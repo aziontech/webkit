@@ -1,13 +1,14 @@
 {
  "purpose": "Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `WebkitProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `Table.CellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.",
  "useWhen": [
+  "Use Timestamp to display a moment in time in the app's time zone, copyable; to pick a date use DatePicker or DateRangePicker.",
   "A detail panel, card or log line shows when something happened and people may need the exact or UTC value.",
   "An app lets people pick a display time zone and every absolute time must follow it.",
   "A list outside `Table` shows relative times that should stay current."
  ],
  "avoidWhen": [
   "A table column of modification times with the author → use `Table.CellTime` in a `#cell-<id>` slot.",
-  "A date the person edits → use `date-range-picker` or `calendar`.",
+  "A date the person edits → use `date-picker` (one date) or `date-range-picker` (a range).",
   "A duration (`1.2 s`, `3 days`) → plain text formatted with `useLocale().formatNumber`; Timestamp is a point in time."
  ],
  "related": [

@@ -3,10 +3,10 @@ name: input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 5597a2b9fc62bcac919cad05e4148636aebb6b465b950f5cf17d2797e5291430
+spec_version: 5
+checksum: 5b207b07b6834af44afb55c924686c3ecb96f9e90916464e39fee4fbb745aaed
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Input Text — Component Spec
@@ -20,6 +20,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 ## When to use
 
 - Capture a single line of free-form text (names, titles, search terms).
+- Use Input with a search icon to filter a list in place; to open the ⌘K palette use SearchTrigger.
 
 ## When NOT to use
 
@@ -35,7 +36,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
 
 ## Best practices
 
-- Prefer the `field-*` wrapper when you need a label, helper text, or validation message.
+- Wrap it in `Field` when you need a label, helper text, or validation message.
 - Set an appropriate `type`/`inputmode` for the content (email, url, …).
 - Set `monospace` on a field whose value is code-like: a CLI command, an ID, a token, a hash, a path. Pair it with `:spellcheck="false"`.
 - A read-only command or ID the user copies: `readonly` + `monospace` inside an `InputGroup` with a `CopyButton`, and a description saying why it cannot change.
@@ -94,12 +95,10 @@ _none_
 
 ## Slots
 
-| Slot        | Purpose                                                   | Notes                                              |
-| ----------- | --------------------------------------------------------- | -------------------------------------------------- |
-| `prefix`    | Leading adornment at the inline start of the field (an icon, a unit). | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
-| `suffix`    | Trailing adornment at the inline end of the field.        | Hidden from assistive tech (`aria-hidden="true"`). |
-| `iconLeft`  | `@deprecated since 6.0 — use prefix. Removed in 7.0.`    | Rendered as the fallback of `prefix`.             |
-| `iconRight` | `@deprecated since 6.0 — use suffix. Removed in 7.0.`    | Rendered as the fallback of `suffix`.             |
+| Slot     | Purpose                                                               | Notes                                                                                               |
+| -------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `prefix` | Leading adornment at the inline start of the field (an icon, a unit). | Hidden from assistive tech (`aria-hidden="true"`). Logical: it sits on the right under `dir="rtl"`. |
+| `suffix` | Trailing adornment at the inline end of the field.                    | Hidden from assistive tech (`aria-hidden="true"`).                                                  |
 
 ## Exposed
 
@@ -117,7 +116,7 @@ _none_
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.prefix` or `$slots.iconLeft` / `$slots.suffix` or `$slots.iconRight`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
+- `data-has-icon-left` / `data-has-icon-right` mirror slot presence (driven by `$slots.prefix` / `$slots.suffix`), read at render time: an icon slot passed behind a `v-if` adds or removes its icon box when the condition changes, never leaving an empty box behind
 - `filled` is detected via the native `:not(:placeholder-shown)` selector — no JS state
 
 ## Motion & Animations
@@ -155,7 +154,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2`, with the offset color resolving `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots. A host that places the field on a surface other than the canvas (a raised popover, a drawer) declares `--input-ring-offset` on any ancestor; custom properties inherit, so one declaration retunes the ring gap of every field inside it (this is how `calendar`'s fields panel matches its raised popover).
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2`, with the offset color resolving `var(--input-ring-offset, var(--bg-canvas))` — applied via `focus-within` on the field wrapper so the ring covers the whole control including icon slots. A host that places the field on a surface other than the canvas (a raised popover, a drawer) declares `--input-ring-offset` on any ancestor; custom properties inherit, so one declaration retunes the ring gap of every field inside it (this is how `date-picker`'s fields panel matches its raised popover).
 - Keyboard map: `Tab` focuses the input; standard text-editing keys apply.
 - Direction: the `<input>` renders `dir="auto"` so a value typed in another script keeps its own direction inside right-to-left UI; a `dir` attribute overrides it.
 - ARIA: `aria-invalid` is bound to the `invalid` prop; `aria-required` to the `required` prop; icon slots are `aria-hidden="true"` (decorative).

@@ -210,10 +210,10 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Flow](components/flow.md): Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-ancho…
 - [Pagination](components/pagination.md): Pagination controls for tables and lists, pixel-perfect to Figma, in two modes.
 - [PaginationButton](components/pagination-button.md): PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (…
-- [PickList](components/pick-list.md): Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them.
 - [PropertyFilter](components/property-filter.md): One field that filters a collection by properties and free text, after Cloudscape's property filter.
 - [Table](components/table.md): The table's parts and its markup-only root.
 - [TopologyDiagram](components/topology-diagram.md): The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its…
+- [TransferList](components/transfer-list.md): Dual-list transfer control: a labelled **source** listbox and a labelled **target** listbox with a control column to move items between them.
 - [Tree](components/tree.md): A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron.
 
 ## Components: Documentation
@@ -258,30 +258,27 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Inputs
 
 - [AttributeEditor](components/attribute-editor.md): An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`.
-- [Calendar](components/calendar.md): Date-range picker.
 - [Checkbox](components/checkbox.md): Binary selection control.
 - [Chip](components/chip.md): Use Chip when the person can remove or select the token (applied filters, picked values); a read-only word is a Tag, and a number is a Badge.
 - [Combobox](components/combobox.md): A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed.
+- [DatePicker](components/date-picker.md): DatePicker picks **one date**, optionally with a time, in a form field.
 - [DateRangePicker](components/date-range-picker.md): A time range for queries over time: logs, events, traces and metrics.
-- [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `Calendar`, `DateRangePicker`, `Checkbox`, `…
+- [Field](components/field.md): One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`,…
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [FileTokenGroup](components/file-token-group.md): Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress.
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
 - [Hint](components/hint.md): Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`.
-- [Label](components/label.md): Form-field label that pairs descriptive text with an optional required indicator and an optional hint.
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.
 - [NumberInput](components/number-input.md): Numeric input field with optional increment/decrement spinner buttons.
 - [OtpInput](components/otp-input.md): The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS.
 - [PasswordInput](components/password-input.md): Single-line password input for forms.
 - [PasswordRequirements](components/password-requirements.md): Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it.
 - [PhoneInput](components/phone-input.md): International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly…
-- [RadioButton](components/radio-button.md): Atomic exclusive-choice control only — the circular radio input from Figma (no label, description, or helper).
-- [RadioCards](components/radio-cards.md): Horizontal grid of selectable cards for mutually exclusive choices (plans, roles, feature tiers).
-- [RadioGroup](components/radio-group.md): RadioGroup picks exactly one value from a short list of labelled options shown at once.
+- [RadioGroup](components/radio-group.md): RadioGroup is the one "pick one of a few" component: it picks exactly one value from a short list of labelled options shown at once.
 - [SchemaForm](components/schema-form.md): A form rendered from a JSON schema: each property of an object schema becomes a `Field` with its label, description, Required marker and control, and a nested object becomes a fieldset with its own legend.
-- [Select](components/select.md): Select control for choosing one (`multiple={false}`) or many (`multiple={true}`) options from a list.
+- [Select](components/select.md): Select control for choosing exactly one option from a list; several values are `multi-select`.
 - [Slider](components/slider.md): Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled.
 - [Switch](components/switch.md): Control-only pill toggle `Switch` (36×20 px).
 - [TagEditor](components/tag-editor.md): Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`.

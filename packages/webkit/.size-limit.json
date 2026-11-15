@@ -81,9 +81,9 @@
     "limit": "1.5 KB"
   },
   {
-    "name": "calendar-root",
-    "path": "src/components/inputs/calendar/calendar.vue",
-    "limit": "21.4 KB"
+    "name": "date-picker-root",
+    "path": "src/components/inputs/date-picker/date-picker.vue",
+    "limit": "17.6 KB"
   },
   {
     "name": "date-range-picker",
@@ -113,7 +113,7 @@
   {
     "name": "collection-preferences",
     "path": "src/components/data/collection-preferences/collection-preferences.vue",
-    "limit": "30.4 KB"
+    "limit": "31.6 KB"
   },
   {
     "name": "card",
@@ -1312,7 +1312,7 @@
   {
     "name": "feedback-reason-dialog",
     "path": "src/components/ai/feedback-reason-dialog/feedback-reason-dialog.vue",
-    "limit": "31.9 KB"
+    "limit": "33.25 KB"
   },
   {
     "name": "response-branches",
@@ -1785,28 +1785,28 @@
     "limit": "1 KB"
   },
   {
-    "name": "pick-list",
-    "path": "src/components/data/pick-list/index.ts",
+    "name": "transfer-list",
+    "path": "src/components/data/transfer-list/index.ts",
     "limit": "6.75 KB"
   },
   {
-    "name": "pick-list-root",
-    "path": "src/components/data/pick-list/pick-list.vue",
+    "name": "transfer-list-root",
+    "path": "src/components/data/transfer-list/transfer-list.vue",
     "limit": "1.65 KB"
   },
   {
-    "name": "pick-list-source",
-    "path": "src/components/data/pick-list/pick-list-source/pick-list-source.vue",
+    "name": "transfer-list-source",
+    "path": "src/components/data/transfer-list/transfer-list-source/transfer-list-source.vue",
     "limit": "4.75 KB"
   },
   {
-    "name": "pick-list-target",
-    "path": "src/components/data/pick-list/pick-list-target/pick-list-target.vue",
+    "name": "transfer-list-target",
+    "path": "src/components/data/transfer-list/transfer-list-target/transfer-list-target.vue",
     "limit": "4.75 KB"
   },
   {
-    "name": "pick-list-controls",
-    "path": "src/components/data/pick-list/pick-list-controls/pick-list-controls.vue",
+    "name": "transfer-list-controls",
+    "path": "src/components/data/transfer-list/transfer-list-controls/transfer-list-controls.vue",
     "limit": "2.15 KB"
   },
   {
@@ -1870,18 +1870,13 @@
     "limit": "1.85 KB"
   },
   {
-    "name": "calendar",
-    "path": "src/components/inputs/calendar/index.ts",
-    "limit": "21.9 KB"
+    "name": "date-picker",
+    "path": "src/components/inputs/date-picker/index.ts",
+    "limit": "17.8 KB"
   },
   {
-    "name": "calendar-preset",
-    "path": "src/components/inputs/calendar/calendar-preset/calendar-preset.vue",
-    "limit": "1 KB"
-  },
-  {
-    "name": "calendar-clear",
-    "path": "src/components/inputs/calendar/calendar-clear/calendar-clear.vue",
+    "name": "date-picker-clear",
+    "path": "src/components/inputs/date-picker/date-picker-clear/date-picker-clear.vue",
     "limit": "0.8 KB"
   },
   {
@@ -1915,11 +1910,6 @@
     "limit": "5.8 KB"
   },
   {
-    "name": "label",
-    "path": "src/components/inputs/label/label.vue",
-    "limit": "6.75 KB"
-  },
-  {
     "name": "password-input",
     "path": "src/components/inputs/password-input/password-input.vue",
     "limit": "4.95 KB"
@@ -1927,22 +1917,22 @@
   {
     "name": "radio-group-root",
     "path": "src/components/inputs/radio-group/radio-group.vue",
-    "limit": "1.5 KB"
+    "limit": "3.2 KB"
   },
   {
-    "name": "radio-cards",
-    "path": "src/components/inputs/radio-cards/radio-cards.vue",
-    "limit": "3.45 KB"
+    "name": "radio-group",
+    "path": "src/components/inputs/radio-group/index.ts",
+    "limit": "3.2 KB"
+  },
+  {
+    "name": "radio-group-item",
+    "path": "src/components/inputs/radio-group/radio-group-item/radio-group-item.vue",
+    "limit": "2.35 KB"
   },
   {
     "name": "checkbox",
     "path": "src/components/inputs/checkbox/checkbox.vue",
     "limit": "2.3 KB"
-  },
-  {
-    "name": "radio-button",
-    "path": "src/components/inputs/radio-button/radio-button.vue",
-    "limit": "1.75 KB"
   },
   {
     "name": "switch",

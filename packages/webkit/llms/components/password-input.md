@@ -54,8 +54,6 @@
 | --- | --- | --- |
 | `prefix` | — | Leading adornment at the inline start of the field. Hidden from assistive tech (`aria-hidden="true"`). Same name as on `input` and `number-input`. |
 | `suffix` | — | Trailing adornment at the inline end. **Only honored when `toggleable=false`** — the visibility toggle sits there when enabled. Hidden from assistive tech (`aria-hidden="true"`). |
-| `iconLeft` | — | @deprecated since 6.0 — use prefix. Removed in 7.0.` Rendered as the fallback of `prefix`. |
-| `iconRight` | — | @deprecated since 6.0 — use suffix. Removed in 7.0.` Rendered as the fallback of `suffix`. |
 
 ## v-model
 
@@ -70,8 +68,8 @@
 - `data-disabled` mirrors the `disabled` prop
 - `data-invalid` mirrors the `invalid` prop
 - `data-required` mirrors the `required` prop; drives the warning-border treatment
-- `data-has-icon-left` mirrors `$slots.prefix` (or `$slots.iconLeft`) presence
-- `data-has-icon-right` mirrors `$slots.suffix` (or `$slots.iconRight`) presence (only relevant when `toggleable=false`)
+- `data-has-icon-left` mirrors `$slots.prefix` presence
+- `data-has-icon-right` mirrors `$slots.suffix` presence (only relevant when `toggleable=false`)
 - `data-toggleable` mirrors the `toggleable` prop
 - `data-monospace` mirrors the `monospace` prop: the value (masked or revealed) and the placeholder render in `.text-label-code-sm` instead of `.text-label-sm`.
 - `data-visible` on the root mirrors the internal visibility state (`true` when the password is revealed as plain text)

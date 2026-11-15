@@ -20,8 +20,6 @@
   defineSlots<{
     /** Leading adornment before the value (an icon, a flag). */
     prefix(): unknown
-    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
-    iconLeft(): unknown
   }>()
 
   const ctx = inject(selectContextKey)
@@ -89,7 +87,7 @@
     @click="onClick"
     @keydown="onKeydown"
   >
-    <slot name="prefix"><slot name="iconLeft" /></slot>
+    <slot name="prefix" />
     <span
       class="flex-1 truncate text-start data-[filled=false]:text-(--text-muted) group-data-[disabled]:text-(--text-disabled)"
       :data-filled="ctx.filled.value"

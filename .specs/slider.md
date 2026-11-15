@@ -3,17 +3,17 @@ name: slider
 category: inputs
 structure: monolithic
 status: implemented
-checksum: a3a7111ffb366a9b3c2afc3555e0195a7fdc7ee693cb4564e09ebceda439c330
-spec_version: 1
+checksum: 74a210cb890406ec9101947653e7befd9601e9300fd63860b3fea2029f08a7a2
+spec_version: 2
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Slider — Component Spec
 
 ## Purpose
 
-Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Label` and `HelperText`, the same way `switch` and `number-input` are composed.
+Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Field.Label` and `Field.Description`, the same way `switch` and `number-input` are composed.
 
 ## When to use
 
@@ -32,14 +32,14 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 ## Related
 
 - `number-input` — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.
-- `label` — names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).
+- `field` — `Field.Label` names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).
 - `helper-text` — description or error message under the slider in a field layout.
 - `toggle-group` — a few discrete, named choices instead of a continuous range.
 - `progress` — displays a fraction; it is not interactive.
 
 ## Best practices
 
-- Always give the slider an accessible name: `aria-label`, or a `Label` whose `for` matches the slider's `id`.
+- Always give the slider an accessible name: `aria-label`, or a `Field.Label` whose `for` matches the slider's `id`.
 - Keep the value inside `[min, max]` and on a `step` multiple; the component clamps the displayed fill but never rewrites the bound value on its own.
 - Turn on `ticks` only when every step is meaningful and the range has at most 21 positions; above that the ticks are not rendered.
 - Use `referenceValues` for a few landmarks (`[0, 50, 100]`), not for every step — labels need horizontal room.
@@ -157,7 +157,7 @@ The fill and the thumb position are not animated: they track the pointer every f
 
 - Visible focus: the ring is drawn on the thumb, not the 40 px input box — `focus-visible:outline-none` on the input plus `focus-visible:[&::-webkit-slider-thumb]:ring-2 focus-visible:[&::-webkit-slider-thumb]:ring-(--ring-color) focus-visible:[&::-webkit-slider-thumb]:ring-offset-2 focus-visible:[&::-webkit-slider-thumb]:ring-offset-(--bg-canvas)` and the same set for `[&::-moz-range-thumb]`.
 - Keyboard map (native): `Tab` focuses; `ArrowRight`/`ArrowUp` +`step`; `ArrowLeft`/`ArrowDown` −`step`; `PageUp`/`PageDown` move by a larger browser-defined increment; `Home` → `min`; `End` → `max`. Under `dir="rtl"` the track runs right to left, so `ArrowLeft` adds `step` and `ArrowRight` subtracts it (handled by the component through `useDirection`, so every browser agrees). When `readonly`, `Tab` still focuses and every value key is inert. When `disabled`, the control is skipped by `Tab`.
-- ARIA: the native `<input type="range">` provides `role="slider"` and the implicit `aria-valuemin` / `aria-valuemax` / `aria-valuenow` from `min` / `max` / the value. `aria-label` comes from `ariaLabel` (omitted when empty, so an associated `Label` wins). `aria-valuetext="{value}{unit}"` is set only when `unit` is non-empty. `aria-readonly="true"` when `readonly`; `aria-invalid="true"` when `invalid`. The ticks and reference-label row is `aria-hidden="true"`.
+- ARIA: the native `<input type="range">` provides `role="slider"` and the implicit `aria-valuemin` / `aria-valuemax` / `aria-valuenow` from `min` / `max` / the value. `aria-label` comes from `ariaLabel` (omitted when empty, so an associated `Field.Label` wins). `aria-valuetext="{value}{unit}"` is set only when `unit` is non-empty. `aria-readonly="true"` when `readonly`; `aria-invalid="true"` when `invalid`. The ticks and reference-label row is `aria-hidden="true"`.
 - Contrast: thumb border and fill against the track ≥3:1 (non-text UI), reference labels ≥4.5:1, including the disabled state per the disabled tokens.
 - `motion-reduce:transition-none` on every transitioned pseudo-element class.
 - Touch target: the native input is 40 px tall and full width, so the whole track row is the hit area (≥40×40); the 16 px thumb is a visual, not the target.

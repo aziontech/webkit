@@ -200,6 +200,30 @@ describe('DateRangePicker', () => {
     })
   })
 
+  it('picks whole days with show-time="false": no time fields, start of the first day to end of the last', async () => {
+    const view = render(DateRangePicker, {
+      props: {
+        now: NOW,
+        timeZone: 'UTC',
+        rangeSelectorMode: 'absolute-only',
+        showTime: false,
+        modelValue: null
+      }
+    })
+    const popover = await open(view.getByTestId)
+    expect(within(popover).queryByLabelText('Start time')).toBeNull()
+    expect(within(popover).queryByLabelText('End time')).toBeNull()
+    await setField(within(popover).getByLabelText('Start'), '11/3/2026')
+    await setField(within(popover).getByLabelText('End'), '11/5/2026')
+    await fireEvent.click(within(popover).getByRole('button', { name: 'Apply' }))
+    const value = lastValue(view.emitted())
+    expect(value?.type).toBe('absolute')
+    const { start, end } = value as { start: string; end: string }
+    expect(start.slice(0, 10)).toBe('2026-11-03')
+    expect(end.slice(0, 10)).toBe('2026-11-05')
+    expect(new Date(end).getTime()).toBeGreaterThan(new Date(start).getTime())
+  })
+
   it('refuses an end before the start', async () => {
     const view = render(DateRangePicker, {
       props: {
@@ -412,6 +436,30 @@ describe('DateRangePicker — reference clock from WebkitProvider', () => {
     )
     return { view, values }
   }
+
+  it('formats in the provider time zone when no time zone is bound', () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            WebkitProvider,
+            { timeZone: 'Asia/Tokyo' },
+            {
+              default: () =>
+                h(DateRangePicker, {
+                  now: NOW,
+                  modelValue: {
+                    type: 'absolute',
+                    start: '2026-11-10T12:00:00.000Z',
+                    end: '2026-11-10T18:30:00.000Z'
+                  }
+                })
+            }
+          )
+      })
+    )
+    expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('UTC+09:00')
+  })
 
   it('steps a relative range from the provider now when the now prop is unset', async () => {
     const { view, values } = host({})

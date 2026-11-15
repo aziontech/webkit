@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/code-editor")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageTabs](../../../components/page-tabs.md), [RadioButton](../../../components/radio-button.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageTabs](../../../components/page-tabs.md), [RadioGroup](../../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -70,9 +70,9 @@ A flush `Card` with one small `Item` per field: a Move up and a Move down `IconB
 
 Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `HelperText` once the field was touched.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Field`, `RadioButton`, `Switch`, `HelperText` (required)
+### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `RadioGroup`, `Switch`, `HelperText` (required)
 
-The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `Field` choice cards around `RadioButton`s) and Status (Active as a `Switch`). See `skills/webkit-form`.
+The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`kind="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
@@ -162,14 +162,13 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/co
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import ResizableHandle from '@aziontech/webkit/resizable-handle'
   import ResizablePane from '@aziontech/webkit/resizable-pane'
   import ResizableRoot from '@aziontech/webkit/resizable-root'
@@ -1202,40 +1201,23 @@ export async function handleRequest(request, args = {}) {
                         title="Runs on"
                         kind="stacked"
                       >
-                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                          <legend class="sr-only">Execution environment</legend>
-                          <Field.Label>
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.executionEnvironment"
-                                value="request"
-                                :name="groupName"
-                              />
-                              <Field.Content>
-                                <Field.Title> On request </Field.Title>
-                                <Field.Description>
-                                  Runs on each request the service handles, after routing.
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                          <Field.Label>
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.executionEnvironment"
-                                value="gateway"
-                                :name="groupName"
-                              />
-                              <Field.Content>
-                                <Field.Title> At the gateway </Field.Title>
-                                <Field.Description>
-                                  Runs at the gateway, before routing, where a request can still be
-                                  refused.
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        <RadioGroup
+                          v-model="form.executionEnvironment"
+                          kind="card"
+                          :name="groupName"
+                          aria-label="Execution environment"
+                        >
+                          <RadioGroup.Item
+                            value="request"
+                            description="Runs on each request the service handles, after routing."
+                            >On request</RadioGroup.Item
+                          >
+                          <RadioGroup.Item
+                            value="gateway"
+                            description="Runs at the gateway, before routing, where a request can still be refused."
+                            >At the gateway</RadioGroup.Item
+                          >
+                        </RadioGroup>
                       </SettingRow>
                     </Item.List>
                   </template>

@@ -252,9 +252,9 @@ describe('PasswordInput', () => {
     expect(toggle.queryByTestId('s-icon')).toBeNull()
   })
 
-  it('renders the iconLeft slot and marks its wrapper aria-hidden', () => {
+  it('renders the prefix slot and marks its wrapper aria-hidden', () => {
     const { getByTestId } = render(PasswordInput, {
-      slots: { iconLeft: '<i data-testid="left-icon" class="pi pi-lock" />' }
+      slots: { prefix: '<i data-testid="left-icon" class="pi pi-lock" />' }
     })
 
     const icon = getByTestId('left-icon')
@@ -263,10 +263,10 @@ describe('PasswordInput', () => {
     expect(icon.closest('[aria-hidden="true"]')).toBeTruthy()
   })
 
-  it('renders the iconRight slot only when toggleable is false', () => {
+  it('renders the suffix slot only when toggleable is false', () => {
     const withToggle = render(PasswordInput, {
       props: { toggleable: true },
-      slots: { iconRight: '<i data-testid="right-icon" class="pi pi-key" />' }
+      slots: { suffix: '<i data-testid="right-icon" class="pi pi-key" />' }
     })
     // hasIconRight is `!toggleable && hasSlot` → not rendered while toggleable.
     expect(withToggle.queryByTestId('right-icon')).toBeNull()
@@ -274,7 +274,7 @@ describe('PasswordInput', () => {
 
     const noToggle = render(PasswordInput, {
       props: { toggleable: false },
-      slots: { iconRight: '<i data-testid="right-icon" class="pi pi-key" />' }
+      slots: { suffix: '<i data-testid="right-icon" class="pi pi-key" />' }
     })
     expect(noToggle.queryByTestId('right-icon')).toBeTruthy()
     expect(
@@ -305,11 +305,11 @@ describe('PasswordInput', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations when toggleable is false with an iconRight slot', async () => {
+  it('has no a11y violations when toggleable is false with a suffix slot', async () => {
     const { container } = render(PasswordInput, {
       props: { toggleable: false, placeholder: 'Password' },
       attrs: { 'aria-label': 'Password' },
-      slots: { iconRight: '<i class="pi pi-key" aria-hidden="true" />' }
+      slots: { suffix: '<i class="pi pi-key" aria-hidden="true" />' }
     })
 
     await expectNoA11yViolations(container)
@@ -352,7 +352,7 @@ describe('PasswordInput slot presence', () => {
     const { queryByTestId, container } = render({
       components: { PasswordInput },
       setup: () => ({ shown }),
-      template: `<PasswordInput><template v-if="shown" #iconLeft><span data-testid="probe">Slotted</span></template></PasswordInput>`
+      template: `<PasswordInput><template v-if="shown" #prefix><span data-testid="probe">Slotted</span></template></PasswordInput>`
     })
     expect(container.querySelector('[data-has-icon-left]')).toBeNull()
 

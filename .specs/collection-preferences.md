@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: fc9ef1c0e9ac18f0f0e63efff04972d1cb6b4bab6f386b8847b4c6e0a10c594c
+checksum: 06c28848e0b837788f134beef6771b0861716dcd6890b967de0639fdff0031b8
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot 
 
 - `use-collection` — saves the preferences; `preferencesProps` is the binding.
 - `data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.
-- `cards` — takes the page size and the visible fields.
+- `card-list` — takes the page size and the visible fields.
 - `property-filter` — sits beside it in the controls row.
 
 ## Best practices

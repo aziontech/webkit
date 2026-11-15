@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use AttributeEditor for a short list of same-field rows the person adds and removes inside a form (environment variables, headers). For key/value tags on a resource use TagEditor; to edit many cells of many records in place, spreadsheet-style, use DataGrid; for read-and-act lists use Table.
 - Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.
 - Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).
 - A bulk form where each row has the same two to four fields and a row-level error can occur.

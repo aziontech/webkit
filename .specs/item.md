@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-05-24
 last_updated: 2026-11-15
-checksum: 3e4a0ed0dd92ba753a7b63f20e4a90837bc70b45560f5e75304c68799b2ffbb7
+checksum: de561704733aa3c01b11b9d0f55f73f0f5e685ea3461a64af6f7836d390b2cce
 ---
 
 # Item — Component Spec
@@ -28,7 +28,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - Records that share columns and need sorting, selection or paging → use `table`.
 - Hierarchical navigation rows in a sidebar → use `sidebar-menu`.
-- A grid of selectable option cards → use `radio-cards`.
+- A grid of selectable option cards → use `radio-group` with `kind="card"`.
 - A single surface that frames arbitrary content → use `card`.
 
 ## Related

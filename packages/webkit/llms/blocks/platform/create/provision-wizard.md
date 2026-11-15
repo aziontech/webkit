@@ -1,11 +1,11 @@
 # ProvisionWizard (`platform/create/provision-wizard`)
 
-> A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Hint`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `SaveBar` and `Button`.
+> A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Hint`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioGroup` (`kind="card"`), `Select`, `SaveBar` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/provision-wizard/provision-wizard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/provision-wizard")`
-- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioCards](../../../components/radio-cards.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioGroup](../../../components/radio-group.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -45,9 +45,9 @@ A `Stepper` labelled with the create label and two steps, Project and Domain and
 
 The `platform/create/resource-picker` band, copied from that block, which is the source of truth for the paged picker (change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
 
-### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Select` (conditional)
+### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioGroup`, `HelperText`, `Select` (conditional)
 
-In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: `RadioCards` for its type with a `HelperText` explaining the choice, then the type's own fields as a `Field` with an `Input`, or with a `Select` for a fixed list. Each opened field is required only while its switch is on.
+In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: a `RadioGroup` with `kind="card"` for its type with a `HelperText` explaining the choice, then the type's own fields as a `Field` with an `Input`, or with a `Select` for a fixed list. Each opened field is required only while its switch is on.
 
 ### F. Project read-back — `Card`, `Item`, `Button` (required on step two)
 
@@ -57,9 +57,9 @@ Step two opens with a flush `Card` holding one `Item` that reads the bound proje
 
 A `Card` titled Domain with a `ToggleGroup` of Free platform domain and Your own domain. The free domain asks for a prefix `Input` with the platform suffix shown inside it; your own domain asks for the hostname and the service name. Below, a preview line names the address traffic arrives on (`https://` plus the domain) and the name the service is created as, updating as the user types.
 
-### H. Environment and certificate — `Card`, `Field`, `RadioCards`, `Hint`, `HelperText`, `Select` (required)
+### H. Environment and certificate — `Card`, `Field`, `RadioGroup`, `Hint`, `HelperText`, `Select` (required)
 
-A padded `Card` with Environment as `RadioCards` (Production, Preview, each with a sentence) and Certificate as a `Select`, Environment headed by a `kind="label"` `Field.Legend` with a `Hint`, Certificate by a `Field.Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
+A padded `Card` with Environment as a `RadioGroup` with `kind="card"` (Production, Preview, each with a sentence) and Certificate as a `Select`, Environment headed by a `kind="label"` `Field.Legend` with a `Hint`, Certificate by a `Field.Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
 
 ### I. Deployment — `Card`, `ToggleGroup`, `Item`, `Input`, `Skeleton`, `Button` (required)
 
@@ -156,7 +156,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -1269,9 +1269,11 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     >
                                       Type
                                     </p>
-                                    <RadioCards
+                                    <RadioGroup
                                       v-model="scratch.origin.type"
-                                      :items="originTypes"
+                                      kind="card"
+                                      orientation="horizontal"
+                                      :options="originTypes"
                                       aria-labelledby="origin-type-label"
                                       aria-describedby="origin-type-help"
                                     />
@@ -1518,9 +1520,11 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       <Hint text="Which environment this binding lands on." />
                                     </span>
                                   </Field.Legend>
-                                  <RadioCards
+                                  <RadioGroup
                                     v-model="form.environment"
-                                    :items="environments"
+                                    kind="card"
+                                    orientation="horizontal"
+                                    :options="environments"
                                     aria-labelledby="environment-label"
                                     aria-describedby="environment-helper"
                                   />

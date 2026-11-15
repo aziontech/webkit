@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -162,11 +162,11 @@
         class="relative data-open:z-1"
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="data-stream-connector"
-            label="Connector"
             required
-          />
+            >Connector</FieldLabel
+          >
           <MockupSelect
             control-id="data-stream-connector"
             :value="frame.connector"
@@ -185,11 +185,11 @@
 
       <ShellMockupPart :order="1">
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="data-stream-url"
-            label="URL"
             required
-          />
+            >URL</FieldLabel
+          >
           <Input
             id="data-stream-url"
             model-value=""
@@ -203,11 +203,11 @@
 
       <ShellMockupPart :order="2">
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="data-stream-api-key"
-            label="API Key"
             required
-          />
+            >API Key</FieldLabel
+          >
           <Textarea
             id="data-stream-api-key"
             model-value=""

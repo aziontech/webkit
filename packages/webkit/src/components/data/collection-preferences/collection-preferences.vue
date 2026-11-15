@@ -11,7 +11,8 @@
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import RadioButton from '../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import Switch from '../../inputs/switch/switch.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
@@ -302,28 +303,33 @@
               v-for="section in ordered"
               :key="section"
             >
-              <fieldset
+              <div
                 v-if="section === 'page-size'"
                 :data-testid="`${testId}__page-size`"
                 class="flex min-w-0 flex-col gap-(--spacing-xs)"
               >
-                <legend class="mb-(--spacing-xs) text-label-md text-(--text-default)">
-                  {{ t('collectionPreferences.pageSize') }}
-                </legend>
-                <label
-                  v-for="size in pageSizeOptions"
-                  :key="size"
-                  class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) text-body-sm text-(--text-default) pointer-coarse:min-h-11"
+                <span
+                  :id="`${uid}-page-size-label`"
+                  class="mb-(--spacing-xs) text-label-md text-(--text-default)"
                 >
-                  <RadioButton
-                    :model-value="String(draftPageSize)"
+                  {{ t('collectionPreferences.pageSize') }}
+                </span>
+                <RadioGroup
+                  :model-value="String(draftPageSize)"
+                  :name="`${uid}-page-size`"
+                  :aria-labelledby="`${uid}-page-size-label`"
+                  @update:model-value="(value) => (draftPageSize = Number(value))"
+                >
+                  <RadioGroupItem
+                    v-for="size in pageSizeOptions"
+                    :key="size"
                     :value="String(size)"
-                    :name="`${uid}-page-size`"
-                    @update:model-value="draftPageSize = size"
-                  />
-                  <span>{{ t('collectionPreferences.pageSizeOption', { count: size }) }}</span>
-                </label>
-              </fieldset>
+                    >{{
+                      t('collectionPreferences.pageSizeOption', { count: size })
+                    }}</RadioGroupItem
+                  >
+                </RadioGroup>
+              </div>
 
               <fieldset
                 v-else-if="section === 'columns'"

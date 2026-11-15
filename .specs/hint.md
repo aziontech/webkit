@@ -3,20 +3,21 @@ name: hint
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: d83e7ef2bc9e73844f63472a603b5ccce6e1e3574f7674f71eb79b01df4eae9f
+spec_version: 3
+checksum: 7eec58a569738a3c20db7b39c37c58c677588e37b3bd97c60a6d3851ad4422eb
 created: 2026-08-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Hint — Component Spec
 
 ## Purpose
 
-Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Label`'s `hint` prop renders.
+Small info affordance — a muted `pi pi-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
 
 ## When to use
 
+- Use Hint for the info glyph beside a field label or column header that explains it in one sentence. Guidance that must stay visible goes in Field.Description (inside Field) or HelperText.
 - A field, switch or setting whose name is clear but whose consequence is not (what "Sensitive" does to a stored value).
 - A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.
 - Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise.
@@ -31,7 +32,7 @@ Small info affordance — a muted `pi pi-info-circle` glyph on a focusable butto
 
 - `tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.
 - `helper-text` — persistent guidance under a field; the right choice when the text must always be visible.
-- `label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component.
+- `Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component.
 
 ## Best practices
 

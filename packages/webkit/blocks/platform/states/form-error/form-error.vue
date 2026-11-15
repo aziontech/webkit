@@ -6,7 +6,6 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -14,7 +13,7 @@
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
@@ -288,29 +287,21 @@
                   <Item.List>
                     <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Protocol Usage</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.protocolUsage"
+                          kind="card"
+                          name="protocolUsage"
+                          aria-label="Protocol Usage"
+                          :disabled="submitting"
+                        >
+                          <RadioGroup.Item
                             v-for="option in protocolUsageOptions"
                             :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field
-                              orientation="horizontal"
-                              :disabled="submitting"
-                            >
-                              <RadioButton
-                                v-model="form.protocolUsage"
-                                :value="option.value"
-                                name="protocolUsage"
-                                :id="`ev-protocolUsage-${option.value}`"
-                              />
-                              <Field.Content>
-                                <Field.Title>{{ option.label }}</Field.Title>
-                                <Field.Description>{{ option.description }}</Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </div>
                     </SettingRow>
                     <SettingRow

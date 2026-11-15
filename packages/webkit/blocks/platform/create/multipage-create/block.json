@@ -3,7 +3,7 @@
   "name": "MultipageCreate",
   "title": "Templates/Platform/Create/MultipageCreate",
   "surface": "product",
-  "summary": "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`.",
+  "summary": "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind=\"card\"`), `Item`, `Textarea`, `HelperText` and `Button`.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -42,7 +42,7 @@
     },
     {
       "name": "ListSettings",
-      "summary": "The settings step of a list bound to acme-production, before Review: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Next in the footer. Leaving the list empty flags it and marks the step red on the rail.",
+      "summary": "The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Next in the footer. Leaving the list empty flags it and marks the step red on the rail.",
       "file": "variants/list-settings.vue"
     },
     {

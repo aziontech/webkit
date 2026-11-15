@@ -1,6 +1,7 @@
 {
  "purpose": "An editable list of rows with the same fields, after Cloudscape's attribute editor: key and value pairs (environment variables, headers, metadata) or any set of columns given by a `definition`. It owns the row anatomy every hand-built editor repeats: a label per cell, one control per cell, a per-cell error under the field, Add and Remove, an item limit, the empty text, focus after add and remove, and a polite announcement of each change. A grouped mode lays rows out as AND groups joined by OR, the shape of rule criteria. With `reorderable`, rows (and groups) carry a grip and Move up / Move down buttons, so the order itself is part of the value, as in rule criteria evaluated top to bottom. It edits an array and validates nothing itself: the consumer passes `errors`.",
  "useWhen": [
+  "Use AttributeEditor for a short list of same-field rows the person adds and removes inside a form (environment variables, headers). For key/value tags on a resource use TagEditor; to edit many cells of many records in place, spreadsheet-style, use DataGrid; for read-and-act lists use Table.",
   "Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.",
   "Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).",
   "A bulk form where each row has the same two to four fields and a row-level error can occur.",

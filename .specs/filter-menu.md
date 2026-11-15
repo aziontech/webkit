@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: 43440c1f464c3e3eab0d2218df4ad4e4be868503fd5d6108f819bd8845432521
+checksum: 6e03552b6b51f9f79a31533e35a5f111ea954e99f53cc08847a5acaf7aff2db4
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ The list filter of a console list: a Filter button that carries the number of ap
 opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to
 it; picking a field slides to its values (check rows for a `multi` field, radio rows for a `single`
 one, an optional avatar per value, a search box and a no-match line), and a `date` field offers
-periods plus a custom range on a `Calendar`. Back returns to the fields, Clear removes the field's
+periods plus a custom whole-day range on a `DateRangePicker` (`range-selector-mode="absolute-only"`, no times, no zone selector). Back returns to the fields, Clear removes the field's
 filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as
 chips under the controls row: the field label in muted ink, an avatar stack, the first value and
 `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a
@@ -48,7 +48,7 @@ combines them with operators and and/or): this menu offers only the values a fie
 - `data-table` — `Table.Filter kind="menu"` and `FilterMenu.Chips` (no `fields`) render this menu and its chips over the table's `filters` model.
 - `property-filter` — the token-based filter field for typed queries.
 - `popover` — the overlay the menu opens in.
-- `calendar` — the range picker the custom date period uses.
+- `date-range-picker` — the range picker the custom date period uses.
 - `chip` — each applied filter in `FilterMenu.Chips`.
 
 ## Best practices
@@ -294,9 +294,9 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Performance
 
-- Bundle budget: 22.1 KB gzip for `./filter-menu-root` and 24.9 KB for `./filter-menu` (root and chips), both measured on the initial chunk (`entryOnly`) because the `Calendar` loads only when a custom range is opened (`defineAsyncComponent`); 20 KB for `./filter-menu-chips`, most of it `Chip` and `Avatar`. All in `.size-limit.json`.
+- Bundle budget: 22.1 KB gzip for `./filter-menu-root` and 24.9 KB for `./filter-menu` (root and chips), both measured on the initial chunk (`entryOnly`) because the `DateRangePicker` loads only when a custom range is opened (`defineAsyncComponent`); 20 KB for `./filter-menu-chips`, most of it `Chip` and `Avatar`. All in `.size-limit.json`.
 - Runtime budget: a level renders at most 100 values however many a field has, so the `FilterMenu field with 1k options` scenario of `performance.test.ts` (open the field, then search) holds its budget in `perf-budgets.json`; a pick re-renders only the open level.
-- Heavy parts: `Calendar`, lazy-loaded.
+- Heavy parts: `DateRangePicker`, lazy-loaded.
 
 ## Examples
 

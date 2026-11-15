@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Combobox when the person may type a value that is not in the list and the list only suggests. When the value must come from the list use Select; for several values use MultiSelect.
 - A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.
 - A long option list the user would rather type than scroll, with the list as a reminder.
 - Options that come from the server as the user types (`search` event, `loading`, `filter: false`).
@@ -24,7 +25,7 @@
 
 ## Don’t
 
-- The value must be one of a short fixed list → use `select` (or `radio-cards` / `radio-button` for 2–5 visible choices).
+- The value must be one of a short fixed list → use `select` (or `radio-group` for two to seven visible choices).
 - Several values at once → use `multi-select`.
 - Searching and running commands or jumping to a page → use `command`.
 - Filtering a collection by properties → use `property-filter`.

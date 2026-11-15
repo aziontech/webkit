@@ -1,5 +1,5 @@
 {
- "purpose": "Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type=\"range\">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Label` and `HelperText`, the same way `switch` and `number-input` are composed.",
+ "purpose": "Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type=\"range\">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Field.Label` and `Field.Description`, the same way `switch` and `number-input` are composed.",
  "useWhen": [
   "Picking an approximate value inside a known, bounded range where the position matters more than the exact digit (a spend or usage limit, a percentage threshold, a sampling rate).",
   "A plan or capacity selector whose stops are evenly spaced and few enough to read as tick marks.",
@@ -14,13 +14,13 @@
  ],
  "related": [
   "number-input` — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.",
-  "label` — names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).",
+  "field` — `Field.Label` names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).",
   "helper-text` — description or error message under the slider in a field layout.",
   "toggle-group` — a few discrete, named choices instead of a continuous range.",
   "progress` — displays a fraction; it is not interactive."
  ],
  "bestPractices": [
-  "Always give the slider an accessible name: `aria-label`, or a `Label` whose `for` matches the slider's `id`.",
+  "Always give the slider an accessible name: `aria-label`, or a `Field.Label` whose `for` matches the slider's `id`.",
   "Keep the value inside `[min, max]` and on a `step` multiple; the component clamps the displayed fill but never rewrites the bound value on its own.",
   "Turn on `ticks` only when every step is meaningful and the range has at most 21 positions; above that the ticks are not rendered.",
   "Use `referenceValues` for a few landmarks (`[0, 50, 100]`), not for every step — labels need horizontal room.",

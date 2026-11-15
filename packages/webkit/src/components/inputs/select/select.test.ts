@@ -5,7 +5,6 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/select/default.vue'
 import Disabled from '../../../../examples/select/disabled.vue'
-import Multiple from '../../../../examples/select/multiple.vue'
 import Transparent from '../../../../examples/select/transparent.vue'
 import WithGroups from '../../../../examples/select/with-groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -25,7 +24,6 @@ const OPTIONS = [
  */
 const Host = defineComponent({
   props: {
-    multiple: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
     readonly: { type: Boolean, default: false },
     invalid: { type: Boolean, default: false },
@@ -39,7 +37,7 @@ const Host = defineComponent({
     wrapperStyle: { type: String, default: '' }
   },
   setup(props) {
-    const value = ref(props.initial ?? (props.multiple ? [] : ''))
+    const value = ref(props.initial ?? '')
     const open = ref(props.startOpen)
     const options = [
       ...OPTIONS,
@@ -53,7 +51,6 @@ const Host = defineComponent({
         h(
           Select,
           {
-            multiple: props.multiple,
             disabled: props.disabled,
             readonly: props.readonly,
             invalid: props.invalid,
@@ -218,13 +215,8 @@ describe('Select (compound / overlay)', () => {
     const root = getByTestId('input-select')
     expect(root.tagName).toBe('DIV')
     expect(root.getAttribute('data-state')).toBe('closed')
-    expect(root.getAttribute('data-mode')).toBe('single')
+    expect(root.hasAttribute('data-mode')).toBe(false)
     expect(root.getAttribute('data-size')).toBe('medium')
-  })
-
-  it('reflects multiple mode as data-mode="multiple" on the root', () => {
-    const { getByTestId } = render(Host, { props: { multiple: true } })
-    expect(getByTestId('input-select').getAttribute('data-mode')).toBe('multiple')
   })
 
   // ---- Trigger anatomy + a11y wiring ----------------------------------------
@@ -269,22 +261,12 @@ describe('Select (compound / overlay)', () => {
     expect(getContent()).toBeNull()
   })
 
-  it('sets aria-multiselectable on the listbox only in multiple mode', async () => {
-    const single = render(Host)
-    await fireEvent.click(single.getByTestId('input-select-trigger'))
+  it('never marks the listbox aria-multiselectable', async () => {
+    const view = render(Host)
+    await fireEvent.click(view.getByTestId('input-select-trigger'))
     expect(
       getContent()?.querySelector('[role="listbox"]')?.getAttribute('aria-multiselectable')
     ).toBeNull()
-    single.unmount()
-    document.body
-      .querySelectorAll('[data-testid="input-select-content"]')
-      .forEach((el) => el.remove())
-
-    const multi = render(Host, { props: { multiple: true } })
-    await fireEvent.click(multi.getByTestId('input-select-trigger'))
-    expect(
-      getContent()?.querySelector('[role="listbox"]')?.getAttribute('aria-multiselectable')
-    ).toBe('true')
   })
 
   it('opens the dropdown from the trigger on Enter, Space and ArrowDown', async () => {
@@ -352,32 +334,32 @@ describe('Select (compound / overlay)', () => {
     expect(within(options[0]).queryByTestId('input-select-option__check')).toBeNull()
   })
 
-  it('multiple mode: clicking two options accumulates both and keeps the dropdown open', async () => {
-    const { getByTestId } = render(Host, { props: { multiple: true, startOpen: true } })
-
-    await fireEvent.click(getOptions()[0])
-    await fireEvent.click(getOptions()[2])
-
-    // still open in multi-select
-    expect(getContent()).not.toBeNull()
-
-    const options = getOptions()
-    expect(options[0].getAttribute('aria-selected')).toBe('true')
-    expect(options[2].getAttribute('aria-selected')).toBe('true')
-    expect(options[1].getAttribute('aria-selected')).toBe('false')
-
-    // trigger displays the joined multi selection
-    expect(getByTestId('input-select-trigger__value').textContent?.trim()).toBe(
-      'Option 1, Option 3'
+  it('ignores the removed multiple prop: one pick replaces the value and closes the panel', async () => {
+    const value = ref<unknown>('')
+    render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            Select,
+            {
+              multiple: true,
+              open: true,
+              modelValue: value.value,
+              'onUpdate:modelValue': (v: unknown) => {
+                value.value = v
+              }
+            } as Record<string, unknown>,
+            () => [
+              h(SelectTrigger, { 'aria-label': 'Pick' }),
+              h(SelectContent, null, () =>
+                OPTIONS.map((o) => h(SelectOption, { value: o.value }, () => o.label))
+              )
+            ]
+          )
+      })
     )
-  })
-
-  it('multiple mode: clicking a selected option again de-selects it', async () => {
-    render(Host, { props: { multiple: true, startOpen: true, initial: ['opt-1'] } })
-
-    expect(getOptions()[0].getAttribute('aria-selected')).toBe('true')
     await fireEvent.click(getOptions()[0])
-    expect(getOptions()[0].getAttribute('aria-selected')).toBe('false')
+    expect(value.value).toBe('opt-1')
   })
 
   it('selects an option via keyboard Enter and Space on the option element', async () => {
@@ -509,7 +491,6 @@ describe('Select (compound / overlay)', () => {
   // therefore assert a clean mount + the compound anatomy instead.
   it.each([
     ['Default', Default],
-    ['Multiple', Multiple],
     ['WithGroups', WithGroups],
     ['Disabled', Disabled]
   ] as const)('mounts the %s story fixture and renders a role=combobox trigger', (_name, Story) => {
@@ -958,7 +939,7 @@ describe('Select labels, typeahead and slots', () => {
     expect(document.activeElement).toBe(options[1])
   })
 
-  it('renders the prefix slot, and the deprecated iconLeft slot as its fallback', () => {
+  it('renders the prefix slot and ignores the removed iconLeft slot', () => {
     const view = render({
       components: { Select, SelectTrigger },
       template: `<Select><SelectTrigger aria-label="Pick"><template #prefix><i data-testid="p" /></template></SelectTrigger></Select>`
@@ -969,7 +950,7 @@ describe('Select labels, typeahead and slots', () => {
       components: { Select, SelectTrigger },
       template: `<Select><SelectTrigger aria-label="Pick"><template #iconLeft><i data-testid="l" /></template></SelectTrigger></Select>`
     })
-    expect(legacy.getByTestId('l')).toBeTruthy()
+    expect(legacy.queryByTestId('l')).toBeNull()
   })
 })
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: a5f3105160cf4bf6b1f913bd2c8a1620070edbe770d232a9befe2301cfb990ab
+checksum: ddc580e02f92dcf6a44e6ae6619c768dda28b5436d4663eb84043534a1d24548
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -85,11 +85,11 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Slots
 
-| Slot      | Scope                       | Notes                                                 |
-| --------- | --------------------------- | ----------------------------------------------------- |
+| Slot      | Scope                          | Notes                                                 |
+| --------- | ------------------------------ | ----------------------------------------------------- |
 | `header`  | `CardListItemSlotProps<TItem>` | Card title; names the card and its selection control. |
 | `default` | `CardListItemSlotProps<TItem>` | Card body: the item's fields.                         |
-| `empty`   | —                           | Shown when there are no items.                        |
+| `empty`   | —                              | Shown when there are no items.                        |
 
 ## States
 
@@ -125,14 +125,14 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 - Visible focus: owned by the checkbox, the radio and the links in the header slot.
 - Keyboard map: `Tab` moves through the select-all, each card's control and its content; `Space` toggles a control.
-- ARIA: the cards are a named `list` of `listitem`s; each selection control is labelled by its card's header (`aria-labelledby`); the select-all has a visible label; the root sets `aria-busy` while loading.
+- ARIA: the cards are a named `list` of `listitem`s; each checkbox is labelled by its card's header (`aria-labelledby`), and in single mode each card's header sits inside its `RadioGroup.Item` label, so the radio is named by it; the select-all has a visible label; the root sets `aria-busy` while loading.
 - Selection is never conveyed by color alone: the control is checked.
 - Contrast ≥4.5:1 (text) and ≥3:1 for the selected border.
 
 ## Internationalization
 
-| Key                      | English source              | Override prop |
-| ------------------------ | --------------------------- | ------------- |
+| Key                         | English source              | Override prop |
+| --------------------------- | --------------------------- | ------------- |
 | `cardList.label`            | Items                       | `ariaLabel`   |
 | `cardList.selectAll`        | Select all items            | —             |
 | `cardList.emptyTitle`       | No items yet                | `empty` slot  |
@@ -142,7 +142,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Right-to-left
 
-- Layout: logical utilities only; the selection control sits at the end of the header row.
+- Layout: logical utilities only; the checkbox sits at the end of the header row, the single-mode radio at its start.
 - Icons: none of its own.
 - Keyboard: no arrow-key navigation of its own.
 - User data: the slots isolate user data (`<bdi>` around domains in the examples).
@@ -156,7 +156,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Performance
 
-- Bundle budget: 19 KB gzip for `./card-list` (it carries `checkbox`, `radio-button`, `skeleton` and `empty-state`) in `.size-limit.json`.
+- Bundle budget: 19 KB gzip for `./card-list` (it carries `checkbox`, `radio-group`, `skeleton` and `empty-state`) in `.size-limit.json`.
 - Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more. Above 120 items the cards mount in chunks of 60 as the list scrolls near them (`useLazyChunks`; a full-row placeholder holds the place of each chunk not yet mounted). Selection is looked up in a `Set` built once per change, so select-all and each card's selected state cost O(1) per card. The `CardList with 1k items: mount and select all` scenario of `performance.test.ts` holds an unpaged list to its budget in `perf-budgets.json`.
 - Heavy parts: none.
 

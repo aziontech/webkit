@@ -57,7 +57,7 @@ export default {
     iconLeft
       ? figma.code`
   <Select.Trigger>
-    <template #iconLeft>
+    <template #prefix>
       <i class="pi pi-globe" />
     </template>
   </Select.Trigger>`

@@ -4,14 +4,13 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
-  import Field from '@aziontech/webkit/field'
   import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -443,28 +442,21 @@
                     title="Workloads"
                     kind="stacked"
                   >
-                    <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                      <legend class="sr-only">Workloads</legend>
-                      <Field.Label
+                    <RadioGroup
+                      v-model="form.scope"
+                      kind="card"
+                      name="data-stream-scope"
+                      aria-label="Workloads"
+                      :disabled="saving"
+                    >
+                      <RadioGroup.Item
                         v-for="option in scopeOptions"
                         :key="option.value"
+                        :value="option.value"
+                        :description="option.description"
+                        >{{ option.label }}</RadioGroup.Item
                       >
-                        <Field
-                          orientation="horizontal"
-                          :disabled="saving"
-                        >
-                          <RadioButton
-                            v-model="form.scope"
-                            :value="option.value"
-                            name="data-stream-scope"
-                          />
-                          <Field.Content>
-                            <Field.Title>{{ option.label }}</Field.Title>
-                            <Field.Description>{{ option.description }}</Field.Description>
-                          </Field.Content>
-                        </Field>
-                      </Field.Label>
-                    </fieldset>
+                    </RadioGroup>
                   </SettingRow>
                   <SettingRow
                     v-if="form.scope === 'filtered'"

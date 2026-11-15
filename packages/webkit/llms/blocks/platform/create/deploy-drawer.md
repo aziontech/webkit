@@ -1,11 +1,11 @@
 # DeployDrawer (`platform/create/deploy-drawer`)
 
-> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
+> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`kind="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioButton](../../../components/radio-button.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioGroup](../../../components/radio-group.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -55,9 +55,9 @@ A small `Accordion` below the resource rows, collapsed, listing the modules and 
 
 A full-width `ToggleGroup` in the card header switches between Use existing and Create new. The project is an outlined `Item`: its name, a New `Tag` when it will be created, and its domains grouped by environment, the first one a small `Link` (`target="_blank"`, with its external glyph) under a `Tooltip` that says it opens in a new tab, the rest behind a `+N` `Tag` whose `Popover.Trigger` is named "N more domains" and opens a searchable `Popover` listing each domain as a `Link`. Never hand-roll the anchors. Change opens a `DropdownMenu` of the projects grouped by how they relate to the service.
 
-### G. Environment — `Field`, `RadioButton`, `Tag` (required)
+### G. Environment — `RadioGroup`, `Tag` (required)
 
-Choice cards, one horizontal `Field` with a `RadioButton` per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
+Choice cards, a `RadioGroup` with `kind="card"` and one item per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
@@ -171,7 +171,6 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
@@ -179,7 +178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Separator from '@aziontech/webkit/separator'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Tag from '@aziontech/webkit/tag'
@@ -1231,45 +1230,31 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               title="Environment"
               hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
             >
-              <div
-                role="radiogroup"
+              <RadioGroup
+                v-model="environment"
+                kind="card"
+                name="service-deploy-environment"
                 aria-label="Environment"
-                class="flex min-w-0 flex-col gap-(--spacing-xs)"
               >
-                <div
+                <RadioGroup.Item
                   v-for="entry in environmentChoices"
                   :key="entry.name"
-                  class="relative min-w-0"
+                  :value="entry.name"
+                  :description="entry.description"
                 >
-                  <Field.Label>
-                    <Field orientation="horizontal">
-                      <RadioButton
-                        v-model="environment"
-                        name="service-deploy-environment"
-                        :value="entry.name"
-                      />
-                      <Field.Content>
-                        <Field.Title>
-                          {{ entry.name }}
-                        </Field.Title>
-                        <Field.Description v-if="entry.description">
-                          {{ entry.description }}
-                        </Field.Description>
-                      </Field.Content>
-                    </Field>
-                  </Field.Label>
-                  <div
+                  {{ entry.name }}
+                  <template
                     v-if="entry.tag"
-                    class="pointer-events-none absolute end-(--spacing-sm) top-(--spacing-sm)"
+                    #tag
                   >
                     <Tag
                       :label="entry.tag"
                       severity="info"
                       size="small"
                     />
-                  </div>
-                </div>
-              </div>
+                  </template>
+                </RadioGroup.Item>
+              </RadioGroup>
             </SettingsSection>
 
             <SettingsSection

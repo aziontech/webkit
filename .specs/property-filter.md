@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 214caf7ef624b02ae328a0172209153afadd6169a79f83acf038e0780c10231d
+checksum: f513cb3457a9091f842cb01a7e201c9089c16c1fead86007e69876bde7926264
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ One field that filters a collection by properties and free text, after Cloudscap
 
 - `use-collection` — applies the query; `propertyFilterProps` is the binding.
 - `table` — the collection it usually filters.
-- `cards` — the card form of a collection.
+- `card-list` — the card form of a collection.
 - `collection-preferences` — the panel that sits beside it in the controls row.
 
 ## Best practices

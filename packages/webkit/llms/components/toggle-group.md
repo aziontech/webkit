@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use ToggleGroup (segmented control) to switch a view or mode in place (Table/Chart, 1h/24h), with two to five short segments; it is not a form field (pick one of a few in a form with RadioGroup).
+- Use ToggleGroup (segmented control) to switch a view or mode in place (Table/Chart, 1h/24h), with two to five short segments; it is not a form field. For one choice in a form use RadioGroup; for an on/off setting use Switch; for the theme in app chrome use ThemeSwitcher.
 - Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.
 - Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.
 - Show a choice that is currently unavailable as a disabled segment instead of hiding it; mark it `locked` when it is unavailable because of a plan or a permission.
@@ -24,7 +24,7 @@
 ## Don’t
 
 - The choice switches between content panels that belong to the control → use `tabs`.
-- The choice is a form field with a label, helper text or validation → use horizontal `field`s with a `radio-button`, or `Field.Label` choice cards when each option needs a description.
+- The choice is a form field with a label, helper text or validation → use `radio-group` (`kind="card"` when each option needs a description).
 - The value is a binary on/off setting → use `switch` (in a horizontal `field` inside a form).
 - The user can pick more than one option → use `checkbox` (in a horizontal `field`).
 - The control triggers an action instead of holding a value → use `button` or `split-button`.
@@ -33,7 +33,8 @@
 ## Related
 
 - [tabs](tabs.md) — tabs that own their panels; reach for it when each option reveals its own content region.
-- [field](field.md) — a horizontal `Field` with a `radio-button` is the form-field single choice with label and description; a `Field.Label` choice card when each option carries a title and description.
+- [radio-group](radio-group.md) — the form-field single choice; `kind="card"` when each option carries a description.
+- [theme-switcher](theme-switcher.md) — the system / light / dark choice in app chrome.
 - [switch](switch.md) — a single boolean toggle.
 - [button](button.md) — a lone action; the segments here hold a value instead of firing one.
 - Naming: Radix and shadcn `ToggleGroup` is a group of `aria-pressed` toggles with `type="single" | "multiple"`. This component is the single-select segmented control (Cloudscape and Geist call it a segmented control): one value is always selected and the segments are radios. There is no multiple mode; for several independent toggles use `checkbox`es or `ButtonGroup` toggles.

@@ -42,9 +42,9 @@ Inserted only when the chosen host has the needed module off. A flush `Card` hol
 
 Each step's fields are `SettingRow`s in an `Item.List` inside a flush `Card`, the same anatomy as a single page create. A large `Input` takes an `aria-label` matching the row title. Next validates only the current step: an empty required field gets `:required` and a `HelperText` with the message, cleared as soon as the field is edited.
 
-### G. Choice cards — `Field`, `RadioButton` (optional)
+### G. Choice cards — `RadioGroup` (optional)
 
-A choice that changes what follows, such as the list type, is a `SettingRow kind="stacked"` holding a `fieldset` of wide horizontal `Field` cards, each a `RadioButton` with `Field.Title` and `Field.Description`. Use it for three to five options that need a sentence each.
+A choice that changes what follows, such as the list type, is a `SettingRow kind="stacked"` holding a `RadioGroup` with `kind="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
 
 ### H. Long entry — `Textarea`, `HelperText` (optional)
 
@@ -94,7 +94,7 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 - The `Stepper` has an `aria-label` naming the flow; disabled steps cannot be focused or activated.
 - The `form` takes the current step's title as its `aria-label`; a `fieldset` with a visually hidden `legend` repeats it.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
-- Choice cards sit in a `fieldset` with a `legend`; each `RadioButton` is labelled by its card.
+- Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
 - Step transitions honour reduced motion.
 

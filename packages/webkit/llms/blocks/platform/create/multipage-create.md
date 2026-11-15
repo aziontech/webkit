@@ -1,11 +1,11 @@
 # MultipageCreate (`platform/create/multipage-create`)
 
-> The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`.
+> The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind="card"`), `Item`, `Textarea`, `HelperText` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/multipage-create/multipage-create.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/multipage-create")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [SettingRow](../../../components/setting-row.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioGroup](../../../components/radio-group.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [SettingRow](../../../components/setting-row.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -54,9 +54,9 @@ Inserted only when the chosen host has the needed module off. A flush `Card` hol
 
 Each step's fields are `SettingRow`s in an `Item.List` inside a flush `Card`, the same anatomy as a single page create. A large `Input` takes an `aria-label` matching the row title. Next validates only the current step: an empty required field gets `:required` and a `HelperText` with the message, cleared as soon as the field is edited.
 
-### G. Choice cards — `Field`, `RadioButton` (optional)
+### G. Choice cards — `RadioGroup` (optional)
 
-A choice that changes what follows, such as the list type, is a `SettingRow kind="stacked"` holding a `fieldset` of wide horizontal `Field` cards, each a `RadioButton` with `Field.Title` and `Field.Description`. Use it for three to five options that need a sentence each.
+A choice that changes what follows, such as the list type, is a `SettingRow kind="stacked"` holding a `RadioGroup` with `kind="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
 
 ### H. Long entry — `Textarea`, `HelperText` (optional)
 
@@ -106,7 +106,7 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 - The `Stepper` has an `aria-label` naming the flow; disabled steps cannot be focused or activated.
 - The `form` takes the current step's title as its `aria-label`; a `fieldset` with a visually hidden `legend` repeats it.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
-- Choice cards sit in a `fieldset` with a `legend`; each `RadioButton` is labelled by its card.
+- Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
 - Step transitions honour reduced motion.
 
@@ -145,7 +145,7 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 - `WhereItRuns` — primary (the code below)
 - `ModuleOff` — acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.
-- `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioButton choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Next in the footer. Leaving the list empty flags it and marks the step red on the rail.
+- `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Next in the footer. Leaving the list empty flags it and marks the step red on the rail.
 - `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/multipage-create", { variant })`, or the file under `blocks/platform/create/multipage-create/variants/`.
@@ -167,7 +167,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -782,31 +782,21 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             title="Type"
                             kind="stacked"
                           >
-                            <fieldset
-                              class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
+                            <RadioGroup
+                              v-model="form.type"
+                              kind="card"
+                              class="w-full"
+                              name="access-lists-type"
+                              aria-label="Type"
                             >
-                              <legend class="sr-only">Type</legend>
-                              <Field.Label
+                              <RadioGroup.Item
                                 v-for="option in types"
                                 :key="option.value"
+                                :value="option.value"
+                                :description="option.description"
+                                >{{ option.label }}</RadioGroup.Item
                               >
-                                <Field orientation="horizontal">
-                                  <RadioButton
-                                    v-model="form.type"
-                                    :value="option.value"
-                                    name="access-lists-type"
-                                  />
-                                  <Field.Content>
-                                    <Field.Title>
-                                      {{ option.label }}
-                                    </Field.Title>
-                                    <Field.Description v-if="option.description">
-                                      {{ option.description }}
-                                    </Field.Description>
-                                  </Field.Content>
-                                </Field>
-                              </Field.Label>
-                            </fieldset>
+                            </RadioGroup>
                           </SettingRow>
                           <SettingRow
                             :title="listField.label"

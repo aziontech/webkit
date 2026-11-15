@@ -1,7 +1,7 @@
 <script setup>
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
   import { ref } from 'vue'
 
@@ -37,20 +37,18 @@
       <Field.Separator />
       <Field.Set>
         <Field.Legend kind="label">Plan</Field.Legend>
-        <Field
-          v-for="option in ['free', 'pro', 'business']"
-          :key="option"
-          orientation="horizontal"
+        <RadioGroup
+          v-model="plan"
+          name="plan"
         >
-          <RadioButton
-            v-model="plan"
+          <RadioGroup.Item
+            v-for="option in ['free', 'pro', 'business']"
+            :key="option"
             :value="option"
-            name="plan"
-          />
-          <Field.Label>
+          >
             <span class="capitalize">{{ option }}</span>
-          </Field.Label>
-        </Field>
+          </RadioGroup.Item>
+        </RadioGroup>
       </Field.Set>
     </Field.Group>
   </Field.Set>

@@ -11,7 +11,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
@@ -186,29 +186,20 @@
                       />
                     </span>
                   </Field.Legend>
-                  <div class="flex flex-col gap-(--spacing-sm)">
-                    <Field
+                  <RadioGroup
+                    v-model="form.bindingPolicy"
+                    name="binding-policy"
+                    aria-label="Binding policy"
+                    :disabled="submitting"
+                  >
+                    <RadioGroup.Item
                       v-for="policy in bindingPolicies"
                       :key="policy.value"
-                      orientation="horizontal"
-                      :disabled="submitting"
+                      :value="policy.value"
+                      :description="policy.description"
+                      >{{ policy.label }}</RadioGroup.Item
                     >
-                      <RadioButton
-                        v-model="form.bindingPolicy"
-                        :value="policy.value"
-                        name="binding-policy"
-                        :id="`deployment-settings-binding-${policy.value}`"
-                      />
-                      <Field.Content>
-                        <Field.Label :for="`deployment-settings-binding-${policy.value}`">
-                          {{ policy.label }}
-                        </Field.Label>
-                        <Field.Description v-if="policy.description">
-                          {{ policy.description }}
-                        </Field.Description>
-                      </Field.Content>
-                    </Field>
-                  </div>
+                  </RadioGroup>
                 </fieldset>
 
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
@@ -218,29 +209,20 @@
                       <Hint text="Defines how many versions can receive traffic." />
                     </span>
                   </Field.Legend>
-                  <div class="flex flex-col gap-(--spacing-sm)">
-                    <Field
+                  <RadioGroup
+                    v-model="form.deploymentPolicy"
+                    name="version-policy"
+                    aria-label="Deployment version policy"
+                    :disabled="submitting"
+                  >
+                    <RadioGroup.Item
                       v-for="policy in deploymentPolicies"
                       :key="policy.value"
-                      orientation="horizontal"
-                      :disabled="submitting"
+                      :value="policy.value"
+                      :description="policy.description"
+                      >{{ policy.label }}</RadioGroup.Item
                     >
-                      <RadioButton
-                        v-model="form.deploymentPolicy"
-                        :value="policy.value"
-                        name="version-policy"
-                        :id="`deployment-settings-version-${policy.value}`"
-                      />
-                      <Field.Content>
-                        <Field.Label :for="`deployment-settings-version-${policy.value}`">
-                          {{ policy.label }}
-                        </Field.Label>
-                        <Field.Description v-if="policy.description">
-                          {{ policy.description }}
-                        </Field.Description>
-                      </Field.Content>
-                    </Field>
-                  </div>
+                  </RadioGroup>
                   <HelperText label="Cannot be changed after the deployment is created." />
                 </fieldset>
 

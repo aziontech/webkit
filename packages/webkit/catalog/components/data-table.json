@@ -14,7 +14,7 @@
   "A short titled preview of a longer listing on a marketing page → use `listing-table`.",
   "A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.",
   "Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.",
-  "The same records as a grid of cards → use `cards` (same collection, card layout)."
+  "The same records as a grid of cards → use `card-list` (same collection, card layout)."
  ],
  "related": [
   "table` — the parts DataTable renders through, and the hand-composed table for small static content; its toolbar parts and cell presets go in DataTable's slots.",

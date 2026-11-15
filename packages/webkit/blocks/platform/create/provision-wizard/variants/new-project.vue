@@ -12,7 +12,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -1125,9 +1125,11 @@
                                     >
                                       Type
                                     </p>
-                                    <RadioCards
+                                    <RadioGroup
                                       v-model="scratch.origin.type"
-                                      :items="originTypes"
+                                      kind="card"
+                                      orientation="horizontal"
+                                      :options="originTypes"
                                       aria-labelledby="origin-type-label"
                                       aria-describedby="origin-type-help"
                                     />
@@ -1374,9 +1376,11 @@
                                       <Hint text="Which environment this binding lands on." />
                                     </span>
                                   </Field.Legend>
-                                  <RadioCards
+                                  <RadioGroup
                                     v-model="form.environment"
-                                    :items="environments"
+                                    kind="card"
+                                    orientation="horizontal"
+                                    :options="environments"
                                     aria-labelledby="environment-label"
                                     aria-describedby="environment-helper"
                                   />

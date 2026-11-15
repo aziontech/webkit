@@ -27,7 +27,7 @@
 
 - Records that share columns and need sorting, selection or paging → use `table`.
 - Hierarchical navigation rows in a sidebar → use `sidebar-menu`.
-- A grid of selectable option cards → use `radio-cards`.
+- A grid of selectable option cards → use `radio-group` with `kind="card"`.
 - A single surface that frames arbitrary content → use `card`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

@@ -62,9 +62,9 @@
       "binding": "PasswordInput"
     },
     "box-grid-selection": {
-      "to": "radio-cards",
+      "to": "radio-group",
       "from": "BoxGridSelection",
-      "binding": "RadioCards"
+      "binding": "RadioGroup"
     },
     "resizable-panel": {
       "to": "resizable",
@@ -90,6 +90,26 @@
       "to": "tool-approval",
       "from": "ActionConfirmation",
       "binding": "ToolApproval"
+    },
+    "calendar": {
+      "to": "date-picker",
+      "from": "Calendar",
+      "binding": "DatePicker"
+    },
+    "pick-list": {
+      "to": "transfer-list",
+      "from": "PickList",
+      "binding": "TransferList"
+    },
+    "radio-cards": {
+      "to": "radio-group",
+      "from": "RadioCards",
+      "binding": "RadioGroup"
+    },
+    "radio-button": {
+      "to": "radio-group-item",
+      "from": "RadioButton",
+      "binding": "RadioGroupItem"
     }
   },
   "removed": {
@@ -107,20 +127,24 @@
     "field-input-group": "Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription",
     "field-text-switch": "Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription",
     "field-checkbox": "Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)",
-    "field-radio": "Field orientation=horizontal + RadioButton + FieldContent (FieldLabel + FieldDescription)",
+    "field-radio": "RadioGroup v-model with a RadioGroup.Item per option (description on the item)",
     "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
     "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
-    "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
+    "field-radio-block": "RadioGroup kind=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
     "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
     "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
     "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
     "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
     "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
     "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu kind); the property kind shows its own tokens",
-    "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)"
+    "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
+    "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
+    "calendar-preset": "DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options",
+    "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes kind=\"card\" with description on the item",
+    "radio-cards": "RadioGroup kind=\"card\" orientation=\"horizontal\" with :options (the items move to options as is); the #default=\"{ item }\" slot becomes #option=\"{ option }\" and #tag=\"{ item }\" becomes #tag=\"{ option }\""
   },
   "types": {
-    "BoxGridSelectionItem": "RadioCardsItem",
+    "BoxGridSelectionItem": "RadioGroupOption",
     "CommandMenuContext": "CommandContext",
     "CommandMenuItemValue": "CommandItemValue",
     "CommandMenuRegisteredItem": "CommandRegisteredItem",
@@ -157,7 +181,18 @@
     "FlowAnchorType": "FlowAnchorSide",
     "GaugeChartThreshold": "ChartThreshold",
     "ChartReferenceSeverity": "ChartThresholdSeverity",
-    "PopoverWidth": "PopoverSize"
+    "PopoverWidth": "PopoverSize",
+    "CalendarMonth": "DatePickerMonth",
+    "CalendarOrientation": "DatePickerOrientation",
+    "CalendarProps": "DatePickerProps",
+    "CalendarSize": "DatePickerSize",
+    "CalendarValue": "DatePickerValue",
+    "PickListContext": "TransferListContext",
+    "PickListItems": "TransferListItems",
+    "PickListSide": "TransferListSide",
+    "PickListValue": "TransferListValue",
+    "RadioCardsItem": "RadioGroupOption",
+    "SwitchType": "SwitchKind"
   },
   "legacy": {
     "major": 3,
@@ -228,7 +263,7 @@
       "avatar": "PrimeVue Avatar; use Avatar (src, initials, size)",
       "azion-system-status": "work-in-progress component, removed; build it from StatusIndicator + Link",
       "badge": "PrimeVue Badge; use Badge",
-      "box-grid-selection": "work-in-progress component; use RadioCards",
+      "box-grid-selection": "work-in-progress component; use RadioGroup kind=\"card\"",
       "breadcrumb": "PrimeVue Breadcrumb (model prop); use Breadcrumb with Breadcrumb.Item children",
       "button": "PrimeVue Button (label, severity, outlined, text); use Button with kind and size, the label in the slot",
       "button-cancel": "preset button; use Button kind=\"secondary\" with your own label",
@@ -237,7 +272,7 @@
       "button-create": "preset button; use Button kind=\"primary\" with your own label",
       "button-delete": "preset button; use Button kind=\"danger\" with your own label",
       "button-save": "preset button; use Button kind=\"primary\" with your own label, or SaveBar",
-      "calendar": "PrimeVue Calendar; use Calendar (inline) or a Popover around Calendar",
+      "calendar": "PrimeVue Calendar; use DatePicker for one date, DateRangePicker for a range",
       "card": "PrimeVue Card; use Card (title prop, default and footer slots)",
       "card-box": "form CardBox; use Card",
       "card-content": "form CardContent; use the default slot of Card",
@@ -281,7 +316,7 @@
       "field-dropdown-lazy-loader-with-filter": "Field + FieldLabel + Select, loading and filtering the options in your own code + FieldDescription",
       "field-dropdown-multi-select-lazy-loader": "Field + FieldLabel + MultiSelect, loading the options in your own code + FieldDescription",
       "field-group-checkbox": "Field.Set + Field.Legend + one Field orientation=horizontal + Checkbox per option",
-      "field-group-radio": "Field.Set + Field.Legend + one Field orientation=horizontal + RadioButton per option, or RadioCards",
+      "field-group-radio": "Field.Set + Field.Legend + RadioGroup with a RadioGroup.Item per option (kind=\"card\" for cards)",
       "field-group-switch": "Field.Set + Field.Legend + one Field orientation=horizontal + Switch per option",
       "field-input-group": "Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription",
       "field-multi-select": "Field + FieldLabel + MultiSelect + FieldDescription",
@@ -289,8 +324,8 @@
       "field-password": "Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)",
       "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
       "field-phone-number-country": "Field + FieldLabel + PhoneInput + FieldDescription",
-      "field-pick-list": "Field + FieldLabel + PickList + FieldDescription",
-      "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
+      "field-pick-list": "Field + FieldLabel + TransferList + FieldDescription",
+      "field-radio-block": "RadioGroup kind=\"card\" with a RadioGroup.Item per option (description on the item)",
       "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
       "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
       "field-text": "Field + FieldLabel + Input + FieldDescription",
@@ -302,7 +337,7 @@
       "inputs/dropdown": "use Select with Select.Trigger / Content / Option",
       "inputswitch": "PrimeVue InputSwitch; use Switch",
       "inputtext": "PrimeVue InputText; use Input",
-      "label": "form Label; use FieldLabel inside a Field, or Label",
+      "label": "form Label; use Field.Label inside a Field, or FieldLabel",
       "list-data-table": "console list table; use DataTable or the table-view block",
       "list-data-table/cells": "console list table cells; use DataTable column slots and the Table.Cell* presets",
       "list-data-table/composables": "console list table composables; use DataTable props (sort, selection, pagination)",
@@ -321,13 +356,13 @@
       "overline": "work-in-progress Overline; use Overline",
       "paginator": "PrimeVue Paginator (first, rows, totalRecords); use Pagination",
       "password": "PrimeVue Password; use PasswordInput (+ PasswordRequirements)",
-      "picklist": "PrimeVue PickList; use PickList",
+      "picklist": "PrimeVue PickList; use TransferList",
       "plugin": "PrimeVue plugin; v6 needs no plugin, mount WebkitProvider at the app root",
       "pricing-card": "work-in-progress card; use CardPricing",
       "prime-tag": "PrimeVue Tag; use Tag",
       "progressbar": "PrimeVue ProgressBar; use Progress",
       "progressspinner": "PrimeVue ProgressSpinner; use Spinner",
-      "radiobutton": "PrimeVue RadioButton; use RadioButton inside Field orientation=\"horizontal\"",
+      "radiobutton": "PrimeVue RadioButton; use RadioGroup with a RadioGroup.Item per option",
       "resizable-splitter": "work-in-progress splitter; use Resizable",
       "selectbutton": "PrimeVue SelectButton; use ToggleGroup",
       "selector-block": "form selector block; use RadioCards",

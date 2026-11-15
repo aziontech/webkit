@@ -60,7 +60,7 @@
 ## Accessibility
 
 - A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
-- The reasons are a `fieldset` with a `legend` (`Reason`), one `RadioButton` per reason with its label; the details `Textarea` is labelled `Details (optional)`.
+- The reasons are a `fieldset` with a `legend` (`Reason`), a `RadioGroup` with one `RadioGroup.Item` per reason and its label; the details `Textarea` is labelled `Details (optional)`.
 - Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
 - Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.
 

@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ThemeSwitcher only for the system / light / dark choice in app chrome; for any other segmented choice use ToggleGroup, and for a choice in a form use RadioGroup.
 - The app-wide color mode picker in a header, footer, account menu or settings page.
 
 ## Do

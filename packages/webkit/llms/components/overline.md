@@ -26,7 +26,7 @@
 - The text is a status, count or category attached to an item → use `tag` or `badge`.
 - The text is the heading itself → use a real heading element; Overline renders a `div` and is not a heading.
 - The text is a keyboard shortcut → use `kbd`.
-- The text is a field label → use `label`.
+- The text is a field label → use `Field.Label`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

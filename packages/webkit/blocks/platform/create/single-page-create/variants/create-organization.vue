@@ -10,7 +10,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -285,29 +285,31 @@
                         kind="stacked"
                       >
                         <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
-                          <RadioCards
+                          <RadioGroup
                             v-model="form.mark"
-                            :items="MARKS"
+                            kind="card"
+                            orientation="horizontal"
+                            :options="MARKS"
                             :disabled="submitting"
                             aria-label="Organization mark"
                             class="w-full"
                           >
-                            <template #default="{ item }">
+                            <template #option="{ option }">
                               <span class="flex flex-col items-center gap-(--spacing-xs)">
                                 <Avatar
                                   :label="previewName"
-                                  :alt="item.label"
-                                  :colors="item.colors"
+                                  :alt="option.label"
+                                  :colors="option.colors"
                                   pattern="marble"
                                   size="medium"
                                   kind="square"
                                 />
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  item.label
+                                  option.label
                                 }}</span>
                               </span>
                             </template>
-                          </RadioCards>
+                          </RadioGroup>
                           <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                             <p class="m-0 text-overline-sm text-(--text-muted)">In the header</p>
                             <span

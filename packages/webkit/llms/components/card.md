@@ -33,7 +33,7 @@
 - It is one tier of a pricing comparison → use `card-pricing`.
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
-- It is one record of a resource list shown as cards, with selection and fields → use `cards` (with `useCollection`).
+- It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
 - It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `platform/view/template-browser`).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

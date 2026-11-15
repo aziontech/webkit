@@ -1,0 +1,270 @@
+---
+name: date-picker
+category: inputs
+structure: composition
+status: implemented
+spec_version: 9
+template: 2
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
+  node_id: 5087:17336
+checksum: 726bb0bcd4542964ac09bb5d59843ed585b09293fc54bbe30c26d5202626cb6b
+created: 2026-06-25
+last_updated: 2026-11-15
+---
+
+# DatePicker — Component Spec
+
+## Purpose
+
+DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and an Apply action. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn "Date Picker".
+
+## When to use
+
+- Use DatePicker to pick one date (optionally with a time) in a form field. For any start–end range use DateRangePicker; to display a moment in time use Timestamp.
+- A due date, a start date, an expiry date, a birthday.
+- A date and a time of day together (`show-time`): a scheduled maintenance window start, a release time.
+
+## When NOT to use
+
+- A start and an end, whole days or with times, relative or absolute → use `date-range-picker`.
+- Displaying a date the person does not edit → use `timestamp`.
+- A duration or count (retention days, TTL) rather than a date → use `number-input`.
+
+## Related
+
+- `date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time="false"`. It is built on this component's grid, fields and time zone selector.
+- `timestamp` — shows a moment in time in the app's time zone.
+- `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
+- `input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side.
+
+## Best practices
+
+- `modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply="false"` when every edit should commit at once.
+- Bind a `Date` or `null`.
+- Bound the selectable days with `min` and `max` instead of validating after commit.
+- Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label.
+
+## Usage
+
+```vue
+<script setup>
+  import { ref } from 'vue'
+
+  import DatePicker from '@aziontech/webkit/date-picker'
+
+  const due = ref(null)
+</script>
+
+<template>
+  <DatePicker
+    v-model="due"
+    aria-label="Due date"
+    clearable
+  />
+</template>
+```
+
+The root renders the complete picker from props. Compose `<DatePicker.Clear>` in the `footer` slot to clear the draft inside the panel:
+
+```vue
+<template>
+  <DatePicker v-model="due">
+    <template #footer>
+      <DatePicker.Clear>Clear</DatePicker.Clear>
+    </template>
+  </DatePicker>
+</template>
+```
+
+Tree-shaking alternative — the standalone root + the sub-component from its own entry (no `Object.assign` compound pulled in):
+
+```vue
+<script setup>
+  import DatePicker from '@aziontech/webkit/date-picker-root'
+  import DatePickerClear from '@aziontech/webkit/date-picker-clear'
+</script>
+```
+
+## Sub-components
+
+- `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
+
+Internal parts, not exported, shared with `date-range-picker`: `date-picker-grid/` (the month grid), `date-picker-fields/` (the date and time fields, a Start/End pair for a range), `date-picker-timezone/` (the time zone selector `date-range-picker` shows).
+
+## Props
+
+| Prop          | Type                             | Default      | Required | JSDoc                                                                                                                                                       |
+| ------------- | -------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects the trigger, day-cell hit-area, and typography.                                                                                         |
+| `min`         | `Date \| undefined`              | `undefined`  | false    | Earliest selectable date; earlier days render disabled.                                                                                                     |
+| `max`         | `Date \| undefined`              | `undefined`  | false    | Latest selectable date; later days render disabled.                                                                                                         |
+| `disabled`    | `boolean`                        | `false`      | false    | Disables the trigger, grid, and all controls, applying disabled tokens.                                                                                     |
+| `invalid`     | `boolean`                        | `false`      | false    | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too.                                         |
+| `defaultOpen` | `boolean`                        | `false`      | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                              |
+| `placeholder` | `string`                         | `''`         | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date`).                                                             |
+| `showFields`  | `boolean`                        | `true`       | false    | Shows the date field (and the time field with `showTime`) in the panel. Set false when the grid is the whole interaction and typing a date is not offered. |
+| `showTime`    | `boolean`                        | `false`      | false    | Shows a time field beside the date field, so the value carries a time of day.                                                                               |
+| `orientation` | `'vertical' \| 'horizontal'`     | `'vertical'` | false    | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal).                                                                 |
+| `ariaLabel`   | `string`                         | `''`         | false    | Accessible name of the trigger; the current value is appended (`Due date: Nov 15, 2026`). Empty leaves the name to the Field label or the trigger text.    |
+| `clearable`   | `boolean`                        | `false`      | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                  |
+| `showApply`   | `boolean`                        | `true`       | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                           |
+| `split`       | `boolean`                        | `false`      | false    | Renders the trigger as a split control with a separate chevron affordance.                                                                                  |
+
+## v-model
+
+| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                   |
+| ------------------- | -------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.      |
+| `v-model:open`      | `boolean`      | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`. |
+| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`.  |
+
+**Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
+
+## Events
+
+| Event          | Payload                               | Notes                                                                                                                               |
+| -------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `month-change` | `DatePickerMonth`                     | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed). |
+| `apply`        | `(event: Event, value: Date \| null)` | Emitted when the draft selection is committed via Apply; `event` is the activating click or key event, `value` the committed date. |
+
+## Slots
+
+| Slot      | Scope                           | Notes                                                                                              |
+| --------- | ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `trigger` | `{ open, value, displayValue }` | Replaces the default trigger button; scope exposes the open state, raw value, and formatted label. |
+| `footer`  | —                               | Custom footer/action-bar content (e.g. `<DatePicker.Clear>`) alongside Apply.                      |
+
+## States
+
+- Visual states: `default`, `hover`, `focus-visible`, `selected`, `disabled`, `today`, `outside` (adjacent-month), popover `open` / `closed`
+- **Field contract parity.** Every field-shaped surface — the trigger and the date + time fields — follows the shared `inputs` field contract used by `input`, `number-input`, `select-trigger` and `textarea`, so a DatePicker reads identically to a text field placed beside it: heights are `small=28px` / `medium=32px` / `large=40px`, the value renders at `.text-label-sm`, and `disabled` applies `var(--bg-disabled)` + `var(--text-disabled)` + `cursor-not-allowed` rather than an opacity wash.
+- **Hover is identical to `input`.** The whole trigger is one field with one border, so hover raises **only** that border to `var(--border-strong)` — no background wash on any segment. It is suppressed while the control is focused and while `disabled`, via the same selector `input` uses: `[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)`. Hovering any segment — the date, clear, or split — raises the single shared border.
+- `data-state` on the root and trigger mirrors the popover open state (`open` | `closed`)
+- `data-size` mirrors the `size` prop on the root, trigger, and each day cell (`small` | `medium` | `large`)
+- `data-selected` mirrors the selected day cell
+- `data-band` on each day cell is `single` on the selected day and `none` elsewhere (the `start` / `middle` / `end` bands are `date-range-picker`'s)
+- `data-today` marks the current date, taken from the nearest `WebkitProvider` `now` when set (so a server render and the hydrating client agree), else the current time; the grid also opens on that month when there is no value; `data-outside` marks an adjacent-month day cell
+- `data-disabled` mirrors the `disabled` prop on the root, unselectable day cells, and the clear control when there is no selection
+- `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`'s) on the root and the trigger shell, with `aria-invalid` on the trigger and the danger border
+- Reflow: the root is capped at the width of its container (`max-w-full`), so the trigger never overflows a 320 px box.
+
+## Motion & Animations
+
+| Trigger                        | Animation / Transition                                                                                                                                                                                                                                                                                                                                                                                                             | Token (see `.claude/docs/DESIGN.md` § Animations)                                                                             | Reduced-motion fallback                                                                                 |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| popover open                   | `animate-popup-scale-in`                                                                                                                                                                                                                                                                                                                                                                                                           | semantic (150ms · cubic-bezier)                                                                                               | `motion-reduce:animate-none` (instant)                                                                  |
+| popover close                  | `animate-popup-scale-out`                                                                                                                                                                                                                                                                                                                                                                                                          | semantic (110ms · cubic-bezier)                                                                                               | `motion-reduce:animate-none` (instant)                                                                  |
+| hover/focus state change       | `transition-colors duration-150 ease-out`                                                                                                                                                                                                                                                                                                                                                                                          | inline (matches catalog)                                                                                                      | `motion-reduce:transition-none`                                                                         |
+| trigger chevron on open        | `transition-transform duration-150 ease-out` + `data-[state=open]:rotate-180`                                                                                                                                                                                                                                                                                                                                                      | inline (matches catalog)                                                                                                      | `motion-reduce:transition-none`                                                                         |
+| month change (next / previous) | only the **month strip** slides horizontally — next enters from `translate-x-full` and the outgoing leaves to `-translate-x-full`, previous mirrors it; both strips are on screen at once so it reads as a continuous scroll rather than a fade. The month label and the prev/next controls are **outside** the transition and never move, so the control the user just pressed stays put (and keeps focus) while the days travel. | `duration['moderate-02']` + `curve['productive-entrance']` from the theme animation catalog, via the shared Tabs panel preset | `motion-safe:` gates both the offset and the fade, so a reduced-motion swap is instant with no movement |
+
+## Tokens
+
+| Region                                  | Token (DESIGN.md)           |
+| --------------------------------------- | --------------------------- |
+| popover surface                         | `var(--bg-surface-raised)`  |
+| popover border                          | `var(--border-default)`     |
+| popover shape                           | `var(--shape-card)`         |
+| popover elevation                       | `var(--shadow-md)`          |
+| trigger / field surface                 | `var(--bg-surface)`         |
+| trigger / field surface (disabled)      | `var(--bg-disabled)`        |
+| trigger / field border                  | `var(--border-default)`     |
+| trigger / field border (hover)          | `var(--border-strong)`      |
+| trigger / field shape                   | `var(--shape-elements)`     |
+| section divider                         | `var(--border-default)`     |
+| label typography                        | `.text-label-sm`            |
+| trigger / field value typography        | `.text-label-sm`            |
+| weekday typography                      | `.text-label-sm`            |
+| day typography (small)                  | `.text-body-xs`             |
+| day typography (medium)                 | `.text-body-sm`             |
+| day typography (large)                  | `.text-body-md`             |
+| month header typography                 | `.text-body-sm`             |
+| header / muted text, adjacent-month day | `var(--text-muted)`         |
+| default text                            | `var(--text-default)`       |
+| disabled text                           | `var(--text-disabled)`      |
+| selected day surface                    | `var(--secondary)`          |
+| selected day text                       | `var(--secondary-contrast)` |
+| hover surface                           | `var(--bg-hover)`           |
+| spacing (padding)                       | `var(--spacing-sm)`         |
+| spacing (gap)                           | `var(--spacing-xxs)`        |
+| spacing (sections)                      | `var(--spacing-md)`         |
+| ring                                    | `var(--ring-color)`         |
+
+## Theme gaps
+
+| Figma variable                          | Temporary primitive                                                           | Follow-up                                                                                                                                                                                                                                                                                                              |
+| --------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Typography/Heading/xss` (14px regular) | `.text-body-sm` (0.875rem / 14px regular — matches the Figma size and weight) | `TODO: catalogar` — no heading-named token exists at 14px; `.text-body-sm` matches the size/weight, so the gap is naming-only. Applies to the day grid only: the **trigger / field value** deliberately uses `.text-label-sm` to match the shared inputs field contract (see § States), overriding the Figma frame's 14px on that region. |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` on the trigger and `focus-visible:ring-offset-(--bg-surface-raised)` inside the popover. The date and time fields reuse `input`, whose ring offset resolves `var(--input-ring-offset, var(--bg-canvas))`; the fields container declares `--input-ring-offset: var(--bg-surface-raised)` once and it inherits to every field.
+- Field labels: the visible Date label is a `<label for>` bound to its date field through `useId()`; the time field beside it carries its own `aria-label` (`Time`), so every field has a programmatic accessible name.
+- Keyboard map: the trigger toggles the popover with `Enter`/`Space` and exposes `aria-haspopup`/`aria-expanded`; `Escape` and click-outside close it and return focus to the trigger; focus is trapped in the open popover. In the grid, `Tab` enters at the focused day, `Arrow` keys move focus (paging the visible month when crossing its first/last day), `Enter`/`Space` selects, `Home`/`End` move to the first/last day of the week (the grid starts on Sunday; logical, so the same under `dir="rtl"`), `PageUp`/`PageDown` change month, `Shift+PageUp`/`Shift+PageDown` change year. Tests: `date-picker.test.ts` › Home and End, Shift+PageDown and Shift+PageUp. Apply, Clear and the fields are all reachable by `Tab`.
+- ARIA: the month grid uses `role="grid"` with `role="row"` and `role="gridcell"` descendants; the selected cell sets `aria-selected="true"`; the current date sets `aria-current="date"`; navigation buttons carry `aria-label`; the popover is a `dialog` named by the catalog (`Choose date`); decorative icons are `aria-hidden="true"`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state.
+- `motion-reduce:animate-none` on the popover and `motion-reduce:transition-none` on animated states.
+- Touch target ≥40×40 px (or justified deviation): day cells use a 32×32 px (`small`), 36×36 px (`medium`), or 40×40 px (`large`) hit area; `small`/`medium` are a justified deviation for dense month-grid layouts, `large` meets the 40 px target.
+
+## Internationalization
+
+- Every built-in string comes from the `datePicker` group of the locale catalog (`useLocale`): trigger placeholder (`Select a date`), Date / Time labels, Apply, Clear, the month navigation labels.
+- The active locale is the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
+- What the person sends stays unambiguous: `v-model` is a `Date` whatever the display format, so an app sends `toISOString()` (or the ISO date `2026-11-15`) to its server, never the printed label.
+- Printed text uses `Intl` in the active locale: the trigger label, the field value and its placeholder (`Jun 1, 2026` in `en`, `1 de jun. de 2026` in `pt-BR`), the time field, weekday and month names.
+- Typing is parsed in the active locale with English always accepted as well: month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`) and ISO `2026-01-05`. Times accept `14:30`, `14h30` and `2:30 pm`.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
+- Icons: the previous/next month chevrons mirror (`rtl:-scale-x-100`); the calendar trigger icon does not.
+- Motion: the month strip slide mirrors (`rtl:` swaps `translate-x-full` and `-translate-x-full`), so under `dir="rtl"` the next month enters from the left, the side its chevron points to.
+- Keyboard: in the day grid `ArrowRight`/`ArrowLeft` move one day later/earlier, swapped under `dir="rtl"` (`logicalArrowKey`): `ArrowLeft` moves to the next day. `ArrowUp`/`ArrowDown`, `PageUp`/`PageDown` and `Home`/`End` are unchanged.
+- User data: dates and times are printed by `Intl` in the active locale; the typed field value uses the `Input` `dir="auto"`.
+- Teleported content: the teleported date popover binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+
+## Responsive
+
+- The root is capped at its container (`max-w-full`), so the trigger never overflows a 320 px box; the popover is capped at `min(90vw, 44rem)` and scrolls inside.
+- `orientation="horizontal"` needs room for the grid and the fields side by side; on narrow screens keep the default vertical layout.
+- Touch: day cells are 32 / 36 / 40 px by `size`; use `size="large"` on touch-first surfaces.
+
+## Performance
+
+- Bundle budget: see `.size-limit.json` entries `date-picker` and `date-picker-root` (the date-field parser is included).
+- Runtime: renders one month of 42 day cells.
+
+## Examples
+
+- Default — an empty picker (opens on the current month) named by `aria-label`. Justified: shows the baseline trigger→popover→grid flow.
+- Sizes — composite story rendering every `size` value side-by-side (canonical, the component declares a `size` prop).
+- Horizontal — `orientation="horizontal"` layout with the fields beside the calendar. Justified: a distinct layout the default vertical story cannot show.
+- MinMax — `min`/`max` bounds that disable out-of-range days. Justified: the date-constraint behavior (disabled cells, clamped navigation) cannot be shown without it.
+- WithTime — `show-time` time field. Justified: the time-field round-trip is a distinct capability.
+- Clearable — `clearable` trigger that empties the committed selection. Justified: the clear affordance cannot be shown without it.
+- Disabled — a disabled picker with a committed date (state example for the `disabled` prop).
+- ClearPart — `DatePicker.Clear` in `#footer`. Justified: the compound sub-component cannot be shown by props.
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

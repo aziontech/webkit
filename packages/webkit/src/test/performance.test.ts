@@ -34,10 +34,13 @@ import Timestamp from '../components/content/timestamp/timestamp.vue'
 import CardList from '../components/data/card-list/card-list.vue'
 import DataTable from '../components/data/data-table/data-table.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
-import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
 import PropertyFilter from '../components/data/property-filter/property-filter.vue'
 import TableCellLink from '../components/data/table/table-cell-link/table-cell-link.vue'
 import TableCellTags from '../components/data/table/table-cell-tags/table-cell-tags.vue'
+import TransferList, {
+  TransferListSource,
+  TransferListTarget
+} from '../components/data/transfer-list'
 import Tree from '../components/data/tree/tree.vue'
 import DocLayout from '../components/documentation/doc-layout/doc-layout.vue'
 import DocMarkdown from '../components/documentation/doc-markdown/doc-markdown.vue'
@@ -1206,7 +1209,7 @@ function filterMenuCase(): Case {
   }
 }
 
-function pickListCase(): Case {
+function transferListCase(): Case {
   const make = (side: string) =>
     Array.from({ length: 1000 }, (_, i) => ({ id: `${side}${i}`, label: `${side} item ${i}` }))
   const model = ref<[unknown[], unknown[]]>([make('a'), make('b')])
@@ -1214,7 +1217,7 @@ function pickListCase(): Case {
     mount: () => ({
       render: () =>
         h(
-          PickList,
+          TransferList,
           {
             modelValue: model.value,
             'onUpdate:modelValue': (v: [unknown[], unknown[]]) => (model.value = v),
@@ -1222,8 +1225,8 @@ function pickListCase(): Case {
           },
           {
             default: () => [
-              h(PickListSource, { title: 'Available' }),
-              h(PickListTarget, { title: 'Selected' })
+              h(TransferListSource, { title: 'Available' }),
+              h(TransferListTarget, { title: 'Selected' })
             ]
           }
         )
@@ -1442,8 +1445,8 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('FilterMenu field with 1k options: open and search', async () => {
     check('filter-menu-1k', await measure(filterMenuCase))
   })
-  it('PickList with 1k items per side: mount and move all', async () => {
-    check('pick-list-1k', await measure(pickListCase))
+  it('TransferList with 1k items per side: mount and move all', async () => {
+    check('transfer-list-1k', await measure(transferListCase))
   })
   it('CardList with 1k items: mount and select all', async () => {
     check('cards-1k', await measure(cardsCase))

@@ -1,11 +1,11 @@
 # OnboardingForm (`platform/account/onboarding-form`)
 
-> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioCards` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
+> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioGroup` with `kind="card"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/onboarding-form")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioCards](../../../components/radio-cards.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Progress](../../../components/progress.md), [RadioGroup](../../../components/radio-group.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -59,7 +59,7 @@ Large; full name with `autocomplete="name"`.
 
 `Organization mark`, the `kind="label"` legend of the `fieldset` that holds the radio cards.
 
-### I. Mark picker — `RadioCards` (required)
+### I. Mark picker — `RadioGroup` with `kind="card"` (required)
 
 Seven colors, `aria-label="Organization mark"`, each card showing the generated mark.
 
@@ -137,7 +137,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Progress from '@aziontech/webkit/progress'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import { computed, ref } from 'vue'
 
   interface Accent {
@@ -327,28 +327,30 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
                         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                           <Field.Legend kind="label">Organization mark</Field.Legend>
-                          <RadioCards
+                          <RadioGroup
                             v-model="accent"
-                            :items="accents"
+                            kind="card"
+                            orientation="horizontal"
+                            :options="accents"
                             aria-label="Organization mark"
                             class="w-full"
                           >
-                            <template #default="{ item }">
+                            <template #option="{ option }">
                               <span class="flex flex-col items-center gap-(--spacing-xs)">
                                 <Avatar
                                   :label="previewName"
-                                  :alt="item.label"
-                                  :colors="item.colors"
+                                  :alt="option.label"
+                                  :colors="option.colors"
                                   pattern="marble"
                                   size="medium"
                                   kind="square"
                                 />
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  item.label
+                                  option.label
                                 }}</span>
                               </span>
                             </template>
-                          </RadioCards>
+                          </RadioGroup>
                           <HelperText
                             label="Generated from the organization's name. Select its color."
                           />

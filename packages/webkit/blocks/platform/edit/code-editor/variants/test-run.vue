@@ -5,7 +5,6 @@
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
   import CopyButton from '@aziontech/webkit/copy-button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -15,7 +14,7 @@
   import LogViewContent from '@aziontech/webkit/log-view-content'
   import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import ResizableHandle from '@aziontech/webkit/resizable-handle'
   import ResizablePane from '@aziontech/webkit/resizable-pane'
   import ResizableRoot from '@aziontech/webkit/resizable-root'
@@ -1290,40 +1289,23 @@ export async function handleRequest(request, args = {}) {
                         title="Runs on"
                         kind="stacked"
                       >
-                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                          <legend class="sr-only">Execution environment</legend>
-                          <Field.Label>
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.executionEnvironment"
-                                value="request"
-                                :name="groupName"
-                              />
-                              <Field.Content>
-                                <Field.Title> On request </Field.Title>
-                                <Field.Description>
-                                  Runs on each request the service handles, after routing.
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                          <Field.Label>
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.executionEnvironment"
-                                value="gateway"
-                                :name="groupName"
-                              />
-                              <Field.Content>
-                                <Field.Title> At the gateway </Field.Title>
-                                <Field.Description>
-                                  Runs at the gateway, before routing, where a request can still be
-                                  refused.
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        <RadioGroup
+                          v-model="form.executionEnvironment"
+                          kind="card"
+                          :name="groupName"
+                          aria-label="Execution environment"
+                        >
+                          <RadioGroup.Item
+                            value="request"
+                            description="Runs on each request the service handles, after routing."
+                            >On request</RadioGroup.Item
+                          >
+                          <RadioGroup.Item
+                            value="gateway"
+                            description="Runs at the gateway, before routing, where a request can still be refused."
+                            >At the gateway</RadioGroup.Item
+                          >
+                        </RadioGroup>
                       </SettingRow>
                     </Item.List>
                   </template>

@@ -24,15 +24,15 @@
 
 - A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).
 - Two or three panes whose boundary the reader drags → use `resizable`.
-- Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.
-- A grid of resources the reader selects, not arranges → use `cards`.
+- Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.
+- A grid of resources the reader selects, not arranges → use `card-list`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [chart-card](chart-card.md) — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
 - [resizable](resizable.md) — split panes with a draggable divider, not a grid of cards.
-- cards` — a selectable collection of item cards with a fixed layout.
+- [card-list](card-list.md) — a selectable collection of item cards with a fixed layout.
 - [page-header](page-header.md) — the title over the board, with the Edit layout and Reset layout actions beside it.
 
 ## Props

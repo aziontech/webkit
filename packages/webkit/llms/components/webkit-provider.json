@@ -74,7 +74,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
+   "doc": "IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
   }
  ],
  "events": [],

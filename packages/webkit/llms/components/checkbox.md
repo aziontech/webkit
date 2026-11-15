@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use a Checkbox per option inside Field.Set for two to five options that all fit on screen; use Checkbox alone for an on/off choice submitted with a form. For a longer list use MultiSelect; for an on/off setting that applies at once use Switch.
 - A bare boolean control whose label lives outside it: a table row-selection cell, an option row in a list, a settings matrix.
 - Picking several values from a short set: give each box its own `value` and bind them all to one array `v-model`.
 - A "select all" control over a partial selection: set `indeterminate` while only some children are checked.
@@ -24,7 +25,7 @@
 - A form field that needs its own label, description, or helper text → wrap it in a horizontal `field` (`Field orientation="horizontal"` + `Field.Content`).
 - Each option needs a bordered card with a label and description → use a `field` choice card (`Field.Label` wrapping a horizontal `Field`).
 - An on/off setting that applies as soon as it flips → use `switch`.
-- Only one option of the set may be chosen → use `radio-button`.
+- Only one option of the set may be chosen → use `radio-group`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -32,28 +33,25 @@
 - [field](field.md) — `orientation="horizontal"` puts the checkbox beside its label and description (the default inside forms); a `Field.Label` wrapping that Field turns it into a bordered choice card.
 - [switch](switch.md) — on/off toggle for settings that take effect immediately.
 - [multi-select](multi-select.md) — renders this checkbox in every option row; use it when the option list is long.
-- [table](table.md) — uses this checkbox for row selection and the select-all header.
+- [data-table](data-table.md) — uses this checkbox for row selection and the select-all header.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `value` | `unknown` | `undefined` | false | Identifier for this checkbox in a group: compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean. |
-| `binary` | `boolean` | `false` | false | @deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`. |
 | `indeterminate` | `boolean` | `false` | false | Renders the indeterminate visual (horizontal bar). Does not affect `modelValue`; the parent owns the tri-state logic. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `readonly` | `boolean` | `false` | false | Marks the field read-only; value is visible but cannot change via interaction. |
 | `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
-| `inputId` | `string` | `''` | false | @deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set. |
 | `name` | `string` | `''` | false | HTML name for form submission. |
-| `tabindex` | `number` | `0` | false | @deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0. |
 | `modelValue` | `TModel` | `undefined as never` | false | Two-way value (`v-model`). |
 
 ## v-model
 
-| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                                           |
-| --------- | -------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset (or `binary`); with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
+| Model     | Type     | Default     | Emits               | Notes                                                                                                                                                                                                                                                             |
+| --------- | -------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model` | `TModel` | `undefined` | `update:modelValue` | The bound value via `defineModel`: a boolean when `value` is unset; with `value`, an array (adds or removes `value`; an undefined model counts as an empty array) or a scalar (set to `value` when checked, to `null` when unchecked). Uncontrolled when unbound. |
 
 ## States
 

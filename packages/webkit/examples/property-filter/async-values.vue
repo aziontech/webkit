@@ -1,5 +1,5 @@
 <script setup>
-  import CalendarRoot from '@aziontech/webkit/calendar-root'
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import { ref } from 'vue'
 
@@ -42,8 +42,7 @@
     placeholder="Filter by Host or Created; type fail to see the error"
   >
     <template #value="{ property, apply }">
-      <CalendarRoot
-        mode="single"
+      <DatePickerRoot
         size="small"
         :placeholder="`Select ${property.label.toLowerCase()} date`"
         :show-apply="false"

@@ -66,10 +66,6 @@
     prefix(): unknown
     /** Trailing adornment at the inline end of the field. */
     suffix(): unknown
-    /** @deprecated since 6.0 — use the prefix slot. Removed in 7.0. */
-    iconLeft(): unknown
-    /** @deprecated since 6.0 — use the suffix slot. Removed in 7.0. */
-    iconRight(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -108,8 +104,8 @@
     })
   )
 
-  const hasIconLeft = () => Boolean(slots['prefix'] || slots['iconLeft'])
-  const hasIconRight = () => Boolean(slots['suffix'] || slots['iconRight'])
+  const hasIconLeft = () => Boolean(slots['prefix'])
+  const hasIconRight = () => Boolean(slots['suffix'])
 
   const handleInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
@@ -148,7 +144,7 @@
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="prefix"><slot name="iconLeft" /></slot>
+      <slot name="prefix" />
     </span>
 
     <input
@@ -178,7 +174,7 @@
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="suffix"><slot name="iconRight" /></slot>
+      <slot name="suffix" />
     </span>
   </span>
 </template>

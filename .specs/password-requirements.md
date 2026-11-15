@@ -3,17 +3,17 @@ name: password-requirements
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 59a56b4e4421c9bf01bd0299eb6ade7866f4949d2425b2cc23af027dbf601862
+spec_version: 2
+checksum: df4de525acfd7440f4b0aa1ec1883886a532646afb11342bec57ee69317ce3ba
 created: 2026-11-10
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # PasswordRequirements — Component Spec
 
 ## Purpose
 
-Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. It replaces the requirements row of the v5 `field-password`; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
+Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
 
 ## When to use
 

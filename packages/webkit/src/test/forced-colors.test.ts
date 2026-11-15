@@ -54,7 +54,7 @@ describe('forced colors (Windows high contrast)', () => {
   it.each<[string, Component, Record<string, unknown>, string]>([
     ['Button', Button, { label: 'Save' }, 'button'],
     ['Input', Input, { 'aria-label': 'Name' }, 'input'],
-    ['Checkbox', Checkbox, { binary: true, 'aria-label': 'Accept' }, 'input'],
+    ['Checkbox', Checkbox, { 'aria-label': 'Accept' }, 'input'],
     ['Switch', Switch, { 'aria-label': 'Notifications' }, 'button'],
     ['Chip (clickable)', Chip, { label: 'Region', clickable: true }, '[role="button"]']
   ])(

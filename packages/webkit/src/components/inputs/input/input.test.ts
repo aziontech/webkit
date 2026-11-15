@@ -169,26 +169,29 @@ describe('Input', () => {
       expect(root?.hasAttribute('data-has-icon-right')).toBe(true)
     })
 
-    it('prefers prefix over the deprecated iconLeft when both are passed', () => {
-      const { queryByText } = render(Input, {
-        slots: { prefix: '<i>New</i>', iconLeft: '<i>Old</i>' }
+    it('ignores the removed iconLeft and iconRight slots', () => {
+      const { getByTestId, queryByText } = render(Input, {
+        slots: { iconLeft: '<i>Old</i>', iconRight: '<i>Gone</i>' }
       })
-      expect(queryByText('New')).toBeTruthy()
       expect(queryByText('Old')).toBeNull()
+      expect(queryByText('Gone')).toBeNull()
+      const root = getByTestId('input').parentElement
+      expect(root?.hasAttribute('data-has-icon-left')).toBe(false)
+      expect(root?.hasAttribute('data-has-icon-right')).toBe(false)
     })
 
-    it('renders iconLeft slot content and flags data-has-icon-left on the root', () => {
+    it('renders prefix slot content and flags data-has-icon-left on the root', () => {
       const { getByTestId, getByText } = render(Input, {
-        slots: { iconLeft: '<i data-testid="left-icon">L</i>' }
+        slots: { prefix: '<i data-testid="left-icon">L</i>' }
       })
       expect(getByText('L')).toBeTruthy()
       const root = getByTestId('input').closest('[data-has-icon-left]')
       expect(root).not.toBeNull()
     })
 
-    it('renders iconRight slot content and flags data-has-icon-right on the root', () => {
+    it('renders suffix slot content and flags data-has-icon-right on the root', () => {
       const { getByTestId, getByText } = render(Input, {
-        slots: { iconRight: '<i>R</i>' }
+        slots: { suffix: '<i>R</i>' }
       })
       expect(getByText('R')).toBeTruthy()
       const root = getByTestId('input').closest('[data-has-icon-right]')
@@ -202,9 +205,7 @@ describe('Input', () => {
           h(
             Input,
             null,
-            shown.value
-              ? { iconLeft: () => h('i', null, 'L'), iconRight: () => h('i', null, 'R') }
-              : {}
+            shown.value ? { prefix: () => h('i', null, 'L'), suffix: () => h('i', null, 'R') } : {}
           )
       })
       const { getByTestId, queryByText } = render(Host)
@@ -252,7 +253,7 @@ describe('Input', () => {
     it('focuses the input when the press lands on a decorative icon', () => {
       const { getByTestId, getByText } = render(Input, {
         props: { size: 'large' },
-        slots: { iconLeft: '<i>L</i>' }
+        slots: { prefix: '<i>L</i>' }
       })
       const input = getByTestId('input') as HTMLInputElement
       pressOn(getByText('L'))

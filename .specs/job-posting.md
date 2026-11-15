@@ -3,11 +3,11 @@ name: job-posting
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: c7025084b904f932c2d4fb47c628da15a8c6240cc43a042cb9d10eb4f32f0b36
+checksum: abf7cd912ebce12223571129b7d429fc42f40a869cc4ab75360211983fb50087
 created: 2026-11-14
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # JobPosting — Component Spec
@@ -173,7 +173,7 @@ _none_
 
 - Visible focus: owned by the composed `button`, `input`, `phone-input`, `file-token-group` and `dialog` controls.
 - Keyboard map: `Tab` walks the rail's apply link, then the fields in order (the file field's browse button, or its remove button once a file is picked), then the submit button; `Enter` in a text field or on the submit button submits; `Enter` or `Space` on the browse button opens the file picker. In the confirmation dialog `Tab` cycles the secondary action, Done and the close button (focus is trapped), and `Escape` closes it and returns focus (`dialog`'s Dialog (Modal) pattern).
-- ARIA: the root is a plain `div` (the posting's title is the title band's heading); each description section heads with an `h2` through `section-title`; the rail restates the title as a paragraph, not a heading, so the outline lists the posting once. The fields sit in a `fieldset` whose visually hidden `legend` is `form.ariaLabel`, or `form.title`; each control is labelled through its own `Label` with an id from `useId`, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`, a `url` field a text input with `inputmode="url"`. The file field's dropzone is a named `group`; its browse button is named `messages.browse` followed by the field label. Validation runs on submit only: a required field left empty takes the amber `required` state, a malformed value the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text. The failure message is an `alert`; the confirmation is a modal `dialog` named by its title and described by its description.
+- ARIA: the root is a plain `div` (the posting's title is the title band's heading); each description section heads with an `h2` through `section-title`; the rail restates the title as a paragraph, not a heading, so the outline lists the posting once. The fields sit in a `fieldset` whose visually hidden `legend` is `form.ariaLabel`, or `form.title`; each control is labelled through its own `Field.Label` with an id from `useId`, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`, a `url` field a text input with `inputmode="url"`. The file field's dropzone is a named `group`; its browse button is named `messages.browse` followed by the field label. Validation runs on submit only: a required field left empty takes the amber `required` state, a malformed value the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text. The failure message is an `alert`; the confirmation is a modal `dialog` named by its title and described by its description.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components; copy uses the text tokens above.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the composed button, dropzone and dialog carry their own fallback.
 - Touch target ≥40×40 px — the text fields, the buttons and the dialog actions are large or medium controls at least 40 px tall.

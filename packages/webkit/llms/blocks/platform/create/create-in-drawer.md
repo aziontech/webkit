@@ -1,11 +1,11 @@
 # CreateInDrawer (`platform/create/create-in-drawer`)
 
-> The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
+> The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`kind="card"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
 
 - Surface: product
 - Source: `blocks/platform/create/create-in-drawer/create-in-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/create-in-drawer")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [InputGroup](../../../components/input-group.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [SchemaForm](../../../components/schema-form.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [InputGroup](../../../components/input-group.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../../components/radio-group.md), [SchemaForm](../../../components/schema-form.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -52,9 +52,9 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 A large `Select` in a required `Field` with its `Field.Label` and a `Field.Description` that the `Field` ties to the trigger by `aria-describedby`; after a failed submit a `Field.Error` takes its place and the `Field` turns `invalid`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
 
-### F. Domain source — `Field`, `RadioButton` (required)
+### F. Domain source — `Field`, `RadioGroup` (required)
 
-Choice cards: one horizontal `Field` per option with a `RadioButton`, a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
+Choice cards: a `RadioGroup` with `kind="card"`, one item per option with a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 
@@ -147,7 +147,7 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - `AddRecord` — Closed until Add Record opens it, here as a DNS zone renders it: Name with the zone as an addon, Record type, TTL, Value with the placeholder and helper of the selected type, and Description under Settings; Policy type under Policy, with Weight appearing only for the weighted policy. Save on an empty form flags Name and Value as required.
 - `ItemRows` — An in-context add whose body is the settings layout: an Origins page inside the storefront resource whose heading action opens a large right-side drawer, and inside it section-titled groups of `Item` rows, each a small heading over a flush `Card`, saved together by the one Add Origin in the footer. An origin lives inside its resource, so it adds in a drawer; a first-level resource such as a service creates on a page instead. General, Connection and Options are the sections. The drawer clears its fields and errors each time it opens, so its content stays in place while it closes. Name and Protocol flag only after Add Origin is pressed. Built from `PageHeader`, `SettingRow`, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select`, `Switch` and `HelperText`. The page is a page body for ConsoleLayout.
 - `NestedDrawer` — A create drawer whose select needs another item of the same resource that may not exist yet: the Rules Engine page of the storefront resource opens a large Add Rule drawer, and the Create Origin option pinned to the foot of its Origin select opens a second, medium drawer stacked above it on raised layers. Rule and origin both live inside the resource, so both create in drawers; a first-level resource such as a service is never created this way, it creates on a page. Saving the child adds the new origin and selects it back into the rule. Each drawer is its own scoped save, and each clears its fields and errors when it opens, so its content stays in place while it closes. Built from `PageHeader`, `SettingRow`, `Button`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Input`, `Select` and `HelperText`. The page is a page body for ConsoleLayout.
-- `DeploymentSettings` — The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea`, `RadioButton` and `Switch` choice cards, `Field.Legend`, `HelperText`, `Hint` and `Button`.
+- `DeploymentSettings` — The drawer that creates a Deployment Setting, opened from the Create Deployment Settings heading action of a Build and deployment settings panel. A form drawer with the title and its description, a General section with the required Name, an optional Description and the Active switch, and a Routing and policy section with the Strict or Flexible binding policy, the Single or Versioned deployment version policy and the Share across services switch, then a submit footer. The form resets every time the drawer opens, never on close, and Name only reads as required once the form is submitted empty. Built from `SettingsSection`, `Drawer`, the `Panel` parts, `Field` with `Input`, `Textarea` and `Switch` choice cards, `RadioGroup`, `Field.Legend`, `HelperText`, `Hint` and `Button`.
 - `Certificate` — Create Certificate: a Server certificate or Trusted CA `ToggleGroup`, a PEM `Textarea` with Upload file, a details panel read from the pasted certificate (issued to, issued by, valid from, and the expiry with a `StatusIndicator` that warns within 30 days and blocks an expired one) and, for a server certificate, the private key; opened with a sample certificate pasted and the key empty.
 - `CreateEnvironment` — Create Environment: Name, Description, a Deployment policy and a Robots policy Select whose helpers say what each choice does, an IP allowlist Switch that reveals a Textarea of IPv4 addresses and CIDR ranges checked on submit, and a Branch tracking Switch that reveals the match Mode and the Branch match. It opens on its own at medium size, or stacked at small size above Add Domain from the Environment select's Create Environment option, and the new environment comes back selected.
 - `FunctionInstance` — Add or edit a function instance from a resource's instance list: a Function Select and a Name, then the function's arguments as a `SchemaForm` built from the schema it declares, with a Fields or JSON `ToggleGroup`; the JSON view is a `CodeEditor` whose edits update the fields and whose parse errors show as markers. Required arguments show their messages only after submit, and changing the function clears the arguments.
@@ -170,7 +170,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { toast } from '@aziontech/webkit/toast'
@@ -431,30 +431,21 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                   <Field.Legend kind="label">Domain source</Field.Legend>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                    <Field.Label
+                  <RadioGroup
+                    v-model="form.kind"
+                    kind="card"
+                    name="domain-kind"
+                    aria-label="Domain source"
+                    :disabled="submitting"
+                  >
+                    <RadioGroup.Item
                       v-for="option in kindOptions"
                       :key="option.value"
+                      :value="option.value"
+                      :description="option.description"
+                      >{{ option.label }}</RadioGroup.Item
                     >
-                      <Field
-                        orientation="horizontal"
-                        :disabled="submitting"
-                      >
-                        <RadioButton
-                          v-model="form.kind"
-                          :value="option.value"
-                          name="domain-kind"
-                          :id="'domain-kind-' + option.value"
-                        />
-                        <Field.Content>
-                          <Field.Title>{{ option.label }}</Field.Title>
-                          <Field.Description v-if="option.description">{{
-                            option.description
-                          }}</Field.Description>
-                        </Field.Content>
-                      </Field>
-                    </Field.Label>
-                  </div>
+                  </RadioGroup>
                 </fieldset>
 
                 <Field

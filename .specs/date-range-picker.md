@@ -3,9 +3,9 @@ name: date-range-picker
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 14de3a28755d681ef4861b3e66158a27c375e10a6238b1d84de172fde07fa5a6
+checksum: 2d244d483aed08bfea1cc3c9eb3e4d3a6e866d9dee7ee3ceee489fc740672af2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,23 +14,26 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, absolute range with times, previous and next) and Cloudscape's date range picker. The value is either **relative** (`{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving) or **absolute** (`{ type: 'absolute', start, end }`, two ISO 8601 instants). The trigger prints `Last 15 minutes` or the absolute range in the selected time zone with its UTC offset. The panel switches between Relative range (the quick ranges and a custom duration) and Absolute range (the `Calendar` month grid, start and end date and time fields, and the time zone selector) and commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. Date math uses `Intl` and the native `Date` only.
+A time range for queries over time: logs, events, traces and metrics. After the Console Kit date-time range (quick ranges, absolute range with times, previous and next) and Cloudscape's date range picker. The value is either **relative** (`{ type: 'relative', amount: 15, unit: 'minute' }`, read as "the last 15 minutes" and re-resolved against the clock on every query, so a live view keeps moving) or **absolute** (`{ type: 'absolute', start, end }`, two ISO 8601 instants). The trigger prints `Last 15 minutes` or the absolute range in the selected time zone with its UTC offset. The panel switches between Relative range (the quick ranges and a custom duration) and Absolute range (the `DatePicker` month grid, start and end date and time fields — the times hidden with `showTime` off — and the time zone selector) and commits only on Apply; Cancel and Escape drop the draft. Absolute boundaries are typed as wall-clock time in the selected zone and stored as instants, so the same value reads correctly in every zone. With `showStep`, Previous and Next move the range by its own length. Date math uses `Intl` and the native `Date` only.
 
 ## When to use
 
+- Use DateRangePicker for any start–end range: relative ('last 24 hours') or absolute, with or without times; turn times off for whole-day reports and billing periods. For one date use DatePicker; to display a moment in time use Timestamp.
 - Filtering events, logs, traces or metrics by time, where "the last N minutes" must stay relative.
 - Any range that needs times of day and a time zone, not only dates.
 - Investigations that page through time window by window (`show-step`).
+- Whole-day ranges for a report or a billing period: `range-selector-mode="absolute-only"` with `:show-time="false"`.
 
 ## When NOT to use
 
-- Picking whole days for a report or a billing period, with day presets → use `calendar`.
-- A single date or a date and time → use `calendar` with `mode="single"`.
+- A single date or a date and time → use `date-picker`.
 - A fixed list of named intervals and nothing custom → use `select` or `toggle-group`.
 
 ## Related
 
-- `calendar` — the month grid, the date and time fields and the time zone selector come from it, so both pickers look and behave the same. Split: Calendar picks whole days (a date or a date range); DateRangePicker picks time ranges and keeps a relative window relative. Both name the zone `timeZone` / `timeZones` / `showTimeZone` / `v-model:time-zone`.
+- `date-picker` — the month grid, the date and time fields and the time zone selector come from its internal parts, so both pickers look and behave the same. Split: DatePicker picks one date (optionally with a time); DateRangePicker owns every range and keeps a relative window relative.
+- `timestamp` — displays a moment in time; both read the `WebkitProvider` `timeZone`.
+- `webkit-provider` — its `timeZone` is the zone the picker formats in while `v-model:time-zone` is unbound.
 - `field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.
 - `property-filter` — the query bar it sits next to in an events toolbar.
 - `chart` — the histogram whose brush usually writes an absolute range back into this picker.
@@ -71,6 +74,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | `relativeOptions`   | `RelativeOption[]`                                | 5m, 15m, 1h, 6h, 24h, 7d, 30d | false    | Quick ranges listed on the Relative tab.                                                                                |
 | `timeZones`         | `string[]`                                        | `[]`                          | false    | Zones offered by the selector. Empty falls back to the zones `Intl` supports.                                           |
 | `showTimeZone`      | `boolean`                                         | `true`                        | false    | Shows the time zone selector in the panel.                                                                              |
+| `showTime`          | `boolean`                                         | `true`                        | false    | Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period).  |
 | `showStep`          | `boolean`                                         | `false`                       | false    | Shows Previous and Next buttons that move the range back or forward by its own length.                                  |
 | `rangeSelectorMode` | `'default' \| 'relative-only' \| 'absolute-only'` | `'default'`                   | false    | Which kinds of range the panel offers.                                                                                  |
 | `min`               | `Date`                                            | undefined                     | false    | Earliest instant an absolute range may start at.                                                                        |
@@ -83,7 +87,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 | `defaultOpen`       | `boolean`                                         | `false`                       | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                          |
 | `size`              | `'small' \| 'medium' \| 'large'`                  | `'medium'`                    | false    | Size token of the trigger and the panel controls.                                                                       |
 
-**Booleans that default to true.** `showTimeZone` defaults to `true`: an events toolbar always states the zone of its range. Inverting it would break every consumer, so it is recorded here as an exception to props.md's default-false rule.
+**Booleans that default to true.** `showTimeZone` and `showTime` default to `true`: an events toolbar always states the zone of its range and the times of its boundaries. Inverting it would break every consumer, so it is recorded here as an exception to props.md's default-false rule.
 
 Types (exported from the component): `DateRangeUnit = 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'year'`; `DateRangeValue = { type: 'relative'; amount: number; unit: DateRangeUnit; key?: string } | { type: 'absolute'; start: string; end: string }`; `RelativeOption = { key: string; amount: number; unit: DateRangeUnit; label?: string }` (an empty `label` prints `Last {count} {unit}` from the catalog).
 
@@ -122,8 +126,8 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 | --------------- | -------------------------------------------- | ------------------------------------------------- | ------------------------------- |
 | panel open      | `animate-popup-scale-in`                     | semantic (150ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
 | panel close     | `animate-popup-scale-out`                    | semantic (110ms · cubic-bezier)                   | `motion-reduce:animate-none`    |
-| chevron         | `transition-transform duration-150 ease-out` | inline (matches `calendar`)                       | `motion-reduce:transition-none` |
-| hover / options | `transition-colors duration-150 ease-out`    | inline (matches `calendar`)                       | `motion-reduce:transition-none` |
+| chevron         | `transition-transform duration-150 ease-out` | inline (matches `date-picker`)                    | `motion-reduce:transition-none` |
+| hover / options | `transition-colors duration-150 ease-out`    | inline (matches `date-picker`)                    | `motion-reduce:transition-none` |
 
 ## Tokens
 
@@ -145,7 +149,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: a 2 px `--ring-color` ring inset on each trigger segment; the quick ranges ring their row when the radio inside has focus.
-- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `calendar` keyboard map; `Escape` closes without committing and returns focus to the trigger.
+- Keyboard map: `Enter`/`Space` on the trigger opens the panel and the focus trap moves into it; `Tab` cycles inside the panel; the range type is a `ToggleGroup` (arrow keys); the quick ranges are native radios (`ArrowUp`/`ArrowDown` move and select); the grid keeps the `date-picker` keyboard map; `Escape` closes without committing and returns focus to the trigger.
 - ARIA: the trigger has `aria-haspopup="dialog"`, `aria-expanded` and a name that starts with the picker's label and contains the visible range (inside a `Field` with no `ariaLabel`, the Field label names it and the trigger also carries the Field's `aria-describedby` and `aria-invalid`); the panel is a named `dialog`; the quick ranges are a `fieldset` with a `legend`; the custom duration and unit have visible labels; the error is `role="alert"` and described from the duration field; Previous and Next are named buttons.
 - Targets: options are 32 px high (44 px on `pointer: coarse`).
 - Contrast ≥4.5:1 from the semantic text tokens.
@@ -173,13 +177,13 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 - Active locale: the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
 - What the person sends stays unambiguous: an absolute `v-model` carries `start` and `end` as ISO 8601 instants (`2026-11-15T00:00:00.000Z`) and a relative one carries `amount` and `unit`, whatever the display format.
-- Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `calendar` keys.
+- Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `datePicker` keys.
 
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s`, `border-e`, `ps-`/`pe-`, `end-`, `text-start`); the panel anchors to the start edge of the trigger.
 - Icons: the Previous and Next chevrons mirror (`rtl:-scale-x-100`); the clock and calendar glyphs do not.
-- Keyboard: the grid's arrow keys follow the reading direction (from `calendar`).
+- Keyboard: the grid's arrow keys follow the reading direction (from `date-picker`).
 - User data: the range text sits in `<bdi>`.
 - Teleported content: the panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`).
 
@@ -192,7 +196,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 
 ## Performance
 
-- Bundle budget: 26 KB gzip for `./date-range-picker` (it carries the `calendar` grid, fields and time zone selector, `toggle-group`, `button`, `input` and the placement and focus-trap composables) in `.size-limit.json`.
+- Bundle budget: 26 KB gzip for `./date-range-picker` (it carries the `date-picker` grid, fields and time zone selector, `toggle-group`, `button`, `input` and the placement and focus-trap composables) in `.size-limit.json`.
 - Runtime budget: zone conversion is two `Intl.DateTimeFormat#formatToParts` calls per boundary; nothing runs per frame.
 - Heavy parts: none; the panel renders only while open.
 

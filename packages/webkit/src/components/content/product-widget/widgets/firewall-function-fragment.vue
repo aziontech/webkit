@@ -3,9 +3,9 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import CodeBlock from '../../../code/code-block/code-block.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -141,11 +141,11 @@
       <div class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
         <ShellMockupPart :order="0">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
+            <FieldLabel
               for="firewall-function-name"
-              label="Name"
               required
-            />
+              >Name</FieldLabel
+            >
             <Input
               id="firewall-function-name"
               model-value="qa-qc-fwfi"
@@ -164,11 +164,11 @@
           class="relative data-open:z-1"
         >
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
+            <FieldLabel
               for="firewall-function-select"
-              label="Function"
               required
-            />
+              >Function</FieldLabel
+            >
             <MockupSelect
               :value="frame.picked"
               :options="FUNCTIONS"

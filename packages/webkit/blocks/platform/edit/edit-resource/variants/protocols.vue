@@ -14,7 +14,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -497,28 +497,21 @@
                       kind="stacked"
                       :level="1"
                     >
-                      <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                        <legend class="sr-only">Mutual authentication mode</legend>
-                        <Field.Label
+                      <RadioGroup
+                        v-model="form.mtlsMode"
+                        kind="card"
+                        name="protocols-mtls-mode"
+                        aria-label="Mutual authentication mode"
+                        :disabled="saving"
+                      >
+                        <RadioGroup.Item
                           v-for="option in mtlsModes"
                           :key="option.value"
+                          :value="option.value"
+                          :description="option.description"
+                          >{{ option.label }}</RadioGroup.Item
                         >
-                          <Field
-                            orientation="horizontal"
-                            :disabled="saving"
-                          >
-                            <RadioButton
-                              v-model="form.mtlsMode"
-                              :value="option.value"
-                              name="protocols-mtls-mode"
-                            />
-                            <Field.Content>
-                              <Field.Title>{{ option.label }}</Field.Title>
-                              <Field.Description>{{ option.description }}</Field.Description>
-                            </Field.Content>
-                          </Field>
-                        </Field.Label>
-                      </fieldset>
+                      </RadioGroup>
                     </SettingRow>
                     <SettingRow
                       v-if="armed"

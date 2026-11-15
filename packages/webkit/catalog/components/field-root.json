@@ -1,21 +1,21 @@
 {
- "purpose": "One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `Calendar`, `DateRangePicker`, `Checkbox`, `RadioButton`, `RadioCards`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. It replaces the v5 `field-*` family (`field-text`, `field-select`, `field-checkbox-block`, …), one wrapper per control, with a single anatomy.",
+ "purpose": "One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`, `RadioGroup`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. One anatomy serves every control, so there is no per-control field wrapper.",
  "useWhen": [
+  "Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.",
   "Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.",
   "A checkbox, radio or switch with its label beside it (`orientation=\"horizontal\"`).",
-  "A selectable choice card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants).",
+  "A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup kind=\"card\"`, never a radio inside a `Field.Label`.",
   "A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`)."
  ],
  "avoidWhen": [
   "A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.",
-  "A group of mutually exclusive cards with icons → use `radio-cards`.",
+  "A group of mutually exclusive cards with icons → use `radio-group` with `kind=\"card\"`.",
   "A static key/value read-out → use `key-value-pairs`."
  ],
  "related": [
-  "label` — the standalone label; `Field.Label` adds the `for` wiring and the Required marker from the Field.",
   "helper-text` — the tone-aware helper line that `Field.Description` and `Field.Error` render.",
   "input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.",
-  "phone-input`, `password-requirements` — the controls that replaced `field-phone-number` and the requirements row of `field-password`."
+  "phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`."
  ],
  "bestPractices": [
   "Put the state on the `Field`, not on the control: `<Field invalid>` sets `aria-invalid` on the control and the invalid tone on `Field.Description`.",

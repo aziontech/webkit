@@ -1,0 +1,25 @@
+{
+ "purpose": "DatePicker picks **one date**, optionally with a time, in a form field. A trigger button opens a popover that holds a month grid, a typed date field (and a time field with `showTime`), an optional footer and an Apply action. The selection is staged in a draft inside the popover and committed to `v-model` only on Apply (or immediately when `show-apply` is false). Date math uses the native `Date` API only — no date library; the trigger formats the value with `Intl` in `v-model:time-zone` (the local zone when empty). Before 6.0 this component was `Calendar` and also picked ranges, periods and presets; every range — relative or absolute, with or without times — now belongs to `date-range-picker`, which reuses this component's month grid and fields as internal parts. The name follows Cloudscape DatePicker and the shadcn \"Date Picker\".",
+ "useWhen": [
+  "Use DatePicker to pick one date (optionally with a time) in a form field. For any start–end range use DateRangePicker; to display a moment in time use Timestamp.",
+  "A due date, a start date, an expiry date, a birthday.",
+  "A date and a time of day together (`show-time`): a scheduled maintenance window start, a release time."
+ ],
+ "avoidWhen": [
+  "A start and an end, whole days or with times, relative or absolute → use `date-range-picker`.",
+  "Displaying a date the person does not edit → use `timestamp`.",
+  "A duration or count (retention days, TTL) rather than a date → use `number-input`."
+ ],
+ "related": [
+  "date-range-picker` — every range: relative windows (`last 15 minutes`) kept relative, absolute ranges down to the minute, and whole days with `:show-time=\"false\"`. It is built on this component's grid, fields and time zone selector.",
+  "timestamp` — shows a moment in time in the app's time zone.",
+  "field` — inside a `Field`, the trigger takes the field's label (`for` points at it), description, `invalid` and `disabled`.",
+  "input` — the trigger and the date field share its heights, hover, and disabled treatment, so they align side by side."
+ ],
+ "bestPractices": [
+  "modelValue` is committed only on Apply; read the final value from `update:modelValue` or the second argument of `apply`, and set `:show-apply=\"false\"` when every edit should commit at once.",
+  "Bind a `Date` or `null`.",
+  "Bound the selectable days with `min` and `max` instead of validating after commit.",
+  "Send `toISOString()` (or the ISO date `2026-11-15`) to the server, never the printed label."
+ ]
+}

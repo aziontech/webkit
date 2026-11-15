@@ -3,9 +3,9 @@ name: board
 category: layout
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 008b15930b93418a84f754d30d9f49a6669ade2f7dd91e49dec6d6ac164e4993
+checksum: baef27173fd7dc37fe8ee8ff78d7af9b893cf15bc48b06d76bbded20c4b1261f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -32,14 +32,14 @@ item, on top of the existing `ChartCard` handles.
 
 - A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).
 - Two or three panes whose boundary the reader drags → use `resizable`.
-- Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.
-- A grid of resources the reader selects, not arranges → use `cards`.
+- Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.
+- A grid of resources the reader selects, not arranges → use `card-list`.
 
 ## Related
 
 - `chart-card` — the card each `Board.Item` holds; its `DragHandle` and `ResizeHandle` drive the board.
 - `resizable` — split panes with a draggable divider, not a grid of cards.
-- `cards` — a selectable collection of item cards with a fixed layout.
+- `card-list` — a selectable collection of item cards with a fixed layout.
 - `page-header` — the title over the board, with the Edit layout and Reset layout actions beside it.
 
 ## Best practices

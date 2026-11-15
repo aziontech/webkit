@@ -1,6 +1,6 @@
 <script setup>
-  import Select from '@aziontech/webkit/select'
   import Button from '@aziontech/webkit/button'
+  import Select from '@aziontech/webkit/select'
   import { ref } from 'vue'
 
   const value = ref('')

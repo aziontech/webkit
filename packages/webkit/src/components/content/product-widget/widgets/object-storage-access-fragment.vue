@@ -2,14 +2,10 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Field from '../../../inputs/field/field.vue'
-  import FieldContent from '../../../inputs/field/field-content/field-content.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
-  import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
-  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -126,7 +122,7 @@
       <div class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)">
         <ShellMockupPart :order="0">
           <div class="flex flex-col gap-(--spacing-xxs)">
-            <Label label="Workloads access" />
+            <FieldLabel>Workloads access</FieldLabel>
             <HelperText label="The access level workloads have to the objects in this bucket." />
           </div>
         </ShellMockupPart>
@@ -137,23 +133,17 @@
           :order="index + 1"
         >
           <div :data-cursor="`option-${option.value}`">
-            <FieldLabel>
-              <Field orientation="horizontal">
-                <RadioButton
-                  :model-value="frame.access"
-                  :value="option.value"
-                  name="object-storage-workloads-access"
-                />
-                <FieldContent>
-                  <FieldTitle>
-                    {{ option.label }}
-                  </FieldTitle>
-                  <FieldDescription v-if="option.description">
-                    {{ option.description }}
-                  </FieldDescription>
-                </FieldContent>
-              </Field>
-            </FieldLabel>
+            <RadioGroup
+              :model-value="frame.access"
+              kind="card"
+              name="object-storage-workloads-access"
+            >
+              <RadioGroupItem
+                :value="option.value"
+                :description="option.description"
+                >{{ option.label }}</RadioGroupItem
+              >
+            </RadioGroup>
           </div>
         </ShellMockupPart>
       </div>

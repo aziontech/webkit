@@ -43,7 +43,7 @@
 | `messages` | `PartialMessages` | `undefined` | false | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). |
 | `dir` | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` | false | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). |
 | `now` | `string \| number \| Date` | `undefined` | false | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
-| `timeZone` | `string` | `''` | false | IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone. |
+| `timeZone` | `string` | `''` | false | IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone. |
 
 ## Slots
 
@@ -56,13 +56,13 @@
 - No visual states; the root carries `lang` (the locale) and `dir` (`ltr` | `rtl`).
 - `locale` unset: `lang` and the formats are `en-US` in the server render and during hydration, then the device locale after mount.
 - `now` set: every relative time below reads it instead of the real clock; changing it re-renders them. An empty or unparseable value reads the real clock.
-- `timeZone` set: every `Timestamp` below shows its local time in that zone and renders it on the server too; `useLocale().formatDate` and the other formatters are unchanged. Empty reads the browser's zone after mount.
+- `timeZone` set: every `Timestamp` below shows its local time in that zone and renders it on the server too, and every `DateRangePicker` without its own `timeZone` formats and edits its range in it; `useLocale().formatDate` and the other formatters are unchanged. Empty reads the browser's zone after mount.
 
 ## Accessibility
 
 - `lang` on the root lets screen readers pick the right voice and pronunciation (WCAG 3.1.1 / 3.1.2).
 - `dir` on the root mirrors reading order for right-to-left languages.
-- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, Calendar, PropertyFilter, NavigationMenu.Portal, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
+- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, DatePicker, DateRangePicker, PropertyFilter, NavigationMenu.Portal, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
 - Every assistive label WebKit ships (close buttons, pagination, sort state, empty states) is read in the provider's language.
 - No focusable element of its own; it adds no role and no landmark.
 

@@ -14,7 +14,7 @@
   import Field from '../../../components/inputs/field/field.vue'
   import FieldLabel from '../../../components/inputs/field/field-label/field-label.vue'
   import Input from '../../../components/inputs/input/input.vue'
-  import RadioCards from '../../../components/inputs/radio-cards/radio-cards.vue'
+  import RadioGroup from '../../../components/inputs/radio-group/radio-group.vue'
   import Select from '../../../components/inputs/select/select.vue'
   import SelectTrigger from '../../../components/inputs/select/select-trigger/select-trigger.vue'
   import Switch from '../../../components/inputs/switch/switch.vue'
@@ -374,12 +374,13 @@
                     v-for="field in section.fields"
                     :key="field.label"
                   >
-                    <RadioCards
+                    <RadioGroup
                       v-if="field.kind === 'choice'"
                       :model-value="field.value"
-                      :items="field.options.map((option) => ({ value: option, label: option }))"
+                      kind="card"
+                      orientation="horizontal"
+                      :options="field.options.map((option) => ({ value: option, label: option }))"
                       :aria-label="field.label"
-                      class="grid-cols-2"
                     />
                     <Field
                       key="field-1"

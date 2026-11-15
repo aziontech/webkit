@@ -1,6 +1,7 @@
 {
  "purpose": "A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.",
  "useWhen": [
+  "Use ThemeSwitcher only for the system / light / dark choice in app chrome; for any other segmented choice use ToggleGroup, and for a choice in a form use RadioGroup.",
   "The app-wide color mode picker in a header, footer, account menu or settings page."
  ],
  "avoidWhen": [

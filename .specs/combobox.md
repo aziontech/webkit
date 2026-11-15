@@ -3,11 +3,11 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: b8ddae1961f1d889ea1684a9611525531d8f8cd96111219986244aa7575f7adb
+checksum: 9ba197c689221abc7493cf4c4664951e1d2a9f1f6a8b680c5ecef10507a272e9
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Combobox — Component Spec
@@ -18,6 +18,7 @@ A text field with a list of suggestions under it: typing filters the options, pi
 
 ## When to use
 
+- Use Combobox when the person may type a value that is not in the list and the list only suggests. When the value must come from the list use Select; for several values use MultiSelect.
 - A form field whose usual values are known but a new one is valid: an environment variable name, a header, a path, a region tag, a branch.
 - A long option list the user would rather type than scroll, with the list as a reminder.
 - Options that come from the server as the user types (`search` event, `loading`, `filter: false`).
@@ -25,7 +26,7 @@ A text field with a list of suggestions under it: typing filters the options, pi
 
 ## When NOT to use
 
-- The value must be one of a short fixed list → use `select` (or `radio-cards` / `radio-button` for 2–5 visible choices).
+- The value must be one of a short fixed list → use `select` (or `radio-group` for two to seven visible choices).
 - Several values at once → use `multi-select`.
 - Searching and running commands or jumping to a page → use `command`.
 - Filtering a collection by properties → use `property-filter`.

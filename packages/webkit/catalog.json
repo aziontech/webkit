@@ -1953,11 +1953,13 @@
   "testimonial": "client-quotes",
   "testimonials": "client-quotes",
   "text-field": "input",
-  "tiles": "radio-group"
+  "tiles": "radio-group",
+  "transfer": "transfer-list"
  },
  "renamed": {
   "action-confirmation": "tool-approval",
-  "box-grid-selection": "radio-cards",
+  "box-grid-selection": "radio-group",
+  "calendar": "date-picker",
   "card-box": "card",
   "cards": "card-list",
   "command-menu": "command",
@@ -1970,12 +1972,16 @@
   "menu": "sidebar-menu",
   "message": "alert",
   "paginator": "pagination",
+  "pick-list": "transfer-list",
   "progress-bar": "progress",
+  "radio-button": "radio-group-item",
+  "radio-cards": "radio-group",
   "resizable-panel": "resizable",
   "segmented-button": "toggle-group",
   "tab-view": "tabs"
  },
  "removed": {
+  "calendar-preset": "DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options",
   "dialog-overlay": "delete the <DialogOverlay /> element: DialogContent renders the portal and the overlay itself",
   "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
   "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
@@ -1987,8 +1993,8 @@
   "field-input-group": "Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription",
   "field-password": "Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)",
   "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
-  "field-radio": "Field orientation=horizontal + RadioButton + FieldContent (FieldLabel + FieldDescription)",
-  "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
+  "field-radio": "RadioGroup v-model with a RadioGroup.Item per option (description on the item)",
+  "field-radio-block": "RadioGroup kind=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
   "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
   "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
   "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
@@ -1998,7 +2004,10 @@
   "field-time": "Field + FieldLabel + Input + FieldDescription",
   "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
   "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+  "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
   "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
+  "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes kind=\"card\" with description on the item",
+  "radio-cards": "RadioGroup kind=\"card\" orientation=\"horizontal\" with :options (the items move to options as is); the #default=\"{ item }\" slot becomes #option=\"{ option }\" and #tag=\"{ item }\" becomes #tag=\"{ option }\"",
   "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu kind); the property kind shows its own tokens",
   "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)"
  },
@@ -9694,16 +9703,16 @@
    "treeShakeableImport": "@aziontech/webkit/flow-anchor",
    "surface": "product"
   },
-  "pick-list": {
-   "import": "@aziontech/webkit/pick-list",
-   "target": "./src/components/data/pick-list/index.ts",
+  "transfer-list": {
+   "import": "@aziontech/webkit/transfer-list",
+   "target": "./src/components/data/transfer-list/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/pick-list-root",
+   "treeShakeableImport": "@aziontech/webkit/transfer-list-root",
    "subcomponents": [
-    "@aziontech/webkit/pick-list-source",
-    "@aziontech/webkit/pick-list-target",
-    "@aziontech/webkit/pick-list-controls"
+    "@aziontech/webkit/transfer-list-source",
+    "@aziontech/webkit/transfer-list-target",
+    "@aziontech/webkit/transfer-list-controls"
    ],
    "models": [
     "modelValue"
@@ -9716,14 +9725,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Item field that identifies a record, the same name as `cards`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index."
-    },
-    {
-     "name": "dataKey",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `trackBy`. Removed in 7.0.** Same as `trackBy`; read when `trackBy` is empty."
+     "doc": "Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index."
     },
     {
      "name": "disabled",
@@ -9741,7 +9743,7 @@
     },
     {
      "name": "modelValue",
-     "type": "PickListValue",
+     "type": "TransferListValue",
      "default": "—",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -9763,19 +9765,19 @@
     {
      "name": "default",
      "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
-     "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
+     "notes": "Composition slot; receives `<TransferList.Source>`, `<TransferList.Controls>`, and `<TransferList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<TransferList.Controls>`."
     }
    ],
    "surface": "product",
-   "examplesFile": "catalog/examples/pick-list.json",
-   "docsFile": "catalog/components/pick-list.json"
+   "examplesFile": "catalog/examples/transfer-list.json",
+   "docsFile": "catalog/components/transfer-list.json"
   },
-  "pick-list-root": {
-   "import": "@aziontech/webkit/pick-list-root",
-   "target": "./src/components/data/pick-list/pick-list.vue",
+  "transfer-list-root": {
+   "import": "@aziontech/webkit/transfer-list-root",
+   "target": "./src/components/data/transfer-list/transfer-list.vue",
    "kind": "root",
-   "rootOf": "pick-list",
-   "treeShakeableImport": "@aziontech/webkit/pick-list-root",
+   "rootOf": "transfer-list",
+   "treeShakeableImport": "@aziontech/webkit/transfer-list-root",
    "models": [
     "modelValue"
    ],
@@ -9787,14 +9789,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Item field that identifies a record, the same name as `cards`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index."
-    },
-    {
-     "name": "dataKey",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `trackBy`. Removed in 7.0.** Same as `trackBy`; read when `trackBy` is empty."
+     "doc": "Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index."
     },
     {
      "name": "disabled",
@@ -9812,7 +9807,7 @@
     },
     {
      "name": "modelValue",
-     "type": "PickListValue",
+     "type": "TransferListValue",
      "default": "—",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -9834,34 +9829,34 @@
     {
      "name": "default",
      "scope": "{ move, moveAll, hasSelection, count, disabled, loading }",
-     "notes": "Composition slot; receives `<PickList.Source>`, `<PickList.Controls>`, and `<PickList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<PickList.Controls>`."
+     "notes": "Composition slot; receives `<TransferList.Source>`, `<TransferList.Controls>`, and `<TransferList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<TransferList.Controls>`."
     }
    ],
    "surface": "product",
-   "docsFile": "catalog/components/pick-list-root.json"
+   "docsFile": "catalog/components/transfer-list-root.json"
   },
-  "pick-list-source": {
-   "import": "@aziontech/webkit/pick-list-source",
-   "target": "./src/components/data/pick-list/pick-list-source/pick-list-source.vue",
+  "transfer-list-source": {
+   "import": "@aziontech/webkit/transfer-list-source",
+   "target": "./src/components/data/transfer-list/transfer-list-source/transfer-list-source.vue",
    "kind": "subcomponent",
-   "parent": "pick-list",
-   "treeShakeableImport": "@aziontech/webkit/pick-list-source",
+   "parent": "transfer-list",
+   "treeShakeableImport": "@aziontech/webkit/transfer-list-source",
    "surface": "product"
   },
-  "pick-list-target": {
-   "import": "@aziontech/webkit/pick-list-target",
-   "target": "./src/components/data/pick-list/pick-list-target/pick-list-target.vue",
+  "transfer-list-target": {
+   "import": "@aziontech/webkit/transfer-list-target",
+   "target": "./src/components/data/transfer-list/transfer-list-target/transfer-list-target.vue",
    "kind": "subcomponent",
-   "parent": "pick-list",
-   "treeShakeableImport": "@aziontech/webkit/pick-list-target",
+   "parent": "transfer-list",
+   "treeShakeableImport": "@aziontech/webkit/transfer-list-target",
    "surface": "product"
   },
-  "pick-list-controls": {
-   "import": "@aziontech/webkit/pick-list-controls",
-   "target": "./src/components/data/pick-list/pick-list-controls/pick-list-controls.vue",
+  "transfer-list-controls": {
+   "import": "@aziontech/webkit/transfer-list-controls",
+   "target": "./src/components/data/transfer-list/transfer-list-controls/transfer-list-controls.vue",
    "kind": "subcomponent",
-   "parent": "pick-list",
-   "treeShakeableImport": "@aziontech/webkit/pick-list-controls",
+   "parent": "transfer-list",
+   "treeShakeableImport": "@aziontech/webkit/transfer-list-controls",
    "surface": "product"
   },
   "tree": {
@@ -11785,6 +11780,13 @@
      "doc": "Shows the time zone selector in the panel."
     },
     {
+     "name": "showTime",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period)."
+    },
+    {
      "name": "showStep",
      "type": "boolean",
      "default": "false",
@@ -11887,32 +11889,23 @@
    "examplesFile": "catalog/examples/date-range-picker.json",
    "docsFile": "catalog/components/date-range-picker.json"
   },
-  "calendar": {
-   "import": "@aziontech/webkit/calendar",
-   "target": "./src/components/inputs/calendar/index.ts",
+  "date-picker": {
+   "import": "@aziontech/webkit/date-picker",
+   "target": "./src/components/inputs/date-picker/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/calendar-root",
+   "treeShakeableImport": "@aziontech/webkit/date-picker-root",
    "subcomponents": [
-    "@aziontech/webkit/calendar-preset",
-    "@aziontech/webkit/calendar-clear"
+    "@aziontech/webkit/date-picker-clear"
    ],
    "models": [
     "modelValue",
     "open",
-    "timeZone",
-    "timezone"
+    "timeZone"
    ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "mode",
-     "type": "'single' | 'range'",
-     "default": "'range'",
-     "required": "false",
-     "doc": "Selection mode. Single picks one date; range picks a start and end date."
-    },
     {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
@@ -11960,56 +11953,21 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`)."
-    },
-    {
-     "name": "presets",
-     "type": "CalendarPresetItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
+     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date`)."
     },
     {
      "name": "showFields",
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+     "doc": "Shows the date field (and the time field with `showTime`) in the panel. Set false when the grid is the whole interaction and typing a date is not offered."
     },
     {
      "name": "showTime",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows Start/End time fields alongside the date fields."
-    },
-    {
-     "name": "showTimeZone",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Shows the time zone selector below the fields."
-    },
-    {
-     "name": "showTimezone",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`."
-    },
-    {
-     "name": "timeZones",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`."
-    },
-    {
-     "name": "timezones",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty."
+     "doc": "Shows a time field beside the date field, so the value carries a time of day."
     },
     {
      "name": "orientation",
@@ -12019,18 +11977,11 @@
      "doc": "Places the fields and Apply column below the calendar (vertical) or beside it (horizontal)."
     },
     {
-     "name": "horizontal",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use orientation=\"horizontal\". Removed in 7.0.` True has the effect of `orientation=\"horizontal\"`."
-    },
-    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text."
+     "doc": "Accessible name of the trigger; the current value is appended (`Due date: Nov 15, 2026`). Empty leaves the name to the Field label or the trigger text."
     },
     {
      "name": "clearable",
@@ -12047,13 +11998,6 @@
      "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
     },
     {
-     "name": "period",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Enables the \"Select period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
-    },
-    {
      "name": "split",
      "type": "boolean",
      "default": "false",
@@ -12062,7 +12006,7 @@
     },
     {
      "name": "modelValue",
-     "type": "CalendarValue",
+     "type": "DatePickerValue",
      "default": "null",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -12080,25 +12024,18 @@
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:timeZone`)."
-    },
-    {
-     "name": "timezone",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Two-way value (`v-model:timezone`)."
     }
    ],
    "events": [
     {
      "name": "month-change",
-     "payload": "CalendarMonth",
+     "payload": "DatePickerMonth",
      "notes": "Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
     },
     {
      "name": "apply",
-     "payload": "(event: Event, value: Date | null | CalendarRange)",
-     "notes": "Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection."
+     "payload": "(event: Event, value: Date | null)",
+     "notes": "Emitted when the draft selection is committed via Apply; `event` is the activating click or key event, `value` the committed date."
     }
    ],
    "slots": [
@@ -12108,42 +12045,29 @@
      "notes": "Replaces the default trigger button; scope exposes the open state, raw value, and formatted label."
     },
     {
-     "name": "presets",
-     "scope": "—",
-     "notes": "Custom preset dropdown content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering."
-    },
-    {
      "name": "footer",
      "scope": "—",
-     "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
+     "notes": "Custom footer/action-bar content (e.g. `<DatePicker.Clear>`) alongside Apply."
     }
    ],
    "surface": "product",
-   "examplesFile": "catalog/examples/calendar.json",
-   "docsFile": "catalog/components/calendar.json"
+   "examplesFile": "catalog/examples/date-picker.json",
+   "docsFile": "catalog/components/date-picker.json"
   },
-  "calendar-root": {
-   "import": "@aziontech/webkit/calendar-root",
-   "target": "./src/components/inputs/calendar/calendar.vue",
+  "date-picker-root": {
+   "import": "@aziontech/webkit/date-picker-root",
+   "target": "./src/components/inputs/date-picker/date-picker.vue",
    "kind": "root",
-   "rootOf": "calendar",
-   "treeShakeableImport": "@aziontech/webkit/calendar-root",
+   "rootOf": "date-picker",
+   "treeShakeableImport": "@aziontech/webkit/date-picker-root",
    "models": [
     "modelValue",
     "open",
-    "timeZone",
-    "timezone"
+    "timeZone"
    ],
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "mode",
-     "type": "'single' | 'range'",
-     "default": "'range'",
-     "required": "false",
-     "doc": "Selection mode. Single picks one date; range picks a start and end date."
-    },
     {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
@@ -12191,56 +12115,21 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date range`)."
-    },
-    {
-     "name": "presets",
-     "type": "CalendarPresetItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Consumer-provided shortcuts; each is `{ label, value }` where value is a `Date` or range. When present, the trigger becomes a two-part control whose left segment opens a dropdown of these presets."
+     "doc": "Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date`)."
     },
     {
      "name": "showFields",
      "type": "boolean",
      "default": "true",
      "required": "false",
-     "doc": "Shows the Start/End date fields in the panel. Set false when the shortcuts and the grid are the whole interaction and typing a boundary by hand is not offered."
+     "doc": "Shows the date field (and the time field with `showTime`) in the panel. Set false when the grid is the whole interaction and typing a date is not offered."
     },
     {
      "name": "showTime",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Shows Start/End time fields alongside the date fields."
-    },
-    {
-     "name": "showTimeZone",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Shows the time zone selector below the fields."
-    },
-    {
-     "name": "showTimezone",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use showTimeZone. Removed in 7.0.` Same effect as `showTimeZone`."
-    },
-    {
-     "name": "timeZones",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Time zone options for the selector (IANA names); empty falls back to a curated list derived from `Intl`."
-    },
-    {
-     "name": "timezones",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use timeZones. Removed in 7.0.` Read when `timeZones` is empty."
+     "doc": "Shows a time field beside the date field, so the value carries a time of day."
     },
     {
      "name": "orientation",
@@ -12250,18 +12139,11 @@
      "doc": "Places the fields and Apply column below the calendar (vertical) or beside it (horizontal)."
     },
     {
-     "name": "horizontal",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use orientation=\"horizontal\". Removed in 7.0.` True has the effect of `orientation=\"horizontal\"`."
-    },
-    {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name of the trigger; the current value is appended (`Billing period: Jan 1 – Jan 31`). Empty leaves the name to the Field label or the trigger text."
+     "doc": "Accessible name of the trigger; the current value is appended (`Due date: Nov 15, 2026`). Empty leaves the name to the Field label or the trigger text."
     },
     {
      "name": "clearable",
@@ -12278,13 +12160,6 @@
      "doc": "Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately."
     },
     {
-     "name": "period",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Enables the \"Select period\" relative-time mode: a relative-preset list plus a text input that parses spans like `45m` or `last month`."
-    },
-    {
      "name": "split",
      "type": "boolean",
      "default": "false",
@@ -12293,7 +12168,7 @@
     },
     {
      "name": "modelValue",
-     "type": "CalendarValue",
+     "type": "DatePickerValue",
      "default": "null",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -12311,25 +12186,18 @@
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:timeZone`)."
-    },
-    {
-     "name": "timezone",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Two-way value (`v-model:timezone`)."
     }
    ],
    "events": [
     {
      "name": "month-change",
-     "payload": "CalendarMonth",
+     "payload": "DatePickerMonth",
      "notes": "Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed)."
     },
     {
      "name": "apply",
-     "payload": "(event: Event, value: Date | null | CalendarRange)",
-     "notes": "Emitted when the draft selection is committed via Apply, a preset or a period; `event` is the activating click or key event, `value` the committed selection."
+     "payload": "(event: Event, value: Date | null)",
+     "notes": "Emitted when the draft selection is committed via Apply; `event` is the activating click or key event, `value` the committed date."
     }
    ],
    "slots": [
@@ -12339,33 +12207,20 @@
      "notes": "Replaces the default trigger button; scope exposes the open state, raw value, and formatted label."
     },
     {
-     "name": "presets",
-     "scope": "—",
-     "notes": "Custom preset dropdown content (e.g. `<Calendar.Preset>`); overrides the `presets` prop rendering."
-    },
-    {
      "name": "footer",
      "scope": "—",
-     "notes": "Custom footer/action-bar content (e.g. `<Calendar.Clear>`) alongside Apply."
+     "notes": "Custom footer/action-bar content (e.g. `<DatePicker.Clear>`) alongside Apply."
     }
    ],
    "surface": "product",
-   "docsFile": "catalog/components/calendar-root.json"
+   "docsFile": "catalog/components/date-picker-root.json"
   },
-  "calendar-preset": {
-   "import": "@aziontech/webkit/calendar-preset",
-   "target": "./src/components/inputs/calendar/calendar-preset/calendar-preset.vue",
+  "date-picker-clear": {
+   "import": "@aziontech/webkit/date-picker-clear",
+   "target": "./src/components/inputs/date-picker/date-picker-clear/date-picker-clear.vue",
    "kind": "subcomponent",
-   "parent": "calendar",
-   "treeShakeableImport": "@aziontech/webkit/calendar-preset",
-   "surface": "product"
-  },
-  "calendar-clear": {
-   "import": "@aziontech/webkit/calendar-clear",
-   "target": "./src/components/inputs/calendar/calendar-clear/calendar-clear.vue",
-   "kind": "subcomponent",
-   "parent": "calendar",
-   "treeShakeableImport": "@aziontech/webkit/calendar-clear",
+   "parent": "date-picker",
+   "treeShakeableImport": "@aziontech/webkit/date-picker-clear",
    "surface": "product"
   },
   "input": {
@@ -12474,16 +12329,6 @@
      "name": "suffix",
      "scope": "",
      "notes": "Hidden from assistive tech (`aria-hidden=\"true\"`)."
-    },
-    {
-     "name": "iconLeft",
-     "scope": "",
-     "notes": "Rendered as the fallback of `prefix`."
-    },
-    {
-     "name": "iconRight",
-     "scope": "",
-     "notes": "Rendered as the fallback of `suffix`."
     }
    ],
    "surface": "product",
@@ -13078,47 +12923,6 @@
    "examplesFile": "catalog/examples/hint.json",
    "docsFile": "catalog/components/hint.json"
   },
-  "label": {
-   "import": "@aziontech/webkit/label",
-   "target": "./src/components/inputs/label/label.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/label",
-   "category": "inputs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Fallback text when the default slot is empty."
-    },
-    {
-     "name": "required",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Appends an inline required indicator (`<span aria-hidden>*</span> (Required)`) next to the label text. The `*` uses `var(--primary)`; \"(Required)\" inherits `var(--text-muted)`."
-    },
-    {
-     "name": "hint",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Short explanation appended as a `Hint` glyph that reveals it on hover or focus. Empty renders no glyph."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "Label text; falls back to `label` prop when empty."
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/label.json",
-   "docsFile": "catalog/components/label.json"
-  },
   "otp-input": {
    "import": "@aziontech/webkit/otp-input",
    "target": "./src/components/inputs/otp-input/otp-input.vue",
@@ -13290,16 +13094,6 @@
      "name": "suffix",
      "scope": "—",
      "notes": "Trailing adornment at the inline end. **Only honored when `toggleable=false`** — the visibility toggle sits there when enabled. Hidden from assistive tech (`aria-hidden=\"true\"`)."
-    },
-    {
-     "name": "iconLeft",
-     "scope": "—",
-     "notes": "@deprecated since 6.0 — use prefix. Removed in 7.0.` Rendered as the fallback of `prefix`."
-    },
-    {
-     "name": "iconRight",
-     "scope": "—",
-     "notes": "@deprecated since 6.0 — use suffix. Removed in 7.0.` Rendered as the fallback of `suffix`."
     }
    ],
    "surface": "product",
@@ -13684,6 +13478,20 @@
      "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
     },
     {
+     "name": "kind",
+     "type": "'default' | 'card'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupKind`, exported."
+    },
+    {
+     "name": "options",
+     "type": "TOption[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Options rendered as `RadioGroup.Item` rows, in place of composed items (`TOption extends RadioGroupOption`: `{ value, label, description?, icon?, ariaLabel?, disabled? }`, exported); extra fields reach the `option` and `tag` slots. Empty renders the default slot."
+    },
+    {
      "name": "disabled",
      "type": "boolean",
      "default": "false",
@@ -13706,7 +13514,7 @@
     },
     {
      "name": "modelValue",
-     "type": "string | undefined",
+     "type": "TOption['value'] | undefined",
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -13716,7 +13524,17 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The `RadioGroup.Item`s."
+     "notes": "The `RadioGroup.Item`s. Not rendered while `options` is set."
+    },
+    {
+     "name": "option",
+     "scope": "{ option: TOption; selected: boolean }",
+     "notes": "Body of one data-driven option, in place of its label."
+    },
+    {
+     "name": "tag",
+     "scope": "{ option: TOption; selected: boolean }",
+     "notes": "Trailing content of one data-driven option, such as a price or a tag."
     }
    ],
    "surface": "product",
@@ -13758,6 +13576,20 @@
      "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
     },
     {
+     "name": "kind",
+     "type": "'default' | 'card'",
+     "default": "'default'",
+     "required": "false",
+     "doc": "Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupKind`, exported."
+    },
+    {
+     "name": "options",
+     "type": "TOption[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Options rendered as `RadioGroup.Item` rows, in place of composed items (`TOption extends RadioGroupOption`: `{ value, label, description?, icon?, ariaLabel?, disabled? }`, exported); extra fields reach the `option` and `tag` slots. Empty renders the default slot."
+    },
+    {
      "name": "disabled",
      "type": "boolean",
      "default": "false",
@@ -13780,7 +13612,7 @@
     },
     {
      "name": "modelValue",
-     "type": "string | undefined",
+     "type": "TOption['value'] | undefined",
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model`)."
@@ -13790,67 +13622,21 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The `RadioGroup.Item`s."
+     "notes": "The `RadioGroup.Item`s. Not rendered while `options` is set."
+    },
+    {
+     "name": "option",
+     "scope": "{ option: TOption; selected: boolean }",
+     "notes": "Body of one data-driven option, in place of its label."
+    },
+    {
+     "name": "tag",
+     "scope": "{ option: TOption; selected: boolean }",
+     "notes": "Trailing content of one data-driven option, such as a price or a tag."
     }
    ],
    "surface": "product",
    "docsFile": "catalog/components/radio-group-root.json"
-  },
-  "radio-cards": {
-   "import": "@aziontech/webkit/radio-cards",
-   "target": "./src/components/inputs/radio-cards/radio-cards.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/radio-cards",
-   "models": [
-    "modelValue"
-   ],
-   "category": "inputs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "items",
-     "type": "TItem[]",
-     "default": "undefined",
-     "required": "true",
-     "doc": "Options rendered as selectable cards; each entry must include `value` and `label`."
-    },
-    {
-     "name": "disabled",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Disables all options and applies disabled tokens."
-    },
-    {
-     "name": "name",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Form field name. Set, a hidden input carries the selected value so a native `form` submits it; a required `Field` adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out."
-    },
-    {
-     "name": "modelValue",
-     "type": "TItem['value']",
-     "default": "undefined as never",
-     "required": "false",
-     "doc": "Two-way value (`v-model`)."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "{ item: TItem; selected: boolean }",
-     "notes": "Overrides the entire card body for an option."
-    },
-    {
-     "name": "tag",
-     "scope": "{ item: TItem; selected: boolean }",
-     "notes": "Trailing content below label/description (e.g. plan badge)."
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/radio-cards.json",
-   "docsFile": "catalog/components/radio-cards.json"
   },
   "chip": {
    "import": "@aziontech/webkit/chip",
@@ -13962,13 +13748,6 @@
      "doc": "Identifier for this checkbox in a group: compared against a scalar model, or added to and removed from an array model. Unset, the model is a boolean."
     },
     {
-     "name": "binary",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — leave value unset for a boolean model. Removed in 7.0.` Forces the boolean model even with a `value`."
-    },
-    {
      "name": "indeterminate",
      "type": "boolean",
      "default": "false",
@@ -13997,25 +13776,11 @@
      "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
     },
     {
-     "name": "inputId",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set."
-    },
-    {
      "name": "name",
      "type": "string",
      "default": "''",
      "required": "false",
      "doc": "HTML name for form submission."
-    },
-    {
-     "name": "tabindex",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — pass the tabindex attribute; it falls through to the input. Removed in 7.0."
     },
     {
      "name": "modelValue",
@@ -14028,64 +13793,6 @@
    "surface": "product",
    "examplesFile": "catalog/examples/checkbox.json",
    "docsFile": "catalog/components/checkbox.json"
-  },
-  "radio-button": {
-   "import": "@aziontech/webkit/radio-button",
-   "target": "./src/components/inputs/radio-button/radio-button.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/radio-button",
-   "models": [
-    "modelValue"
-   ],
-   "category": "inputs",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "value",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Option value for this radio instance."
-    },
-    {
-     "name": "name",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "HTML name shared across a mutually exclusive group; empty renders no `name`."
-    },
-    {
-     "name": "disabled",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Disables interaction and applies disabled tokens."
-    },
-    {
-     "name": "invalid",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too."
-    },
-    {
-     "name": "inputId",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — pass id (or let the enclosing Field set it). Removed in 7.0.` Wins over `id` while it is set."
-    },
-    {
-     "name": "modelValue",
-     "type": "string | undefined",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Two-way value (`v-model`)."
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/radio-button.json",
-   "docsFile": "catalog/components/radio-button.json"
   },
   "switch": {
    "import": "@aziontech/webkit/switch",
@@ -14103,7 +13810,7 @@
      "type": "'default' | 'privacy'",
      "default": "'default'",
      "required": "false",
-     "doc": "Visual variant (`SwitchKind`; `SwitchType` stays exported as a deprecated alias until 7.0). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+     "doc": "Visual variant (`SwitchKind`). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
     },
     {
      "name": "autofocus",
@@ -14111,13 +13818,6 @@
      "default": "false",
      "required": "false",
      "doc": "Moves focus to the switch once, when it mounts."
-    },
-    {
-     "name": "focused",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use autofocus. Removed in 7.0.` Forces the focused visual state and moves focus. Mirrors the Figma `focused` variant."
     },
     {
      "name": "disabled",
@@ -14341,13 +14041,6 @@
      "default": "'vertical'",
      "required": "false",
      "doc": "Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior."
-    },
-    {
-     "name": "resizable",
-     "type": "'vertical' | 'horizontal' | 'both' | 'none'",
-     "default": "'vertical'",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use resize. Removed in 7.0.` Read when `resize` is left at `vertical`."
     },
     {
      "name": "monospace",
@@ -15107,13 +14800,6 @@
    "structure": "composition",
    "props": [
     {
-     "name": "multiple",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use multi-select. Removed in 7.0.` Switches to multi-select; `modelValue` becomes an array."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
@@ -15222,13 +14908,6 @@
    "category": "inputs",
    "structure": "composition",
    "props": [
-    {
-     "name": "multiple",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use multi-select. Removed in 7.0.` Switches to multi-select; `modelValue` becomes an array."
-    },
     {
      "name": "defaultOpen",
      "type": "boolean",
@@ -21021,7 +20700,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
+     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
     }
    ],
    "slots": [
@@ -29695,7 +29374,7 @@
    "title": "Templates/Platform/Account/BuildDeployment",
    "source": "blocks/platform/account/build-deployment/build-deployment.vue",
    "surface": "product",
-   "summary": "The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `Table` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `Table.CellStatus`, `Table.CellTime` for Last modified, `Table.CellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a medium `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioButton`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.",
+   "summary": "The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `Table` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `Table.CellStatus`, `Table.CellTime` for Last modified, `Table.CellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a medium `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioGroup`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "build and deployment",
     "deployment settings",
@@ -29741,7 +29420,7 @@
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
-    "RadioButton",
+    "RadioGroup",
     "SaveBar",
     "Select",
     "SettingRow",
@@ -29778,7 +29457,7 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
@@ -30093,7 +29772,7 @@
    "title": "Templates/Platform/Account/OnboardingForm",
    "source": "blocks/platform/account/onboarding-form/onboarding-form.vue",
    "surface": "product",
-   "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioCards` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
+   "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` with a flat `Progress`, the step counter and heading, the step’s fields and a Back / Continue row, and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The flow shows one step at a time; each story here is one of the three. Built from `Field` with `Input`, `RadioGroup` with `kind=\"card\"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
    "intents": [
     "onboarding",
     "onboarding form",
@@ -30140,7 +29819,7 @@
     "PanelHeader",
     "PaymentBrand",
     "Progress",
-    "RadioCards",
+    "RadioGroup",
     "Select",
     "Separator",
     "Switch",
@@ -30168,7 +29847,7 @@
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/payment-brand",
     "@aziontech/webkit/progress",
-    "@aziontech/webkit/radio-cards",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/select",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/switch",
@@ -31209,7 +30888,7 @@
    "title": "Templates/Platform/Create/CreateInDrawer",
    "source": "blocks/platform/create/create-in-drawer/create-in-drawer.vue",
    "surface": "product",
-   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup` and `RadioButton` choice cards), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.",
+   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`kind=\"card\"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.",
    "intents": [
     "create domain",
     "add domain",
@@ -31312,7 +30991,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
-    "RadioButton",
+    "RadioGroup",
     "SchemaForm",
     "Select",
     "SettingRow",
@@ -31352,7 +31031,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/schema-form",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
@@ -31406,7 +31085,7 @@
    "title": "Templates/Platform/Create/DeployDrawer",
    "source": "blocks/platform/create/deploy-drawer/deploy-drawer.vue",
    "surface": "product",
-   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `Field` choice cards with `RadioButton`, `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
+   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`kind=\"card\"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
    "intents": [
     "deploy drawer",
     "deploy panel",
@@ -31435,7 +31114,6 @@
     "DrawerTrigger",
     "DropdownMenu",
     "EmptyState",
-    "Field",
     "Input",
     "Item",
     "Link",
@@ -31443,7 +31121,7 @@
     "PanelFooter",
     "PanelHeader",
     "Popover",
-    "RadioButton",
+    "RadioGroup",
     "Separator",
     "SettingsSection",
     "Skeleton",
@@ -31465,7 +31143,6 @@
     "@aziontech/webkit/drawer-trigger",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/field",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
@@ -31473,7 +31150,7 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/separator",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/skeleton",
@@ -31803,7 +31480,7 @@
    "title": "Templates/Platform/Create/MultipageCreate",
    "source": "blocks/platform/create/multipage-create/multipage-create.vue",
    "surface": "product",
-   "summary": "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` choice cards with `Switch` and `RadioButton`, `Item`, `Textarea`, `HelperText` and `Button`.",
+   "summary": "The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind=\"card\"`), `Item`, `Textarea`, `HelperText` and `Button`.",
    "intents": [
     "multipage create",
     "multi-step create page",
@@ -31850,7 +31527,7 @@
     "Input",
     "Item",
     "PageHeader",
-    "RadioButton",
+    "RadioGroup",
     "SaveBar",
     "SectionHeader",
     "SettingRow",
@@ -31874,7 +31551,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/section-header",
     "@aziontech/webkit/setting-row",
@@ -31904,7 +31581,7 @@
    "title": "Templates/Platform/Create/ProvisionWizard",
    "source": "blocks/platform/create/provision-wizard/provision-wizard.vue",
    "surface": "product",
-   "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Hint`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioCards`, `Select`, `SaveBar` and `Button`.",
+   "summary": "A two-step creation wizard that provisions a resource and binds it to another: the creation header, a Stepper rail that only lets you go back, a page heading over the form column, and a borderless SaveBar footer that fades in over the canvas with Back and the primary action, Next and then Create and deploy. Step one binds the project the service serves, either an existing one from the paged list (ResourcePicker) or a new one whose cache settings and origin are set right there. Step two reads the chosen project back with a Change button, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), the environment and certificate, the deployment the first release is cut against, and an Advanced disclosure. Submitting runs the provisioning log plotted in DeploymentFlow and ends on DeploySuccess. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `GlobalHeader`, `Stepper`, `Card`, `ToggleGroup`, `Field`, `Hint`, `Input`, `HelperText`, `Item`, `Skeleton`, `Switch`, `RadioGroup` (`kind=\"card\"`), `Select`, `SaveBar` and `Button`.",
    "intents": [
     "provision wizard",
     "create service wizard",
@@ -31940,7 +31617,7 @@
     "Input",
     "Item",
     "PageHeader",
-    "RadioCards",
+    "RadioGroup",
     "SaveBar",
     "Select",
     "SettingRow",
@@ -31964,7 +31641,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/radio-cards",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
@@ -32152,7 +31829,7 @@
    "title": "Templates/Platform/Create/SinglePageCreate",
    "source": "blocks/platform/create/single-page-create/single-page-create.vue",
    "surface": "product",
-   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `Field` choice cards with `RadioButton`, `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`. ImportFromGit is the same job as a page body for ConsoleLayout, with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.",
+   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`kind=\"card\"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`. ImportFromGit is the same job as a page body for ConsoleLayout, with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.",
    "intents": [
     "create page",
     "create resource page",
@@ -32211,8 +31888,7 @@
     "PageHeader",
     "PasswordInput",
     "PhoneInput",
-    "RadioButton",
-    "RadioCards",
+    "RadioGroup",
     "SaveBar",
     "Select",
     "SettingRow",
@@ -32242,8 +31918,7 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
     "@aziontech/webkit/phone-input",
-    "@aziontech/webkit/radio-button",
-    "@aziontech/webkit/radio-cards",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
@@ -34734,7 +34409,6 @@
     "CodeEditor",
     "CopyButton",
     "EmptyState",
-    "Field",
     "HelperText",
     "IconButton",
     "Input",
@@ -34744,7 +34418,7 @@
     "LogViewContent",
     "LogView",
     "PageTabs",
-    "RadioButton",
+    "RadioGroup",
     "ResizableHandle",
     "ResizablePane",
     "ResizableRoot",
@@ -34769,7 +34443,6 @@
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/field",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -34779,7 +34452,7 @@
     "@aziontech/webkit/log-view-content",
     "@aziontech/webkit/log-view-root",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/resizable-handle",
     "@aziontech/webkit/resizable-pane",
     "@aziontech/webkit/resizable-root",
@@ -34823,7 +34496,7 @@
    "title": "Templates/Platform/Edit/EditResource",
    "source": "blocks/platform/edit/edit-resource/edit-resource.vue",
    "surface": "product",
-   "summary": "The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
+   "summary": "The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `RadioGroup` choice cards (`kind=\"card\"`), `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
    "intents": [
     "settings page",
     "resource settings",
@@ -34918,7 +34591,7 @@
     "PanelFooter",
     "PanelHeader",
     "PasswordInput",
-    "RadioButton",
+    "RadioGroup",
     "SaveBar",
     "Select",
     "SettingRow",
@@ -34959,7 +34632,7 @@
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/password-input",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
@@ -35016,7 +34689,7 @@
    "title": "Templates/Platform/Edit/RuleBuilder",
    "source": "blocks/platform/edit/rule-builder/rule-builder.vue",
    "surface": "product",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `Alert` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`kind=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -35051,7 +34724,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
-    "RadioButton",
+    "RadioGroup",
     "Select",
     "SettingRow",
     "SettingsSection",
@@ -35074,7 +34747,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
@@ -35441,7 +35114,7 @@
    "title": "Templates/Platform/States/FormError",
    "source": "blocks/platform/states/form-error/form-error.vue",
    "surface": "product",
-   "summary": "A server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Tooltip`, `Avatar`, `DropdownMenu`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`. A focused create page with its own creation header and no rail: render it outside ConsoleLayout.",
+   "summary": "A server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Tooltip`, `Avatar`, `DropdownMenu`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `RadioGroup` choice cards (`kind=\"card\"`), `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`. A focused create page with its own creation header and no rail: render it outside ConsoleLayout.",
    "intents": [
     "form error",
     "server validation",
@@ -35473,7 +35146,6 @@
     "Button",
     "Card",
     "DropdownMenu",
-    "Field",
     "GlobalHeader",
     "HelperText",
     "IconButton",
@@ -35481,7 +35153,7 @@
     "Item",
     "MultiSelect",
     "NumberInput",
-    "RadioButton",
+    "RadioGroup",
     "SaveBar",
     "SectionHeader",
     "Select",
@@ -35498,7 +35170,6 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/dropdown-menu",
-    "@aziontech/webkit/field",
     "@aziontech/webkit/global-header",
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
@@ -35506,7 +35177,7 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/number-input",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/section-header",
     "@aziontech/webkit/select",
@@ -36286,7 +35957,7 @@
     "PanelContent",
     "PanelFooter",
     "PanelHeader",
-    "RadioButton",
+    "RadioGroup",
     "SaveBar",
     "Select",
     "SettingRow",
@@ -36321,7 +35992,7 @@
     "@aziontech/webkit/panel-content",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
-    "@aziontech/webkit/radio-button",
+    "@aziontech/webkit/radio-group",
     "@aziontech/webkit/save-bar",
     "@aziontech/webkit/select",
     "@aziontech/webkit/setting-row",

@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/vue'
+import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
@@ -212,6 +212,29 @@ describe('FilterMenu', () => {
     await waitFor(() =>
       expect(panel()?.querySelector('[data-level="values:modified"]')).not.toBeNull()
     )
+  })
+
+  it('commits a whole-day custom range from the range picker as dates', async () => {
+    const { updates } = mount()
+    await openField('modified')
+    await fireEvent.click(byTestId('data-filter-menu__custom')!)
+    const picker = await waitFor(() => {
+      const el = byTestId('data-filter-menu__calendar__popover')
+      expect(el).not.toBeNull()
+      return el as HTMLElement
+    })
+    expect(within(picker).queryByLabelText('Start time')).toBeNull()
+    const start = within(picker).getByLabelText('Start')
+    const end = within(picker).getByLabelText('End')
+    await fireEvent.update(start, '11/2/2026')
+    await fireEvent.change(start)
+    await fireEvent.update(end, '11/9/2026')
+    await fireEvent.change(end)
+    await fireEvent.click(within(picker).getByRole('button', { name: 'Apply' }))
+    const applied = updates.at(-1)?.['modified'] as { start: Date; end: Date }[]
+    expect(applied[0].start).toBeInstanceOf(Date)
+    expect(applied[0].start.getDate()).toBe(2)
+    expect(applied[0].end.getDate()).toBe(9)
   })
 
   it('summarizes a custom range on the field row', async () => {

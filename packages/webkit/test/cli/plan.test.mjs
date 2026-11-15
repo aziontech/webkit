@@ -772,13 +772,13 @@ async function lintWithInitConfig(code) {
 
 test('the init ESLint config accepts a label that points at its control with for, or wraps it', async () => {
   const script =
-    "<script setup>\nimport Input from '@aziontech/webkit/input'\nimport Label from '@aziontech/webkit/label'\n</script>\n"
+    "<script setup>\nimport Input from '@aziontech/webkit/input'\nimport FieldLabel from '@aziontech/webkit/field-label'\n</script>\n"
   assert.deepEqual(
     await lintWithInitConfig(
-      `${script}<template><Label for="name" label="Name" /><Input id="name" /></template>\n`
+      `${script}<template><FieldLabel for="name">Name</FieldLabel><Input id="name" /></template>\n`
     ),
     [],
-    'a standalone Label with for next to its Input must pass'
+    'a standalone FieldLabel with for next to its Input must pass'
   )
   assert.deepEqual(
     await lintWithInitConfig(
@@ -800,7 +800,7 @@ test('the init ESLint config accepts a label that points at its control with for
     'a label wrapping a WebKit control must pass'
   )
   assert.equal(
-    (await lintWithInitConfig(`${script}<template><Label label="Name" /><Input /></template>\n`))
+    (await lintWithInitConfig(`${script}<template><label>Name</label><Input /></template>\n`))
       .length,
     1,
     'a label that neither wraps nor points at a control must fail'

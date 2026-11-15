@@ -8,7 +8,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Progress from '@aziontech/webkit/progress'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -197,28 +197,30 @@
 
                         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                           <Field.Legend kind="label">Organization mark</Field.Legend>
-                          <RadioCards
+                          <RadioGroup
                             v-model="accent"
-                            :items="accents"
+                            kind="card"
+                            orientation="horizontal"
+                            :options="accents"
                             aria-label="Organization mark"
                             class="w-full"
                           >
-                            <template #default="{ item }">
+                            <template #option="{ option }">
                               <span class="flex flex-col items-center gap-(--spacing-xs)">
                                 <Avatar
                                   :label="previewName"
-                                  :alt="item.label"
-                                  :colors="item.colors"
+                                  :alt="option.label"
+                                  :colors="option.colors"
                                   pattern="marble"
                                   size="medium"
                                   kind="square"
                                 />
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  item.label
+                                  option.label
                                 }}</span>
                               </span>
                             </template>
-                          </RadioCards>
+                          </RadioGroup>
                           <HelperText
                             label="Generated from the organization's name. Select its color."
                           />

@@ -18,6 +18,11 @@
       "file": "disabled.vue"
     },
     {
+      "name": "Card",
+      "summary": "`kind=\"card\"` with `options`: each option is a bordered card with an icon and a description, the `tag` slot adds a price, and the cards share a row that wraps.",
+      "file": "card.vue"
+    },
+    {
       "name": "InField",
       "summary": "Inside `Field.Set` the legend names the group, the description describes it, and `required` on the group makes a native form refuse an empty submit; the value posts under `name`.",
       "file": "in-field.vue"

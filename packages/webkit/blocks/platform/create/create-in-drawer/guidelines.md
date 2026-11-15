@@ -40,9 +40,9 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 A large `Select` in a required `Field` with its `Field.Label` and a `Field.Description` that the `Field` ties to the trigger by `aria-describedby`; after a failed submit a `Field.Error` takes its place and the `Field` turns `invalid`. The options are every environment, and the panel ends with a Create Environment option. The helper text says where the item answers, and changes to say when picking an environment the resource does not publish to yet connects it.
 
-### F. Domain source — `Field`, `RadioButton` (required)
+### F. Domain source — `Field`, `RadioGroup` (required)
 
-Choice cards: one horizontal `Field` per option with a `RadioButton`, a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
+Choice cards: a `RadioGroup` with `kind="card"`, one item per option with a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 

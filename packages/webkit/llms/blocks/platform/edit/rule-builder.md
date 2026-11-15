@@ -1,11 +1,11 @@
 # RuleBuilder (`platform/edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioButton` choice cards, `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`kind="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/rule-builder")`
-- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md)
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../../components/radio-group.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
@@ -37,9 +37,9 @@ A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined m
 
 A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name, which shows "Name is required." only after Save is pressed with it empty, and an optional Description. Fields are disabled while saving.
 
-### C. Phase — `SettingsSection`, `Card`, `Field`, `RadioButton`, `HelperText` (optional)
+### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `HelperText` (optional)
 
-Request and Response as choice cards: a flush `Card` of `Field`s, each a `RadioButton` with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
+Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `kind="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
 
 ### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
@@ -135,7 +135,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -727,26 +727,21 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/ru
                 <template #content>
                   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                     <div class="flex flex-col gap-(--spacing-xs)">
-                      <Field.Label
-                        v-for="phase in PHASES"
-                        :key="phase.value"
+                      <RadioGroup
+                        v-model="form.phase"
+                        kind="card"
+                        name="rule-phase"
+                        aria-label="Phase"
+                        :disabled="submitting || editing"
                       >
-                        <Field
-                          orientation="horizontal"
-                          :disabled="submitting || editing"
+                        <RadioGroup.Item
+                          v-for="phase in PHASES"
+                          :key="phase.value"
+                          :value="phase.value"
+                          :description="phase.description"
+                          >{{ phase.label }}</RadioGroup.Item
                         >
-                          <RadioButton
-                            v-model="form.phase"
-                            :value="phase.value"
-                            name="rule-phase"
-                            :id="`rule-phase-${phase.value}`"
-                          />
-                          <Field.Content>
-                            <Field.Title>{{ phase.label }}</Field.Title>
-                            <Field.Description>{{ phase.description }}</Field.Description>
-                          </Field.Content>
-                        </Field>
-                      </Field.Label>
+                      </RadioGroup>
                       <HelperText
                         v-if="editing"
                         kind="disabled"

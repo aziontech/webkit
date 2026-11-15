@@ -26,7 +26,7 @@ The `item` is a per-component decision — pick the smallest thing that unambigu
 | A menu selection carrying a value (`dropdown` select)                                      | the selected `value`                                                                               |
 | A leaf that owns a `value` (`tabs-item`)                                                   | its `value`                                                                                        |
 | A leaf identified only by display fields (`chip`, `menu-item`, `breadcrumb-item`)          | `label` / `href` — or `{ label, href }` when more than one is needed                               |
-| A structured activation (`pick-list` item-double-click)                                    | `(event, { list, item, index })` — the existing payload object, with `event` promoted to first arg |
+| A structured activation (`transfer-list` item-double-click)                                    | `(event, { list, item, index })` — the existing payload object, with `event` promoted to first arg |
 | A lone control with no subject (`button`, `icon-button`, `link`, a pagination page button) | nothing — emit `(event)`                                                                           |
 
 Two shapes are allowed for the second argument, never mixed within one event:

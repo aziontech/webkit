@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: b876a9055911bf57da497716843a70c0758c408dcd1fa515210e4bb3e2f1f4ae
+checksum: 1a565aa60d27a3555e5f5cf26137e6724cbe232de6514c29fcd9f147e5d0bdbd
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -37,7 +37,8 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 - A short titled preview of a longer listing on a marketing page → use `listing-table`.
 - A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
-- The same records as a grid of cards → use `cards` (same collection, card layout).
+- A grid of selectable cards or options → use `radio-group` with `kind="card"`.
+- The same records as a grid of cards → use `card-list` (same collection, card layout).
 
 ## Related
 

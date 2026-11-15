@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 18ca78e3e625fd447f8d4b12af941d299818daeaecbd1e44a8fd3a0c5843cc91
+checksum: 46f7186c7f5416d1ce4b84efa58536e2f9f88d8ea93f1d325c05cd559b3ec6c7
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - The text is a status, count or category attached to an item → use `tag` or `badge`.
 - The text is the heading itself → use a real heading element; Overline renders a `div` and is not a heading.
 - The text is a keyboard shortcut → use `kbd`.
-- The text is a field label → use `label`.
+- The text is a field label → use `Field.Label`.
 
 ## Related
 

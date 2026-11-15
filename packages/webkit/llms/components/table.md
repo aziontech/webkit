@@ -30,7 +30,8 @@
 - A short titled preview of a longer listing on a marketing page → use `listing-table`.
 - A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
-- The same records as a grid of cards → use `cards` (same collection, card layout).
+- A grid of selectable cards or options → use `radio-group` with `kind="card"`.
+- The same records as a grid of cards → use `card-list` (same collection, card layout).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`; `resizable` is its deprecated name until 7.0). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+ "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
  "setup": null,
  "useWhen": [
   "Capture multiple lines of free-form text (descriptions, comments, messages)."
@@ -71,13 +71,6 @@
    "default": "'vertical'",
    "required": "false",
    "doc": "Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior."
-  },
-  {
-   "name": "resizable",
-   "type": "'vertical' | 'horizontal' | 'both' | 'none'",
-   "default": "'vertical'",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use resize. Removed in 7.0.` Read when `resize` is left at `vertical`."
   },
   {
    "name": "monospace",

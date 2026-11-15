@@ -5,13 +5,12 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -229,77 +228,47 @@
                         description="The cache layer the objects are evicted from."
                         kind="stacked"
                       >
-                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                          <legend class="sr-only">Layer</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.layer"
+                          kind="card"
+                          class="w-full"
+                          name="purge-layer"
+                          aria-label="Layer"
+                        >
+                          <RadioGroup.Item
                             v-for="option in layers"
                             :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.layer"
-                                :value="option.value"
-                                name="purge-layer"
-                                :id="'purge-layer-' + option.value"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ option.label }}
-                                </Field.Title>
-                                <Field.Description v-if="option.description">
-                                  {{ option.description }}
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </SettingRow>
                       <SettingRow
                         title="Purge type"
                         description="How the arguments below identify the objects."
                         kind="stacked"
                       >
-                        <fieldset class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0">
-                          <legend class="sr-only">Purge type</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.type"
+                          kind="card"
+                          class="w-full"
+                          name="purge-type"
+                          aria-label="Purge type"
+                        >
+                          <RadioGroup.Item
                             v-for="option in types"
                             :key="option.value"
+                            :value="option.value"
+                            :description="
+                              typeAllowed(option.value)
+                                ? option.description
+                                : option.description + ' Tiered Cache purges by cache key only.'
+                            "
+                            :disabled="!typeAllowed(option.value)"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field
-                              orientation="horizontal"
-                              :disabled="!typeAllowed(option.value)"
-                            >
-                              <RadioButton
-                                v-model="form.type"
-                                :value="option.value"
-                                name="purge-type"
-                                :id="'purge-type-' + option.value"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ option.label }}
-                                </Field.Title>
-                                <Field.Description v-if="option.description">
-                                  {{ option.description }}
-                                </Field.Description>
-                                <Field.Description
-                                  key="field.description-2"
-                                  v-if="
-                                    !typeAllowed(option.value) && typeAllowed(option.value)
-                                      ? ''
-                                      : 'Tiered Cache purges by cache key only.'
-                                  "
-                                >
-                                  {{
-                                    typeAllowed(option.value)
-                                      ? ''
-                                      : 'Tiered Cache purges by cache key only.'
-                                  }}
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </SettingRow>
                     </Item.List>
                   </template>

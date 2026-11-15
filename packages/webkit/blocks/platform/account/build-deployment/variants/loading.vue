@@ -21,7 +21,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -1119,48 +1119,38 @@
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
                     <Field.Legend kind="label">Binding policy</Field.Legend>
-                    <Field
-                      v-for="policy in BINDING_POLICIES"
-                      :key="policy.value"
-                      orientation="horizontal"
+                    <RadioGroup
+                      v-model="draft.bindingPolicy"
+                      name="deployment-settings-binding"
+                      aria-label="Binding policy"
                     >
-                      <RadioButton
-                        v-model="draft.bindingPolicy"
+                      <RadioGroup.Item
+                        v-for="policy in BINDING_POLICIES"
+                        :key="policy.value"
                         :value="policy.value"
-                        name="deployment-settings-binding"
-                        :id="`deployment-settings-binding-${policy.value}`"
-                      />
-                      <Field.Content>
-                        <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
-                          policy.label
-                        }}</Field.Label>
-                        <Field.Description>{{ policy.description }}</Field.Description>
-                      </Field.Content>
-                    </Field>
+                        :description="policy.description"
+                        >{{ policy.label }}</RadioGroup.Item
+                      >
+                    </RadioGroup>
                   </fieldset>
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
-                    :disabled="Boolean(editingId)"
                   >
                     <Field.Legend kind="label">Deployment policy</Field.Legend>
-                    <Field
-                      v-for="policy in DEPLOYMENT_POLICIES"
-                      :key="policy.value"
-                      orientation="horizontal"
+                    <RadioGroup
+                      v-model="draft.deploymentPolicy"
+                      name="deployment-settings-policy"
+                      aria-label="Deployment policy"
+                      :disabled="Boolean(editingId)"
                     >
-                      <RadioButton
-                        v-model="draft.deploymentPolicy"
+                      <RadioGroup.Item
+                        v-for="policy in DEPLOYMENT_POLICIES"
+                        :key="policy.value"
                         :value="policy.value"
-                        name="deployment-settings-policy"
-                        :id="`deployment-settings-policy-${policy.value}`"
-                      />
-                      <Field.Content>
-                        <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{
-                          policy.label
-                        }}</Field.Label>
-                        <Field.Description>{{ policy.description }}</Field.Description>
-                      </Field.Content>
-                    </Field>
+                        :description="policy.description"
+                        >{{ policy.label }}</RadioGroup.Item
+                      >
+                    </RadioGroup>
                     <Field.Description
                       >Cannot be changed after the setting is created.</Field.Description
                     >

@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use HelperText only under a control that is not inside Field; inside Field use Field.Description or Field.Error. For a one-sentence note beside a label use Hint.
 - Guidance under a bare input you compose yourself (format hints, limits).
 - A validation error (`kind="invalid"`), a required reminder (`kind="required"`), or a locked-field notice (`kind="disabled"`) under a field.
 
@@ -20,13 +21,13 @@
 ## Don’t
 
 - A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.
-- The field name or required marker above the input → use `label`.
+- The field name or required marker above the input → use `Field.Label`.
 - Feedback about a whole form or page rather than one field → use `alert`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [label](label.md) — sits above the input; HelperText sits below it.
+- Field.Label` — sits above the input; HelperText sits below it.
 - [field](field.md) — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
 - message` — banner-level feedback with severity and an optional action.
 

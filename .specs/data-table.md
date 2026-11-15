@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 08b9af7dac28d159c36385a4c6faed889ad62fd4a8121e73365153dc48fddab9
+checksum: 90a45ecd69ae638f8650519400000b76e12757bfeb4a548305326c4409cffe6c
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -45,7 +45,7 @@ The data-driven table: pass `data` + `columns` and it renders the header, rows, 
 - A short titled preview of a longer listing on a marketing page → use `listing-table`.
 - A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
-- The same records as a grid of cards → use `cards` (same collection, card layout).
+- The same records as a grid of cards → use `card-list` (same collection, card layout).
 
 ## Related
 

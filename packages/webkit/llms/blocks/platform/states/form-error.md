@@ -1,11 +1,11 @@
 # FormError (`platform/states/form-error`)
 
-> A server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Tooltip`, `Avatar`, `DropdownMenu`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `Field` with `RadioButton` choice cards, `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`. A focused create page with its own creation header and no rail: render it outside ConsoleLayout.
+> A server rejection scoped to one section of a long create form. A Create Service page whose linked origin is deleted by another user while the form is open; Save sends it, the API answers with a field-scoped error, and the page scrolls to the Origin section, where one danger `Alert` opens under the section heading saying what happened and that nothing else was lost, with the recovery action on it (Reload origins). The Origin select turns invalid with its own one-line reason under it and takes the focus. Never a toast, never a validation summary. Reloading swaps the select for a `Skeleton` and disables Save; Reloaded closes the Alert, clears the select and flags it required. Same page anatomy as Templates/Platform/Create/SinglePageCreate: the creation header, section headings over flush `Card` groups of `Item` rows, and a sticky footer raised with `z-10`. Built from `SectionHeader`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Tooltip`, `Avatar`, `DropdownMenu`, `Card`, `Item`, `Input`, `MultiSelect`, `Select`, `RadioGroup` choice cards (`kind="card"`), `Switch`, `NumberInput`, `Skeleton`, `Alert`, `HelperText` and `Button`. A focused create page with its own creation header and no rail: render it outside ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/states/form-error/form-error.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/form-error")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DropdownMenu](../../../components/dropdown-menu.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DropdownMenu](../../../components/dropdown-menu.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [RadioGroup](../../../components/radio-group.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-errors`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -82,11 +82,11 @@ HTTP ports, with `MultiSelect.Trigger` carrying the id the error points at.
 
 The Origin. It takes `invalid` when the server says the chosen origin no longer exists, and `required` once the list is reloaded without it.
 
-### N. Choice cards — `Field` (required)
+### N. Choice cards — `RadioGroup` (required)
 
-Protocol usage, a `fieldset` of `Field`s each wrapping a `RadioButton` with a label and a description.
+Protocol usage, a `RadioGroup` with `kind="card"`, each option with a label and a description.
 
-### O. Choice — `RadioButton` (required)
+### O. Choice — `RadioGroup.Item` (required)
 
 One per protocol option.
 
@@ -189,7 +189,6 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -197,7 +196,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
@@ -471,29 +470,21 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                   <Item.List>
                     <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Protocol Usage</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.protocolUsage"
+                          kind="card"
+                          name="protocolUsage"
+                          aria-label="Protocol Usage"
+                          :disabled="submitting"
+                        >
+                          <RadioGroup.Item
                             v-for="option in protocolUsageOptions"
                             :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field
-                              orientation="horizontal"
-                              :disabled="submitting"
-                            >
-                              <RadioButton
-                                v-model="form.protocolUsage"
-                                :value="option.value"
-                                name="protocolUsage"
-                                :id="`ev-protocolUsage-${option.value}`"
-                              />
-                              <Field.Content>
-                                <Field.Title>{{ option.label }}</Field.Title>
-                                <Field.Description>{{ option.description }}</Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </div>
                     </SettingRow>
                     <SettingRow

@@ -90,7 +90,7 @@ Heading (what this is, one line)
   printed under every band is prose the reader has to cross to reach the controls, and on a page of
   four bands it costs more room than the fields do. The glyph costs 20px and answers only when asked.
 - **A row is the label.** The row's title names the field and its description carries the guidance,
-  so there is no separate `<Label for>` and the control takes an `aria-label`. That is what makes the
+  so there is no separate `<Field.Label for>` and the control takes an `aria-label`. That is what makes the
   shape compact: name, guidance and control share one line's worth of height instead of three.
 - **The control sits right, capped at a fixed cell width**, so every field on the page ends at the
   same x and the card reads as a column rather than a ragged edge. A switch sits hard right at its

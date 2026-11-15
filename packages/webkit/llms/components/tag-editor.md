@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use TagEditor when the person adds, edits or removes key/value tags (labels) on a resource; it enforces tag limits and reserved prefixes. For a short list of same-field rows inside a form (environment variables, headers) use AttributeEditor; to edit many cells of many records in place use DataGrid.
 - The Tags section of a create or settings form of any resource.
 - Labels used for cost allocation, ownership or search, where keys repeat across resources and suggestions help keep them consistent.
 

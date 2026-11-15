@@ -2,15 +2,11 @@
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Field from '../../../inputs/field/field.vue'
-  import FieldContent from '../../../inputs/field/field-content/field-content.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
-  import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
-  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
@@ -145,26 +141,20 @@
       >
         <div class="flex flex-col gap-(--spacing-sm)">
           <span class="text-label-sm text-(--text-default)">Option</span>
-          <FieldLabel
-            v-for="choice in OPTIONS"
-            :key="choice.value"
+          <RadioGroup
+            model-value="all"
+            kind="card"
+            name="data-stream-workloads"
+            aria-label="Option"
           >
-            <Field orientation="horizontal">
-              <RadioButton
-                model-value="all"
-                name="data-stream-workloads"
-                :value="choice.value"
-              />
-              <FieldContent>
-                <FieldTitle>
-                  {{ choice.label }}
-                </FieldTitle>
-                <FieldDescription v-if="choice.description">
-                  {{ choice.description }}
-                </FieldDescription>
-              </FieldContent>
-            </Field>
-          </FieldLabel>
+            <RadioGroupItem
+              v-for="choice in OPTIONS"
+              :key="choice.value"
+              :value="choice.value"
+              :description="choice.description"
+              >{{ choice.label }}</RadioGroupItem
+            >
+          </RadioGroup>
         </div>
       </ShellMockupPart>
 
@@ -195,10 +185,7 @@
               class="overflow-hidden [interpolate-size:allow-keywords]"
             >
               <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-lg)">
-                <Label
-                  for="data-stream-sampling-rate"
-                  label="Sampling Rate (%)"
-                />
+                <FieldLabel for="data-stream-sampling-rate">Sampling Rate (%)</FieldLabel>
                 <NumberInput
                   id="data-stream-sampling-rate"
                   :model-value="frame.rate"

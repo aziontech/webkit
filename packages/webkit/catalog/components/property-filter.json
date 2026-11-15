@@ -16,7 +16,7 @@
  "related": [
   "use-collection` — applies the query; `propertyFilterProps` is the binding.",
   "table` — the collection it usually filters.",
-  "cards` — the card form of a collection.",
+  "card-list` — the card form of a collection.",
   "collection-preferences` — the panel that sits beside it in the controls row."
  ],
  "bestPractices": [

@@ -384,21 +384,16 @@
   "theme-switcher": {
     "value": "modelValue"
   },
-  "calendar": {
-    "showTimezone": "showTimeZone",
-    "timezones": "timeZones",
-    "timezone": "timeZone"
-  },
   "calendar-root": {
     "showTimezone": "showTimeZone",
     "timezones": "timeZones",
     "timezone": "timeZone"
   },
   "checkbox": {
-    "inputId": "id"
-  },
-  "radio-button": {
-    "inputId": "id"
+    "inputId": "id",
+    "binary": {
+      "removed": "leave value unset for a boolean v-model"
+    }
   },
   "split-button": {
     "model": "items"
@@ -408,12 +403,6 @@
   },
   "flow-anchor": {
     "type": "side"
-  },
-  "pick-list": {
-    "dataKey": "trackBy"
-  },
-  "pick-list-root": {
-    "dataKey": "trackBy"
   },
   "table-header": {
     "kind": {
@@ -491,5 +480,83 @@
     "count": {
       "removed": "Table.Filter hosts FilterMenu or PropertyFilter, which count the applied filters themselves"
     }
+  },
+  "date-picker": {
+    "mode": {
+      "removed": "DatePicker picks one date; for a range (relative or absolute, with or without times) use DateRangePicker"
+    },
+    "period": {
+      "removed": "use DateRangePicker, whose Relative tab lists the quick ranges"
+    },
+    "presets": {
+      "removed": "use DateRangePicker with relative-options for preset ranges"
+    },
+    "showTimeZone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "showTimezone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "timeZones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezone": "timeZone",
+    "horizontal": {
+      "removed": "set orientation=\"horizontal\""
+    }
+  },
+  "date-picker-root": {
+    "mode": {
+      "removed": "DatePicker picks one date; for a range (relative or absolute, with or without times) use DateRangePicker"
+    },
+    "period": {
+      "removed": "use DateRangePicker, whose Relative tab lists the quick ranges"
+    },
+    "presets": {
+      "removed": "use DateRangePicker with relative-options for preset ranges"
+    },
+    "showTimeZone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "showTimezone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "timeZones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezone": "timeZone",
+    "horizontal": {
+      "removed": "set orientation=\"horizontal\""
+    }
+  },
+  "radio-group": {
+    "items": "options"
+  },
+  "select": {
+    "multiple": {
+      "removed": "use MultiSelect (same options, same array v-model)"
+    }
+  },
+  "select-root": {
+    "multiple": {
+      "removed": "use MultiSelect (same options, same array v-model)"
+    }
+  },
+  "switch": {
+    "focused": {
+      "removed": "use autofocus to focus it on mount"
+    }
+  },
+  "transfer-list": {
+    "dataKey": "trackBy"
+  },
+  "transfer-list-root": {
+    "dataKey": "trackBy"
   }
 }

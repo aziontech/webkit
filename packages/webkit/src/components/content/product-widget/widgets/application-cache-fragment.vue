@@ -2,14 +2,11 @@
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Field from '../../../inputs/field/field.vue'
-  import FieldContent from '../../../inputs/field/field-content/field-content.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
-  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
@@ -139,11 +136,11 @@
       class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
     >
       <div class="flex flex-col gap-(--spacing-xs)">
-        <Label
+        <FieldLabel
           for="browser-max-age"
-          label="Max Age"
           required
-        />
+          >Max Age</FieldLabel
+        >
         <NumberInput
           id="browser-max-age"
           :model-value="600"
@@ -160,25 +157,19 @@
       >
         <div class="flex flex-col gap-(--spacing-md)">
           <span class="text-label-sm text-(--text-default)">Cache Behavior</span>
-          <Field
-            v-for="behavior in BEHAVIORS"
-            :key="behavior.value"
-            orientation="horizontal"
+          <RadioGroup
+            :model-value="frame.behavior"
+            name="cache-behavior"
+            aria-label="Cache Behavior"
           >
-            <RadioButton
-              :model-value="frame.behavior"
-              name="cache-behavior"
+            <RadioGroupItem
+              v-for="behavior in BEHAVIORS"
+              :key="behavior.value"
               :value="behavior.value"
-            />
-            <FieldContent>
-              <FieldLabel>
-                {{ behavior.label }}
-              </FieldLabel>
-              <FieldDescription v-if="behavior.description">
-                {{ behavior.description }}
-              </FieldDescription>
-            </FieldContent>
-          </Field>
+              :description="behavior.description ?? ''"
+              >{{ behavior.label }}</RadioGroupItem
+            >
+          </RadioGroup>
         </div>
       </ShellMockupPart>
 
@@ -187,11 +178,11 @@
         data-anchor
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="cache-max-age"
-            label="Max Age"
             required
-          />
+            >Max Age</FieldLabel
+          >
           <NumberInput
             id="cache-max-age"
             :model-value="3600"
@@ -236,10 +227,7 @@
           </span>
         </span>
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
-            for="cache-offset"
-            label="Offset (KB)"
-          />
+          <FieldLabel for="cache-offset">Offset (KB)</FieldLabel>
           <NumberInput
             id="cache-offset"
             :model-value="1024"

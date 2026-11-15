@@ -3,11 +3,11 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 3b4f1649129947dca44eca79d84b3cef1937a51f57ef6fcb5641207446b65b6a
+checksum: faf997b1fb8a22b65bbae48512d6940a0059e4a92172e6dd20bc6314f15ab840
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # AttributeEditor — Component Spec
@@ -18,6 +18,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 ## When to use
 
+- Use AttributeEditor for a short list of same-field rows the person adds and removes inside a form (environment variables, headers). For key/value tags on a resource use TagEditor; to edit many cells of many records in place, spreadsheet-style, use DataGrid; for read-and-act lists use Table.
 - Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.
 - Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).
 - A bulk form where each row has the same two to four fields and a row-level error can occur.

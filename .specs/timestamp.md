@@ -3,11 +3,11 @@ name: timestamp
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 22fb3d816955797aafcb7b3108881f858a37e288da06471edf89664b3ada5b55
+checksum: f89c9ae394b5cc5727f37a3fd7e5ea8d6d85e0962431ad57e270ecc4b145cf1e
 created: 2026-11-14
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Timestamp — Component Spec
@@ -18,6 +18,7 @@ Timestamp shows one moment — when a request ran, a deployment finished, a key 
 
 ## When to use
 
+- Use Timestamp to display a moment in time in the app's time zone, copyable; to pick a date use DatePicker or DateRangePicker.
 - A detail panel, card or log line shows when something happened and people may need the exact or UTC value.
 - An app lets people pick a display time zone and every absolute time must follow it.
 - A list outside `Table` shows relative times that should stay current.
@@ -25,7 +26,7 @@ Timestamp shows one moment — when a request ran, a deployment finished, a key 
 ## When NOT to use
 
 - A table column of modification times with the author → use `Table.CellTime` in a `#cell-<id>` slot.
-- A date the person edits → use `date-range-picker` or `calendar`.
+- A date the person edits → use `date-picker` (one date) or `date-range-picker` (a range).
 - A duration (`1.2 s`, `3 days`) → plain text formatted with `useLocale().formatNumber`; Timestamp is a point in time.
 
 ## Related

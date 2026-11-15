@@ -17,7 +17,7 @@
  ],
  "avoidWhen": [
   "Navigation or filters → `tabs`, `toggle-group`, `property-filter`.",
-  "Choices that are a form value → `radio-button` / `radio-cards`.",
+  "Choices that are a form value → `radio-group`.",
   "More than five options → let the reader type; the prompt input stays available."
  ],
  "related": [

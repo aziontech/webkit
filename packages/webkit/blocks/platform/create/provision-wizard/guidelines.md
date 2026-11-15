@@ -33,9 +33,9 @@ A `Stepper` labelled with the create label and two steps, Project and Domain and
 
 The `platform/create/resource-picker` band, copied from that block, which is the source of truth for the paged picker (change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field` with an `Input`. The required message is a `HelperText kind="required"` under the search, above the rows.
 
-### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioCards`, `HelperText`, `Select` (conditional)
+### E. New project configuration — `Card`, `Item`, `Switch`, `Field`, `Input`, `SettingRow`, `RadioGroup`, `HelperText`, `Select` (conditional)
 
-In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: `RadioCards` for its type with a `HelperText` explaining the choice, then the type's own fields as a `Field` with an `Input`, or with a `Select` for a fixed list. Each opened field is required only while its switch is on.
+In New mode the project is configured in place. A Cache Settings `Card` lists each policy as an `Item` with a `Switch` in `Item.Actions`; turning one on opens its `Field`s under it. An Add an origin `SettingRow kind="compact"` with a `Switch` opens the origin: a `RadioGroup` with `kind="card"` for its type with a `HelperText` explaining the choice, then the type's own fields as a `Field` with an `Input`, or with a `Select` for a fixed list. Each opened field is required only while its switch is on.
 
 ### F. Project read-back — `Card`, `Item`, `Button` (required on step two)
 
@@ -45,9 +45,9 @@ Step two opens with a flush `Card` holding one `Item` that reads the bound proje
 
 A `Card` titled Domain with a `ToggleGroup` of Free platform domain and Your own domain. The free domain asks for a prefix `Input` with the platform suffix shown inside it; your own domain asks for the hostname and the service name. Below, a preview line names the address traffic arrives on (`https://` plus the domain) and the name the service is created as, updating as the user types.
 
-### H. Environment and certificate — `Card`, `Field`, `RadioCards`, `Hint`, `HelperText`, `Select` (required)
+### H. Environment and certificate — `Card`, `Field`, `RadioGroup`, `Hint`, `HelperText`, `Select` (required)
 
-A padded `Card` with Environment as `RadioCards` (Production, Preview, each with a sentence) and Certificate as a `Select`, Environment headed by a `kind="label"` `Field.Legend` with a `Hint`, Certificate by a `Field.Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
+A padded `Card` with Environment as a `RadioGroup` with `kind="card"` (Production, Preview, each with a sentence) and Certificate as a `Select`, Environment headed by a `kind="label"` `Field.Legend` with a `Hint`, Certificate by a `Field.Label` with a `hint`. A `HelperText` under the radio cards says what the selected environment means.
 
 ### I. Deployment — `Card`, `ToggleGroup`, `Item`, `Input`, `Skeleton`, `Button` (required)
 
