@@ -41,6 +41,7 @@
     <Wizard.Step
       title="Name and region"
       description="Name the resource and choose where it runs."
+      :invalid="nameMissing && !name.trim()"
     >
       <div class="flex flex-col gap-(--spacing-md)">
         <Alert

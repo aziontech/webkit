@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, provide, ref, useAttrs } from 'vue'
+  import { computed, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -68,7 +68,12 @@
   const steps = computed<WizardStepRecord[]>(() =>
     ordered.value.map((id) => {
       const meta = metas.get(id)
-      return { id, title: meta?.title() ?? '', optional: meta?.optional() ?? false }
+      return {
+        id,
+        title: meta?.title() ?? '',
+        optional: meta?.optional() ?? false,
+        invalid: meta?.invalid() ?? false
+      }
     })
   )
 
@@ -90,6 +95,24 @@
   })
 
   const shown = computed<number>(() => (mounted.value ? current.value : requested.value))
+
+  const furthest = ref<number>(0)
+  watch(
+    current,
+    (now) => {
+      if (now > furthest.value) furthest.value = now
+    },
+    { immediate: true }
+  )
+
+  const reached = computed<number>(() =>
+    total.value === 0 ? 0 : Math.min(furthest.value, total.value - 1)
+  )
+
+  const railState = (step: WizardStepRecord, index: number): 'error' | 'complete' | 'upcoming' => {
+    if (step.invalid) return 'error'
+    return index < reached.value && index !== current.value ? 'complete' : 'upcoming'
+  }
 
   const isLast = computed<boolean>(() => mounted.value && current.value === total.value - 1)
 
@@ -181,8 +204,9 @@
           :key="step.id"
           :value="String(index)"
           :title="step.title"
-          :state="index < current ? 'complete' : 'upcoming'"
-          :disabled="loading || index > current"
+          :state="railState(step, index)"
+          :disabled="loading || index > reached"
+          :data-invalid="step.invalid || null"
         >
           <span
             v-if="step.optional"

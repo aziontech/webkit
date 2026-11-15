@@ -17,12 +17,15 @@
     description?: string
     /** Marks the step as skippable: shows Optional beside the title in the rail and in the header. */
     optional?: boolean
+    /** The step holds an error: the rail shows it in the error state and the step root carries data-invalid. */
+    invalid?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     title: '',
     description: '',
-    optional: false
+    optional: false,
+    invalid: false
   })
 
   defineSlots<{
@@ -37,7 +40,8 @@
   const id = Symbol('WizardStep')
   const { index, active } = context.register(id, {
     title: () => props.title,
-    optional: () => props.optional
+    optional: () => props.optional,
+    invalid: () => props.invalid
   })
 
   const root = ref<globalThis.HTMLElement | null>(null)
@@ -78,6 +82,7 @@
     :data-testid="testId"
     :data-active="active || null"
     :data-optional="optional || null"
+    :data-invalid="invalid || null"
   >
     <template v-if="active">
       <div class="flex flex-col gap-(--spacing-xxs)">

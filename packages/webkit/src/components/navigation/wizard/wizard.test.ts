@@ -17,7 +17,8 @@ const Flow = defineComponent({
   props: {
     start: { type: Number, default: 0 },
     loading: { type: Boolean, default: false },
-    block: { type: Boolean, default: false }
+    block: { type: Boolean, default: false },
+    invalidStep: { type: Number, default: -1 }
   },
   emits: ['next', 'submit', 'cancel'],
   data() {
@@ -39,10 +40,14 @@ const Flow = defineComponent({
       @submit="$emit('submit', $event)"
       @cancel="$emit('cancel', $event)"
     >
-      <WizardStep title="Configure" description="Name the resource and choose where it runs.">
+      <WizardStep
+        title="Configure"
+        description="Name the resource and choose where it runs."
+        :invalid="invalidStep === 0"
+      >
         <label>Name <input type="text" /></label>
       </WizardStep>
-      <WizardStep title="Settings" optional>
+      <WizardStep title="Settings" optional :invalid="invalidStep === 1">
         <p>Settings fields</p>
       </WizardStep>
       <WizardStep title="Review">
@@ -341,6 +346,70 @@ describe('Wizard', () => {
       expect(view.getByTestId('model').textContent).toBe('0')
       expect(headingOf(view).textContent?.trim()).toBe('Configure')
       expect(view.emitted('next')).toBeUndefined()
+    })
+
+    it('keeps every step already reached reachable, forward too, without firing next', async () => {
+      const view = await mount()
+      await userEvent.click(button(view, 'Next'))
+      await userEvent.click(button(view, 'Next'))
+      expect(view.emitted('next')).toHaveLength(2)
+
+      await userEvent.click(railButtons(view)[0])
+      expect(view.getByTestId('model').textContent).toBe('0')
+      expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, false])
+      expect(
+        view
+          .getAllByTestId('navigation-stepper-step')
+          .map((step) => step.getAttribute('data-state'))
+      ).toEqual(['current', 'complete', 'upcoming'])
+
+      await userEvent.click(railButtons(view)[2])
+      expect(view.getByTestId('model').textContent).toBe('2')
+      expect(headingOf(view).textContent?.trim()).toBe('Review')
+      expect(view.emitted('next')).toHaveLength(2)
+    })
+
+    it('keeps steps past the furthest one reached disabled after going back', async () => {
+      const view = await mount()
+      await userEvent.click(button(view, 'Next'))
+      await userEvent.click(button(view, 'Previous'))
+
+      expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, true])
+    })
+  })
+
+  describe('invalid', () => {
+    it('marks an invalid step in the rail and on the step, and reads the error word to screen readers', async () => {
+      const view = await mount({ start: 1, invalidStep: 0 })
+      const [first, second] = view.getAllByTestId('navigation-stepper-step')
+
+      expect(first.getAttribute('data-state')).toBe('error')
+      expect(first.hasAttribute('data-invalid')).toBe(true)
+      expect(first.textContent).toContain('Needs attention')
+      expect(second.hasAttribute('data-invalid')).toBe(false)
+      expect(railButtons(view)[0].disabled).toBe(false)
+
+      const steps = view.getAllByTestId('navigation-wizard-step')
+      expect(steps[0].hasAttribute('data-invalid')).toBe(true)
+      expect(steps[1].hasAttribute('data-invalid')).toBe(false)
+    })
+
+    it('clears the error state once the step is no longer invalid', async () => {
+      const view = await mount({ start: 1, invalidStep: 0 })
+      await view.rerender({ start: 1, invalidStep: -1 })
+      await nextTick()
+      const [first] = view.getAllByTestId('navigation-stepper-step')
+
+      expect(first.getAttribute('data-state')).toBe('complete')
+      expect(first.hasAttribute('data-invalid')).toBe(false)
+      expect(view.getAllByTestId('navigation-wizard-step')[0].hasAttribute('data-invalid')).toBe(
+        false
+      )
+    })
+
+    it('has no violations with an invalid step', async () => {
+      const view = await mount({ start: 1, invalidStep: 0 })
+      await expectNoA11yViolations(view.container)
     })
   })
 

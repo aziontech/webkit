@@ -5,6 +5,8 @@ export interface WizardStepMeta {
   title: () => string
   /** Reads whether the step is marked optional. */
   optional: () => boolean
+  /** Reads whether the step holds an error. */
+  invalid: () => boolean
 }
 
 export interface WizardStepRecord {
@@ -14,6 +16,8 @@ export interface WizardStepRecord {
   title: string
   /** Whether the step is marked optional. */
   optional: boolean
+  /** Whether the step holds an error. */
+  invalid: boolean
 }
 
 export interface WizardStepHandle {
