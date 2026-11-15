@@ -2,7 +2,7 @@
   import { computed, provide, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { formatLogLineText } from './composables/format-log-line-text'
   import type { LogViewLine, LogViewLineLevel } from './injection-key'

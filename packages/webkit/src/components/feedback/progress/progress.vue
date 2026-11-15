@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   export type ProgressKind = 'rounded' | 'flat'
   export type ProgressSize = 'small' | 'medium' | 'large'

@@ -72,5 +72,5 @@ default, is stuck in one language and drifts from the rest of the product.
   webkit's own components.
 - Inside the package the same check runs at write time (the authoring hook) and in CI
   (`scripts/check-authoring.mjs`): a literal UI string in a component template attribute, or an
-  English prop default, is blocked; the text goes to `src/i18n/messages/*.ts`.
+  English prop default, is blocked; the text goes to `src/locales/*.ts`.
 - Product copy, the text no component ships, follows the `webkit-microcopy` skill.

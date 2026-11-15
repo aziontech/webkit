@@ -3,7 +3,7 @@
 
   import { clientBrand } from '../../../assets/logos/clients/brands'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'

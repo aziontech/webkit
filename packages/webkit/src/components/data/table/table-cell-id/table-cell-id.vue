@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import { TableInjectionKey } from '../injection-key'
 

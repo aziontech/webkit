@@ -2,7 +2,7 @@
   import { computed, defineAsyncComponent, h, onBeforeUnmount, ref, useAttrs, useId } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
   defineOptions({ name: 'CopyPromptButton', inheritAttrs: false })

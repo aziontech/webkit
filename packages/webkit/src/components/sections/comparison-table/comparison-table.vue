@@ -2,7 +2,7 @@
   import { computed, onMounted, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Brand from '../../content/brand/brand.vue'
   import Logo, { type LogoArtwork } from '../../content/logo/logo.vue'

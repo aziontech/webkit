@@ -14,7 +14,7 @@
   import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { diffLines, pairDiffLines } from '../../../utils/line-diff'
   import CopyButton from '../../actions/copy-button/copy-button.vue'

@@ -16,7 +16,7 @@
   } from '../../../composables/use-collection/lib/property-filter'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import Chip from '../../inputs/chip/chip.vue'

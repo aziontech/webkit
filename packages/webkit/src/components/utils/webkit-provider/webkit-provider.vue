@@ -7,7 +7,7 @@
     type PartialMessages,
     provideLocale
   } from '../../../composables/use-locale'
-  import { en } from '../../../i18n/messages/en'
+  import { en } from '../../../locales/en'
 
   defineOptions({
     name: 'WebkitProvider',

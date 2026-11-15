@@ -3,7 +3,7 @@
   import { computed, type FunctionalComponent, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Kbd from '../../content/kbd/kbd.vue'
   import { isShortcutClaimed } from '../../overlay/command/shortcut-registry'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'

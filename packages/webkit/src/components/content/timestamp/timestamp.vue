@@ -3,7 +3,7 @@
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import { LocaleInjectionKey } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import { useMinuteClock } from '../../data/table/table-cell-time/minute-clock'
   import Popover from '../../overlay/popover/popover.vue'

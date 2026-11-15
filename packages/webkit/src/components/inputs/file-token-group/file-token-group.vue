@@ -2,7 +2,7 @@
   import { computed, nextTick, onMounted, ref, useAttrs, useId } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { relativePathOf } from '../../../utils/file-entries'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'

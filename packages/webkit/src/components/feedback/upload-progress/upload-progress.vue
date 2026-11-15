@@ -3,7 +3,7 @@
 
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocale } from '../../../composables/use-locale/use-locale'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import OutcomeMark from '../outcome-mark/outcome-mark.vue'

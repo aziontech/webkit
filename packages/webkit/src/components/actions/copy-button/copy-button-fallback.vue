@@ -2,7 +2,7 @@
   import { computed, defineComponent, nextTick, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Input from '../../inputs/input/input.vue'
   import { usePopoverContext } from '../../overlay/popover/injection-key'
   import Popover from '../../overlay/popover/popover.vue'

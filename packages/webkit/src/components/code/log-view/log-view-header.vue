@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Tag from '../../content/tag/tag.vue'
   import Input from '../../inputs/input/input.vue'
   import { useLogViewContext } from './composables/use-log-view-context'

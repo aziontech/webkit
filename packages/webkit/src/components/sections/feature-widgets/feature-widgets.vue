@@ -3,7 +3,7 @@
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'
   import Illustration from '../../content/illustration/illustration.vue'

@@ -2,7 +2,7 @@
   import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import type { TagSeverity } from '../../content/tag/tag.vue'

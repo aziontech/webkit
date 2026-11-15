@@ -7,7 +7,7 @@
     CollectionPreferencesValue
   } from '../../../composables/use-collection/lib/preferences'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'

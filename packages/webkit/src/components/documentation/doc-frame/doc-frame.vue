@@ -5,7 +5,7 @@
 
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { flattenSlot } from './flatten-slot'
 
   defineOptions({ name: 'DocFrame', inheritAttrs: false })

@@ -5,7 +5,7 @@
   import { useFocusTrap } from '../../../composables/use-focus-trap'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import DatePickerFields from './date-picker-fields/date-picker-fields.vue'
   import DatePickerGrid from './date-picker-grid/date-picker-grid.vue'

@@ -4,7 +4,7 @@
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useSelectSearch } from '../../../composables/use-select-search'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { FieldInjectionKey } from '../field/injection-key'
   import Input from '../input/input.vue'
   import InputGroup from '../input-group/input-group.vue'

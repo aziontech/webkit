@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Separator from '../../layout/separator/separator.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'

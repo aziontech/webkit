@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
 
   export type OutcomeMarkSeverity = 'success' | 'danger' | 'warning' | 'neutral'
 

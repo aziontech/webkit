@@ -2,7 +2,7 @@
   import { computed, nextTick, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Kbd from '../../../content/kbd/kbd.vue'
   import Input from '../../../inputs/input/input.vue'
   import { useCommandMenuContext } from '../injection-key'

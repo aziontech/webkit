@@ -2,7 +2,7 @@
   import { computed, onMounted, provide, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import Stepper from '../stepper/stepper.vue'
   import StepperStep from '../stepper/stepper-step/stepper-step.vue'

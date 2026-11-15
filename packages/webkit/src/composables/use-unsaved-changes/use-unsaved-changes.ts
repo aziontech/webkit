@@ -11,7 +11,7 @@ import {
   toValue
 } from 'vue'
 
-import * as en from '../../i18n/messages/en'
+import * as en from '../../locales/en'
 import { useTranslate } from '../use-translate'
 
 /** Options of `useUnsavedChanges`. */

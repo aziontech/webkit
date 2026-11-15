@@ -3,7 +3,7 @@
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import type { SplitButtonItem } from '../../actions/split-button/split-button.vue'
   import SplitButton from '../../actions/split-button/split-button.vue'

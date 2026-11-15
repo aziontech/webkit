@@ -3,7 +3,7 @@
 
   import { useListboxTrigger } from '../../../../composables/use-listbox-trigger'
   import { useTranslate } from '../../../../composables/use-translate'
-  import * as en from '../../../../i18n/messages/en'
+  import * as en from '../../../../locales/en'
   import Chip from '../../chip/chip.vue'
   import { MultiSelectInjectionKey } from '../injection-key'
 

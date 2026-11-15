@@ -1629,7 +1629,7 @@ export function checkFile(rel, text, ctx = {}) {
     out.push(...checkExampleIndex(rel, text))
   if (/^packages\/webkit\/blocks\/.+\/block\.json$/.test(rel))
     out.push(...checkBlockFile(rel, text))
-  if (/^packages\/webkit\/src\/i18n\/messages\/[^/]+\.ts$/.test(rel))
+  if (/^packages\/webkit\/src\/locales\/[^/]+\.ts$/.test(rel))
     out.push(...checkI18n(rel, text, ctx))
   if (/^packages\/theme\/src\/tokens\//.test(rel) && /\.(js|mjs|css)$/.test(rel))
     out.push(...checkTokenNames(rel, text))

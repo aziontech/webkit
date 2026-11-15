@@ -3,7 +3,7 @@
 
   import { useStepRegistry } from '../../../composables/use-step-registry'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import { StepperInjectionKey } from './injection-key'
 
   defineOptions({

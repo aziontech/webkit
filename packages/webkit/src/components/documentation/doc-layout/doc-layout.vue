@@ -13,7 +13,7 @@
   } from '../../../composables/use-app-navigation'
   import { type HeadingNavItem, provideHeadingNav } from '../../../composables/use-heading-nav'
   import { useTranslate } from '../../../composables/use-translate'
-  import * as en from '../../../i18n/messages/en'
+  import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
   import Brand from '../../content/brand/brand.vue'
