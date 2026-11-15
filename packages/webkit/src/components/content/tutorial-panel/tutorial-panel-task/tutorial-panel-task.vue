@@ -3,11 +3,11 @@
 
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { useHelpPanelTutorialContext } from '../composables/use-help-panel-tutorial-context'
-  import type { HelpPanelTaskStatus } from '../injection-key'
+  import { useTutorialTasksContext } from '../composables/use-tutorial-tasks-context'
+  import type { TutorialTaskStatus } from '../injection-key'
 
   defineOptions({
-    name: 'HelpPanelTask',
+    name: 'TutorialPanelTask',
     inheritAttrs: false
   })
 
@@ -15,7 +15,7 @@
     /** What the reader does, in their words. */
     title?: string
     /** Where the reader is in the tutorial; set by the owner from what the real UI confirmed. */
-    status?: HelpPanelTaskStatus
+    status?: TutorialTaskStatus
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -30,9 +30,9 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ helpPanel: en.helpPanel })
-  const context = useHelpPanelTutorialContext()
+  const context = useTutorialTasksContext()
 
-  const id = Symbol('HelpPanelTask')
+  const id = Symbol('TutorialPanelTask')
   const { index } = context.register(id, () => props.status)
   const root = ref<globalThis.HTMLElement | null>(null)
 
@@ -40,7 +40,7 @@
   onBeforeUnmount(() => context.unregister(id))
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel-task'
+    () => (attrs['data-testid'] as string | undefined) ?? 'content-tutorial-panel-task'
   )
 
   const statusLabel = computed<string>(() => {

@@ -5,11 +5,11 @@
   import * as en from '../../../../i18n/messages/en'
   import { hasRenderedContent } from '../../../../utils/rendered-content'
   import Tag from '../../tag/tag.vue'
-  import type { HelpPanelTaskHandle, HelpPanelTaskStatus } from '../injection-key'
-  import { HelpPanelTutorialInjectionKey } from '../injection-key'
+  import type { TutorialTaskHandle, TutorialTaskStatus } from '../injection-key'
+  import { TutorialTasksInjectionKey } from '../injection-key'
 
   defineOptions({
-    name: 'HelpPanelTutorial',
+    name: 'TutorialPanelTasks',
     inheritAttrs: false
   })
 
@@ -29,7 +29,7 @@
   })
 
   defineSlots<{
-    /** HelpPanel.Task items, in order. */
+    /** TutorialPanelTask items, in order. */
     default(): unknown
     /** The Start, Continue or Restart controls; the row is not rendered when empty. */
     actions(): unknown
@@ -41,7 +41,7 @@
   const headingId = useId()
 
   const tasks = ref<symbol[]>([])
-  const statuses = new Map<symbol, () => HelpPanelTaskStatus>()
+  const statuses = new Map<symbol, () => TutorialTaskStatus>()
   const elements = new Map<symbol, globalThis.HTMLElement>()
 
   const ordered = computed(() =>
@@ -62,7 +62,7 @@
     () => tasks.value.filter((id) => statuses.get(id)?.() === 'complete').length
   )
 
-  const register = (id: symbol, status: () => HelpPanelTaskStatus): HelpPanelTaskHandle => {
+  const register = (id: symbol, status: () => TutorialTaskStatus): TutorialTaskHandle => {
     statuses.set(id, status)
     tasks.value.push(id)
     return {
@@ -83,7 +83,7 @@
     if (at !== -1) tasks.value.splice(at, 1)
   }
 
-  provide(HelpPanelTutorialInjectionKey, {
+  provide(TutorialTasksInjectionKey, {
     register,
     attach,
     unregister,
@@ -92,7 +92,7 @@
   })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel-tutorial'
+    () => (attrs['data-testid'] as string | undefined) ?? 'content-tutorial-panel-tasks'
   )
 
   const hasActions = () => hasRenderedContent(slots['actions']?.() ?? [])

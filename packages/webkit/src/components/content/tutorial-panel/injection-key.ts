@@ -76,3 +76,27 @@ export interface TutorialContext {
 }
 
 export const TutorialInjectionKey: InjectionKey<TutorialContext> = Symbol('TutorialPanelProvider')
+
+/** Where the reader is in a tutorial task, as confirmed by the real UI. */
+export type TutorialTaskStatus = 'upcoming' | 'current' | 'complete'
+
+export interface TutorialTaskHandle {
+  /** 1-based position of the task in document order. */
+  index: ComputedRef<number>
+}
+
+export interface TutorialTasksContext {
+  /** Registers a task with a getter for its status and returns its reactive handle. */
+  register: (id: symbol, status: () => TutorialTaskStatus) => TutorialTaskHandle
+  /** Hands the task's root element over once mounted, so order is read from the DOM. */
+  attach: (id: symbol, el: globalThis.HTMLElement | null) => void
+  /** Removes a previously registered task; called by the task on unmount. */
+  unregister: (id: symbol) => void
+  /** Number of registered tasks. */
+  total: ComputedRef<number>
+  /** Number of registered tasks whose status is complete. */
+  complete: ComputedRef<number>
+}
+
+export const TutorialTasksInjectionKey: InjectionKey<TutorialTasksContext> =
+  Symbol('TutorialPanelTasks')
