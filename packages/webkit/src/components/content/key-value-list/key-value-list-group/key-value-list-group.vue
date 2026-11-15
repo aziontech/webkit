@@ -10,7 +10,7 @@
 
   export interface KeyValueListGroupProps {
     /** The group's term, shown above its Items. */
-    title: string
+    label: string
   }
 
   defineProps<KeyValueListGroupProps>()
@@ -34,7 +34,7 @@
     :data-testid="testId"
     class="flex min-w-0 flex-col gap-(--spacing-sm)"
   >
-    <dt class="text-heading-2xs text-(--text-default)">{{ title }}</dt>
+    <dt class="text-heading-2xs text-(--text-default)">{{ label }}</dt>
     <dd class="min-w-0">
       <dl class="flex flex-col gap-(--spacing-sm)">
         <slot />

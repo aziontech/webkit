@@ -3,8 +3,8 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: fef78e2e5baacfe583b635678f7e8084673eed428156b303bc324a8d24f2b017
-spec_version: 4
+checksum: d4f6b3dfea74bc8e9b8f908502031aaefcdd42e45a9abc93ce1339b98410e3ce
+spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -68,7 +68,7 @@ the links or carry one section or five.
       description="Where your domains meet the applications that answer them."
     />
 
-    <HelpPanel.Group title="What is a workload?">
+    <HelpPanel.Group label="What is a workload?">
       <p>A workload binds one or more domains to an application and a firewall.</p>
     </HelpPanel.Group>
 
@@ -112,8 +112,8 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
   - Slot: `default` — optional extra content under the description (a `Tag` naming the product state, for example).
   - `data-testid` fallback: `help-panel-header`.
-- `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
-  - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
+- `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `label` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
+  - Props: `label?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
   - `data-testid` fallback: `help-panel-group`.
 - `help-panel-footer/help-panel-footer.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.

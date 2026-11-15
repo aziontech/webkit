@@ -21,10 +21,10 @@ const FeatureItem = defineComponent({
         title="Workloads"
         description="Where your domains meet the applications that answer them."
       />
-      <HelpPanelGroup title="What is a workload?">
+      <HelpPanelGroup label="What is a workload?">
         <p>A workload binds one or more domains to an application.</p>
       </HelpPanelGroup>
-      <HelpPanelGroup title="Who can edit it?">
+      <HelpPanelGroup label="Who can edit it?">
         <p>Anyone with the Workloads permission.</p>
       </HelpPanelGroup>
       <HelpPanelFooter>
@@ -116,7 +116,7 @@ describe('HelpPanel', () => {
       expect(links.querySelectorAll('a')).toHaveLength(2)
     })
 
-    it('renders no section heading when the title is empty', () => {
+    it('renders no section heading when the label is empty', () => {
       const view = render(HelpPanelGroup, { slots: { default: '<p>Body</p>' } })
       expect(view.queryByRole('heading')).toBeNull()
       expect(view.getByTestId('help-panel-group').hasAttribute('aria-labelledby')).toBe(false)
