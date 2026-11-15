@@ -13,6 +13,7 @@ const MIGRATION_DOC = /^MIGRATION-v\d+\.md$/
 
 const norm = (value) =>
   String(value ?? '')
+    .replace(/\\\s*\|/g, '|')
     .replace(/\s+/g, ' ')
     .trim()
 const isRequired = (value) => norm(value) === 'true'

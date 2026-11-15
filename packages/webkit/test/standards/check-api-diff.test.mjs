@@ -243,3 +243,17 @@ test('a prop removed without becoming a model is still breaking', () => {
   assert.equal(c.kind, 'removed')
   assert.equal(c.breaking, true)
 })
+
+test('a union escaped for a Markdown table is the same type as the plain one', () => {
+  const changes = diff(
+    {
+      props: [prop('kind', "'neutral' \\ | 'danger'", "'neutral'"), prop('label', 'string', "''")],
+      slots: [{ name: 'default', scope: '{ tab: string \\| null }', notes: '' }]
+    },
+    {
+      props: [prop('kind', "'neutral' | 'danger'", "'neutral'"), prop('label', 'string', "''")],
+      slots: [{ name: 'default', scope: '{ tab: string | null }', notes: '' }]
+    }
+  )
+  assert.deepEqual(changes, [])
+})
