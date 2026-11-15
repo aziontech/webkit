@@ -21,9 +21,9 @@ The page of one resource whose tab holds more sibling pages than a tab row can c
 
 A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level. Each tab is its own route: this block renders the open tab's page, and another tab shows an `EmptyState` with an Open link to that tab's route, so no tab is ever dead.
 
-### B. Local navigation — `MenuRoot` (required)
+### B. Local navigation — `SidebarMenuRoot` (required)
 
-From `@3xl` of the tab body, a `MenuRoot` with `groups` in a fixed `w-(--container-3xs)` column at the inline start. Its rows are `href` links with no glyphs, like the rail's sub-rows, grouped under short group labels. `active-id` comes from the route: the row whose `href` matches the current path is the one current row (`aria-current="page"`), and no row is current when the route is not one of them. Its `aria-label` is the tab name. `navigate` routes on a plain click and leaves modified clicks to the browser.
+From `@3xl` of the tab body, a `SidebarMenuRoot` with `groups` in a fixed `w-(--container-3xs)` column at the inline start. Its rows are `href` links with no glyphs, like the rail's sub-rows, grouped under short group labels. `active-id` comes from the route: the row whose `href` matches the current path is the one current row (`aria-current="page"`), and no row is current when the route is not one of them. Its `aria-label` is the tab name. `navigate` routes on a plain click and leaves modified clicks to the browser.
 
 ### C. Folded navigation — `Field`, `Select` (required)
 
@@ -52,7 +52,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 
 ## Don't
 
-- Don't render a `Menu` in a page body outside this block; local navigation is this block.
+- Don't render a `SidebarMenu` in a page body outside this block; local navigation is this block.
 - Don't repeat in the local navigation a page the rail already offers, and don't add rail rows that route into a resource, not even as a shortcut into a default one.
 - Don't use it for 7 or fewer siblings; a `ToggleGroup`, tabs or one page of sections carries them.
 - Don't add glyphs to the menu rows or nest a second level inside the local navigation.
