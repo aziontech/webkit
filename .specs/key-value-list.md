@@ -3,7 +3,7 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: 6a197a155194afd8c701d0ef5908be766a5a749651c39b96c266e440a5153105
+checksum: ad98805ddcded5ea292a012b40b2ac5a7bbc7168c2869fcf601a9eaa96acbcf5
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15

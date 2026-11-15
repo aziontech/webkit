@@ -652,7 +652,22 @@ test('every renamed compound part points at a member the v6 compound attaches', 
         new RegExp(`^\\s+${from}:`, 'm'),
         `${subpath}.${from} still attached`
       )
-      if (to) assert.match(text, new RegExp(`(^\\s+${to}:|\\.${to} =)`, 'm'), `${subpath}.${to}`)
+      if (typeof to === 'string' && to) assert.match(text, new RegExp(`(^\\s+${to}:|\\.${to} =)`, 'm'), `${subpath}.${to}`)
     }
   }
+})
+
+test('a removed compound member is reported as manual work and left in place', () => {
+  const v6 = loadMigration(6)
+  const sfc = [
+    '<script setup>',
+    "import NavigationMenu from '@aziontech/webkit/navigation-menu'",
+    '</script>',
+    '<template>',
+    '  <NavigationMenu><NavigationMenu.Portal><NavigationMenu.Viewport /></NavigationMenu.Portal></NavigationMenu>',
+    '</template>'
+  ].join('\n')
+  const { source, warnings } = migrateSource(sfc, v6)
+  assert.equal(source, sfc)
+  assert.ok(warnings.some((w) => w.startsWith('<NavigationMenu.Portal> was removed in v6')))
 })

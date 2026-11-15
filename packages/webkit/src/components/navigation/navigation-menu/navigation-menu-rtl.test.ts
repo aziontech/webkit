@@ -3,7 +3,7 @@ import '../../../test/reflow.css'
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import NavigationMenuArrow from './navigation-menu-arrow.vue'
+import NavigationMenuArrow from './parts/navigation-menu-arrow.vue'
 
 const arrowIn = (dir: 'ltr' | 'rtl') => {
   const host = document.createElement('div')
@@ -16,7 +16,7 @@ const arrowIn = (dir: 'ltr' | 'rtl') => {
 }
 
 describe('NavigationMenu', () => {
-  describe('NavigationMenu.Arrow in a right-to-left subtree (styled)', () => {
+  describe('the Viewport arrow in a right-to-left subtree (styled)', () => {
     it('keeps its visible corner pointing at the trigger by flipping on the inline axis', () => {
       const ltr = arrowIn('ltr')
       const ltrStyle = getComputedStyle(ltr.arrow)

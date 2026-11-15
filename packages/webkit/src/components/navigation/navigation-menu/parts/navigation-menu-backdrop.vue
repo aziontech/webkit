@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../utils/cn'
-  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
+  import { cn } from '../../../../utils/cn'
+  import { useNavigationMenuContext } from '../composables/use-navigation-menu-context'
 
   defineOptions({ name: 'NavigationMenuBackdrop', inheritAttrs: false })
 

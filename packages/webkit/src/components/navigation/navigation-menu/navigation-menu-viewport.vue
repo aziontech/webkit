@@ -1,45 +1,88 @@
 <script setup lang="ts">
-  import { computed, ref, useAttrs, watch } from 'vue'
-
-  import { cn } from '../../../utils/cn'
-  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
-  import { resolveHostElement } from './lib/host-element'
+  import NavigationMenuArrow from './parts/navigation-menu-arrow.vue'
+  import NavigationMenuBackdrop from './parts/navigation-menu-backdrop.vue'
+  import NavigationMenuPopup, {
+    type NavigationMenuPopupKind
+  } from './parts/navigation-menu-popup.vue'
+  import NavigationMenuPortal from './parts/navigation-menu-portal.vue'
+  import NavigationMenuPositioner, {
+    type NavigationMenuAlign,
+    type NavigationMenuCollisionPadding,
+    type NavigationMenuSide
+  } from './parts/navigation-menu-positioner.vue'
+  import NavigationMenuViewportFrame from './parts/navigation-menu-viewport-frame.vue'
 
   defineOptions({ name: 'NavigationMenuViewport', inheritAttrs: false })
 
-  defineSlots<{ default(): unknown }>()
+  interface Props {
+    /** Preferred placement relative to the active trigger. */
+    side?: NavigationMenuSide
+    /** Alignment along the anchor edge. */
+    align?: NavigationMenuAlign
+    /** Offset from the anchor on the side axis (px). */
+    sideOffset?: number
+    /** Offset along the alignment axis (px). */
+    alignOffset?: number
+    /** Padding reserved for the arrow (px). */
+    arrowPadding?: number
+    /** Distance kept from the boundary edges (px); an object insets each axis on its own. */
+    collisionPadding?: NavigationMenuCollisionPadding
+    /** Sticky positioning while scrolling. */
+    sticky?: boolean
+    /** Tracks the active trigger as the anchor; false keeps the popup where it first opened. */
+    trackAnchor?: boolean
+    /** Surface treatment of the popup. */
+    kind?: NavigationMenuPopupKind
+    /** Shows an arrow that points at the active trigger. */
+    arrow?: boolean
+    /** Dims the page behind the open popup; a click on it closes the menu. */
+    backdrop?: boolean
+    /** Teleport container element or selector. */
+    container?: object | string
+    /** Keeps the popup mounted while it is closed. */
+    keepMounted?: boolean
+  }
 
-  const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__viewport'
-  )
-
-  const root = useNavigationMenuContext()
-  const viewportTargetEl = ref<HTMLElement | null>(null)
-
-  const ROOT_CLASS =
-    'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-y-auto'
-
-  watch(
-    viewportTargetEl,
-    (target) => {
-      root.setViewportTargetEl(resolveHostElement(target))
-    },
-    { immediate: true }
-  )
+  const props = withDefaults(defineProps<Props>(), {
+    side: 'bottom',
+    align: 'center',
+    sideOffset: 8,
+    alignOffset: 0,
+    arrowPadding: 8,
+    collisionPadding: 8,
+    sticky: false,
+    trackAnchor: true,
+    kind: 'default',
+    arrow: false,
+    backdrop: false,
+    container: undefined,
+    keepMounted: true
+  })
 </script>
 
 <template>
-  <div
-    :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
-    :data-testid="testId"
+  <NavigationMenuPortal
+    :container="props.container"
+    :keep-mounted="props.keepMounted"
   >
-    <div
-      ref="viewportTargetEl"
-      class="relative h-full w-[var(--navigation-menu-viewport-width,100%)]"
-      :data-testid="`${testId}__target`"
+    <NavigationMenuBackdrop v-if="props.backdrop" />
+    <NavigationMenuPositioner
+      :side="props.side"
+      :align="props.align"
+      :side-offset="props.sideOffset"
+      :align-offset="props.alignOffset"
+      :arrow-padding="props.arrowPadding"
+      :collision-padding="props.collisionPadding"
+      :sticky="props.sticky"
+      :track-anchor="props.trackAnchor"
     >
-      <slot />
-    </div>
-  </div>
+      <NavigationMenuPopup
+        v-bind="$attrs"
+        :kind="props.kind"
+      >
+        <NavigationMenuArrow v-if="props.arrow" />
+        <NavigationMenuViewportFrame />
+      </NavigationMenuPopup>
+    </NavigationMenuPositioner>
+  </NavigationMenuPortal>
 </template>

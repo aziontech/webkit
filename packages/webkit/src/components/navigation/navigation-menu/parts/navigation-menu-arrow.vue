@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, ref, useAttrs, watch } from 'vue'
 
-  import { cn } from '../../../utils/cn'
-  import { NavigationMenuPositionerInjectionKey } from './injection-key'
+  import { cn } from '../../../../utils/cn'
+  import { NavigationMenuPositionerInjectionKey } from '../injection-key'
 
   defineOptions({ name: 'NavigationMenuArrow', inheritAttrs: false })
 

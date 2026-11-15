@@ -2,10 +2,10 @@
   import { type MaybeElement, onClickOutside } from '@vueuse/core'
   import { computed, type CSSProperties, shallowRef, useAttrs, watch } from 'vue'
 
-  import { cn } from '../../../utils/cn'
-  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
-  import { createChangeEventDetails } from './composables/use-navigation-menu-root'
-  import { resolveHostElement } from './lib/host-element'
+  import { cn } from '../../../../utils/cn'
+  import { useNavigationMenuContext } from '../composables/use-navigation-menu-context'
+  import { createChangeEventDetails } from '../composables/use-navigation-menu-root'
+  import { resolveHostElement } from '../lib/host-element'
 
   defineOptions({ name: 'NavigationMenuPopup', inheritAttrs: false })
 

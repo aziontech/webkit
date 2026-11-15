@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 75548764b5de0a6bdcafad4ded76937951e84decf04a77a866293e93a0656184
+checksum: e901cb1ddf15d33595b2011e0b27b3c2be0658473a1ff12c0423aab666a5ab28
 created: 2026-11-11
 last_updated: 2026-11-15
 ---

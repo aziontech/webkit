@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 3
 template: 2
-checksum: 65ba0224cb3ba6d9064b35bdb7823c64b207013d400afa8008dc7ac7e4751bde
+checksum: e5c4d469dd98087b6df190523da2a06640982225554144d3337e5a9248ad2502
 created: 2026-11-14
 last_updated: 2026-11-15
 ---

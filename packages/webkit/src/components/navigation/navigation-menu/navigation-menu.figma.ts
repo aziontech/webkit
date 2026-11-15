@@ -22,7 +22,6 @@ const items = entries
     <NavigationMenu.Item>
       <NavigationMenu.Trigger>
         ${entry.label}
-        <NavigationMenu.Icon><i class="ai ai-chevron-down" aria-hidden="true" /></NavigationMenu.Icon>
       </NavigationMenu.Trigger>
       <NavigationMenu.Content />
     </NavigationMenu.Item>`
@@ -35,13 +34,7 @@ const items = entries
 
 const viewport = hasSubmenu
   ? `
-  <NavigationMenu.Portal>
-    <NavigationMenu.Positioner>
-      <NavigationMenu.Popup>
-        <NavigationMenu.Viewport />
-      </NavigationMenu.Popup>
-    </NavigationMenu.Positioner>
-  </NavigationMenu.Portal>`
+  <NavigationMenu.Viewport />`
   : ''
 
 export default {

@@ -470,9 +470,13 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
     const renames = (migration.members || {})[base]
     if (!renames) continue
     for (const [from, to] of Object.entries(renames)) {
-      const next = to ? `${binding}.${to}` : binding
       const re = new RegExp(`(?<![\\w$.])${escapeRe(binding)}\\.${escapeRe(from)}(?![\\w$])`, 'g')
       if (!re.test(out)) continue
+      if (typeof to === 'object') {
+        warnings.push(`<${binding}.${from}> was removed in v6: ${to.removed}`)
+        continue
+      }
+      const next = to ? `${binding}.${to}` : binding
       out = replaceOutsideComments(out, re, () => next)
       changes.push(`${binding}.${from} → ${next}`)
     }

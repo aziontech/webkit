@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { computed, type CSSProperties, provide, ref, useAttrs, watch } from 'vue'
 
-  import { useDirection } from '../../../composables/use-direction'
-  import type { Side } from '../../../composables/use-placement'
-  import { cn } from '../../../utils/cn'
-  import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
-  import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner'
-  import { NavigationMenuPositionerInjectionKey } from './injection-key'
+  import { useDirection } from '../../../../composables/use-direction'
+  import type { Side } from '../../../../composables/use-placement'
+  import { cn } from '../../../../utils/cn'
+  import { useNavigationMenuContext } from '../composables/use-navigation-menu-context'
+  import { useNavigationMenuPositioner } from '../composables/use-navigation-menu-positioner'
+  import { NavigationMenuPositionerInjectionKey } from '../injection-key'
 
   defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
 
