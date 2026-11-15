@@ -3,6 +3,7 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import Combobox from '@aziontech/webkit/combobox'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
@@ -493,7 +494,10 @@
                         @click="tableRef?.exportCsv({ filename: 'files.csv' })"
                       />
                     </Tooltip>
-                    <Table.ColumnSelector class="shrink-0" />
+                    <CollectionPreferences
+                      :sections="['columns']"
+                      class="shrink-0"
+                    />
                   </div>
 
                   <div

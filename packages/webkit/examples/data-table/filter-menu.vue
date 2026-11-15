@@ -1,5 +1,7 @@
 <script setup>
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import DataTable from '@aziontech/webkit/data-table'
+  import FilterMenu from '@aziontech/webkit/filter-menu'
   import Table from '@aziontech/webkit/table'
   import { ref } from 'vue'
 
@@ -68,11 +70,11 @@
   >
     <template #title>Workloads</template>
     <template #toolbar>
-      <Table.Filter kind="menu" />
-      <Table.ColumnSelector />
+      <Table.Filter />
+      <CollectionPreferences :sections="['columns']" />
     </template>
     <template #filters>
-      <Table.AppliedFilters kind="menu" />
+      <FilterMenu.Chips />
     </template>
     <template #cell-status="{ value }">
       <Table.CellStatus

@@ -1,5 +1,4 @@
 import Table from './table.vue'
-import TableAppliedFilters from './table-applied-filters/table-applied-filters.vue'
 import TableBody from './table-body/table-body.vue'
 import TableCaption from './table-caption/table-caption.vue'
 import TableCell from './table-cell/table-cell.vue'
@@ -9,7 +8,6 @@ import TableCellLink from './table-cell-link/table-cell-link.vue'
 import TableCellStatus from './table-cell-status/table-cell-status.vue'
 import TableCellTags from './table-cell-tags/table-cell-tags.vue'
 import TableCellTime from './table-cell-time/table-cell-time.vue'
-import TableColumnSelector from './table-column-selector/table-column-selector.vue'
 import TableExport from './table-export/table-export.vue'
 import TableFilter from './table-filter/table-filter.vue'
 import TableFooter from './table-footer/table-footer.vue'
@@ -40,8 +38,6 @@ type CompoundTable = typeof Table & {
   Toolbar: typeof TableToolbar
   Search: typeof TableSearch
   Filter: typeof TableFilter
-  AppliedFilters: typeof TableAppliedFilters
-  ColumnSelector: typeof TableColumnSelector
   Export: typeof TableExport
   RefreshButton: typeof TableRefreshButton
   LiveButton: typeof TableLiveButton
@@ -65,8 +61,6 @@ const TableRoot = Object.assign(Table, {
   Toolbar: TableToolbar,
   Search: TableSearch,
   Filter: TableFilter,
-  AppliedFilters: TableAppliedFilters,
-  ColumnSelector: TableColumnSelector,
   Export: TableExport,
   RefreshButton: TableRefreshButton,
   LiveButton: TableLiveButton

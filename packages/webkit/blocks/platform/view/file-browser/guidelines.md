@@ -32,9 +32,9 @@ The toolbar opens with the storage glyph and the storage name, the page's `h1`, 
 
 Large outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
 
-### D. Columns — `Table.ColumnSelector` (optional)
+### D. Columns — `CollectionPreferences` (optional)
 
-The last toolbar control is `Table.ColumnSelector`, which reads the table's columns from context: one switch per column, Name locked as Always shown, and Show all columns once one is hidden. Do not build a popover of `Switch`es by hand.
+The last toolbar control is `CollectionPreferences` with only its columns section (`:sections="['columns']"`), which reads the table's columns from context: one switch per column with its order, Name locked, and Confirm writes them back to the table. Do not build a popover of `Switch`es by hand.
 
 ### E. Path and create — `Breadcrumb`, `SplitButton` (required)
 
