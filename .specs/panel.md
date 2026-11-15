@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 5
-checksum: 60d2f86ea8e0448fd747b5ecfc8670aa9e17a6ed3eab9b896c7848ce21138096
+checksum: 4bea0ff5402da78e5853ce807b3bbc67832d1d23f9cd9b45988fabbc24b5432f
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
