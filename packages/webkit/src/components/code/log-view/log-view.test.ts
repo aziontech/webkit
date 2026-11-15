@@ -755,6 +755,23 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(queryByTestId('code-log-view__steps__toolbar')).toBeNull()
     })
 
+    it('shows the toolbar when a header slot appears after mount', async () => {
+      const shown = ref(false)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(
+            LogViewSteps,
+            { steps: STEPS, viewSwitch: false },
+            shown.value ? { header: () => h('span', 'Run 42') } : {}
+          )
+      })
+      const { queryByTestId, findByText } = render(Host)
+      expect(queryByTestId('code-log-view__steps__toolbar')).toBeNull()
+      shown.value = true
+      await findByText('Run 42')
+      expect(queryByTestId('code-log-view__steps__toolbar')).toBeTruthy()
+    })
+
     it('draws the flush progress bar valued by the share of steps done', () => {
       const { getByRole } = render(LogViewSteps, { props: { steps: STEPS, progress: true } })
       const bar = getByRole('progressbar', { name: 'Run progress' })

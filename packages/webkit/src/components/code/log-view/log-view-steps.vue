@@ -101,7 +101,7 @@
     return Math.round((done / props.steps.length) * 100)
   })
 
-  const hasToolbar = computed(() => Boolean(slots.header) || props.viewSwitch)
+  const hasToolbar = () => Boolean(slots.header) || props.viewSwitch
 
   const onAccordion = (next: unknown) => {
     expanded.value = typeof next === 'string' ? next : ''
@@ -116,7 +116,7 @@
     class="flex w-full min-w-0 flex-col"
   >
     <div
-      v-if="hasToolbar"
+      v-if="hasToolbar()"
       :data-testid="`${testId}__toolbar`"
       class="flex min-h-12 flex-wrap items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
@@ -190,7 +190,7 @@
               <span
                 v-if="step.description"
                 :data-status="step.status"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=failed]:whitespace-normal data-[status=failed]:text-pretty data-[status=failed]:text-(--danger-contrast) data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent data-[status=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=failed]:whitespace-normal data-[status=failed]:text-pretty data-[status=failed]:text-(--danger-contrast) data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent data-[status=running]:motion-safe:animate-shimmer motion-reduce:animate-none"
               >
                 {{ step.description }}
               </span>

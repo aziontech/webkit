@@ -323,6 +323,29 @@ describe('Tree', () => {
         }
       })
 
+    it('switches to a treegrid when the actions slot appears after mount', async () => {
+      const shown = ref(false)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(
+            Tree,
+            { ariaLabel: 'Bucket objects', items: ITEMS },
+            shown.value
+              ? {
+                  actions: (scope: { item: TreeItem }) =>
+                    h('button', { type: 'button', 'aria-label': `Delete ${scope.item.label}` })
+                }
+              : {}
+          )
+      })
+      const view = render(Host)
+      expect(view.getByRole('tree', { name: 'Bucket objects' })).toBeTruthy()
+      shown.value = true
+      await nextTick()
+      expect(view.getByRole('treegrid', { name: 'Bucket objects' })).toBeTruthy()
+      expect(view.queryAllByRole('treeitem')).toHaveLength(0)
+    })
+
     it('renders a treegrid of rows and gridcells, and a plain tree without actions', () => {
       const view = withActions({ expanded: ['assets'] })
       const grid = view.getByRole('treegrid', { name: 'Bucket objects' })

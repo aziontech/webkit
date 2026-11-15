@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, onMounted, ref, watch } from 'vue'
+  import { computed, nextTick, onMounted, ref, useId, watch } from 'vue'
 
   import Button from '../../../actions/button/button.vue'
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
@@ -50,6 +50,7 @@
     row: number
   }
 
+  const environmentHeadingId = useId()
   const SCROLL_INSET = 16
 
   const topologyRef = ref<globalThis.HTMLElement | null>(null)
@@ -562,6 +563,7 @@
 
           <div class="flex flex-col gap-(--spacing-sm)">
             <h3
+              :id="environmentHeadingId"
               class="m-0 flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
             >
               Environment
@@ -573,7 +575,7 @@
             <RadioGroup
               :model-value="SELECTED_ENVIRONMENT"
               kind="card"
-              aria-label="Environment"
+              :aria-labelledby="environmentHeadingId"
             >
               <RadioGroupItem
                 v-for="environment in ENVIRONMENTS"
