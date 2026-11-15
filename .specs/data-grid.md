@@ -1,0 +1,269 @@
+---
+name: data-grid
+category: data
+structure: monolithic
+status: implemented
+spec_version: 1
+template: 2
+figma:
+  url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
+  node_id: 2053:7649
+checksum: 78cf6cfb3aab69a0897d3bda1e97d6c85fb075c23b5baed42e9c9c6065a08f07
+created: 2026-11-15
+last_updated: 2026-11-15
+---
+
+# DataGrid — Component Spec
+
+## Purpose
+
+An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, a roving tab stop), not a read-only table. The rows are a two-way model (`v-model`); every committed edit writes the new rows and emits `change` with the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-delete` and the app changes the rows. It loads no table engine and no virtualization library: thousands of rows scroll natively inside `maxHeight`, and each row is laid out lazily with CSS `content-visibility: auto`.
+
+## When to use
+
+- Use DataGrid only when people edit many cells of many records in place, spreadsheet-style; for a short list of rows in a form use AttributeEditor, for read-and-act lists use Table.
+- A database table editor or the editable results of a query: typed cells (text, number, boolean, a choice), keyboard-first editing, copy of a cell range.
+- Bulk corrections across rows, where opening a drawer per record would be slower than editing the cells.
+
+## When NOT to use
+
+- People read, sort, filter, select and act on records but do not edit cells → use `data-table` (or a hand-composed `table`).
+- A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
+- One record edited field by field → use a form with `field` controls.
+- Key and value pairs shown for reading → use `key-value-list`.
+
+## Related
+
+- `data-table` — the read-and-act table (sorting, filters, paging, toolbar parts); DataGrid is its editable counterpart.
+- `table` — the parts and tokens DataGrid shares its look with.
+- `attribute-editor` — a few rows of the same fields inside a form.
+- `collection-preferences` — the display preferences of a list; DataGrid's column widths are dragged in place instead.
+
+## Best practices
+
+- Give every row a stable id under `row-key` (default `'id'`): the cursor, the selection and the edits follow it.
+- Type each column (`text`, `number`, `boolean`, `select`) so the editor matches the value; mark computed or key columns `editable: false`.
+- Freeze the first column (`frozen-first-column`) when it names the row and the grid scrolls sideways.
+- Keep adding and deleting in the app: handle `row-add` and `row-delete`, then write the new rows to the `v-model`. Confirm a delete of more than a few rows in a `confirm-dialog`.
+- Use `readonly` while saving or for people who may not edit; the cursor, selection and copy still work.
+
+## Usage
+
+```vue
+<script setup>
+  import Button from '@aziontech/webkit/button'
+  import DataGrid from '@aziontech/webkit/data-grid'
+  import { ref } from 'vue'
+
+  const rows = ref([
+    { id: '1', name: 'Acme Inc.', plan: 'business', seats: 12, active: true },
+    { id: '2', name: 'Jane Doe', plan: 'free', seats: 1, active: false }
+  ])
+  const columns = [
+    { id: 'name', header: 'Name', type: 'text' },
+    {
+      id: 'plan',
+      header: 'Plan',
+      type: 'select',
+      options: [
+        { label: 'Free', value: 'free' },
+        { label: 'Business', value: 'business' }
+      ]
+    },
+    { id: 'seats', header: 'Seats', type: 'number', align: 'end' },
+    { id: 'active', header: 'Active', type: 'boolean' }
+  ]
+  const selection = ref({})
+  const addRow = () =>
+    rows.value.push({
+      id: String(rows.value.length + 1),
+      name: '',
+      plan: 'free',
+      seats: 1,
+      active: true
+    })
+  const deleteRows = (event, removed) => {
+    const ids = new Set(removed.map((row) => row.id))
+    rows.value = rows.value.filter((row) => !ids.has(row.id))
+  }
+</script>
+
+<template>
+  <DataGrid
+    v-model="rows"
+    v-model:row-selection="selection"
+    :columns="columns"
+    aria-label="Customers"
+    enable-row-selection
+    frozen-first-column
+    max-height="24rem"
+    @row-add="addRow"
+    @row-delete="deleteRows"
+  >
+    <template #toolbar="{ add, remove, selectedCount }">
+      <Button
+        label="Add row"
+        kind="outlined"
+        size="small"
+        @click="add"
+      />
+      <Button
+        label="Delete rows"
+        kind="outlined"
+        size="small"
+        :disabled="selectedCount === 0"
+        @click="remove"
+      />
+    </template>
+  </DataGrid>
+</template>
+```
+
+## Props
+
+| Prop                 | Type               | Default | Required | JSDoc                                                                                                                              |
+| -------------------- | ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `columns`            | `DataGridColumn[]` | `[]`    | false    | Columns in order: `{ id, header, type?, options?, editable?, width?, minWidth?, align? }`; `type` picks the editor (default text). |
+| `rowKey`             | `string`           | `'id'`  | false    | Field used as the stable row id (cursor, selection and edits follow it).                                                           |
+| `enableRowSelection` | `boolean`          | `false` | false    | Adds a leading checkbox column with Select all.                                                                                    |
+| `frozenFirstColumn`  | `boolean`          | `false` | false    | Pins the first data column to the inline start edge while the grid scrolls sideways.                                               |
+| `readonly`           | `boolean`          | `false` | false    | No cell can be edited; the cursor, range selection and copy still work.                                                            |
+| `maxHeight`          | `string`           | `''`    | false    | Max height (CSS length) of the scrolling viewport; the header stays on top.                                                        |
+| `ariaLabel`          | `string`           | `''`    | false    | Accessible name of the grid when no visible heading names it.                                                                      |
+
+`DataGridColumn` = `{ id: string; header: string; type?: DataGridColumnType; options?: { label: string; value: string | number }[]; editable?: boolean; width?: number; minWidth?: number; align?: 'start' | 'end' }`, `DataGridColumnType` = `'text' | 'number' | 'boolean' | 'select'`. `width` (px) is the starting width (160 when unset); every header carries a resize handle that drags the width down to `minWidth` (64 when unset). The component is generic over its row (`generic="TRow extends object"`), inferred from `v-model`.
+
+## v-model
+
+| Model                   | Type                      | Default | Emits                 | Notes                                                                                                                   |
+| ----------------------- | ------------------------- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `v-model`               | `TRow[]`                  | `[]`    | `update:modelValue`   | The rows. A committed edit writes a new array with a copy of the edited row.                                            |
+| `v-model:row-selection` | `Record<string, boolean>` | `{}`    | `update:rowSelection` | Selected row ids (the same shape as DataTable's `rowSelection`). Space on the checkbox column and Select all change it. |
+
+## Events
+
+| Event        | Payload                                  | Notes                                                                                                               |
+| ------------ | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `change`     | `(event: Event, edit: DataGridCellEdit)` | A cell edit was committed (Enter, Tab, blur, a toggle); `edit` is `{ row, columnId, value, previous }`.             |
+| `row-add`    | `(event: Event)`                         | The `add` function of the toolbar slot ran; the app appends a row to the `v-model`.                                 |
+| `row-delete` | `(event: Event, rows: TRow[])`           | The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`.          |
+| `copy`       | `(event: ClipboardEvent, text: string)`  | Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard. |
+
+## Slots
+
+| Slot      | Scope                                                                                                          | Notes                                                                                       |
+| --------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `toolbar` | `{ selectedRows: TRow[]; selectedCount: number; add: (event: Event) => void; remove: (event: Event) => void }` | Action band above the grid (add and delete buttons); `add` and `remove` emit the row hooks. |
+| `empty`   | —                                                                                                              | Shown in place of the rows when there are none. Defaults to a small `EmptyState`.           |
+
+## States
+
+- Visual states: `default`, `hover` (row), `focus-visible` (the active cell ring), `selected` (cells in the range: `data-selected`; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
+- `empty`: no rows, the `empty` slot (default `EmptyState`, `dataGrid.emptyTitle`) in place of the body; the header and toolbar stay.
+- No `loading` or `error` state of its own: the app shows a `Skeleton` or an `Alert` around the grid while it loads; DataGrid never fetches.
+- `data-frozen="start"` on the first column's cells with `frozenFirstColumn`; `data-resizing` on a header while its width is dragged.
+
+## Motion & Animations
+
+| Trigger                 | Animation / Transition                    | Token  | Reduced-motion fallback         |
+| ----------------------- | ----------------------------------------- | ------ | ------------------------------- |
+| row hover / cell select | `transition-colors duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+
+## Tokens
+
+| Region                         | Token (DESIGN.md)             |
+| ------------------------------ | ----------------------------- |
+| surface                        | `var(--bg-surface)`           |
+| header surface                 | `var(--bg-surface-raised)`    |
+| header typography              | `.text-label-sm`              |
+| cell typography                | `.text-body-sm`               |
+| text                           | `var(--text-default)`         |
+| text muted (header, read-only) | `var(--text-muted)`           |
+| divider                        | `var(--border-default)`       |
+| divider width                  | `var(--border-width-default)` |
+| row hover                      | `var(--bg-canvas)`            |
+| selected cells / rows          | `var(--bg-selected)`          |
+| active cell and focus ring     | `var(--ring-color)`           |
+| cell padding x                 | `var(--spacing-sm)`           |
+| gap                            | `var(--spacing-xs)`           |
+| shape (frame, editor)          | `var(--shape-elements)`       |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `aria-label` (or `aria-labelledby`), `aria-multiselectable="true"` with `enableRowSelection`, and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when checked; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; a cell in the range carries `aria-selected="true"`, a cell that cannot be edited `aria-readonly="true"`.
+- Roving tab stop: exactly one cell has `tabindex="0"` (the active cell, the first body cell at start), every other cell `-1`, so `Tab` enters the grid on the active cell. The editor inside a cell takes focus while editing and returns it to the cell when it closes.
+- Keyboard map (cell cursor): `Arrow` keys move one cell (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range; `Tab` / `Shift+Tab` move to the next / previous cell and wrap to the next / previous row, and leave the grid from its last / first cell. `Enter` or `F2` opens the editor; typing a character opens it with that character; `Space` toggles a boolean cell or the row checkbox; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+A` / `Cmd+A` selects every cell.
+- Keyboard map (editing): `Enter` commits and moves down, `Tab` / `Shift+Tab` commit and move right / left, `Escape` cancels and restores the value; blur commits. A select editor is a native `select`, so its own keys apply while it is open.
+- Resize handles are `role="separator"` with `aria-orientation="vertical"`, `aria-valuenow` (the width in px), `aria-valuemin` and a name (`dataGrid.resize`: `Resize Name`); they are focusable and `Arrow Left` / `Arrow Right` change the width by 16 px.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` inset on the active cell; the editor uses the same ring.
+- Contrast ≥ 4.5:1 for text (muted header text included); the selected surface keeps the text contrast.
+- `motion-reduce:transition-none` on every transition.
+- Touch: each cell is at least 40 px high; tapping a cell moves the cursor there, a second tap opens the editor; the resize handle is 12 px wide with a 24 px hit area.
+
+## Internationalization
+
+| Key                         | English source                | Override prop |
+| --------------------------- | ----------------------------- | ------------- |
+| `dataGrid.selectAll`        | `Select all rows`             | —             |
+| `dataGrid.selectRow`        | `Select row`                  | —             |
+| `dataGrid.resize`           | `Resize {column}`             | —             |
+| `dataGrid.emptyTitle`       | `No rows yet`                 | `empty` slot  |
+| `dataGrid.emptyDescription` | `Add a row to start editing.` | `empty` slot  |
+| `dataGrid.true`             | `Yes`                         | —             |
+| `dataGrid.false`            | `No`                          | —             |
+
+- Formatting: `number` cells render with `Intl.NumberFormat` in the locale of the nearest `WebkitProvider`; the editor and the copied text use the raw number. Strings come from the locale catalog through `useTranslate` (`dataGrid` group).
+
+## Right-to-left
+
+- Layout: logical utilities only (`start-0`, `ps-` / `pe-`, `text-start` / `text-end`, `border-e`); the frozen first column pins to the inline start edge, and the resize handle sits on the inline end edge of each header.
+- Icons: none of its own; the row checkbox and the empty state are the package's components.
+- Keyboard: `Arrow Left` / `Arrow Right` follow the reading direction (`logicalArrowKey`): under `dir="rtl"` `Arrow Left` moves to the next cell; a resize handle's `Arrow Right` widens under `ltr` and `Arrow Left` widens under `rtl`.
+- User data: cell text renders in a `<bdi>`, so ids, domains and numbers keep their own direction.
+
+## Responsive
+
+- Container queries: none: the grid is a two-dimensional surface that keeps its columns at every width.
+- Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
+- Touch: cells are 40 px high; editing opens on a second tap; nothing is hover-only.
+- Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
+
+## Performance
+
+- Bundle budget: the `data-grid` entry in `.size-limit.json` (target below 9 KB gzip); it imports no table engine, so it does not add `@tanstack/vue-table` to a page, and a hand-composed `table` does not import it.
+- Runtime budget: 1,000 rows mount and the cursor moves without layout of the off-screen rows; keyboard moves touch two cells (the old and the new active cell).
+- Heavy parts: none: rows lay out lazily with `content-visibility: auto` and `contain-intrinsic-size`; no virtualization library.
+
+## Examples
+
+This component has no `kind`/`size`, so the canonical Types/Sizes examples do not apply.
+
+- Default — a customers grid with text, select, number and boolean columns, the first column frozen; justified as the baseline.
+- Row Selection — `enable-row-selection` with the toolbar's Add row and Delete rows wired to `row-add` / `row-delete`; justified because the add and delete hooks and the checkbox column are distinct behaviours.
+- Readonly — `readonly` while a save runs: the cursor and copy work, no editor opens; justified because `readonly` is a state the grid owns.
+
+## Constraints — DO NOT
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.
