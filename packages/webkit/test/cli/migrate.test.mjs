@@ -189,12 +189,14 @@ test('migrateSource moves a static value to another prop from a moves map', () =
     '  <Tag severity="accent" label="New" />',
     '  <Tag severity="default" />',
     '  <Tag :severity="level" />',
+    `  <Tag :severity="t('x')" severity="accent" />`,
     '</template>'
   ].join('\n')
   const { source } = migrateSource(sfc, { ...migration, ...rules })
   assert.match(source, /<Tag variant="accent" label="New" \/>/)
   assert.match(source, /<Tag severity="neutral" \/>/)
   assert.match(source, /<Tag :severity="level" \/>/)
+  assert.match(source, /<Tag :severity="t\('x'\)" variant="accent" \/>/)
   assert.equal(migrateSource(source, { ...migration, ...rules }).source, source)
 })
 

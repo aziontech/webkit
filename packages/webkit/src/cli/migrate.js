@@ -262,15 +262,20 @@ function renameAttributes(attrs, rules) {
       )
       const inverts = rule.values && rule.values.true === 'false' && rule.values.false === 'true'
       out = out.replace(
-        new RegExp(`(\\s)(:|v-bind:)${name}(\\s*=\\s*)(["'])([^"']*)\\4`, 'g'),
-        (all, sp, bind, eq, q, expr) =>
-          inverts
+        new RegExp(`(\\s)(:|v-bind:)${name}(\\s*=\\s*)(?:(")([^"]*)"|(')([^']*)')`, 'g'),
+        (all, sp, bind, eq, dq, dv, sq, sv) => {
+          const q = dq || sq
+          const expr = dq ? dv : sv
+          return inverts
             ? `${sp}${bind}${toKebab}${eq}${q}!(${expr})${q}`
             : `${sp}${bind}${toKebab}${eq}${q}${expr}${q}`
+        }
       )
       out = out.replace(
-        new RegExp(`(\\s)${name}(\\s*=\\s*)(["'])([^"']*)\\3`, 'g'),
-        (all, sp, eq, q, value) => {
+        new RegExp(`(\\s)${name}(\\s*=\\s*)(?:(")([^"]*)"|(')([^']*)')`, 'g'),
+        (all, sp, eq, dq, dv, sq, sv) => {
+          const q = dq || sq
+          const value = dq ? dv : sv
           if (rule.moves && Object.hasOwn(rule.moves, value))
             return `${sp}${kebab(rule.moves[value])}${eq}${q}${value}${q}`
           const mapped = rule.values && value in rule.values ? rule.values[value] : value
