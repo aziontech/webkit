@@ -3,8 +3,8 @@ name: media-split
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 3071c466f05079e6010e1083ba61e990034aad099e7d7f4419ff902f66f27431
+spec_version: 3
+checksum: 2944bf28f1bf31c230dd86317a24de3708e2ff5b0e018d28519ce7160ba80b5e
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -25,6 +25,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## When to use
 
+- Use MediaSplit (primitive) to pair copy with one piece of media in a hand-built SFC.
 - To pair one capability's explanation with a screenshot or diagram of it.
 - Down a product page, alternating `kind` so consecutive bands mirror each other.
 - With `framed` off inside a page column that already draws the frame, and on when the band stands alone.
@@ -35,6 +36,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 ## When NOT to use
 
 - For copy with no media → use `section-title`, which is the header band.
+- For one claim beside its picture, scene or code placed from page JSON → use `media-split-band`.
 - For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `kind="announcement"`.
 - For several short claims side by side → use `topic` in a `card-grid`.
 - For a picture with no explanation → use `illustration` directly.
