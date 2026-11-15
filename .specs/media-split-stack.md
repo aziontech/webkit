@@ -3,11 +3,11 @@ name: media-split-stack
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 0469860ad44c4815bedb264d9adcaf2090a04c3444ccf9aa67b6ab6f46805b85
+last_updated: 2026-11-15
+checksum: e36d853edb1df8df3a8a30b045a543c8f0a8f57b2fdc1684bff3555831af5129
 ---
 
 # MediaSplitStack — Component Spec
@@ -18,11 +18,12 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## When to use
 
+- Use MediaSplitStack for a run of linked claims that pile up as the reader scrolls.
 - To list the solution areas or the claims of a page, one large band each, with a link through to its own page.
 
 ## When NOT to use
 
-- For a single claim beside its media → use `media-split` directly.
+- For a single claim beside its picture, scene or code → use `media-split-band`.
 - For small reasons in a grid → use `feature-tiles`.
 
 ## Related

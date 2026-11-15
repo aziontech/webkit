@@ -1,7 +1,5 @@
 <script setup>
-  import CodeSplit from '@aziontech/webkit/code-split'
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
+  import MediaSplitBand from '@aziontech/webkit/media-split-band'
 
   const codeTabs = [
     {
@@ -23,17 +21,11 @@
 </script>
 
 <template>
-  <SectionContainer max-width="site">
-    <SectionGap hatch />
-
-    <CodeSplit
-      title="From basic caching to advanced acceleration"
-      description="Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content."
-      :code-tabs="codeTabs"
-      copy-aria-label="Copy the cache settings sample"
-      :primary-action="primaryAction"
-    />
-
-    <SectionGap hatch />
-  </SectionContainer>
+  <MediaSplitBand
+    title="From basic caching to advanced acceleration"
+    description="Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content."
+    :code-tabs="codeTabs"
+    copy-aria-label="Copy the cache settings sample"
+    :primary-action="primaryAction"
+  />
 </template>

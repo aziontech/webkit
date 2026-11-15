@@ -3,11 +3,11 @@ name: console-panel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 358dbda3ed32f2b81afcfb58085c247781ddfab855681d723d1b85bed48c8596
+checksum: 465bc7eed1912b52394bc088545393cf5cab2934ff28f19300f513c599d77ad0
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ConsolePanel — Component Spec
@@ -24,7 +24,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 ## When NOT to use
 
 - For a screenshot with copy beside it — use `MediaSplitBand`.
-- For code — use `CodeSplit` or `CliTerminal`.
+- For code — use `MediaSplitBand` with `codeTabs`, or `CliTerminal`.
 
 ## Related
 

@@ -3,10 +3,10 @@ name: cli-terminal
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 0968336b9e358a7cd17545502f84ffc9b17c5a341dd1005bce69fd3f3216b1a9
+last_updated: 2026-11-15
+checksum: a01eb39217900742716d0b96b15d08f5aba1fa209938ddb7f1e4bcb0d148b2ae
 ---
 # CliTerminal — Component Spec
 
@@ -16,17 +16,18 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 ## When to use
 
+- Use CliTerminal only on marketing pages for a full-width terminal session.
 - To close a product argument on how little it takes to ship from the terminal, like Functions and Workloads.
 
 ## When NOT to use
 
-- For a config file or handler beside the claim → use `code-split`.
-- For several capabilities, each with its own file → use `sticky-scroll-code`.
+- For a config file or handler beside the claim → use `media-split-band` with `codeTabs`.
+- For several capabilities, each with its own file → use `feature-scroll` with code items.
 
 ## Related
 
 - `code-block` — the terminal session the band shows.
-- `code-split` — the sibling band with the sample beside the copy.
+- `media-split-band` — the sibling band with the sample (`codeTabs`) beside the copy.
 
 ## Best practices
 

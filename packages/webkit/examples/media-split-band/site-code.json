@@ -1,5 +1,5 @@
 {
-  "_id": "code-split",
+  "_id": "media-split-band",
   "props": {
     "title": "From hello world to full-stack applications",
     "description": "Run application logic next to what a full-stack product needs: SQL Database, KV Store, Object Storage and AI Inference, through Azion libraries.",
@@ -25,7 +25,8 @@
     "primaryAction": {
       "label": "Explore Azion Lib",
       "href": "https://www.azion.com/en/documentation/products/azion-lib/overview/",
-      "trailing": true
+      "trailing": true,
+      "kind": "secondary"
     },
     "secondaryAction": {
       "label": "See GitHub",

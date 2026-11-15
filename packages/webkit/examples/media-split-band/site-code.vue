@@ -1,5 +1,5 @@
 <script setup>
-  import CodeSplit from '@aziontech/webkit/code-split'
+  import MediaSplitBand from '@aziontech/webkit/media-split-band'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
 
@@ -25,7 +25,8 @@
   const primaryAction = {
     label: 'Explore Azion Lib',
     href: 'https://www.azion.com/en/documentation/products/azion-lib/overview/',
-    trailing: true
+    trailing: true,
+    kind: 'secondary'
   }
 
   const secondaryAction = {
@@ -40,7 +41,7 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <CodeSplit
+    <MediaSplitBand
       title="From hello world to full-stack applications"
       description="Run application logic next to what a full-stack product needs: SQL Database, KV Store, Object Storage and AI Inference, through Azion libraries."
       :code-tabs="codeTabs"
