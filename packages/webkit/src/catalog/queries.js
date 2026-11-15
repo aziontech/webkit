@@ -228,6 +228,21 @@ function resolveAlias(catalog, name) {
   return to && catalog.getEntry(to) ? { alias: key, to } : null
 }
 
+function retiredNote(catalog, key) {
+  const name = normalize(key).replace(/ /g, '-')
+  const to = catalog.renamed?.[name]
+  if (to && catalog.getEntry(to)) {
+    return {
+      to,
+      note: `"${name}" was renamed in WebKit v6: import ${catalog.prefix}${to}. Run \`npx @aziontech/webkit migrate v6\` to rewrite old imports.`
+    }
+  }
+  const replacement = catalog.removed?.[name]
+  return replacement
+    ? { to: null, note: `"${name}" was removed in WebKit v6. Use ${replacement} instead.` }
+    : null
+}
+
 function aliasNote(alias, to) {
   return `"${alias}" is not a webkit export: it is another name for "${to}". Import @aziontech/webkit/${to}.`
 }
@@ -259,13 +274,22 @@ export function getComponent(catalog, name) {
         note: aliasNote(resolved.alias, resolved.to)
       }
     }
+    const retired = retiredNote(catalog, key)
+    if (retired?.to) {
+      return {
+        ...getComponent(catalog, retired.to),
+        requested: key,
+        renamedFrom: key,
+        note: retired.note
+      }
+    }
     return {
       ok: false,
       available: true,
       found: false,
       name: key,
       suggestions: catalog.suggestSubpaths(key),
-      message: `No webkit export named "${key}".`
+      message: retired ? retired.note : `No webkit export named "${key}".`
     }
   }
   return {

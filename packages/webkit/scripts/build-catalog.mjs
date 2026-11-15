@@ -16,7 +16,7 @@ import {
   writeLlms
 } from './build-llms.mjs'
 import { exportTarget } from './lib/exports.mjs'
-import { buildAliases, retiredNames } from './lib/naming.mjs'
+import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import { iconKeywords } from '../../icons/scripts/icon-keywords.mjs'
 import {
@@ -326,6 +326,7 @@ export async function build() {
     .filter((k) => k.startsWith('./'))
     .map((k) => k.slice(2))
   const subpathSet = new Set(subpaths)
+  const v6Migration = JSON.parse(readFileSync(V6_MIGRATION, 'utf-8'))
 
   const compoundRoots = subpaths.filter((s) => {
     if (s.includes('/')) return false
@@ -468,7 +469,9 @@ export async function build() {
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
     surfaces: SURFACES,
-    aliases: buildAliases(subpaths, retiredNames(JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')))),
+    aliases: buildAliases(subpaths),
+    renamed: buildRenamed(subpaths, retiredNames(v6Migration)),
+    removed: removedNames(subpaths, v6Migration),
     imports,
     assets: buildAssets(imports),
     patterns,
