@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import test from 'node:test'
 
 const { loadCatalogFrom } = await import('../../src/catalog/catalog.js')
-const { getComponent, getPattern, searchComponents, searchPatterns, suggestComponent } =
+const { getComponent, getBlock, searchComponents, searchBlocks, suggestComponent } =
   await import('../../src/catalog/queries.js')
 
 const P = '@aziontech/webkit/'
@@ -37,7 +37,7 @@ function fixture() {
       table: component('table', { purpose: 'Records in rows.' }),
       'table-search': { import: `${P}table-search`, kind: 'subcomponent', parent: 'table' }
     },
-    patterns: {
+    blocks: {
       'platform/view/table-view': {
         name: 'TableView',
         summary: 'A list page.',
@@ -73,7 +73,7 @@ test('with no surface asked, a product component outranks a docs look-alike', ()
   )
 })
 
-test('equal scores break by product surface, then by use in patterns', () => {
+test('equal scores break by product surface, then by use in blocks', () => {
   const names = searchComponents(catalog, 'ranked bars').matches.map((m) => m.name)
   assert.equal(names[0], 'bar-list')
 })
@@ -105,13 +105,13 @@ test('a v6 rename answers with the new export, a v6 removal with its replacement
 })
 
 test('a fragment is labelled a card and left out when the request asks for a page', () => {
-  const plain = searchPatterns(catalog, 'go-live checklist').matches
+  const plain = searchBlocks(catalog, 'go-live checklist').matches
   assert.equal(plain[0].id, 'platform/detail/production-checklist')
   assert.equal(plain[0].kind, 'fragment')
   assert.match(plain[0].note, /A card, not a page/)
-  const page = searchPatterns(catalog, 'checklist page').matches.map((m) => m.id)
+  const page = searchBlocks(catalog, 'checklist page').matches.map((m) => m.id)
   assert.ok(!page.includes('platform/detail/production-checklist'))
-  const asked = searchPatterns(catalog, 'checklist page', { fragments: true }).matches
+  const asked = searchBlocks(catalog, 'checklist page', { fragments: true }).matches
   assert.ok(asked.some((m) => m.id === 'platform/detail/production-checklist'))
-  assert.equal(getPattern(catalog, 'production-checklist').kind, 'fragment')
+  assert.equal(getBlock(catalog, 'production-checklist').kind, 'fragment')
 })

@@ -11,11 +11,11 @@ const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/cata
 const {
   getBestPractices,
   getComponent,
-  getPattern,
+  getBlock,
   getUsageExample,
   listAssets,
   searchComponents,
-  searchPatterns
+  searchBlocks
 } = await import('../../src/catalog/queries.js')
 
 const SPLIT_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
@@ -34,7 +34,7 @@ const split = load(SPLIT_PATH)
 const monolith = load(MONOLITH_PATH)
 rmSync(dir, { recursive: true, force: true })
 
-const PATTERN_IDS = Object.keys(full.patterns)
+const BLOCK_IDS = Object.keys(full.blocks)
 const COMPONENT_IDS = ['button', 'field', 'table', 'select', 'chart', 'dialog', 'overline']
 
 test('catalog.json stays under 1.35 MB once the SFCs, examples and component prose move to catalog/', () => {
@@ -45,9 +45,9 @@ test('catalog.json stays under 1.35 MB once the SFCs, examples and component pro
     }
     if (e.docsFile) assert.match(e.docsFile, /^catalog\/components\/.+\.json$/)
   }
-  for (const p of Object.values(split.patterns)) {
+  for (const p of Object.values(split.blocks)) {
     assert.equal('sfc' in p, false)
-    assert.match(p.file, /^catalog\/patterns\/.+\.json$/)
+    assert.match(p.file, /^catalog\/blocks\/.+\.json$/)
   }
 })
 
@@ -61,7 +61,7 @@ test('splitCatalog moves sfc, variants and guidelines and keeps everything else'
         examples: [{ name: 'A', summary: '', sfc: '<template/>' }]
       }
     },
-    patterns: {
+    blocks: {
       'a/b': {
         name: 'B',
         primary: 'Default',
@@ -71,13 +71,13 @@ test('splitCatalog moves sfc, variants and guidelines and keeps everything else'
       }
     }
   })
-  assert.deepEqual(catalog.patterns['a/b'], {
+  assert.deepEqual(catalog.blocks['a/b'], {
     name: 'B',
     primary: 'Default',
     variants: [{ name: 'Empty' }],
-    file: 'catalog/patterns/a/b.json'
+    file: 'catalog/blocks/a/b.json'
   })
-  assert.deepEqual(files['catalog/patterns/a/b.json'], {
+  assert.deepEqual(files['catalog/blocks/a/b.json'], {
     sfc: '<template/>',
     guidelines: '# B',
     variants: [{ name: 'Empty', summary: 's', sfc: '<template/>' }]
@@ -91,18 +91,18 @@ test('splitCatalog moves sfc, variants and guidelines and keeps everything else'
   assert.deepEqual(files['catalog/examples/x.json'].examples[0].name, 'A')
 })
 
-test('get_pattern returns the same result from the split catalog as from one file', () => {
-  for (const id of PATTERN_IDS) {
-    assert.deepEqual(getPattern(split, id), getPattern(monolith, id), id)
-    for (const v of full.patterns[id].variants) {
+test('get_block returns the same result from the split catalog as from one file', () => {
+  for (const id of BLOCK_IDS) {
+    assert.deepEqual(getBlock(split, id), getBlock(monolith, id), id)
+    for (const v of full.blocks[id].variants) {
       assert.deepEqual(
-        getPattern(split, id, { variant: v.name }),
-        getPattern(monolith, id, { variant: v.name }),
+        getBlock(split, id, { variant: v.name }),
+        getBlock(monolith, id, { variant: v.name }),
         `${id}#${v.name}`
       )
     }
   }
-  assert.deepEqual(searchPatterns(split, 'login'), searchPatterns(monolith, 'login'))
+  assert.deepEqual(searchBlocks(split, 'login'), searchBlocks(monolith, 'login'))
 })
 
 test('get_component and get_usage_example return the same examples from the split catalog', () => {
@@ -130,4 +130,19 @@ test('list_assets returns the same names from the split catalog as from one file
   }
   assert.ok(split.assets.icons.file.startsWith('catalog/assets/'))
   assert.equal(split.assets.icons.items, undefined)
+})
+
+test('asset parts and block parts are written under kebab-case file names in catalog/', () => {
+  const { catalog, files } = splitCatalog(full)
+  assert.equal(catalog.assets.lineFigures.file, 'catalog/assets/line-figures.json')
+  assert.equal(catalog.assets.brandMarks.file, 'catalog/assets/brand-marks.json')
+  for (const file of Object.keys(files)) {
+    for (const segment of file.replace(/\.json$/, '').split('/')) {
+      assert.match(segment, /^[a-z0-9]+(-[a-z0-9]+)*$/, file)
+    }
+  }
+  assert.ok(Object.keys(catalog.blocks).length > 0)
+  assert.equal('patterns' in catalog, false)
+  assert.equal('patternAliases' in catalog, false)
+  assert.ok(Object.values(catalog.blocks).every((b) => b.file.startsWith('catalog/blocks/')))
 })

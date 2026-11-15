@@ -9,9 +9,8 @@ export const MARKET_ALIASES = {
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
   'command-palette': 'command',
-  comparison: 'compare-plans',
   'config-provider': 'webkit-provider',
-  cta: 'closing-call-to-action',
+  cta: 'call-to-action',
   datatable: 'data-table',
   'feature-grid': 'capability-grid',
   'input-otp': 'otp-input',
@@ -33,7 +32,6 @@ export const MARKET_ALIASES = {
   testimonial: 'client-quotes',
   testimonials: 'client-quotes',
   'text-field': 'input',
-  tiles: 'radio-group',
   transfer: 'transfer-list'
 }
 
@@ -81,10 +79,17 @@ export function removedNames(subpaths, migration) {
   )
 }
 
+export const RENAMED_OVERRIDES = {
+  menu: null,
+  'radio-button': 'radio-group'
+}
+
 export function buildRenamed(subpaths, retired) {
   const exported = new Set(subpaths)
   return Object.fromEntries(
     Object.entries(retired)
+      .map(([from, to]) => [from, from in RENAMED_OVERRIDES ? RENAMED_OVERRIDES[from] : to])
+      .filter(([, to]) => to !== null)
       .filter(([from, to]) => !exported.has(from) && exported.has(to))
       .sort(([a], [b]) => a.localeCompare(b))
   )

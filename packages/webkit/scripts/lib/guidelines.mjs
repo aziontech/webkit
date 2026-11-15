@@ -1,4 +1,4 @@
-import { importsOf } from './patterns.mjs'
+import { importsOf } from './blocks.mjs'
 
 export const GUIDELINE_FILE = 'guidelines.md'
 
@@ -97,18 +97,18 @@ export function primaryComponents(sfc) {
   ]
 }
 
-export function checkGuidelines(id, pattern) {
+export function checkGuidelines(id, block) {
   const errors = []
   const file = `blocks/${id}/${GUIDELINE_FILE}`
-  if (!pattern.guidelines) return [`${id}: no ${file}`]
-  const g = parseGuidelines(pattern.guidelines)
+  if (!block.guidelines) return [`${id}: no ${file}`]
+  const g = parseGuidelines(block.guidelines)
   if (!g.title) errors.push(`${file}: the "# <Block name>" title is missing`)
   if (!g.purpose) errors.push(`${file}: the purpose paragraph under the title is empty`)
   for (const name of GUIDELINE_SECTIONS) {
     if (!(name in g.sections)) errors.push(`${file}: section "## ${name}" is missing`)
     else if (!g.sections[name]) errors.push(`${file}: section "## ${name}" is empty`)
   }
-  const imported = primaryComponents(pattern.sfc)
+  const imported = primaryComponents(block.sfc)
   const importedSet = new Set(imported)
   const named = new Set()
   g.buildingBlocks.forEach((b, i) => {
@@ -123,7 +123,7 @@ export function checkGuidelines(id, pattern) {
       named.add(c)
       if (!importedSet.has(c))
         errors.push(
-          `${file}: building block "${b.letter}. ${b.title}" names \`${c}\`, which ${pattern.source} does not import`
+          `${file}: building block "${b.letter}. ${b.title}" names \`${c}\`, which ${block.source} does not import`
         )
     }
   })
@@ -132,10 +132,10 @@ export function checkGuidelines(id, pattern) {
   const missing = imported.filter((c) => !named.has(c))
   if (missing.length && g.buildingBlocks.length)
     errors.push(
-      `${file}: no building block names ${missing.map((c) => `\`${c}\``).join(', ')}, imported by ${pattern.source}`
+      `${file}: no building block names ${missing.map((c) => `\`${c}\``).join(', ')}, imported by ${block.source}`
     )
   const states = new Set(g.states)
-  for (const v of [pattern.primary, ...(pattern.variants || []).map((x) => x.name)]) {
+  for (const v of [block.primary, ...(block.variants || []).map((x) => x.name)]) {
     if (v && !states.has(v)) errors.push(`${file}: "## States" has no line for variant "${v}"`)
   }
   return errors
@@ -171,11 +171,11 @@ export function rendersToastRegion(sfc) {
   return re.test(template)
 }
 
-export function checkToastRegion(id, pattern) {
+export function checkToastRegion(id, block) {
   if (APP_ROOT_BLOCKS.test(id)) return []
   const sfcs = [
-    { name: pattern.primary, sfc: pattern.sfc },
-    ...(pattern.variants || []).map((v) => ({ name: v.name, sfc: v.sfc }))
+    { name: block.primary, sfc: block.sfc },
+    ...(block.variants || []).map((v) => ({ name: v.name, sfc: v.sfc }))
   ]
   return sfcs
     .filter((v) => rendersToastRegion(v.sfc))

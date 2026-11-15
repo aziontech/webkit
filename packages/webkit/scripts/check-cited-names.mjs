@@ -58,20 +58,20 @@ function main() {
       sources.push({ source: relative(REPO_ROOT, file), text: readFileSync(file, 'utf-8') })
     }
   }
-  for (const [id, p] of Object.entries(catalog.patterns || {})) {
-    sources.push({ source: `catalog.json#patterns/${id}`, text: (p.imports || []).join('\n') })
+  for (const [id, p] of Object.entries(catalog.blocks || {})) {
+    sources.push({ source: `catalog.json#blocks/${id}`, text: (p.imports || []).join('\n') })
   }
   const problems = unknownCitations(catalog, sources)
   if (problems.length) {
     for (const p of problems)
       process.stderr.write(`✖ ${p.source}: ${p.cited} is not in catalog.json\n`)
     process.stderr.write(
-      '\nA skill, rule or pattern names a webkit export that does not exist (renamed, removed or never published). Fix the citation or the export.\n'
+      '\nA skill, rule or block names a webkit export that does not exist (renamed, removed or never published). Fix the citation or the export.\n'
     )
     process.exit(1)
   }
   process.stdout.write(
-    `✓ every @aziontech/webkit/* cited in skills/, rules/, adapters/ and patterns exists (${sources.length} sources)\n`
+    `✓ every @aziontech/webkit/* cited in skills/, rules/, adapters/ and blocks exists (${sources.length} sources)\n`
   )
 }
 

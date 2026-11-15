@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os'
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import { readBlocks } from './lib/blocks.mjs'
+import { importsOf, readBlocks } from './lib/blocks.mjs'
 import {
   buildWorkspace,
   installConsumerApp,
@@ -15,7 +15,6 @@ import {
   runLogged,
   writeConsumerApp
 } from './lib/consumer-app.mjs'
-import { importsOf } from './lib/patterns.mjs'
 
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const ROOT = resolve(PKG, '../..')

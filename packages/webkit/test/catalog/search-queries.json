@@ -1,414 +1,414 @@
 {
-  "description": "Fixed query set for MCP search quality (M2.6). tool: patterns = search_patterns, components = search_components, suggest = suggest_component (pattern id, or component/section name). top1 is the expected first result; top3 lists every answer acceptable in the first three. A query with `pending` expects a name another v6 lane is still renaming: it is skipped until the catalog is regenerated.",
+  "description": "Fixed query set for MCP search quality (M2.6). tool: blocks = search_blocks, components = search_components, suggest = suggest_component (block id, or component/section name). top1 is the expected first result; top3 lists every answer acceptable in the first three. A query with `pending` expects a name another v6 lane is still renaming: it is skipped until the catalog is regenerated.",
   "queries": [
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "onboarding",
       "top1": "platform/account/onboarding-form",
       "top3": ["platform/account/onboarding-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "upgrade plan",
       "top1": "platform/account/change-plan-drawer",
       "top3": ["platform/account/change-plan-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "login",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "sign up",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "forgot password",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "verify email",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "manage users",
       "top1": "platform/account/users",
       "top3": ["platform/account/users"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "invite teammate",
       "top1": "platform/account/users",
       "top3": ["platform/account/users"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "api tokens",
       "top1": "platform/account/tokens",
       "top3": ["platform/account/tokens"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "audit log",
       "top1": "platform/account/activity-history",
       "top3": ["platform/account/activity-history"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "delete resource",
       "top1": "platform/delete/delete-with-confirmation",
       "top3": ["platform/delete/delete-with-confirmation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "type to confirm delete",
       "top1": "platform/delete/delete-with-confirmation",
       "top3": ["platform/delete/delete-with-confirmation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "create domain",
       "top1": "platform/create/create-in-drawer",
       "top3": ["platform/create/create-in-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "create resource page",
       "top1": "platform/create/single-page-create",
       "top3": ["platform/create/single-page-create"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "create wizard",
       "top1": "platform/create/multipage-create",
       "top3": ["platform/create/multipage-create", "platform/create/deploy-template"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "import from github",
       "top1": "platform/create/create-hub",
       "top3": ["platform/create/create-hub", "platform/create/deploy-template"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "deploy from template",
       "top1": "platform/create/deploy-template",
       "top3": ["platform/create/deploy-template"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "deploy success",
       "top1": "platform/create/deploy-success",
       "top3": ["platform/create/deploy-success"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "build logs",
       "top1": "platform/detail/deployment-logs",
       "top3": ["platform/detail/deployment-logs"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "billing",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "invoices",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "subscription",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "checkout",
       "top1": "platform/account/change-plan-drawer",
       "top3": ["platform/account/change-plan-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "account settings",
       "top1": "platform/settings/settings-form",
       "top3": ["platform/settings/settings-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "my profile",
       "top1": "platform/settings/settings-form",
       "top3": ["platform/settings/settings-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "settings page",
       "top1": "platform/edit/edit-resource",
       "top3": ["platform/edit/edit-resource", "platform/settings/settings-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "unsaved changes",
       "top1": "platform/edit/edit-resource",
       "top3": ["platform/edit/edit-resource"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "preferences page",
       "top1": "platform/settings/settings-form",
       "top3": ["platform/settings/settings-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "metrics dashboard",
       "top1": "platform/dashboard/analytics-dashboard",
       "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "traffic analytics",
       "top1": "platform/dashboard/analytics-dashboard",
       "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "security dashboard",
       "top1": "platform/dashboard/security-dashboard",
       "top3": ["platform/dashboard/security-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "alerts",
       "top1": "platform/dashboard/alerts-dashboard",
       "top3": ["platform/dashboard/alerts-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "home page",
       "top1": "platform/dashboard/home-dashboard",
       "top3": ["platform/dashboard/home-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "uptime monitoring",
       "top1": "platform/dashboard/service-monitoring-dashboard",
       "top3": ["platform/dashboard/service-monitoring-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "cost breakdown",
       "top1": "platform/dashboard/composition-dashboard",
       "top3": ["platform/dashboard/composition-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "web vitals",
       "top1": "platform/dashboard/health-score-dashboard",
       "top3": ["platform/dashboard/health-score-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "empty state",
       "top1": "platform/states/first-use",
       "top3": ["platform/states/first-use"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "loading skeleton",
       "top1": "platform/states/page-wires",
       "top3": ["platform/states/page-wires"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "form validation errors",
       "top1": "platform/states/form-validation",
       "top3": ["platform/states/form-validation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "drag and drop upload",
       "top1": "platform/states/project-intake",
       "top3": ["platform/states/project-intake"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "object storage browser",
       "top1": "platform/view/file-browser",
       "top3": ["platform/view/file-browser"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "sql editor",
       "top1": "platform/view/query-editor",
       "top3": ["platform/view/query-editor"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "log explorer",
       "top1": "platform/view/split-view",
       "top3": ["platform/view/split-view"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "edge function editor",
       "top1": "platform/edit/function-editor",
       "top3": ["platform/edit/function-editor"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "environment variables",
       "top1": "platform/edit/variables",
       "top3": ["platform/edit/variables"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "rules engine",
       "top1": "platform/edit/rule-builder",
       "top3": ["platform/edit/rule-builder"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "dns records",
       "top1": "platform/detail/record-table",
       "top3": ["platform/detail/record-table"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "go-live checklist",
       "top1": "platform/detail/production-checklist",
       "top3": ["platform/detail/production-checklist"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "get started",
       "top1": "platform/detail/get-started",
       "top3": ["platform/detail/get-started"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "resource overview",
       "top1": "platform/detail/details-page",
       "top3": ["platform/detail/details-page"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "card grid",
       "top1": "platform/view/card-view",
       "top3": ["platform/view/card-view"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "app shell with sidebar",
       "top1": "shells/console",
       "top3": ["shells/console"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "docs layout",
       "top1": "shells/documentation",
       "top3": ["shells/documentation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "landing page layout",
       "top1": "shells/website",
       "top3": ["shells/website"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "console header",
       "top1": "shells/console",
       "top3": ["shells/console"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "async job status",
       "top1": "platform/states/async-submit",
       "top3": ["platform/states/async-submit"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "nested drawer",
       "top1": "platform/create/create-in-drawer",
       "top3": ["platform/create/create-in-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "cadastro",
       "top1": "platform/auth",
       "top3": ["platform/auth", "platform/account/onboarding-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "criar",
       "top1": "platform/create/single-page-create",
@@ -420,469 +420,469 @@
       ]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "listagem",
       "top1": "platform/view/table-view",
       "top3": ["platform/view/table-view"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "painel",
       "top1": "platform/dashboard/analytics-dashboard",
       "top3": ["platform/dashboard/analytics-dashboard", "platform/dashboard/home-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "assinatura",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "fazer upgrade do plano",
       "top1": "platform/account/change-plan-drawer",
       "top3": ["platform/account/change-plan-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "entrar",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "excluir",
       "top1": "platform/delete/delete-with-confirmation",
       "top3": ["platform/delete/delete-with-confirmation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "esqueci minha senha",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "tela de cadastro",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "primeiro acesso",
       "top1": "platform/dashboard/home-dashboard",
       "top3": ["platform/dashboard/home-dashboard", "platform/account/onboarding-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "configurações da conta",
       "top1": "platform/settings/settings-form",
       "top3": ["platform/settings/settings-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "lista de usuários",
       "top1": "platform/account/users",
       "top3": ["platform/account/users"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "convidar membro",
       "top1": "platform/account/users",
       "top3": ["platform/account/users"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "variáveis de ambiente",
       "top1": "platform/edit/variables",
       "top3": ["platform/edit/variables"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "editor de código",
       "top1": "platform/edit/function-editor",
       "top3": ["platform/edit/function-editor"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "registros dns",
       "top1": "platform/detail/record-table",
       "top3": ["platform/detail/record-table"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "estado vazio",
       "top1": "platform/states/first-use",
       "top3": ["platform/states/first-use"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "carregando",
       "top1": "platform/states/page-wires",
       "top3": ["platform/states/page-wires"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "métricas",
       "top1": "platform/dashboard/analytics-dashboard",
       "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "faturas",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "trocar cartão",
       "top1": "platform/account/payment-method-card",
       "top3": ["platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "criar domínio",
       "top1": "platform/create/create-in-drawer",
       "top3": ["platform/create/create-in-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "novo projeto",
       "top1": "platform/create/create-hub",
       "top3": ["platform/create/create-hub", "platform/create/deploy-template"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "assistente de criação",
       "top1": "platform/create/multipage-create",
       "top3": ["platform/create/multipage-create"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "logs de build",
       "top1": "platform/detail/deployment-logs",
       "top3": ["platform/detail/deployment-logs"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "painel de segurança",
       "top1": "platform/dashboard/security-dashboard",
       "top3": ["platform/dashboard/security-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "alterações não salvas",
       "top1": "platform/edit/edit-resource",
       "top3": ["platform/edit/edit-resource"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "tokens de api",
       "top1": "platform/account/tokens",
       "top3": ["platform/account/tokens"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "histórico de atividades",
       "top1": "platform/account/activity-history",
       "top3": ["platform/account/activity-history"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "menu lateral",
       "top1": "shells/console",
       "top3": ["shells/console"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "validação de formulário",
       "top1": "platform/states/form-validation",
       "top3": ["platform/states/form-validation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "upload de arquivos",
       "top1": "platform/states/project-intake",
       "top3": ["platform/states/project-intake", "platform/view/file-browser"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "boas-vindas",
       "top1": "platform/dashboard/home-dashboard",
       "top3": ["platform/dashboard/home-dashboard", "platform/account/onboarding-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "deploy concluído",
       "top1": "platform/create/deploy-success",
       "top3": ["platform/create/deploy-success"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "iniciar sesión",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "registrarse",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "crear cuenta",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "olvidé mi contraseña",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "lista de usuarios",
       "top1": "platform/account/users",
       "top3": ["platform/account/users"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "eliminar recurso",
       "top1": "platform/delete/delete-with-confirmation",
       "top3": ["platform/delete/delete-with-confirmation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "panel de métricas",
       "top1": "platform/dashboard/analytics-dashboard",
       "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "facturación",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "cambiar plan",
       "top1": "platform/account/change-plan-drawer",
       "top3": ["platform/account/change-plan-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "mejorar plan",
       "top1": "platform/account/change-plan-drawer",
       "top3": ["platform/account/change-plan-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "configuración de la cuenta",
       "top1": "platform/settings/settings-form",
       "top3": ["platform/settings/settings-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "variables de entorno",
       "top1": "platform/edit/variables",
       "top3": ["platform/edit/variables"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "editor de consultas sql",
       "top1": "platform/view/query-editor",
       "top3": ["platform/view/query-editor"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "estado vacío",
       "top1": "platform/states/first-use",
       "top3": ["platform/states/first-use"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "crear dominio",
       "top1": "platform/create/create-in-drawer",
       "top3": ["platform/create/create-in-drawer"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "zona dns",
       "top1": "platform/detail/record-table",
       "top3": ["platform/detail/record-table"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "incorporación de usuarios",
       "top1": "platform/account/onboarding-form",
       "top3": ["platform/account/onboarding-form"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "suscripción",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "cargando",
       "top1": "platform/states/page-wires",
       "top3": ["platform/states/page-wires"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "registro de auditoría",
       "top1": "platform/account/activity-history",
       "top3": ["platform/account/activity-history"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "monitoreo",
       "top1": "platform/dashboard/service-monitoring-dashboard",
       "top3": ["platform/dashboard/service-monitoring-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "panel de seguridad",
       "top1": "platform/dashboard/security-dashboard",
       "top3": ["platform/dashboard/security-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "asistente de creación",
       "top1": "platform/create/multipage-create",
       "top3": ["platform/create/multipage-create"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "remove user",
       "top1": "platform/account/users",
       "top3": ["platform/account/users", "platform/delete/delete-with-confirmation"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "signup page",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "nova variável",
       "top1": "platform/edit/variables",
       "top3": ["platform/edit/variables"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "tela inicial",
       "top1": "platform/dashboard/home-dashboard",
       "top3": ["platform/dashboard/home-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "excluir domínio",
       "top1": "platform/delete/delete-with-confirmation",
       "top3": ["platform/delete/delete-with-confirmation", "platform/detail/attached-resources"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "crear proyecto",
       "top1": "platform/create/create-hub",
       "top3": ["platform/create/create-hub", "platform/create/deploy-template"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "panel de alertas",
       "top1": "platform/dashboard/alerts-dashboard",
       "top3": ["platform/dashboard/alerts-dashboard"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "pantalla de registro",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "cambiar contraseña",
       "top1": "platform/auth",
       "top3": ["platform/auth"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "página de facturación",
       "top1": "platform/account/billing",
       "top3": ["platform/account/billing", "platform/account/payment-method-card"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "pantalla de inicio",
       "top1": "platform/dashboard/home-dashboard",
@@ -1312,42 +1312,42 @@
       "top3": ["button"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "product page",
       "top1": "shells/website",
       "top3": ["shells/website"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "solution page",
       "top1": "shells/website",
       "top3": ["shells/website"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "landing page",
       "top1": "shells/website",
       "top3": ["shells/website"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "en",
       "query": "marketing page",
       "top1": "shells/website",
       "top3": ["shells/website"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "pt-BR",
       "query": "página de produto",
       "top1": "shells/website",
       "top3": ["shells/website"]
     },
     {
-      "tool": "patterns",
+      "tool": "blocks",
       "lang": "es",
       "query": "página de solución",
       "top1": "shells/website",

@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 
-import { getPattern } from '../catalog/queries.js'
+import { getBlock } from '../catalog/queries.js'
 import { PACKAGE_NAME } from './source.js'
 import { unifiedDiff } from './text-diff.js'
 
@@ -69,7 +69,7 @@ export function resolveBlock(webkit, catalog, id, { variant } = {}) {
   let wantedVariant = variant
   let note = null
   if (!resolvedId) {
-    const hit = getPattern(catalog, key)
+    const hit = getBlock(catalog, key)
     if (!hit.found) {
       return {
         ok: false,
@@ -80,8 +80,8 @@ export function resolveBlock(webkit, catalog, id, { variant } = {}) {
     resolvedId = hit.id
     if (hit.movedFrom) {
       note = hit.note
-      const moved = variant ? getPattern(catalog, key, { variant }) : hit
-      if (moved.found && moved.variant && moved.variant !== catalog.patterns[hit.id]?.primary) {
+      const moved = variant ? getBlock(catalog, key, { variant }) : hit
+      if (moved.found && moved.variant && moved.variant !== catalog.blocks[hit.id]?.primary) {
         wantedVariant = moved.variant
       }
     }

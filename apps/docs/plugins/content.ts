@@ -183,7 +183,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
     states: block.states,
     dir: block.dir,
     uses: (
-      ((catalog.patterns as Record<string, { imports?: string[] }>)?.[block.id]?.imports ??
+      ((catalog.blocks as Record<string, { imports?: string[] }>)?.[block.id]?.imports ??
         []) as string[]
     ).map((path) => path.replace('@aziontech/webkit/', '')),
     layout: block.preview?.layout ?? 'padded',
@@ -491,6 +491,6 @@ export function buildAssets() {
     illustrations: assetItems<{ name: string; canvas?: string }>('illustrations').map(
       (item) => item.name
     ),
-    lineFigures: assetItems<{ name: string; label: string }>('lineFigures')
+    lineFigures: assetItems<{ name: string; label: string }>('line-figures')
   }
 }

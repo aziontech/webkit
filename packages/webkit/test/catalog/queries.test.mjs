@@ -21,8 +21,8 @@ const {
   getUsageExample,
   validateUsage,
   pascalCase,
-  searchPatterns,
-  getPattern
+  searchBlocks,
+  getBlock
 } = await import('../../src/catalog/queries.js')
 
 _resetCatalogCache()
@@ -293,7 +293,7 @@ test('validateUsage with a component flags classes outside the layout utilities'
   assert.deepEqual(problem.classes, ['mt-4'])
 })
 
-test('searchPatterns ranks platform/auth first for login and sign-up intents in EN and PT', () => {
+test('searchBlocks ranks platform/auth first for login and sign-up intents in EN and PT', () => {
   for (const q of [
     'login',
     'sign in',
@@ -302,18 +302,18 @@ test('searchPatterns ranks platform/auth first for login and sign-up intents in 
     'forgot password',
     'criar conta'
   ]) {
-    const res = searchPatterns(catalog, q)
+    const res = searchBlocks(catalog, q)
     assert.equal(res.matches[0].id, 'platform/auth', q)
   }
 })
 
-test('searchPatterns with an empty query lists every pattern', () => {
-  const res = searchPatterns(catalog, '')
-  assert.equal(res.count, Object.keys(catalog.patterns).length)
+test('searchBlocks with an empty query lists every block', () => {
+  const res = searchBlocks(catalog, '')
+  assert.equal(res.count, Object.keys(catalog.blocks).length)
 })
 
-test('getPattern returns the SFC, components, skills and steps; variants by name', () => {
-  const p = getPattern(catalog, 'platform/auth')
+test('getBlock returns the SFC, components, skills and steps; variants by name', () => {
+  const p = getBlock(catalog, 'platform/auth')
   assert.equal(p.found, true)
   assert.equal(p.variant, 'Login')
   assert.match(p.sfc, /<script setup( lang="ts")?>/)
@@ -321,85 +321,85 @@ test('getPattern returns the SFC, components, skills and steps; variants by name
   assert.ok(p.components.includes('Input'))
   assert.deepEqual(p.steps, ['email', 'password', 'reset', 'sent', 'new-password'])
   assert.ok(p.skills.includes('webkit-errors'))
-  const v = getPattern(catalog, 'platform/auth', { variant: 'IncorrectCredentials' })
+  const v = getBlock(catalog, 'platform/auth', { variant: 'IncorrectCredentials' })
   assert.equal(v.variant, 'IncorrectCredentials')
   assert.match(v.sfc, /Incorrect email or password/)
-  assert.equal(getPattern(catalog, 'platform/auth', { variant: 'SignUp' }).variant, 'SignUp')
-  assert.equal(getPattern(catalog, 'auth').id, 'platform/auth')
-  assert.equal(getPattern(catalog, 'nope-nope').found, false)
+  assert.equal(getBlock(catalog, 'platform/auth', { variant: 'SignUp' }).variant, 'SignUp')
+  assert.equal(getBlock(catalog, 'auth').id, 'platform/auth')
+  assert.equal(getBlock(catalog, 'nope-nope').found, false)
 })
 
-test('getPattern returns the guidelines and tells the agent to read them first', () => {
-  const p = getPattern(catalog, 'platform/view/table-view')
+test('getBlock returns the guidelines and tells the agent to read them first', () => {
+  const p = getBlock(catalog, 'platform/view/table-view')
   assert.match(p.guidelines, /^# Table view/)
   for (const section of ['## When to use', '## Building blocks', '## Copy', '## Accessibility'])
     assert.ok(p.guidelines.includes(section), section)
   assert.match(p.howToUse, /^Read `guidelines` first/)
-  const v = getPattern(catalog, 'platform/view/table-view', { variant: 'Empty' })
+  const v = getBlock(catalog, 'platform/view/table-view', { variant: 'Empty' })
   assert.equal(v.guidelines, p.guidelines)
 })
 
-test('searchPatterns cards carry the guidelines purpose as guidelinesSummary', () => {
-  const card = searchPatterns(catalog, 'resource list').matches.find(
+test('searchBlocks cards carry the guidelines purpose as guidelinesSummary', () => {
+  const card = searchBlocks(catalog, 'resource list').matches.find(
     (m) => m.id === 'platform/view/table-view'
   )
   assert.ok(card.guidelinesSummary.length > 40)
   assert.equal(card.guidelinesSummary.includes('##'), false)
 })
 
-test('a pattern without guidelines keeps the plain howToUse and no guidelines fields', () => {
+test('a block without guidelines keeps the plain howToUse and no guidelines fields', () => {
   const bare = {
     available: true,
-    patternAliases: {},
-    patterns: {
+    blockAliases: {},
+    blocks: {
       'platform/x': { name: 'X', primary: 'Default', sfc: '<template />', variants: [] }
     },
-    pattern(id) {
-      return this.patterns[id]
+    block(id) {
+      return this.blocks[id]
     }
   }
-  const p = getPattern(bare, 'platform/x')
+  const p = getBlock(bare, 'platform/x')
   assert.equal('guidelines' in p, false)
   assert.match(p.howToUse, /^Copy this SFC/)
-  assert.equal('guidelinesSummary' in searchPatterns(bare, '').matches[0], false)
+  assert.equal('guidelinesSummary' in searchBlocks(bare, '').matches[0], false)
 })
 
-test('getPattern resolves a v6 block id through catalog.patternAliases with a note', () => {
-  const moved = getPattern(catalog, 'platform/lists/table-view')
+test('getBlock resolves a v6 block id through catalog.blockAliases with a note', () => {
+  const moved = getBlock(catalog, 'platform/lists/table-view')
   assert.equal(moved.found, true)
   assert.equal(moved.id, 'platform/view/table-view')
   assert.equal(moved.movedFrom, 'platform/lists/table-view')
   assert.match(moved.note, /platform\/view\/table-view/)
   assert.equal(
-    getPattern(catalog, 'platform/lists/table-view', { variant: 'Empty' }).variant,
+    getBlock(catalog, 'platform/lists/table-view', { variant: 'Empty' }).variant,
     'Empty'
   )
 
-  const merged = getPattern(catalog, 'platform/forms/save-per-group')
+  const merged = getBlock(catalog, 'platform/forms/save-per-group')
   assert.equal(merged.id, 'platform/settings/settings-form')
   assert.equal(merged.variant, 'SavePerGroup')
   assert.equal(
-    getPattern(catalog, 'platform/forms/save-per-group', { variant: 'SavingOneGroup' }).variant,
+    getBlock(catalog, 'platform/forms/save-per-group', { variant: 'SavingOneGroup' }).variant,
     'SavingOneGroup'
   )
   assert.equal(
-    getPattern(catalog, 'platform/forms/sectioned-form', { variant: 'Submitted' }).variant,
+    getBlock(catalog, 'platform/forms/sectioned-form', { variant: 'Submitted' }).variant,
     'ImportFromGit'
   )
-  assert.equal(getPattern(catalog, 'platform/forms/save-all-groups').variant, 'SaveAll')
-  assert.equal(getPattern(catalog, 'details-page-with-tabs').id, 'platform/detail/details-page')
-  assert.equal(getPattern(catalog, 'platform/auth').note, undefined)
+  assert.equal(getBlock(catalog, 'platform/forms/save-all-groups').variant, 'SaveAll')
+  assert.equal(getBlock(catalog, 'details-page-with-tabs').id, 'platform/detail/details-page')
+  assert.equal(getBlock(catalog, 'platform/auth').note, undefined)
 
-  for (const [from, to] of Object.entries(catalog.patternAliases)) {
+  for (const [from, to] of Object.entries(catalog.blockAliases)) {
     const [id, variant] = to.split('#')
     const [oldId, oldVariant] = from.split('#')
-    const p = getPattern(catalog, oldId, oldVariant ? { variant: oldVariant } : {})
+    const p = getBlock(catalog, oldId, oldVariant ? { variant: oldVariant } : {})
     assert.equal(p.id, id, from)
     if (variant) assert.equal(p.variant, variant, from)
   }
 })
 
-test('searchPatterns lands each task on its v6 category block', () => {
+test('searchBlocks lands each task on its v6 category block', () => {
   for (const [q, id] of [
     ['delete confirmation', 'platform/delete/delete-with-confirmation'],
     ['create in drawer', 'platform/create/create-in-drawer'],
@@ -409,14 +409,14 @@ test('searchPatterns lands each task on its v6 category block', () => {
     ['save per card', 'platform/settings/settings-form'],
     ['account settings', 'platform/settings/settings-form']
   ]) {
-    assert.equal(searchPatterns(catalog, q).matches[0].id, id, q)
+    assert.equal(searchBlocks(catalog, q).matches[0].id, id, q)
   }
 })
 
-test('suggestComponent returns the pattern first for a screen and the section for a marketing band', () => {
+test('suggestComponent returns the block first for a screen and the section for a marketing band', () => {
   const screen = suggestComponent(catalog, 'login page')
-  assert.equal(screen.recommendation, 'pattern')
-  assert.equal(screen.pattern.id, 'platform/auth')
+  assert.equal(screen.recommendation, 'block')
+  assert.equal(screen.block.id, 'platform/auth')
   const band = suggestComponent(catalog, 'pricing page')
   assert.equal(band.recommendation, 'section')
   assert.equal(band.best.name, 'pricing-plans')
@@ -475,7 +475,7 @@ test('searchComponents ranks the aliased component first and marks it', () => {
     ['modal', 'dialog'],
     ['sheet', 'drawer'],
     ['message', 'alert'],
-    ['tiles', catalog.aliases.tiles]
+    ['cta', 'call-to-action']
   ]) {
     const res = searchComponents(catalog, query)
     assert.equal(res.matches[0].name, name, `${query} should resolve to ${name}`)
@@ -485,12 +485,12 @@ test('searchComponents ranks the aliased component first and marks it', () => {
   assert.ok(plain.matches.every((m) => m.note === undefined))
 })
 
-test('suggestComponent answers an alias with the current component, not a pattern', () => {
+test('suggestComponent answers an alias with the current component, not a block', () => {
   for (const [need, name] of [
     ['modal', 'dialog'],
     ['segmented control', 'toggle-group'],
     ['paginator', 'pagination'],
-    ['tiles', catalog.aliases.tiles],
+    ['sheet', 'drawer'],
     ['message', 'alert']
   ]) {
     const res = suggestComponent(catalog, need)
@@ -619,7 +619,7 @@ test('get_component points a consuming component at its asset list', () => {
 
 test('a marketing page query ranks the website shell and the page sections first', () => {
   for (const q of ['product page', 'solution page', 'landing page', 'página de produto']) {
-    assert.equal(searchPatterns(catalog, q).matches[0].id, 'shells/website', q)
+    assert.equal(searchBlocks(catalog, q).matches[0].id, 'shells/website', q)
     const sections = searchComponents(catalog, q).matches
     assert.ok(sections.length > 0, q)
     assert.ok(
@@ -627,5 +627,5 @@ test('a marketing page query ranks the website shell and the page sections first
       `${q}: ${sections.map((m) => m.name).join(', ')}`
     )
   }
-  assert.equal(searchPatterns(catalog, 'docs landing page').matches[0].id, 'shells/documentation')
+  assert.equal(searchBlocks(catalog, 'docs landing page').matches[0].id, 'shells/documentation')
 })

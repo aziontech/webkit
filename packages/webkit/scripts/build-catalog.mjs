@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
 import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
-import { readBlocks, readExamples } from './lib/blocks.mjs'
+import { kebab, readBlocks, readExamples } from './lib/blocks.mjs'
 import {
   buildLlms,
   catalogView,
@@ -23,7 +23,7 @@ import {
 } from './lib/catalog-references.mjs'
 import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
-import { iconKeywords } from '../../icons/scripts/icon-keywords.mjs'
+import { iconKeywords } from '../../icons/scripts/lib/icon-keywords.mjs'
 import {
   animate as themeAnimate,
   useWhen as themeAnimateUseWhen
@@ -36,7 +36,7 @@ const PKG_PATH = resolve(REPO_ROOT, 'packages/webkit/package.json')
 const SPECS_DIR = resolve(REPO_ROOT, '.specs')
 const OUT_PATH = resolve(REPO_ROOT, 'packages/webkit/catalog.json')
 const PARTS_DIR = resolve(REPO_ROOT, 'packages/webkit/catalog')
-const PATTERN_HEAVY_KEYS = ['sfc', 'variants', 'guidelines']
+const BLOCK_HEAVY_KEYS = ['sfc', 'variants', 'guidelines']
 const COMPONENT_PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'related', 'bestPractices']
 const V6_MIGRATION = resolve(PKG_ROOT, 'src/cli/migrations/v6.json')
 const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
@@ -458,8 +458,8 @@ export async function build() {
     imports[subpath] = entry
   }
 
-  const patterns = readBlocks(PKG_ROOT)
-  const patternAliases = readPatternAliases(patterns)
+  const blocks = readBlocks(PKG_ROOT)
+  const blockAliases = readBlockAliases(blocks)
   const examples = readExamples(PKG_ROOT, subpathSet)
   for (const [subpath, list] of Object.entries(examples)) {
     if (imports[subpath]) imports[subpath].examples = list
@@ -478,8 +478,8 @@ export async function build() {
     removed: removedNames(subpaths, v6Migration),
     imports,
     assets: buildAssets(imports),
-    patterns,
-    patternAliases
+    blocks,
+    blockAliases
   }
 }
 
@@ -690,13 +690,13 @@ export function isIconProp(prop) {
   return /^(icon|[a-z]+Icon)$/.test(prop.name) && /string/.test(prop.type)
 }
 
-function readPatternAliases(patterns) {
+function readBlockAliases(blocks) {
   const aliases = existsSync(V6_BLOCKS) ? JSON.parse(readFileSync(V6_BLOCKS, 'utf-8')) : {}
   const broken = []
   for (const [from, to] of Object.entries(aliases)) {
     const [id, variant] = to.split('#')
-    const p = patterns[id]
-    if (patterns[from.split('#')[0]]) broken.push(`${from}: old id still names a block`)
+    const p = blocks[id]
+    if (blocks[from.split('#')[0]]) broken.push(`${from}: old id still names a block`)
     else if (!p) broken.push(`${from} -> ${to}: no block "${id}"`)
     else if (variant && variant !== p.primary && !p.variants.some((v) => v.name === variant))
       broken.push(`${from} -> ${to}: block "${id}" has no variant "${variant}"`)
@@ -754,23 +754,23 @@ function buildTokens() {
 
 export function splitCatalog(full) {
   const files = {}
-  const patterns = {}
-  for (const [id, p] of Object.entries(full.patterns)) {
-    const file = `catalog/patterns/${id}.json`
+  const blocks = {}
+  for (const [id, p] of Object.entries(full.blocks)) {
+    const file = `catalog/blocks/${id}.json`
     const part = {}
     const meta = {}
     for (const [k, v] of Object.entries(p)) {
-      if (PATTERN_HEAVY_KEYS.includes(k)) part[k] = v
+      if (BLOCK_HEAVY_KEYS.includes(k)) part[k] = v
       else meta[k] = v
     }
     meta.variants = (p.variants || []).map((v) => ({ name: v.name }))
     meta.file = file
-    patterns[id] = meta
+    blocks[id] = meta
     files[file] = part
   }
   const assets = {}
   for (const [kind, { items, ...meta }] of Object.entries(full.assets || {})) {
-    const file = `${ASSET_PART_DIR}/${kind}.json`
+    const file = `${ASSET_PART_DIR}/${kebab(kind)}.json`
     files[file] = { items }
     assets[kind] = { ...meta, file }
   }
@@ -795,7 +795,7 @@ export function splitCatalog(full) {
     }
     imports[subpath] = meta
   }
-  return { catalog: { ...full, imports, assets, patterns }, files }
+  return { catalog: { ...full, imports, assets, blocks }, files }
 }
 
 const serialize = (value) => JSON.stringify(value, null, 1) + '\n'
@@ -854,7 +854,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   if (stale.length) {
     process.stderr.write(
       `${process.argv.includes('--check') ? '✖' : '⚠'} ${stale.length} stale reference(s) in spec Purpose / When to use / When NOT to use / Related:\n  ${stale.join('\n  ')}\n` +
-        'Name an export, a catalog alias or a pattern id; fix the text in .specs/<name>.md.\n'
+        'Name an export, a catalog alias or a block id; fix the text in .specs/<name>.md.\n'
     )
     if (process.argv.includes('--check')) process.exit(1)
   }
@@ -862,7 +862,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     const drift = checkParts(catalog, files)
     if (drift.length) {
       process.stderr.write(
-        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/webkit catalog:build\n`
+        `✖ catalog out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: pnpm --filter @aziontech/webkit build:catalog\n`
       )
       process.exit(1)
     }
@@ -879,6 +879,6 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   const llms = writeLlms()
   const componentCount = Object.values(catalog.imports).filter((e) => e.kind === 'component').length
   process.stdout.write(
-    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.patterns).length} patterns @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
+    `catalog.json written: ${Object.keys(catalog.imports).length} exports (${componentCount} components), ${Object.keys(catalog.blocks).length} blocks @ ${catalog.webkitVersion}; ${Object.keys(files).length} files in catalog/\n${llmsSummary(llms)}\n`
   )
 }

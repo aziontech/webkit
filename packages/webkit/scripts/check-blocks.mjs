@@ -10,22 +10,22 @@ import { checkGuidelines, checkToastRegion, primaryComponents } from './lib/guid
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
-const BASELINE_PATH = resolve(SCRIPT_DIR, 'patterns-lint-baseline.json')
-const PENDING_PATH = resolve(SCRIPT_DIR, 'guidelines-pending.json')
+const BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-baseline.json')
+const PENDING_PATH = resolve(SCRIPT_DIR, 'guidelines-baseline.json')
 const SKILL_DIRS = [resolve(REPO_ROOT, 'skills')]
 
 export function skillExists(name, dirs = SKILL_DIRS) {
   return dirs.some((dir) => existsSync(join(dir, name, 'SKILL.md')))
 }
 
-export function checkPatternMetadata(patterns, blockIds) {
+export function checkBlockMetadata(catalogBlocks, blockIds) {
   const errors = []
   const warnings = []
   for (const id of blockIds) {
-    if (!patterns[id])
-      errors.push(`blocks/${id}: no entry in catalog.json#patterns (run catalog:build)`)
+    if (!catalogBlocks[id])
+      errors.push(`blocks/${id}: no entry in catalog.json#blocks (run build:catalog)`)
   }
-  for (const [id, p] of Object.entries(patterns)) {
+  for (const [id, p] of Object.entries(catalogBlocks)) {
     if (!Array.isArray(p.intents) || p.intents.length === 0) {
       warnings.push(`${id}: "intents" is missing or empty in blocks/${id}/block.json`)
     }
@@ -36,9 +36,9 @@ export function checkPatternMetadata(patterns, blockIds) {
   return { errors, warnings }
 }
 
-export function checkSummaryComponents(patterns) {
+export function checkSummaryComponents(blocks) {
   const errors = []
-  for (const [id, p] of Object.entries(patterns)) {
+  for (const [id, p] of Object.entries(blocks)) {
     const imported = new Set(
       [p.sfc, ...(p.variants || []).map((v) => v.sfc)].flatMap((sfc) => primaryComponents(sfc))
     )
@@ -53,22 +53,22 @@ export function checkSummaryComponents(patterns) {
   return errors
 }
 
-export function checkToastRegions(patterns) {
-  return Object.entries(patterns).flatMap(([id, p]) => checkToastRegion(id, p))
+export function checkToastRegions(blocks) {
+  return Object.entries(blocks).flatMap(([id, p]) => checkToastRegion(id, p))
 }
 
-export function checkPatternGuidelines(patterns, { pending = [], only = [] } = {}) {
+export function checkBlockGuidelines(blocks, { pending = [], only = [] } = {}) {
   const errors = []
   const notes = []
   const waiting = new Set(pending)
   for (const id of pending) {
-    if (!patterns[id]) errors.push(`scripts/guidelines-pending.json: "${id}" is not a block`)
+    if (!blocks[id]) errors.push(`scripts/guidelines-baseline.json: "${id}" is not a block`)
   }
-  for (const [id, p] of Object.entries(patterns)) {
+  for (const [id, p] of Object.entries(blocks)) {
     if (only.length && !only.some((prefix) => id.startsWith(prefix))) continue
     if (waiting.has(id)) {
       if (p.guidelines)
-        notes.push(`${id} has guidelines.md: remove it from scripts/guidelines-pending.json`)
+        notes.push(`${id} has guidelines.md: remove it from scripts/guidelines-baseline.json`)
       else continue
     }
     errors.push(...checkGuidelines(id, p))
@@ -118,11 +118,11 @@ async function consumerLinter() {
   return (sfc, filename) => linter.verify(sfc, config, { filename })
 }
 
-export async function lintPatterns(patterns) {
+export async function lintBlocks(blocks) {
   const lint = await consumerLinter()
   const counts = {}
   const samples = {}
-  for (const [id, p] of Object.entries(patterns)) {
+  for (const [id, p] of Object.entries(blocks)) {
     for (const variant of [{ name: p.primary, sfc: p.sfc }, ...(p.variants || [])]) {
       const messages = lint(variant.sfc, `${id.replace(/\//g, '__')}__${variant.name}.vue`)
       for (const m of messages) {
@@ -150,11 +150,11 @@ export function compareToBaseline(counts, baseline) {
 async function main() {
   const { update, warnIntents, only } = parseCheckArgs(process.argv.slice(2))
   const catalog = JSON.parse(readFileSync(CATALOG_PATH, 'utf-8'))
-  const patterns = catalog.patterns || {}
+  const catalogBlocks = catalog.blocks || {}
   const blocks = readBlocks(resolve(SCRIPT_DIR, '..'))
-  const metadata = checkPatternMetadata(patterns, Object.keys(blocks))
+  const metadata = checkBlockMetadata(catalogBlocks, Object.keys(blocks))
   const pending = existsSync(PENDING_PATH) ? JSON.parse(readFileSync(PENDING_PATH, 'utf-8')) : []
-  const guidelines = checkPatternGuidelines(blocks, { pending, only })
+  const guidelines = checkBlockGuidelines(blocks, { pending, only })
   for (const n of guidelines.notes) process.stdout.write(`ℹ ${n}\n`)
   const errors = [
     ...(warnIntents ? metadata.errors : [...metadata.errors, ...metadata.warnings]),
@@ -166,13 +166,11 @@ async function main() {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
   }
 
-  const { counts, samples } = await lintPatterns(blocks)
+  const { counts, samples } = await lintBlocks(blocks)
   if (update) {
     const sorted = Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)))
     writeFileSync(BASELINE_PATH, JSON.stringify(sorted, null, 2) + '\n', 'utf-8')
-    process.stdout.write(
-      `patterns-lint-baseline.json updated (${Object.keys(sorted).length} patterns)\n`
-    )
+    process.stdout.write(`blocks-baseline.json updated (${Object.keys(sorted).length} blocks)\n`)
   }
   const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf-8')) : {}
   const regressions = update ? [] : compareToBaseline(counts, baseline)
@@ -185,22 +183,22 @@ async function main() {
   for (const e of errors) process.stderr.write(`✖ ${e}\n`)
   for (const r of regressions) {
     process.stderr.write(
-      `✖ ${r.id}: ${r.count} × ${r.rule} in the pattern SFC (baseline allows ${r.allowed}). ${samples[r.id] ?? ''}\n`
+      `✖ ${r.id}: ${r.count} × ${r.rule} in the block SFC (baseline allows ${r.allowed}). ${samples[r.id] ?? ''}\n`
     )
   }
   if (fixed.length && !update) {
     process.stdout.write(
-      `ℹ fewer lint findings than the baseline — run \`pnpm --filter @aziontech/webkit run patterns:check --update\` to lock in: ${fixed.join(', ')}\n`
+      `ℹ fewer lint findings than the baseline — run \`pnpm --filter @aziontech/webkit run check:blocks --update\` to lock in: ${fixed.join(', ')}\n`
     )
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a pattern the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, and no Toaster outside an app root (blocks/shells).\n'
+      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, and no Toaster outside an app root (blocks/shells).\n'
     )
     process.exit(1)
   }
   process.stdout.write(
-    `✓ ${Object.keys(patterns).length} patterns: intents, skills, guidelines (${pending.length} pending) and consumer lint (baseline for ${Object.keys(baseline).length} legacy patterns)\n`
+    `✓ ${Object.keys(catalogBlocks).length} blocks: intents, skills, guidelines (${pending.length} pending) and consumer lint (baseline for ${Object.keys(baseline).length} legacy blocks)\n`
   )
 }
 

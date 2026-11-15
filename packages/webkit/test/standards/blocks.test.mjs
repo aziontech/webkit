@@ -14,14 +14,20 @@ import { join } from 'node:path'
 import test from 'node:test'
 
 import {
-  checkPatternGuidelines,
-  checkPatternMetadata,
+  checkBlockGuidelines,
+  checkBlockMetadata,
   checkSummaryComponents,
   checkToastRegions,
   compareToBaseline,
   parseCheckArgs
-} from '../../scripts/check-patterns.mjs'
-import { readBlocks, readExamples } from '../../scripts/lib/blocks.mjs'
+} from '../../scripts/check-blocks.mjs'
+import {
+  blockIdFromTitle,
+  importsOf,
+  kebab,
+  readBlocks,
+  readExamples
+} from '../../scripts/lib/blocks.mjs'
 import {
   checkGuidelines,
   checkToastRegion,
@@ -30,11 +36,10 @@ import {
   primaryComponents,
   rendersToastRegion
 } from '../../scripts/lib/guidelines.mjs'
-import { importsOf, kebab, patternIdFromTitle } from '../../scripts/lib/patterns.mjs'
 
 const catalog = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf-8'))
 const pending = JSON.parse(
-  readFileSync(new URL('../../scripts/guidelines-pending.json', import.meta.url), 'utf-8')
+  readFileSync(new URL('../../scripts/guidelines-baseline.json', import.meta.url), 'utf-8')
 )
 
 const SFC = [
@@ -75,7 +80,7 @@ function guide({ blocks, states, drop, empty } = {}) {
   return ['# Table view', 'Find a resource and act on it.', '', ...sections].join('\n')
 }
 
-const pattern = (guidelines) => ({
+const block = (guidelines) => ({
   source: 'blocks/platform/x/x.vue',
   sfc: SFC,
   primary: 'Default',
@@ -83,13 +88,11 @@ const pattern = (guidelines) => ({
   guidelines
 })
 
-test('pattern ids come from the story title, kebab-cased, without "Templates/"', () => {
-  assert.equal(patternIdFromTitle('Templates/Platform/Auth/SignIn'), 'platform/auth/sign-in')
-  assert.equal(patternIdFromTitle('Templates/TopBars/CreationBar'), 'top-bars/creation-bar')
-  assert.equal(
-    patternIdFromTitle('Templates/Platform/Creation/CreationHeader'),
-    'platform/creation/creation-header'
-  )
+test('block ids come from the block title, kebab-cased, without "Blocks/"', () => {
+  assert.equal(blockIdFromTitle('Blocks/Auth/SignIn'), 'auth/sign-in')
+  assert.equal(blockIdFromTitle('Blocks/TopBar/CreationBar'), 'top-bar/creation-bar')
+  assert.equal(blockIdFromTitle('Blocks/AI/AiChat'), 'ai/ai-chat')
+  assert.equal(blockIdFromTitle('Templates/Auth/SignIn'), 'templates/auth/sign-in')
   assert.equal(kebab('SQLDatabase'), 'sql-database')
 })
 
@@ -121,7 +124,7 @@ test('importsOf leaves out type-only imports, which render nothing', () => {
   ])
 })
 
-test('readBlocks builds a pattern from block.json, the primary SFC and every variant file', () => {
+test('readBlocks builds a block from block.json, the primary SFC and every variant file', () => {
   const pkg = mkdtempSync(join(tmpdir(), 'blocks-'))
   try {
     const dir = join(pkg, 'blocks/platform/auth/sign-in')
@@ -135,7 +138,7 @@ test('readBlocks builds a pattern from block.json, the primary SFC and every var
       JSON.stringify({
         id: 'platform/auth/sign-in',
         name: 'SignIn',
-        title: 'Templates/Platform/Auth/SignIn',
+        title: 'Blocks/Auth/SignIn',
         summary: 'Sign in.',
         intents: ['login'],
         skills: ['webkit-form'],
@@ -246,11 +249,11 @@ test('readExamples keys a folder by its examples.json#component', () => {
   }
 })
 
-test('checkPatternMetadata reports a block without a pattern, empty intents and unknown skills', () => {
-  const patterns = {
+test('checkBlockMetadata reports a block without a catalog entry, empty intents and unknown skills', () => {
+  const catalogBlocks = {
     'platform/x': { source: 'blocks/platform/x/x.vue', intents: [], skills: ['no-such-skill'] }
   }
-  const { errors, warnings } = checkPatternMetadata(patterns, ['platform/y'])
+  const { errors, warnings } = checkBlockMetadata(catalogBlocks, ['platform/y'])
   assert.equal(errors.length, 2)
   assert.match(errors[0], /no entry/)
   assert.match(errors[1], /no-such-skill/)
@@ -265,7 +268,7 @@ test('checkSummaryComponents flags a backticked component the primary and varian
     '</script>',
     '<template><TableRoot /><Toaster /></template>'
   ].join('\n')
-  const patterns = {
+  const fixtures = {
     'platform/x': {
       summary:
         'A list in `PageHeader` over a `TableRoot`, with `Button`, `Toaster` and `toast.error`; built from `Table`, `Hint` and `Hint`.',
@@ -273,13 +276,13 @@ test('checkSummaryComponents flags a backticked component the primary and varian
       variants: [{ name: 'Loading', sfc: variant }]
     }
   }
-  const errors = checkSummaryComponents(patterns)
+  const errors = checkSummaryComponents(fixtures)
   assert.equal(errors.length, 2)
   assert.match(errors[0], /blocks\/platform\/x\/block\.json: the summary names `Table`/)
   assert.match(errors[1], /`Hint`/)
   assert.deepEqual(
     checkSummaryComponents({
-      'platform/x': { ...patterns['platform/x'], summary: 'Built from `PageHeader`.' }
+      'platform/x': { ...fixtures['platform/x'], summary: 'Built from `PageHeader`.' }
     }),
     []
   )
@@ -354,16 +357,16 @@ test('rendersToastRegion finds a Toaster under any binding, and ignores toast ca
 test('checkToastRegion flags a page body that renders a Toaster and allows an app root in shells/', () => {
   const page = toastSfc(["import { toast } from '@aziontech/webkit/toast'"], '<p />')
   const own = toastSfc(["import { toast, Toaster } from '@aziontech/webkit/toast'"], '<Toaster />')
-  const pattern = { primary: 'Default', sfc: page, variants: [{ name: 'Saved', sfc: own }] }
-  const errors = checkToastRegion('platform/view/x', pattern)
+  const toastBlock = { primary: 'Default', sfc: page, variants: [{ name: 'Saved', sfc: own }] }
+  const errors = checkToastRegion('platform/view/x', toastBlock)
   assert.equal(errors.length, 1)
   assert.match(
     errors[0],
     /^blocks\/platform\/view\/x \(Saved\): renders a `Toaster` in a page body/
   )
   assert.match(errors[0], /ToastPlugin/)
-  assert.deepEqual(checkToastRegion('shells/console', pattern), [])
-  assert.deepEqual(checkToastRegion('platform/view/x', { ...pattern, variants: [] }), [])
+  assert.deepEqual(checkToastRegion('shells/console', toastBlock), [])
+  assert.deepEqual(checkToastRegion('platform/view/x', { ...toastBlock, variants: [] }), [])
 })
 
 test('no block outside shells/ renders a Toaster', () => {
@@ -379,11 +382,11 @@ test('compareToBaseline only reports counts above the baseline', () => {
   ])
 })
 
-test('the catalog carries one pattern per block in top-bars, shells and platform', () => {
-  const ids = Object.keys(catalog.patterns)
+test('the catalog carries one entry per block in top-bars, shells and platform', () => {
+  const ids = Object.keys(catalog.blocks)
   assert.ok(ids.length >= 58)
   assert.ok(ids.every((id) => /^(top-bars|shells|platform)\//.test(id)))
-  for (const p of Object.values(catalog.patterns)) {
+  for (const p of Object.values(catalog.blocks)) {
     const part = JSON.parse(readFileSync(new URL(`../../${p.file}`, import.meta.url), 'utf-8'))
     assert.ok(part.sfc.includes('<template>'))
     assert.equal('sfc' in p, false)
@@ -450,23 +453,23 @@ test('primaryComponents leaves out the types a TypeScript SFC imports from webki
 })
 
 test('checkGuidelines accepts a complete guide that matches the SFC and the variants', () => {
-  assert.deepEqual(checkGuidelines('platform/x', pattern(guide())), [])
+  assert.deepEqual(checkGuidelines('platform/x', block(guide())), [])
 })
 
 test('checkGuidelines fails without guidelines.md and on a missing or empty section', () => {
-  assert.deepEqual(checkGuidelines('platform/x', pattern(undefined)), [
+  assert.deepEqual(checkGuidelines('platform/x', block(undefined)), [
     'platform/x: no blocks/platform/x/guidelines.md'
   ])
   assert.match(
-    checkGuidelines('platform/x', pattern(guide({ drop: "Don't" })))[0],
+    checkGuidelines('platform/x', block(guide({ drop: "Don't" })))[0],
     /"## Don't" is missing/
   )
   assert.match(
-    checkGuidelines('platform/x', pattern(guide({ empty: 'Copy' })))[0],
+    checkGuidelines('platform/x', block(guide({ empty: 'Copy' })))[0],
     /"## Copy" is empty/
   )
   const noPurpose = guide().replace('Find a resource and act on it.', '')
-  assert.match(checkGuidelines('platform/x', pattern(noPurpose))[0], /purpose paragraph/)
+  assert.match(checkGuidelines('platform/x', block(noPurpose))[0], /purpose paragraph/)
 })
 
 test('checkGuidelines fails on a component the SFC does not import, or one it imports and no block names', () => {
@@ -480,44 +483,44 @@ test('checkGuidelines fails on a component the SFC does not import, or one it im
       'x'
     ].join('\n')
   })
-  const [error] = checkGuidelines('platform/x', pattern(invented))
+  const [error] = checkGuidelines('platform/x', block(invented))
   assert.match(error, /names `PropertyFilter`, which blocks\/platform\/x\/x.vue does not import/)
   const uncovered = guide({ blocks: '### A. Page heading — `PageHeader`\nx' })
   assert.match(
-    checkGuidelines('platform/x', pattern(uncovered))[0],
+    checkGuidelines('platform/x', block(uncovered))[0],
     /no building block names `Button`/
   )
   const bare = guide({ blocks: 'Just prose.' })
-  assert.match(checkGuidelines('platform/x', pattern(bare))[0], /no "### A\. <Element>/)
+  assert.match(checkGuidelines('platform/x', block(bare))[0], /no "### A\. <Element>/)
 })
 
 test('checkGuidelines fails on letters out of order and on a variant with no States line', () => {
   const skipped = guide({
     blocks: '### A. Page heading — `PageHeader`\nx\n### C. Primary action — `Button`\nx'
   })
-  assert.match(checkGuidelines('platform/x', pattern(skipped))[0], /should be lettered B/)
+  assert.match(checkGuidelines('platform/x', block(skipped))[0], /should be lettered B/)
   const noEmpty = guide({ states: '- Default: rows exist.' })
-  assert.deepEqual(checkGuidelines('platform/x', pattern(noEmpty)), [
+  assert.deepEqual(checkGuidelines('platform/x', block(noEmpty)), [
     'blocks/platform/x/guidelines.md: "## States" has no line for variant "Empty"'
   ])
 })
 
-test('checkPatternGuidelines skips pending blocks, flags stale and unknown pending ids, honours --only', () => {
-  const patterns = {
-    'platform/view/a': pattern(undefined),
-    'platform/view/b': pattern(guide()),
-    'headers/c': pattern(undefined),
-    'headers/d': pattern(guide())
+test('checkBlockGuidelines skips pending blocks, flags stale and unknown pending ids, honours --only', () => {
+  const fixtures = {
+    'platform/view/a': block(undefined),
+    'platform/view/b': block(guide()),
+    'headers/c': block(undefined),
+    'headers/d': block(guide())
   }
-  const all = checkPatternGuidelines(patterns, { pending: ['headers/c', 'headers/d', 'nope'] })
+  const all = checkBlockGuidelines(fixtures, { pending: ['headers/c', 'headers/d', 'nope'] })
   assert.deepEqual(all.errors, [
-    'scripts/guidelines-pending.json: "nope" is not a block',
+    'scripts/guidelines-baseline.json: "nope" is not a block',
     'platform/view/a: no blocks/platform/view/a/guidelines.md'
   ])
   assert.deepEqual(all.notes, [
-    'headers/d has guidelines.md: remove it from scripts/guidelines-pending.json'
+    'headers/d has guidelines.md: remove it from scripts/guidelines-baseline.json'
   ])
-  assert.deepEqual(checkPatternGuidelines(patterns, { only: ['headers/'] }).errors, [
+  assert.deepEqual(checkBlockGuidelines(fixtures, { only: ['headers/'] }).errors, [
     'headers/c: no blocks/headers/c/guidelines.md'
   ])
 })
@@ -531,9 +534,9 @@ test('parseCheckArgs reads --update, --warn-intents and repeated --only prefixes
   assert.equal(parseCheckArgs(['--update']).update, true)
 })
 
-test('every block outside guidelines-pending.json has guidelines that match its SFC and variants', () => {
+test('every block outside guidelines-baseline.json has guidelines that match its SFC and variants', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
-  const { errors } = checkPatternGuidelines(blocks, { pending })
+  const { errors } = checkBlockGuidelines(blocks, { pending })
   assert.deepEqual(errors, [])
   for (const [id, p] of Object.entries(blocks)) {
     if (pending.includes(id)) continue

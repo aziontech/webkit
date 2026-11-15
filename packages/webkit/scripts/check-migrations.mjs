@@ -33,7 +33,7 @@ export function apiFromCatalog(catalog) {
   }
   return {
     exports: Object.keys(imports).sort(),
-    patterns: Object.keys(catalog.patterns || {}).sort(),
+    blocks: Object.keys(catalog.blocks || {}).sort(),
     props
   }
 }
@@ -68,7 +68,7 @@ export const ruleOf = (spec) => (typeof spec === 'string' ? { to: spec } : spec)
 export function diffApi(before, after, migrations) {
   const uncovered = []
   const afterExports = new Set(after.exports)
-  const afterPatterns = new Set(after.patterns)
+  const afterBlocks = new Set(after.blocks)
 
   for (const subpath of before.exports) {
     if (afterExports.has(subpath)) continue
@@ -80,11 +80,11 @@ export function diffApi(before, after, migrations) {
     )
   }
 
-  for (const id of before.patterns) {
-    if (afterPatterns.has(id)) continue
+  for (const id of before.blocks) {
+    if (afterBlocks.has(id)) continue
     const target = migrations.blocks[id]
-    if (target && afterPatterns.has(String(target).split('#')[0])) continue
-    uncovered.push(`pattern ${id} was removed or renamed (add it to v<N>-blocks.json)`)
+    if (target && afterBlocks.has(String(target).split('#')[0])) continue
+    uncovered.push(`block ${id} was removed or renamed (add it to v<N>-blocks.json)`)
   }
 
   for (const [subpath, props] of Object.entries(before.props)) {
@@ -174,7 +174,7 @@ if (invoked) {
     )
     for (const line of uncovered) console.error(`  - ${line}`)
     console.error(
-      'Every removed or renamed export, pattern, prop or prop value needs an entry in src/cli/migrations/ so `migrate` rewrites consumer code; then run `node scripts/check-migrations.mjs --update`.'
+      'Every removed or renamed export, block, prop or prop value needs an entry in src/cli/migrations/ so `migrate` rewrites consumer code; then run `node scripts/check-migrations.mjs --update`.'
     )
     process.exit(1)
   }
