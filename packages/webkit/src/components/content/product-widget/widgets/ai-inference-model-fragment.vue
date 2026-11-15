@@ -10,10 +10,10 @@
   import InputGroupAddon from '../../../inputs/input-group/input-group-addon/input-group-addon.vue'
   import Select from '../../../inputs/select/index'
   import Switch from '../../../inputs/switch/switch.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'AiInferenceModelFragment' })
 

@@ -3,11 +3,11 @@ name: story-library
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 75ec313a7ddf84f20dc093242048161d29ee0be632868a5c5e8832bde1f576a1
+last_updated: 2026-11-15
+checksum: d6526bd1ebf7a3667c321113edaeb96902266f01e0c5666e53b2e8fbc0a6b2f1
 ---
 
 # StoryLibrary — Component Spec
@@ -18,16 +18,17 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ## When to use
 
-- To list every success story with search and facet filters.
+- Use StoryLibrary for a card grid of customer stories with search and facets.
 
 ## When NOT to use
 
 - For a closing row of three related stories → use `article-cards`.
-- For a filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.
+- For the full filterable list of articles or resources → use `article-index`.
+- For a filterable list of non-article rows (jobs) → use `listing-browser`.
 
 ## Related
 
-- `article-index-resource-hub` — the sibling listing of articles with facet dropdowns.
+- `article-index` — the filterable list of articles or resources.
 - `empty-state` — the no-match state.
 
 ## Best practices

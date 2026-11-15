@@ -17,7 +17,7 @@
 
 ## Don’t
 
-- For a list of articles → use `article-index-blog`.
+- For a list of articles → use `article-index`.
 - For a closing row of related articles → use `article-cards`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

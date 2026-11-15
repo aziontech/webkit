@@ -37,7 +37,7 @@
 ## Related
 
 - [data-table](data-table.md) — the data-driven table (`data` + `columns`, TanStack engine) that renders through these parts.
-- [data-grid](data-grid.md) — the editable, spreadsheet-like grid built on these parts.
+- [data-grid](data-grid.md) — the editable, spreadsheet-like grid; a separate grid (`role="grid"`, one roving tab stop, in-cell editors) that shares these tokens, not built on these parts.
 - [pagination](pagination.md) — the page strip; put it in a `Table.Footer` in the `footer` slot.
 - [empty-state](empty-state.md) — compose it in a full-width row when a hand-composed table has no rows.
 - [item](item.md) — list rows without a column structure.

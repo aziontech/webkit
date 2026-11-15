@@ -5,7 +5,7 @@
   "To show three stories as a landing-page band under a centred heading."
  ],
  "avoidWhen": [
-  "For the full, filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.",
+  "For the full, filterable list of articles → use `article-index`.",
   "For one featured article selected from a wall → use `article-highlight`."
  ],
  "related": [

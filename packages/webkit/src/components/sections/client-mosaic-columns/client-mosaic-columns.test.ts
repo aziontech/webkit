@@ -1,8 +1,13 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
+import { userEvent } from 'vitest/browser'
+import { h } from 'vue'
 
+import RevealHover from '../../../../examples/client-mosaic-columns/reveal-hover.vue'
 import { CLIENT_BRANDS } from '../../../assets/logos/clients/brands'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { LOCALES } from '../../../test/locales'
+import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import ClientMosaicColumns from './client-mosaic-columns.vue'
 
 const TESTID = 'sections-client-mosaic-columns'
@@ -146,5 +151,67 @@ describe('ClientMosaicColumns', () => {
     const { container } = render(ClientMosaicColumns, { props: { cells: [] } })
 
     await expectNoA11yViolations(container)
+  })
+
+  describe('reveal="hover"', () => {
+    it('keeps the always layout by default', () => {
+      const { container } = render(ClientMosaicColumns, { props: { cells } })
+      expect(container.querySelector('[data-state]')).toBeNull()
+    })
+
+    it('is a named list of one story link per card', () => {
+      const { getByRole, getAllByRole } = render(RevealHover)
+      expect(getByRole('list', { name: 'Customer stories' })).toBeInTheDocument()
+      const links = getAllByRole('link')
+      expect(links).toHaveLength(3)
+      expect(links[0]).toHaveAccessibleName(
+        'Read story, Agibank: Agibank moved its digital bank to a platform that scales with every campaign.'
+      )
+      expect(links[0]).toHaveAttribute('href', '/customers/agibank')
+    })
+
+    it('reads ariaLabel and linkLabel, and keeps the logo decorative', () => {
+      const { getByRole, container } = render(ClientMosaicColumns, {
+        props: { cells: [cells[0]], reveal: 'hover', ariaLabel: ARIA_LABEL, linkLabel: 'Read it' }
+      })
+      expect(getByRole('list', { name: ARIA_LABEL })).toBeInTheDocument()
+      expect(getByRole('link').getAttribute('aria-label')).toMatch(/^Read it, Magalu/)
+      for (const img of container.querySelectorAll('img')) expect(img).toHaveAttribute('alt', '')
+    })
+
+    it('opens the card under focus and closes it when focus leaves', async () => {
+      const { getAllByRole } = render(RevealHover)
+      const items = getAllByRole('listitem')
+      await userEvent.tab()
+      expect(items[0]).toHaveAttribute('data-state', 'open')
+      await userEvent.tab()
+      expect(items[1]).toHaveAttribute('data-state', 'open')
+      expect(items[0]).toHaveAttribute('data-state', 'closed')
+    })
+
+    it('opens the card under the pointer', async () => {
+      const { getAllByRole } = render(RevealHover)
+      const items = getAllByRole('listitem')
+      await fireEvent.mouseEnter(items[2])
+      expect(items[2]).toHaveAttribute('data-state', 'open')
+    })
+
+    it('translates the built-in labels', () => {
+      const { getByRole, getAllByRole } = render({
+        render: () =>
+          h(
+            WebkitProvider,
+            { locale: 'pt-BR', catalogs: LOCALES },
+            { default: () => h(RevealHover) }
+          )
+      })
+      expect(getByRole('list', { name: 'Histórias de clientes' })).toBeInTheDocument()
+      expect(getAllByRole('link')[0].getAttribute('aria-label')).toMatch(/^Ler a história, Agibank/)
+    })
+
+    it('has no axe violations', async () => {
+      const { container } = render(RevealHover)
+      await expectNoA11yViolations(container)
+    })
   })
 })

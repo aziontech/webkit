@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use MediaSplitStack for a run of linked claims that pile up as the reader scrolls.
 - To list the solution areas or the claims of a page, one large band each, with a link through to its own page.
 
 ## Do
@@ -19,7 +20,7 @@
 
 ## Don’t
 
-- For a single claim beside its media → use `media-split` directly.
+- For a single claim beside its picture, scene or code → use `media-split-band`.
 - For small reasons in a grid → use `feature-tiles`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

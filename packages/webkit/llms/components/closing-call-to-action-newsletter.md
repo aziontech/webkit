@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ClosingCallToActionNewsletter when the closing ask is an email field.
 - To close the Blog or the Resource Hub on a newsletter subscription.
 
 ## Do
@@ -19,7 +20,8 @@
 
 ## Don’t
 
-- For a close on one or two link actions → use `closing-call-to-action`.
+- For a close on one or two link actions or a command → use `closing-call-to-action`.
+- For a close that lists deployable templates → use `template-gallery` with `closing`.
 - For a lead form with several fields → use `hero-form`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

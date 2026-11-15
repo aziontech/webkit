@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SectionCommand for a one-line command or agent prompt with a copy button on a marketing page.
 - The one command that starts a product, beside or instead of a call to action.
 - A prompt to paste into an AI agent (`shell` off).
 

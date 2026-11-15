@@ -348,4 +348,47 @@ describe('CallToAction slot presence', () => {
     expect(queryByTestId('probe')).toBeNull()
     expect(queryByTestId('probe')).toBeNull()
   })
+
+  it('carries the announcement register on the root when asked for it', () => {
+    const { getByTestId } = render(CallToAction, { props: { title: TITLE, kind: 'announcement' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'announcement')
+  })
+
+  it('renders the announcement, its eyebrow, its actions and its note in the announcement register', () => {
+    const { getByRole, getByText } = render(CallToAction, {
+      props: { title: TITLE, eyebrow: EYEBROW, description: DESCRIPTION, kind: 'announcement' },
+      slots: { actions: '<button type="button">Read the announcement</button>' }
+    })
+
+    expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
+    expect(getByText(EYEBROW)).toBeInTheDocument()
+    expect(getByText(DESCRIPTION)).toBeInTheDocument()
+    expect(getByRole('button', { name: 'Read the announcement' })).toBeInTheDocument()
+  })
+
+  it('lets the default slot replace the note in the announcement register', () => {
+    const { getByRole, queryByText } = render(CallToAction, {
+      props: { title: TITLE, description: DESCRIPTION, kind: 'announcement' },
+      slots: { default: '<a href="https://example.com/changelog">the rollout schedule</a>' }
+    })
+
+    expect(getByRole('link', { name: 'the rollout schedule' })).toBeInTheDocument()
+    expect(queryByText(DESCRIPTION)).toBeNull()
+  })
+
+  it('renders no note column in the announcement register without a description', () => {
+    const { container } = render(CallToAction, { props: { title: TITLE, kind: 'announcement' } })
+
+    expect(container.querySelector('p')).toBeNull()
+  })
+
+  it('has no a11y violations in the announcement register', async () => {
+    const { container } = render(CallToAction, {
+      props: { title: TITLE, eyebrow: EYEBROW, description: DESCRIPTION, kind: 'announcement' },
+      slots: { actions: '<button type="button">Read the announcement</button>' }
+    })
+
+    await expectNoA11yViolations(container)
+  })
 })

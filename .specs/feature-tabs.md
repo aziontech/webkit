@@ -3,10 +3,10 @@ name: feature-tabs
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 8ca2f1d7c94deb9a5046f46958d2c3b67f48b95f92a2bf2952c131b715f97e22
+checksum: 1cebb1c72f8f25cf20039cdc6614b1b7d95888ed8dc28f5e6ea0079bcfad88a9
 ---
 
 # FeatureTabs — Component Spec
@@ -17,6 +17,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 
 ## When to use
 
+- Use FeatureTabs for up to three tabs beside a media on a product page.
 - To walk through the two or three features behind one claim, one picture at a time, like Functions' Observability.
 
 ## When NOT to use
@@ -79,7 +80,6 @@ The feature walkthrough band of a product page: a horizontal section title, with
 | `scene`            | `FeatureTabsScene`  | `undefined` | false    | Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations.                                                                                                                                                                                                                     |
 | `autoplay`         | `boolean`           | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                                                                                                                                                                                                                  |
 | `autoplayInterval` | `number`            | `5200`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                                                                                                                                                                                                                         |
-| `interval`         | `number`            | `0`         | false    | @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold.                                                                                                                                                                                                                                                                                                                                          |
 | `copyAriaLabel`    | `string`            | `''`        | false    | Accessible name of the copy button on each tab's code file; empty keeps the code block's own.                                                                                                                                                                                                                                                                                                                                                  |
 | `primaryAction`    | `FeatureTabsAction` | `undefined` | false    | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent.                                                                                                                                                                                                                                                   |
 

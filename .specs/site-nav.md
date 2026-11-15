@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 111b1d86eebf40b93649743766ef4bae41af01a2c3ab596cf24ce209a19b8f14
+checksum: d107b18f65f9fa989f54b9bf28f5e80b275a8e62eaf1fc44c185db2b57e243cd
 template: 2
 ---
 
@@ -18,6 +18,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 
 ## When to use
 
+- Use SiteNav for the marketing site's top bar (mega-menus and mobile sheet).
 - At the top of every marketing page, once.
 
 ## When NOT to use

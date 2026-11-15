@@ -3,10 +3,10 @@ name: feature-tiles
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: b71b0f212f269f90557d2768f504b03c941c9f812514c71de696225199cdc0fd
+last_updated: 2026-11-15
+checksum: 3efb495c93279f485a7af572638f8c5fd075bda8f31f67578a50090c38f52020
 ---
 # FeatureTiles — Component Spec
 
@@ -16,11 +16,12 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 ## When to use
 
+- Use FeatureTiles for a static set of picture tiles.
 - To state three or four reasons to buy, each with a picture, under a product or pricing argument.
 
 ## When NOT to use
 
-- For linked use cases → use `use-case-links`.
+- For linked use cases or a grid of claims without pictures → use `capability-grid`.
 - For a scroll-driven walkthrough with one screen per feature → use `feature-scroll`.
 
 ## Related

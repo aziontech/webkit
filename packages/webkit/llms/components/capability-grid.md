@@ -1,6 +1,6 @@
 # Capability Grid
 
-> A framed grid of product capabilities under an optional section title: each cell is a `Topic` (glyph, heading, sentence) with optional bullet points, three or four to a row. From the design sample's site `CapabilityGrid`.
+> A framed grid of claims or links under an optional section title: each cell is a `Topic` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`. Use CapabilityGrid for any grid of claims or links on a marketing page; icons and per-item links are optional.
 
 - Import: `import CapabilityGrid from '@aziontech/webkit/capability-grid'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -9,18 +9,21 @@
 ## When to use
 
 - A product page listing what the product does, three or six at a time.
+- Use cases or resources that each link to their own page: give each item an `href` (and no `icon` for a resource list).
 - A bare grid (no title) under a band that already has its heading.
 
 ## Do
 
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
+- Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
 - Set `titleKind: 'left'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Don’t
 
 - For capabilities with art — use `FeatureTiles` or `BentoGrid`.
-- For links to other pages — use `UseCaseLinks` or `ResourceGrid`.
+- For use cases whose band title sits in the first grid cell with one action — use `UseCases`.
+- For cells that each carry their own action or copy button — use `FeatureWidgets`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -35,7 +38,7 @@
 | `eyebrow` | `string` | `''` | false | Overline above the title. |
 | `title` | `string` | `''` | false | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`. |
 | `description` | `string` | `''` | false | One or two sentences under the title. |
-| `items` | `CapabilityGridItem[]` | `[]` | false | The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty. |
+| `items` | `CapabilityGridItem[]` | `[]` | false | The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty. |
 | `columns` | `CapabilityGridColumns` | `3` | false | Capabilities per row from the large breakpoint up. |
 | `primaryAction` | `CapabilityGridAction` | `undefined` | false | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outlined`; same shape. Shown only with a label and a link. |
@@ -46,6 +49,7 @@
 
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
+- An item with `href` renders its heading as a link that covers the cell.
 - `titleKind` is passed to the section title as its `kind`; it has no effect on a bare grid.
 
 ## Accessibility
@@ -53,6 +57,7 @@
 - A `section` named by its title; headings nest under it.
 - Points are a real list.
 - Glyphs are decorative (from `Topic`).
+- A linked cell is one link named by its heading (from `Topic`), with a visible focus ring.
 
 ## Right-to-left
 

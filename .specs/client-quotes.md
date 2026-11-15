@@ -3,10 +3,10 @@ name: client-quotes
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 5
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 9aa83b6bfb2d09efa0fd1ae3c451752a99524172f849277e2ab478fee68fd8ef
+last_updated: 2026-11-15
+checksum: 3d0157a051800aacd625786ed9b363d4f2cf4d2b6e551ff391e2467a2109cacc
 ---
 
 # ClientQuotes — Component Spec
@@ -17,6 +17,8 @@ The client-stories band: a framed `quote-tabs` carousel of customer quotes, each
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
+- Use ClientQuotes for a band of customer quotes the reader browses by client.
 - To let several customers speak in turn, one at a time, near the end of a page's argument.
 
 ## When NOT to use

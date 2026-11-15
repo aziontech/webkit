@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.
 - Opening a marketing or landing page section that needs a framed header.
 - Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.
 - For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind="horizontal"`.

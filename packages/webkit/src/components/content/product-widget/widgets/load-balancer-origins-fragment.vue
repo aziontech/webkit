@@ -4,8 +4,8 @@
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'LoadBalancerOriginsFragment' })
 

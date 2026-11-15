@@ -25,6 +25,8 @@
     icon?: string
     /** Bullet points under the description. */
     points?: string[]
+    /** Destination the whole cell links to. */
+    href?: string
   }
 
   /** Button kind of an action. */
@@ -51,7 +53,7 @@
     title?: string
     /** One or two sentences under the title. */
     description?: string
-    /** The capabilities, in order; each is `{ title, description, icon?, points? }`. Three or six fill a three-column grid. */
+    /** The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell. Three or six fill a three-column grid. */
     items?: CapabilityGridItem[]
     /** Capabilities per row from the large breakpoint up. */
     columns?: CapabilityGridColumns
@@ -151,14 +153,16 @@
         >
           <CardGridCell
             v-for="item in items"
-            :key="item.title"
+            :key="(item.href ?? '') + item.title"
             kind="canvas"
+            class="relative"
           >
             <Topic
               :heading-level="headingLevel"
               :icon="item.icon ?? ''"
               :title="item.title"
               :description="item.description"
+              :href="item.href ?? ''"
             />
             <ul
               v-if="item.points?.length"

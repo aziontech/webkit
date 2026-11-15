@@ -28,7 +28,7 @@
 ## Don’t
 
 - The content is build or deploy output with timestamps and log levels → use `log-view`.
-- It is a marketing band that pairs a claim with its code → use `code-split`, or `sticky-scroll-code` for several claims.
+- It is a marketing band that pairs a claim with its code → use `media-split-band` with `codeTabs`, or `feature-scroll` with code items for several claims.
 - It is a terminal session of CLI commands on a product page → use `cli-terminal`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
 - The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
@@ -39,7 +39,7 @@
 - [copy-button](copy-button.md) — the copy control CodeBlock embeds; use it alone for one-line values.
 - [code-editor](code-editor.md) — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.
 - [log-view](log-view.md) — terminal-style viewer for CI and deploy logs.
-- [code-split](code-split.md) — page section built around one code sample.
+- [media-split-band](media-split-band.md) — page section that sets one claim beside a code sample (`codeTabs`).
 - [scroll-area](scroll-area.md) — the scroll container the code region runs in.
 
 ## Props

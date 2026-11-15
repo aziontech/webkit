@@ -3,31 +3,30 @@ name: process-scroll
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: f64e9bd583e3548176dc854e5592c62b37aedcbc42e7ae6e59c5c3edc51ab03b
+checksum: 19f9e0009f730162a2a10557526e23d860a3aba0a0747c796249d34ed7c79bc6
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # ProcessScroll — Component Spec
 
 ## Purpose
 
-The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). From the design sample's site `ProcessScroll`.
+The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleKind: 'centered'`. From the design sample's site `ProcessScroll`.
 
 ## When to use
 
-- How something works in three to five ordered stages (build, deploy, observe).
+- Use ProcessScroll for numbered stage cards; set `pinned` to pin them under the header while they slide.
+- How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-kind="centered"`).
 
 ## When NOT to use
 
 - For more than five stages or stages with art — use `FeatureScroll`.
-- For five to eight short points with no section-title layout — use `StickyCarousel`; for ordered stages that pin while the page scrolls, set `pinned` here.
 
 ## Related
 
-- `StickyCarousel` — the same cards, always pinned, under a plain section title.
 - `TextureMaterial`, `FrameBox`, `SectionTitle`.
 
 ## Best practices
@@ -57,18 +56,18 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 
 ## Props
 
-| Prop               | Type                           | Default        | Required | JSDoc                                                                                  |
-| ------------------ | ------------------------------ | -------------- | -------- | -------------------------------------------------------------------------------------- |
-| `anchor`           | `string`                       | `''`           | false    | In-page id set on the band so a hash link can target it.                               |
-| `eyebrow`          | `string`                       | `''`           | false    | Overline above the title.                                                              |
-| `titleKind`        | `SectionTitleKind`             | `'horizontal'` | false    | Alignment of the section title over the card row.                                      |
-| `title`            | `string`                       | `''`           | false    | Headline of the band, rendered as its `h2`; the band renders nothing when empty.       |
-| `description`      | `string`                       | `''`           | false    | Paragraph beside the headline.                                                         |
-| `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'`     | false    | Column span of the paragraph: `wide` runs it across the middle column too.             |
-| `steps`            | `ProcessScrollStep[]`          | `[]`           | false    | The stages, in order; each is `{ title, description }` and gets its own numbered card. |
-| `ariaLabel`        | `string`                       | `''`           | false    | Accessible name of the scrollable card row; defaults to the title.                     |
-| `pinned`           | `boolean`                      | `false`        | false    | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |
-| `headerOffset`     | `string`                       | `'var(--layout-header-height)'` | false | Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length. |
+| Prop               | Type                           | Default                         | Required | JSDoc                                                                                                                                                                                                                          |
+| ------------------ | ------------------------------ | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`           | `string`                       | `''`                            | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                       |
+| `eyebrow`          | `string`                       | `''`                            | false    | Overline above the title.                                                                                                                                                                                                      |
+| `titleKind`        | `SectionTitleKind`             | `'horizontal'`                  | false    | Alignment of the section title over the card row.                                                                                                                                                                              |
+| `title`            | `string`                       | `''`                            | false    | Headline of the band, rendered as its `h2`; the band renders nothing when empty.                                                                                                                                               |
+| `description`      | `string`                       | `''`                            | false    | Paragraph beside the headline.                                                                                                                                                                                                 |
+| `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'`                      | false    | Column span of the paragraph: `wide` runs it across the middle column too.                                                                                                                                                     |
+| `steps`            | `ProcessScrollStep[]`          | `[]`                            | false    | The stages, in order; each is `{ title, description }` and gets its own numbered card.                                                                                                                                         |
+| `ariaLabel`        | `string`                       | `''`                            | false    | Accessible name of the scrollable card row; defaults to the title.                                                                                                                                                             |
+| `pinned`           | `boolean`                      | `false`                         | false    | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |
+| `headerOffset`     | `string`                       | `'var(--layout-header-height)'` | false    | Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length.                                                                                                              |
 
 ## Events
 

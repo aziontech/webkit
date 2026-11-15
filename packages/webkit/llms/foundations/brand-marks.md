@@ -2,11 +2,11 @@
 
 > Client, analyst and framework marks drawn as theme-aware SVG.
 
-Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` and `QuoteCarousel` `mark`, `ClientQuotes` `mark`); the label is the accessible name.
+Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.
 
 60 names. These are the only values the components accept. An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark. The MCP tool `list_assets({ kind: "brandMarks" })` returns the same list (with a `query` to filter), and `catalog.json#assets.brandMarks` points at it as data.
 
-Used by: [ClientQuotes](../components/client-quotes.md), [Hero](../components/hero.md), [HeroBand](../components/hero-band.md), [HeroCopyOnTopArt](../components/hero-copy-on-top-art.md), [HeroForm](../components/hero-form.md), [HeroWithOpening](../components/hero-with-opening.md), [QuoteCarousel](../components/quote-carousel.md), [QuoteTabs](../components/quote-tabs.md), [SitePage](../components/site-page.md), [TemplateGallery](../components/template-gallery.md), [Ticker](../components/ticker.md).
+Used by: [ClientQuotes](../components/client-quotes.md), [Hero](../components/hero.md), [HeroBand](../components/hero-band.md), [HeroForm](../components/hero-form.md), [QuoteTabs](../components/quote-tabs.md), [SitePage](../components/site-page.md), [TemplateGallery](../components/template-gallery.md), [Ticker](../components/ticker.md).
 
 ## Usage
 

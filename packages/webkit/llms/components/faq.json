@@ -11,6 +11,8 @@
  "purpose": "The frequently-asked-questions band of a marketing page: a two-column panel with the section's heading on the left and the answers as a disclosure list on the right. It is the page-level band, not the disclosure primitive — it composes `accordion`, which remains the right choice anywhere a bare expandable list is wanted. The band is drawn in the hairline register: the two columns and every row are separated by a one-pixel gap over a rule fill, so the seams are the grid's own gaps rather than borders on the cells. The rule under a row is held at the item's edge and drawn only while that item is open, which keeps exactly one rule per row in either state; the last row draws none, because it sits on the band's own floor. A single `--accordion-inset` hook, re-declared per breakpoint, puts the heading, every question and every answer on one content column.",
  "setup": null,
  "useWhen": [
+  "Use Faq in a hand-built SFC that needs rich answers in the `#answer` slot.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`faq-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`faq`).",
   "As the FAQ band near the end of a marketing or pricing page.",
   "Whenever a page must answer a known set of objections without sending the reader to docs.",
   "When the answers are short enough to read in place rather than link out to."

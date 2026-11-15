@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use MediaTile for a scene above a run-in caption inside a grid cell.
 - For a row of three or four scenes that each need one sentence of explanation, laid out by `card-grid` in its `gap` register (`frame`) or its `divider` register (`plain`).
 - When the claim is a label for the picture above it (`AI workloads.`, `Middleware.`) rather than a section heading in its own right.
 - When the media should carry the page's frame language — hairline rules and corner marks — and the copy should not (`frame`).

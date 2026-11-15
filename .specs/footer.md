@@ -3,13 +3,13 @@ name: footer
 category: layout
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 1ba94d793febc2b3cf824ab34ec1c397a84d0c460618e8098f2494bb12cd2fd7
+checksum: 585bf63f92f019409180e0315accdcebd413f03a61aad9f86992ca390579c6fd
 created: 2026-08-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Footer — Component Spec
@@ -37,6 +37,8 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 ## When to use
 
+- Use Footer to compose a footer in product or docs.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - The page-level footer of a site or application, paired with `GlobalHeader`.
 - Grouped navigation links at the bottom of the page plus a brand/social/status bar.
 

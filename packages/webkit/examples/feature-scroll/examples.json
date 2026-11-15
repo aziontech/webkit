@@ -4,13 +4,18 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The band as the Workloads page places it: the product name as overline, the headline and lead over five feature screens, each with its own illustration and a link out to the documentation. From the large breakpoint up the features run through the sticky stack with the illustration pinned; below it they fall into a three-column grid of media tiles. Edit the props in the Controls panel — a band with no items renders nothing at all.",
+      "summary": "The band as the Workloads page places it: the product name as overline, the headline and lead over five feature screens, each with its own illustration and a link out to the documentation. From the large breakpoint up the features run through the sticky stack with the illustration pinned; below it they fall into a three-column grid of media tiles. Edit the props in the Controls panel \u2014 a band with no items renders nothing at all.",
       "file": "default.vue"
     },
     {
       "name": "Live scenes",
       "summary": "The same band with a live console fragment for each feature: every item names a `ProductWidget` as its `scene`, so the pinned stage plays the open step's screen and the small-screen grid shows each one still. An item's `scene` wins over its `illustration`.",
       "file": "live-scenes.vue"
+    },
+    {
+      "name": "Code",
+      "summary": "The band as the Web Apps page places it: five capabilities, from deploying with the CLI to querying metrics over GraphQL, each pinning a one-file `code` sample (`{ fileName, code, language?, fileIcon?, copyAriaLabel? }`) with a docs button under the open step. An item's `scene` wins over its `code`, and `code` over its `illustration`. The GraphQL action opens the docs in a new tab (`target: '_blank'`).",
+      "file": "code.vue"
     }
   ],
   "site": [
@@ -19,6 +24,12 @@
       "summary": "The Workloads band: five features, each shown by its own illustration, with a docs button under the open step.",
       "file": "site-default.vue",
       "json": "site-default.json"
+    },
+    {
+      "name": "Code",
+      "summary": "The Web Apps band: five capabilities, each with a one-file code sample and a docs button under the open one.",
+      "file": "site-code.vue",
+      "json": "site-code.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Features/FeatureScroll",
@@ -26,5 +37,5 @@
     "layout": "fullscreen",
     "background": "dark"
   },
-  "siteStories": ["Default", "DefaultJson"]
+  "siteStories": ["Default", "DefaultJson", "Code", "CodeJson"]
 }

@@ -11,6 +11,7 @@
  "purpose": "A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box` and `column-navigation` rather than owning any anatomy of its own.",
  "setup": null,
  "useWhen": [
+  "Use PlatformDirectory for the Azion products directory band.",
   "On Home, right under the hero, to show every product the platform offers at a glance.",
   "On a solution, product or pricing page that repeats the full product map."
  ],

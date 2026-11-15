@@ -11,6 +11,7 @@
  "purpose": "A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.",
  "setup": null,
  "useWhen": [
+  "Use MediaTabs (primitive) for claims on one side and the selected claim's media on the other.",
   "For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.",
   "When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.",
   "As a product-page band that rewards watching but does not require it."
@@ -113,13 +114,7 @@
    "doc": "Two-way value (`v-model`)."
   }
  ],
- "events": [
-  {
-   "name": "tab-change",
-   "payload": "(event: Event, index: number)",
-   "notes": "@deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick."
-  }
- ],
+ "events": [],
  "slots": [
   {
    "name": "media",

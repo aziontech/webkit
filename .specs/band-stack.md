@@ -3,10 +3,10 @@ name: band-stack
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-09-26
-last_updated: 2026-10-01
-checksum: ae90d6498a6aa38d842e1d88deedd2bbd769cf34f7286b25aa92e1202e2bb33e
+last_updated: 2026-11-15
+checksum: 9535c9446d3a55cfda3378e150b0e5b15fe1e44d4f6239383e7bd374bf5e592d
 ---
 
 # Band Stack — Component Spec
@@ -19,6 +19,7 @@ The component owns the band rules, the shared hairlines and the pin offsets, and
 
 ## When to use
 
+- Use BandStack (primitive) for several full bands in sequence; `sticky` piles them under the header.
 - For a run of peer bands — three to six `media-split`s, one per solution or capability — that should read as one sequence.
 - With `sticky`, when the run is the page's centrepiece and the reader should feel each band land on the last.
 - Without `sticky`, to frame a run of bands with one shared hairline between neighbours, with no pinning.

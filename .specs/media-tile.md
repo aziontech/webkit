@@ -3,10 +3,10 @@ name: media-tile
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 54df2ca57d4e2039b7914cfe43bf9c08c70f6e2e8a56103bb19b10fbcd0107db
+spec_version: 2
+checksum: c6bc615dbea425836c4d6d35e2103c8bb298e3b92541029356c8059ef4b4bedf
 created: 2026-09-25
-last_updated: 2026-10-01
+last_updated: 2026-11-15
 ---
 
 # Media Tile — Component Spec
@@ -17,6 +17,7 @@ One cell of a media band: a scene above, and under it a run-in caption whose lea
 
 ## When to use
 
+- Use MediaTile for a scene above a run-in caption inside a grid cell.
 - For a row of three or four scenes that each need one sentence of explanation, laid out by `card-grid` in its `gap` register (`frame`) or its `divider` register (`plain`).
 - When the claim is a label for the picture above it (`AI workloads.`, `Middleware.`) rather than a section heading in its own right.
 - When the media should carry the page's frame language — hairline rules and corner marks — and the copy should not (`frame`).

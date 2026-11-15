@@ -1925,6 +1925,8 @@
  },
  "aliases": {
   "alert-dialog": "confirm-dialog",
+  "banner": "alert",
+  "blog-index": "article-index",
   "bordered-box": "frame-box",
   "breadcrumbs": "breadcrumb",
   "callout": "alert",
@@ -1981,7 +1983,16 @@
   "tab-view": "tabs"
  },
  "removed": {
+  "article-index-blog": "ArticleIndex from @aziontech/webkit/article-index (filters defaults to category-search)",
+  "article-index-resource-hub": "ArticleIndex from @aziontech/webkit/article-index with filters=\"facets\"",
+  "banner": "CallToAction from @aziontech/webkit/call-to-action with kind=\"announcement\"; the aside slot becomes the default slot",
   "calendar-preset": "DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options",
+  "closing-call-to-action-agents": "ClosingCallToAction from @aziontech/webkit/closing-call-to-action with kind=\"primary\" and the same audiences, typedLead, typedWords and description",
+  "closing-call-to-action-templates": "TemplateGallery from @aziontech/webkit/template-gallery with closing; the same title, actions, templates and deployLabel",
+  "code-split": "MediaSplitBand from @aziontech/webkit/media-split-band with the same codeTabs, defaultFile and actions",
+  "compare-support-tiers": "ComparePlans from @aziontech/webkit/compare-plans; pass the tiers as plans",
+  "content-columns": "CapabilityGrid from @aziontech/webkit/capability-grid; items keep title and description, columns is 3 or 4",
+  "customer-spotlight": "ClientMosaicColumns from @aziontech/webkit/client-mosaic-columns with reveal=\"hover\"; items become cells and each card's description becomes story",
   "dialog-overlay": "delete the <DialogOverlay /> element: DialogContent renders the portal and the overlay itself",
   "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
   "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
@@ -2004,12 +2015,22 @@
   "field-time": "Field + FieldLabel + Input + FieldDescription",
   "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
   "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+  "hero-copy-on-top-art": "HeroBand from @aziontech/webkit/hero-band with kind=\"copy-on-top-art\" and the same levels",
+  "hero-with-opening": "HeroBand from @aziontech/webkit/hero-band with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
   "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
   "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
+  "quote-carousel": "ClientQuotes from @aziontech/webkit/client-quotes, or Quote cards in a CardCarousel",
   "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes kind=\"card\" with description on the item",
   "radio-cards": "RadioGroup kind=\"card\" orientation=\"horizontal\" with :options (the items move to options as is); the #default=\"{ item }\" slot becomes #option=\"{ option }\" and #tag=\"{ item }\" becomes #tag=\"{ option }\"",
+  "resource-grid": "CapabilityGrid from @aziontech/webkit/capability-grid with title-kind=\"horizontal\"; items keep title, description and href",
+  "shell-mockup": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
+  "shell-mockup-part": "ProductWidget from @aziontech/webkit/product-widget; the frame and its parts are internal",
+  "shell-mockup-root": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
+  "sticky-carousel": "ProcessScroll from @aziontech/webkit/process-scroll with pinned and title-kind=\"centered\"; items become steps",
+  "sticky-scroll-code": "FeatureScroll from @aziontech/webkit/feature-scroll; items keep title, description, code and action",
   "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu kind); the property kind shows its own tokens",
-  "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)"
+  "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
+  "use-case-links": "CapabilityGrid from @aziontech/webkit/capability-grid with title-kind=\"left\"; items keep icon, title, description and href"
  },
  "imports": {
   "catalog.json": {
@@ -7046,278 +7067,6 @@
    "surface": "product",
    "examplesFile": "catalog/examples/product-widget.json",
    "docsFile": "catalog/components/product-widget.json"
-  },
-  "shell-mockup": {
-   "import": "@aziontech/webkit/shell-mockup",
-   "target": "./src/components/content/shell-mockup/index.ts",
-   "kind": "component",
-   "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
-   "subcomponents": [
-    "@aziontech/webkit/shell-mockup-part"
-   ],
-   "category": "content",
-   "structure": "composition",
-   "props": [
-    {
-     "name": "kind",
-     "type": "'window' | 'bare'",
-     "default": "'window'",
-     "required": "false",
-     "doc": "How the mockup is plated: a bordered console window, or bare parts floating on the host's surface."
-    },
-    {
-     "name": "shell",
-     "type": "'console' | 'legacy'",
-     "default": "'console'",
-     "required": "false",
-     "doc": "Console generation the shell draws: the current one, or the previous one with its top bar."
-    },
-    {
-     "name": "width",
-     "type": "number",
-     "default": "860",
-     "required": "false",
-     "doc": "Design width of the frame from `md` up; the frame scales to fit its host."
-    },
-    {
-     "name": "mobileWidth",
-     "type": "number",
-     "default": "390",
-     "required": "false",
-     "doc": "Design width of the frame below `md`."
-    },
-    {
-     "name": "fade",
-     "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
-     "default": "'none'",
-     "required": "false",
-     "doc": "Edge the mockup fades out along; `y` fades top and bottom."
-    },
-    {
-     "name": "chrome",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Draws the console bar over the body."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Module label on the console bar; with a rail, `›` splits it into breadcrumbs."
-    },
-    {
-     "name": "rail",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Active entry of the console's side rail; empty renders no rail."
-    },
-    {
-     "name": "texture",
-     "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
-     "default": "'none'",
-     "required": "false",
-     "doc": "Texture the frame is grounded with, behind the body."
-    },
-    {
-     "name": "textureFade",
-     "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
-     "default": "'vignette'",
-     "required": "false",
-     "doc": "How the frame's texture fades out before its edges."
-    },
-    {
-     "name": "travel",
-     "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
-     "default": "'slow-01'",
-     "required": "false",
-     "doc": "Duration token of each part's travel."
-    },
-    {
-     "name": "beat",
-     "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
-     "default": "'fast-01'",
-     "required": "false",
-     "doc": "Duration token of the gap between one part's beat and the next."
-    },
-    {
-     "name": "active",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Whether this mockup is the one showing; parts replay their entrance each time it becomes active."
-    },
-    {
-     "name": "interactive",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Lets the viewer operate the controls inside instead of drawing them as an inert picture."
-    },
-    {
-     "name": "animated",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The mockup's body, composed of `ShellMockup.Part` beats."
-    },
-    {
-     "name": "overlay",
-     "scope": "—",
-     "notes": "A layer over the whole frame, bar and rail included, such as a drawer."
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/shell-mockup.json",
-   "docsFile": "catalog/components/shell-mockup.json"
-  },
-  "shell-mockup-root": {
-   "import": "@aziontech/webkit/shell-mockup-root",
-   "target": "./src/components/content/shell-mockup/shell-mockup.vue",
-   "kind": "root",
-   "rootOf": "shell-mockup",
-   "treeShakeableImport": "@aziontech/webkit/shell-mockup-root",
-   "category": "content",
-   "structure": "composition",
-   "props": [
-    {
-     "name": "kind",
-     "type": "'window' | 'bare'",
-     "default": "'window'",
-     "required": "false",
-     "doc": "How the mockup is plated: a bordered console window, or bare parts floating on the host's surface."
-    },
-    {
-     "name": "shell",
-     "type": "'console' | 'legacy'",
-     "default": "'console'",
-     "required": "false",
-     "doc": "Console generation the shell draws: the current one, or the previous one with its top bar."
-    },
-    {
-     "name": "width",
-     "type": "number",
-     "default": "860",
-     "required": "false",
-     "doc": "Design width of the frame from `md` up; the frame scales to fit its host."
-    },
-    {
-     "name": "mobileWidth",
-     "type": "number",
-     "default": "390",
-     "required": "false",
-     "doc": "Design width of the frame below `md`."
-    },
-    {
-     "name": "fade",
-     "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
-     "default": "'none'",
-     "required": "false",
-     "doc": "Edge the mockup fades out along; `y` fades top and bottom."
-    },
-    {
-     "name": "chrome",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Draws the console bar over the body."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Module label on the console bar; with a rail, `›` splits it into breadcrumbs."
-    },
-    {
-     "name": "rail",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Active entry of the console's side rail; empty renders no rail."
-    },
-    {
-     "name": "texture",
-     "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
-     "default": "'none'",
-     "required": "false",
-     "doc": "Texture the frame is grounded with, behind the body."
-    },
-    {
-     "name": "textureFade",
-     "type": "'none' | 'top' | 'bottom' | 'left' | 'right' | 'edges' | 'vignette'",
-     "default": "'vignette'",
-     "required": "false",
-     "doc": "How the frame's texture fades out before its edges."
-    },
-    {
-     "name": "travel",
-     "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
-     "default": "'slow-01'",
-     "required": "false",
-     "doc": "Duration token of each part's travel."
-    },
-    {
-     "name": "beat",
-     "type": "'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'",
-     "default": "'fast-01'",
-     "required": "false",
-     "doc": "Duration token of the gap between one part's beat and the next."
-    },
-    {
-     "name": "active",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Whether this mockup is the one showing; parts replay their entrance each time it becomes active."
-    },
-    {
-     "name": "interactive",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Lets the viewer operate the controls inside instead of drawing them as an inert picture."
-    },
-    {
-     "name": "animated",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Plays the entrance as the frame comes into view and replays it when `active` turns back on. Off draws every part in place from the start, with no entrance and no replay."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The mockup's body, composed of `ShellMockup.Part` beats."
-    },
-    {
-     "name": "overlay",
-     "scope": "—",
-     "notes": "A layer over the whole frame, bar and rail included, such as a drawer."
-    }
-   ],
-   "surface": "product",
-   "docsFile": "catalog/components/shell-mockup-root.json"
-  },
-  "shell-mockup-part": {
-   "import": "@aziontech/webkit/shell-mockup-part",
-   "target": "./src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue",
-   "kind": "subcomponent",
-   "parent": "shell-mockup",
-   "treeShakeableImport": "@aziontech/webkit/shell-mockup-part",
-   "surface": "product"
   },
   "kbd": {
    "import": "@aziontech/webkit/kbd",
@@ -17306,7 +17055,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`; overridden by the default slot."
+     "doc": "Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`, on the raised trailing column in `announcement`; overridden by the default slot."
     },
     {
      "name": "eyebrow",
@@ -17320,7 +17069,7 @@
      "type": "CallToActionKind",
      "default": "'panel'",
      "required": "false",
-     "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor."
+     "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column."
     },
     {
      "name": "framed",
@@ -17344,7 +17093,7 @@
     {
      "name": "aside",
      "scope": "—",
-     "notes": "The aside cell's control in `split`; ignored in `panel`, `lead` and `primary`, where every control belongs in `actions`."
+     "notes": "The aside cell's control in `split`; ignored in `panel`, `lead`, `primary` and `announcement`, where every control belongs in `actions`."
     },
     {
      "name": "background",
@@ -17540,52 +17289,6 @@
    "treeShakeableImport": "@aziontech/webkit/carousel-next",
    "surface": "marketing"
   },
-  "banner": {
-   "import": "@aziontech/webkit/banner",
-   "target": "./src/components/marketing/banner/banner.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/banner",
-   "category": "marketing",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "title",
-     "type": "string",
-     "default": "—",
-     "required": "true",
-     "doc": "The announcement, rendered as the band's `h2` in the leading column."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Supporting note set on the raised trailing column; overridden by the `aside` slot."
-    },
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Short uppercase overline naming the programme, above the announcement."
-    }
-   ],
-   "slots": [
-    {
-     "name": "actions",
-     "scope": "—",
-     "notes": "The controls the band exists to offer, under the announcement."
-    },
-    {
-     "name": "aside",
-     "scope": "—",
-     "notes": "Trailing column content; replaces the `description` prop when provided."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/banner.json",
-   "docsFile": "catalog/components/banner.json"
-  },
   "banner-art": {
    "import": "@aziontech/webkit/banner-art",
    "target": "./src/components/marketing/banner-art/banner-art.vue",
@@ -17731,13 +17434,6 @@
      "doc": "Stand the brand ticker on the band's floor, under the `bottom` window."
     },
     {
-     "name": "carousel",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `ticker`. Removed in 7.0. Read only when `ticker` is empty."
-    },
-    {
      "name": "tickerMarks",
      "type": "string[]",
      "default": "[]",
@@ -17745,25 +17441,11 @@
      "doc": "Registry names of the marks the ticker shows, in order."
     },
     {
-     "name": "carouselMarks",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty."
-    },
-    {
      "name": "tickerLabel",
      "type": "string",
      "default": "''",
      "required": "false",
      "doc": "Overline above the brand ticker, stating the claim the marks make."
-    },
-    {
-     "name": "carouselLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty."
     }
    ],
    "slots": [
@@ -17912,13 +17594,6 @@
      "doc": "Stand the brand ticker on the band's floor, under the `bottom` window."
     },
     {
-     "name": "carousel",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `ticker`. Removed in 7.0. Read only when `ticker` is empty."
-    },
-    {
      "name": "tickerMarks",
      "type": "string[]",
      "default": "[]",
@@ -17926,25 +17601,11 @@
      "doc": "Registry names of the marks the ticker shows, in order."
     },
     {
-     "name": "carouselMarks",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty."
-    },
-    {
      "name": "tickerLabel",
      "type": "string",
      "default": "''",
      "required": "false",
      "doc": "Overline above the brand ticker, stating the claim the marks make."
-    },
-    {
-     "name": "carouselLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty."
     }
    ],
    "slots": [
@@ -18041,33 +17702,6 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/sticky-stack.json",
    "docsFile": "catalog/components/sticky-stack.json"
-  },
-  "quote-carousel": {
-   "import": "@aziontech/webkit/quote-carousel",
-   "target": "./src/components/marketing/quote-carousel/quote-carousel.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/quote-carousel",
-   "category": "marketing",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "items",
-     "type": "QuoteCarouselItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The testimonials rendered as cards, in order; each item is `{ text, name?, jobTitle?, photo?, logo?, logoAlt?, mark? }` — the quotation, who said it, the rest of the attribution, their likeness, the URL of the company's logo (wins over `mark`) with its alternative text, and the registry name of the company's mark. The same `logo` / `mark` pair as `quote-tabs` items."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name for the scrollable row of testimonials, announced before its contents."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/quote-carousel.json",
-   "docsFile": "catalog/components/quote-carousel.json"
   },
   "quote": {
    "import": "@aziontech/webkit/quote",
@@ -18244,13 +17878,6 @@
      "doc": "Two-way value (`v-model`)."
     }
    ],
-   "events": [
-    {
-     "name": "tab-change",
-     "payload": "(event: Event, index: number)",
-     "notes": "@deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick."
-    }
-   ],
    "slots": [
     {
      "name": "media",
@@ -18336,54 +17963,6 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/faq.json",
    "docsFile": "catalog/components/faq.json"
-  },
-  "content-columns": {
-   "import": "@aziontech/webkit/content-columns",
-   "target": "./src/components/marketing/content-columns/content-columns.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/content-columns",
-   "category": "marketing",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "items",
-     "type": "ContentColumnsItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The columns, in reading order; each item is `{ title, description }`."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, rendered as its `h2` above the columns."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Supporting sentence under the headline."
-    },
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Short uppercase overline rendered above the headline."
-    },
-    {
-     "name": "columns",
-     "type": "2 | 3",
-     "default": "3",
-     "required": "false",
-     "doc": "How many columns the grid holds from the medium breakpoint up; below it the columns stack."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/content-columns.json",
-   "docsFile": "catalog/components/content-columns.json"
   },
   "column-navigation": {
    "import": "@aziontech/webkit/column-navigation",
@@ -23385,13 +22964,6 @@
      "doc": "Milliseconds each tab holds before the next one opens."
     },
     {
-     "name": "interval",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold."
-    },
-    {
      "name": "primaryAction",
      "type": "ArchitectureTabsAction",
      "default": "undefined",
@@ -23613,11 +23185,11 @@
    "examplesFile": "catalog/examples/article-highlight.json",
    "docsFile": "catalog/components/article-highlight.json"
   },
-  "article-index-blog": {
-   "import": "@aziontech/webkit/article-index-blog",
-   "target": "./src/components/sections/article-index-blog/article-index-blog.vue",
+  "article-index": {
+   "import": "@aziontech/webkit/article-index",
+   "target": "./src/components/sections/article-index/article-index.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/article-index-blog",
+   "treeShakeableImport": "@aziontech/webkit/article-index",
    "category": "sections",
    "structure": "monolithic",
    "props": [
@@ -23636,39 +23208,53 @@
      "doc": "Headline beside the controls, rendered as the band's `h2`; it also names the band."
     },
     {
+     "name": "filters",
+     "type": "ArticleIndexFilters",
+     "default": "'category-search'",
+     "required": "false",
+     "doc": "Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet."
+    },
+    {
      "name": "items",
-     "type": "ArticleIndexBlogItem[]",
+     "type": "ArticleIndexItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The articles, newest first; each is `{ key, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, external? }`."
+     "doc": "The entries, in order; each is `{ key, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, external? }`."
     },
     {
      "name": "categories",
      "type": "string[]",
      "default": "[]",
      "required": "false",
-     "doc": "Segments of the category picker after the show-all segment; the picker is omitted when empty."
+     "doc": "Segments of the category picker after the show-all segment (`category-search`); the picker is omitted when empty."
     },
     {
      "name": "allLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Label of the first segment, which shows every category."
+     "doc": "Label of the first category segment, which shows every category (`category-search`)."
     },
     {
      "name": "categoryLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name of the category picker."
+     "doc": "Accessible name of the category picker (`category-search`)."
     },
     {
      "name": "search",
-     "type": "ArticleIndexBlogSearch",
+     "type": "ArticleIndexSearch",
      "default": "undefined",
      "required": "false",
-     "doc": "The search field's `placeholder` and accessible `label`; the field is omitted when absent."
+     "doc": "The search field's `placeholder` and accessible `label` (`category-search`); the field is omitted when absent."
+    },
+    {
+     "name": "facets",
+     "type": "ArticleIndexFacet[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "The facet dropdowns, in order (`facets`); each is `{ key, label, allLabel, options }`."
     },
     {
      "name": "rowLabel",
@@ -23696,130 +23282,40 @@
      "type": "number",
      "default": "0",
      "required": "false",
-     "doc": "Leading articles left out until a filter applies, because a band above already shows them."
+     "doc": "Leading entries left out until a filter applies, because a band above already shows them."
     },
     {
      "name": "empty",
-     "type": "ArticleIndexBlogEmpty",
+     "type": "ArticleIndexEmpty",
      "default": "undefined",
      "required": "false",
      "doc": "Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that clears every filter."
     },
     {
      "name": "rowKind",
-     "type": "ArticleIndexBlogRowKind",
-     "default": "'byline'",
+     "type": "ArticleIndexRowKind",
+     "default": "undefined",
      "required": "false",
-     "doc": "Row layout: `byline` pins the writers to the foot of the copy, `centered` centres the copy."
+     "doc": "Row layout: `byline` pins the writers to the foot of the copy, `centered` centres the copy; unset, `byline` for `category-search` and `centered` for `facets`."
     },
     {
      "name": "categoryParam",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Name of a URL query parameter that preselects a category on load and scrolls the band into view; off when empty."
+     "doc": "Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty."
     },
     {
      "name": "ariaLabel",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name of the list of articles."
+     "doc": "Accessible name of the list."
     }
    ],
    "surface": "marketing",
-   "examplesFile": "catalog/examples/article-index-blog.json",
-   "docsFile": "catalog/components/article-index-blog.json"
-  },
-  "article-index-resource-hub": {
-   "import": "@aziontech/webkit/article-index-resource-hub",
-   "target": "./src/components/sections/article-index-resource-hub/article-index-resource-hub.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/article-index-resource-hub",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline beside the dropdowns, rendered as the band's `h2`."
-    },
-    {
-     "name": "items",
-     "type": "ArticleIndexResourceHubItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The resources, in order; each is `{ key, href, image?, mark?, meta, title, description?, facets?, external? }`."
-    },
-    {
-     "name": "facets",
-     "type": "ArticleIndexResourceHubFacet[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The facet dropdowns, in order; each is `{ key, label, allLabel, options }`."
-    },
-    {
-     "name": "rowLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Read cue revealed at the end of a row under hover or focus."
-    },
-    {
-     "name": "moreLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Label of the load-more button under the list; without it every match is listed and no button renders."
-    },
-    {
-     "name": "pageSize",
-     "type": "number",
-     "default": "12",
-     "required": "false",
-     "doc": "Rows listed per page when `moreLabel` is set; the load-more button reveals the next page."
-    },
-    {
-     "name": "leading",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "Leading resources left out until a facet applies, because a band above already shows them."
-    },
-    {
-     "name": "empty",
-     "type": "ArticleIndexResourceHubEmpty",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that resets every facet."
-    },
-    {
-     "name": "rowKind",
-     "type": "ArticleIndexResourceHubRowKind",
-     "default": "'centered'",
-     "required": "false",
-     "doc": "Row layout: `centered` centres the copy, `byline` spreads it to the foot of the row."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the list of resources."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/article-index-resource-hub.json",
-   "docsFile": "catalog/components/article-index-resource-hub.json"
+   "examplesFile": "catalog/examples/article-index.json",
+   "docsFile": "catalog/components/article-index.json"
   },
   "cli-terminal": {
    "import": "@aziontech/webkit/cli-terminal",
@@ -23979,7 +23475,14 @@
      "type": "ClientMosaicColumnsCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`, and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
+    },
+    {
+     "name": "reveal",
+     "type": "ClientMosaicColumnsReveal",
+     "default": "'always'",
+     "required": "false",
+     "doc": "When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint."
     }
    ],
    "surface": "marketing",
@@ -24128,61 +23631,27 @@
      "default": "true",
      "required": "false",
      "doc": "Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/closing-call-to-action.json",
-   "docsFile": "catalog/components/closing-call-to-action.json"
-  },
-  "closing-call-to-action-agents": {
-   "import": "@aziontech/webkit/closing-call-to-action-agents",
-   "target": "./src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-agents",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
     },
     {
-     "name": "title",
-     "type": "string",
-     "default": "''",
+     "name": "audiences",
+     "type": "ClosingCallToActionAudience[]",
+     "default": "[]",
      "required": "false",
-     "doc": "Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty."
+     "doc": "The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, kind?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more."
     },
     {
      "name": "typedLead",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Fixed opening of the typed line, before the typed word."
+     "doc": "Fixed opening of the typed line under the audiences, before the typed word."
     },
     {
      "name": "typedWords",
      "type": "string[]",
      "default": "[]",
      "required": "false",
-     "doc": "Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only when there are words."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Closing sentence under the typed line, the same for every audience."
-    },
-    {
-     "name": "audiences",
-     "type": "ClosingCallToActionAgentsAudience[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The ways in, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt) and the first one opens. The switch renders only with two or more."
+     "doc": "Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only with `audiences` and words."
     },
     {
      "name": "audiencesAriaLabel",
@@ -24197,18 +23666,11 @@
      "default": "''",
      "required": "false",
      "doc": "Accessible name of the read-only field that shows an audience's copyable line."
-    },
-    {
-     "name": "hatch",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame."
     }
    ],
    "surface": "marketing",
-   "examplesFile": "catalog/examples/closing-call-to-action-agents.json",
-   "docsFile": "catalog/components/closing-call-to-action-agents.json"
+   "examplesFile": "catalog/examples/closing-call-to-action.json",
+   "docsFile": "catalog/components/closing-call-to-action.json"
   },
   "closing-call-to-action-newsletter": {
    "import": "@aziontech/webkit/closing-call-to-action-newsletter",
@@ -24293,151 +23755,6 @@
    "examplesFile": "catalog/examples/closing-call-to-action-newsletter.json",
    "docsFile": "catalog/components/closing-call-to-action-newsletter.json"
   },
-  "closing-call-to-action-templates": {
-   "import": "@aziontech/webkit/closing-call-to-action-templates",
-   "target": "./src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/closing-call-to-action-templates",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, rendered as its `h2` and naming its region; the band renders nothing when empty."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Sentence under the headline."
-    },
-    {
-     "name": "primaryAction",
-     "type": "ClosingCallToActionTemplatesAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "The white button under the copy; `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
-    },
-    {
-     "name": "secondaryAction",
-     "type": "ClosingCallToActionTemplatesAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "The outlined button beside the primary one; `{ label, href, trailing?, target? }`. Omitted when absent."
-    },
-    {
-     "name": "templates",
-     "type": "ClosingCallToActionTemplatesTemplate[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The template cards of the scrolling grid beside the copy, in order; each is `{ title, description?, icon?, invertInDark?, href? }`. Templates without a title are skipped and the grid is omitted when none is left."
-    },
-    {
-     "name": "deployLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Label of the deploy button on each card; a card renders its button only when both this and its `href` are set."
-    },
-    {
-     "name": "templatesAriaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the scrolling grid of templates."
-    },
-    {
-     "name": "hatch",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/closing-call-to-action-templates.json",
-   "docsFile": "catalog/components/closing-call-to-action-templates.json"
-  },
-  "code-split": {
-   "import": "@aziontech/webkit/code-split",
-   "target": "./src/components/sections/code-split/code-split.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/code-split",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, rendered by the media split as its `h2` and naming its region; the band renders nothing when empty."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Supporting sentence under the headline."
-    },
-    {
-     "name": "codeTabs",
-     "type": "CodeSplitTab[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The files of the code sample, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark drawn beside the tab label. A tab without `code` is skipped."
-    },
-    {
-     "name": "defaultFile",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "value` of the tab open first; empty, or a value no tab carries, opens the first tab."
-    },
-    {
-     "name": "copyAriaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the sample's copy button; empty keeps the code block's own."
-    },
-    {
-     "name": "primaryAction",
-     "type": "CodeSplitAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `secondary`. Omitted when absent."
-    },
-    {
-     "name": "secondaryAction",
-     "type": "CodeSplitAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Second button beside the first; `{ label, href, trailing?, icon?, target?, kind? }` where `kind` defaults to `outlined`. Omitted when absent."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/code-split.json",
-   "docsFile": "catalog/components/code-split.json"
-  },
   "compare-plans": {
    "import": "@aziontech/webkit/compare-plans",
    "target": "./src/components/sections/compare-plans/compare-plans.vue",
@@ -24500,7 +23817,7 @@
      "type": "ComparePlansSection[]",
      "default": "[]",
      "required": "false",
-     "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`; `link` still works, @deprecated since 6.0 — use `action`, removed in 7.0) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover."
+     "doc": "The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover."
     },
     {
      "name": "primaryAction",
@@ -24513,75 +23830,6 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/compare-plans.json",
    "docsFile": "catalog/components/compare-plans.json"
-  },
-  "compare-support-tiers": {
-   "import": "@aziontech/webkit/compare-support-tiers",
-   "target": "./src/components/sections/compare-support-tiers/compare-support-tiers.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/compare-support-tiers",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a hash link can target it."
-    },
-    {
-     "name": "caption",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Screen-reader caption naming the table."
-    },
-    {
-     "name": "columnLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Heading of the service column, shown from the large breakpoint up."
-    },
-    {
-     "name": "pickerAriaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the tier picker shown below the large breakpoint."
-    },
-    {
-     "name": "includedLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Screen-reader text of a ticked cell."
-    },
-    {
-     "name": "excludedLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Screen-reader text of a dashed cell."
-    },
-    {
-     "name": "tiers",
-     "type": "CompareSupportTiersTier[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The tier columns, in order; each is `{ id, name, description, highlighted?, action }` with `action` as `{ label, href }`; a tier without a name is dropped."
-    },
-    {
-     "name": "sections",
-     "type": "CompareSupportTiersSection[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The service bands, in order; each is `{ eyebrow, title, action?, rows }` where `action` is the closing `{ label, href }` link, and a row is `{ label, values, group? }` with one value per tier: `true` or `✓` ticks, `—` dashes, other text shows as written, empty is blank."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/compare-support-tiers.json",
-   "docsFile": "catalog/components/compare-support-tiers.json"
   },
   "comparison-table": {
    "import": "@aziontech/webkit/comparison-table",
@@ -24837,7 +24085,7 @@
      "type": "FeatureScrollItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The features, in order; each is `{ title, description, scene?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `illustration` is a registry name drawn when no scene is set, and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step."
+     "doc": "The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the step, secondary unless `kind` says otherwise."
     }
    ],
    "surface": "marketing",
@@ -24907,13 +24155,6 @@
      "default": "5200",
      "required": "false",
      "doc": "Milliseconds each tab holds before the next one opens."
-    },
-    {
-     "name": "interval",
-     "type": "number",
-     "default": "0",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold."
     },
     {
      "name": "copyAriaLabel",
@@ -25144,25 +24385,11 @@
      "doc": "Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`)."
     },
     {
-     "name": "carouselLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty."
-    },
-    {
      "name": "tickerMarks",
      "type": "string[]",
      "default": "[]",
      "required": "false",
      "doc": "Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks."
-    },
-    {
-     "name": "carouselMarks",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty."
     },
     {
      "name": "illustration",
@@ -25219,13 +24446,27 @@
      "default": "false",
      "required": "false",
      "doc": "Drops the dot texture of the `centered` layout."
+    },
+    {
+     "name": "levels",
+     "type": "HeroBandLevel[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped."
+    },
+    {
+     "name": "items",
+     "type": "HeroBandItem[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items."
     }
    ],
    "slots": [
     {
      "name": "top",
      "scope": "—",
-     "notes": "A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here."
+     "notes": "A scene in the window above the copy (`ProductWidget`, a diagram). The design sample's hero scenes render here."
     },
     {
      "name": "bottom",
@@ -25271,7 +24512,7 @@
      "type": "CapabilityGridItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The capabilities, in order; each is `{ title, description, icon?, points? }`. The band renders nothing when empty."
+     "doc": "The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty."
     },
     {
      "name": "columns",
@@ -25438,47 +24679,6 @@
    "examplesFile": "catalog/examples/console-panel.json",
    "docsFile": "catalog/components/console-panel.json"
   },
-  "customer-spotlight": {
-   "import": "@aziontech/webkit/customer-spotlight",
-   "target": "./src/components/sections/customer-spotlight/customer-spotlight.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/customer-spotlight",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "items",
-     "type": "CustomerSpotlightCard[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The cards, in reading order; each is `{ name, logo, logoWidth?, href, description, brand? }`; `brand` (`{ base, glow }`) defaults to the client registry's colours for `name`. A card opens while hovered or focused."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the list; empty uses the built-in \"Customer stories\"."
-    },
-    {
-     "name": "linkLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Label revealed under the description while the card is open; empty uses the built-in \"Read story\"."
-    },
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a hash link can target it."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/customer-spotlight.json",
-   "docsFile": "catalog/components/customer-spotlight.json"
-  },
   "process-scroll": {
    "import": "@aziontech/webkit/process-scroll",
    "target": "./src/components/sections/process-scroll/process-scroll.vue",
@@ -25588,137 +24788,6 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/section-command.json",
    "docsFile": "catalog/components/section-command.json"
-  },
-  "sticky-carousel": {
-   "import": "@aziontech/webkit/sticky-carousel",
-   "target": "./src/components/sections/sticky-carousel/sticky-carousel.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/sticky-carousel",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a hash link can target it."
-    },
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Overline above the title."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, rendered as its `h2`; the band renders nothing when empty."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Paragraph beside the headline."
-    },
-    {
-     "name": "items",
-     "type": "StickyCarouselItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The cards, in order; each is `{ title, description }` and is numbered by its position."
-    },
-    {
-     "name": "ariaLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Accessible name of the card row; defaults to the title."
-    },
-    {
-     "name": "headerOffset",
-     "type": "string",
-     "default": "'3.5rem'",
-     "required": "false",
-     "doc": "Height of the sticky site header the band pins under, from the large breakpoint up; any CSS length."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/sticky-carousel.json",
-   "docsFile": "catalog/components/sticky-carousel.json"
-  },
-  "hero-copy-on-top-art": {
-   "import": "@aziontech/webkit/hero-copy-on-top-art",
-   "target": "./src/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/hero-copy-on-top-art",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Short overline above the headline."
-    },
-    {
-     "name": "highlight",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Opening words of the headline, painted in the brand accent; reads as one sentence with `title`."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Sentence under the headline."
-    },
-    {
-     "name": "primaryAction",
-     "type": "HeroCopyOnTopArtAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
-    },
-    {
-     "name": "secondaryAction",
-     "type": "HeroCopyOnTopArtAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
-    },
-    {
-     "name": "levels",
-     "type": "HeroCopyOnTopArtLevel[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The columns of the topology, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped, and the scene renders only when a level has a card."
-    },
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/hero-copy-on-top-art.json",
-   "docsFile": "catalog/components/hero-copy-on-top-art.json"
   },
   "hero-form": {
    "import": "@aziontech/webkit/hero-form",
@@ -25834,25 +24903,11 @@
      "doc": "Overline above the client ticker."
     },
     {
-     "name": "carouselLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty."
-    },
-    {
      "name": "tickerMarks",
      "type": "string[]",
      "default": "[]",
      "required": "false",
      "doc": "Registry names of the client marks, in order; the ticker renders only when there are marks."
-    },
-    {
-     "name": "carouselMarks",
-     "type": "string[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty."
     },
     {
      "name": "loading",
@@ -25886,82 +24941,6 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/hero-form.json",
    "docsFile": "catalog/components/hero-form.json"
-  },
-  "hero-with-opening": {
-   "import": "@aziontech/webkit/hero-with-opening",
-   "target": "./src/components/sections/hero-with-opening/hero-with-opening.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/hero-with-opening",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Short overline above the headline."
-    },
-    {
-     "name": "highlight",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Opening words of the headline, painted in the brand accent; reads as one sentence with `title`."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Page headline, rendered as the page `h1`; the band renders nothing when empty. Without `titleLength`, a title longer than 45 characters widens the headline column."
-    },
-    {
-     "name": "titleLength",
-     "type": "HeroWithOpeningTitleLength",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Length of the headline: `short` keeps it on the narrow `xl` column, `long` widens it to `4xl` so it breaks into two lines instead of three; unset, the column follows the 45-character rule."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Sentence under the headline."
-    },
-    {
-     "name": "primaryAction",
-     "type": "HeroWithOpeningAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
-    },
-    {
-     "name": "secondaryAction",
-     "type": "HeroWithOpeningAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
-    },
-    {
-     "name": "items",
-     "type": "HeroWithOpeningItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The arguments in reading order, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items."
-    },
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a hash link can target it."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/hero-with-opening.json",
-   "docsFile": "catalog/components/hero-with-opening.json"
   },
   "investor-marks": {
    "import": "@aziontech/webkit/investor-marks",
@@ -26408,11 +25387,32 @@
      "doc": "Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media."
     },
     {
+     "name": "codeTabs",
+     "type": "MediaSplitBandCodeTab[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped."
+    },
+    {
+     "name": "defaultFile",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "value` of the code tab open first; empty, or a value no tab carries, opens the first tab."
+    },
+    {
+     "name": "copyAriaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the code sample's copy button; empty keeps the code block's own."
+    },
+    {
      "name": "widget",
      "type": "ProductWidgetName",
      "default": "undefined",
      "required": "false",
-     "doc": "Name of the product console widget drawn in the media cell when no scene is set."
+     "doc": "Name of the product console widget drawn in the media cell when neither a scene nor code is set."
     },
     {
      "name": "diagram",
@@ -26447,14 +25447,14 @@
      "type": "MediaSplitBandAction",
      "default": "undefined",
      "required": "false",
-     "doc": "First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it."
+     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind."
     },
     {
      "name": "secondaryAction",
      "type": "MediaSplitBandAction",
      "default": "undefined",
      "required": "false",
-     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked."
+     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked."
     }
    ],
    "surface": "marketing",
@@ -26805,61 +25805,6 @@
    "examplesFile": "catalog/examples/recognition-marquee.json",
    "docsFile": "catalog/components/recognition-marquee.json"
   },
-  "resource-grid": {
-   "import": "@aziontech/webkit/resource-grid",
-   "target": "./src/components/sections/resource-grid/resource-grid.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/resource-grid",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Id set on the band so an in-page `#hash` link can target it."
-    },
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Overline above the headline."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, which also names its region and the scroll area."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Lead sentence beside the grid."
-    },
-    {
-     "name": "items",
-     "type": "ResourceGridItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The resource cards, in order; each is `{ title, description?, href }`, and a card with no title is skipped."
-    },
-    {
-     "name": "primaryAction",
-     "type": "ResourceGridAction",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Button under the copy; dropped when its label or link is missing."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/resource-grid.json",
-   "docsFile": "catalog/components/resource-grid.json"
-  },
   "site-footer": {
    "import": "@aziontech/webkit/site-footer",
    "target": "./src/components/sections/site-footer/site-footer.vue",
@@ -27040,54 +25985,6 @@
    "surface": "marketing",
    "examplesFile": "catalog/examples/stats-band.json",
    "docsFile": "catalog/components/stats-band.json"
-  },
-  "sticky-scroll-code": {
-   "import": "@aziontech/webkit/sticky-scroll-code",
-   "target": "./src/components/sections/sticky-scroll-code/sticky-scroll-code.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/sticky-scroll-code",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a `#hash` link can scroll to it."
-    },
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Overline above the section title."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Supporting sentence under the headline."
-    },
-    {
-     "name": "items",
-     "type": "StickyScrollCodeItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The capabilities, in reading order; each is `{ title, description, code, action? }` where `code` is the one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the open item, `secondary` unless `kind` says `outlined` or `transparent`, opening in a new tab when `target` is `_blank`."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/sticky-scroll-code.json",
-   "docsFile": "catalog/components/sticky-scroll-code.json"
   },
   "story-library": {
    "import": "@aziontech/webkit/story-library",
@@ -27311,59 +26208,25 @@
      "default": "[]",
      "required": "false",
      "doc": "Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty."
+    },
+    {
+     "name": "closing",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it."
+    },
+    {
+     "name": "hatch",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`."
     }
    ],
    "surface": "marketing",
    "examplesFile": "catalog/examples/template-gallery.json",
    "docsFile": "catalog/components/template-gallery.json"
-  },
-  "use-case-links": {
-   "import": "@aziontech/webkit/use-case-links",
-   "target": "./src/components/sections/use-case-links/use-case-links.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/use-case-links",
-   "category": "sections",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "eyebrow",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Overline above the section title."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty."
-    },
-    {
-     "name": "description",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Supporting sentence under the headline."
-    },
-    {
-     "name": "items",
-     "type": "UseCaseLinksItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "The use cases rendered as linked topics in a three-column divider grid, in order; each item is `{ icon, title, description, href? }`; an item without `href` renders as a plain, unlinked topic."
-    },
-    {
-     "name": "anchor",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "In-page id set on the band so a hash link can target it."
-    }
-   ],
-   "surface": "marketing",
-   "examplesFile": "catalog/examples/use-case-links.json",
-   "docsFile": "catalog/components/use-case-links.json"
   },
   "use-cases": {
    "import": "@aziontech/webkit/use-cases",
@@ -28899,17 +27762,14 @@
   },
   "brandMarks": {
    "title": "Brand marks",
-   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` and `QuoteCarousel` `mark`, `ClientQuotes` `mark`); the label is the accessible name.",
+   "summary": "Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.",
    "unknown": "An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.",
    "registry": "src/svg/brands/registry.ts",
    "usedBy": [
     "client-quotes",
     "hero",
     "hero-band",
-    "hero-copy-on-top-art",
     "hero-form",
-    "hero-with-opening",
-    "quote-carousel",
     "quote-tabs",
     "site-page",
     "template-gallery",

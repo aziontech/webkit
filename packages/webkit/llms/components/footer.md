@@ -9,6 +9,8 @@
 
 ## When to use
 
+- Use Footer to compose a footer in product or docs.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - The page-level footer of a site or application, paired with `GlobalHeader`.
 - Grouped navigation links at the bottom of the page plus a brand/social/status bar.
 

@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use ColumnNavigation for a columned directory of destinations inside a marketing band.
 - As the "everything on the platform" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.
 - When a set of destinations is grouped and the group's name carries as much as the destinations under it.
 - When each destination needs a glyph and one line of what it is, not just a label.

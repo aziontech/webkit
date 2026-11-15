@@ -3,10 +3,10 @@ name: stats-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: cb21cd1fdab35e7e46205aaf93c8ae73022ce6e2d2a8a179429530998c0ca9ae
+last_updated: 2026-11-15
+checksum: b4a20c4fd5312649c2ac57b922cd04287f797ed20d5b283388c8262b410518cc
 template: 2
 ---
 
@@ -18,6 +18,8 @@ The proof-by-numbers band of a marketing page: a framed row of big figures, each
 
 ## When to use
 
+- Use StatsBand for a band of proof figures placed from page JSON.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`stats-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`big-numbers`).
 - To state reach, scale or results in three to five figures right after a hero or a claim.
 
 ## When NOT to use

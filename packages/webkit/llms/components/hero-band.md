@@ -1,6 +1,6 @@
 # Hero Band
 
-> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`. `kind` picks the layout only: `centered` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges; every layout takes the same copy, actions and client strip. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
+> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `kind` picks the layout only: `centered` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
 - Import: `import HeroBand from '@aziontech/webkit/hero-band'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,7 +8,9 @@
 
 ## When to use
 
-- To open a home, solution, product, listing or contact page with its headline and main actions.
+- Use HeroBand for every marketing page opening; pick the layout with `kind`.
+- To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `kind="copy-on-top-art"` for a topology under the copy.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`hero-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
 
 ## Do
 
@@ -19,8 +21,8 @@
 
 ## Don’t
 
-- For a hero followed by a grid of arguments → use `hero-with-opening`.
-- For a hero with a topology scene under the copy → use `hero-copy-on-top-art`.
+- When the page exists to capture a lead and the form sits above the fold → use `hero-form`.
+- In a hand-built SFC that needs slots HeroBand does not offer → use the `hero` primitive.
 - For a band inside the page column → use `section-module` or a sibling section.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -28,6 +30,9 @@
 
 - [hero](hero.md) — the band primitive every layout is rendered with.
 - hero-title` — the headline block rendered inside it.
+- [hero-form](hero-form.md) — the opening band with a lead form beside the copy.
+- [flow](flow.md) — the diagram primitive the `levels` topology is drawn with.
+- [topic](topic.md) — the icon, heading and sentence each argument of `items` is rendered with.
 
 ## Props
 
@@ -42,9 +47,7 @@
 | `primaryAction` | `HeroBandAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `secondaryAction` | `HeroBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `tickerLabel` | `string` | `''` | false | Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`). |
-| `carouselLabel` | `string` | `''` | false | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty. |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. |
-| `carouselMarks` | `string[]` | `[]` | false | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible description of the illustration. |
 | `image` | `HeroBandImage` | `undefined` | false | Image set beside the copy in the `copy-beside-art` layout when no `illustration` is given; `{ src, alt, width, height }`. A portrait image (taller than wide) is drawn at half width, centered, below `md`. |
@@ -53,12 +56,14 @@
 | `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the site header above the band, taken out of a band that fills a screen; defaults to the `SiteNav` bar's token, any CSS length, empty for a page with no header above it. |
 | `titleLength` | `HeroBandTitleLength` | `'short'` | false | Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. |
 | `plain` | `boolean` | `false` | false | Drops the dot texture of the `centered` layout. |
+| `levels` | `HeroBandLevel[]` | `[]` | false | Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. |
+| `items` | `HeroBandItem[]` | `[]` | false | Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `top` | — | A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here. |
+| `top` | — | A scene in the window above the copy (`ProductWidget`, a diagram). The design sample's hero scenes render here. |
 | `bottom` | — | A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers. |
 
 ## Assets
@@ -75,12 +80,14 @@
 - The client strip renders only when `tickerMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
 - `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-art-width`, `--hero-art-bleed`, `--hero-art-trim-top` and `--hero-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
 - `data-orientation="portrait"` on an `image` taller than it is wide
+- Topology: in `copy-on-top-art` with no `top` or `bottom` slot, `levels` draws a `Flow` in the bottom window, one column per level and one card per node with a title; a level left with no card is dropped, and with none left the window is not drawn. A lit node carries `data-lit` and a brand glow. Other layouts ignore `levels`, and a slotted scene wins over it
+- Argument grid: `items` renders a framed three-column `CardGrid` of `Topic`s (headings at level 2) inside a site-wide `SectionContainer` under the hero, closed by a hatched `SectionGap`; only with a title and at least one item
 
 ## Accessibility
 
 - Visible focus: owned by `button`.
 - Keyboard map: `Tab` moves through the actions; the client strip is not focusable.
-- ARIA: the hero `<section>` is named by the full headline (`aria-label`); the headline is the page `h1`; the illustration is named by `illustrationAriaLabel`, decorative when empty; an `image` carries its `alt`.
+- ARIA: the hero `<section>` is named by the full headline (`aria-label`); the headline is the page `h1`; the illustration is named by `illustrationAriaLabel`, decorative when empty; an `image` carries its `alt`. The topology cards are static text (eyebrow, title, status tag), not focusable; each argument heading is an `h2` under the page `h1`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `hero-title` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the pixel floor and the client strip stop under reduced motion in `texture-material` and `ticker`.
 - Touch target ≥40×40 px — the large buttons meet it.

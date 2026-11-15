@@ -3,10 +3,10 @@ name: big-numbers
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 84a65c49f35780df43d4412f665f770493e4252b6c197422f555253cf466c2a6
+spec_version: 4
+checksum: 74ca9d458ed2cd8bba453b79d989b443e2f4d4fb084ff07137b830f8265ad57b
 created: 2026-09-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Big Numbers — Component Spec
@@ -17,6 +17,8 @@ A band of headline figures — throughput, uptime, points of presence — set in
 
 ## When to use
 
+- Use BigNumbers inside another band or a hand-built SFC; for product KPIs use StatTile.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`stats-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`big-numbers`).
 - To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.
 - Whenever the figure itself is the message and the caption only names what was measured.
 - Under a `section-title`, as the opening evidence of a section.

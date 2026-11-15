@@ -1,6 +1,6 @@
 # Closing Call To Action
 
-> The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `button`, `frame-box` and `texture-material`. `kind` picks the layout only: `split` sets the headline and the primary action in a raised lead cell beside an aside cell carrying the description and the secondary action, over a tall closing frame; `panel` sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. All three take the same copy, the same two actions and an optional copyable shell `command` set before the actions. `frame` draws the closing frame alone, with no ask: the close of a page whose last band already carries its own action. `hatch` turns the closing frame off when another closing band stacks directly below and draws the shared one (`site-page` sets it for stacked closings).
+> The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `button`, `frame-box` and `texture-material`. `kind` picks the layout only: `split` sets the headline and the primary action in a raised lead cell beside an aside cell carrying the description and the secondary action, over a tall closing frame; `panel` sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. All three take the same copy, the same two actions and an optional copyable shell `command` set before the actions. `frame` draws the closing frame alone, with no ask: the close of a page whose last band already carries its own action. `hatch` turns the closing frame off when another closing band stacks directly below and draws the shared one (`site-page` sets it for stacked closings). In `primary`, `audiences` turns the ask into a switch between ways in (a person or an agent): each audience swaps in its own copyable line and actions, and a typed line (`typedLead` + `typedWords`) loops under them; the switch block loads on demand, only when `audiences` is set.
 
 - Import: `import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,6 +8,9 @@
 
 ## When to use
 
+- Use ClosingCallToAction for the last band before the site footer that asks for one action, with links or a command.
+- Rendering page JSON, or you need a whole band with no custom content → this section. Building an SFC by hand, needing slots, or nesting inside another band → the `call-to-action` primitive.
+- In `primary` with `audiences`, to close a page whose reader may be a person or an agent, each with its own way in.
 - To close a solution or product page on its one or two asks (`split`), or a page such as Careers on one action (`panel`), or a page that ends on its one loud ask (`primary`).
 
 ## Do
@@ -17,11 +20,14 @@
 - Use `kind: 'frame'` (no copy) to close a page that ends on a band with its own actions (a listing, a legal page); `site-page` draws no gap before it.
 - Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.
 - Give `command` a short shell line (`npm create azion@latest`); it is copied as written and reads as a command, with the `$` prompt.
+- Give `audiences` two or more entries so the switch renders; set `audiencesAriaLabel` and `lineAriaLabel` so the switch and the copyable field are named. With `audiences` set, `description` is the closing sentence under the typed line, and `command` and the two actions are not drawn.
+- Mark a command line with `copy.shell` so it draws the `$` prompt; leave a prompt meant for an agent bare.
 - In `split`, keep `title` and `titleMuted` to one short line each; `panel` and `primary` do not draw `titleMuted`, and `primary` does not draw `eyebrow`.
 
 ## Don’t
 
 - For a newsletter sign-up close → use `closing-call-to-action-newsletter`.
+- For a close that lists deployable templates → use `template-gallery` with `closing`.
 - For an ask in the middle of a page → compose `call-to-action` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -29,6 +35,7 @@
 
 - [call-to-action](call-to-action.md) — the framed band this section renders.
 - [closing-call-to-action-newsletter](closing-call-to-action-newsletter.md) — the closing band whose ask is a subscribe form.
+- [template-gallery](template-gallery.md) — with `closing`, the closing band that lists deployable templates.
 
 ## Props
 
@@ -44,6 +51,11 @@
 | `secondaryAction` | `ClosingCallToActionAction` | `undefined` | false | The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. |
 | `command` | `string` | `''` | false | Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`. |
 | `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
+| `audiences` | `ClosingCallToActionAudience[]` | `[]` | false | The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, kind?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. |
+| `typedLead` | `string` | `''` | false | Fixed opening of the typed line under the audiences, before the typed word. |
+| `typedWords` | `string[]` | `[]` | false | Words typed, held, erased and typed again in order after `typedLead`; the typed line renders only with `audiences` and words. |
+| `audiencesAriaLabel` | `string` | `''` | false | Accessible name of the audience switch. |
+| `lineAriaLabel` | `string` | `''` | false | Accessible name of the read-only field that shows an audience's copyable line. |
 
 ## States
 
@@ -54,26 +66,28 @@
 - `hatch` off: the band renders without its closing frame
 - Empty: when `title` is empty the band renders nothing but its root (except in `frame`)
 - Each action and the command line render only when given
+- `audiences` (in `primary`): picking an audience swaps the copyable line and the actions; the swapped row sits in a polite live region and fades in. After mount the typed words are typed (90 ms a character), held (1.8 s), erased (45 ms a character) and the next one typed (after 270 ms), in a loop; the timer is cleared on scope dispose. Under reduced motion every word shows at once, joined by commas, and the cursor is hidden
 
 ## Accessibility
 
 - Visible focus: owned by the composed buttons.
-- Keyboard map: `Tab` reaches the command line and its copy button, then the primary and the secondary action; `Enter` follows an action.
+- Keyboard map: `Tab` reaches the command line and its copy button, then the primary and the secondary action; `Enter` follows an action. With `audiences`, `Tab` reaches the switch (arrow keys move it, owned by `toggle-group`), the copy button and each action.
+- With `audiences`: the switch is a `radiogroup` named by `audiencesAriaLabel`; the swapped row is `aria-live="polite"`; the read-only field is named by `lineAriaLabel` and the copy button by the audience's `copy.label`. The typed line reads its whole sentence from a visually hidden copy while the animated letters are `aria-hidden`.
 - ARIA: the `call-to-action` renders the band's `<section>` named by its title; the root is a plain `div` so the band has one landmark. The closing frame is decorative.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `call-to-action` and `button`.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the texture and the buttons carry their own fallback.
+- `motion-reduce:transition-none motion-reduce:transform-none` — see the Motion table; under reduced motion nothing types or blinks, and the texture and the buttons carry their own fallback.
 - Touch target ≥40×40 px — the actions are large buttons.
 
 ## Right-to-left
 
-- Layout: logical utilities only; the split cells mirror as `call-to-action` lays them out.
+- Layout: logical utilities only (`ms-px` on the typed-line cursor); the split cells mirror as `call-to-action` lays them out.
 - Icons: the trailing chevron on an action mirrors with `button`; the texture is not mirrored.
-- Keyboard: no arrow-key handling.
+- Keyboard: the audience switch's arrow keys follow the direction (owned by `toggle-group`); nothing else handles arrows.
 - User data: the command line renders `dir="ltr"` (owned by `section-command`).
 
 ## Internationalization
 
-No built-in strings of its own: every visible text is a prop from the page JSON. The command line's field and copy button names come from `section-command` (`sectionCommand.command`, `sectionCommand.copyCommand`).
+No built-in strings of its own: every visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `section-command` (`sectionCommand.command`, `sectionCommand.copyCommand`).
 
 - Formatting: none.
 

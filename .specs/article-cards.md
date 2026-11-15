@@ -6,8 +6,8 @@ status: implemented
 spec_version: 2
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 9545e04804820e1e5f7543edc1d45b251c2e95249e78573090e68ab56fe9a442
+last_updated: 2026-11-15
+checksum: 9f6380c2623e8177d2357d70507405ebf19942bd8f550bef1648b4875c44cc48
 ---
 # ArticleCards — Component Spec
 
@@ -22,7 +22,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 ## When NOT to use
 
-- For the full, filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.
+- For the full, filterable list of articles → use `article-index`.
 - For one featured article selected from a wall → use `article-highlight`.
 
 ## Related

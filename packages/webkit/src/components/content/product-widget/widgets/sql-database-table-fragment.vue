@@ -8,8 +8,8 @@
   import Input from '../../../inputs/input/input.vue'
   import Select from '../../../inputs/select/index'
   import Card from '../../card/card.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'SqlDatabaseTableFragment' })
 

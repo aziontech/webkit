@@ -249,11 +249,11 @@ test('validateUsage does NOT flag a sibling package as an invalid webkit import'
 })
 
 test('getUsageExample binds an empty literal for a required array prop (never prop="text")', () => {
-  const res = getUsageExample(catalog, 'radio-cards', { fromStory: false })
+  const res = getUsageExample(catalog, 'site-nav', { fromStory: false })
   assert.equal(res.found, true)
-  // items: RadioCardsItem[] is required and non-scalar → :items="[]", not items="text"
-  assert.match(res.sfc, /:items="\[\]"/)
-  assert.doesNotMatch(res.sfc, /items="text"/)
+  // menus: SiteNavMenu[] is required and non-scalar → :menus="[]", not menus="text"
+  assert.match(res.sfc, /:menus="\[\]"/)
+  assert.doesNotMatch(res.sfc, /menus="text"/)
 })
 
 test('validateUsage flags a hardcoded hex color in a class string', () => {

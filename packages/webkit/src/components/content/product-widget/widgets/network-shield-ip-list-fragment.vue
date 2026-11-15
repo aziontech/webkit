@@ -8,8 +8,8 @@
   import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
   import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'NetworkShieldIpListFragment' })
 

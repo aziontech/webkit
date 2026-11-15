@@ -1,6 +1,6 @@
 # Template Gallery
 
-> The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own.
+> The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
 - Import: `import TemplateGallery from '@aziontech/webkit/template-gallery'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use TemplateGallery on marketing pages to show deployable templates; set `closing` when it is the last band.
 - On a solution page (Retail, Web Apps, AI Workloads, Security, Performance, Streaming) to show the templates a reader can deploy right away.
 - Whenever a band pairs one pitch with a long, browsable list of deployable starters.
 
@@ -16,12 +17,15 @@
 - Keep the wall to an even number of templates so the two columns end level.
 - Turn on `invertInDark` only for a mark whose artwork ships in dark ink, so it stays legible on the dark theme.
 - Set `templatesAriaLabel` so the scrolling wall is announced by name.
+- Set `closing` only on the last band of the page, right above `site-footer`: it draws the hatched closing frame itself, so nothing follows it inside the page column (no trailing `SectionGap`, no closing `FrameBox`).
+- Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.
 
 ## Don’t
 
 - For a grid of features with artwork → use `feature-tiles`.
 - For a ticker of marks alone → compose `ticker` directly.
 - For a handful of icon-led use cases → use `use-cases`.
+- For a closing ask with links or a command and no templates → use `closing-call-to-action`; for an email sign-up close → use `closing-call-to-action-newsletter`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -44,6 +48,8 @@
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |
 | `tickerLabel` | `string` | `''` | false | Overline above the row of marks. |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty. |
+| `closing` | `boolean` | `false` | false | Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it. |
+| `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`. |
 
 ## Assets
 
@@ -54,13 +60,14 @@
 - Visual states: `default`
 - A card with an `href` is a link target as a whole: a click anywhere on it follows the `href` (and a modified or middle click opens it in a new tab, as any link does), the pointer turns to the hand over it, and hovering it lights its deploy button. With a deploy button the card keeps one tab stop — the button — and the card-wide link is a pointer-only target hidden from assistive technology; without a deploy button the card-wide link is the card's one tab stop, named by the template title
 - A card without an `href` is not interactive: no hand pointer, no hover light
-- Empty: when no template carries a title the band renders nothing — not the split, not the ticker
+- Empty: when no template carries a title the band renders nothing — not the split, not the ticker, not the closing frame
+- `closing`: the tall hatched closing frame (`data-hatch="true"`, decorative) follows the band; `hatch` off drops it
 
 ## Accessibility
 
 - Visible focus: owned by the composed `button`s and the `scroll-area`; a card-wide link that is a card's only tab stop draws `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset` over the card.
 - Keyboard map: `Tab` reaches the copy's actions, the scrolling wall and each card's one link (its deploy button, or the card itself when it has none) in reading order; `Enter` follows a link. Nothing else in the band is interactive.
-- ARIA: the band's root is a plain `div`, because `media-split` already renders the band's region named by its title; the wall is `scroll-area`'s region named by `templatesAriaLabel`; the template marks are decorative (`aria-hidden`); a card-wide link duplicated by a deploy button is `aria-hidden` with `tabindex="-1"`, so each card is announced once.
+- ARIA: the band's root is a plain `div`, because `media-split` already renders the band's region named by its title; the wall is `scroll-area`'s region named by `templatesAriaLabel`; the template marks and the closing frame are decorative (`aria-hidden`, or no content); a card-wide link duplicated by a deploy button is `aria-hidden` with `tabindex="-1"`, so each card is announced once.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): card titles `var(--text-default)`, card lines `var(--text-muted)`; marks flagged `invertInDark` invert under the dark theme.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the button hover and the ticker scroll belong to `button` and `ticker`, which carry their own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — the deploy buttons are medium `button`s, the copy's actions are large.
@@ -129,5 +136,108 @@
     ticker-label="Compatible with Your Stack"
     :ticker-marks="['nextjs', 'astro', 'react', 'vue', 'angular', 'nuxt']"
   />
+</template>
+```
+
+### Closing
+
+```vue
+<script setup>
+  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import TemplateGallery from '@aziontech/webkit/template-gallery'
+
+  const primaryAction = {
+    label: 'Start for free',
+    href: '/signup'
+  }
+
+  const secondaryAction = {
+    label: 'Browse all templates',
+    href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates',
+    trailing: true
+  }
+
+  const templates = [
+    {
+      title: 'AI Inference Starter Kit',
+      description: 'Run AI models close to your users.',
+      icon: 'ai ai-edge-functions',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Next.js Commerce',
+      description: 'Ecommerce template built with Next.js and Shopify.',
+      icon: 'ai-cor ai-next',
+      invertInDark: true,
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Astro Odyssey',
+      description: 'A business marketing website built with Astro.',
+      icon: 'ai-cor ai-astro',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Next.js AI Chatbot',
+      description: 'A server-rendered Next.js App Router AI chatbot.',
+      icon: 'ai-cor ai-next',
+      invertInDark: true,
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'SvelteKit Commerce',
+      description: 'Ecommerce template built with SvelteKit and Shopify.',
+      icon: 'ai-cor ai-svelte',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Next.js Multi-tenant Starter',
+      description: 'A minimal multi-tenant Next.js starter.',
+      icon: 'ai-cor ai-next',
+      invertInDark: true,
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Cosmic Agency Website',
+      description: "A template built on Cosmic's React components.",
+      icon: 'ai-cor ai-react',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    },
+    {
+      title: 'Functions Starter Kit',
+      description: 'A “Hello World” originless app powered by functions.',
+      icon: 'ai ai-edge-functions',
+      href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
+    }
+  ]
+</script>
+
+<template>
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <TemplateGallery
+      closing
+      anchor="contact"
+      title="Start from a template. Ship it today."
+      description="Deploy a ready-made starter in seconds, then make it yours."
+      :primary-action="primaryAction"
+      :secondary-action="secondaryAction"
+      :templates="templates"
+      deploy-label="Deploy"
+      templates-aria-label="Templates you can deploy"
+      :hatch="false"
+    />
+    <SectionGap hatch />
+
+    <ClosingCallToAction
+      kind="panel"
+      title="Ready to talk?"
+      description="Tell us what you are building and a specialist will reach out."
+      :primary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    />
+  </SectionContainer>
 </template>
 ```

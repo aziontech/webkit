@@ -1,6 +1,7 @@
 {
  "purpose": "The empty registration frame that divides two page sections. On a page with no margins between sections, this frame *is* the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.",
  "useWhen": [
+  "Use SectionGap only between marketing page sections inside SectionContainer; in product UI use Separator.",
   "Between two stacked page sections on a full-bleed, framed layout.",
   "Wherever a page needs breathing room that still reads as part of the frame instead of as empty margin.",
   "To change the weight of one break without touching its neighbours — a `large` gap before a new part of the page, `small` between two bands that belong together."

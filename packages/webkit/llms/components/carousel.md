@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Carousel when the reader steps through cards themself.
 - When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.
 - For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.
 - Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need.

@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Quote for one testimonial.
 - To carry one customer statement inside a marketing section.
 - Whenever a claim the page makes is better made by the customer who verified it.
 - As the repeated unit of a testimonial row or grid, one instance per quote — in `inline`, where every cell carries equal weight.

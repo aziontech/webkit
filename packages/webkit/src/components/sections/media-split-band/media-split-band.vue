@@ -46,6 +46,9 @@
     framed?: boolean
   }
 
+  /** Button kind of an action, overriding the one the band draws. */
+  export type MediaSplitBandActionKind = 'secondary' | 'outlined' | 'transparent'
+
   /** A call to action under the copy. */
   export type MediaSplitBandAction = {
     /** Visible label of the action. */
@@ -54,8 +57,30 @@
     href: string
     /** Closes the label on a trailing chevron that reads as "go". */
     trailing?: boolean
+    /** Icon class drawn before the label when the action has no trailing chevron. */
+    icon?: string
     /** Link target of the action. */
     target?: '_blank' | '_self'
+    /** Button kind; wins over the kind the band draws, and transparent draws a quiet text button. */
+    kind?: MediaSplitBandActionKind
+  }
+
+  /** One file of the code sample drawn in the media cell. */
+  export type MediaSplitBandCodeTab = {
+    /** Label of the tab in the strip. */
+    label: string
+    /** Stable id of the tab. */
+    value: string
+    /** The code shown verbatim; a tab without it is skipped. */
+    code: string
+    /** Language the code is highlighted as. */
+    language?: string
+    /** File name shown in the filename bar. */
+    fileName?: string
+    /** Icon class shown beside the file name. */
+    fileIcon?: string
+    /** Icon class of the mark drawn beside the tab label. */
+    icon?: string
   }
 
   interface Props {
@@ -77,7 +102,13 @@
     linked?: boolean
     /** Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media. */
     scene?: MediaSplitBandScene
-    /** Name of the product console widget drawn in the media cell when no scene is set. */
+    /** Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped. */
+    codeTabs?: MediaSplitBandCodeTab[]
+    /** `value` of the code tab open first; empty, or a value no tab carries, opens the first tab. */
+    defaultFile?: string
+    /** Accessible name of the code sample's copy button; empty keeps the code block's own. */
+    copyAriaLabel?: string
+    /** Name of the product console widget drawn in the media cell when neither a scene nor code is set. */
     widget?: ProductWidgetName
     /** Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set. */
     diagram?: DiagramName
@@ -87,9 +118,9 @@
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it. */
+    /** First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind. */
     primaryAction?: MediaSplitBandAction
-    /** Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked. */
+    /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked. */
     secondaryAction?: MediaSplitBandAction
   }
 
@@ -103,6 +134,9 @@
     texture: 'pixelate',
     linked: true,
     scene: undefined,
+    codeTabs: () => [],
+    defaultFile: '',
+    copyAriaLabel: '',
     widget: undefined,
     diagram: undefined,
     image: undefined,
@@ -116,6 +150,7 @@
     () => import('../../content/product-widget/product-widget.vue')
   )
   const Diagram = defineAsyncComponent(() => import('../../marketing/diagram/diagram.vue'))
+  const CodeBlock = defineAsyncComponent(() => import('../../code/code-block/code-block.vue'))
 
   const attrs = useAttrs()
 
@@ -127,10 +162,23 @@
 
   const sceneComponent = computed(() => (props.scene ? resolveScene(props.scene.component) : null))
 
+  const tabs = computed(() => props.codeTabs.filter((tab) => tab.code.length > 0))
+
+  const tabIcons = computed<Record<string, string>>(() =>
+    Object.fromEntries(tabs.value.map((tab) => [tab.value, tab.icon ?? '']))
+  )
+
+  const hasTabIcons = computed(() => tabs.value.some((tab) => Boolean(tab.icon)))
+
+  const openFile = computed(() =>
+    tabs.value.some((tab) => tab.value === props.defaultFile) ? props.defaultFile : undefined
+  )
+
   const hasImage = computed(() => Boolean(props.image?.src))
 
   const media = computed(() => {
     if (sceneComponent.value) return 'scene'
+    if (tabs.value.length > 0) return 'code'
     if (props.widget) return 'widget'
     if (props.diagram) return 'diagram'
     if (hasImage.value) return props.image?.framed ? 'framed-image' : 'image'
@@ -141,7 +189,11 @@
   const hasMedia = computed(() => media.value !== null)
 
   const mediaPadded = computed(
-    () => media.value === 'widget' || media.value === 'diagram' || media.value === 'framed-image'
+    () =>
+      media.value === 'code' ||
+      media.value === 'widget' ||
+      media.value === 'diagram' ||
+      media.value === 'framed-image'
   )
 
   const primary = computed(() =>
@@ -157,7 +209,12 @@
     return actions.length === 1 ? (actions[0] ?? null) : null
   })
 
-  const bandHref = computed(() => (props.linked && lone.value ? lone.value.href : ''))
+  const bandHref = computed(() =>
+    props.linked && lone.value && media.value !== 'code' ? lone.value.href : ''
+  )
+
+  const actionIcon = (action: MediaSplitBandAction): string =>
+    action.trailing ? 'pi pi-chevron-right' : (action.icon ?? '')
 </script>
 
 <template>
@@ -198,6 +255,31 @@
             v-if="media === 'scene'"
             v-bind="scene?.props ?? {}"
           />
+          <div
+            v-else-if="media === 'code'"
+            class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-elements) border-x border-t border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm)"
+          >
+            <CodeBlock
+              :tabs="tabs"
+              :default-value="openFile"
+              line-numbers
+              :bordered="false"
+              v-bind="{ animateLines: true }"
+              :copy-aria-label="copyAriaLabel || undefined"
+            >
+              <template
+                v-if="hasTabIcons"
+                #tab-icon="{ tab }"
+              >
+                <i
+                  v-if="tabIcons[tab.value]"
+                  :class="tabIcons[tab.value]"
+                  class="size-3.5!"
+                  aria-hidden="true"
+                />
+              </template>
+            </CodeBlock>
+          </div>
           <ProductWidget
             v-else-if="media === 'widget' && widget"
             :name="widget"
@@ -250,11 +332,11 @@
             :label="lone.label"
             :href="lone.href"
             :target="lone.target"
-            kind="outlined"
+            :kind="lone.kind ?? 'outlined'"
             size="medium"
-            icon="pi pi-chevron-right"
-            icon-position="trailing"
-            animated
+            :icon="lone.icon && !lone.trailing ? lone.icon : 'pi pi-chevron-right'"
+            :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
+            :animated="!(lone.icon && !lone.trailing)"
           />
           <Button
             key="button-2"
@@ -262,9 +344,9 @@
             :label="primary.label"
             :href="primary.href"
             :target="primary.target"
-            kind="secondary"
+            :kind="primary.kind ?? 'secondary'"
             size="medium"
-            :icon="primary.trailing ? 'pi pi-chevron-right' : ''"
+            :icon="actionIcon(primary)"
             :icon-position="primary.trailing ? 'trailing' : 'leading'"
             :animated="Boolean(primary.trailing)"
           />
@@ -274,9 +356,9 @@
             :label="secondary.label"
             :href="secondary.href"
             :target="secondary.target"
-            kind="outlined"
+            :kind="secondary.kind ?? 'outlined'"
             size="medium"
-            :icon="secondary.trailing ? 'pi pi-chevron-right' : ''"
+            :icon="actionIcon(secondary)"
             :icon-position="secondary.trailing ? 'trailing' : 'leading'"
             :animated="Boolean(secondary.trailing)"
           />

@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use CardCarousel for four or more marketing cards the reader steps through.
 - Four or more cases, industries or examples of equal weight that do not all need to be seen: the reader steps through them.
 - When each case is a short card (overline, heading, one or two sentences) that may link to its own page or example.
 
@@ -21,17 +22,17 @@
 
 ## Don’t
 
-- When every case must be visible, or there are three or six of equal weight → use `use-case-links` (linked grid) or `use-cases` (grid with one action).
-- For a quote or testimonial row → use `quote-carousel` or `client-quotes`.
-- For numbered principles pinned while the page scrolls → use `sticky-carousel`.
+- When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `use-cases` (grid with one action).
+- For a quote or testimonial row → use `client-quotes`.
+- For numbered principles pinned while the page scrolls → use `process-scroll` with `pinned`.
 - For articles with images → use `article-cards`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [carousel](carousel.md) — the primitive this band composes; reach for it directly only for a non-card row.
-- [use-case-links](use-case-links.md) — the same content as a static, fully visible grid.
-- [sticky-carousel](sticky-carousel.md) — numbered dark cards pinned on scroll.
+- [capability-grid](capability-grid.md) — the same content as a static, fully visible grid.
+- [process-scroll](process-scroll.md) — numbered dark cards, pinned on scroll with `pinned`.
 
 ## Props
 

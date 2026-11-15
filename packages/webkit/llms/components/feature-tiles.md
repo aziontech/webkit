@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use FeatureTiles for a static set of picture tiles.
 - To state three or four reasons to buy, each with a picture, under a product or pricing argument.
 
 ## Do
@@ -18,7 +19,7 @@
 
 ## Don’t
 
-- For linked use cases → use `use-case-links`.
+- For linked use cases or a grid of claims without pictures → use `capability-grid`.
 - For a scroll-driven walkthrough with one screen per feature → use `feature-scroll`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

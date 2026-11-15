@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Use SiteFooter for the marketing site footer from page JSON.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - As the last block of every marketing page.
 
 ## Do

@@ -1,5 +1,5 @@
-import type { ShellMockupKind } from '../shell-mockup/shell-mockup.vue'
 import type { ProductWidgetName } from './product-widget.vue'
+import type { ShellMockupKind } from './shell-mockup/shell-mockup.vue'
 
 export { default as ProductWidgetPlate } from './parts/widget-plate.vue'
 

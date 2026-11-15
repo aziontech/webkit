@@ -11,6 +11,7 @@
  "purpose": "Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it. The library is drawn once, in dark mode. The scene is drawn into the page as inline SVG and every colour it carries is repainted from the `illustration` theme foundation of `@aziontech/theme` — `--illustration-*` roles that alias the global tokens — so the one export follows light and dark like the rest of the page.",
  "setup": null,
  "useWhen": [
+  "Use Illustration for a static official scene.",
   "An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).",
   "The same concept appears on more than one screen and must be the same drawing every time.",
   "The artwork must scale to its container without rasterizing or re-exporting."

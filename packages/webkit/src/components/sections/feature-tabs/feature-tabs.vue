@@ -67,8 +67,6 @@
     autoplay?: boolean
     /** Milliseconds each tab holds before the next one opens. */
     autoplayInterval?: number
-    /** @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. */
-    interval?: number
     /** Accessible name of the copy button on each tab's code file; empty keeps the code block's own. */
     copyAriaLabel?: string
     /** Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. */
@@ -84,7 +82,6 @@
     scene: undefined,
     autoplay: true,
     autoplayInterval: 5200,
-    interval: 0,
     copyAriaLabel: '',
     primaryAction: undefined
   })
@@ -166,7 +163,7 @@
             texture-size="small"
             texture-fade="top"
             :autoplay="autoplay"
-            :autoplay-interval="interval || autoplayInterval"
+            :autoplay-interval="autoplayInterval"
           >
             <template #media="{ index, active }">
               <div

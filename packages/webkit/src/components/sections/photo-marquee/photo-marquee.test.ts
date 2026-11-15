@@ -1,4 +1,4 @@
-import { render } from '@testing-library/vue'
+import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -87,6 +87,19 @@ describe('PhotoMarquee', () => {
     expect(queryByRole('region', { name: ARIA_LABEL })).toBeNull()
     expect(queryByRole('heading', { level: 2 })).toBeNull()
     expect(queryAllByRole('img')).toHaveLength(0)
+  })
+
+  it('offers a pause control that holds the loop and resumes it', async () => {
+    const { container, getByRole } = band()
+    const track = container.querySelector('ul')?.parentElement as HTMLElement
+
+    const control = getByRole('button', { name: 'Pause scrolling' })
+    expect(track).not.toHaveAttribute('data-paused')
+    await fireEvent.click(control)
+    expect(track).toHaveAttribute('data-paused')
+    expect(getByRole('button', { name: 'Resume scrolling' })).toBe(control)
+    await fireEvent.click(control)
+    expect(track).not.toHaveAttribute('data-paused')
   })
 
   it('has no a11y violations with a full band', async () => {

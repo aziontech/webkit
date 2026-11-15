@@ -20,7 +20,8 @@
  "avoidWhen": [
   "Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.",
   "A fixed set of named settings on one resource → use `field` controls in a form.",
-  "Many records the user browses, filters and acts on → use `table` with row actions.",
+  "Many records the user browses, filters and acts on → use `data-table` with row actions.",
+  "Many cells of many records edited in place, spreadsheet-style → use `data-grid`.",
   "An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block."
  ],
  "related": [

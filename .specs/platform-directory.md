@@ -4,10 +4,10 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 144b5d4ef9da3e29c62dad4e980143677ee2d63b05e034fc94fe9d5c26218bad
+last_updated: 2026-11-15
+checksum: 947346fed88c2975d657eeac7fbdc7e1e8f39b789e68c0d67690c8054d90b96d
 ---
 
 # PlatformDirectory — Component Spec
@@ -18,6 +18,7 @@ A directory of Azion's products under a section title: one column per product gr
 
 ## When to use
 
+- Use PlatformDirectory for the Azion products directory band.
 - On Home, right under the hero, to show every product the platform offers at a glance.
 - On a solution, product or pricing page that repeats the full product map.
 

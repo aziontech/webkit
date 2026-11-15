@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Topic for one icon + headline + sentence claim inside a grid cell.
 - For each cell of a "what you get" band: a row of equal claims under a section's headline.
 - Inside `CardGrid.Cell` or `BentoGrid.Cell`, where the grid owns the frame and the fill and the topic owns only the copy.
 - Whenever a claim is glyph-led and one sentence long, repeated three to six times across a band.
@@ -26,6 +27,7 @@
 - For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
 - For a claim that carries an eyebrow, a media region or a button → use `media-split`.
 - For the headline that opens the whole section → use `section-title`.
+- For a whole band of claims or links placed from page JSON → use `capability-grid`, which lays topics out for you.
 - For a measured figure with a unit → use `big-numbers`.
 - For a console list row with media and actions → use `item`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

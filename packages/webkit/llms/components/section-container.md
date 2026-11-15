@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SectionContainer once per marketing page as the framed column below the hero.
 - As the container for every band below a `hero`, on a marketing, hub or documentation page.
 - Whenever a stack of `section-module` bricks needs one continuous frame around it.
 - For a plain prose column that should sit on the page's own measure, with `padded`.

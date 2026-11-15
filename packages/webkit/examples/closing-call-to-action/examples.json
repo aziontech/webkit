@@ -18,6 +18,11 @@
       "file": "command.vue"
     },
     {
+      "name": "Audiences",
+      "summary": "The `primary` close for a reader who may be a person or an agent: a switch under the title. For humans opens on two actions; For agents swaps in a copyable prompt and the agent docs. The typed word loops under both, and the description closes the band under it.",
+      "file": "audiences.vue"
+    },
+    {
       "name": "Stacked",
       "summary": "Two closings stacked on one page: the upper `panel` turns `hatch` off so only the lower `primary` draws the closing frame. Below, a page that ends on a band with its own actions closes on the bare `frame`, with no gap before it.",
       "file": "stacked.vue"
@@ -41,6 +46,12 @@
       "summary": "The loud close: one centred ask on the canvas, under a pixelated texture whose two waves keep travelling across it, then the tall closing frame.",
       "file": "site-primary.vue",
       "json": "site-primary.json"
+    },
+    {
+      "name": "Audiences",
+      "summary": "The close for a reader who may be a person or an agent: the `primary` register with a switch under the title. For humans opens on two actions; For agents swaps in a copyable prompt and the agent docs. The typed word loops under both.",
+      "file": "site-audiences.vue",
+      "json": "site-audiences.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Closing CTAs/ClosingCallToAction",
@@ -48,5 +59,14 @@
     "layout": "fullscreen",
     "background": "dark"
   },
-  "siteStories": ["Split", "SplitJson", "Panel", "PanelJson", "Primary", "PrimaryJson"]
+  "siteStories": [
+    "Split",
+    "SplitJson",
+    "Panel",
+    "PanelJson",
+    "Primary",
+    "PrimaryJson",
+    "Audiences",
+    "AudiencesJson"
+  ]
 }

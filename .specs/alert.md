@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 7db0a11efe379368a849fd12a1e86418f2aab538bb171b8d87f491ad641f59e4
+checksum: 130c64bb51bacbd19ded5617b63aa9b4dc96e1a47903d3b444acf97c859f5812
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 - A transient confirmation of an action → use `toast`.
 - Validation feedback under one form field → use `helper-text`.
 - An admonition inside documentation prose → use `doc-callout`.
-- A promotional band between page sections → use `banner`.
+- A promotional band between page sections → use `call-to-action` with `kind="announcement"`.
 
 ## Related
 
@@ -95,9 +95,9 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 
 ## Events
 
-| Event    | Payload      | Notes                                                                   |
-| -------- | ------------ | ----------------------------------------------------------------------- |
-| `action` | `MouseEvent` | Emitted when the built-in action button is clicked.                     |
+| Event    | Payload           | Notes                                                                                                                                                                                    |
+| -------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `action` | `MouseEvent`      | Emitted when the built-in action button is clicked.                                                                                                                                      |
 | `close`  | `(event?: Event)` | Emitted when the message is dismissed, after the fade. Carries the originating event: the close button's `MouseEvent` or the `Escape` `KeyboardEvent`; no argument after `life` expires. |
 
 ## Slots
@@ -115,8 +115,8 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition      | Token                                                           | Reduced-motion fallback         |
-| ------- | --------------------------- | --------------------------------------------------------------- | ------------------------------- |
+| Trigger | Animation / Transition                                                                                                                          | Token                                                           | Reduced-motion fallback         |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------------- |
 | dismiss | `transition-opacity duration-fast-02 ease-productive-exit` on the leave-active class (no inline `transition`, so the reduced-motion class wins) | `duration['fast-02']` · `curve['productive-exit']` (animate.js) | `motion-reduce:transition-none` |
 
 ## Tokens

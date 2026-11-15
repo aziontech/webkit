@@ -3,10 +3,10 @@ name: compare-plans
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 084ee36f163f23bb99d71b18569399e3f3c08bec16acc1dfa26a5107ba570282
+last_updated: 2026-11-15
+checksum: a5f96f3e69ea04359a6adc9afbecb3fc2693f320ea2dda5e38608f537917cb99
 ---
 
 # ComparePlans — Component Spec
@@ -17,17 +17,17 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 
 ## When to use
 
-- On Pricing, under the plan cards, to show what every plan includes product by product.
+- Use ComparePlans for a feature matrix across plans or support tiers: on Pricing under the plan cards, product by product, and on Support with one column per support tier.
 
 ## When NOT to use
 
-- To compare support tiers → use `compare-support-tiers`.
-- To compare Azion with a competitor → use `comparison-table`.
+- To compare Azion with one competitor → use `comparison-table`.
+- For price cards with a billing-period toggle → use `pricing-plans`.
 
 ## Related
 
 - `pricing-plans` — the plan cards this matrix sits under.
-- `compare-support-tiers` — the same matrix for the Support page.
+- `comparison-table` — Azion against one competitor.
 
 ## Best practices
 
@@ -92,7 +92,7 @@ The feature-by-feature matrix under the plan cards on Pricing: one column per pl
 | `includedLabel`   | `string`                | `''`        | false    | Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`).                                                                                                                                                                                                                                                                                                                                  |
 | `excludedLabel`   | `string`                | `''`        | false    | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`).                                                                                                                                                                                                                                                                                                                           |
 | `plans`           | `ComparePlansPlan[]`    | `[]`        | false    | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped.                                                                                                                                                                                                                                                                     |
-| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`; `link` still works, @deprecated since 6.0 — use `action`, removed in 7.0) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
+| `sections`        | `ComparePlansSection[]` | `[]`        | false    | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
 | `primaryAction`   | `ComparePlansAction`    | `undefined` | false    | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent.                                                                                                                                                                                                                                                                                                                                       |
 
 ## Events

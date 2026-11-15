@@ -3,8 +3,8 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 4
-checksum: b8335431aaabc22bfa9f65816d37caa91726eb407c3554fa598baa153dfa892c
+spec_version: 5
+checksum: 56d5e8b6e84000bb4d317559700a9947960b83d525ef2b7802e74a9f6a2f4f74
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -17,6 +17,8 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 ## When to use
 
+- Use the Hero primitive only in a hand-built SFC that needs slots HeroBand does not offer.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`hero-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
 - As the opening band of a marketing, hub or documentation page.
 - Whenever a band must span the window while its copy stays on the page's measure.
 - For any band that carries a decorative backdrop behind its content.
@@ -24,10 +26,11 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 ## When NOT to use
 
+- For a marketing page opening placed from page JSON → use `hero-band` (or `hero-form` for a lead form).
 - For the framed column of bands below the opening → use `section-container`.
 - For one band inside that column → use `section-module`.
 - For a section header further down the page → use `section-title`, which renders an `h2`.
-- For a mid-page announcement → use `banner`; for the closing ask → use `call-to-action`.
+- For a mid-page announcement → use `call-to-action` with `kind="announcement"`; for the closing ask → use `call-to-action`.
 - For a copy-and-media pairing that is not the page opening → use `media-split`.
 
 ## Related
@@ -36,7 +39,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - `section-module` — the brick stacked inside that column.
 - `texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.
 - `media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.
-- `banner` — the mid-page announcement band.
+- `call-to-action` — the mid-page announcement band (`kind="announcement"`) and the closing ask.
 
 ## Best practices
 
@@ -106,11 +109,8 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 | `offset`           | `string`              | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length.                                                       |
 | `bottomHeight`     | `string`              | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
 | `ticker`           | `boolean`             | `false`    | false    | Stand the brand ticker on the band's floor, under the `bottom` window.                                                                                                 |
-| `carousel`         | `boolean`             | `false`    | false    | @deprecated since 6.0 — use `ticker`. Removed in 7.0. Read only when `ticker` is empty.                                                                                |
 | `tickerMarks`      | `string[]`            | `[]`       | false    | Registry names of the marks the ticker shows, in order.                                                                                                                |
-| `carouselMarks`    | `string[]`            | `[]`       | false    | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty.                                                                      |
 | `tickerLabel`      | `string`              | `''`       | false    | Overline above the brand ticker, stating the claim the marks make.                                                                                                     |
-| `carouselLabel`    | `string`              | `''`       | false    | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty.                                                                      |
 
 ## Events
 

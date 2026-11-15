@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SectionGap only between marketing page sections inside SectionContainer; in product UI use Separator.
 - Between two stacked page sections on a full-bleed, framed layout.
 - Wherever a page needs breathing room that still reads as part of the frame instead of as empty margin.
 - To change the weight of one break without touching its neighbours — a `large` gap before a new part of the page, `small` between two bands that belong together.

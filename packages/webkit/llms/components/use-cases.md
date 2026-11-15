@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use UseCases when the band's title sits in the first grid cell with one action.
 - On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.
 - Whenever a page needs three to six short, icon-led use cases with one link out to the documentation.
 
@@ -21,7 +22,7 @@
 ## Don’t
 
 - For a grid of features with artwork → use `feature-tiles`.
-- For use cases that each link to their own page → use `use-case-links`.
+- For use cases that each link to their own page, or any grid of claims with no single action → use `capability-grid`.
 - Inside another band's cell → compose `topic` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

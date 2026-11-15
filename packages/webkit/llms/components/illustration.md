@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Illustration for a static official scene.
 - An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).
 - The same concept appears on more than one screen and must be the same drawing every time.
 - The artwork must scale to its container without rasterizing or re-exporting.

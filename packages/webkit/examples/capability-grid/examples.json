@@ -16,6 +16,11 @@
       "name": "Left title",
       "summary": "`titleKind: 'left'` sets the section title at the start edge over the grid; the capabilities stay `h3` under the band's `h2`.",
       "file": "left-title.vue"
+    },
+    {
+      "name": "Links",
+      "summary": "Six use cases with no points, each `item.href` linking its whole cell to the use case's page; the title sits at the start edge.",
+      "file": "links.vue"
     }
   ],
   "site": [

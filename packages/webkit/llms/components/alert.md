@@ -26,7 +26,7 @@
 - A transient confirmation of an action → use `toast`.
 - Validation feedback under one form field → use `helper-text`.
 - An admonition inside documentation prose → use `doc-callout`.
-- A promotional band between page sections → use `banner`.
+- A promotional band between page sections → use `call-to-action` with `kind="announcement"`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

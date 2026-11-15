@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import type { TagSeverity } from '../../content/tag/tag.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle, {
     type HeroTitleEyebrowPrefix
@@ -55,6 +56,38 @@
     height: number
   }
 
+  /** One card of the topology drawn under the copy. */
+  export type HeroBandNode = {
+    /** Kind of resource the card stands for, set above its title. */
+    eyebrow: string
+    /** Icon class drawn before the eyebrow. */
+    icon: string
+    /** Name of the resource; a card without it is skipped. */
+    title: string
+    /** Status shown in the card's tag. */
+    label: string
+    /** Severity of the status tag. */
+    severity: TagSeverity
+    /** Marks the card as the focus of the scene. */
+    lit?: boolean
+  }
+
+  /** One column of the topology drawn under the copy. */
+  export type HeroBandLevel = {
+    /** The cards of the column, top to bottom. */
+    nodes: HeroBandNode[]
+  }
+
+  /** One argument of the grid under the band. */
+  export type HeroBandItem = {
+    /** Icon class drawn above the heading. */
+    icon: string
+    /** Short heading of the argument. */
+    title: string
+    /** One sentence supporting the heading. */
+    description: string
+  }
+
   type ArtBounds = {
     canvas: number
     start: number
@@ -87,10 +120,6 @@
     tickerLabel?: string
     /** Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. */
     tickerMarks?: string[]
-    /** @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. */
-    carouselLabel?: string
-    /** @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. */
-    carouselMarks?: string[]
     /** Registry name of the illustration set beside the copy in the `copy-beside-art` layout. */
     illustration?: string
     /** Accessible description of the illustration. */
@@ -107,6 +136,10 @@
     titleLength?: HeroBandTitleLength
     /** Drops the dot texture of the `centered` layout. */
     plain?: boolean
+    /** Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. */
+    levels?: HeroBandLevel[]
+    /** Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. */
+    items?: HeroBandItem[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -120,8 +153,6 @@
     secondaryAction: undefined,
     tickerLabel: '',
     tickerMarks: () => [],
-    carouselLabel: '',
-    carouselMarks: () => [],
     illustration: '',
     illustrationAriaLabel: '',
     image: undefined,
@@ -129,17 +160,23 @@
     anchor: '',
     headerOffset: 'var(--layout-header-height)',
     titleLength: 'short',
-    plain: false
+    plain: false,
+    levels: () => [],
+    items: () => []
   })
 
   const slots = defineSlots<{
-    /** A scene in the window above the copy (a `ShellMockup`, a `ProductWidget`, a diagram). */
+    /** A scene in the window above the copy (a `ProductWidget`, a diagram). */
     top?(): unknown
     /** A scene in the window under the copy, entering after it. */
     bottom?(): unknown
   }>()
 
   const attrs = useAttrs()
+
+  const HeroBandTopology = defineAsyncComponent(() => import('./parts/hero-band-topology.vue'))
+
+  const HeroBandArguments = defineAsyncComponent(() => import('./parts/hero-band-arguments.vue'))
   const { t } = useTranslate({ heroBand: en.heroBand })
 
   const COMPARISON: ArtBounds = {
@@ -289,7 +326,14 @@
     props.secondaryAction?.label && props.secondaryAction.href ? props.secondaryAction : null
   )
 
-  const marks = computed(() => (props.tickerMarks.length ? props.tickerMarks : props.carouselMarks))
+  const levelColumns = computed(() =>
+    props.levels
+      .map((level) => level.nodes.filter((node) => node.title))
+      .filter((nodes) => nodes.length > 0)
+  )
+
+  const scene = () =>
+    props.kind === 'copy-on-top-art' && !slots.top && !slots.bottom ? levelColumns.value : []
 </script>
 
 <template>
@@ -314,9 +358,9 @@
       :padded="kind !== 'copy-on-top-art'"
       :media-align="kind === 'copy-beside-art' ? 'end' : 'center'"
       :offset="isScreen ? headerOffset : ''"
-      :ticker="marks.length > 0"
-      :ticker-marks="marks"
-      :ticker-label="tickerLabel || carouselLabel || t('heroBand.carouselLabel')"
+      :ticker="tickerMarks.length > 0"
+      :ticker-marks="tickerMarks"
+      :ticker-label="tickerLabel || t('heroBand.carouselLabel')"
       :aria-label="headline"
     >
       <HeroTitle
@@ -368,14 +412,16 @@
       </template>
 
       <template
-        v-if="slots.bottom"
+        v-if="slots.bottom || scene().length > 0"
         #bottom
       >
         <div class="@container">
           <div
             class="flex animate-content-enter justify-center pb-(--spacing-xxl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
           >
-            <slot name="bottom" />
+            <slot name="bottom">
+              <HeroBandTopology :columns="scene()" />
+            </slot>
           </div>
         </div>
       </template>
@@ -406,5 +452,10 @@
         </div>
       </template>
     </Hero>
+
+    <HeroBandArguments
+      v-if="title && items.length > 0"
+      :items="items"
+    />
   </div>
 </template>

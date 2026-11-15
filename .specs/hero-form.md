@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 4cfdd288a7e683958642073c8095e29a7ed9160063301fc760a69e0acc8f7b00
+checksum: a64911c8622d3638eaaa81c6fe8423409ff91d48cc414452fe79c8275bffeca8
 template: 2
 ---
 
@@ -18,12 +18,13 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 ## When to use
 
+- Use HeroForm when the page exists to capture a lead and the form sits above the fold.
 - To open a page whose purpose is a lead form, such as Contact sales or Under attack.
 
 ## When NOT to use
 
 - For a newsletter sign-up with one email field → use `closing-call-to-action-newsletter`.
-- For an opening band with calls to action and no form → use `hero-band` or `hero-with-opening`.
+- For an opening band with calls to action and no form → use `hero-band`, which takes every other marketing page opening.
 
 ## Related
 
@@ -113,9 +114,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `fields`           | `HeroFormField[]`  | `[]`        | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel`      | `string`           | `''`        | false    | Label of the submit button.                                                                                                                                                                                             |
 | `tickerLabel`      | `string`           | `''`        | false    | Overline above the client ticker.                                                                                                                                                                                       |
-| `carouselLabel`    | `string`           | `''`        | false    | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty.                                                                                                                       |
 | `tickerMarks`      | `string[]`         | `[]`        | false    | Registry names of the client marks, in order; the ticker renders only when there are marks.                                                                                                                             |
-| `carouselMarks`    | `string[]`         | `[]`        | false    | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty.                                                                                                                       |
 | `loading`          | `boolean`          | `false`     | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                                                                                                             |
 | `submitted`        | `boolean`          | `false`     | false    | The site sent the values: the form gives way to `messages.success`.                                                                                                                                                     |
 | `error`            | `boolean`          | `false`     | false    | The site could not send the values: `messages.error` shows under the form.                                                                                                                                              |

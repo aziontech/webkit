@@ -29,7 +29,8 @@
 
 - Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.
 - A fixed set of named settings on one resource → use `field` controls in a form.
-- Many records the user browses, filters and acts on → use `table` with row actions.
+- Many records the user browses, filters and acts on → use `data-table` with row actions.
+- Many cells of many records edited in place, spreadsheet-style → use `data-grid`.
 - An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -87,7 +88,7 @@
 
 | Model            | Type                     | Default     | Emits           | Notes                                                                                                                                                                         |
 | ---------------- | ------------------------ | ----------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                         |
+| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                       |
 | `v-model:groups` | `TItem[][] \| undefined` | `undefined` | `update:groups` | Rows in grouped mode, via `defineModel('groups')`: every inner array is an AND group, groups are joined by OR. Setting it (even to `[]`) switches the editor to grouped mode. |
 
 ## States

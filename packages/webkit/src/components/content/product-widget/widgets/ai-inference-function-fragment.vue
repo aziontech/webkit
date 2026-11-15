@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import CodeBlock from '../../../code/code-block/code-block.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'AiInferenceFunctionFragment' })
 

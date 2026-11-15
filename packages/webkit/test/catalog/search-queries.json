@@ -1380,7 +1380,7 @@
       "lang": "en",
       "query": "solution page",
       "top1": "hero-band",
-      "top3": ["hero-band", "resource-grid", "template-gallery"]
+      "top3": ["hero-band", "capability-grid", "template-gallery"]
     },
     {
       "tool": "components",

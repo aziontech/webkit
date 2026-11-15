@@ -1,6 +1,6 @@
 # Console Panel
 
-> A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ShellMockup`, `ProductWidget` or diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
+> A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
 
 - Import: `import ConsolePanel from '@aziontech/webkit/console-panel'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ConsolePanel for a marketing band that plays a product scene under a section title.
 - Showing the product itself on a landing page.
 - A tour of three or four views of one screen.
 
@@ -19,12 +20,12 @@
 ## Don’t
 
 - For a screenshot with copy beside it — use `MediaSplitBand`.
-- For code — use `CodeSplit` or `CliTerminal`.
+- For code — use `MediaSplitBand` with `codeTabs`, or `CliTerminal`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- ShellMockup`, `ProductWidget` — scenes it frames.
+- ProductWidget` — the console scenes it frames.
 - ToggleGroup` — the tab control.
 - TextureMaterial`, `FrameBox`, `SectionTitle`.
 
@@ -58,7 +59,7 @@
 
 - `data-kind` mirrors `kind`.
 - The first tab is selected on render.
-- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ShellMockup` scene when cropped.
+- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ProductWidget` scene when cropped.
 
 ## Accessibility
 
@@ -92,20 +93,13 @@
 ```vue
 <script setup>
   import ConsolePanel from '@aziontech/webkit/console-panel'
-  import ShellMockupRoot from '@aziontech/webkit/shell-mockup-root'
-  import Tag from '@aziontech/webkit/tag'
+  import ProductWidget from '@aziontech/webkit/product-widget'
 
   const tabs = [
-    { value: 'applications', title: 'Applications' },
-    { value: 'metrics', title: 'Metrics' },
-    { value: 'logs', title: 'Logs' }
+    { value: 'workloads-list', title: 'Workloads' },
+    { value: 'workload-deployments', title: 'Deployments' },
+    { value: 'workload-deploy-logs', title: 'Logs' }
   ]
-
-  const views = {
-    applications: { heading: 'Applications', rows: ['storefront', 'checkout-api', 'image-proxy'] },
-    metrics: { heading: 'Metrics', rows: ['Requests 1.2M', 'Cache hit 94%', 'Errors 0.02%'] },
-    logs: { heading: 'Logs', rows: ['GET /cart 200', 'POST /pay 201', 'GET /img/hero.webp 304'] }
-  }
 </script>
 
 <template>
@@ -117,29 +111,7 @@
     :crop="0.2"
   >
     <template #scene="{ tab }">
-      <ShellMockupRoot
-        :title="views[tab ?? 'applications'].heading"
-        rail="workloads"
-        fade="bottom"
-      >
-        <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-lg)">
-          <span class="text-heading-sm text-(--text-default)">{{
-            views[tab ?? 'applications'].heading
-          }}</span>
-          <div
-            v-for="row in views[tab ?? 'applications'].rows"
-            :key="row"
-            class="flex items-center justify-between border-b border-(--border-default) py-(--spacing-xs) text-body-sm text-(--text-default)"
-          >
-            {{ row }}
-            <Tag
-              label="Live"
-              severity="success"
-              size="small"
-            />
-          </div>
-        </div>
-      </ShellMockupRoot>
+      <ProductWidget :name="tab ?? 'workloads-list'" />
     </template>
   </ConsolePanel>
 </template>

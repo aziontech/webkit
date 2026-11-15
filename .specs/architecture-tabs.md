@@ -3,10 +3,10 @@ name: architecture-tabs
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 10c27f2b6c3e8a89728d645ae6120d4564724b2fabac75b203ff2c6c71019e54
+last_updated: 2026-11-15
+checksum: 104e1e363e8c82f2d1add68109e3ae66bfcca566ab5434bcbf3faf22882863cf
 ---
 
 # ArchitectureTabs — Component Spec
@@ -17,6 +17,7 @@ The architecture band of a product page: a horizontal section title with one lar
 
 ## When to use
 
+- Use ArchitectureTabs only when every tab shows a full-width official diagram (up to five tabs).
 - To plot several architectures of one product, or one request across the platform, one diagram at a time.
 
 ## When NOT to use
@@ -78,7 +79,6 @@ The architecture band of a product page: a horizontal section title with one lar
 | `tabs`             | `ArchitectureTabsTab[]`    | `[]`        | false    | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay`         | `boolean`                  | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                 |
 | `autoplayInterval` | `number`                   | `6000`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                        |
-| `interval`         | `number`                   | `0`         | false    | @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold.                                                                                                                                         |
 | `primaryAction`    | `ArchitectureTabsAction`   | `undefined` | false    | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                |
 
 ## Events

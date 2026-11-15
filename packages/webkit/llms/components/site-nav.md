@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SiteNav for the marketing site's top bar (mega-menus and mobile sheet).
 - At the top of every marketing page, once.
 
 ## Do

@@ -3,13 +3,13 @@ name: illustration
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 0a48a628992cbe97631c53b32069fd389825ef26345fc1ccd93c2987f1ee2eb5
+checksum: 3acf10af71bf5283874cc09d9a86c5e4f50096dc93bd8eba559ed847ce7105ca
 created: 2026-08-05
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # Illustration — Component Spec
@@ -29,6 +29,7 @@ export follows light and dark like the rest of the page.
 
 ## When to use
 
+- Use Illustration for a static official scene.
 - An empty state, error page, onboarding step, or marketing tile needs a diagrammatic illustration of a product concept (a deploy, a request path, a connected service).
 - The same concept appears on more than one screen and must be the same drawing every time.
 - The artwork must scale to its container without rasterizing or re-exporting.

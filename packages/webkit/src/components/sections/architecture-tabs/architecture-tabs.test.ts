@@ -178,8 +178,8 @@ describe('ArchitectureTabs', () => {
       expect(await activeAfter({ autoplayInterval: 1000 }, 1000)).toBe(1)
     })
 
-    it('still reads the deprecated interval', async () => {
-      expect(await activeAfter({ interval: 1000 }, 1000)).toBe(1)
+    it('ignores the removed interval prop', async () => {
+      expect(await activeAfter({ interval: 1000 }, 1000)).toBe(0)
     })
 
     it('stays on the first tab with autoplay off', async () => {

@@ -11,6 +11,7 @@
  "purpose": "The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the \"A\" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the \"move to the edge technologies®\" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.",
  "setup": null,
  "useWhen": [
+  "Use Brand only for the Azion logo.",
   "The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.",
   "kind=\"reduced\"` where space is tight (collapsed sidebar, mobile header).",
   "kind=\"extended\"` in marketing layouts that carry the tagline."

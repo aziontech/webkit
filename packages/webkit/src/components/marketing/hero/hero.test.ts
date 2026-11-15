@@ -282,33 +282,17 @@ describe('Hero', () => {
     expect(strip).toHaveTextContent('Trusted in production')
   })
 
-  it('still reads the deprecated carousel props, and the ticker names win', async () => {
-    const old = render(Hero, {
+  it('ignores the removed carousel props', () => {
+    const { queryByTestId } = render(Hero, {
       props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Old label' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    expect(await old.findByTestId('marketing-ticker')).toHaveTextContent('Old label')
-    old.unmount()
-
-    const both = render(Hero, {
-      props: {
-        carousel: true,
-        carouselMarks: ['Itau'],
-        carouselLabel: 'Old label',
-        tickerMarks: ['NZN'],
-        tickerLabel: 'New label'
-      },
-      slots: { default: '<h1>Headline</h1>' }
-    })
-    const strip = await both.findByTestId('marketing-ticker')
-    expect(strip).toHaveTextContent('New label')
-    expect(strip).toHaveTextContent('NZN')
-    expect(strip).not.toHaveTextContent('Itau')
+    expect(queryByTestId('marketing-ticker')).toBeNull()
   })
 
   it('shares one floor between the bottom window and the strip', async () => {
     const { findByTestId, getByText } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN'] },
+      props: { ticker: true, tickerMarks: ['NZN'] },
       slots: { bottom: '<div>field</div>', default: '<h1>Headline</h1>' }
     })
     const strip = await findByTestId('marketing-ticker')
@@ -397,7 +381,7 @@ describe('Hero', () => {
 
   it('has no accessibility violations with the brand strip on the floor', async () => {
     const { container, findByTestId } = render(Hero, {
-      props: { carousel: true, carouselMarks: ['NZN', 'Itau'] },
+      props: { ticker: true, tickerMarks: ['NZN', 'Itau'] },
       slots: { default: '<h1>Headline</h1>' }
     })
     await findByTestId('marketing-ticker')

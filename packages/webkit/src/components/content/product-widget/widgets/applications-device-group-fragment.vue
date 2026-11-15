@@ -7,8 +7,8 @@
   import Hint from '../../../inputs/hint/hint.vue'
   import Input from '../../../inputs/input/input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'ApplicationsDeviceGroupFragment' })
 

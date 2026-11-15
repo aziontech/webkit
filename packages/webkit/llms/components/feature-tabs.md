@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use FeatureTabs for up to three tabs beside a media on a product page.
 - To walk through the two or three features behind one claim, one picture at a time, like Functions' Observability.
 
 ## Do
@@ -41,7 +42,6 @@
 | `scene` | `FeatureTabsScene` | `undefined` | false | Live scene drawn as the media of every tab without code, `{ component, props? }` naming a webkit scene asset; it receives the tab's `value` as `tab` and whether the tab is open as `active`. Wins over the illustrations. |
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `5200` | false | Milliseconds each tab holds before the next one opens. |
-| `interval` | `number` | `0` | false | @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the copy button on each tab's code file; empty keeps the code block's own. |
 | `primaryAction` | `FeatureTabsAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
 

@@ -3,10 +3,10 @@ name: sticky-stack
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 611e421160e80782143616de92fa9310b5698616e7d1b30b98c97726ddf69b22
+spec_version: 3
+checksum: 34e2e7015faca6904b1160ad74f19e15a82fc583174461571cd3ebe0fb7de535
 created: 2026-09-25
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Sticky Stack — Component Spec
@@ -17,6 +17,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 ## When to use
 
+- Use StickyStack (primitive) for claims that open one by one as the reader scrolls past pinned media.
 - For a sequence of claims a reader should take in one at a time, each with a medium worth looking at — five ways a platform is used, each with the file you would actually write.
 - When the media is the payload and the copy is the caption: a code sample, a console shot, an official scene.
 - As the one band on a page that rewards scrolling slowly, placed where a reader has already committed to the page.
@@ -27,6 +28,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 - For one claim beside one picture → use `media-split`.
 - For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.
 - On a page that is already a single short screen: there is no scroll to spend.
+- For the product-page walkthrough placed from page JSON → use `feature-scroll`.
 
 ## Related
 

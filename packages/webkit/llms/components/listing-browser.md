@@ -8,7 +8,7 @@
 
 ## When to use
 
-- For a listing a reader narrows by text and by a few facets, such as open positions grouped by department.
+- Use ListingBrowser for a filterable list of non-article rows (jobs): a listing a reader narrows by text and by a few facets, such as open positions grouped by department.
 - When every row links to its own page and the listing fits in the page JSON.
 
 ## Do
@@ -23,6 +23,8 @@
 - For a short, unfiltered preview of the same rows → use `listing-table`.
 - For a data table with sorting, selection and pagination inside the product → use `table`.
 - For a grid of linked topic cards → use `subject-library`.
+- For the full filterable list of articles or resources → use `article-index`.
+- For a card grid of customer stories with search and facets → use `story-library`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

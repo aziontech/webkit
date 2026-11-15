@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { type Component, computed, useAttrs } from 'vue'
+  import { type Component, computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
@@ -26,6 +26,27 @@
     href: string
     /** Closes the label on a trailing chevron that reads as "go". */
     trailing?: boolean
+    /** Link target of the action; `_blank` opens it in a new tab. */
+    target?: '_blank' | '_self'
+    /** Button kind; defaults to secondary, and transparent draws a quiet text button. */
+    kind?: FeatureScrollActionKind
+  }
+
+  /** Button kind of a step's action. */
+  export type FeatureScrollActionKind = 'secondary' | 'outlined' | 'transparent'
+
+  /** The one-file code sample a step shows as its media. */
+  export type FeatureScrollCode = {
+    /** File name shown in the sample's filename bar. */
+    fileName: string
+    /** The code shown verbatim. */
+    code: string
+    /** Language the code is highlighted as. */
+    language?: string
+    /** Icon class shown beside the file name. */
+    fileIcon?: string
+    /** Accessible name of the sample's copy button; empty keeps the code block's own. */
+    copyAriaLabel?: string
   }
 
   /** One feature of the walkthrough: a step of the stack and a tile of the grid. */
@@ -34,11 +55,13 @@
     title: string
     /** One sentence explaining the feature. */
     description: string
-    /** Live scene pinned for this step and shown still as the tile's media, `{ component, props? }` naming a webkit scene asset; wins over the illustration. */
+    /** Live scene pinned for this step and shown still as the tile's media, `{ component, props? }` naming a webkit scene asset; wins over the code and the illustration. */
     scene?: SceneRef
-    /** Registry name of the illustration pinned for this step and shown as the tile's media when no scene is set. */
+    /** One-file code sample pinned for this step and shown as the tile's media when no scene is set, `{ fileName, code, language?, fileIcon?, copyAriaLabel? }`. */
+    code?: FeatureScrollCode
+    /** Registry name of the illustration pinned for this step and shown as the tile's media when neither a scene nor code is set. */
     illustration?: string
-    /** Small secondary button under the step; `{ label, href, trailing? }`. Omitted when absent. */
+    /** Small button under the step; `{ label, href, trailing?, target?, kind? }`, secondary unless `kind` says otherwise. Omitted when absent. */
     action?: FeatureScrollAction
   }
 
@@ -51,7 +74,7 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The features, in order; each is `{ title, description, scene?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `illustration` is a registry name drawn when no scene is set, and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. */
+    /** The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the step, secondary unless `kind` says otherwise. */
     items?: FeatureScrollItem[]
   }
 
@@ -62,6 +85,8 @@
     description: '',
     items: () => []
   })
+
+  const CodeBlock = defineAsyncComponent(() => import('../../code/code-block/code-block.vue'))
 
   const attrs = useAttrs()
 
@@ -76,6 +101,17 @@
   const scenes = computed<(Component | null)[]>(() =>
     props.items.map((item) => (item.scene ? resolveScene(item.scene.component) : null))
   )
+
+  const sampleTabs = (sample: FeatureScrollCode) => [
+    {
+      label: sample.fileName,
+      value: sample.fileName,
+      code: sample.code,
+      language: sample.language,
+      fileName: sample.fileName,
+      fileIcon: sample.fileIcon
+    }
+  ]
 </script>
 
 <template>
@@ -135,6 +171,16 @@
                     v-bind="{ ...item.scene?.props, active: false }"
                   />
                 </div>
+                <div
+                  v-else-if="item.code"
+                  class="w-full min-w-0 p-(--spacing-md)"
+                >
+                  <CodeBlock
+                    :tabs="sampleTabs(item.code)"
+                    line-numbers
+                    :copy-aria-label="item.code.copyAriaLabel || undefined"
+                  />
+                </div>
                 <Illustration
                   v-else-if="item.illustration"
                   :name="item.illustration"
@@ -175,6 +221,17 @@
                     />
                   </div>
                   <div
+                    v-else-if="items[index].code"
+                    class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)"
+                  >
+                    <CodeBlock
+                      :tabs="sampleTabs(items[index].code)"
+                      line-numbers
+                      v-bind="{ animateLines: true }"
+                      :copy-aria-label="items[index].code.copyAriaLabel || undefined"
+                    />
+                  </div>
+                  <div
                     v-else-if="items[index].illustration"
                     class="w-full min-w-0"
                   >
@@ -189,7 +246,8 @@
               v-if="items[index].action"
               :label="items[index].action.label"
               :href="items[index].action.href"
-              kind="secondary"
+              :target="items[index].action.target"
+              :kind="items[index].action.kind ?? 'secondary'"
               size="small"
               :icon="items[index].action.trailing ? 'pi pi-chevron-right' : ''"
               icon-position="trailing"

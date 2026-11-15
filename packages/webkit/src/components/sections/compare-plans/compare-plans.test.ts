@@ -211,18 +211,22 @@ describe('ComparePlans', () => {
     )
   })
 
-  it('closes a band with its action, and still reads the deprecated link', () => {
+  it('closes a band with its action, and ignores the removed link key', () => {
     const closed = (key: 'action' | 'link') =>
       band({
         primaryAction: undefined,
         sections: [{ ...sections[0], [key]: { label: 'See rates', href: '/pricing/rates' } }]
       })
-    for (const key of ['action', 'link'] as const) {
-      const { getByRole, container, unmount } = closed(key)
-      expect(getByRole('link', { name: 'See rates' })).toHaveAttribute('href', '/pricing/rates')
-      expect(container.querySelectorAll('[data-closing]')).toHaveLength(0)
-      unmount()
-    }
+    const withAction = closed('action')
+    expect(withAction.getByRole('link', { name: 'See rates' })).toHaveAttribute(
+      'href',
+      '/pricing/rates'
+    )
+    expect(withAction.container.querySelectorAll('[data-closing]')).toHaveLength(0)
+    withAction.unmount()
+    const withLink = closed('link')
+    expect(withLink.queryByRole('link', { name: 'See rates' })).toBeNull()
+    withLink.unmount()
   })
 
   it('draws the closing rule on the last row only when no closing link follows it', () => {
@@ -307,6 +311,30 @@ describe('ComparePlans — plan description and band links', () => {
   it('has no axe violations with band links', async () => {
     const { default: BandLinks } = await import('../../../../examples/compare-plans/band-links.vue')
     const { container } = render(BandLinks)
+    await expectNoA11yViolations(container)
+  })
+})
+
+describe('ComparePlans — support tiers', () => {
+  it('lays the support tiers out as plan columns, opening the picker on the highlighted tier', async () => {
+    const { default: SupportTiers } =
+      await import('../../../../examples/compare-plans/support-tiers.vue')
+    const { container, getByText } = render(SupportTiers)
+    const heads = Array.from(container.querySelectorAll('thead th[scope="col"]')).slice(1)
+    expect(
+      heads.map(
+        (th) => th.textContent?.match(/Developer|Business|Enterprise|Mission-Critical/)?.[0]
+      )
+    ).toEqual(['Developer', 'Business', 'Enterprise', 'Mission-Critical'])
+    expect(heads.filter((th) => !th.hasAttribute('data-folded'))).toHaveLength(1)
+    expect(heads[2]).not.toHaveAttribute('data-folded')
+    expect(getByText('Ideal for teams that need support from specialists.')).toBeInTheDocument()
+  })
+
+  it('has no axe violations with support tiers', async () => {
+    const { default: SupportTiers } =
+      await import('../../../../examples/compare-plans/support-tiers.vue')
+    const { container } = render(SupportTiers)
     await expectNoA11yViolations(container)
   })
 })

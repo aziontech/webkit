@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 87bf237a926e2e7382ebba5bba5f3208e3c63cc425cae7f79470905b91ddc953
+checksum: 0957e5c880b38e2c073c359f7daa55288fd61bf9fa80625e0f6a6319f093c8ee
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 ## When NOT to use
 
 - To show the prompt text itself → use `DocPrompt`.
-- As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `Banner`.
+- As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `CallToAction` (`kind="announcement"`).
 - On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead.
 
 ## Related

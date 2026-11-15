@@ -3,25 +3,26 @@ name: client-mosaic-columns
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 12ca80f9dac1cc4d101d2854c8b28923762e34c43bef0f37c02152977b17e512
+last_updated: 2026-11-15
+checksum: 46d5ab6d960704dbc2a8e7ff65bea9be03e641c31a9af93f2189bef6f7c66718
 ---
 
 # ClientMosaicColumns — Component Spec
 
 ## Purpose
 
-Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`.
+Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. With `reveal="hover"` each column is one card instead: the client's reversed logo on its brand face, which opens while hovered or focused to reveal the story line and a "Read story" cue, the whole card linking to the case; below the large breakpoint those cards stack and stay open. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`. The retired `'customer-spotlight'` `_id` resolves here with `reveal: 'hover'`.
 
 ## When to use
 
-- When three stories deserve equal weight and their brands should colour the band.
+- Use ClientMosaicColumns for three or four client cards in brand colours linking to case studies; `reveal="hover"` shows the story on hover.
 
 ## When NOT to use
 
-- For a mixed mosaic of stories and marks → use `client-mosaic`.
+- For a bento of client stories with photos and logos → use `client-mosaic`.
+- For a quotation → use `client-quotes` or `logo-wall-quote` `kind="quote"`.
 
 ## Related
 
@@ -30,7 +31,8 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ## Best practices
 
-- Exactly three cells; the grid is three columns from the large breakpoint.
+- Three cells for `reveal="always"` (the grid is three columns from the large breakpoint); three or four for `reveal="hover"`, which shares the row between them.
+- With `reveal="hover"` use the client's reversed (white) logo and one sentence per story; `logoWidth` sizes the mark as a share of the card (default `35%`).
 - Leave `brand` out for a client the client registry knows (`clientBrand(name)` from `@aziontech/webkit/assets/client-registry`): the face reads its colours, and its ink, by `name`. Add a missing client to the registry rather than writing its hex colours into the page.
 - Pass `brand` only for a one-off client the registry does not carry: `base` and `glow` may be any CSS colour, and `ink` is `'dark'` when the face is light enough that the link text must be dark. A cell with neither paints a black face.
 
@@ -69,12 +71,13 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ## Props
 
-| Prop        | Type                        | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                |
-| ----------- | --------------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`    | `string`                    | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                             |
-| `ariaLabel` | `string`                    | `''`    | false    | Accessible name of the list of stories.                                                                                                                                                                                                                                                                              |
-| `linkLabel` | `string`                    | `''`    | false    | Label the mark face reveals on hover and the link's accessible name.                                                                                                                                                                                                                                                 |
-| `cells`     | `ClientMosaicColumnsCell[]` | `[]`    | false    | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
+| Prop        | Type                        | Default    | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------- | --------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`    | `string`                    | `''`       | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                                                                                                                                                                                        |
+| `ariaLabel` | `string`                    | `''`       | false    | Accessible name of the list of stories.                                                                                                                                                                                                                                                                                                                                                                         |
+| `linkLabel` | `string`                    | `''`       | false    | Label the mark face reveals on hover and the link's accessible name.                                                                                                                                                                                                                                                                                                                                            |
+| `cells`     | `ClientMosaicColumnsCell[]` | `[]`       | false    | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`, and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
+| `reveal`    | `ClientMosaicColumnsReveal` | `'always'` | false    | When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint.                                                                                                                                                                                                                                              |
 
 ## Events
 
@@ -88,13 +91,15 @@ Three featured success stories side by side: each column is a client's mark on a
 
 - Visual states: `default`, `hover` on each column (the face reveals the link line, the story fill rises)
 - The face colours are bound as the `--wall-face` and `--wall-ink` custom properties from `brand`, or from the client registry by `name` when `brand` is left out; `data-treatment` on every mark drives its ink
+- `reveal="hover"`: each list item carries `data-state=open|closed`; one card is open at a time on large screens, every card is open below the large breakpoint
 - Empty: when `cells` is empty the band renders nothing
 
 ## Motion & Animations
 
-| Trigger                 | Animation / Transition                                                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
-| ----------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| hover fill on the story | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
+| Trigger                     | Animation / Transition                                                                                                                                                                                                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| hover fill on the story     | `before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance`                                                                                                                               | inline (matches catalog)                          | `motion-reduce:before:transition-none` |
+| `reveal="hover"` card opens | `transition-[translate] duration-moderate-02 ease-productive-entrance` (logo rises), `transition-[translate,opacity] duration-moderate-02` (story panel), `transition-[opacity,translate] duration-moderate-01` (cue) | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 
 ## Tokens
 
@@ -122,10 +127,19 @@ Three featured success stories side by side: each column is a client's mark on a
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
+- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `pi-arrow-up-right` mirrors under right-to-left.
+
+## Internationalization
+
+| Key                       | English source     | Override prop                          |
+| ------------------------- | ------------------ | -------------------------------------- |
+| `customerSpotlight.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
+| `customerSpotlight.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
 
 ## Examples
 
 - Default
+- Reveal on hover — four client cards that open on hover or focus.
 
 ## Constraints — DO NOT
 

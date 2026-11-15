@@ -3,11 +3,11 @@ name: section-module
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 0a84001795327967d779625c185428e8d7f76fcb9527d1b4c9bc609bec5b6377
+spec_version: 2
+checksum: 90943ee0e958ddcecf693d4b6bb5f8fbbc0961778f95f0f80df810bddb72dc38
 style_seam: true
 created: 2026-09-23
-last_updated: 2026-11-09
+last_updated: 2026-11-15
 ---
 
 # Section Module — Component Spec
@@ -18,6 +18,7 @@ The brick of the page column: a section whose header row is divided from its bod
 
 ## When to use
 
+- Use SectionModule for each band inside SectionContainer.
 - For every band stacked inside a `section-container`.
 - Whenever a band needs a header row divided from its content by a rule.
 - For a body-only band, by passing no title and no header slot.

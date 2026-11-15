@@ -3,11 +3,11 @@ name: payment-brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: fcd4e091c9343722c46d08f3e35fb5762638adccc9ba7004cd138d868a11cd83
+checksum: 1ffd986cafd936c1a2657c199b3c54d7ef99fc72f34bda0da94573afdf9ff117
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # PaymentBrand — Component Spec
@@ -18,6 +18,7 @@ The card-brand plate shown beside a payment card: a small bordered plate with th
 
 ## When to use
 
+- Use PaymentBrand for the card network plate next to a payment card.
 - A payment method row, a checkout summary or a billing table names the card on file: the plate sits before `Ending in 4242` or `Visa •••• 4242`.
 - A list of saved cards where the brand helps the reader tell them apart.
 

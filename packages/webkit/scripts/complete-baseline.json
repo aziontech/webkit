@@ -1,7 +1,6 @@
 [
   "app-layout::examples-count",
   "button::examples-count",
-  "code-split::examples-count",
   "hero-form::examples-count",
   "icon-button::examples-count",
   "password-requirements::root-export"

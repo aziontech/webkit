@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Use BigNumbers inside another band or a hand-built SFC; for product KPIs use StatTile.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`stats-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`big-numbers`).
 - To state a handful of measured facts (2–6) as the proof band of a marketing or landing page.
 - Whenever the figure itself is the message and the caption only names what was measured.
 - Under a `section-title`, as the opening evidence of a section.

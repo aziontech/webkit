@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use NetworkMap as a decorative world-map backdrop; for data by location use MapChart.
 - As the backdrop of a band whose subject is the network (reach, data centers, latency, resilience), composed as a sibling under the band's copy inside a positioned, clipping ancestor.
 - When a band is about one part of the network, so only that region's PoPs should light (`region`) while the whole world stays drawn.
 - When the same artwork has to read with more or fewer PoPs lit, or with none at all (`density="none"`), from one component instead of separate exports.

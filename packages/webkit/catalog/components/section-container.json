@@ -1,6 +1,7 @@
 {
  "purpose": "The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside. It is the middle layer of the page language — the hero above it owns the page's top rule, the footer below it owns the bottom, and this column owns the sides — so a page's frame is drawn once, by three components, instead of by every band that happens to need an edge.",
  "useWhen": [
+  "Use SectionContainer once per marketing page as the framed column below the hero.",
   "As the container for every band below a `hero`, on a marketing, hub or documentation page.",
   "Whenever a stack of `section-module` bricks needs one continuous frame around it.",
   "For a plain prose column that should sit on the page's own measure, with `padded`."

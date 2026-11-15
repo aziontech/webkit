@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use LogoWall for a static grid of customer marks.
 - To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.
 - Wherever a set of partner, customer or certification marks is the message.
 - When the marks are recognisable enough that names are unnecessary.

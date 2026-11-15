@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use LineFigure for an interactive isometric product figure.
 - The art beside a product's copy on a landing or a docs home.
 - An empty state or a not-found page (`azion-404`).
 
@@ -29,7 +30,7 @@
 ## Related
 
 - Illustration` — static art from the registry.
-- ProductWidget`, `ShellMockup` — product scenes.
+- ProductWidget` — product scenes.
 - EmptyState` — can carry a figure in its art slot.
 
 ## Props

@@ -1,6 +1,6 @@
 # Product Widget
 
-> Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
+> Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ShellMockup` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
 
 - Import: `import ProductWidget from '@aziontech/webkit/product-widget'`
 - Category: content · Surface: product · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ProductWidget to show an official console screen on a marketing band.
 - A product band (hero, media split, feature tab, widget grid cell) needs to show a console screen or a fragment of one.
 - The same console screen appears on more than one page and must be the same drawing on each.
 - Several widgets share one slot (tabs), and only the one showing should play: drive `active` from the host.
@@ -24,7 +25,7 @@
 
 ## Don’t
 
-- The screen you need is not in the registry → compose it with `shell-mockup` and its parts, then add it to the registry. Do not approximate it at the call site.
+- The screen you need is not in the registry → add it to the registry inside WebKit (drawn in the internal `ShellMockup` frame). Do not approximate it at the call site.
 - A live, working screen at a device size → use `browser-frame`.
 - A static product concept drawing → use `illustration`.
 - A screenshot or clip in documentation → use `doc-frame`.
@@ -32,7 +33,6 @@
 
 ## Related
 
-- [shell-mockup](shell-mockup.md) — the frame every widget is drawn in; reach for it directly to compose a new screen.
 - [illustration](illustration.md) — the same closed-registry pattern for static scenes.
 - [texture-material](texture-material.md) — the texture a full-screen widget grounds itself with through `texture`.
 
@@ -55,14 +55,14 @@
 ## States
 
 - Visual states: `default` only. A widget is decorative: no `hover`, `focus-visible`, `disabled` or `loading` state of its own. `hover` and `active` are triggers the host drives, not states the root renders.
-- Every widget is drawn in an inert `shell-mockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `toggle-group` above its inert frame that switches the coding agent.
+- Every widget is drawn in an inert `ShellMockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `toggle-group` above its inert frame that switches the coding agent.
 - `cli-terminal-start` and `cli-terminal-deploy` play a recorded Azion CLI session (init to curl, or link and deploy); `workload-topology-flow` draws domains, a workload and its bindings joined by `flow` connectors, with the workload ringed in the primary glow.
 - `data-name` mirrors `name` on the root, and `data-kind` mirrors a fragment's plating (`window` or `bare`, the registry default when `kind` is unset); a workload screen leaves `data-kind` off the root. The window around a framed fragment carries `data-testid="<root testid>__frame"` and its body `<root testid>__frame-body`.
 - Loading: the widget's code is loaded on demand, and the plating registry with the window part beside it. The root keeps its size while it loads and draws nothing until the widget (and its window) arrives, so a framed fragment is never drawn bare first. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.
 - A `name` outside the registry (from untyped code), or a widget chunk that fails to load, warns in development only (`import.meta.env.DEV`) and leaves the root empty; it never throws.
 - A plating prop the loaded widget does not read warns in development only, once per load, and changes nothing.
 - `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
-- Each widget owns its entrance (a `shell-mockup` replay when `active` turns on) and, for fragments, its beat while `hover` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
+- Each widget owns its entrance (a `ShellMockup` replay when `active` turns on) and, for fragments, its beat while `hover` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
 
 ## Accessibility
 
@@ -88,7 +88,7 @@
 
 ## Responsive
 
-- Container queries: none; every widget scales its design width to fit its host (`shell-mockup`), with a narrower design width below `md`. A framed fragment scales once: the window scales to the host, and the fragment inside measures the window body's layout width (untransformed), not its scaled box.
+- Container queries: none; every widget scales its design width to fit its host (`ShellMockup`), with a narrower design width below `md`. A framed fragment scales once: the window scales to the host, and the fragment inside measures the window body's layout width (untransformed), not its scaled box.
 - Narrow: the host sets the size; the widget scales down with it.
 - Touch: a fragment shows its finished beat on a device that cannot hover.
 - Reflow: no horizontal scroll; the frame scales instead. A bare fragment's decorative overflow (cursor, mock text grown by a 200% root font) is clipped by its host cell, never by the page; the Library example's cells clip, and `src/test/reflow.test.ts` checks it on Chromium, Firefox and WebKit.

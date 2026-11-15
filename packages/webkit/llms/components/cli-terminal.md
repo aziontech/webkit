@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use CliTerminal only on marketing pages for a full-width terminal session.
 - To close a product argument on how little it takes to ship from the terminal, like Functions and Workloads.
 
 ## Do
@@ -19,14 +20,14 @@
 
 ## Don’t
 
-- For a config file or handler beside the claim → use `code-split`.
-- For several capabilities, each with its own file → use `sticky-scroll-code`.
+- For a config file or handler beside the claim → use `media-split-band` with `codeTabs`.
+- For several capabilities, each with its own file → use `feature-scroll` with code items.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [code-block](code-block.md) — the terminal session the band shows.
-- [code-split](code-split.md) — the sibling band with the sample beside the copy.
+- [media-split-band](media-split-band.md) — the sibling band with the sample (`codeTabs`) beside the copy.
 
 ## Props
 

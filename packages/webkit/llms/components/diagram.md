@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Diagram for one of the official marketing architecture drawings.
 - Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.
 - Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.
 - Filling the media cell of a marketing band (`media-tabs`, `media-split`) with an architecture instead of a picture.

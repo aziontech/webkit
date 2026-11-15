@@ -9,7 +9,7 @@
   "A transient confirmation of an action → use `toast`.",
   "Validation feedback under one form field → use `helper-text`.",
   "An admonition inside documentation prose → use `doc-callout`.",
-  "A promotional band between page sections → use `banner`."
+  "A promotional band between page sections → use `call-to-action` with `kind=\"announcement\"`."
  ],
  "related": [
   "toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.",

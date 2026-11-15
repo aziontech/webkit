@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use MediaTabs (primitive) for claims on one side and the selected claim's media on the other.
 - For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.
 - When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.
 - As a product-page band that rewards watching but does not require it.
@@ -50,12 +51,6 @@
 | `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the ground's tiling — how far apart its cells sit. |
 | `textureFade` | `TextureMaterialFade` | `'vignette'` | false | How the ground fades out before the column's edges. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
-
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `tab-change` | `(event: Event, index: number)` | @deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick. |
 
 ## Slots
 

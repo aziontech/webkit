@@ -6,7 +6,7 @@ A cell shows a check-circle mark when the feature is included, a circle-minus ma
 
 On small screens the table shows one plan at a time, picked from a select in the header.
 
-For the Support page's tier comparison, use CompareSupportTiers.
+The Support page's tier comparison is the same table: pass the support tiers as `plans`.
 
 The band is the `ComparePlans` component from `@aziontech/webkit/compare-plans`; it composes `SectionModule`, `Select`, `Button`, `Overline`, `Hint`, `Tag` and `Link`, and keeps the plan picked on small screens as local state.
 
@@ -39,3 +39,17 @@ Site JSON: [`site-plan-matrix.json`](./site-plan-matrix.json)
 Rows whose label needs a definition carry a `hint`: the info button opens a popover titled with the label. Included and not-included cells show their marks with a tooltip. The table has no closing link, so its last row draws the closing rule.
 
 Example: [`hints-and-marks.vue`](./hints-and-marks.vue)
+
+### Support tiers
+
+Developer, Business, Enterprise and Mission-Critical as the columns of the Support page, across the Support and the Professional Services bands, each band closing on its pricing link. Tiers are plans: give each one an `id`, a `name`, a `description` and an `action`.
+
+Example: [`support-tiers.vue`](./support-tiers.vue)
+
+### Tier Matrix
+
+The Support page's site entry: Developer starts a free account, the other tiers hand off to the contact page, and Enterprise is the recommended tier.
+
+Example: [`site-tier-matrix.vue`](./site-tier-matrix.vue)
+
+Site JSON: [`site-tier-matrix.json`](./site-tier-matrix.json)

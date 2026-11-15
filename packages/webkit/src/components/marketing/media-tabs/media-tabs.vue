@@ -72,11 +72,6 @@
     textureFade: 'vignette'
   })
 
-  const emit = defineEmits<{
-    /** @deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; the DOM event that moved it, then the index now shown. */
-    'tab-change': [event: Event, index: number]
-  }>()
-
   /** Index of the tab shown; moved by a click, a hover or the autoplay timer. */
   const activeIndex = defineModel<number>({ default: 0 })
 
@@ -182,25 +177,24 @@
     focusInside.value = false
   }
 
-  function move(event: globalThis.Event, index: number): void {
+  function move(index: number): void {
     elapsed.value = 0
     if (index === activeIndex.value) return
     activeIndex.value = index
-    emit('tab-change', event, index)
   }
 
-  function point(event: globalThis.Event, index: number): void {
+  function point(index: number): void {
     if (props.selectOn !== 'hover') return
-    move(event, index)
+    move(index)
   }
 
   function togglePause(): void {
     paused.value = !paused.value
   }
 
-  function select(event: globalThis.MouseEvent, index: number): void {
+  function select(index: number): void {
     pointerInside.value = false
-    move(event, index)
+    move(index)
   }
 </script>
 
@@ -232,7 +226,7 @@
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
           class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
-          @pointerenter="point($event, index)"
+          @pointerenter="point(index)"
         >
           <FrameBox
             borders="all"
@@ -250,8 +244,8 @@
                   type="button"
                   :aria-current="isActive(index) ? 'true' : undefined"
                   class="m-0 cursor-pointer p-0 text-start after:absolute after:inset-0 after:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
-                  @click="select($event, index)"
-                  @focus="point($event, index)"
+                  @click="select(index)"
+                  @focus="point(index)"
                 >
                   {{ item.title }}
                 </button>

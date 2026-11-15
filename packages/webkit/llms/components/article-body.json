@@ -14,7 +14,7 @@
   "To open every blog post and every success story page."
  ],
  "avoidWhen": [
-  "For a list of articles → use `article-index-blog`.",
+  "For a list of articles → use `article-index`.",
   "For a closing row of related articles → use `article-cards`."
  ],
  "related": [

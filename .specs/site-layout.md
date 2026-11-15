@@ -3,11 +3,11 @@ name: site-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: e7ea4b3de71d822ba6cb9f5bc1c0cc9edb8f64790d0ac32e62dbf919cf9c1853
+checksum: 41f308b8645ee68e818ca87b0e56b8633d6cfffff9c23b14c77e142daf533350
 created: 2026-11-12
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SiteLayout — Component Spec
@@ -18,6 +18,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 
 ## When to use
 
+- Use SiteLayout once in the marketing app for the site chrome.
 - Every public marketing page (home, product, solution, company, legal): put one `SiteLayout` in the app's root (around `RouterView`) and render each page's sections as its default slot.
 - A site that needs the Azion navigation, footer and search palette without hand-composing `GlobalHeader`, `NavigationMenu`, `Footer`, `SearchTrigger` and `Command`.
 

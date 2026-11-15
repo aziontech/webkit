@@ -7,10 +7,10 @@
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
   import Switch from '../../../inputs/switch/switch.vue'
   import Item from '../../item/index'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'EdgeDnsDnssecFragment' })
 

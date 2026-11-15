@@ -1,6 +1,6 @@
 # Process Scroll
 
-> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). From the design sample's site `ProcessScroll`.
+> The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleKind: 'centered'`. From the design sample's site `ProcessScroll`.
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,7 +8,8 @@
 
 ## When to use
 
-- How something works in three to five ordered stages (build, deploy, observe).
+- Use ProcessScroll for numbered stage cards; set `pinned` to pin them under the header while they slide.
+- How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-kind="centered"`).
 
 ## Do
 
@@ -19,12 +20,10 @@
 ## Don’t
 
 - For more than five stages or stages with art — use `FeatureScroll`.
-- For five to eight short points with no section-title layout — use `StickyCarousel`; for ordered stages that pin while the page scrolls, set `pinned` here.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- StickyCarousel` — the same cards, always pinned, under a plain section title.
 - TextureMaterial`, `FrameBox`, `SectionTitle`.
 
 ## Props

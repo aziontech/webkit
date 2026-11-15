@@ -11,6 +11,7 @@
  "purpose": "The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `kind` picks the layout — `centered` for a symmetric opener, `left` for a reading-order one, and `horizontal` for a wide row that sets the headline against its description.",
  "setup": null,
  "useWhen": [
+  "Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.",
   "Opening a marketing or landing page section that needs a framed header.",
   "Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.",
   "For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind=\"horizontal\"`."

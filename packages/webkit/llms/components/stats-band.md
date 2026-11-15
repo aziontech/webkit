@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Use StatsBand for a band of proof figures placed from page JSON.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`stats-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`big-numbers`).
 - To state reach, scale or results in three to five figures right after a hero or a claim.
 
 ## Do

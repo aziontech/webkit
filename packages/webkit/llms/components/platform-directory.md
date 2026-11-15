@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use PlatformDirectory for the Azion products directory band.
 - On Home, right under the hero, to show every product the platform offers at a glance.
 - On a solution, product or pricing page that repeats the full product map.
 

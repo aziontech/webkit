@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ArchitectureTabs only when every tab shows a full-width official diagram (up to five tabs).
 - To plot several architectures of one product, or one request across the platform, one diagram at a time.
 
 ## Do
@@ -38,7 +39,6 @@
 | `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `6000` | false | Milliseconds each tab holds before the next one opens. |
-| `interval` | `number` | `0` | false | @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. A non-zero value still sets the hold. |
 | `primaryAction` | `ArchitectureTabsAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## Assets

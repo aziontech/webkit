@@ -4,7 +4,7 @@
   import { resolveScene } from '../../../assets/scene-registry'
   import SectionContainer from '../section-container/section-container.vue'
   import SectionGap from '../section-gap/section-gap.vue'
-  import { resolveSection, warnOnce } from './site-page-sections'
+  import { resolveSection, resolveSectionEntry, warnOnce } from './site-page-sections'
 
   defineOptions({ name: 'SitePage', inheritAttrs: false })
 
@@ -85,7 +85,12 @@
   })
 
   function isClosing(entry?: SitePageSection): boolean {
-    return !!entry?._id.startsWith('closing-call-to-action')
+    if (!entry) return false
+    const { id, props: bound } = resolveSectionEntry(entry._id, entry.props)
+    return (
+      id.startsWith('closing-call-to-action') ||
+      (id === 'template-gallery' && bound['closing'] === true)
+    )
   }
 
   function resolveScenes(entry: SitePageSection): ResolvedScene[] {
@@ -104,9 +109,9 @@
   function resolveEntries(entries: SitePageSection[], column = false): ResolvedSection[] {
     const resolved: ResolvedSection[] = []
     entries.forEach((entry, index) => {
-      const component = resolveSection(entry._id)
+      const { id, props: bound } = resolveSectionEntry(entry._id, entry.props)
+      const component = resolveSection(id)
       if (!component) return
-      const bound = entry.props ?? {}
       const closing = column && isClosing(entry)
       resolved.push({
         key: `${entry._id}-${index}`,

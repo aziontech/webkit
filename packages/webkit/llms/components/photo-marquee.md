@@ -1,6 +1,6 @@
 # Photo Marquee
 
-> The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.
+> The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.
 
 - Import: `import PhotoMarquee from '@aziontech/webkit/photo-marquee'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use PhotoMarquee for a decorative moving strip of photos.
 - To show a place or a team in pictures without a grid.
 
 ## Do
@@ -38,14 +39,14 @@
 
 ## States
 
-- Visual states: `default`, paused while the strip is hovered or holds focus
+- Visual states: `default`, paused while the strip is hovered or holds focus, or while its pause control is pressed (the track carries `data-paused`)
 - Empty: when `photos` is empty the band renders nothing
 - The list is rendered twice for a seamless loop; the duplicate is `aria-hidden`, its photos carry an empty `alt`, and it is hidden under reduced motion, where the region scrolls by hand instead
 
 ## Accessibility
 
 - Visible focus: the scrolling region is focusable and carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`.
-- Keyboard map: `Tab` reaches the region, which pauses the loop; under reduced motion arrow keys scroll it.
+- Keyboard map: `Tab` reaches the region, which pauses the loop, then the pause control (`Enter` / `Space` toggles it, WCAG 2.2.2); under reduced motion the control is hidden and arrow keys scroll the region.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the strip is a `region` named by `ariaLabel`; every photo carries its `alt` once — the duplicate copy is `aria-hidden` with empty `alt`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.

@@ -1,6 +1,8 @@
 {
  "purpose": "The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row of small icon buttons; below `lg` it moves into the footer's signature band, centred under the social row, as the design sample draws it. The status indicator fills the footer's `status` slot and the language select its `language` slot, so the bottom bar lays them out as `footer` does. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.",
  "useWhen": [
+  "Use SiteFooter for the marketing site footer from page JSON.",
+  "Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).",
   "As the last block of every marketing page."
  ],
  "avoidWhen": [

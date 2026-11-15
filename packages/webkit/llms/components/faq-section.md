@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Use FaqSection for the questions band of a marketing page placed from page JSON (Markdown answers).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`faq-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`faq`).
 - To answer the handful of questions a reader still has before the closing call to action.
 
 ## Do

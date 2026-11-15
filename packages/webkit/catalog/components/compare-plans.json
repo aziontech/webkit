@@ -1,15 +1,15 @@
 {
  "purpose": "The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `overline`, `tag` and `link`.",
  "useWhen": [
-  "On Pricing, under the plan cards, to show what every plan includes product by product."
+  "Use ComparePlans for a feature matrix across plans or support tiers: on Pricing under the plan cards, product by product, and on Support with one column per support tier."
  ],
  "avoidWhen": [
-  "To compare support tiers → use `compare-support-tiers`.",
-  "To compare Azion with a competitor → use `comparison-table`."
+  "To compare Azion with one competitor → use `comparison-table`.",
+  "For price cards with a billing-period toggle → use `pricing-plans`."
  ],
  "related": [
   "pricing-plans` — the plan cards this matrix sits under.",
-  "compare-support-tiers` — the same matrix for the Support page."
+  "comparison-table` — Azion against one competitor."
  ],
  "bestPractices": [
   "Give every plan a stable `id`; the narrow-screen picker selects by it.",

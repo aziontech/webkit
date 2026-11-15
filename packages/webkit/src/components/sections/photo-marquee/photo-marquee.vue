@@ -4,6 +4,7 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
+  import TickerLoop from '../../marketing/ticker/ticker-loop.vue'
 
   defineOptions({
     name: 'PhotoMarquee',
@@ -95,42 +96,34 @@
         borders="y"
         marks="bottom"
       >
-        <div
-          role="region"
-          :aria-label="ariaLabel || undefined"
-          tabindex="0"
-          class="group/loop overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:overflow-x-auto"
+        <TickerLoop
+          v-slot="{ copy, duplicate }"
+          :duration="loopDuration"
+          :aria-label="ariaLabel"
         >
-          <div
-            :style="{ animationDuration: `${loopDuration}s` }"
-            class="flex w-max animate-brand-marquee rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0 group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
+          <ul
+            :data-duplicate="duplicate || null"
+            :aria-hidden="duplicate ? 'true' : undefined"
+            class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pe-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
           >
-            <ul
-              v-for="copy in 2"
-              :key="copy"
-              :data-duplicate="copy === 2 || null"
-              :aria-hidden="copy === 2 ? 'true' : undefined"
-              class="m-0 flex shrink-0 list-none items-end gap-(--spacing-md) p-0 pe-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+            <li
+              v-for="photo in photos"
+              :key="photo.src + copy"
+              :style="{ aspectRatio: `${photo.width} / ${photo.height}` }"
+              class="h-80 shrink-0 overflow-hidden sm:h-112"
             >
-              <li
-                v-for="photo in photos"
-                :key="photo.src + copy"
-                :style="{ aspectRatio: `${photo.width} / ${photo.height}` }"
-                class="h-80 shrink-0 overflow-hidden sm:h-112"
-              >
-                <img
-                  :src="photo.src"
-                  :alt="copy === 2 ? '' : photo.alt"
-                  :width="photo.width"
-                  :height="photo.height"
-                  draggable="false"
-                  decoding="async"
-                  class="size-full object-cover"
-                />
-              </li>
-            </ul>
-          </div>
-        </div>
+              <img
+                :src="photo.src"
+                :alt="duplicate ? '' : photo.alt"
+                :width="photo.width"
+                :height="photo.height"
+                draggable="false"
+                decoding="async"
+                class="size-full object-cover"
+              />
+            </li>
+          </ul>
+        </TickerLoop>
       </FrameBox>
     </SectionModule>
   </section>

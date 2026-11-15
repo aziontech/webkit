@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use FeatureWidgets when each cell has its own action or copy button.
 - To offer the same outcome through two or three entry points (agent, console, terminal), each with its own next step.
 
 ## Do
@@ -19,7 +20,7 @@
 
 ## Don’t
 
-- For reasons without an action per cell → use `feature-tiles`.
+- For reasons without an action per cell → use `feature-tiles` (with pictures) or `capability-grid` (without).
 - For a long argument per feature → use `feature-scroll`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

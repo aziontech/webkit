@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Accordion for expandable sections in product UI; the marketing FAQ band is FaqSection.
 - Long content splits into independent sections the reader scans by heading and opens on demand (settings groups, help topics, a details list).
 - The reader may want one section open at a time (`type="single"`) or to compare several side by side (`type="multiple"`).
 - Content should expand inline below its heading, pushing the rest of the page down.

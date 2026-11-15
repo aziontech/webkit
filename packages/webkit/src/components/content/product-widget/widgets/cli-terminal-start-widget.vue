@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import CliTerminal from '../parts/cli-terminal.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
 
   defineOptions({ name: 'CliTerminalStartWidget' })
 

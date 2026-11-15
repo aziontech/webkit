@@ -5,7 +5,7 @@
   import LogViewContent from '../../../components/code/log-view/log-view-content.vue'
   import LogViewHeader from '../../../components/code/log-view/log-view-header.vue'
   import Trace from '../../../components/code/trace/trace.vue'
-  import ShellMockup from '../../../components/content/shell-mockup/shell-mockup.vue'
+  import ShellMockup from '../../../components/content/product-widget/shell-mockup/shell-mockup.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import Flow from '../../../components/data/flow/flow.vue'
   import FlowAnchor from '../../../components/data/flow/flow-anchor/flow-anchor.vue'

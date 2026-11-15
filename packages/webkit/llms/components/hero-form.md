@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use HeroForm when the page exists to capture a lead and the form sits above the fold.
 - To open a page whose purpose is a lead form, such as Contact sales or Under attack.
 
 ## Do
@@ -21,7 +22,7 @@
 ## Don’t
 
 - For a newsletter sign-up with one email field → use `closing-call-to-action-newsletter`.
-- For an opening band with calls to action and no form → use `hero-band` or `hero-with-opening`.
+- For an opening band with calls to action and no form → use `hero-band`, which takes every other marketing page opening.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -48,9 +49,7 @@
 | `fields` | `HeroFormField[]` | `[]` | false | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel` | `string` | `''` | false | Label of the submit button. |
 | `tickerLabel` | `string` | `''` | false | Overline above the client ticker. |
-| `carouselLabel` | `string` | `''` | false | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty. |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks, in order; the ticker renders only when there are marks. |
-| `carouselMarks` | `string[]` | `[]` | false | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty. |
 | `loading` | `boolean` | `false` | false | The site is sending the values: the button shows its loading state and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the values: the form gives way to `messages.success`. |
 | `error` | `boolean` | `false` | false | The site could not send the values: `messages.error` shows under the form. |

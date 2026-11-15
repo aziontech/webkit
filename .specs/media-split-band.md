@@ -3,27 +3,31 @@ name: media-split-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 6
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 275475480e4e1a3c8b9ee41a0cc307b6059e8758bc80c2d48811e285f8e3e0fa
+last_updated: 2026-11-15
+checksum: a61fb38710175cd4866ef2b6cf193f2bcc3c43ce754143f5e1ae6a7ed3462074
 ---
 
 # MediaSplitBand — Component Spec
 
 ## Purpose
 
-One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
+One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `code-block`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a code sample (one file or a tab strip of files), a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
+- Use MediaSplitBand for one marketing claim beside its picture, scene or code.
 - To make one point beside one picture and move on (a values statement, a single product claim).
+- To set a claim beside the code that delivers it (`codeTabs`), with the files in a tab strip.
 
 ## When NOT to use
 
 - For several claims stacked one after the other → use `media-split-stack`.
-- For a claim beside a code sample → use `code-split`.
+- For a full-width terminal session with no copy column → use `cli-terminal`.
+- For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`.
 
 ## Related
 
@@ -32,7 +36,8 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ## Best practices
 
-- Give the band exactly one media: `scene`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.
+- Give the band exactly one media: `scene`, `codeTabs`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.
+- A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `kind: 'transparent'` action for a quiet "Learn more".
 - On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.
 - Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.
 - Use `size="large"` for a band that carries only its headline and description.
@@ -72,13 +77,16 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 | `texture` | `TextureMaterialKind` | `'pixelate'` | false | Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`. |
 | `linked` | `boolean` | `true` | false | Links the whole band to a lone action; turn it off when the media holds controls of its own. |
 | `scene`                 | `MediaSplitBandScene`  | `undefined` | false    | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media.                                                                                          |
-| `widget`                | `ProductWidgetName`    | `undefined` | false    | Name of the product console widget drawn in the media cell when no scene is set.                                                                                                                  |
+| `codeTabs` | `MediaSplitBandCodeTab[]` | `[]` | false | Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped. |
+| `defaultFile` | `string` | `''` | false | `value` of the code tab open first; empty, or a value no tab carries, opens the first tab. |
+| `copyAriaLabel` | `string` | `''` | false | Accessible name of the code sample's copy button; empty keeps the code block's own. |
+| `widget`                | `ProductWidgetName`    | `undefined` | false    | Name of the product console widget drawn in the media cell when neither a scene nor code is set.                                                                                                                  |
 | `diagram`               | `DiagramName`          | `undefined` | false    | Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set.                                                                                                |
 | `image`                 | `MediaSplitBandImage`  | `undefined` | false    | Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. |
 | `illustration`          | `string`               | `''`        | false    | Registry name of the illustration drawn in the media cell when no other media is set.                                                                                                             |
 | `illustrationAriaLabel` | `string`               | `''`        | false    | Accessible name of the illustration; empty keeps it decorative.                                                                                                                                   |
-| `primaryAction`         | `MediaSplitBandAction` | `undefined` | false    | First button under the copy; `{ label, href, trailing?, target? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it.                                                                       |
-| `secondaryAction`       | `MediaSplitBandAction` | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. With two actions the band stays unlinked.                                                                        |
+| `primaryAction`         | `MediaSplitBandAction` | `undefined` | false    | First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind.                                                                       |
+| `secondaryAction`       | `MediaSplitBandAction` | `undefined` | false    | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked.                                                                        |
 
 ## Events
 
@@ -96,9 +104,11 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 - With exactly one action the band is a link to that action's `href` (unless `linked` is `false`), and that lone action renders as an outlined button closed by the trailing chevron; with two the first is secondary, the second outlined, and the band is not a link
 - `size="medium"` aligns the copy to the top of the media, `size="large"` centres it
 - `orientation` and `texture` are forwarded to the media split
-- Media precedence: `scene`, `widget`, `diagram`, `image`, `illustration`. A widget, a diagram and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
+- Media precedence: `scene`, `codeTabs`, `widget`, `diagram`, `image`, `illustration`. Code, a widget, a diagram and a framed image are inset from the cell's edges (`media-split`'s `mediaPadded`); a scene, a plain image (which covers the cell) and an illustration run flush
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
-- Scenes, widget and diagram load on demand (`defineAsyncComponent`)
+- Scenes, code block, widget and diagram load on demand (`defineAsyncComponent`)
+- Code: the sample opens on `defaultFile` (or the first tab), numbers its lines and types them in once; the band does not link to a lone action while it shows code
+- An action's `kind` (`secondary`, `outlined`, `transparent`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
 
 ## Motion & Animations
 
@@ -123,7 +133,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by `button` and `media-split`.
-- Keyboard map: `Tab` moves through the actions, and through the media link when the band links.
+- Keyboard map: `Tab` moves through the actions, and through the media link when the band links; over code it moves through the code block's tabs and copy button (owned by `code-block`).
 - ARIA: the media split's `<section>` is the band's named region (`aria-label` from `title`), so the root is a plain `div`; the headline is its `h2`; an image is named by `alt`, an illustration by `illustrationAriaLabel`, and both are decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the scenes stop under reduced motion on their own.
@@ -150,14 +160,15 @@ _none_
 
 ## Performance
 
-- Bundle budget: 11 KB gzip for `./media-split-band` (initial chunk only) in `.size-limit.json`; scenes, `product-widget` and `diagram` are async chunks.
+- Bundle budget: 6.95 KB gzip for `./media-split-band` (initial chunk only) in `.size-limit.json`; scenes, `code-block`, `product-widget` and `diagram` are async chunks.
 - Runtime budget: none: static apart from the widget beat while hovered.
-- Heavy parts: the scenes, `product-widget` and `diagram`, all lazy.
+- Heavy parts: the scenes, `code-block`, `product-widget` and `diagram`, all lazy.
 
 ## Examples
 
 - Default
 - Product media — the band with a `ProductWidget`, then with a `Diagram` (justified: `widget` and `diagram` are render paths the default does not reach).
+- Code — a claim beside a one-file code sample with a quiet `transparent` action (justified: the code media is a render path the other examples do not reach).
 - Vertical — a wide scene stacked under the copy with `orientation="vertical"`, a lone outlined action and `linked` off (justified: the vertical split and the unlinked lone action are layouts the default does not reach).
 
 ## Constraints — DO NOT

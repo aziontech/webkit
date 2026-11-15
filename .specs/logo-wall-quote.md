@@ -3,11 +3,11 @@ name: logo-wall-quote
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 0470ccae6434f706c135bf656e1a102db01965cf0d680d2a1c5ac638c3424949
+last_updated: 2026-11-15
+checksum: af72120a884ba8c5af03ea798936fa74ce921348445f030204e3657d517be00a
 ---
 
 # LogoWallQuote — Component Spec
@@ -18,6 +18,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 ## When to use
 
+- Use LogoWallQuote for customer logos plus one featured quote.
 - To prove adoption with marks and let one customer speak, early on a home or solution page.
 
 ## When NOT to use

@@ -18,7 +18,7 @@
  ],
  "related": [
   "data-table` — the data-driven table (`data` + `columns`, TanStack engine) that renders through these parts.",
-  "data-grid` — the editable, spreadsheet-like grid built on these parts.",
+  "data-grid` — the editable, spreadsheet-like grid; a separate grid (`role=\"grid\"`, one roving tab stop, in-cell editors) that shares these tokens, not built on these parts.",
   "pagination` — the page strip; put it in a `Table.Footer` in the `footer` slot.",
   "empty-state` — compose it in a full-width row when a hand-composed table has no rows.",
   "item` — list rows without a column structure.",

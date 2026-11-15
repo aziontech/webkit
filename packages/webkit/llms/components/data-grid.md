@@ -1,6 +1,6 @@
 # Data Grid
 
-> An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, a roving tab stop), not a read-only table. The rows are a two-way model (`v-model`); every committed edit writes the new rows and emits `change` with the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-delete` and the app changes the rows. It loads no table engine and no virtualization library: thousands of rows scroll natively inside `maxHeight`, and each row is laid out lazily with CSS `content-visibility: auto`.
+> An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role="grid"`, `gridcell`, one roving tab stop), not a read-only table. **Why a component of its own.** DataGrid is not an `editable` mode of `data-table` and is not composed from `table`'s parts, for three reasons. Table's parts render the **table** pattern (`role="table"`, `cell`, every link and button its own tab stop), while a grid needs `gridcell`s inside one roving tab stop with a cell cursor; switching the roles and the focus model inside the same parts would make every read-only table pay for it. In-cell editors must be borderless and fill the cell, so they are a bare `input` and `select` styled with the tokens, not the package's `Input` and `Select`, whose frames and overlays fight a 40 px cell. And DataGrid needs no sorting, filtering or paging engine: it loads no `@tanstack/vue-table` and no virtualization library, so an editing screen stays at about 9 KB. **The rows are the edited value.** Where `data-table` takes `data` and only emits `update:data` when rows are reordered, DataGrid's rows are what the person edits, so they are its `v-model`: every committed edit writes a new array with a copy of the edited row, and `change` reports the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-delete` and the app changes the rows. Thousands of rows scroll natively inside `maxHeight`, each row is laid out lazily with CSS `content-visibility: auto`, and each row re-renders only when its cells, its cursor or its range change.
 
 - Import: `import DataGrid from '@aziontech/webkit/data-grid'`
 - Category: data · Surface: product · Structure: monolithic
@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use DataGrid only when people edit many cells of many records in place, spreadsheet-style; for a short list of rows in a form use AttributeEditor, for read-and-act lists use Table.
+- Use DataGrid only when people edit many cells of many records in place, spreadsheet-style; for a short list of rows in a form use AttributeEditor, for read-and-act lists use DataTable (a hand-composed Table for small static ones).
 - A database table editor or the editable results of a query: typed cells (text, number, boolean, a choice), keyboard-first editing, copy of a cell range.
 - Bulk corrections across rows, where opening a drawer per record would be slower than editing the cells.
 
@@ -74,22 +74,24 @@
 
 ## States
 
-- Visual states: `default`, `hover` (row), `focus-visible` (the active cell ring), `selected` (cells in the range: `data-selected`; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
-- `empty`: no rows, the `empty` slot (default `EmptyState`, `dataGrid.emptyTitle`) in place of the body; the header and toolbar stay.
-- No `loading` or `error` state of its own: the app shows a `Skeleton` or an `Alert` around the grid while it loads; DataGrid never fetches.
+- Visual states: `default`, `hover` (row), `focus-visible` (the cursor ring on the active cell or header), `selected` (cells in the range: `data-selected`, `aria-selected="true"`; rows checked: `data-state="selected"`), `editing` (`data-editing` on the cell with the editor open), `readonly` (`data-readonly` on the root; non-editable cells carry `aria-readonly`).
+- `invalid`: a number cell whose text is not a number stays in its editor on Enter or Tab, with `data-invalid` on the cell and the editor, `aria-invalid="true"` and `aria-describedby` pointing to a message (`dataGrid.invalidNumber`, `role="alert"`) under the cell; nothing is committed until the text parses or Escape restores the value. Blur with an invalid text discards it and keeps the previous value.
+- `empty`: no rows, the `empty` slot (default `EmptyState`, `dataGrid.emptyTitle`) under the header, outside the grid's rows; the header and toolbar stay.
+- No `disabled` state: a grid people may not edit is `readonly` (the cursor, ranges and copy keep working). No `loading` or `error` state of its own: the app shows a `Skeleton` or an `Alert` around the grid while it loads; DataGrid never fetches.
 - `data-frozen="start"` on the first column's cells with `frozenFirstColumn`; `data-resizing` on a header while its width is dragged.
 
 ## Accessibility
 
-- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `aria-label` (or `aria-labelledby`), `aria-multiselectable="true"` with `enableRowSelection`, and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when checked; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; a cell in the range carries `aria-selected="true"`, a cell that cannot be edited `aria-readonly="true"`.
-- Roving tab stop: exactly one cell has `tabindex="0"` (the active cell, the first body cell at start), every other cell `-1`, so `Tab` enters the grid on the active cell. The editor inside a cell takes focus while editing and returns it to the cell when it closes.
-- Keyboard map (cell cursor): `Arrow` keys move one cell (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range; `Tab` / `Shift+Tab` move to the next / previous cell and wrap to the next / previous row, and leave the grid from its last / first cell. `Enter` or `F2` opens the editor; typing a character opens it with that character; `Space` toggles a boolean cell or the row checkbox; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+A` / `Cmd+A` selects every cell.
-- Keyboard map (editing): `Enter` commits and moves down, `Tab` / `Shift+Tab` commit and move right / left, `Escape` cancels and restores the value; blur commits. A select editor is a native `select`, so its own keys apply while it is open.
-- Resize handles are `role="separator"` with `aria-orientation="vertical"`, `aria-valuenow` (the width in px), `aria-valuemin` and a name (`dataGrid.resize`: `Resize Name`); they are focusable and `Arrow Left` / `Arrow Right` change the width by 16 px.
-- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` inset on the active cell; the editor uses the same ring.
+- Pattern: the WAI-ARIA APG **data grid**. The grid element is `role="grid"` with `aria-rowcount` (rows + header) and `aria-colcount`, named by `ariaLabel`, or by an `aria-labelledby` / `aria-describedby` passed to DataGrid (both are forwarded to the grid element, not the frame), `aria-multiselectable="true"` (a cell range can always be selected) and `aria-readonly="true"` while `readonly`. Rows are `role="row"` with `aria-rowindex` (1-based, header is 1) and `aria-selected` when row selection is on; header cells `role="columnheader"`, body cells `role="gridcell"`, each with `aria-colindex`; every gridcell carries `aria-selected` (`true` in the range, `false` outside it) and a cell that cannot be edited `aria-readonly="true"`. The empty state renders outside the grid's rows, so `aria-rowcount` stays exact.
+- One tab stop: exactly one cell of the grid has `tabindex="0"` (the active cell, the first body cell at start; the header row is part of the cursor), every other cell, checkbox and resize handle `-1`. `Tab` enters the grid on the active cell and `Tab` / `Shift+Tab` leave it. The editor inside a cell takes focus while editing and returns it to the cell when it closes.
+- Keyboard map (cell cursor): `Arrow` keys move one cell, up into the header row and back (inline arrows follow the reading direction); `Home` / `End` the first / last cell of the row; `Ctrl+Home` / `Ctrl+End` the first / last cell of the grid; `PageUp` / `PageDown` ten rows; `Shift` with an arrow, `Home` or `End` extends the range over body cells; `Tab` / `Shift+Tab` leave the grid. `Enter` or `F2` opens the editor of a body cell and, on a header cell, moves focus to its resize handle; typing a character opens a text or number editor with that character (select and boolean cells do not open on typing); `Space` toggles a boolean cell, the row checkbox, or Select all on its header; `Delete` / `Backspace` clears an editable text or number cell; `Ctrl+C` / `Cmd+C` copies the range; `Ctrl+A` / `Cmd+A` selects every cell.
+- Keyboard map (editing): `Enter` commits and moves down; `Tab` / `Shift+Tab` commit and move to the next / previous cell (wrapping across rows), the one case where Tab moves inside the grid; `Escape` cancels and restores the value; blur commits. A select editor is a native `select`: its arrow keys change the choice without committing, and Enter, Tab or blur commit it. An invalid number keeps the editor open (see States).
+- Row checkboxes are named after the row: `dataGrid.selectRow` (`Select row {row}`) filled with the first column's text, else the row key.
+- Resize handles are `role="separator"` with `aria-orientation="vertical"`, `aria-valuenow` (the width in px), `aria-valuemin` (`minWidth`, 64 by default), `aria-valuemax` (960) and a name (`dataGrid.resize`: `Resize Name`); they are reached with Enter from their header cell, `Arrow Left` / `Arrow Right` change the width by 16 px, and `Escape` or `Enter` return focus to the header cell.
+- Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` inset on the active cell or header; the editor uses the same ring (`--danger-border` while invalid).
 - Contrast ≥ 4.5:1 for text (muted header text included); the selected surface keeps the text contrast.
 - `motion-reduce:transition-none` on every transition.
-- Touch: each cell is at least 40 px high; tapping a cell moves the cursor there, a second tap opens the editor; the resize handle is 12 px wide with a 24 px hit area.
+- Touch: cells and headers are 40 px high, 44 px under `pointer: coarse`; tapping a cell moves the cursor there, a second tap opens the editor; the resize handle has a 24 px hit area, 44 px under `pointer: coarse`.
 
 ## Right-to-left
 
@@ -105,6 +107,7 @@
 | `dataGrid.selectAll`        | `Select all rows`             | —             |
 | `dataGrid.selectRow`        | `Select row`                  | —             |
 | `dataGrid.resize`           | `Resize {column}`             | —             |
+| `dataGrid.invalidNumber`    | `Enter a number`              | —             |
 | `dataGrid.emptyTitle`       | `No rows yet`                 | `empty` slot  |
 | `dataGrid.emptyDescription` | `Add a row to start editing.` | `empty` slot  |
 | `dataGrid.true`             | `Yes`                         | —             |
@@ -116,7 +119,7 @@
 
 - Container queries: none: the grid is a two-dimensional surface that keeps its columns at every width.
 - Narrow (≤ 640 px or a narrow container): the viewport scrolls sideways inside the grid, with the frozen first column still in view; the toolbar wraps.
-- Touch: cells are 40 px high; editing opens on a second tap; nothing is hover-only.
+- Touch: cells and headers are 44 px high under `pointer: coarse` (40 px otherwise); the resize handle's hit area is 44 px under `pointer: coarse` (24 px otherwise); editing opens on a second tap; nothing is hover-only.
 - Reflow: a data grid is the WCAG 1.4.10 exception for two-dimensional content: the grid scrolls horizontally inside its frame, never the page.
 
 ## Examples

@@ -3,10 +3,10 @@ name: faq
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 9e30a8734dce728b076bcb9e4e7e30c0395148d9503dd4f9e7887b1db1097feb
+spec_version: 4
+checksum: d7707520b79b0e4165f4e103ad62908403cadd97ad7e16a45254ce1ff6539051
 created: 2026-09-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Faq — Component Spec
@@ -19,6 +19,8 @@ The band is drawn in the hairline register: the two columns and every row are se
 
 ## When to use
 
+- Use Faq in a hand-built SFC that needs rich answers in the `#answer` slot.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`faq-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`faq`).
 - As the FAQ band near the end of a marketing or pricing page.
 - Whenever a page must answer a known set of objections without sending the reader to docs.
 - When the answers are short enough to read in place rather than link out to.

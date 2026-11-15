@@ -19,7 +19,7 @@
 
 ## Don’t
 
-- For the full, filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.
+- For the full, filterable list of articles → use `article-index`.
 - For one featured article selected from a wall → use `article-highlight`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

@@ -432,6 +432,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 import FrameBox from '@aziontech/webkit/frame-box'
 import TextureMaterial from '@aziontech/webkit/texture-material'
 import FaqSection from '@aziontech/webkit/faq-section'
+import TemplateGallery from '@aziontech/webkit/template-gallery'
 </script>`
   const sfc = (template) => `${imports}<template>${template}</template>`
   vue.run('no-gap-after-closing-section', noGapAfterClosingSection, {
@@ -458,6 +459,11 @@ import FaqSection from '@aziontech/webkit/faq-section'
           '<ClosingCallToAction kind="panel" :hatch="false" /><SectionGap hatch /><ClosingCallToAction kind="primary" />'
         ),
         filename: 'h.vue'
+      },
+      { code: sfc('<TemplateGallery title="Go" /><SectionGap hatch />'), filename: 'k.vue' },
+      {
+        code: sfc('<TemplateGallery :closing="false" title="Go" /><SectionGap hatch />'),
+        filename: 'l.vue'
       }
     ],
     invalid: [
@@ -486,6 +492,16 @@ import FaqSection from '@aziontech/webkit/faq-section'
       {
         code: sfc('<ClosingCallToAction :hatch="stacked" title="Go" /><SectionGap hatch />'),
         filename: 'j.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<TemplateGallery closing title="Go" /><SectionGap hatch />'),
+        filename: 'm.vue',
+        errors: [{ messageId: 'doubled' }]
+      },
+      {
+        code: sfc('<template-gallery :closing="last" /><section-gap hatch />'),
+        filename: 'n.vue',
         errors: [{ messageId: 'doubled' }]
       }
     ]

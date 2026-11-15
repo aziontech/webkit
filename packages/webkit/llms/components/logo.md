@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Logo for any other company's mark (client, competitor, agent, certification).
 - A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
 - The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
 - A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).

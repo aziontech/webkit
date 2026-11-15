@@ -2,7 +2,7 @@
 
 The core of a product page: a run of copy-beside-art bands, each stating one claim. From `lg` up the bands pin under the site header and pile on each other as the page scrolls.
 
-Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A band whose picture is code is the CodeSplit template.
+Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A single band whose picture is code is `MediaSplitBand` with `codeTabs`.
 
 The band is the `MediaSplitStack` component from `@aziontech/webkit/media-split-stack`; it composes `SectionModule`, `SectionTitle`, `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. `kind` picks the layout: `media-end` (every picture at the closing end) or `alternating` (the picture swaps sides band by band, starting at the opening end). Both use `_id: 'media-split-stack'`.
 

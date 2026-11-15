@@ -6,8 +6,8 @@ status: implemented
 spec_version: 3
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 02037d1093f3c932cf3a65a96727572d1275eacdac56a543a9526426365362a7
+last_updated: 2026-11-15
+checksum: 6b8ea8c9d949e1df79c16a0114257749836aa8c16268777d2492469e4aa8a04a
 ---
 
 # ArticleHighlight — Component Spec
@@ -23,7 +23,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 ## When NOT to use
 
 - For a closing row of related articles → use `article-cards`.
-- For the full list of articles → use `article-index-blog`.
+- For the full list of articles → use `article-index`.
 
 ## Related
 

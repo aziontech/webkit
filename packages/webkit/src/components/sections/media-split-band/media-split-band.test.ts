@@ -1,6 +1,7 @@
 import { render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import Code from '../../../../examples/media-split-band/code.vue'
 import ProductMedia from '../../../../examples/media-split-band/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaSplitBand from './media-split-band.vue'
@@ -20,6 +21,26 @@ const image = {
   width: 360,
   height: 165
 }
+
+const codeTabs = [
+  {
+    label: 'OpenAI SDK',
+    value: 'openai-sdk',
+    language: 'ts',
+    code: 'const client = new OpenAI()',
+    fileName: 'client.ts',
+    icon: 'ai-cor ai-open'
+  },
+  {
+    label: 'GitHub Copilot',
+    value: 'github-copilot',
+    language: 'json',
+    code: '[]',
+    fileName: 'chatLanguageModels.json',
+    icon: 'ai-cor ai-microsoft-copilot'
+  },
+  { label: 'Empty', value: 'empty', code: '' }
+]
 
 const band = (props: Record<string, unknown> = {}) =>
   render(MediaSplitBand, {
@@ -264,6 +285,53 @@ describe('MediaSplitBand', () => {
 
     await findByTestId('content-product-widget', {}, { timeout: 5000 })
     await findByTestId('marketing-diagram', {}, { timeout: 5000 })
+    await expectNoA11yViolations(container)
+  })
+
+  it('draws a code sample, one tab per file with code, opening defaultFile', async () => {
+    const { findAllByRole, container, getByTestId } = band({
+      image: undefined,
+      codeTabs,
+      defaultFile: 'github-copilot'
+    })
+
+    const tabs = await findAllByRole('tab', {}, { timeout: 5000 })
+    expect(tabs.map((tab) => tab.textContent?.trim())).toEqual(['OpenAI SDK', 'GitHub Copilot'])
+    expect(tabs[1]).toHaveAttribute('aria-selected', 'true')
+    expect(container.querySelectorAll('[role="tab"] i.ai-cor')).toHaveLength(2)
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
+  })
+
+  it('opens the first tab when defaultFile names no tab', async () => {
+    const { findAllByRole } = band({ image: undefined, codeTabs, defaultFile: 'nope' })
+
+    const tabs = await findAllByRole('tab', {}, { timeout: 5000 })
+    expect(tabs[0]).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('does not link the band to a lone action while it shows code', async () => {
+    const { findAllByRole, getByTestId } = band({ image: undefined, codeTabs, primaryAction })
+
+    await findAllByRole('tab', {}, { timeout: 5000 })
+    expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-href')).toBe(false)
+  })
+
+  it('lets an action kind win over the drawn kind and draws its leading icon', () => {
+    const { getByRole } = band({
+      primaryAction: { ...primaryAction, kind: 'transparent' },
+      secondaryAction: { ...secondaryAction, icon: 'pi pi-github', trailing: false }
+    })
+
+    expect(getByRole('link', { name: 'Join us' })).toHaveAttribute('data-kind', 'transparent')
+    const second = getByRole('link', { name: secondaryAction.label })
+    expect(second).toHaveAttribute('data-kind', 'outlined')
+    expect(second.querySelector('.pi-github')).not.toBeNull()
+  })
+
+  it('has no a11y violations with a code sample', async () => {
+    const { container, findByRole } = render(Code)
+
+    await findByRole('button', { name: 'Copy the cache settings sample' }, { timeout: 5000 })
     await expectNoA11yViolations(container)
   })
 })

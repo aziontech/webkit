@@ -8,7 +8,7 @@
 
 ## When to use
 
-- On Pricing, under the plan cards, to show what every plan includes product by product.
+- Use ComparePlans for a feature matrix across plans or support tiers: on Pricing under the plan cards, product by product, and on Support with one column per support tier.
 
 ## Do
 
@@ -20,14 +20,14 @@
 
 ## Don’t
 
-- To compare support tiers → use `compare-support-tiers`.
-- To compare Azion with a competitor → use `comparison-table`.
+- To compare Azion with one competitor → use `comparison-table`.
+- For price cards with a billing-period toggle → use `pricing-plans`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [pricing-plans](pricing-plans.md) — the plan cards this matrix sits under.
-- [compare-support-tiers](compare-support-tiers.md) — the same matrix for the Support page.
+- [comparison-table](comparison-table.md) — Azion against one competitor.
 
 ## Props
 
@@ -40,7 +40,7 @@
 | `includedLabel` | `string` | `''` | false | Tooltip and screen-reader text of an included cell; empty uses the locale catalog (`Included`). |
 | `excludedLabel` | `string` | `''` | false | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`). |
 | `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
-| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`; `link` still works, @deprecated since 6.0 — use `action`, removed in 7.0) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
+| `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
 | `primaryAction` | `ComparePlansAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
@@ -175,6 +175,188 @@
     included-label="Included"
     excluded-label="Not included"
     :plans="plans"
+    :sections="sections"
+  />
+</template>
+```
+
+### Support tiers
+
+```vue
+<script setup>
+  import ComparePlans from '@aziontech/webkit/compare-plans'
+
+  const tiers = [
+    {
+      id: 'developer',
+      name: 'Developer',
+      description: 'Ideal for exploring the platform independently.',
+      highlighted: false,
+      action: {
+        label: 'Start for free',
+        href: '/signup'
+      }
+    },
+    {
+      id: 'business',
+      name: 'Business',
+      description: 'Ideal for teams that need support from specialists.',
+      highlighted: false,
+      action: {
+        label: 'Talk to a specialist',
+        href: '/contact'
+      }
+    },
+    {
+      id: 'enterprise',
+      name: 'Enterprise',
+      description: 'Ideal for organizations that require advanced support and ongoing services.',
+      highlighted: true,
+      action: {
+        label: 'Talk to a specialist',
+        href: '/contact'
+      }
+    },
+    {
+      id: 'mission-critical',
+      name: 'Mission-Critical',
+      description:
+        'Ideal for mission-critical operations that need priority and proactive support.',
+      highlighted: false,
+      action: {
+        label: 'Talk to a specialist',
+        href: '/contact'
+      }
+    }
+  ]
+
+  const sections = [
+    {
+      eyebrow: 'Support',
+      title: 'Get help when it matters most',
+      action: {
+        label: 'See pricing',
+        href: 'https://www.azion.com/en/documentation/products/pricing/#support'
+      },
+      rows: [
+        {
+          label: 'Self-service support',
+          group: true,
+          values: ['', '', '', '']
+        },
+        {
+          label: 'Learning Center',
+          values: [true, true, true, true]
+        },
+        {
+          label: 'Azion Copilot (AI)',
+          values: [true, true, true, true]
+        },
+        {
+          label: 'Technical Support',
+          group: true,
+          values: ['', '', '', '']
+        },
+        {
+          label: 'Community Support (Discord)',
+          values: [true, true, true, true]
+        },
+        {
+          label: '24/7 support via ticket and email',
+          values: ['—', true, true, true]
+        },
+        {
+          label: 'Phone and video support',
+          values: ['—', '—', true, true]
+        },
+        {
+          label: 'Slack channel',
+          values: ['—', '—', 'Paid add-on', 'Paid add-on']
+        },
+        {
+          label: 'First response time',
+          group: true,
+          values: ['', '', '', '']
+        },
+        {
+          label: 'General guidance',
+          values: ['—', '< 24 hours', '< 24 hours', '< 12 hours']
+        },
+        {
+          label: 'System impaired',
+          values: ['—', '< 12 hours', '< 12 hours', '< 12 hours']
+        },
+        {
+          label: 'Production system impaired',
+          values: ['—', '< 4 hours', '< 4 hours', '< 2 hours']
+        },
+        {
+          label: 'Production system down',
+          values: ['—', '< 2 hours', '< 1 hour', '< 30 minutes']
+        },
+        {
+          label: 'Business system down',
+          values: ['—', '—', '< 15 minutes', '< 15 minutes']
+        }
+      ]
+    },
+    {
+      eyebrow: 'Professional Services',
+      title: 'Move faster with specialist guidance',
+      action: {
+        label: 'See pricing',
+        href: 'https://www.azion.com/en/documentation/products/pricing/#professional-services'
+      },
+      rows: [
+        {
+          label: 'Integration Services',
+          group: true,
+          values: ['—', '5 hours/year included', '20 hours/year included', '60 hours/year included']
+        },
+        {
+          label: 'Best Practices Review',
+          group: true,
+          values: ['—', 'Paid add-on', '20 hours/year included', '40 hours/year included']
+        },
+        {
+          label: 'Business Events Support',
+          group: true,
+          values: ['—', '—', '1 event per year', '100 hours/year included']
+        },
+        {
+          label: 'Technical Account Manager',
+          group: true,
+          values: ['—', '—', 'Paid add-on', '20 hours/month included']
+        },
+        {
+          label: 'Instructor-Led Training',
+          group: true,
+          values: ['—', '—', 'Paid add-on', 'Paid add-on']
+        },
+        {
+          label: 'Managed Configuration Service',
+          group: true,
+          values: ['—', '—', 'Paid add-on', 'Paid add-on']
+        },
+        {
+          label: 'Security Response Team',
+          group: true,
+          values: ['—', '—', 'Paid add-on', 'Paid add-on']
+        }
+      ]
+    }
+  ]
+</script>
+
+<template>
+  <ComparePlans
+    anchor="tiers"
+    caption="Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers."
+    column-label="Support"
+    picker-aria-label="Tier being compared"
+    included-label="Included"
+    excluded-label="Not included"
+    :plans="tiers"
     :sections="sections"
   />
 </template>

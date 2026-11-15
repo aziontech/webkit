@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SiteLayout once in the marketing app for the site chrome.
 - Every public marketing page (home, product, solution, company, legal): put one `SiteLayout` in the app's root (around `RouterView`) and render each page's sections as its default slot.
 - A site that needs the Azion navigation, footer and search palette without hand-composing `GlobalHeader`, `NavigationMenu`, `Footer`, `SearchTrigger` and `Command`.
 

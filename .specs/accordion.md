@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: cd6e0dcba116f1d4b35a846ae80c9ecb69b3272fac2842dfc455afa10fd74f96
+checksum: 7f7b0bc788823cc977d84e2d52b9c618908b4a0f5ef3247743524f879e484fa8
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -20,6 +20,7 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 
 ## When to use
 
+- Use Accordion for expandable sections in product UI; the marketing FAQ band is FaqSection.
 - Long content splits into independent sections the reader scans by heading and opens on demand (settings groups, help topics, a details list).
 - The reader may want one section open at a time (`type="single"`) or to compare several side by side (`type="multiple"`).
 - Content should expand inline below its heading, pushing the rest of the page down.

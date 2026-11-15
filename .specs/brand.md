@@ -3,13 +3,13 @@ name: brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 5f2193015bd69c88a55e9cdaf265f50fbca580d4969ef45917a68bdcf4001794
+checksum: 928f06c4fdd57d0a5530d70425324921fd5f0cf3a1405e1e53405fd9dc7b673d
 created: 2026-07-13
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Brand — Component Spec
@@ -20,6 +20,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop sel
 
 ## When to use
 
+- Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - `kind="reduced"` where space is tight (collapsed sidebar, mobile header).
 - `kind="extended"` in marketing layouts that carry the tagline.

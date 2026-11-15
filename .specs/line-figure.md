@@ -3,11 +3,11 @@ name: line-figure
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 2786f572ddd3195718906c9050d9342c42c34e7298ae5406ffc265d80ef6cfa6
+checksum: 56a12fa7f0ef9fa362bd409c6925621e5376f6ee86fa1bc4e495872c040728b7
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # LineFigure — Component Spec
@@ -18,6 +18,7 @@ An isometric line-art figure that answers the pointer: one per product (cache TT
 
 ## When to use
 
+- Use LineFigure for an interactive isometric product figure.
 - The art beside a product's copy on a landing or a docs home.
 - An empty state or a not-found page (`azion-404`).
 
@@ -30,7 +31,7 @@ An isometric line-art figure that answers the pointer: one per product (cache TT
 ## Related
 
 - `Illustration` — static art from the registry.
-- `ProductWidget`, `ShellMockup` — product scenes.
+- `ProductWidget` — product scenes.
 - `EmptyState` — can carry a figure in its art slot.
 
 ## Best practices

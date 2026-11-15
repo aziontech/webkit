@@ -8,7 +8,7 @@
 
 ## When to use
 
-- To list every success story with search and facet filters.
+- Use StoryLibrary for a card grid of customer stories with search and facets.
 
 ## Do
 
@@ -19,12 +19,13 @@
 ## Don’t
 
 - For a closing row of three related stories → use `article-cards`.
-- For a filterable list of articles → use `article-index-blog` or `article-index-resource-hub`.
+- For the full filterable list of articles or resources → use `article-index`.
+- For a filterable list of non-article rows (jobs) → use `listing-browser`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [article-index-resource-hub](article-index-resource-hub.md) — the sibling listing of articles with facet dropdowns.
+- [article-index](article-index.md) — the filterable list of articles or resources.
 - [empty-state](empty-state.md) — the no-match state.
 
 ## Props

@@ -576,18 +576,6 @@
       "types": "./types/components/content/product-widget/product-widget.vue.d.ts",
       "default": "./src/components/content/product-widget/product-widget.vue"
     },
-    "./shell-mockup": {
-      "types": "./types/components/content/shell-mockup/index.d.ts",
-      "default": "./src/components/content/shell-mockup/index.ts"
-    },
-    "./shell-mockup-root": {
-      "types": "./types/components/content/shell-mockup/shell-mockup.vue.d.ts",
-      "default": "./src/components/content/shell-mockup/shell-mockup.vue"
-    },
-    "./shell-mockup-part": {
-      "types": "./types/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue.d.ts",
-      "default": "./src/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue"
-    },
     "./kbd": {
       "types": "./types/components/content/kbd/kbd.vue.d.ts",
       "default": "./src/components/content/kbd/kbd.vue"
@@ -1436,10 +1424,6 @@
       "types": "./types/components/marketing/carousel/carousel-next/carousel-next.vue.d.ts",
       "default": "./src/components/marketing/carousel/carousel-next/carousel-next.vue"
     },
-    "./banner": {
-      "types": "./types/components/marketing/banner/banner.vue.d.ts",
-      "default": "./src/components/marketing/banner/banner.vue"
-    },
     "./banner-art": {
       "types": "./types/components/marketing/banner-art/banner-art.vue.d.ts",
       "default": "./src/components/marketing/banner-art/banner-art.vue"
@@ -1456,10 +1440,6 @@
       "types": "./types/components/marketing/sticky-stack/sticky-stack.vue.d.ts",
       "default": "./src/components/marketing/sticky-stack/sticky-stack.vue"
     },
-    "./quote-carousel": {
-      "types": "./types/components/marketing/quote-carousel/quote-carousel.vue.d.ts",
-      "default": "./src/components/marketing/quote-carousel/quote-carousel.vue"
-    },
     "./quote": {
       "types": "./types/components/marketing/quote/quote.vue.d.ts",
       "default": "./src/components/marketing/quote/quote.vue"
@@ -1475,10 +1455,6 @@
     "./faq": {
       "types": "./types/components/marketing/faq/faq.vue.d.ts",
       "default": "./src/components/marketing/faq/faq.vue"
-    },
-    "./content-columns": {
-      "types": "./types/components/marketing/content-columns/content-columns.vue.d.ts",
-      "default": "./src/components/marketing/content-columns/content-columns.vue"
     },
     "./column-navigation": {
       "types": "./types/components/marketing/column-navigation/index.d.ts",
@@ -2202,13 +2178,9 @@
       "types": "./types/components/sections/article-highlight/article-highlight.vue.d.ts",
       "default": "./src/components/sections/article-highlight/article-highlight.vue"
     },
-    "./article-index-blog": {
-      "types": "./types/components/sections/article-index-blog/article-index-blog.vue.d.ts",
-      "default": "./src/components/sections/article-index-blog/article-index-blog.vue"
-    },
-    "./article-index-resource-hub": {
-      "types": "./types/components/sections/article-index-resource-hub/article-index-resource-hub.vue.d.ts",
-      "default": "./src/components/sections/article-index-resource-hub/article-index-resource-hub.vue"
+    "./article-index": {
+      "types": "./types/components/sections/article-index/article-index.vue.d.ts",
+      "default": "./src/components/sections/article-index/article-index.vue"
     },
     "./cli-terminal": {
       "types": "./types/components/sections/cli-terminal/cli-terminal.vue.d.ts",
@@ -2230,29 +2202,13 @@
       "types": "./types/components/sections/closing-call-to-action/closing-call-to-action.vue.d.ts",
       "default": "./src/components/sections/closing-call-to-action/closing-call-to-action.vue"
     },
-    "./closing-call-to-action-agents": {
-      "types": "./types/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue.d.ts",
-      "default": "./src/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue"
-    },
     "./closing-call-to-action-newsletter": {
       "types": "./types/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue.d.ts",
       "default": "./src/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue"
     },
-    "./closing-call-to-action-templates": {
-      "types": "./types/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue.d.ts",
-      "default": "./src/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue"
-    },
-    "./code-split": {
-      "types": "./types/components/sections/code-split/code-split.vue.d.ts",
-      "default": "./src/components/sections/code-split/code-split.vue"
-    },
     "./compare-plans": {
       "types": "./types/components/sections/compare-plans/compare-plans.vue.d.ts",
       "default": "./src/components/sections/compare-plans/compare-plans.vue"
-    },
-    "./compare-support-tiers": {
-      "types": "./types/components/sections/compare-support-tiers/compare-support-tiers.vue.d.ts",
-      "default": "./src/components/sections/compare-support-tiers/compare-support-tiers.vue"
     },
     "./comparison-table": {
       "types": "./types/components/sections/comparison-table/comparison-table.vue.d.ts",
@@ -2298,10 +2254,6 @@
       "types": "./types/components/sections/console-panel/console-panel.vue.d.ts",
       "default": "./src/components/sections/console-panel/console-panel.vue"
     },
-    "./customer-spotlight": {
-      "types": "./types/components/sections/customer-spotlight/customer-spotlight.vue.d.ts",
-      "default": "./src/components/sections/customer-spotlight/customer-spotlight.vue"
-    },
     "./process-scroll": {
       "types": "./types/components/sections/process-scroll/process-scroll.vue.d.ts",
       "default": "./src/components/sections/process-scroll/process-scroll.vue"
@@ -2310,21 +2262,9 @@
       "types": "./types/components/sections/section-command/section-command.vue.d.ts",
       "default": "./src/components/sections/section-command/section-command.vue"
     },
-    "./sticky-carousel": {
-      "types": "./types/components/sections/sticky-carousel/sticky-carousel.vue.d.ts",
-      "default": "./src/components/sections/sticky-carousel/sticky-carousel.vue"
-    },
-    "./hero-copy-on-top-art": {
-      "types": "./types/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue.d.ts",
-      "default": "./src/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue"
-    },
     "./hero-form": {
       "types": "./types/components/sections/hero-form/hero-form.vue.d.ts",
       "default": "./src/components/sections/hero-form/hero-form.vue"
-    },
-    "./hero-with-opening": {
-      "types": "./types/components/sections/hero-with-opening/hero-with-opening.vue.d.ts",
-      "default": "./src/components/sections/hero-with-opening/hero-with-opening.vue"
     },
     "./investor-marks": {
       "types": "./types/components/sections/investor-marks/investor-marks.vue.d.ts",
@@ -2374,10 +2314,6 @@
       "types": "./types/components/sections/recognition-marquee/recognition-marquee.vue.d.ts",
       "default": "./src/components/sections/recognition-marquee/recognition-marquee.vue"
     },
-    "./resource-grid": {
-      "types": "./types/components/sections/resource-grid/resource-grid.vue.d.ts",
-      "default": "./src/components/sections/resource-grid/resource-grid.vue"
-    },
     "./site-footer": {
       "types": "./types/components/sections/site-footer/site-footer.vue.d.ts",
       "default": "./src/components/sections/site-footer/site-footer.vue"
@@ -2390,10 +2326,6 @@
       "types": "./types/components/sections/stats-band/stats-band.vue.d.ts",
       "default": "./src/components/sections/stats-band/stats-band.vue"
     },
-    "./sticky-scroll-code": {
-      "types": "./types/components/sections/sticky-scroll-code/sticky-scroll-code.vue.d.ts",
-      "default": "./src/components/sections/sticky-scroll-code/sticky-scroll-code.vue"
-    },
     "./story-library": {
       "types": "./types/components/sections/story-library/story-library.vue.d.ts",
       "default": "./src/components/sections/story-library/story-library.vue"
@@ -2405,10 +2337,6 @@
     "./template-gallery": {
       "types": "./types/components/sections/template-gallery/template-gallery.vue.d.ts",
       "default": "./src/components/sections/template-gallery/template-gallery.vue"
-    },
-    "./use-case-links": {
-      "types": "./types/components/sections/use-case-links/use-case-links.vue.d.ts",
-      "default": "./src/components/sections/use-case-links/use-case-links.vue"
     },
     "./use-cases": {
       "types": "./types/components/sections/use-cases/use-cases.vue.d.ts",
@@ -2865,15 +2793,6 @@
       ],
       "product-widget": [
         "./types/components/content/product-widget/product-widget.vue.d.ts"
-      ],
-      "shell-mockup": [
-        "./types/components/content/shell-mockup/index.d.ts"
-      ],
-      "shell-mockup-root": [
-        "./types/components/content/shell-mockup/shell-mockup.vue.d.ts"
-      ],
-      "shell-mockup-part": [
-        "./types/components/content/shell-mockup/shell-mockup-part/shell-mockup-part.vue.d.ts"
       ],
       "kbd": [
         "./types/components/content/kbd/kbd.vue.d.ts"
@@ -3490,9 +3409,6 @@
       "carousel-next": [
         "./types/components/marketing/carousel/carousel-next/carousel-next.vue.d.ts"
       ],
-      "banner": [
-        "./types/components/marketing/banner/banner.vue.d.ts"
-      ],
       "banner-art": [
         "./types/components/marketing/banner-art/banner-art.vue.d.ts"
       ],
@@ -3505,9 +3421,6 @@
       "sticky-stack": [
         "./types/components/marketing/sticky-stack/sticky-stack.vue.d.ts"
       ],
-      "quote-carousel": [
-        "./types/components/marketing/quote-carousel/quote-carousel.vue.d.ts"
-      ],
       "quote": [
         "./types/components/marketing/quote/quote.vue.d.ts"
       ],
@@ -3519,9 +3432,6 @@
       ],
       "faq": [
         "./types/components/marketing/faq/faq.vue.d.ts"
-      ],
-      "content-columns": [
-        "./types/components/marketing/content-columns/content-columns.vue.d.ts"
       ],
       "column-navigation": [
         "./types/components/marketing/column-navigation/index.d.ts"
@@ -3781,11 +3691,8 @@
       "article-highlight": [
         "./types/components/sections/article-highlight/article-highlight.vue.d.ts"
       ],
-      "article-index-blog": [
-        "./types/components/sections/article-index-blog/article-index-blog.vue.d.ts"
-      ],
-      "article-index-resource-hub": [
-        "./types/components/sections/article-index-resource-hub/article-index-resource-hub.vue.d.ts"
+      "article-index": [
+        "./types/components/sections/article-index/article-index.vue.d.ts"
       ],
       "cli-terminal": [
         "./types/components/sections/cli-terminal/cli-terminal.vue.d.ts"
@@ -3802,23 +3709,11 @@
       "closing-call-to-action": [
         "./types/components/sections/closing-call-to-action/closing-call-to-action.vue.d.ts"
       ],
-      "closing-call-to-action-agents": [
-        "./types/components/sections/closing-call-to-action-agents/closing-call-to-action-agents.vue.d.ts"
-      ],
       "closing-call-to-action-newsletter": [
         "./types/components/sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue.d.ts"
       ],
-      "closing-call-to-action-templates": [
-        "./types/components/sections/closing-call-to-action-templates/closing-call-to-action-templates.vue.d.ts"
-      ],
-      "code-split": [
-        "./types/components/sections/code-split/code-split.vue.d.ts"
-      ],
       "compare-plans": [
         "./types/components/sections/compare-plans/compare-plans.vue.d.ts"
-      ],
-      "compare-support-tiers": [
-        "./types/components/sections/compare-support-tiers/compare-support-tiers.vue.d.ts"
       ],
       "comparison-table": [
         "./types/components/sections/comparison-table/comparison-table.vue.d.ts"
@@ -3853,26 +3748,14 @@
       "console-panel": [
         "./types/components/sections/console-panel/console-panel.vue.d.ts"
       ],
-      "customer-spotlight": [
-        "./types/components/sections/customer-spotlight/customer-spotlight.vue.d.ts"
-      ],
       "process-scroll": [
         "./types/components/sections/process-scroll/process-scroll.vue.d.ts"
       ],
       "section-command": [
         "./types/components/sections/section-command/section-command.vue.d.ts"
       ],
-      "sticky-carousel": [
-        "./types/components/sections/sticky-carousel/sticky-carousel.vue.d.ts"
-      ],
-      "hero-copy-on-top-art": [
-        "./types/components/sections/hero-copy-on-top-art/hero-copy-on-top-art.vue.d.ts"
-      ],
       "hero-form": [
         "./types/components/sections/hero-form/hero-form.vue.d.ts"
-      ],
-      "hero-with-opening": [
-        "./types/components/sections/hero-with-opening/hero-with-opening.vue.d.ts"
       ],
       "investor-marks": [
         "./types/components/sections/investor-marks/investor-marks.vue.d.ts"
@@ -3910,9 +3793,6 @@
       "recognition-marquee": [
         "./types/components/sections/recognition-marquee/recognition-marquee.vue.d.ts"
       ],
-      "resource-grid": [
-        "./types/components/sections/resource-grid/resource-grid.vue.d.ts"
-      ],
       "site-footer": [
         "./types/components/sections/site-footer/site-footer.vue.d.ts"
       ],
@@ -3922,9 +3802,6 @@
       "stats-band": [
         "./types/components/sections/stats-band/stats-band.vue.d.ts"
       ],
-      "sticky-scroll-code": [
-        "./types/components/sections/sticky-scroll-code/sticky-scroll-code.vue.d.ts"
-      ],
       "story-library": [
         "./types/components/sections/story-library/story-library.vue.d.ts"
       ],
@@ -3933,9 +3810,6 @@
       ],
       "template-gallery": [
         "./types/components/sections/template-gallery/template-gallery.vue.d.ts"
-      ],
-      "use-case-links": [
-        "./types/components/sections/use-case-links/use-case-links.vue.d.ts"
       ],
       "use-cases": [
         "./types/components/sections/use-cases/use-cases.vue.d.ts"

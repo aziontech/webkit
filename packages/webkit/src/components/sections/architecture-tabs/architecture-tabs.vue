@@ -59,8 +59,6 @@
     autoplay?: boolean
     /** Milliseconds each tab holds before the next one opens. */
     autoplayInterval?: number
-    /** @deprecated since 6.0 — use `autoplayInterval`. Removed in 7.0. */
-    interval?: number
     /** Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. */
     primaryAction?: ArchitectureTabsAction
   }
@@ -74,7 +72,6 @@
     tabs: () => [],
     autoplay: true,
     autoplayInterval: 6000,
-    interval: 0,
     primaryAction: undefined
   })
 
@@ -145,7 +142,7 @@
           size="small"
           :items="items"
           :autoplay="autoplay"
-          :autoplay-interval="interval || autoplayInterval"
+          :autoplay-interval="autoplayInterval"
           class="[--media-tabs-media-bg:var(--bg-surface)] [--media-tabs-media-min-lg:28rem] [--media-tabs-media-min:24rem]"
         >
           <template #media="{ index }">

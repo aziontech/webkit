@@ -3,21 +3,22 @@ name: product-widget
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 382666cfb8c8cd9c5aed31db7c90b3642bbff562e7db99df97232a6dc2b72fdc
+checksum: bb17e96b441837940d303ad1dfc61e9df612131b0e502c05fb5e47274d8b2be9
 created: 2026-10-23
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # ProductWidget — Component Spec
 
 ## Purpose
 
-Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
+Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ShellMockup` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
 
 ## When to use
 
+- Use ProductWidget to show an official console screen on a marketing band.
 - A product band (hero, media split, feature tab, widget grid cell) needs to show a console screen or a fragment of one.
 - The same console screen appears on more than one page and must be the same drawing on each.
 - Several widgets share one slot (tabs), and only the one showing should play: drive `active` from the host.
@@ -25,14 +26,13 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
 
 ## When NOT to use
 
-- The screen you need is not in the registry → compose it with `shell-mockup` and its parts, then add it to the registry. Do not approximate it at the call site.
+- The screen you need is not in the registry → add it to the registry inside WebKit (drawn in the internal `ShellMockup` frame). Do not approximate it at the call site.
 - A live, working screen at a device size → use `browser-frame`.
 - A static product concept drawing → use `illustration`.
 - A screenshot or clip in documentation → use `doc-frame`.
 
 ## Related
 
-- `shell-mockup` — the frame every widget is drawn in; reach for it directly to compose a new screen.
 - `illustration` — the same closed-registry pattern for static scenes.
 - `texture-material` — the texture a full-screen widget grounds itself with through `texture`.
 
@@ -75,14 +75,14 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
 | `cursor`   | `boolean`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | `true`      | false    | Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it.                                         |
 | `interval` | `number`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | `undefined` | false    | Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace.                                                                                            |
 
-`active` defaults to `true` (a widget plays unless the host says it is hidden) and reads positively, matching `shell-mockup`. `kind`, `chrome`, `width`, `tab` and `interval` default to `undefined` because absence is meaningful: each widget has its own plating, bar, design width, first tab and pace, and an unset prop keeps them. A prop reaches the widget only when the widget declares it, so no prop leaks onto a widget as a stray attribute.
+`active` defaults to `true` (a widget plays unless the host says it is hidden) and reads positively, matching `ShellMockup`. `kind`, `chrome`, `width`, `tab` and `interval` default to `undefined` because absence is meaningful: each widget has its own plating, bar, design width, first tab and pace, and an unset prop keeps them. A prop reaches the widget only when the widget declares it, so no prop leaks onto a widget as a stray attribute.
 
 Which widget takes which prop:
 
 - Every widget takes `active`.
 - `cursor` reaches every widget through the root's context, not as a forwarded prop; the fragments that act their beat with a collaborator cursor hide it when it is off, and the beat itself still plays.
 - A plating prop (`kind`, `chrome`, `width`, `fade` other than `'none'`, `texture` other than `'none'`, `tab`, `interval`) set on a widget that does not declare it has no effect and warns in development: `[webkit] <ProductWidget name="…">: kind, chrome have no effect on this widget …`.
-- Fragments but `function-code` and `functions-start` (56) take `kind`, and `chrome` while they are framed. The root draws a framed fragment in a `shell-mockup` window (console bar titled with the fragment's module, a bottom fade from 80%, a `var(--spacing-lg)` body padding) at a 468 design width (428 below `md`), and the fragment inside scales once to the window's body. The window body resets `--mockup-fade-color` to `var(--bg-canvas)` and `--mockup-fade-start` to its initial value, so every fade the fragment plays (bottom at rest, top and bottom on the beat) ends on the window's own fill. Framed by default (25): `application-cache`, `application-rule`, `applications-device-group`, `bot-manager-rule`, `data-stream-connector`, `data-stream-sampling`, `data-stream-source`, `edge-dns-dnssec`, `edge-dns-nameserver`, `edge-dns-record`, `firewall-function`, `firewall-rules-order`, `image-processor-events`, `image-processor-rule`, `kv-store-key`, `load-balancer-method`, `network-shield-ip-list`, `network-shield-rule`, `object-storage-access`, `real-time-events-filter`, `real-time-events-log`, `real-time-events-volume`, `real-time-metrics-dashboard`, `waf-allowed-rule`, `waf-firewall-rule`. The other 31 are bare by default.
+- Fragments but `function-code` and `functions-start` (56) take `kind`, and `chrome` while they are framed. The root draws a framed fragment in a `ShellMockup` window (console bar titled with the fragment's module, a bottom fade from 80%, a `var(--spacing-lg)` body padding) at a 468 design width (428 below `md`), and the fragment inside scales once to the window's body. The window body resets `--mockup-fade-color` to `var(--bg-canvas)` and `--mockup-fade-start` to its initial value, so every fade the fragment plays (bottom at rest, top and bottom on the beat) ends on the window's own fill. Framed by default (25): `application-cache`, `application-rule`, `applications-device-group`, `bot-manager-rule`, `data-stream-connector`, `data-stream-sampling`, `data-stream-source`, `edge-dns-dnssec`, `edge-dns-nameserver`, `edge-dns-record`, `firewall-function`, `firewall-rules-order`, `image-processor-events`, `image-processor-rule`, `kv-store-key`, `load-balancer-method`, `network-shield-ip-list`, `network-shield-rule`, `object-storage-access`, `real-time-events-filter`, `real-time-events-log`, `real-time-events-volume`, `real-time-metrics-dashboard`, `waf-allowed-rule`, `waf-firewall-rule`. The other 31 are bare by default.
 - Fragments (57, every fragment but `function-code`) take `hover`: `ai-inference-function`, `ai-inference-model`, `ai-inference-template`, `application-accelerator-cookie`, `application-accelerator-method`, `application-accelerator-query-string`, `application-cache`, `application-function`, `application-rule`, `applications-create-method`, `applications-device-group`, `applications-rule-phases`, `bot-manager-metrics`, `bot-manager-rule`, `bot-manager-traffic`, `data-stream-connector`, `data-stream-sampling`, `data-stream-source`, `ddos-firewall-modules`, `ddos-http-events`, `ddos-requests-metric`, `edge-dns-dnssec`, `edge-dns-nameserver`, `edge-dns-record`, `firewall-function`, `firewall-modules`, `firewall-rules-order`, `functions-start`, `image-processor-events`, `image-processor-module`, `image-processor-rule`, `kv-store-function`, `kv-store-key`, `kv-store-security-list`, `load-balancer-address`, `load-balancer-method`, `load-balancer-origins`, `network-shield-ip-list`, `network-shield-lists`, `network-shield-rule`, `object-storage-access`, `object-storage-browser`, `object-storage-buckets`, `real-time-events-filter`, `real-time-events-log`, `real-time-events-volume`, `real-time-metrics-dashboard`, `real-time-metrics-filter`, `real-time-metrics-panel`, `sql-database-query`, `sql-database-row`, `sql-database-table`, `waf-allowed-rule`, `waf-firewall-rule`, `waf-threat`, `workload-deploy`, `workload-domain`. `function-code` takes `active` only.
 - `workloads-list`, `workload-topology`, `workload-domains`, `workload-topology-chain`, `workload-rollout-rows` take `kind`, `chrome`, `width`, `fade`; `workload-deploy-logs` adds `interval`; `workload-deployments` takes `width` and `fade`.
 - `workload-overview` and `application-version` take `tab`, `fade` and `texture`; `functions-start` takes `tab` and `hover` and plays `agents`, `console` or `cli`.
@@ -99,20 +99,20 @@ _No slots — a widget is a closed drawing selected by `name`._
 ## States
 
 - Visual states: `default` only. A widget is decorative: no `hover`, `focus-visible`, `disabled` or `loading` state of its own. `hover` and `active` are triggers the host drives, not states the root renders.
-- Every widget is drawn in an inert `shell-mockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `toggle-group` above its inert frame that switches the coding agent.
+- Every widget is drawn in an inert `ShellMockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `toggle-group` above its inert frame that switches the coding agent.
 - `cli-terminal-start` and `cli-terminal-deploy` play a recorded Azion CLI session (init to curl, or link and deploy); `workload-topology-flow` draws domains, a workload and its bindings joined by `flow` connectors, with the workload ringed in the primary glow.
 - `data-name` mirrors `name` on the root, and `data-kind` mirrors a fragment's plating (`window` or `bare`, the registry default when `kind` is unset); a workload screen leaves `data-kind` off the root. The window around a framed fragment carries `data-testid="<root testid>__frame"` and its body `<root testid>__frame-body`.
 - Loading: the widget's code is loaded on demand, and the plating registry with the window part beside it. The root keeps its size while it loads and draws nothing until the widget (and its window) arrives, so a framed fragment is never drawn bare first. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.
 - A `name` outside the registry (from untyped code), or a widget chunk that fails to load, warns in development only (`import.meta.env.DEV`) and leaves the root empty; it never throws.
 - A plating prop the loaded widget does not read warns in development only, once per load, and changes nothing.
 - `cursor` off: no collaborator cursor or name tag is drawn; the fragment's controls still open, highlight and settle on their beat.
-- Each widget owns its entrance (a `shell-mockup` replay when `active` turns on) and, for fragments, its beat while `hover` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
+- Each widget owns its entrance (a `ShellMockup` replay when `active` turns on) and, for fragments, its beat while `hover` is set or the device cannot hover. Under reduced motion every widget is drawn in its settled state.
 
 ## Motion & Animations
 
 | Trigger                                                                          | Animation / Transition                                                                                                                                                                                               | Token (see `.claude/docs/DESIGN.md` § Animations)       | Reduced-motion fallback         |
 | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
-| widget entrance                                                                  | `shell-mockup` part transitions on `opacity` and `translate`                                                                                                                                                         | `duration` + `curve` from `@aziontech/theme/animations` | parts drawn in place            |
+| widget entrance                                                                  | `ShellMockup` part transitions on `opacity` and `translate`                                                                                                                                                          | `duration` + `curve` from `@aziontech/theme/animations` | parts drawn in place            |
 | row inserted or removed inside a fragment                                        | Vue `<Transition>` from `-translate-y-1 opacity-0` with `transition-[opacity,translate]`: enter `duration-moderate-02 ease-productive-entrance`, leave `duration-fast-02 ease-productive-exit`                       | catalog durations and curves                            | `motion-reduce:transition-none` |
 | result, summary or tab body swapped inside a widget                              | Vue `<Transition>` from `opacity-0` with `transition-opacity duration-moderate-02 ease-in-out`                                                                                                                       | catalog durations and easing                            | `motion-reduce:transition-none` |
 | select list opened or closed inside a fragment                                   | Vue `<Transition>` from `scale-90 opacity-0` with `transition-[scale,opacity]` about `origin-(--popup-origin)`: enter `duration-moderate-01 ease-productive-entrance`, leave `duration-fast-02 ease-productive-exit` | catalog durations and curves                            | `motion-reduce:transition-none` |
@@ -128,7 +128,7 @@ No keyframe animation runs in the root or in any widget: every motion above is a
 | framed fragment window body padding | `var(--spacing-lg)` |
 | framed fragment fade color          | `var(--bg-canvas)`  |
 
-The root's own tokens are the padding and fade color of the window it draws around a framed fragment; the window itself is a `shell-mockup` and draws with its tokens. Each widget draws with the tokens of the webkit components it is composed of, plus `var(--bg-canvas)`, `var(--bg-surface)`, `var(--border-default)`, `var(--text-default)`, `var(--text-muted)`, `var(--shape-card)` and `var(--shape-elements)` on its own surfaces.
+The root's own tokens are the padding and fade color of the window it draws around a framed fragment; the window itself is a `ShellMockup` and draws with its tokens. Each widget draws with the tokens of the webkit components it is composed of, plus `var(--bg-canvas)`, `var(--bg-surface)`, `var(--border-default)`, `var(--text-default)`, `var(--text-muted)`, `var(--shape-card)` and `var(--shape-elements)` on its own surfaces.
 
 ## Theme gaps
 
@@ -160,14 +160,14 @@ The root's own tokens are the padding and fade color of the window it draws arou
 
 ## Responsive
 
-- Container queries: none; every widget scales its design width to fit its host (`shell-mockup`), with a narrower design width below `md`. A framed fragment scales once: the window scales to the host, and the fragment inside measures the window body's layout width (untransformed), not its scaled box.
+- Container queries: none; every widget scales its design width to fit its host (`ShellMockup`), with a narrower design width below `md`. A framed fragment scales once: the window scales to the host, and the fragment inside measures the window body's layout width (untransformed), not its scaled box.
 - Narrow: the host sets the size; the widget scales down with it.
 - Touch: a fragment shows its finished beat on a device that cannot hover.
 - Reflow: no horizontal scroll; the frame scales instead. A bare fragment's decorative overflow (cursor, mock text grown by a 200% root font) is clipped by its host cell, never by the page; the Library example's cells clip, and `src/test/reflow.test.ts` checks it on Chromium, Firefox and WebKit.
 
 ## Performance
 
-- Bundle budget: 2.5 KB gzip for `./product-widget` (initial chunk only) in `.size-limit.json`; every widget is its own async chunk from the registry. The plating registry and the part that draws a loaded widget (framed or bare) are one small async chunk loaded beside the widget, and the window it draws around a framed fragment is the `shell-mockup` chunk the fragments already load.
+- Bundle budget: 2.5 KB gzip for `./product-widget` (initial chunk only) in `.size-limit.json`; every widget is its own async chunk from the registry. The plating registry and the part that draws a loaded widget (framed or bare) are one small async chunk loaded beside the widget, and the window it draws around a framed fragment is the `ShellMockup` chunk the fragments already load.
 - Runtime budget: one widget's timers while it plays its beat; none at rest.
 - Heavy parts: every widget, lazy.
 

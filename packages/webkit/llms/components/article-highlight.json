@@ -15,7 +15,7 @@
  ],
  "avoidWhen": [
   "For a closing row of related articles → use `article-cards`.",
-  "For the full list of articles → use `article-index-blog`."
+  "For the full list of articles → use `article-index`."
  ],
  "related": [
   "article-cards` — the closing row of related articles.",

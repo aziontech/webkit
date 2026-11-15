@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
 - kind="reduced"` where space is tight (collapsed sidebar, mobile header).
 - kind="extended"` in marketing layouts that carry the tagline.

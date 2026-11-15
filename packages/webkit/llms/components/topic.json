@@ -11,6 +11,7 @@
  "purpose": "One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand. Given an `href` the whole claim becomes the link, and its headline closes on a trailing arrow, so a band of claims needs no separate row of \"learn more\" controls.",
  "setup": null,
  "useWhen": [
+  "Use Topic for one icon + headline + sentence claim inside a grid cell.",
   "For each cell of a \"what you get\" band: a row of equal claims under a section's headline.",
   "Inside `CardGrid.Cell` or `BentoGrid.Cell`, where the grid owns the frame and the fill and the topic owns only the copy.",
   "Whenever a claim is glyph-led and one sentence long, repeated three to six times across a band."
@@ -19,6 +20,7 @@
   "For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.",
   "For a claim that carries an eyebrow, a media region or a button → use `media-split`.",
   "For the headline that opens the whole section → use `section-title`.",
+  "For a whole band of claims or links placed from page JSON → use `capability-grid`, which lays topics out for you.",
   "For a measured figure with a unit → use `big-numbers`.",
   "For a console list row with media and actions → use `item`."
  ],

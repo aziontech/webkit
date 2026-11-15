@@ -2,9 +2,9 @@
   import { useLocale } from '../../../../composables/use-locale'
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Card from '../../card/card.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'RealTimeMetricsPanelFragment' })
 

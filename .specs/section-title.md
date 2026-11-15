@@ -3,13 +3,13 @@ name: section-title
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 7ea497bcb269619a269a3aa57670d87715e43e8d92836b293116e3c0f94ade8d
+spec_version: 5
+checksum: 3ea65eb2dba18781d3e175996913b61c202fe6dd064b1b08b1531fda17150f63
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
 created: 2026-08-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Section Title — Component Spec
@@ -20,6 +20,7 @@ The framed header row that opens a page section: an optional overline, the secti
 
 ## When to use
 
+- Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.
 - Opening a marketing or landing page section that needs a framed header.
 - Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.
 - For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind="horizontal"`.

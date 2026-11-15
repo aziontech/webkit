@@ -1,12 +1,14 @@
 {
- "purpose": "A framed grid of product capabilities under an optional section title: each cell is a `Topic` (glyph, heading, sentence) with optional bullet points, three or four to a row. From the design sample's site `CapabilityGrid`.",
+ "purpose": "A framed grid of claims or links under an optional section title: each cell is a `Topic` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`. Use CapabilityGrid for any grid of claims or links on a marketing page; icons and per-item links are optional.",
  "useWhen": [
   "A product page listing what the product does, three or six at a time.",
+  "Use cases or resources that each link to their own page: give each item an `href` (and no `icon` for a resource list).",
   "A bare grid (no title) under a band that already has its heading."
  ],
  "avoidWhen": [
   "For capabilities with art — use `FeatureTiles` or `BentoGrid`.",
-  "For links to other pages — use `UseCaseLinks` or `ResourceGrid`."
+  "For use cases whose band title sits in the first grid cell with one action — use `UseCases`.",
+  "For cells that each carry their own action or copy button — use `FeatureWidgets`."
  ],
  "related": [
   "Topic`, `CardGrid`, `FrameBox`, `SectionTitle` — the parts.",
@@ -15,6 +17,7 @@
  "bestPractices": [
   "Three or six items at three columns, four or eight at four, so rows stay full.",
   "Keep points to three short lines.",
+  "Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).",
   "Set `titleKind: 'left'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
  ]
 }

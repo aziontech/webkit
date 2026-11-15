@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use PaymentBrand for the card network plate next to a payment card.
 - A payment method row, a checkout summary or a billing table names the card on file: the plate sits before `Ending in 4242` or `Visa •••• 4242`.
 - A list of saved cards where the brand helps the reader tell them apart.
 

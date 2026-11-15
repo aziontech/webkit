@@ -3,10 +3,10 @@ name: column-navigation
 category: marketing
 structure: composition
 status: implemented
-spec_version: 1
-checksum: d491647ef766bc19d3ae5867fba1027761f1866e411ea1d3af622476189384df
+spec_version: 2
+checksum: 972c04974f768797ec2b9ed63ffa292c8e307e11c155717f15d035350fe042fa
 created: 2026-09-24
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Column Navigation — Component Spec
@@ -17,6 +17,7 @@ A directory of destinations laid out in columns on one set of shared hairlines: 
 
 ## When to use
 
+- Use ColumnNavigation for a columned directory of destinations inside a marketing band.
 - As the "everything on the platform" band of a product, solutions or pricing page, under a `section-title` and inside the page's frame.
 - When a set of destinations is grouped and the group's name carries as much as the destinations under it.
 - When each destination needs a glyph and one line of what it is, not just a label.

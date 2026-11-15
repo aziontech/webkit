@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
+- Use ClientQuotes for a band of customer quotes the reader browses by client.
 - To let several customers speak in turn, one at a time, near the end of a page's argument.
 
 ## Do

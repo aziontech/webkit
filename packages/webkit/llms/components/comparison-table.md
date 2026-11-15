@@ -8,7 +8,7 @@
 
 ## When to use
 
-- On a "Azion vs X" page, to lay one competitor against Azion across a few categories of capabilities.
+- Use ComparisonTable to compare Azion with one competitor, on an "Azion vs X" page, across a few categories of capabilities.
 
 ## Do
 
@@ -21,8 +21,8 @@
 
 ## Don’t
 
-- To compare Azion's own plans → use `compare-plans`.
-- To compare support tiers → use `compare-support-tiers`.
+- To compare Azion's own plans or support tiers → use `compare-plans`.
+- For price cards with a billing-period toggle → use `pricing-plans`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

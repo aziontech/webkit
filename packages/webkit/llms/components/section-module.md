@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SectionModule for each band inside SectionContainer.
 - For every band stacked inside a `section-container`.
 - Whenever a band needs a header row divided from its content by a rule.
 - For a body-only band, by passing no title and no header slot.

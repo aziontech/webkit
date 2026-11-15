@@ -1,6 +1,7 @@
 {
  "purpose": "A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy (\"npm create azion\", \"Ask your agent to …\"). With `shell` a `$` prompt leads the line. From the design sample's site `SectionCommand`.",
  "useWhen": [
+  "Use SectionCommand for a one-line command or agent prompt with a copy button on a marketing page.",
   "The one command that starts a product, beside or instead of a call to action.",
   "A prompt to paste into an AI agent (`shell` off)."
  ],

@@ -3,10 +3,10 @@ name: feature-widgets
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: eda325909e196e0fc3c38d2f54d0fe55fc4a722ba253c3e8ee0e2fa8f6b197a2
+last_updated: 2026-11-15
+checksum: c53ae023ab825d6279c68a6e89eb7b35018866629539554c96ed2e9932d23645
 ---
 # FeatureWidgets — Component Spec
 
@@ -16,11 +16,12 @@ The "three ways to start" band of a product page: a centered section title with 
 
 ## When to use
 
+- Use FeatureWidgets when each cell has its own action or copy button.
 - To offer the same outcome through two or three entry points (agent, console, terminal), each with its own next step.
 
 ## When NOT to use
 
-- For reasons without an action per cell → use `feature-tiles`.
+- For reasons without an action per cell → use `feature-tiles` (with pictures) or `capability-grid` (without).
 - For a long argument per feature → use `feature-scroll`.
 
 ## Related

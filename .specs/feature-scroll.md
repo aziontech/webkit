@@ -3,25 +3,28 @@ name: feature-scroll
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 4e56f5a9becdc00c6db976a6edec02f46c5fd5de3258db9378c80abdb20e55b2
+last_updated: 2026-11-15
+checksum: fc448de522b05b0d15e94043275ede3970d5d5b0878fd4338af516bd119c0bf4
 ---
 # FeatureScroll — Component Spec
 
 ## Purpose
 
-The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step; below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).
+The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).
 
 ## When to use
 
+- Use FeatureScroll for the product-page walkthrough, one pinned screen (scene or code) per feature.
 - To walk through four to six capabilities of one product, each with a picture of its own.
+- To walk through capabilities each shown by the file you would write: give each item a `code` sample.
 
 ## When NOT to use
 
 - For three reasons with no scroll story → use `feature-tiles`.
-- For code-led steps → use `sticky-scroll-code`.
+- For one claim beside one code sample → use `media-split-band` with `codeTabs`.
+- In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
 
 ## Related
 
@@ -31,7 +34,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## Best practices
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item a `scene` or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ProductWidget` (`{ component: 'ProductWidget', props: { name } }`): it shows the console itself.
+- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ProductWidget` (`{ component: 'ProductWidget', props: { name } }`): it shows the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Usage
@@ -62,7 +65,7 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `illustration` is a registry name drawn when no scene is set, and `action` is `{ label, href, trailing? }` rendered as a small secondary button under the step. |
+| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the step, secondary unless `kind` says otherwise. |
 
 ## Events
 
@@ -77,7 +80,7 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
 - Visual states: `default`
 - Below the large breakpoint the features render as a three-column grid of media tiles; from it up they render as a sticky stack whose active step is `sticky-stack`'s own
 - Empty: when `items` is empty the band renders nothing — not the header, not the frames
-- Media: an item's `scene` wins over its `illustration`; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
+- Media: an item's `scene` wins over its `code`, which wins over its `illustration`; a `code` sample is a one-file `code-block` with line numbers, typed in once in the stack and loaded on demand; in the stack the scene receives `active` for the open step only, so a console fragment plays its beat while its step is open and rests on its settled frame otherwise; in the grid every scene is drawn still (`active: false`) in a 20rem window. A scene name that is not registered draws nothing.
 
 ## Motion & Animations
 
@@ -103,7 +106,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the composed `button`.
-- Keyboard map: `Tab` reaches each step's action; `Enter` follows it; the stack's own progression is scroll-driven and never traps focus.
+- Keyboard map: `Tab` reaches each step's action and a code sample's copy button; `Enter` follows it; the stack's own progression is scroll-driven and never traps focus.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ProductWidget` is a decorative console picture).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the step transition belongs to `sticky-stack`, which carries its own fallback; this band adds no motion.
@@ -113,6 +116,7 @@ _none_
 
 - Default
 - Live scenes — each item draws a `ProductWidget` console fragment instead of an illustration.
+- Code — each item pins a one-file code sample with a docs action, one opening in a new tab (justified: the code media is a render path the other examples do not reach).
 
 ## Constraints — DO NOT
 

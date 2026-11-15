@@ -3,10 +3,10 @@ name: media-split
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 884a18a46ab75b7b09c6c3bea1a589d113b0d467333f2a351476ed8b7cdada05
+spec_version: 4
+checksum: 0156d19343b9795c4f84dfe0bc8dedc030ffc143b1c762e16f874f8b01ddc7e5
 created: 2026-09-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Media Split — Component Spec
@@ -25,6 +25,8 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
+- Use MediaSplit (primitive) to pair copy with one piece of media in a hand-built SFC.
 - To pair one capability's explanation with a screenshot or diagram of it.
 - Down a product page, alternating `kind` so consecutive bands mirror each other.
 - With `framed` off inside a page column that already draws the frame, and on when the band stands alone.
@@ -35,7 +37,8 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 ## When NOT to use
 
 - For copy with no media → use `section-title`, which is the header band.
-- For the closing ask → use `call-to-action`; for a mid-page announcement → use `banner`.
+- For one claim beside its picture, scene or code placed from page JSON → use `media-split-band`.
+- For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `kind="announcement"`.
 - For several short claims side by side → use `topic` in a `card-grid`.
 - For a picture with no explanation → use `illustration` directly.
 

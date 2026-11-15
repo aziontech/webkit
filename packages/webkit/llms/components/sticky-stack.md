@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use StickyStack (primitive) for claims that open one by one as the reader scrolls past pinned media.
 - For a sequence of claims a reader should take in one at a time, each with a medium worth looking at — five ways a platform is used, each with the file you would actually write.
 - When the media is the payload and the copy is the caption: a code sample, a console shot, an official scene.
 - As the one band on a page that rewards scrolling slowly, placed where a reader has already committed to the page.
@@ -30,6 +31,7 @@
 - For one claim beside one picture → use `media-split`.
 - For questions and answers, or any run longer than about six items → use `faq`. A pinned band holds the page for its whole run, and a long run holds it too long.
 - On a page that is already a single short screen: there is no scroll to spend.
+- For the product-page walkthrough placed from page JSON → use `feature-scroll`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

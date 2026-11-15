@@ -101,7 +101,7 @@
   })
 
   defineSlots<{
-    /** The scene the band presents (a `ShellMockup`, a `ProductWidget`, a diagram); `tab` is the selected tab value. */
+    /** The scene the band presents (a `ProductWidget`, a diagram); `tab` is the selected tab value. */
     scene(props: { tab: string | undefined }): unknown
   }>()
 

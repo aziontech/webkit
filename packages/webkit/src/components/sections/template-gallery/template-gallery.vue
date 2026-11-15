@@ -8,6 +8,7 @@
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
   import Ticker from '../../marketing/ticker/ticker.vue'
 
   defineOptions({
@@ -64,6 +65,10 @@
     tickerLabel?: string
     /** Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty. */
     tickerMarks?: string[]
+    /** Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it. */
+    closing?: boolean
+    /** Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`. */
+    hatch?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -77,7 +82,9 @@
     deployLabel: '',
     templatesAriaLabel: '',
     tickerLabel: '',
-    tickerMarks: () => []
+    tickerMarks: () => [],
+    closing: false,
+    hatch: true
   })
 
   const attrs = useAttrs()
@@ -239,5 +246,14 @@
         </SectionModule>
       </FrameBox>
     </SectionModule>
+    <FrameBox
+      v-if="hasCards && closing && hatch"
+      borders="none"
+      marks="all"
+      data-hatch="true"
+      class="h-[calc(var(--spacing-xxl)*2)]"
+    >
+      <TextureMaterial kind="lines" />
+    </FrameBox>
   </div>
 </template>

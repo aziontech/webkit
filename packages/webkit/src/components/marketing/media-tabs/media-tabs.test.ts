@@ -124,27 +124,27 @@ describe('MediaTabs', () => {
     expect(getAllByRole('button')[0].getAttribute('aria-current')).toBeNull()
   })
 
-  it('emits tab-change with (event, index) — the DOM event first', async () => {
+  it('emits update:modelValue with the index and no removed tab-change', async () => {
     const { getAllByRole, emitted } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false }
     })
 
     await fireEvent.click(getAllByRole('button')[1])
 
-    const calls = emitted()['tab-change'] as unknown[][]
+    const calls = emitted()['update:modelValue'] as unknown[][]
     expect(calls).toHaveLength(1)
-    expect(calls[0][0]).toBeInstanceOf(Event)
-    expect(calls[0][1]).toBe(1)
+    expect(calls[0][0]).toBe(1)
+    expect(emitted()['tab-change']).toBeUndefined()
   })
 
-  it('does not emit tab-change when the clicked tab is already the active one', async () => {
+  it('does not emit update:modelValue when the clicked tab is already the active one', async () => {
     const { getAllByRole, emitted } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false }
     })
 
     await fireEvent.click(getAllByRole('button')[0])
 
-    expect(emitted()['tab-change']).toBeUndefined()
+    expect(emitted()['update:modelValue']).toBeUndefined()
   })
 
   it('moves the selection on hover when selectOn is hover', async () => {
@@ -155,7 +155,7 @@ describe('MediaTabs', () => {
     await fireEvent.pointerEnter(rowsOf(container)[2])
 
     expect(activeTitles(container)).toEqual([ITEMS[2].title])
-    expect(emitted()['tab-change']).toHaveLength(1)
+    expect(emitted()['update:modelValue']).toHaveLength(1)
   })
 
   it('leaves the selection alone on hover when selectOn is click', async () => {
@@ -166,7 +166,7 @@ describe('MediaTabs', () => {
     await fireEvent.pointerEnter(rowsOf(container)[2])
 
     expect(activeTitles(container)).toEqual([ITEMS[0].title])
-    expect(emitted()['tab-change']).toBeUndefined()
+    expect(emitted()['update:modelValue']).toBeUndefined()
   })
 
   it('still selects on click when selectOn is click', async () => {
@@ -444,8 +444,8 @@ describe('MediaTabs', () => {
       await fireEvent.click(rowsOf(container)[4].querySelector('button') as HTMLElement)
 
       expect(activeTitles(container)).toEqual(['Use case 5'])
-      expect(emitted()['tab-change']).toHaveLength(1)
-      expect(emitted()['tab-change'][0][1]).toBe(4)
+      expect(emitted()['update:modelValue']).toHaveLength(1)
+      expect(emitted()['update:modelValue'][0][0]).toBe(4)
     }
   )
 

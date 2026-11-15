@@ -7,7 +7,7 @@
   import CodeBlock from '../../../components/code/code-block/code-block.vue'
   import Card from '../../../components/content/card/card.vue'
   import ItemList from '../../../components/content/item/item-list.vue'
-  import ShellMockup from '../../../components/content/shell-mockup/shell-mockup.vue'
+  import ShellMockup from '../../../components/content/product-widget/shell-mockup/shell-mockup.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import DataTable from '../../../components/data/data-table/data-table.vue'
   import TableCellStatus from '../../../components/data/table/table-cell-status/table-cell-status.vue'

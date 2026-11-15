@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Use Faq in a hand-built SFC that needs rich answers in the `#answer` slot.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`faq-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`faq`).
 - As the FAQ band near the end of a marketing or pricing page.
 - Whenever a page must answer a known set of objections without sending the reader to docs.
 - When the answers are short enough to read in place rather than link out to.

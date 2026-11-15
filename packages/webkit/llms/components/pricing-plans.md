@@ -8,7 +8,7 @@
 
 ## When to use
 
-- At the top of Pricing, to lay the plans side by side with a price per billing period.
+- Use PricingPlans for price cards with a billing-period toggle on the public pricing page, the plans side by side at the top of Pricing.
 
 ## Do
 
@@ -19,7 +19,8 @@
 
 ## Don’t
 
-- To compare plans feature by feature → use `compare-plans`.
+- To compare plans or support tiers feature by feature → use `compare-plans`.
+- To compare Azion with one competitor → use `comparison-table`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

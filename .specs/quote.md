@@ -3,10 +3,10 @@ name: quote
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 5cba11fe7e7a6c9e756f3c6ad6134de37337d0062f176c303bb46a80af4d5b9b
+spec_version: 3
+checksum: d341950cf34251c613b6e1ce91abe291211d74716d44365bb6a0f4fe41f81c79
 created: 2026-09-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Quote — Component Spec
@@ -23,6 +23,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 
 ## When to use
 
+- Use Quote for one testimonial.
 - To carry one customer statement inside a marketing section.
 - Whenever a claim the page makes is better made by the customer who verified it.
 - As the repeated unit of a testimonial row or grid, one instance per quote — in `inline`, where every cell carries equal weight.
@@ -56,7 +57,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 
 ```vue
 <script setup>
-import Quote from '@aziontech/webkit/quote'
+  import Quote from '@aziontech/webkit/quote'
 </script>
 
 <template>
@@ -71,16 +72,16 @@ import Quote from '@aziontech/webkit/quote'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `text` | `string` | `—` | true | The quotation itself, rendered as the `blockquote` body; overridden by the default slot. |
-| `name` | `string` | `''` | false | Who said it — the attribution's lead, set in the accent. |
-| `jobTitle` | `string` | `''` | false | Their role and company, as one line — the attribution's second part. Named `jobTitle`, not `role`, because `role` is the ARIA attribute and a prop of that name reads as one to both tooling and the consumer. |
-| `photo` | `string` | `''` | false | URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone. |
-| `logo` | `string` | `''` | false | URL of the company mark; ignored when the `mark` slot is filled. |
-| `logoAlt` | `string` | `''` | false | Alternative text for the mark; falls back to `jobTitle` when empty. |
-| `highlights` | `string[]` | `[]` | false | Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. |
-| `kind` | `QuoteKind` | `'inline'` | false | Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one. |
+| Prop         | Type        | Default    | Required | JSDoc                                                                                                                                                                                                                                   |
+| ------------ | ----------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`       | `string`    | `—`        | true     | The quotation itself, rendered as the `blockquote` body; overridden by the default slot.                                                                                                                                                |
+| `name`       | `string`    | `''`       | false    | Who said it — the attribution's lead, set in the accent.                                                                                                                                                                                |
+| `jobTitle`   | `string`    | `''`       | false    | Their role and company, as one line — the attribution's second part. Named `jobTitle`, not `role`, because `role` is the ARIA attribute and a prop of that name reads as one to both tooling and the consumer.                          |
+| `photo`      | `string`    | `''`       | false    | URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone.                                                                                                                    |
+| `logo`       | `string`    | `''`       | false    | URL of the company mark; ignored when the `mark` slot is filled.                                                                                                                                                                        |
+| `logoAlt`    | `string`    | `''`       | false    | Alternative text for the mark; falls back to `jobTitle` when empty.                                                                                                                                                                     |
+| `highlights` | `string[]`  | `[]`       | false    | Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. |
+| `kind`       | `QuoteKind` | `'inline'` | false    | Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one.                                                                                          |
 
 ## Events
 
@@ -88,11 +89,11 @@ import Quote from '@aziontech/webkit/quote'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Quotation body; replaces the `text` prop when provided. |
-| `mark` | — | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
-| `actions` | — | A trailing control under the attribution, floored so a row of quotes aligns on it. |
+| Slot      | Scope | Notes                                                                                         |
+| --------- | ----- | --------------------------------------------------------------------------------------------- |
+| `default` | —     | Quotation body; replaces the `text` prop when provided.                                       |
+| `mark`    | —     | The company mark; replaces the image built from `logo`, for a mark that owns its own theming. |
+| `actions` | —     | A trailing control under the attribution, floored so a row of quotes aligns on it.            |
 
 ## States
 
@@ -112,33 +113,33 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (quotation, `inline`) | `.text-heading-xs` |
-| typography (quotation, `signed`) | `.text-body-lg` |
-| typography (quotation, `highlight`) | `.text-heading-lg` |
-| typography (attribution, every register) | `.text-overline-md` |
-| quotation text | `var(--text-default)` |
-| quotation text (highlighted, outside a phrase) | `var(--text-muted)` |
-| highlighted phrase | `var(--text-default)` |
-| quotation glyph | `var(--text-muted)` |
-| attribution name | `var(--text-primary)` |
-| attribution role | `var(--text-muted)` |
-| quotation measure (`highlight`) | `var(--container-2xl)` |
-| spacing (mark to quotation, `inline`) | `var(--spacing-lg)` |
-| spacing (mark to quotation, `signed`) | `var(--spacing-sm)` + `var(--spacing-md)` |
-| spacing (glyph to quotation, `signed`) | `var(--spacing-xs)` |
-| spacing (glyph to quotation, `highlight`) | `var(--spacing-md)` |
-| spacing (quotation to attribution) | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)` |
-| spacing (quotation to mark column, `highlight`) | `var(--spacing-xl)` |
-| spacing (attribution lines, `inline` / `signed`) | `var(--spacing-md)` |
-| spacing (attribution inset) | `var(--spacing-xxs)` |
+| Region                                           | Token (DESIGN.md)                                               |
+| ------------------------------------------------ | --------------------------------------------------------------- |
+| typography (quotation, `inline`)                 | `.text-heading-xs`                                              |
+| typography (quotation, `signed`)                 | `.text-body-lg`                                                 |
+| typography (quotation, `highlight`)              | `.text-heading-lg`                                              |
+| typography (attribution, every register)         | `.text-overline-md`                                             |
+| quotation text                                   | `var(--text-default)`                                           |
+| quotation text (highlighted, outside a phrase)   | `var(--text-muted)`                                             |
+| highlighted phrase                               | `var(--text-default)`                                           |
+| quotation glyph                                  | `var(--text-muted)`                                             |
+| attribution name                                 | `var(--text-primary)`                                           |
+| attribution role                                 | `var(--text-muted)`                                             |
+| quotation measure (`highlight`)                  | `var(--container-2xl)`                                          |
+| spacing (mark to quotation, `inline`)            | `var(--spacing-lg)`                                             |
+| spacing (mark to quotation, `signed`)            | `var(--spacing-sm)` + `var(--spacing-md)`                       |
+| spacing (glyph to quotation, `signed`)           | `var(--spacing-xs)`                                             |
+| spacing (glyph to quotation, `highlight`)        | `var(--spacing-md)`                                             |
+| spacing (quotation to attribution)               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)` |
+| spacing (quotation to mark column, `highlight`)  | `var(--spacing-xl)`                                             |
+| spacing (attribution lines, `inline` / `signed`) | `var(--spacing-md)`                                             |
+| spacing (attribution inset)                      | `var(--spacing-xxs)`                                            |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

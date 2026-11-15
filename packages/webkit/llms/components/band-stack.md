@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use BandStack (primitive) for several full bands in sequence; `sticky` piles them under the header.
 - For a run of peer bands — three to six `media-split`s, one per solution or capability — that should read as one sequence.
 - With `sticky`, when the run is the page's centrepiece and the reader should feel each band land on the last.
 - Without `sticky`, to frame a run of bands with one shared hairline between neighbours, with no pinning.

@@ -8,18 +8,19 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ShellMockup`, `ProductWidget` or diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.",
+ "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.",
  "setup": null,
  "useWhen": [
+  "Use ConsolePanel for a marketing band that plays a product scene under a section title.",
   "Showing the product itself on a landing page.",
   "A tour of three or four views of one screen."
  ],
  "avoidWhen": [
   "For a screenshot with copy beside it — use `MediaSplitBand`.",
-  "For code — use `CodeSplit` or `CliTerminal`."
+  "For code — use `MediaSplitBand` with `codeTabs`, or `CliTerminal`."
  ],
  "related": [
-  "ShellMockup`, `ProductWidget` — scenes it frames.",
+  "ProductWidget` — the console scenes it frames.",
   "ToggleGroup` — the tab control.",
   "TextureMaterial`, `FrameBox`, `SectionTitle`."
  ],
@@ -147,7 +148,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n  import ShellMockupRoot from '@aziontech/webkit/shell-mockup-root'\n  import Tag from '@aziontech/webkit/tag'\n\n  const tabs = [\n    { value: 'applications', title: 'Applications' },\n    { value: 'metrics', title: 'Metrics' },\n    { value: 'logs', title: 'Logs' }\n  ]\n\n  const views = {\n    applications: { heading: 'Applications', rows: ['storefront', 'checkout-api', 'image-proxy'] },\n    metrics: { heading: 'Metrics', rows: ['Requests 1.2M', 'Cache hit 94%', 'Errors 0.02%'] },\n    logs: { heading: 'Logs', rows: ['GET /cart 200', 'POST /pay 201', 'GET /img/hero.webp 304'] }\n  }\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Console\"\n    title=\"One console for every workload\"\n    description=\"Deploy, observe and secure from the same place.\"\n    :tabs=\"tabs\"\n    :crop=\"0.2\"\n  >\n    <template #scene=\"{ tab }\">\n      <ShellMockupRoot\n        :title=\"views[tab ?? 'applications'].heading\"\n        rail=\"workloads\"\n        fade=\"bottom\"\n      >\n        <div class=\"flex flex-col gap-(--spacing-sm) p-(--spacing-lg)\">\n          <span class=\"text-heading-sm text-(--text-default)\">{{\n            views[tab ?? 'applications'].heading\n          }}</span>\n          <div\n            v-for=\"row in views[tab ?? 'applications'].rows\"\n            :key=\"row\"\n            class=\"flex items-center justify-between border-b border-(--border-default) py-(--spacing-xs) text-body-sm text-(--text-default)\"\n          >\n            {{ row }}\n            <Tag\n              label=\"Live\"\n              severity=\"success\"\n              size=\"small\"\n            />\n          </div>\n        </div>\n      </ShellMockupRoot>\n    </template>\n  </ConsolePanel>\n</template>"
+   "sfc": "<script setup>\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n  import ProductWidget from '@aziontech/webkit/product-widget'\n\n  const tabs = [\n    { value: 'workloads-list', title: 'Workloads' },\n    { value: 'workload-deployments', title: 'Deployments' },\n    { value: 'workload-deploy-logs', title: 'Logs' }\n  ]\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Console\"\n    title=\"One console for every workload\"\n    description=\"Deploy, observe and secure from the same place.\"\n    :tabs=\"tabs\"\n    :crop=\"0.2\"\n  >\n    <template #scene=\"{ tab }\">\n      <ProductWidget :name=\"tab ?? 'workloads-list'\" />\n    </template>\n  </ConsolePanel>\n</template>"
   },
   {
    "name": "Diagram",

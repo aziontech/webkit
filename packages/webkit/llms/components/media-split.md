@@ -8,6 +8,8 @@
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
+- Use MediaSplit (primitive) to pair copy with one piece of media in a hand-built SFC.
 - To pair one capability's explanation with a screenshot or diagram of it.
 - Down a product page, alternating `kind` so consecutive bands mirror each other.
 - With `framed` off inside a page column that already draws the frame, and on when the band stands alone.
@@ -32,7 +34,8 @@
 ## Don’t
 
 - For copy with no media → use `section-title`, which is the header band.
-- For the closing ask → use `call-to-action`; for a mid-page announcement → use `banner`.
+- For one claim beside its picture, scene or code placed from page JSON → use `media-split-band`.
+- For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `kind="announcement"`.
 - For several short claims side by side → use `topic` in a `card-grid`.
 - For a picture with no explanation → use `illustration` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

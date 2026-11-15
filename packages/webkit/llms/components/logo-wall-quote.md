@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use LogoWallQuote for customer logos plus one featured quote.
 - To prove adoption with marks and let one customer speak, early on a home or solution page.
 
 ## Do

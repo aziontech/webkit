@@ -1,6 +1,6 @@
 # Recognition Marquee
 
-> The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.
+> The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.
 
 - Import: `import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use RecognitionMarquee only for a looping row of analyst or press quotes.
 - To list analyst reports and awards on a page that needs third-party proof.
 
 ## Do
@@ -39,14 +40,14 @@
 
 ## States
 
-- Visual states: `default`, paused while the strip is hovered or holds focus
+- Visual states: `default`, paused while the strip is hovered or holds focus, or while its pause control is pressed (the track carries `data-paused`)
 - Empty: when `items` is empty the band renders nothing
 - The list is rendered twice for a seamless loop; the duplicate is `aria-hidden` and hidden under reduced motion, where the region scrolls by hand instead
 
 ## Accessibility
 
 - Visible focus: the scrolling region is focusable and carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`.
-- Keyboard map: `Tab` reaches the region, which pauses the loop; under reduced motion arrow keys scroll it.
+- Keyboard map: `Tab` reaches the region, which pauses the loop, then the pause control (`Enter` / `Space` toggles it, WCAG 2.2.2); under reduced motion the control is hidden and arrow keys scroll the region.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the strip is a `region` named by `ariaLabel`; the second copy of the list is `aria-hidden`; each firm mark carries `firmName` as `alt`; each recognition is a `blockquote` signed by its report and date.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `quote` on `var(--bg-surface)`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.

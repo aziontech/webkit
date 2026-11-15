@@ -3,13 +3,13 @@ name: media-tabs
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: 912a4875faa04a2d0d3cefab8f92414317b166d3987559e229fdd3bc6628c8cf
+checksum: f3ef00fc2dfa39770e1f29d6da86e056823a5db923d5e14a20458da85d493be6
 created: 2026-09-24
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Media Tabs — Component Spec
@@ -20,6 +20,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 ## When to use
 
+- Use MediaTabs (primitive) for claims on one side and the selected claim's media on the other.
 - For a run of peer claims that share one picture frame — three ways a platform is fast, four things a product does.
 - When each claim needs a sentence of its own, not a bullet: the copy is the content and the media illustrates it.
 - As a product-page band that rewards watching but does not require it.
@@ -105,9 +106,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 ## Events
 
-| Event        | Payload                         | Notes                                                                                                                                                                                                   |
-| ------------ | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tab-change` | `(event: Event, index: number)` | @deprecated since 6.0 — use `v-model` (`update:modelValue`). Removed in 7.0. The reader moved the selection; `index` is the tab now shown. Fires on a reader's hover or click, not on an autoplay tick. |
+None. The tab shown is the `v-model` (`update:modelValue`).
 
 ## Slots
 
