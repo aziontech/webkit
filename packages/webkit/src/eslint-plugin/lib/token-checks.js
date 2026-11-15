@@ -112,13 +112,13 @@ export const TOKEN_CHECKS = [
     id: 'keyframes-local',
     regex: /@keyframes\b/g,
     message:
-      'Component-local @keyframes. Add the animation to packages/theme/src/tokens/semantic/animations.js (run /add-animation) and use the animate-* utility.'
+      'Component-local @keyframes. Add the animation to packages/theme/src/tokens/semantic/animations.js (run /animation-add) and use the animate-* utility.'
   },
   {
     id: 'animate-arbitrary',
     regex: /\banimate-[[(]/g,
     message:
-      'Arbitrary animate-[…] value. Use a catalogued animate-* utility, or add one via /add-animation (semantic/animations.js).'
+      'Arbitrary animate-[…] value. Use a catalogued animate-* utility, or add one via /animation-add (semantic/animations.js).'
   },
   {
     id: 'motion-hardcoded',
