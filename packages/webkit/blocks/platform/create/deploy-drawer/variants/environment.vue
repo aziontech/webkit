@@ -657,7 +657,7 @@
   <div>
     <Drawer
       v-model:open="open"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerTrigger>

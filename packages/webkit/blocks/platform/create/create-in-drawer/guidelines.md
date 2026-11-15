@@ -8,6 +8,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - Editing that same item from its row menu; the drawer opens on its values and saves them.
 - A first-level tuple normally created in bulk, such as variables, the one exception the surface rule allows.
 - A select needs another item of the same resource that may not exist yet, such as the origin a new rule sends requests to: the NestedDrawer shape creates it in a second drawer and selects it back.
+- A form needs a resource that does not exist yet, first-level ones included, such as the digital certificate of a workload being created: offer `Create certificate` in the field, and the drawer holds that resource's own create form (`large` over a page, `medium` over a drawer) and selects it back. The reader never leaves the form to create it.
 
 ## When not to use
 
@@ -15,7 +16,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - A blocking yes or no question, or a destructive guard: use `platform/delete/delete-with-confirmation`.
 - Deploying what exists: use `platform/create/deploy-drawer`, which commits a deployment rather than a record.
 - Binding a whole resource that may be reused or created in a create flow: use `platform/create/resource-picker`.
-- A select that needs a missing first-level resource, such as a service or a function: the stacked drawer would create on the wrong surface. Link to that resource's create page, or bind it with `platform/create/resource-picker`.
+- A missing resource whose creation takes several steps, such as a project imported from a repository: open its create page in a new tab and give the field a `Refresh` option.
 - Editing the settings of the resource itself: use `platform/edit/edit-resource`.
 
 ## Building blocks
@@ -26,7 +27,7 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 ### B. Drawer frame — `Drawer`, `DrawerContent` (required)
 
-`Drawer` at `size="medium"` for a form of two or three sections; large for the ItemRows shape. It portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title. State resets each time the drawer opens, never on close, so the content stays in place while it slides out.
+`Drawer` at `size="large"`, the standard drawer, for every shape; only the nested child steps down to `medium`. It portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title. State resets each time the drawer opens, never on close, so the content stays in place while it slides out.
 
 ### C. Panel header — `PanelHeader`, `DrawerTitle` (required)
 
@@ -114,7 +115,7 @@ In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` p
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
-- CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at small size above that drawer and selects the new environment back.
+- CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at medium size above that drawer and selects the new environment back.
 - SaveFailed: Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
 - FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 

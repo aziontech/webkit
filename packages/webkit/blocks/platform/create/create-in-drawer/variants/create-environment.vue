@@ -328,7 +328,7 @@
 
   <Drawer
     v-model:open="open"
-    size="medium"
+    size="large"
     side="right"
   >
     <DrawerContent>
@@ -501,7 +501,7 @@
   </Drawer>
   <Drawer
     v-model:open="environmentOpen"
-    :size="open ? 'small' : 'medium'"
+    :size="open ? 'medium' : 'large'"
     side="right"
   >
     <DrawerContent>

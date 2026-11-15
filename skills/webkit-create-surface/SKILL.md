@@ -2,7 +2,7 @@
 name: webkit-create-surface
 description: Where a create or settings form LIVES, and what it is built from. Use whenever you add or review a flow that creates a resource, edits one, or asks a question that commits — a "New X" button, a create route, an "add" affordance inside a detail page, a settings tab. Fixes the surface (a first-level resource creates on a PAGE; anything created inside a resource opens a DRAWER; nothing creates in a dialog), the anatomy every one of them shares (Section band with a Hint glyph over a flush card of rows, control right or stacked when wide), what belongs behind the collapsed Advanced band (the endpoint's not-required, already-defaulted fields), and the commit model (create pages carry a persistent bar; settings pages mount one only once something is edited), and how a flow picks an existing resource (an Existing / New band whose picker carries search past 7 options and Load more).
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 scope: general
 enforced_by: [ui-verify, webkit-component-states, webkit-accessibility, webkit-prefer-over-custom]
 ---
@@ -62,6 +62,20 @@ a page.
 | A resource inside another resource           | Drawer                 | none — it opens over the owner |
 | A tuple normally created in bulk (variables) | Drawer, at first level | none                           |
 | A confirmation, a destructive guard          | `ConfirmDialog`        | none                           |
+| A resource another form needs, not made yet  | Drawer, over that form | none — it opens over the form  |
+
+**Configuring a resource is never a drawer.** A Configure, Settings or Edit action on a product or a
+resource navigates to that resource's page, on its settings tab; drawers open only over the screen
+that owns their item. The first drawer is `large`, a nested one `medium`, never a third
+(`/webkit-navigation`, Drawers).
+
+**A form creates what it is missing.** When a field needs a resource that does not exist yet (the
+certificate of a workload being created), the field offers `Create <noun>` and a drawer opens over the
+form with that resource's own create form, the same bands as its create page. On save the new
+resource is selected in the field and the form is as the reader left it. This holds for first-level
+resources too: their page is where they start from their own module, the drawer is where another form
+needs them. Never send the reader away to create it and come back. Only a resource that creates in
+several steps opens its create page in a new tab (`/webkit-navigation`, Create what is missing).
 
 **Settings use the create surface again.** The page that edits a resource is the page that created
 it, with values in it. Same bands, same rows, same order — so the two are one object seen twice, and
@@ -216,7 +230,11 @@ clear the search.`;
 
 **A single field that references an existing resource stays a row with a `Select`** — a domain's
 certificate, a rule's function, an environment. It follows the same rule in the Select's own
-panel: search in `Select.Content`'s `#search` slot past 7 options, Load more in its `#footer`.
+panel: search in `Select.Content`'s `#search` slot past 7 options, Load more in its `#footer`, and a
+`Create <noun>` option there that opens the resource's create form in a drawer (section 1).
+
+**New is never a trip away.** In the band, New shows the create fields inline when the resource needs
+only a name or two; when it needs its full form, New opens that form in a drawer over the page.
 
 Build the band and the picker once as shared components and pass the noun, the icon and the
 options. Every flow that reuses a resource then reads the same, and the one hand-made copy that
@@ -225,7 +243,11 @@ would ship without search never exists.
 ## Checklist
 
 - [ ] First-level resource → a page at `/<module>/new`. Inside a resource → a drawer. Never a dialog.
+- [ ] Configure, Settings or Edit on a resource → its page, never a drawer. First drawer `large`, nested
+      `medium`, never a third.
 - [ ] A first-level drawer passes BOTH halves of the exception test (small tuple **and** normally bulk).
+- [ ] A field that needs a resource not created yet offers `Create <noun>` in a drawer and selects it
+      on save; the reader never leaves the form to create it.
 - [ ] Settings reuse the create page's bands, in the same order.
 - [ ] Every band is a Section with a title and a Hint — not a paragraph of prose.
 - [ ] Rows carry the name and guidance; the control has an `aria-label`, not a separate label.

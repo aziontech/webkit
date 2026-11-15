@@ -61,6 +61,13 @@ foundation, a JSON API per component, and `llms-full.txt` with everything in one
   are bodies in its slot, never a second shell, `<main>` or ⌘K palette (above).
 - **One navigation per level.** Rail, page tabs, at most one local navigation; a destination
   appears once per screen; the rail never routes into a resource (rule `webkit-navigation-levels`).
+- **A drawer is never the way in.** Opening, configuring or editing a product or a resource goes to
+  its page (Configure → the resource page, on its settings tab); a drawer opens only over the screen
+  that owns its item (a tab of that page). The first drawer is `size="large"`, at most one
+  `size="medium"` drawer stacks on it, never a third (`/webkit-navigation`, Drawers).
+- **A form creates what it is missing.** A field that needs a resource that does not exist yet (the
+  certificate of a new workload) offers `Create <noun>`, which opens that resource's create form in a
+  drawer over the form and selects it on save. Never send the reader away to create it.
 - **Patterns, then components.** Screens start from a pattern (above). Pieces reach for an
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
@@ -129,7 +136,7 @@ runs axe + screenshots), and taste is a review concern.
 Start with `webkit-usage` (the entry point that routes the rest). Get structure and states right
 before any polish:
 
-- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Alert, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation`
+- **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Alert, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation` (shells, navigation levels, breadcrumb, and when a drawer may open: never as the way into a resource, `large` then one `medium`)
 - **Layout:** `/webkit-layout` (the page container system: measure, boundary, rhythm — a page never writes its own `mx-auto max-w-*`)
 - **Words:** `/webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography hierarchy, spacing rhythm)

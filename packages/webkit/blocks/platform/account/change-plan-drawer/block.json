@@ -35,7 +35,13 @@
     "change my plan",
     "upgrade plan drawer"
   ],
-  "skills": ["webkit-microcopy", "webkit-ux-heuristics", "webkit-form", "webkit-errors"],
+  "skills": [
+    "webkit-navigation",
+    "webkit-microcopy",
+    "webkit-ux-heuristics",
+    "webkit-form",
+    "webkit-errors"
+  ],
   "primary": {
     "name": "Default",
     "file": "change-plan-drawer.vue"

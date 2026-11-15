@@ -1075,7 +1075,7 @@
 
     <Drawer
       v-model:open="columnOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerContent>
@@ -1233,7 +1233,7 @@
 
     <Drawer
       v-model:open="rowOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerContent>

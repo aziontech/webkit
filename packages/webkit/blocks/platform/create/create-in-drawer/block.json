@@ -78,7 +78,7 @@
     "criar ambiente",
     "instância de função"
   ],
-  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "skills": ["webkit-create-surface", "webkit-navigation", "webkit-form", "webkit-errors"],
   "primary": {
     "name": "Default",
     "file": "create-in-drawer.vue"
@@ -129,7 +129,7 @@
     },
     {
       "name": "CreateEnvironment",
-      "summary": "Create Environment: Name, Description, a Deployment policy and a Robots policy Select whose helpers say what each choice does, an IP allowlist Switch that reveals a Textarea of IPv4 addresses and CIDR ranges checked on submit, and a Branch tracking Switch that reveals the match Mode and the Branch match. It opens on its own at medium size, or stacked at small size above Add Domain from the Environment select's Create Environment option, and the new environment comes back selected.",
+      "summary": "Create Environment: Name, Description, a Deployment policy and a Robots policy Select whose helpers say what each choice does, an IP allowlist Switch that reveals a Textarea of IPv4 addresses and CIDR ranges checked on submit, and a Branch tracking Switch that reveals the match Mode and the Branch match. It opens on its own at large size, or stacked at medium size above Add Domain from the Environment select's Create Environment option, and the new environment comes back selected.",
       "file": "variants/create-environment.vue"
     },
     {

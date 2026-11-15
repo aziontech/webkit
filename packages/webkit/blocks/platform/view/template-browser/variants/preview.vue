@@ -292,7 +292,7 @@
 
     <Drawer
       v-model:open="previewOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerContent>

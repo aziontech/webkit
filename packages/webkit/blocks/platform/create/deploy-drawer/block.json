@@ -19,7 +19,7 @@
     "implantar serviço",
     "escolher versão"
   ],
-  "skills": ["webkit-create-surface", "webkit-form", "webkit-ui-states"],
+  "skills": ["webkit-create-surface", "webkit-navigation", "webkit-form", "webkit-ui-states"],
   "primary": {
     "name": "Service",
     "file": "deploy-drawer.vue"

@@ -1031,7 +1031,7 @@
 
     <Drawer
       v-model:open="drawerOpen"
-      size="medium"
+      size="large"
       side="right"
       :dismissible="!submitting"
       :closable="!submitting"

@@ -670,7 +670,7 @@
     <Drawer
       v-model:open="uploadOpen"
       side="right"
-      size="small"
+      size="large"
     >
       <DrawerContent>
         <form

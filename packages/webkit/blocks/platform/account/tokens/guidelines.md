@@ -41,7 +41,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 ### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 
-A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
+A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
 
 ### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `HelperText` (required)
 

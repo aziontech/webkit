@@ -420,7 +420,7 @@
 
     <Drawer
       v-model:open="detailOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerContent>

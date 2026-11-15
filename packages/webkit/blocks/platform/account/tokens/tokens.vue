@@ -510,7 +510,7 @@
 
     <Drawer
       v-model:open="createOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerContent>

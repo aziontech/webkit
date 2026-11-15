@@ -1,8 +1,8 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `top-bars/creation-bar` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `top-bars/creation-bar` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 scope: general
 enforced_by: [webkit-navigation-levels, webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -682,6 +682,152 @@ on a `SidebarMenu` in a page body, `ConsoleLayout` warns in development when an 
 row, and `npx @aziontech/webkit check` with `/webkit-ui-verify` fail a duplicate route or disagreeing
 active rows at runtime.
 
+## Drawers — opened from inside a screen, never the way in
+
+> **A drawer opens over a screen the reader already reached, to add or edit one item of that screen.
+> It is never the first surface of a product or a resource: opening, configuring or editing a
+> resource navigates to its page. And when a form needs a resource that does not exist yet, a drawer
+> creates it right there, so the reader never leaves the form to make it. The first drawer is
+> `large`; at most one more drawer, `medium`, stacks on it. Nothing deeper.**
+
+### The path down
+
+Every step towards a thing is a page with a URL until the reader stands on the screen that owns it.
+Only then does a drawer open, over that screen:
+
+```
+rail ─▶ module list ─▶ resource page ─▶ tab ─▶ drawer (large) ─▶ nested drawer (medium)
+└───────────── pages: routes, breadcrumb, back button ─────────┘  └────── overlays: no route ──────┘
+```
+
+The levels above (rail, `PageTabs`, local navigation) are routes. A drawer is not a level: it has no
+route, no breadcrumb entry and no `aria-current` row, and closing it leaves the reader exactly where
+they were.
+
+### What a click opens
+
+| The reader clicks…                                                                           | It opens                                               | Why                                                         |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------- |
+| A product or module in the rail                                                              | its page (the list or the overview)                    | navigation, level 1                                         |
+| A resource in a list (its row or its name)                                                   | the resource's page, on its tabs                       | navigation, level 2                                         |
+| **Configure, Settings or Edit** on a product or a resource                                   | **the resource's page**, on its settings tab (`?tab=`) | configuring is a destination: reload, link, back, more tabs |
+| Create a first-level resource                                                                | the create page, in the focused shell                  | `/webkit-create-surface`                                    |
+| Add or edit an item that lives inside the resource (a rule, an origin, a record), from a tab | a **`large` drawer** over that tab                     | the tab behind it is the context                            |
+| On a page, a field needs a resource that does not exist yet (a certificate for a workload)   | a **`large` drawer** that creates it, over that page   | create the missing piece where it is missing (below)        |
+| Inside a drawer, a field needs a resource or an item that does not exist yet                 | a **`medium` drawer** stacked on the first             | the same, without losing typed work (`/webkit-form`)        |
+| A yes-or-no guard (remove, discard)                                                          | `ConfirmDialog`, over the page or over any drawer      | a decision, not a surface                                   |
+
+**The test:** _is the screen this thing belongs to already open behind the click?_ If yes, a drawer.
+If the drawer would open over some other screen (configuring a product from the product list, from a
+dashboard, from the rail), it is the wrong surface: navigate to the resource's page and let the
+drawers start there. Variables are the one first-level drawer (`/webkit-create-surface`), and they
+still pass the test: the drawer opens over the variables list, the screen that owns them.
+
+### Create what is missing, where it is missing
+
+> **When a form needs a resource that does not exist yet, the form offers to create it right there,
+> in a drawer. This is a must, not an option: never make the reader leave the form, create the
+> resource somewhere else and come back.**
+
+The reader is on the Workload page, creating a workload. The Certificate field is empty because they
+have not created a digital certificate yet. Without this rule they would have to cancel or abandon
+the workload, go to Certificates, create one, come back and start again. With it, the Certificate
+field offers **Create certificate**, a drawer opens over the workload form, they create the
+certificate, the drawer closes, and the new certificate is already selected in the field. The
+workload form is exactly as they left it.
+
+- **Every field that points at another resource offers the create.** A `Select` shows a
+  `Create <noun>` option in its `#footer`; a `platform/create/resource-picker` band shows it as its
+  New mode, and the New mode opens the drawer when the resource needs more than a name. With nothing
+  to pick yet, the field still renders and says so: `No certificates yet.` plus the create option.
+- **It applies to first-level resources too.** A certificate, a function, a firewall or an
+  application is created on its own page when the reader starts from its module (`Create
+certificate` on the Certificates list). When another form needs it, the same form opens in a drawer
+  instead. One form, two containers: the drawer holds the same sections and fields as the create
+  page, so the reader sees the same thing in both places.
+- **The size follows the depth, not the resource.** Opened from a page (a create page or a settings
+  tab), the drawer is the first drawer: `large`. Opened from a field inside a drawer, it is the
+  nested drawer: `medium`. Depth two still holds: a field inside the nested drawer never opens a
+  third, it links to the resource's create page in a new tab.
+- **Saving wires it back.** On save the drawer closes, the new resource is added to the field's
+  options and selected, the field's error clears, and a toast confirms it. Cancel returns to the form
+  with nothing changed.
+- **It passes the test above.** The drawer opens over the form that needs the resource, which is the
+  screen the reader is working on. It creates one missing piece of that work.
+- **When the create does not fit a drawer.** A resource whose creation takes several steps (a
+  project imported from a repository, a provisioning wizard) cannot become one drawer. Then the
+  create option opens its create page in a new browser tab, and the field offers `Refresh` to load
+  what was created there. The form tab is never navigated away.
+
+**Why a page, not a drawer, for the first step.**
+
+- **A drawer has no URL.** A configuration screen is something people reload, bookmark, send to a
+  colleague and come back to with the back button. A drawer loses all four.
+- **A drawer is worth its context.** It earns its place by keeping the owner visible behind it. Opened
+  as the first step, it covers a screen that is not the owner, so the reader sees the wrong context
+  and none of the right one.
+- **Configuration grows.** A product's settings start as one form and become tabs (Settings, Rules,
+  Domains, Logs). A page takes tabs; a drawer never carries `PageTabs`. A drawer that needs tabs, a
+  breadcrumb or a second-level navigation is a page.
+
+### Sizes and stacking
+
+| Layer                       | `size`   | Max width | Holds                                                       |
+| --------------------------- | -------- | --------- | ----------------------------------------------------------- |
+| First drawer (the standard) | `large`  | 1024 px   | one item of the screen behind it, or a missing resource     |
+| Nested drawer (at most one) | `medium` | 672 px    | the create of one resource or item the parent's field needs |
+| —                           | `small`  | 384 px    | not part of this stack: a narrow panel that holds no form   |
+
+**One drawer is not an item drawer: the AI assistant.** The `platform/ai/ai-chat-drawer` block opens
+a conversation beside the page, not an item of it, so it stays `medium`: a chat reads as a narrow
+column, and the page it talks about must stay visible. It never opens a nested drawer.
+
+- **The standard drawer is the widest.** Every form drawer carries the shared form anatomy (Section
+  bands over a flush card of rows, label and control side by side), and the row keeps label and
+  control on one line only from the drawer's `@md` container width. `large` gives every form that
+  room, so one item never reflows between drawers of different widths.
+- **Depth two, never three.** The nested drawer is the last layer. A third layer means the flow is a
+  page: open the create page in a new tab (the drawers keep their typing) or bind the field with the
+  `platform/create/resource-picker`. A nested drawer may create any missing resource whose create
+  fits in one drawer, first-level ones included (above).
+- **The child is one step narrower than the parent.** At `medium` over `large`, 352 px of the parent
+  stays visible at its start edge, so the reader sees which form the child returns to. Never stack two
+  drawers of the same size: the parent disappears and the stack reads as one drawer that replaced its
+  content.
+- **Each drawer is its own form.** Its own Save, its own `submitting` flag; saving the child appends
+  and selects the new item in the parent's field and closes the child, and the parent keeps what was
+  typed (`/webkit-form`, the nested drawer).
+- **Focus returns down the stack.** Closing the child returns focus to the control that opened it in
+  the parent; closing the parent returns it to the trigger on the page. `Escape` closes the top
+  layer only.
+- **No navigation inside a drawer.** No `PageTabs`, no breadcrumb, no local navigation. A link that
+  leaves the screen opens in a new tab, so the open drawers keep their work.
+- **Phones.** Below `md` each drawer is a bottom sheet and below `sm` a full-screen sheet; the nested
+  one covers its parent fully. The depth limit still holds.
+
+### What the market does, and where we differ
+
+| System                      | Overlay stacking                                                                    |
+| --------------------------- | ----------------------------------------------------------------------------------- |
+| Microsoft Fluent 2 (Drawer) | Do not open several overlay drawers at a time; overlays are used with caution       |
+| Shopify Polaris (Modal)     | Do not nest modals; never launch one modal from another                             |
+| Sainsbury's (Drawer)        | One drawer at a time, never stacked or nested                                       |
+| Carbon for IBM Products     | Tearsheets stack, with stacked and double-stacked layers, each lower layer receding |
+| Vaul (nested drawers)       | A nested drawer pushes its parent back so the parent stays visible behind it        |
+| AWS Cloudscape (Drawer)     | Drawers hold supplementary work; a separate page is often the better surface        |
+
+The common ground is that a drawer is a secondary surface on top of a page and that stacking is the
+exception. We take that and set three numbers of our own:
+
+- **One nested drawer, not zero.** Fluent and Polaris forbid stacking outright. We allow exactly one,
+  because the quick-create of a missing item is the case where sending the reader away loses typed
+  work.
+- **Depth two, not three.** Carbon goes one layer further. At console widths a third layer would leave
+  no part of the first visible, which is the reason to stack at all.
+- **The standard drawer is the largest.** Fluent defaults to its smallest drawer for light side
+  content. Ours hold full forms in the shared anatomy, so the default is the size that fits that
+  anatomy, and the nested child steps down from it, the way Carbon and Vaul let the layer below recede.
+
 ## Breadcrumb — first level and second-level resource nav
 
 In the console the trail is `ConsoleLayout`'s `breadcrumbs` prop, derived from the route meta. A
@@ -826,6 +972,14 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 - **One navigation per level.** Rail, `PageTabs`, at most one local navigation (the
   `platform/detail/sectioned-resource` block); a destination appears once per screen, and the rail
   never routes into a resource (rule `webkit-navigation-levels`).
+- **A drawer is never the way in.** Opening, configuring or editing a product or a resource navigates
+  to its page; a drawer opens only over the screen that owns its item (a tab of the resource, the list
+  that holds it). The first drawer is `large`, at most one `medium` drawer stacks on it, never a
+  third, and no drawer carries tabs or navigation.
+- **Create what is missing, where it is missing.** A field that needs a resource that does not exist
+  yet offers `Create <noun>`, which opens a drawer with that resource's create form over the form
+  that needs it (`large` from a page, `medium` from a drawer) and selects the new resource on save.
+  Never send the reader away to create it.
 
 ## Review output
 
@@ -867,6 +1021,22 @@ For `/webkit-navigation <file>`, list gaps. Each:
 ✗ navigation.ts:31  rail row /policy-pages/... routes into a resource
   rule: The rail never routes into a resource — those pages are reached through the resource.
   fix: point the row at the resource list (/policies); the pages live in the policy's tabs.
+
+✗ ProductsView.vue:48  "Configure" on a product row opens a Drawer with the product's settings
+  rule: A drawer is never the way in; configuring a resource navigates to its page.
+  fix: route to the product's page on its settings tab (/products/:id?tab=settings); drawers open from its tabs.
+
+✗ WorkloadCreate.vue:64  Certificate Select has no create option; the empty state says "Create a certificate first" with a link to /certificates/new
+  rule: Create what is missing, where it is missing.
+  fix: a "Create certificate" option in the Select #footer opens a large Drawer with the certificate form; on save select the new certificate.
+
+✗ RulesTab.vue:90  nested Drawer size="large" over a large Drawer
+  rule: The nested drawer is one step narrower, so the parent stays visible behind it.
+  fix: size="medium" on the child; the parent stays large.
+
+✗ OriginDrawer.vue:120  a third Drawer opens from the nested one
+  rule: Depth two, never three; a third layer means the flow is a page.
+  fix: open the create page in a new tab, or bind the field with platform/create/resource-picker.
 ```
 
 End with: `navigation sound` or `N gaps — fix before polish`.
@@ -920,3 +1090,9 @@ End with: `navigation sound` or `N gaps — fix before polish`.
       screen, and each level's `aria-current="page"` row agrees with the route.
 - [ ] No rail row routes into a resource (a default policy, zone or application); those pages are
       reached through the resource's list row, tabs or local navigation.
+- [ ] Opening, configuring or editing a product or a resource navigates to its page; no drawer is
+      the first surface of a resource, and every drawer opens over the screen that owns its item.
+- [ ] The first drawer is `size="large"`; a nested drawer is `size="medium"`, at most one, never a
+      third; no drawer carries `PageTabs`, a breadcrumb or a local navigation.
+- [ ] Every field that needs another resource offers to create it in a drawer when it does not exist
+      yet, and selects it on save; the reader never leaves the form to create it.

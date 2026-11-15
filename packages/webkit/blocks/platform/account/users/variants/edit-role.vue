@@ -595,7 +595,7 @@
     <Drawer
       v-model:open="inviteOpen"
       side="right"
-      size="medium"
+      size="large"
       :dismissible="!sending"
       :closable="!sending"
     >

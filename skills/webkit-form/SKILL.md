@@ -2,7 +2,7 @@
 name: webkit-form
 description: Accessible forms on @aziontech/webkit — one Form Layout spacing reference (xs inside a field, lg between fields/rows) shared by five form types (Drawer, nested Drawer, Dialog, ItemGroup settings, Card with independent saves) that differ only in container + save model, with two internal layouts (Cards + ItemGroups / Fields separated) composing inside each. Every field carries a real label (never a placeholder-as-label), errors are tied to the control via aria-describedby, and related fields group in a real <fieldset>/<legend>; validated only on submit with the field's own required/invalid state as the feedback — no custom error-summary block, no Alert callout for field validation. The a11y companion to /webkit-ux-heuristics (states) and /webkit-ui-states (locking + toast).
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
@@ -157,20 +157,29 @@ contexts** in Azion products:
 
 - **Drawer form.** In-context creation — the user is working inside a resource and adds an item that
   only exists in it (a rule, an origin, a domain, a record) _without leaving the page they're on_. A
-  first-level resource creates on a page, not here (`/webkit-create-surface`; variables are the one
-  exception). One scoped save (the drawer's primary action).
+  first-level resource started from its own module creates on a page, not here
+  (`/webkit-create-surface`; variables are the one exception). A `large` drawer (`/webkit-navigation`, Drawers). One scoped save (the drawer's primary
+  action).
   Approach A for grouped/config-heavy creates (one flush ItemGroup, or several `SettingsSection` bands),
   Approach B for short ones.
 
-- **Nested drawer.** A drawer form whose Select points at **another item of the same resource** that may
-  not exist yet — the origin a new rule sends requests to, both living inside the storefront resource.
+- **Missing-resource drawer.** A form whose field needs a resource that does not exist yet — a workload
+  being created needs a digital certificate the reader has not made. The field offers `Create <noun>`,
+  and a drawer holding **that resource's own create form** opens over the form, creates it and selects
+  it back. A must, for first-level resources too: never send the reader to another page to create it
+  and come back (`/webkit-navigation`, Create what is missing). `large` when opened from a page;
+  from a drawer it is the nested drawer below.
+
+- **Nested drawer.** A drawer form whose Select points at a resource or an item that may not exist
+  yet — the origin a new rule sends requests to, or the certificate a new domain needs.
   Rather than sending the user away to create it (losing the parent form's in-progress state), a
-  "Create …" quick-add opens a **second, smaller drawer** stacked over the first; on save the new item is
+  "Create …" quick-add opens a **second, smaller drawer** (`medium` over the parent's `large`, never a third) stacked over the first; on save the new item is
   appended to the Select's options and selected back into the parent. **Each drawer is its own form** —
   its own scoped save, its own `submitting` flag, its own `<fieldset>`; the two never share a lock.
-  Approach A inside each. Documented below. **Never a first-level resource** (a Function, a Service, a
-  Team — anything the sidebar routes to): it creates on its own page (`/webkit-create-surface`), so the
-  Select gets a link to that create page, or the field becomes a `platform/create/resource-picker`.
+  Approach A inside each. Documented below. A first-level resource (a Certificate, a Function, a
+  Firewall) creates here too, with the same fields as its create page. Only a resource whose creation
+  takes several steps (a repository import, a provisioning wizard) opens its create page in a new tab
+  instead, and the field offers `Refresh`.
 
 - **Dialog form.** Small, focused, usually confirmational or destructive — e.g. removing a resource.
   Few (or zero) fields, a single confirm action. A yes-or-no decision is `ConfirmDialog`
@@ -409,21 +418,21 @@ Canonical pattern:
 </template>
 ```
 
-### Example — Nested drawer (create an item of the same resource inline)
+### Example — Nested drawer (create a missing resource inline)
 
-A drawer form whose `Select` points at another item of the **same** resource that the user may not have
-created yet. Rather than sending them away to make it — and losing everything they've typed in the parent —
+A drawer form whose `Select` points at a resource or an item that the user may not have created yet. Rather than sending them away to make it — and losing everything they've typed in the parent —
 a "Create …" affordance in the `Select`'s footer opens a **second, smaller drawer** on top. The child
 creates the item, appends it to the `Select`'s options, selects it back into the parent, and closes; the
 parent form is exactly as the user left it. This is the pattern behind _Rules Engine → Add Rule → Origin →
 Create Origin_ on a resource (`platform/create/create-in-drawer`, variant `NestedDrawer`): the rule and the
 origin both live inside the storefront resource, so both create in a drawer.
 
-**Only for items inside the parent's resource.** When the missing thing is a first-level resource (a
-Function, a Service, a Team), the stacked drawer would create it on the wrong surface — a first-level
-resource creates on its own page (`/webkit-create-surface`). Give the Select a link to that resource's
-create page (opened in a new tab so the drawer keeps its typing), or bind the field with
-`platform/create/resource-picker`.
+**First-level resources too.** When the missing thing is a first-level resource (a Certificate, a
+Function, a Firewall), the child drawer holds that resource's own create form, the same sections and
+fields as its create page. The same shape works from a page: on a workload create page, the
+Certificate `Select` opens a `large` drawer with the certificate form. Only a resource whose creation
+takes several steps (a repository import, a provisioning wizard) does not fit a drawer: open its
+create page in a new tab, so the form keeps its typing, and give the field a `Refresh` option.
 
 Three decisions make it safe:
 
@@ -560,9 +569,9 @@ Rules:
 - **On the child's save, wire the resource back into the parent** — append it to the `Select`'s options,
   set the parent's model to the new value, clear the parent's error for that field, `toast.success`, close
   the child. The parent form keeps everything else the user had typed.
-- **The child creates an item of the parent's resource, never a first-level resource.** A missing
-  Function, Service or Team gets a link to its create page or a `platform/create/resource-picker`, not
-  a stacked drawer.
+- **The child creates whatever the field is missing**, an item of the parent's resource or a
+  first-level resource, with that resource's own create form. Only a multi-step create opens its page
+  in a new tab instead.
 - **No `z-*` overrides** — the child drawer portals over the parent and `Select.Content` already sits
   above every drawer.
 - Everything else follows the **Drawer form** rules: Approach A ItemGroup sections inside each drawer,
@@ -1103,13 +1112,14 @@ Rules:
 
 ## Choosing an approach
 
-| Situation                                                            | Approach                                                                              |
-| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Settings page, resource config, many grouped fields, a Create drawer | **A — Cards + ItemGroups** (`Item.List`, `size="small"`)                              |
-| Login, rename, a short 1–3 field dialog, one wizard step             | **B — Fields separated** (`Field` stacked)                                            |
-| A section mixes a couple of simple rows with a radio block           | **A**, with the radio block as a full-width child inside its `Item`                   |
-| A drawer's Select needs an item of the same resource not created yet | **Nested drawer** — quick-add opens a second drawer; each drawer its own scoped save  |
-| A drawer's Select needs a first-level resource that doesn't exist    | Link to its create page, or `platform/create/resource-picker` — never a nested drawer |
+| Situation                                                                | Approach                                                                               |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| Settings page, resource config, many grouped fields, a Create drawer     | **A — Cards + ItemGroups** (`Item.List`, `size="small"`)                               |
+| Login, rename, a short 1–3 field dialog, one wizard step                 | **B — Fields separated** (`Field` stacked)                                             |
+| A section mixes a couple of simple rows with a radio block               | **A**, with the radio block as a full-width child inside its `Item`                    |
+| A page's field needs a resource not created yet (workload → certificate) | **Missing-resource drawer** — `large`, the resource's own create form, selects it back |
+| A drawer's Select needs a resource or an item not created yet            | **Nested drawer** — quick-add opens a second drawer; each drawer its own scoped save   |
+| The missing resource creates in several steps (repository import)        | Its create page in a new tab, and a `Refresh` option on the field                      |
 
 The module **create** action for a first-level resource lands on a dedicated **page** (route
 `/<module>/new`), not a modal, so it is linkable and back-button-safe, however short the form; a
@@ -1156,11 +1166,12 @@ End with: `form is accessible` or `N gaps — fix before polish`.
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
       Dialog, or an ItemGroup — single block _or_ multiple `SettingsSection` bands); one save per card only
       for the Card-with-independent-saves type.
+- [ ] Every field that needs another resource offers `Create <noun>` when it may not exist yet; the
+      drawer creates it and selects it back, so the reader never leaves the form to create it.
 - [ ] A **nested drawer** keeps parent and child as independent forms — each its own `submitting` flag,
       `<fieldset :disabled>`, and Save `:loading`; the parent `Select` is controlled with a sentinel
-      quick-add; the child creates an item of the parent's resource (never a first-level resource,
-      which gets a link to its create page or a `resource-picker`) and wires it back into the parent on
-      save; no `z-*` overrides on the drawers or popups.
+      quick-add; the child creates the missing resource or item with its own create form and wires it
+      back into the parent on save; no `z-*` overrides on the drawers or popups.
 - [ ] Field spacing follows the macro rule: `--spacing-xs` inside a field, `--spacing-lg` between fields
       and sections (`--spacing-md` only in a compact modal body). No one-off gaps.
 - [ ] Hierarchy is not inverted: title → description → section title → field label → control → helper.

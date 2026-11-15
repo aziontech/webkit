@@ -605,7 +605,7 @@
     <Drawer
       v-model:open="deployOpen"
       side="right"
-      size="medium"
+      size="large"
     >
       <DrawerContent>
         <PanelHeader class="w-full">
