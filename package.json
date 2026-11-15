@@ -57,7 +57,6 @@
     "@tailwindcss/typography": "^0.5.19",
     "autoprefixer": "^10.4.27",
     "pnpm": "^11.9.0",
-    "primeflex": "^3.3.1",
     "tailwindcss": "^3.4.19",
     "vue": "^3.5.29"
   },
