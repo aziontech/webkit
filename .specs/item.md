@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-05-24
 last_updated: 2026-11-15
-checksum: de561704733aa3c01b11b9d0f55f73f0f5e685ea3461a64af6f7836d390b2cce
+checksum: 58eba95b5a7417f6c110b0c942f8168f3219865824966dd5d55a8a9692cfab67
 ---
 
 # Item — Component Spec
@@ -173,7 +173,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 | padding (small)        | `var(--spacing-3)`                                    |
 | ItemGroup row gap      | `var(--spacing-lg)`                                   |
 | ItemList divider       | `var(--border-muted)`                                 |
-| shape                  | `var(--shape-elements)`                               |
+| shape                  | `var(--shape-control)`                                |
 | ring                   | `var(--ring-color)`                                   |
 
 ## Theme gaps

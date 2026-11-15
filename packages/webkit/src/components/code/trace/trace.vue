@@ -584,7 +584,7 @@
       class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted)"
     >
       <div
-        class="flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xxs)"
+        class="flex min-w-0 items-center gap-(--spacing-xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-2xs)"
       >
         <span class="truncate text-label-sm text-(--text-muted)">{{ t('trace.zoom') }}</span>
         <Button
@@ -633,7 +633,7 @@
               :aria-valuetext="thumb.text"
               :data-edge="thumb.edge"
               :data-testid="`${testId}__thumb`"
-              class="pointer-events-auto absolute inset-y-0 w-3 cursor-ew-resize rounded-(--shape-button) after:absolute after:inset-y-(--spacing-xxs) after:start-1/2 after:w-0.5 after:-ms-px after:rounded-full after:bg-(--border-selected) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none data-[edge=end]:-end-1.5 data-[edge=start]:-start-1.5 pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3"
+              class="pointer-events-auto absolute inset-y-0 w-3 cursor-ew-resize rounded-(--shape-button) after:absolute after:inset-y-(--spacing-2xs) after:start-1/2 after:w-0.5 after:-ms-px after:rounded-full after:bg-(--border-selected) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none data-[edge=end]:-end-1.5 data-[edge=start]:-start-1.5 pointer-coarse:w-6 pointer-coarse:data-[edge=end]:-end-3 pointer-coarse:data-[edge=start]:-start-3"
               @pointerdown.stop="onThumbDown($event, thumb.edge)"
               @keydown="onThumbKey($event, thumb.edge)"
             />
@@ -713,7 +713,7 @@
         >
           <span
             role="gridcell"
-            class="flex min-w-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--span-depth)*var(--spacing-md))] pe-(--spacing-sm)"
+            class="flex min-w-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--span-depth)*var(--spacing-md))] pe-(--spacing-sm)"
           >
             <span
               v-if="row.hasChildren"
@@ -750,7 +750,7 @@
             >
             <span
               v-if="row.span.status === 'error' || row.span.id === slowestId"
-              class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)"
+              class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
               aria-hidden="true"
             >
               <i
@@ -760,7 +760,7 @@
               />
               <i
                 v-if="row.span.status === 'error'"
-                class="ai ai-exclamation-circle text-(--danger-contrast)"
+                class="ai ai-exclamation-circle text-(--danger-foreground)"
               />
             </span>
           </span>
@@ -779,7 +779,7 @@
                   :data-tone="row.tone"
                   :data-wide="row.wide || null"
                   :data-flip="row.flip || null"
-                  class="pointer-events-none absolute start-full top-1/2 ms-(--spacing-xxs) -translate-y-1/2 text-label-sm whitespace-nowrap tabular-nums data-flip:start-auto data-flip:end-full data-flip:ms-0 data-flip:me-(--spacing-xxs) data-wide:start-(--spacing-xs) data-wide:ms-0 data-[tone=error]:text-(--danger-contrast) data-[tone=ok]:text-(--success-contrast) data-[tone=root]:text-(--info-contrast) data-[tone=running]:text-(--warning-contrast)"
+                  class="pointer-events-none absolute start-full top-1/2 ms-(--spacing-2xs) -translate-y-1/2 text-label-sm whitespace-nowrap tabular-nums data-flip:start-auto data-flip:end-full data-flip:ms-0 data-flip:me-(--spacing-2xs) data-wide:start-(--spacing-xs) data-wide:ms-0 data-[tone=error]:text-(--danger-foreground) data-[tone=ok]:text-(--success-foreground) data-[tone=root]:text-(--info-foreground) data-[tone=running]:text-(--warning-foreground)"
                   aria-hidden="true"
                   >{{ formatDuration(row.span.duration) }}</span
                 >
@@ -883,7 +883,7 @@
         <div
           v-for="fact in detailFacts"
           :key="fact.label"
-          class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+          class="flex min-w-0 flex-col gap-(--spacing-2xs)"
         >
           <dt class="text-label-sm text-(--text-muted)">{{ fact.label }}</dt>
           <dd class="m-0 truncate text-body-sm text-(--text-default) tabular-nums">
@@ -894,7 +894,7 @@
 
       <p
         v-if="detail.message"
-        class="text-body-sm text-(--danger-contrast)"
+        class="text-body-sm text-(--danger-foreground)"
       >
         {{ detail.message }}
       </p>
@@ -906,7 +906,7 @@
       >
         <p class="text-label-sm text-(--text-default)">{{ t('trace.events') }}</p>
         <dl
-          class="m-0 grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-xxs)"
+          class="m-0 grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-2xs)"
         >
           <template
             v-for="item in detailEvents"
@@ -928,7 +928,7 @@
       >
         <p class="text-label-sm text-(--text-default)">{{ t('trace.attributes') }}</p>
         <dl
-          class="m-0 grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-xxs)"
+          class="m-0 grid grid-cols-[minmax(0,10rem)_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-2xs)"
         >
           <template
             v-for="item in detailAttributes"

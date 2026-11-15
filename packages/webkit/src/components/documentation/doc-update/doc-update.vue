@@ -61,13 +61,13 @@
   >
     <div
       data-doc-chrome
-      class="flex shrink-0 flex-col items-start gap-(--spacing-xxs) md:sticky md:top-(--spacing-lg) md:w-40 md:self-start"
+      class="flex shrink-0 flex-col items-start gap-(--spacing-2xs) md:sticky md:top-(--spacing-lg) md:w-40 md:self-start"
     >
       <div
         v-if="title"
         class="flex min-h-[1lh] items-center text-heading-md"
       >
-        <span class="whitespace-nowrap text-heading-xxs text-(--text-default)">{{ label }}</span>
+        <span class="whitespace-nowrap text-heading-2xs text-(--text-default)">{{ label }}</span>
       </div>
       <h2
         v-else
@@ -99,7 +99,7 @@
       >
       <div
         v-if="tags.length && !title"
-        class="flex flex-wrap gap-(--spacing-xxs) pt-(--spacing-xxs)"
+        class="flex flex-wrap gap-(--spacing-2xs) pt-(--spacing-2xs)"
       >
         <Tag
           v-for="tag in tags"

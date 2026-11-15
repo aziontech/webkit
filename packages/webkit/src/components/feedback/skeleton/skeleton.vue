@@ -41,6 +41,6 @@
     :data-kind="kind"
     :data-animated="animated || null"
     :style="{ width, height }"
-    class="block bg-(--bg-placeholder) data-[kind=rectangle]:rounded-(--shape-elements) data-[kind=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
+    class="block bg-(--bg-placeholder) data-[kind=rectangle]:rounded-(--shape-control) data-[kind=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
   />
 </template>

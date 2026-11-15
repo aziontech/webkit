@@ -7,7 +7,7 @@ spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: e90f10157fb8b2484c353bf8829773ae93847eb0590549271842ce493009e48b
+checksum: 06b11fbfe67ab8353895bbc4a107d8d68af8036a1544b5a39463cb4217060afa
 ---
 
 # ComparisonTable — Component Spec
@@ -111,18 +111,18 @@ _none_
 
 ## Tokens
 
-| Region                                    | Token (DESIGN.md)                                                           |
-| ----------------------------------------- | --------------------------------------------------------------------------- |
-| typography (column heads, category heads) | `.text-overline-md`                                                         |
-| typography (row heads)                    | `.text-label-md`                                                            |
-| category head text                        | `var(--text-primary)`                                                       |
-| column head text                          | `var(--text-muted)`                                                         |
-| row head text                             | `var(--text-default)`                                                       |
-| full / partial / none glyph               | `var(--success-contrast)` / `var(--warning-contrast)` / `var(--text-muted)` |
-| header fill                               | `var(--bg-canvas)`                                                          |
-| category fill                             | `var(--bg-surface)`                                                         |
-| rules                                     | `var(--border-default)`                                                     |
-| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`             |
+| Region                                    | Token (DESIGN.md)                                                               |
+| ----------------------------------------- | ------------------------------------------------------------------------------- |
+| typography (column heads, category heads) | `.text-overline-md`                                                             |
+| typography (row heads)                    | `.text-label-md`                                                                |
+| category head text                        | `var(--text-primary)`                                                           |
+| column head text                          | `var(--text-muted)`                                                             |
+| row head text                             | `var(--text-default)`                                                           |
+| full / partial / none glyph               | `var(--success-foreground)` / `var(--warning-foreground)` / `var(--text-muted)` |
+| header fill                               | `var(--bg-canvas)`                                                              |
+| category fill                             | `var(--bg-surface)`                                                             |
+| rules                                     | `var(--border-default)`                                                         |
+| cell padding                              | `var(--spacing-xs)` / `var(--spacing-md)` / `var(--spacing-xl)`                 |
 
 ## Theme gaps
 

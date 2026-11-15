@@ -275,14 +275,14 @@
             class="sticky top-0 flex h-dvh max-h-full flex-col items-center justify-center gap-(--spacing-md) p-(--spacing-lg) text-center"
           >
             <span
-              class="flex size-12 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised)"
+              class="flex size-12 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"
             >
               <i
                 class="ai ai-cloud-upload text-body-lg leading-none text-(--text-default)"
                 aria-hidden="true"
               />
             </span>
-            <div class="flex max-w-(--container-md) flex-col gap-(--spacing-xxs)">
+            <div class="flex max-w-(--container-md) flex-col gap-(--spacing-2xs)">
               <p class="text-heading-xs text-(--text-default)">Drop your project to deploy it</p>
               <p class="text-pretty text-body-sm text-(--text-muted)">
                 We build a new version of {{ APP.name }}, then you choose where it goes live.
@@ -326,7 +326,7 @@
                       kind="compact"
                     >
                       <template #description>
-                        <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                        <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                           <i
                             class="ai ai-github shrink-0"
                             aria-hidden="true"
@@ -520,7 +520,7 @@
                         :href="`https://${APP.host}`"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                       >
                         <span class="truncate underline-offset-2 group-hover/link:underline">{{
                           APP.host
@@ -587,7 +587,7 @@
               <div
                 class="grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) sm:grid-cols-3 lg:grid-cols-6"
               >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <span class="text-label-sm text-(--text-muted)">Deployment</span>
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                     <Link
@@ -603,13 +603,13 @@
                     />
                   </div>
                 </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <span class="text-label-sm text-(--text-muted)">Domains</span>
                   <div class="flex min-h-7 min-w-0 items-center">
                     <span class="truncate text-body-sm text-(--text-default)">{{ APP.host }}</span>
                   </div>
                 </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <span class="text-label-sm text-(--text-muted)">Status</span>
                   <div class="flex min-h-7 min-w-0 items-center">
                     <StatusIndicator
@@ -618,7 +618,7 @@
                     />
                   </div>
                 </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <span class="text-label-sm text-(--text-muted)">Created</span>
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                     <span class="truncate text-body-sm text-(--text-default)"
@@ -633,7 +633,7 @@
                     />
                   </div>
                 </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <span class="text-label-sm text-(--text-muted)">Source</span>
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -645,7 +645,7 @@
                         APP.repository
                       }}</span>
                     </span>
-                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                    <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                       <i
                         class="ai ai-branch shrink-0 text-(--text-muted)"
                         aria-hidden="true"
@@ -656,7 +656,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <span class="text-label-sm text-(--text-muted)">Framework</span>
                   <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                     <i

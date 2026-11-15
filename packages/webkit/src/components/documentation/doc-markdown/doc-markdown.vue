@@ -117,7 +117,7 @@
       h(HoverCardTrigger, null, () =>
         h('button', { type: 'button', 'data-doc-chrome': '', class: TOOLTIP_TERM_CLASS }, children)
       ),
-      h(HoverCardContent, { 'data-doc-chrome': '', class: 'gap-(--spacing-xxs)' }, () => [
+      h(HoverCardContent, { 'data-doc-chrome': '', class: 'gap-(--spacing-2xs)' }, () => [
         title ? h('span', { class: 'text-body-sm text-(--text-default)' }, title) : null,
         tip ? h('span', { class: 'text-pretty text-body-sm text-(--text-muted)' }, tip) : null,
         href && linkLabel
@@ -134,7 +134,7 @@
   }
 
   const TABLE_CLASS =
-    'w-full border-separate border-spacing-0 overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-(--text-default)'
+    'w-full border-separate border-spacing-0 overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default)'
   const HEAD_CELL_CLASS =
     'h-11 border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-start align-middle text-label-sm text-(--text-muted) data-[align=center]:text-center data-[align=end]:text-end'
   const BODY_CELL_CLASS =

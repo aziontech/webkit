@@ -287,7 +287,7 @@
         :view-switch="false"
       >
         <template #header>
-          <p class="shrink-0 text-heading-xxs text-(--text-default)">Logs</p>
+          <p class="shrink-0 text-heading-2xs text-(--text-default)">Logs</p>
           <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
             <Tag
               label="Failed on routing rules"

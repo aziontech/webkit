@@ -612,7 +612,7 @@
                             <div
                               v-for="row in group.rows"
                               :key="row.name"
-                              class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-muted) p-(--spacing-sm)"
+                              class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-muted) p-(--spacing-sm)"
                             >
                               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                                 <span class="truncate text-label-sm text-(--text-default)">
@@ -624,7 +624,7 @@
                                 >
                                   <span
                                     tabindex="0"
-                                    class="inline-flex shrink-0 rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                                    class="inline-flex shrink-0 rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                                   >
                                     <Tag
                                       label="Shared"
@@ -803,7 +803,7 @@
                           <li
                             v-for="environment in settings.environments"
                             :key="environment.id"
-                            class="relative flex min-w-0 flex-col before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-elements) before:border-b before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) after:content-[''] last:after:hidden"
+                            class="relative flex min-w-0 flex-col before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-control) before:border-b before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) after:content-[''] last:after:hidden"
                           >
                             <span
                               class="flex min-h-8 min-w-0 items-center justify-between gap-(--spacing-xs)"
@@ -825,7 +825,7 @@
                               <li
                                 v-for="project in environment.projects"
                                 :key="project.id"
-                                class="relative flex min-w-0 before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-elements) before:border-b before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) after:content-[''] last:after:hidden"
+                                class="relative flex min-w-0 before:absolute before:top-0 before:-start-(--tree-rail) before:h-4 before:w-(--tree-rail) before:rounded-es-(--shape-control) before:border-b before:border-s before:border-(--border-default) before:content-[''] after:absolute after:top-4 after:bottom-0 after:-start-(--tree-rail) after:border-s after:border-(--border-default) after:content-[''] last:after:hidden"
                               >
                                 <span
                                   class="flex min-h-8 min-w-0 flex-1 items-center justify-between gap-(--spacing-xs)"
@@ -863,7 +863,7 @@
                         class="flex min-w-0 flex-col items-stretch gap-(--spacing-xs) sm:flex-row sm:items-center"
                       >
                         <span
-                          class="flex min-w-0 shrink-0 flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) sm:w-(--size-40)"
+                          class="flex min-w-0 shrink-0 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) sm:w-(--size-40)"
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
@@ -958,7 +958,7 @@
         <template #actions>
           <p
             v-if="blocker"
-            class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
+            class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-foreground)"
           >
             <i
               class="ai ai-exclamation-triangle shrink-0"

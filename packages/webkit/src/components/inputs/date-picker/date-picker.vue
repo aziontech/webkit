@@ -301,7 +301,7 @@
           :data-state="isOpen ? 'open' : 'closed'"
           :data-disabled="isDisabled || null"
           :data-invalid="field.invalid.value || null"
-          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+          class="inline-flex w-(--container-3xs) max-w-full items-stretch overflow-hidden rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
         >
           <button
             type="button"

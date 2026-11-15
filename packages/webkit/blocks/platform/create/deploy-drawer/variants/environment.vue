@@ -677,7 +677,7 @@
           @submit.prevent="deploy"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Deploy</DrawerTitle>
             </div>
           </PanelHeader>
@@ -702,7 +702,7 @@
                       >
                         <Item.Media>
                           <span
-                            class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                            class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
                               :class="row.icon"
@@ -807,7 +807,7 @@
                               #bottom
                             >
                               <div
-                                class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                                class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
                               >
                                 <Button
                                   :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
@@ -961,7 +961,7 @@
                                           #bottom
                                         >
                                           <div
-                                            class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                                            class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
                                           >
                                             <Button
                                               :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
@@ -1012,7 +1012,7 @@
                       >
                         <Item.Media>
                           <span
-                            class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                            class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
                               class="ai ai-box text-body-xs text-(--text-default)"
@@ -1036,7 +1036,7 @@
                           </Item.Description>
                           <ul
                             v-else
-                            class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xxs) p-0"
+                            class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-2xs) p-0"
                           >
                             <li
                               v-for="domainGroup in project.domains"
@@ -1101,12 +1101,12 @@
                                   </div>
 
                                   <div
-                                    class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                                    class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
                                   >
                                     <div
                                       v-for="domain in domainGroup.domains"
                                       :key="domain"
-                                      class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
+                                      class="flex min-w-0 px-(--spacing-xs) py-(--spacing-2xs)"
                                     >
                                       <Link
                                         :label="domain"
@@ -1119,7 +1119,7 @@
 
                                   <div
                                     v-if="domainGroup.total > domainGroup.domains.length"
-                                    class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                    class="border-t border-(--border-default) p-(--spacing-2xs)"
                                   >
                                     <Button
                                       :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
@@ -1242,7 +1242,7 @@
                     v-for="row in projectCount"
                     :key="row"
                     aria-hidden="true"
-                    class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)"
+                    class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)"
                   >
                     <Skeleton
                       width="var(--size-7)"
@@ -1296,7 +1296,7 @@
                         >
                           <Item.Media>
                             <span
-                              class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                              class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
                                 class="ai ai-box text-body-xs text-(--text-default)"
@@ -1315,7 +1315,7 @@
                                 class="shrink-0"
                               />
                             </span>
-                            <ul class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xxs) p-0">
+                            <ul class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-2xs) p-0">
                               <li
                                 v-for="domainGroup in target.domains"
                                 :key="domainGroup.environment"
@@ -1379,12 +1379,12 @@
                                     </div>
 
                                     <div
-                                      class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                                      class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
                                     >
                                       <div
                                         v-for="domain in domainGroup.domains"
                                         :key="domain"
-                                        class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
+                                        class="flex min-w-0 px-(--spacing-xs) py-(--spacing-2xs)"
                                       >
                                         <Link
                                           :label="domain"
@@ -1397,7 +1397,7 @@
 
                                     <div
                                       v-if="domainGroup.total > domainGroup.domains.length"
-                                      class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                      class="border-t border-(--border-default) p-(--spacing-2xs)"
                                     >
                                       <Button
                                         :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 8a8a637df1e575d34945b10e27cd5d1a440bbf50a43bfe91d5420e81a4f7cdf7
+last_updated: 2026-11-15
+checksum: a41de1d1d76766cffbc62fe84faeb5dbfa6537d7cc71e3a7844c05e92e8011ec
 template: 2
 ---
 
@@ -105,9 +105,9 @@ The investors band: a centered section title over a two-column bento grid where 
 | cell inset             | `var(--spacing-xl)`     |
 | link line offset       | `var(--spacing-md)`     |
 | mark lift              | `var(--spacing-sm)`     |
-| link line gap          | `var(--spacing-xxs)`    |
+| link line gap          | `var(--spacing-2xs)`    |
 | frame rules and marks  | `var(--border-default)` |
-| anchor scroll offset   | `var(--spacing-xxl)`    |
+| anchor scroll offset   | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 

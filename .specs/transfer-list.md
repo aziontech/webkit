@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 5
-checksum: 1158d0d93ae801d385178d1aaf5009941490c47cc024dbf462dc2a9edd8d6f23
+checksum: 27d84ea3e39b3e44561f7fdd1c8649507bc932e93ad563124926784214c71d10
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -176,7 +176,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 | spacing (option padding)  | `var(--spacing-sm)`     |
 | gap (lists + controls)    | `var(--spacing-sm)`     |
 | shape (list)              | `var(--shape-card)`     |
-| shape (option)            | `var(--shape-elements)` |
+| shape (option)            | `var(--shape-control)`  |
 
 ## Theme gaps
 

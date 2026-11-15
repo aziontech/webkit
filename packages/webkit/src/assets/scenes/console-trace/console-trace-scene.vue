@@ -84,7 +84,7 @@
       <div
         class="flex shrink-0 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs)"
       >
-        <span class="flex min-w-0 items-center gap-(--spacing-xxs) text-label-sm">
+        <span class="flex min-w-0 items-center gap-(--spacing-2xs) text-label-sm">
           <i
             :class="CONSOLE_TRACE_FUNCTION.icon"
             class="shrink-0 leading-none text-(--primary)"
@@ -155,7 +155,7 @@
           >
             <FlowAnchor>
               <div
-                class="flex w-full items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"
+                class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
               >
                 <i
                   :class="node.icon"
@@ -181,7 +181,7 @@
               <div
                 v-for="field in node.fields"
                 :key="field.label"
-                class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+                class="flex min-w-0 flex-col gap-(--spacing-2xs)"
               >
                 <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
                 <span class="truncate text-body-xs text-(--text-default)">{{ field.value }}</span>

@@ -179,14 +179,14 @@
           <i
             :class="resolvedIcon"
             :data-severity="normalizedSeverity"
-            class="size-3.5 text-label-md leading-none data-[severity=info]:text-(--info-contrast) data-[severity=success]:text-(--success-contrast) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:text-(--danger-contrast)"
+            class="size-3.5 text-label-md leading-none data-[severity=info]:text-(--info-foreground) data-[severity=success]:text-(--success-foreground) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:text-(--danger-foreground)"
             aria-hidden="true"
           />
         </span>
-        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
           <div
             v-if="title"
-            class="text-heading-xxs text-(--text-default)"
+            class="text-heading-2xs text-(--text-default)"
             :data-testid="`${testId}__title`"
           >
             {{ title }}

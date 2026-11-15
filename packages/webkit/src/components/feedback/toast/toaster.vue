@@ -470,7 +470,7 @@
           :data-removing="item.removing || null"
           :tabindex="region.live.indexOf(item) === 0 ? -1 : undefined"
           :style="toastStyle(region, item, indexInAll)"
-          class="will-change-transform rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit motion-reduce:transition-none"
+          class="will-change-transform rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) transition-[transform,opacity,height] duration-moderate-02 ease-productive-entrance data-[removing]:duration-slow-01 data-[removing]:ease-productive-exit motion-reduce:transition-none"
         >
           <div :ref="(el) => setCardEl(item.entry.id, el)">
             <slot
@@ -485,7 +485,7 @@
                 <div
                   v-if="item.entry.progress !== undefined"
                   :data-testid="`${testId}__progress`"
-                  class="flex items-center gap-(--spacing-xs) pt-(--spacing-xxs)"
+                  class="flex items-center gap-(--spacing-xs) pt-(--spacing-2xs)"
                 >
                   <Progress
                     :value="progressOf(item.entry)"

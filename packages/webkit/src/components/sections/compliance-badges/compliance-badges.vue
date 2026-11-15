@@ -68,7 +68,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="title.length > 0"
@@ -112,11 +112,11 @@
                   class="h-16 w-24 object-contain"
                 />
                 <span
-                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pe-(--spacing-sm) ps-(--spacing-xxs) text-overline-sm text-(--text-default)"
+                  class="inline-flex h-7 items-center gap-(--spacing-xs) whitespace-nowrap rounded-full border border-(--border-muted) bg-(--bg-surface-raised) pe-(--spacing-sm) ps-(--spacing-2xs) text-overline-sm text-(--text-default)"
                 >
                   <span
                     aria-hidden="true"
-                    class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success-contrast) text-tag-sm text-(--success)"
+                    class="flex size-5 shrink-0 items-center justify-center rounded-full bg-(--success-foreground) text-tag-sm text-(--success)"
                   >
                     <i class="ai ai-check text-[length:inherit] leading-none" />
                   </span>

@@ -325,7 +325,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="hasHeader ? title : undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasRows"
@@ -342,7 +342,7 @@
           kind="left"
           :framed="false"
           :title="title"
-          class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-xxl)"
+          class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-2xl)"
         />
 
         <div
@@ -429,7 +429,7 @@
                 <p
                   v-if="narrowed(facet.key, facet.options).length === 0"
                   role="status"
-                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
                   {{ t('listingBrowser.noMatch') }}
                 </p>
@@ -476,7 +476,7 @@
                 <p
                   v-if="narrowed(SORT_KEY, sorts).length === 0"
                   role="status"
-                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
                   {{ t('listingBrowser.noMatch') }}
                 </p>

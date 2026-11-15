@@ -31,7 +31,7 @@ export const FOUNDATIONS: FoundationPage[] = [
   {
     slug: 'spacing',
     title: 'Spacing',
-    summary: 'The semantic rhythm (xxs to xxl) and the numeric scale.',
+    summary: 'The semantic rhythm (2xs to 2xl) and the numeric scale.',
     tokens: 'spacing'
   },
   {

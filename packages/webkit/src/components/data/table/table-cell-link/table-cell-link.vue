@@ -108,7 +108,7 @@
         v-bind="linkAttrs"
         :data-link="isLink || null"
         :data-testid="`${testId}__link`"
-        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline outline-none data-[link]:cursor-pointer focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline outline-none data-[link]:cursor-pointer focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
         @click.stop
       >
         <span

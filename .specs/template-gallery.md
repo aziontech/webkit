@@ -7,7 +7,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 1e1c5ffb53fbdecbcab9da1e4c27be6bb123ec83def175225ac7d03ce0aabb40
+checksum: da68ccf1f1ab148b080d3995e02a490dc2200b05d44e26bc17cb705699184ba6
 ---
 
 # TemplateGallery — Component Spec
@@ -119,10 +119,10 @@ _none_
 | card rhythm | `var(--spacing-md)` |
 | mark tile fill | `var(--bg-surface-raised)` |
 | mark tile rule | `var(--border-muted)` |
-| mark tile shape | `var(--shape-elements)` |
+| mark tile shape | `var(--shape-control)` |
 | deploy prefix mark | `var(--primary)` |
 | card link focus ring | `var(--ring-color)` |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

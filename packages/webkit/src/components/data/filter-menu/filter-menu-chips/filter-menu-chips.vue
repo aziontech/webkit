@@ -111,7 +111,7 @@
         @click="(event) => onEdit(event, field)"
         @remove="(event) => onRemove(event, field)"
       >
-        <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+        <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
           <bdi class="truncate text-(--text-muted)">{{ field.label }}</bdi>
           <span
             v-if="avatarsOf(field).length"

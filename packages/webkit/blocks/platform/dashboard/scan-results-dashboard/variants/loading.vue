@@ -527,7 +527,7 @@
       >
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Verdicts</ChartCard.Title>
               <Hint text="Every item analyzed in the period, by the verdict it received." />
             </span>
@@ -548,7 +548,7 @@
 
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Sources</ChartCard.Title>
               <Hint
                 text="Where the items came from: scanned inline, sent through the API, uploaded by hand or picked up by a scheduled scan."
@@ -595,7 +595,7 @@
                 v-else
                 class="flex flex-col gap-(--spacing-md)"
               >
-                <div class="flex flex-col items-start gap-(--spacing-xxs)">
+                <div class="flex flex-col items-start gap-(--spacing-2xs)">
                   <p class="text-pretty text-body-sm text-(--text-default)">
                     {{ formatters.count(summary.held) }} deliveries held for a verdict now,
                     {{ formatters.count(summary.heldLast24h) }} in the last 24 hours.
@@ -606,7 +606,7 @@
                     size="small"
                   />
                 </div>
-                <div class="flex flex-col items-start gap-(--spacing-xxs)">
+                <div class="flex flex-col items-start gap-(--spacing-2xs)">
                   <p class="text-pretty text-body-sm text-(--text-default)">
                     {{ formatters.count(summary.alertsOpen) }} open alerts of
                     {{ formatters.count(summary.alertsTotal) }} for items delivered before they were
@@ -625,7 +625,7 @@
 
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Submissions</ChartCard.Title>
               <Hint
                 text="Every item sent for analysis, newest first, with its verdict and where it came from."

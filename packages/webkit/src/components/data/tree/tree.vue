@@ -474,7 +474,7 @@
     <div
       v-if="loading"
       aria-hidden="true"
-      class="flex flex-col gap-(--spacing-xxs)"
+      class="flex flex-col gap-(--spacing-2xs)"
     >
       <Skeleton
         v-for="width in SKELETON_WIDTHS"
@@ -530,7 +530,7 @@
                 class="leading-none"
               />
             </span>
-            <span class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xxs)">
+            <span class="flex min-w-0 flex-1 items-baseline gap-(--spacing-2xs)">
               <span
                 class="min-w-0 truncate text-label-md text-(--text-default) group-data-[disabled]/tree-row:text-(--text-disabled)"
               >

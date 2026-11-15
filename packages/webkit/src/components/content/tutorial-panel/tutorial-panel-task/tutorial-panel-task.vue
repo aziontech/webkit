@@ -57,11 +57,11 @@
     :data-testid="testId"
     :data-status="status"
     :aria-current="status === 'current' ? 'step' : undefined"
-    class="group/task flex w-full items-start gap-(--spacing-xxs)"
+    class="group/task flex w-full items-start gap-(--spacing-2xs)"
   >
     <span
       aria-hidden="true"
-      class="flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[status=current]/task:border-(--secondary) group-data-[status=current]/task:text-(--text-default) group-data-[status=complete]/task:border-(--secondary) group-data-[status=complete]/task:bg-(--secondary) group-data-[status=complete]/task:text-(--secondary-contrast) motion-reduce:transition-none"
+      class="flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[status=current]/task:border-(--secondary) group-data-[status=current]/task:text-(--text-default) group-data-[status=complete]/task:border-(--secondary) group-data-[status=complete]/task:bg-(--secondary) group-data-[status=complete]/task:text-(--secondary-foreground) motion-reduce:transition-none"
     >
       <span
         v-if="status === 'complete'"
@@ -69,7 +69,7 @@
       />
       <span v-else>{{ index }}</span>
     </span>
-    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
       <span
         class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[status=current]/task:text-(--text-default) group-data-[status=complete]/task:text-(--text-default) motion-reduce:transition-none"
         >{{ title }}</span

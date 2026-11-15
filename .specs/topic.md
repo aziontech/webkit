@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 9b4ee388cbbe6590cbdd409ad415102b8e4960a3d3d26a5df2f0e03ad4f7788b
+checksum: ac21027aceed2079c7a128328c1d230d1eaedab83d9a7fdd2d9cbc881916f186
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -115,7 +115,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 | focus ring                         | `var(--ring-color)` on `var(--bg-canvas)`                                                   |
 | spacing (headline row to sentence) | `var(--spacing-sm)`                                                                         |
 | spacing (glyph to headline)        | `var(--spacing-xs)`                                                                         |
-| spacing (headline to arrow)        | `var(--spacing-xxs)`                                                                        |
+| spacing (headline to arrow)        | `var(--spacing-2xs)`                                                                        |
 
 ## Theme gaps
 

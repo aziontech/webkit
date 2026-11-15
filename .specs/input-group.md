@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 9cc7498eba58cf4cbbf367893574944370502f6f03cd6051ab8025289cd88cab
+checksum: 4b498f8a72ff60af717c0a4b79ffa59207690c2af1a424b7d72b25a19278364d
 created: 2026-07-01
 last_updated: 2026-11-15
 ---
@@ -185,8 +185,8 @@ Root props:
 - Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
 - Disabled: `bg-(--bg-disabled)`, `text-(--text-disabled)`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
 - Child seams (applied by the root via Tailwind child selectors):
-  - `[&>*:first-child]:rounded-l-(--shape-elements)` and `[&>*:not(:first-child)]:rounded-l-none`
-  - `[&>*:last-child]:rounded-r-(--shape-elements)` and `[&>*:not(:last-child)]:rounded-r-none`
+  - `[&>*:first-child]:rounded-l-(--shape-control)` and `[&>*:not(:first-child)]:rounded-l-none`
+  - `[&>*:last-child]:rounded-r-(--shape-control)` and `[&>*:not(:last-child)]:rounded-r-none`
   - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
   - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
 
@@ -208,7 +208,7 @@ Root props:
 | root surface (disabled) | `var(--bg-disabled)`                                                                       |
 | root text (disabled)    | `var(--text-disabled)`                                                                     |
 | root border width       | `border` (Tailwind utility)                                                                |
-| root shape              | `var(--shape-elements)`                                                                    |
+| root shape              | `var(--shape-control)`                                                                    |
 | root height (small)     | `h-7` (Tailwind utility)                                                                   |
 | root height (medium)    | `h-8` (Tailwind utility)                                                                   |
 | root height (large)     | `h-10` (Tailwind utility)                                                                  |

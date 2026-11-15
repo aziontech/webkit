@@ -163,7 +163,7 @@
             :checked="enabled(module.key)"
             :disabled="module.locked"
           />
-          <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+          <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
             <span class="text-label-md text-(--text-default)">{{ module.title }}</span>
             <span class="text-body-xs text-(--text-muted)">{{ module.description }}</span>
             <span
@@ -184,7 +184,7 @@
       <span class="mt-(--spacing-sm) text-label-md text-(--text-default)">Debug Rules</span>
       <span class="flex items-start gap-(--spacing-sm)">
         <LegacySwitch :checked="true" />
-        <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="text-label-md text-(--text-default)">Active</span>
           <span class="text-body-xs text-(--text-muted)">
             Rules that were successfully executed will be shown under the $traceback field in Data

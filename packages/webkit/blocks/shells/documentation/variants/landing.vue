@@ -237,7 +237,7 @@
     :sections="sections"
     home="/docs"
   >
-    <article class="layout-column layout-boundary-inline flex flex-col pb-(--spacing-xxl)">
+    <article class="layout-column layout-boundary-inline flex flex-col pb-(--spacing-2xl)">
       <DocHero
         title="Welcome to Azion Docs"
         description="We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts."
@@ -257,7 +257,7 @@
       </DocHero>
 
       <DocProse>
-        <div class="flex flex-col gap-(--spacing-xxl)">
+        <div class="flex flex-col gap-(--spacing-2xl)">
           <section
             aria-labelledby="start-by-interface"
             class="flex flex-col"
@@ -439,7 +439,7 @@
           </section>
         </div>
       </DocProse>
-      <div class="mt-(--spacing-xxl)">
+      <div class="mt-(--spacing-2xl)">
         <DocPrevNext :next="{ title: 'Agent setup', href: '/docs/agent-setup' }" />
       </div>
     </article>

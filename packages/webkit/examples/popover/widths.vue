@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-(--spacing-xxl) p-(--spacing-xxl)">
+  <div class="flex flex-wrap items-center gap-(--spacing-2xl) p-(--spacing-2xl)">
     <PopoverRoot
       placement="bottom-start"
       size="small"

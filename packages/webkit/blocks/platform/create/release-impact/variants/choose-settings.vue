@@ -272,7 +272,7 @@
                           </span>
                         </Field.Title>
                         <Field.Description>{{ entry.policy }}</Field.Description>
-                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs)">
+                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-2xs)">
                           <Tag
                             v-for="name in entry.environments.slice(0, ENVIRONMENT_LIMIT)"
                             :key="name"
@@ -317,11 +317,11 @@
                 <div
                   v-for="entry in group.items"
                   :key="entry.id"
-                  class="flex min-w-0 flex-col items-start gap-(--spacing-xs) rounded-(--shape-elements) border border-dashed border-(--border-muted) p-(--spacing-sm)"
+                  class="flex min-w-0 flex-col items-start gap-(--spacing-xs) rounded-(--shape-control) border border-dashed border-(--border-muted) p-(--spacing-sm)"
                 >
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-exclamation-circle shrink-0 text-(--warning-contrast)"
+                      class="ai ai-exclamation-circle shrink-0 text-(--warning-foreground)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">

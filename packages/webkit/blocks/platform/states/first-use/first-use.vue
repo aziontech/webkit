@@ -145,7 +145,7 @@
               aria-hidden="true"
             >
               <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
                   class="ai-cor ai-next text-body-lg leading-none text-(--text-default)"
@@ -153,7 +153,7 @@
                 />
               </span>
               <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
                   class="ai-cor ai-react text-body-lg leading-none text-(--text-default)"
@@ -161,7 +161,7 @@
                 />
               </span>
               <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
                   class="ai-cor ai-vue text-body-lg leading-none text-(--text-default)"
@@ -169,7 +169,7 @@
                 />
               </span>
               <span
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
                   class="ai-cor ai-svelte text-body-lg leading-none text-(--text-default)"
@@ -178,8 +178,8 @@
               </span>
             </span>
 
-            <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <span class="text-heading-xxs text-(--text-default)"
+            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+              <span class="text-heading-2xs text-(--text-default)"
                 >Start from a Catalog template</span
               >
               <span class="text-pretty text-body-sm text-(--text-muted)"
@@ -212,7 +212,7 @@
               <span
                 v-for="agent in agentMarks"
                 :key="agent.name"
-                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <Logo
                   :name="agent.name"
@@ -224,8 +224,8 @@
               </span>
             </span>
 
-            <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <span class="text-heading-xxs text-(--text-default)">Set up your coding agent</span>
+            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+              <span class="text-heading-2xs text-(--text-default)">Set up your coding agent</span>
               <span class="text-pretty text-body-sm text-(--text-muted)"
                 >Give your editor a prompt that teaches it to build and deploy here.</span
               >

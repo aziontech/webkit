@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 2
 template: 2
-checksum: 134629a4f5fab879fe6db827f3ee17ea4eda6a923a140aef1b2fbe87ee9e80e2
+checksum: 377f0126cb99f3356ac7f19e86ce575a9f7b24324057b1e254815fe63df6c28c
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # ChatMessage — Component Spec
@@ -152,8 +152,8 @@ _No motion of its own — `AiLoading` owns the pulsing dots shown while `pending
 | author line                    | `.text-label-sm`, `var(--text-default)`; time `.text-body-xs`, `var(--text-muted)` |
 | content                        | `.text-body-md`, `var(--text-default)`  |
 | system line                    | `.text-body-sm`, `var(--text-muted)`    |
-| error line                     | `.text-body-sm`, `var(--danger-contrast)` |
-| gaps                           | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-xxs)` |
+| error line                     | `.text-body-sm`, `var(--danger-foreground)` |
+| gaps                           | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-2xs)` |
 
 ## Theme gaps
 

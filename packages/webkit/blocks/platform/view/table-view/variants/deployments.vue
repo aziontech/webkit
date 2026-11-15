@@ -319,7 +319,7 @@
                   @row-click="(_event, row) => openDeployment(row)"
                 >
                   <template #cell-version="{ row }">
-                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                    <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                       <span class="truncate tabular-nums text-body-sm text-(--text-default)">
                         {{ row.version }}
                       </span>

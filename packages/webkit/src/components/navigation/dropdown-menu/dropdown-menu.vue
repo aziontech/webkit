@@ -170,7 +170,7 @@
           <div
             v-if="$slots['top']"
             :data-testid="`${testId}__top`"
-            class="sticky top-0 z-10 bg-(--bg-surface) px-(--spacing-xxs) pb-(--spacing-xxs)"
+            class="sticky top-0 z-10 bg-(--bg-surface) px-(--spacing-2xs) pb-(--spacing-2xs)"
           >
             <slot name="top" />
           </div>
@@ -188,7 +188,7 @@
           <div
             v-if="$slots['bottom']"
             :data-testid="`${testId}__bottom`"
-            class="sticky bottom-0 z-10 bg-(--bg-surface) px-(--spacing-xxs) pt-(--spacing-xxs)"
+            class="sticky bottom-0 z-10 bg-(--bg-surface) px-(--spacing-2xs) pt-(--spacing-2xs)"
           >
             <slot name="bottom" />
           </div>

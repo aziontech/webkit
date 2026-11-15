@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 5e34aca1c2cf9d68feabdeaf0c9d1775e9ce0aa01a49a9ed9233d81a1b242703
+checksum: c642a5c3c12fbe121703511d608fab32970e97ddc7ddf6df8f9756b663fec8f2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -108,9 +108,9 @@ _none_
 
 | Region        | Token                                                                               |
 | ------------- | ----------------------------------------------------------------------------------- |
-| token surface | `var(--bg-surface)`, border `var(--border-default)`, radius `var(--shape-elements)` |
-| error token   | border `var(--danger-border)`, text `var(--danger-contrast)`                        |
-| warning token | border `var(--warning-border)`, text `var(--warning-contrast)`                      |
+| token surface | `var(--bg-surface)`, border `var(--border-default)`, radius `var(--shape-control)` |
+| error token   | border `var(--danger-border)`, text `var(--danger-foreground)`                        |
+| warning token | border `var(--warning-border)`, text `var(--warning-foreground)`                      |
 | name / meta   | `var(--text-default)` / `var(--text-muted)`                                         |
 
 ## Theme gaps

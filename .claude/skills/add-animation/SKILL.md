@@ -59,7 +59,7 @@ The consumer-facing form of all of this — including the full glitch catalog �
 
 The theme is CSS-first (Tailwind v4) — the old `semantic/animations.js` file and the v3 plugin are gone.
 An animation is now **two edits in two files**, both under
-`packages/theme/src/tokens/primitives/animations/`, compiled into `dist/v4/globals.css`
+`packages/theme/src/tokens/primitives/animations/`, compiled into `dist/globals.css`
 by `pnpm --filter @aziontech/theme build:tokens`:
 
 In the `animate` map of **`animate.js`** (emitted as `@theme { --animate-<name>: … }`, which
@@ -115,7 +115,7 @@ Add a row to the component's `## Theme gaps` table in `.specs/<component>.md`:
 ### 3. Regenerate the catalog
 
 Build the theme first (`pnpm --filter @aziontech/theme build:tokens`) — the catalog reads the
-token source, but nothing renders until `dist/v4/globals.css` carries the utility and its
+token source, but nothing renders until `dist/globals.css` carries the utility and its
 `@keyframes`. Then run `pnpm --filter @aziontech/webkit catalog:build` (or
 `node packages/webkit/scripts/build-catalog.mjs`).
 Confirm `<name>` now appears in `catalog.json → tokens.animations`. This is what makes

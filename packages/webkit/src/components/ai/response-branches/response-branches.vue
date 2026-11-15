@@ -65,7 +65,7 @@
       :aria-label="ariaLabel || t('responseBranches.label')"
       :data-testid="`${testId}__pager`"
       :data-disabled="disabled || null"
-      class="group inline-flex items-center gap-(--spacing-xxs) self-start"
+      class="group inline-flex items-center gap-(--spacing-2xs) self-start"
     >
       <IconButton
         icon="ai ai-chevron-left"

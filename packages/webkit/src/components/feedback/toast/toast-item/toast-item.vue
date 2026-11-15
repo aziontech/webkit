@@ -56,7 +56,7 @@
     :role="role"
     :data-testid="testId"
     :data-severity="severity"
-    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
+    class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-control) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
       <span
@@ -72,16 +72,16 @@
           v-else
           :class="icon"
           :data-severity="severity"
-          class="leading-none text-(--text-muted) data-[severity=success]:text-(--success-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:text-(--danger-contrast)"
+          class="leading-none text-(--text-muted) data-[severity=success]:text-(--success-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) data-[severity=danger]:text-(--danger-foreground)"
         />
       </span>
-      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
         <slot />
       </div>
     </div>
     <div
       v-if="$slots['trailing']"
-      class="-my-(--spacing-xxs) -me-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-xxs)"
+      class="-my-(--spacing-2xs) -me-(--spacing-xs) flex shrink-0 items-center gap-(--spacing-2xs)"
     >
       <slot name="trailing" />
     </div>

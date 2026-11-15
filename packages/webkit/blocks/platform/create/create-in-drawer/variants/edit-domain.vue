@@ -242,7 +242,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Edit Domain</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Change where it answers, the address, or the certificate it is served with.

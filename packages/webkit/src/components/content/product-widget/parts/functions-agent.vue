@@ -141,7 +141,7 @@
         tag="ol"
         enter-from-class="opacity-0!"
         :style="trackStyle"
-        class="m-0 flex list-none flex-col gap-(--spacing-lg) p-0 pt-(--spacing-xl) pb-(--spacing-xxs)"
+        class="m-0 flex list-none flex-col gap-(--spacing-lg) p-0 pt-(--spacing-xl) pb-(--spacing-2xs)"
       >
         <li
           v-for="(entry, index) in shown"
@@ -151,7 +151,7 @@
         >
           <p
             v-if="entry.kind === 'user'"
-            class="m-0 ms-(--spacing-xl) rounded-(--shape-elements) [border:var(--illustration-rim-width,var(--border-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)"
+            class="m-0 ms-(--spacing-xl) rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)"
           >
             {{ entry.text }}
           </p>
@@ -170,7 +170,7 @@
 
           <div
             v-else
-            class="ms-(--spacing-lg) flex flex-col overflow-hidden rounded-(--shape-elements) [border:var(--illustration-rim-width,var(--border-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)]"
+            class="ms-(--spacing-lg) flex flex-col overflow-hidden rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)]"
           >
             <div class="flex items-center gap-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)">
               <i
@@ -191,7 +191,7 @@
             </div>
             <dl
               v-if="entry.state !== 'running'"
-              class="m-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-xxs) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm) text-label-code-sm"
+              class="m-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-2xs) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm) text-label-code-sm"
             >
               <template
                 v-for="[term, value] in entry.detail"
@@ -207,7 +207,7 @@
     </div>
 
     <div
-      class="flex shrink-0 items-end gap-(--spacing-sm) rounded-(--shape-elements) [border:var(--illustration-rim-width,var(--border-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] py-(--spacing-sm) ps-(--spacing-md) pe-(--spacing-sm)"
+      class="flex shrink-0 items-end gap-(--spacing-sm) rounded-(--shape-control) [border:var(--illustration-rim-width,var(--border-width-2))_solid_transparent] [background-image:var(--illustration-rim-layers,linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--illustration-fill,var(--bg-surface)),var(--illustration-fill,var(--bg-surface))))] [background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] [background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] py-(--spacing-sm) ps-(--spacing-md) pe-(--spacing-sm)"
     >
       <p class="m-0 min-h-10 min-w-0 flex-1 self-center text-body-sm">
         <span

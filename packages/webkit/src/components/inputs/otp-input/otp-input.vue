@@ -194,7 +194,7 @@
         :data-testid="`${testId}__box`"
         :data-state="box.char ? 'filled' : 'empty'"
         :data-active="focused && box.index === activeIndex ? '' : null"
-        class="pointer-events-none flex h-10 w-10 min-w-6 shrink items-center justify-center rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) text-label-lg text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[active]:border-(--border-strong) data-[active]:ring-2 data-[active]:ring-(--ring-color) data-[active]:ring-offset-2 data-[active]:ring-offset-(--bg-canvas) group-data-[invalid]:border-(--danger-border) group-data-[disabled]:bg-(--bg-disabled) group-data-[disabled]:text-(--text-disabled)"
+        class="pointer-events-none flex h-10 w-10 min-w-6 shrink items-center justify-center rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-label-lg text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[active]:border-(--border-strong) data-[active]:ring-2 data-[active]:ring-(--ring-color) data-[active]:ring-offset-2 data-[active]:ring-offset-(--bg-canvas) group-data-[invalid]:border-(--danger-border) group-data-[disabled]:bg-(--bg-disabled) group-data-[disabled]:text-(--text-disabled)"
         >{{ box.char }}</span
       >
     </template>
@@ -218,7 +218,7 @@
       :aria-invalid="isInvalid || undefined"
       :aria-required="isRequired || undefined"
       :data-testid="`${testId}__input`"
-      class="absolute inset-0 z-(--z-input-field) h-full w-full cursor-text appearance-none border-0 bg-transparent p-0 text-transparent caret-transparent outline-none selection:bg-transparent disabled:cursor-not-allowed"
+      class="absolute inset-0 z-(--z-control) h-full w-full cursor-text appearance-none border-0 bg-transparent p-0 text-transparent caret-transparent outline-none selection:bg-transparent disabled:cursor-not-allowed"
       v-bind="passthroughAttrs"
       @input="onInput"
       @paste="onPaste"

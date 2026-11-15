@@ -59,10 +59,10 @@
         class="flex min-w-0 items-start gap-(--spacing-xs)"
       >
         <i
-          class="ai ai-check mt-0.5 shrink-0 text-body-sm text-(--success-contrast)"
+          class="ai ai-check mt-0.5 shrink-0 text-body-sm text-(--success-foreground)"
           aria-hidden="true"
         />
-        <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span
             dir="auto"
             class="break-words text-label-sm text-(--text-default)"

@@ -393,3 +393,68 @@ test('a rename whose new name prefixes the old one still rewrites the sub-compon
   assert.match(source, /<CommandItem \/><ResizablePane \/>/)
   assert.equal(migrateSource(source, v6).source, source)
 })
+
+test('migrateTokens renames theme variables and utilities, and leaves look-alikes alone', async () => {
+  const { migrateTokens } = await import('../../src/cli/migrate-tokens.js')
+  const tokens = loadMigration(6).tokens
+  const sfc = [
+    '<template>',
+    '  <div class="text-(--primary-contrast) bg-(--primary) p-(--spacing-xxs) gap-(--spacing-xxl) text-heading-xxs hover:bg-danger-contrast border-0 data-open:animate-slide-in-left" />',
+    '  <pre class="text-(--code-sintax-keyword) w-(--border-2) rounded-(--shape-elements) z-(--z-input-overlay)" />',
+    '  <p class="bg-contrast text-(--text-contrast)" />',
+    '</template>',
+    '<style>',
+    '.x { color: var(--danger-contrast); font-size: var(--text-body-xxs-font-size); }',
+    '</style>'
+  ].join('\n')
+  const { source, changes } = migrateTokens(sfc, tokens)
+  assert.match(
+    source,
+    /text-\(--primary-foreground\) bg-\(--primary\) p-\(--spacing-2xs\) gap-\(--spacing-2xl\) text-heading-2xs hover:bg-danger-foreground border-0 data-open:animate-slide-in-start/
+  )
+  assert.match(
+    source,
+    /text-\(--code-syntax-keyword\) w-\(--border-width-2\) rounded-\(--shape-control\) z-\(--z-control-overlay\)/
+  )
+  assert.match(source, /bg-contrast text-\(--text-contrast\)/)
+  assert.match(source, /var\(--danger-foreground\); font-size: var\(--text-body-2xs-font-size\)/)
+  assert.ok(changes.includes('--primary-contrast → --primary-foreground'))
+})
+
+test('migrateTokens rewrites renamed theme imports and warns on removed names and rtl swaps', async () => {
+  const { migrateTokens } = await import('../../src/cli/migrate-tokens.js')
+  const tokens = loadMigration(6).tokens
+  const ts = [
+    "import { textsData } from '@aziontech/theme/texts'",
+    "import { layoutsData as layout, layoutsUtilities } from '@aziontech/theme/layouts'",
+    "document.documentElement.classList.add('azion', 'azion-dark')",
+    "const lh = 'var(--line-height-4)'",
+    "const cls = 'animate-slide-in-right rtl:animate-slide-in-left'",
+    'const text = value.toString()'
+  ].join('\n')
+  const { source, warnings } = migrateTokens(ts, tokens)
+  assert.match(source, /import \{ typography as textsData \} from '@aziontech\/theme\/typography'/)
+  assert.match(
+    source,
+    /import \{ layout as layout, layoutUtilities as layoutsUtilities \} from '@aziontech\/theme\/layout'/
+  )
+  assert.match(source, /animate-slide-in-end rtl:animate-slide-in-start/)
+  assert.ok(warnings.some((w) => w.startsWith('azion-dark was removed in v6')))
+  assert.ok(warnings.some((w) => w.startsWith('--line-height-4 was removed in v6')))
+  assert.ok(warnings.some((w) => w.includes('rtl: variant')))
+  assert.ok(!warnings.some((w) => w.startsWith('toString')))
+})
+
+test('planMigrate rewrites tokens in plain CSS files too', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'webkit-migrate-tokens-'))
+  try {
+    writeFileSync(join(dir, 'app.css'), '.hero { padding: var(--spacing-xxl); }\n')
+    planMigrate(dir)
+    assert.equal(
+      readFileSync(join(dir, 'app.css'), 'utf8'),
+      '.hero { padding: var(--spacing-2xl); }\n'
+    )
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})

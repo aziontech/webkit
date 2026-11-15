@@ -107,7 +107,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="flex w-[min(var(--container-xl),calc(100vw_-_var(--spacing-xxl)*3))] flex-col items-center gap-(--spacing-md)"
+    class="flex w-[min(var(--container-xl),calc(100vw_-_var(--spacing-2xl)*3))] flex-col items-center gap-(--spacing-md)"
   >
     <ToggleGroup
       v-if="options.length > 1"

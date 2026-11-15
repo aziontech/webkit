@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 736fe694b89e42437412eec067954431415f54de63505354f53631b83791593a
+checksum: 70d2a8d380211ba9e32a5828d16369a57496456066bfcf0c077e323f9c27d881
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -84,13 +84,13 @@ _none_
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| Region     | Token (DESIGN.md)      |
+| ---------- | ---------------------- |
+| typography | .text-body-sm          |
+| text       | `var(--text-default)`  |
+| spacing    | `var(--spacing-3)`     |
+| shape      | `var(--shape-control)` |
+| ring       | `var(--ring-color)`    |
 
 ## Theme gaps
 

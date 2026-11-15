@@ -361,18 +361,18 @@
             <div
               v-for="group in RAIL"
               :key="group.key"
-              class="flex flex-col gap-(--spacing-xxs)"
+              class="flex flex-col gap-(--spacing-2xs)"
             >
               <span
                 v-if="group.label"
-                class="px-(--spacing-sm) pb-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                class="px-(--spacing-sm) pb-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >{{ group.label }}</span
               >
               <span
                 v-for="entry in group.entries"
                 :key="entry.key"
                 :data-active="entry.key === rail || null"
-                class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-sm) text-label-md text-(--text-default) data-active:bg-(--bg-selected)"
+                class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-sm) text-label-md text-(--text-default) data-active:bg-(--bg-selected)"
               >
                 <i
                   :class="entry.icon"
@@ -412,7 +412,7 @@
             </ol>
             <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
               <span
-                class="flex h-8 w-56 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm)"
+                class="flex h-8 w-56 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm)"
               >
                 <i
                   class="ai ai-search text-(--text-muted)"

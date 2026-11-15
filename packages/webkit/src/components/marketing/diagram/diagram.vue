@@ -159,7 +159,7 @@
         v-for="chip in labels"
         :key="chip.key"
         :data-active="chip.active || null"
-        class="absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
+        class="absolute -translate-1/2 rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm whitespace-nowrap text-(--text-muted) data-[active]:text-(--text-default)"
         :style="at(chip.x, chip.y)"
       >
         {{ chip.label }}

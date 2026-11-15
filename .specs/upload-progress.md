@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: a524f4c1c90256a4ffdc22b2d0463ff260e98205eb06161dbcf0b84fa4aad843
+checksum: b951b4e8528d2a8ccc9a7a9c79575faea4f72713987b5ff199039e15c96f0fd9
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'cancel
 | ----------- | ----------------------------------------------------------------------------------------------------------------- |
 | card        | `var(--bg-surface-raised)`, border `var(--border-default)`, radius `var(--shape-card)`, shadow `var(--shadow-sm)` |
 | header text | `var(--text-default)`; counts and sizes `var(--text-muted)`                                                       |
-| row error   | `var(--danger-contrast)`                                                                                          |
+| row error   | `var(--danger-foreground)`                                                                                          |
 
 ## Theme gaps
 

@@ -47,11 +47,11 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    class="relative inline-flex h-7 min-w-16 items-center rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-muted) has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-(--ring-color) has-[select:focus-visible]:ring-offset-2 has-[select:focus-visible]:ring-offset-(--bg-canvas)"
+    class="relative inline-flex h-7 min-w-16 items-center rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-muted) has-[select:focus-visible]:ring-2 has-[select:focus-visible]:ring-(--ring-color) has-[select:focus-visible]:ring-offset-2 has-[select:focus-visible]:ring-offset-(--bg-canvas)"
   >
     <select
       :value="model"
-      class="h-full w-full cursor-pointer appearance-none rounded-(--shape-elements) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
+      class="h-full w-full cursor-pointer appearance-none rounded-(--shape-control) border-0 bg-transparent ps-(--spacing-sm) pe-7 text-label-sm text-(--text-muted) focus-visible:outline-none pointer-coarse:-my-2 pointer-coarse:h-11 [&>option]:bg-(--bg-surface) [&>option]:text-(--text-default)"
       :aria-label="t('pagination.pageSize')"
       @change="handleChange"
     >

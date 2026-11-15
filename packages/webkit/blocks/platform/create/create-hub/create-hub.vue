@@ -503,7 +503,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -580,7 +580,7 @@
               class="flex w-full min-w-0 flex-col gap-(--layout-group-gap) lg:min-h-0 lg:flex-1"
             >
               <header class="flex min-h-(--size-8) items-center px-(--spacing-xs)">
-                <h2 class="text-heading-xxs text-(--text-default)">Import from GitHub</h2>
+                <h2 class="text-heading-2xs text-(--text-default)">Import from GitHub</h2>
               </header>
 
               <div class="flex flex-col lg:min-h-0 lg:flex-1">
@@ -606,7 +606,7 @@
                           class="absolute left-1/2 top-1/2 size-12 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10"
                         />
                         <span
-                          class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface)"
+                          class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface)"
                         >
                           <i
                             class="ai ai-github text-body-md leading-none text-(--text-default)"
@@ -777,7 +777,7 @@
                               >
                                 <Item.Media>
                                   <span
-                                    class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                    class="flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                                   >
                                     <i
                                       :class="repo.icon"
@@ -790,7 +790,7 @@
                                   <Item.Title>{{ repo.name }}</Item.Title>
                                   <Item.Description>
                                     <span
-                                      class="flex items-center gap-(--spacing-xxs) text-body-xs"
+                                      class="flex items-center gap-(--spacing-2xs) text-body-xs"
                                     >
                                       <i
                                         class="ai ai-history"
@@ -853,7 +853,7 @@
                 <div
                   class="flex min-h-(--size-8) flex-wrap items-center justify-between gap-(--spacing-md)"
                 >
-                  <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+                  <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
                     Start from template
                   </h2>
 
@@ -880,7 +880,7 @@
                     aria-label="Start from template results"
                     class="w-full"
                   >
-                    <div class="pb-(--spacing-xxs) pe-(--spacing-xxs)">
+                    <div class="pb-(--spacing-2xs) pe-(--spacing-2xs)">
                       <EmptyState
                         v-if="!filteredSections.length"
                         size="small"
@@ -951,7 +951,7 @@
                                       class="relative z-10 flex flex-col items-start gap-(--spacing-md) text-start"
                                     >
                                       <span
-                                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                                       >
                                         <i
                                           :class="[item.icon, item.markClass]"
@@ -959,7 +959,7 @@
                                           aria-hidden="true"
                                         />
                                       </span>
-                                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                                      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                                         <h4 class="text-label-md text-(--text-default)">
                                           <a
                                             :href="templateHref(item)"

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 0a08f97946369b59f3f6e3b5ee2700ff8bf5275ce5784d3a1b0e3de6f71db628
+checksum: 934ec04a36522b8797050945ce4f65140d409ed2d99077aaf56a7f8d8b645d5a
 created: 2026-05-26
 last_updated: 2026-11-15
 ---
@@ -214,16 +214,16 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | surface (line hover)                                 | `var(--bg-surface-raised)`                                                                                                     |
 | text (default line)                                  | `var(--text-default)`                                                                                                          |
 | text (timestamp)                                     | `var(--text-muted)`                                                                                                            |
-| text (`warn` line message)                           | `var(--warning-contrast)`                                                                                                      |
-| text (success line)                                  | `var(--success-contrast)`                                                                                                      |
+| text (`warn` line message)                           | `var(--warning-foreground)`                                                                                                      |
+| text (success line)                                  | `var(--success-foreground)`                                                                                                      |
 | surface (`error` level row)                          | `var(--danger)`                                                                                                                |
 | text (timestamp on an `error` level row)             | `var(--text-default)` (muted fails contrast on the danger tint)                                                                |
-| text (`error` level line, error level label and dot) | `var(--danger-contrast)`                                                                                                       |
-| text (`warn` level label and dot)                    | `var(--warning-contrast)`                                                                                                      |
-| text (`info` level label and dot)                    | `var(--info-contrast)`                                                                                                         |
+| text (`error` level line, error level label and dot) | `var(--danger-foreground)`                                                                                                       |
+| text (`warn` level label and dot)                    | `var(--warning-foreground)`                                                                                                      |
+| text (`info` level label and dot)                    | `var(--info-foreground)`                                                                                                         |
 | level toggle (rest / active)                         | `var(--border-default)`, `var(--bg-surface)` / `var(--border-selected)`, `var(--bg-selected)`, `var(--border-strong)` on hover |
 | border (outer card, `bordered` prop)                 | `var(--border-muted)`                                                                                                          |
-| shape (outer card, `bordered` prop)                  | `var(--shape-elements)`                                                                                                        |
+| shape (outer card, `bordered` prop)                  | `var(--shape-control)`                                                                                                        |
 | spacing (loading block, vertical)                    | `var(--spacing-xl)`                                                                                                            |
 | ring                                                 | `var(--ring-color)`                                                                                                            |
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 05c5f913eb84ab1c53e92530be48daf4af939ccf040f7220379e6491e94fd75a
+checksum: 1b89173dd2bcfd2979864563ad41fc387237b7c064a2e27472f8604eb2e30de2
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -80,7 +80,7 @@ Kbd renders keyboard input — a single key or a shortcut combination — as a c
 Kbd is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
 - `data-size` mirrors the `size` prop (`small` | `medium`).
-- `data-kind` mirrors the `kind` prop (`combined` | `separate`). With `separate` the root drops its keycap chrome (border, surface, shadow, padding) and each key renders as a nested `<kbd>` keycap with the same size tokens, separated by `--spacing-xxs`.
+- `data-kind` mirrors the `kind` prop (`combined` | `separate`). With `separate` the root drops its keycap chrome (border, surface, shadow, padding) and each key renders as a nested `<kbd>` keycap with the same size tokens, separated by `--spacing-2xs`.
 
 ## Motion & Animations
 
@@ -95,7 +95,7 @@ _none_
 | surface                                       | `var(--bg-surface)`                    |
 | label                                         | `var(--text-default)`                  |
 | border (keycap outline + thicker bottom edge) | `var(--border-default)`                |
-| shape                                         | `var(--shape-elements)`                |
+| shape                                         | `var(--shape-control)`                |
 | elevation (keycap lift)                       | `var(--shadow-sm)`                     |
 | spacing (medium)                              | `var(--spacing-xs)` horizontal padding |
 | spacing (small)                               | `var(--spacing-xs)` horizontal padding |

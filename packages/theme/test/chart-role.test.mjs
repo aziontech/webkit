@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { compileThemeVars } from '../src/scripts/compile-theme.js';
+import { compileThemeVars } from '../src/tokens/theme-colors.js';
 
 const SERIES = [1, 2, 3, 4, 5, 6].map((n) => `--chart-series-${n}`);
 const CHROME = [

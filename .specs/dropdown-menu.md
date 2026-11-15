@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 54ede657c3990a7806481aee216dc834cd5fecb356d6147313b10b8cd2715020
+checksum: 5aab3b2f5700b6e14e018e75c06dd05b9bce7c9adc79be652b7ed8482c41fe56
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -256,7 +256,7 @@ Sub-menus and checkable options:
 | panel typography (option label) | `.text-label-sm` + `text-(--text-default)`                                                                                      |
 | option shape                    | `var(--shape-button)`                                                                                                           |
 | option spacing.x                | `var(--spacing-sm)`                                                                                                             |
-| option spacing.y                | `var(--spacing-xxs)`                                                                                                            |
+| option spacing.y                | `var(--spacing-2xs)`                                                                                                            |
 | option gap                      | `var(--spacing-xs)`                                                                                                             |
 | option hover surface            | `var(--bg-hover)`                                                                                                               |
 | option selected surface         | `var(--bg-selected)`                                                                                                            |
@@ -268,7 +268,7 @@ Sub-menus and checkable options:
 | group divider                   | `border-t border-(--border-default)`, full-bleed (no horizontal padding on the panel or the group root)                         |
 | group divider spacing.above     | `var(--spacing-sm)`                                                                                                             |
 | group divider spacing.below     | `var(--spacing-xs)`                                                                                                             |
-| group content inset.x           | `var(--spacing-xxs)`                                                                                                            |
+| group content inset.x           | `var(--spacing-2xs)`                                                                                                            |
 | panel spacing.y                 | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
 | focus ring                      | `var(--ring-color)`                                                                                                             |
 | popup origin                    | `var(--popup-origin)`                                                                                                           |

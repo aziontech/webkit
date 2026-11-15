@@ -48,13 +48,13 @@
 </script>
 
 <template>
-  <div class="w-full rounded-(--shape-elements) border border-(--border-default)">
+  <div class="w-full rounded-(--shape-control) border border-(--border-default)">
     <LogView.Steps
       :steps="steps"
       open-step="build"
     >
       <template #header>
-        <h2 class="m-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
+        <h2 class="m-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
         <Tag
           label="Completed"
           severity="success"

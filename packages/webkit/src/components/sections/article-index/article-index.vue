@@ -282,7 +282,7 @@
     ref="root"
     :data-testid="testId"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       :divided="false"
@@ -385,7 +385,7 @@
                 <p
                   v-if="optionsOf(facet).length === 0"
                   role="status"
-                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
                   {{ t('articleIndex.empty') }}
                 </p>
@@ -491,7 +491,7 @@
                   <span
                     v-if="rowLabel"
                     aria-hidden="true"
-                    class="flex shrink-0 translate-y-1 items-center self-center gap-(--spacing-xxs) whitespace-nowrap text-overline-md text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/row:translate-y-0 group-hover/row:opacity-100 group-has-[a:focus-visible]/row:translate-y-0 group-has-[a:focus-visible]/row:opacity-100 motion-reduce:transition-none max-lg:hidden"
+                    class="flex shrink-0 translate-y-1 items-center self-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/row:translate-y-0 group-hover/row:opacity-100 group-has-[a:focus-visible]/row:translate-y-0 group-has-[a:focus-visible]/row:opacity-100 motion-reduce:transition-none max-lg:hidden"
                   >
                     {{ rowLabel }}
                     <i class="ai ai-arrow-up-right leading-none" />
@@ -530,7 +530,7 @@
           :title="empty.title"
           :description="empty.description"
           icon="ai ai-search"
-          class="p-(--spacing-xxl)"
+          class="p-(--spacing-2xl)"
         >
           <template
             v-if="empty.action"

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 130a8c974f9d2079a12e1baaa95841be1fd324ca513b7dbfbff8d7244fe03d73
+checksum: b4d0c5f7d8c269a176d3ff049b99af620f855ccd63786442780309a5b3586169
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -118,8 +118,8 @@ _No slots — the content is the `content` string._
 | Region      | Token                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------- |
 | body        | `.text-body-md`, `var(--text-default)`                                                             |
-| headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-xxs`, `.text-label-md`                |
-| inline code | `.text-label-code`, `var(--bg-surface-raised)`, `var(--shape-elements)`                            |
+| headings    | `.text-heading-sm` (`#`), `.text-heading-xs`, `.text-heading-2xs`, `.text-label-md`                |
+| inline code | `.text-label-code`, `var(--bg-surface-raised)`, `var(--shape-control)`                             |
 | links       | `var(--text-link)`                                                                                 |
 | quote       | `var(--border-strong)`, `var(--text-muted)`                                                        |
 | table       | `var(--border-default)`, `var(--border-muted)`, header `var(--bg-surface-raised)`, `.text-body-sm` |

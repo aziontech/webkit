@@ -443,7 +443,7 @@ Scope: new component `ArtifactCanvas` (spec, examples Default and Table) and its
 
 - Flow: File → Map columns → Check rows → Insert, one drawer, errors only after Insert (form-error rule); a primary key may stay unmapped; rows with errors are skipped and counted in the outcome toast with Undo (not a deploy, so no Edit / Redeploy).
 - Finding: the Skip option showed the raw `__skip` value in the trigger before the list was opened. Fixed with `Select`'s `displayValue`.
-- Finding: the per-line error used `font-medium` and `mt-1`. Fixed: `text-label-sm` and `mt-(--spacing-xxs)`.
+- Finding: the per-line error used `font-medium` and `mt-1`. Fixed: `text-label-sm` and `mt-(--spacing-2xs)`.
 - The mapping arrow mirrors under RTL; the ready count is a polite live region, so changing a mapping announces the new count.
 
 ### team-permissions#EditTeam

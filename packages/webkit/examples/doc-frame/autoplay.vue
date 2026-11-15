@@ -15,7 +15,7 @@
       <video
         autoplay
         :src="placeholderClip"
-        class="block h-auto w-full rounded-(--shape-elements)"
+        class="block h-auto w-full rounded-(--shape-control)"
       ></video>
     </DocFrame>
   </div>

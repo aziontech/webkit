@@ -83,7 +83,7 @@
         :is="`h${block.level}`"
         v-else-if="block.type === 'heading'"
         :data-level="block.level"
-        class="m-0 text-(--text-default) data-[level='3']:text-heading-sm data-[level='4']:text-heading-xs data-[level='5']:text-heading-xxs data-[level='6']:text-label-md"
+        class="m-0 text-(--text-default) data-[level='3']:text-heading-sm data-[level='4']:text-heading-xs data-[level='5']:text-heading-2xs data-[level='6']:text-label-md"
       >
         <MarkdownInline
           :nodes="block.children"
@@ -101,7 +101,7 @@
         v-else-if="block.type === 'list'"
         :start="block.ordered && block.start !== 1 ? block.start : undefined"
         :data-ordered="block.ordered || null"
-        class="m-0 flex list-disc flex-col gap-(--spacing-xxs) ps-(--spacing-lg) data-[ordered]:list-decimal"
+        class="m-0 flex list-disc flex-col gap-(--spacing-2xs) ps-(--spacing-lg) data-[ordered]:list-decimal"
       >
         <li
           v-for="(item, j) in block.items"

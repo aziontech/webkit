@@ -82,7 +82,7 @@
     :data-state="collapsible ? (open ? 'open' : 'closed') : undefined"
     class="flex min-w-0 flex-col gap-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
   >
-    <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-xxs)">
+    <div class="group/heading relative flex min-w-0 items-center gap-(--spacing-2xs)">
       <button
         v-if="anchor"
         type="button"
@@ -103,7 +103,7 @@
       <h2
         :id="anchor || undefined"
         :data-testid="`${testId}__title`"
-        class="scroll-mt-(--spacing-xl) text-balance text-heading-xxs text-(--text-default)"
+        class="scroll-mt-(--spacing-xl) text-balance text-heading-2xs text-(--text-default)"
       >
         <button
           v-if="collapsible"
@@ -112,7 +112,7 @@
           :aria-expanded="open"
           :aria-controls="regionId"
           :data-state="open ? 'open' : 'closed'"
-          class="group/disclosure -mx-(--spacing-xxs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+          class="group/disclosure -mx-(--spacing-2xs) flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
           @click="toggle"
         >
           <i

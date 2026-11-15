@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: 85de13fe61ab41bc2d14fe628905041a181774be4f58f4ad2346347b8dda8f5f
+checksum: c4502942f7cd931ab9123845c418bc61b9d23447148865f0b3bad270cc898be9
 created: 2026-09-23
-last_updated: 2026-11-09
+last_updated: 2026-11-15
 ---
 
 # Texture Material — Component Spec
@@ -103,7 +103,7 @@ Reduced motion keeps both crests — they are part of the picture, not only of t
 | pixelate light | `var(--primary)` |
 | spacing (pitch, small) | `var(--spacing-sm)` |
 | spacing (pitch, medium) | `var(--spacing-lg)` |
-| spacing (pitch, large) | `var(--spacing-xxl)` |
+| spacing (pitch, large) | `var(--spacing-2xl)` |
 | lines pitch (small / medium / large) | 6 / 8 / 14 px — a measured ladder of its own, not a multiple of the shared `--texture-scale`, because a scaled-down line pitch stops reading as rules and starts reading as a flat wash |
 
 ## Theme gaps

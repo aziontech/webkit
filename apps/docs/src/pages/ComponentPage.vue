@@ -179,7 +179,7 @@
           class="flex flex-col gap-(--spacing-xs)"
         >
           <h2 class="text-heading-xs">{{ t.related }}</h2>
-          <ul class="flex list-disc flex-col gap-(--spacing-xxs) ps-(--spacing-md) text-body-sm">
+          <ul class="flex list-disc flex-col gap-(--spacing-2xs) ps-(--spacing-md) text-body-sm">
             <RawHtml
               v-for="line in doc.related"
               :key="line"
@@ -256,7 +256,7 @@
               :key="sub.name"
             >
               <code
-                class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-label-code-sm"
+                class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-code-sm"
                 >{{ sub.import }}</code
               >
             </li>

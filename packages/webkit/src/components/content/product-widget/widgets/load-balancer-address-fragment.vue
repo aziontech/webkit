@@ -141,13 +141,13 @@
             class="ai ai-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted)"
             aria-hidden="true"
           />
-          <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+          <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
             <span class="truncate text-body-sm text-(--text-default)">origin-aws.example.com</span>
             <span class="flex flex-wrap gap-x-(--spacing-xs)">
               <span
                 v-for="pair in meta"
                 :key="pair.label"
-                class="flex gap-(--spacing-xxs)"
+                class="flex gap-(--spacing-2xs)"
               >
                 <span class="text-body-xs text-(--text-muted)">{{ pair.label }}</span>
                 <span class="text-label-sm text-(--text-default)">{{ pair.value }}</span>
@@ -195,7 +195,7 @@
           <FieldLabel for="address-weight">Weight</FieldLabel>
           <span
             :data-focused="frame.focused || null"
-            class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+            class="flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
           >
             <NumberInput
               id="address-weight"

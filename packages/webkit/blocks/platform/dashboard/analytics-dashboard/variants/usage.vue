@@ -495,7 +495,7 @@
       >
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Data transferred, this period vs previous</ChartCard.Title>
               <Hint
                 text="Data delivered by every project in the selected period, drawn over the same span of the previous period."
@@ -589,7 +589,7 @@
 
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Data transferred by project</ChartCard.Title>
               <Hint text="The projects that delivered the most data in the period." />
             </span>
@@ -662,7 +662,7 @@
 
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Usage by project</ChartCard.Title>
               <Hint text="Requests and data transferred per project in the period." />
             </span>
@@ -780,7 +780,7 @@
     >
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DialogTitle>{{ expandedReport.label }}</DialogTitle>
             <DialogDescription>{{ expandedReport.description }}</DialogDescription>
           </div>

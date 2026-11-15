@@ -155,7 +155,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -200,7 +200,7 @@
             <legend class="sr-only">Create Service</legend>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</h2>
+              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -235,7 +235,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
                 Delivery settings
               </h2>
               <Card :padded="false">
@@ -330,7 +330,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Origins</h2>
+              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Origins</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>
@@ -426,7 +426,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
                 Cache expiration policies
               </h2>
               <Card :padded="false">
@@ -504,7 +504,7 @@
             </section>
 
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-              <h2 class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Debug rules</h2>
+              <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Debug rules</h2>
               <Card :padded="false">
                 <template #content>
                   <Item.List>

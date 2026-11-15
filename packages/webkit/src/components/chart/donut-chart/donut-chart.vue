@@ -321,7 +321,7 @@
             v-for="heading in [t('donutChart.name'), t('donutChart.value'), t('donutChart.share')]"
             :key="heading"
             scope="col"
-            class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-end text-label-sm text-(--text-muted) first:text-start"
+            class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-end text-label-sm text-(--text-muted) first:text-start"
           >
             {{ heading }}
           </th>
@@ -334,17 +334,17 @@
         >
           <th
             scope="row"
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-start text-body-sm"
+            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-sm"
           >
             {{ entry.name }}
           </th>
           <td
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-end tabular-nums"
+            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
           >
             {{ entry.value }}
           </td>
           <td
-            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-end tabular-nums"
+            class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
           >
             {{ entry.share }}
           </td>
@@ -397,7 +397,7 @@
         </svg>
         <div
           v-if="kind === 'donut'"
-          class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-xxs) px-(--spacing-lg) text-center"
+          class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-2xs) px-(--spacing-lg) text-center"
           :data-testid="`${testId}__center`"
         >
           <slot
@@ -415,7 +415,7 @@
       <ul
         v-if="legend.length > 1"
         :data-testid="`${testId}__legend`"
-        class="m-0 flex min-w-0 grow basis-48 list-none flex-col gap-(--spacing-xxs) p-0"
+        class="m-0 flex min-w-0 grow basis-48 list-none flex-col gap-(--spacing-2xs) p-0"
       >
         <li
           v-for="entry in legend"
@@ -426,13 +426,13 @@
             :aria-pressed="!entry.hidden"
             :data-hidden="entry.hidden || null"
             :data-testid="`${testId}__legend-item`"
-            class="relative inline-flex min-h-6 w-full items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
+            class="relative inline-flex min-h-6 w-full items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-start text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
             @click="toggle($event, entry.id)"
           >
             <span
               :data-hidden="entry.hidden || null"
               :style="{ '--donut-key': entry.color }"
-              class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--donut-key) data-[hidden]:opacity-30"
+              class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--donut-key) data-[hidden]:opacity-30"
             />
             <span class="min-w-0 flex-1 truncate">{{ entry.name }}</span>
             <span class="text-label-code-md tabular-nums text-(--text-muted)">{{

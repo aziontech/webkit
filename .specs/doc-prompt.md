@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 426160aa91b47d99c15b8e357f7e9aa4d88bfe089915628ca67d2c80a7846151
+checksum: fd0705de388d263d1eff4350022a5c05fc5e1773f2cca3fbfa1bb84c1cbe385d
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -117,7 +117,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 | spacing.y                   | `var(--spacing-sm)`     |
 | gap                         | `var(--spacing-sm)`     |
 | fade extent                 | `var(--spacing-lg)`     |
-| line shape                  | `var(--shape-elements)` |
+| line shape                  | `var(--shape-control)`  |
 | focus ring                  | `var(--ring-color)`     |
 
 ## Theme gaps

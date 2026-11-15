@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: e7ba0c110070a6ef28f869634afef6ace5d7d880621de00b7223e3b482b52626
+checksum: 097deb1eef13e6e364d958494ebf4b78665fc15aec6e504abd2bcbc6c054c7d3
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -130,10 +130,10 @@ _No motion of its own; `Button` handles its loading spinner._
 | Region       | Token                                                                                                      |
 | ------------ | ---------------------------------------------------------------------------------------------------------- |
 | frame        | `var(--bg-surface)`, `var(--border-default)` (danger pending: `var(--danger-border)`), `var(--shape-card)` |
-| title        | `.text-heading-xxs`, `var(--text-default)`                                                                 |
+| title        | `.text-heading-2xs`, `var(--text-default)`                                                                 |
 | description  | `.text-body-sm`, `var(--text-muted)`                                                                       |
-| shield glyph | `var(--text-muted)` / `var(--danger-contrast)`                                                             |
-| phrase input | `var(--border-default)`, `var(--shape-elements)`, `.text-body-sm`                                          |
+| shield glyph | `var(--text-muted)` / `var(--danger-foreground)`                                                           |
+| phrase input | `var(--border-default)`, `var(--shape-control)`, `.text-body-sm`                                           |
 | padding/gaps | `var(--spacing-md)`, `var(--spacing-sm)`, `var(--spacing-xs)`                                              |
 
 ## Theme gaps

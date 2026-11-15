@@ -242,7 +242,7 @@
 
 <template>
   <div class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
-    <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+    <header class="flex min-w-0 flex-col gap-(--spacing-2xs)">
       <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
       <p class="text-body-md text-(--text-muted)">
         Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
@@ -273,7 +273,7 @@
               :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
               class="shrink-0"
             />
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DialogTitle>{{ title }}</DialogTitle>
               <DialogDescription>
                 {{ tally }}
@@ -335,7 +335,7 @@
                   <Item.Description>{{ item.environments }}</Item.Description>
                   <span
                     v-if="item.message"
-                    class="text-body-xs text-(--danger-contrast)"
+                    class="text-body-xs text-(--danger-foreground)"
                   >
                     {{ item.message }}
                   </span>

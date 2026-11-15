@@ -35,7 +35,7 @@
     data-slot="field-legend"
     :data-kind="kind"
     :data-testid="testId"
-    class="mb-(--spacing-xxs) p-0 text-(--text-default) data-[kind=legend]:text-label-md data-[kind=label]:text-label-sm"
+    class="mb-(--spacing-2xs) p-0 text-(--text-default) data-[kind=legend]:text-label-md data-[kind=label]:text-label-sm"
   >
     <slot />
   </legend>

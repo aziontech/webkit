@@ -52,7 +52,7 @@
   <span
     :data-focused="focused || null"
     :data-open="open || null"
-    class="relative flex w-full rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 data-open:z-1 motion-reduce:transition-none"
+    class="relative flex w-full rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 data-open:z-1 motion-reduce:transition-none"
   >
     <Select
       :model-value="value"
@@ -81,13 +81,13 @@
         <span
           v-if="open && options.length"
           :data-side="side"
-          class="absolute inset-x-0 z-1 flex flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xxs) py-(--spacing-xs) shadow-(--shadow-xs) data-[side=bottom]:top-full data-[side=bottom]:mt-1 data-[side=bottom]:[--popup-origin:top] data-[side=top]:bottom-full data-[side=top]:mb-1 data-[side=top]:[--popup-origin:bottom]"
+          class="absolute inset-x-0 z-1 flex flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-2xs) py-(--spacing-xs) shadow-(--shadow-xs) data-[side=bottom]:top-full data-[side=bottom]:mt-1 data-[side=bottom]:[--popup-origin:top] data-[side=top]:bottom-full data-[side=top]:mb-1 data-[side=top]:[--popup-origin:bottom]"
         >
           <span class="relative isolate flex flex-col">
             <span
               :data-visible="highlight >= 0 || null"
               :style="highlightStyle"
-              class="absolute inset-x-0 top-0 -z-1 h-8 rounded-(--shape-elements) bg-(--bg-hover) opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance data-visible:opacity-100 motion-reduce:transition-none"
+              class="absolute inset-x-0 top-0 -z-1 h-8 rounded-(--shape-control) bg-(--bg-hover) opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance data-visible:opacity-100 motion-reduce:transition-none"
             />
             <Select.Option
               v-for="(option, index) in options"

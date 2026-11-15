@@ -115,7 +115,7 @@
       v-else
       dir="auto"
       :data-ink="kind"
-      class="whitespace-nowrap text-heading-xxs text-(--text-default) data-[ink=current]:text-current data-[ink=knockout]:text-(--color-base-black)"
+      class="whitespace-nowrap text-heading-2xs text-(--text-default) data-[ink=current]:text-current data-[ink=knockout]:text-(--color-base-black)"
       >{{ name }}</span
     >
   </span>

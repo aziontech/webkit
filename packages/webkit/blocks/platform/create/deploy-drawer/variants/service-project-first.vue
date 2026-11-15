@@ -314,7 +314,7 @@
         @submit.prevent="open = false"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Deploy</DrawerTitle>
           </div>
         </PanelHeader>
@@ -339,7 +339,7 @@
                     >
                       <Item.Media>
                         <span
-                          class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                          class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
                             :class="row.icon"
@@ -444,7 +444,7 @@
                             #bottom
                           >
                             <div
-                              class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                              class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
                             >
                               <Button
                                 :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
@@ -594,7 +594,7 @@
                                         #bottom
                                       >
                                         <div
-                                          class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                                          class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
                                         >
                                           <Button
                                             :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
@@ -645,7 +645,7 @@
                     >
                       <Item.Media>
                         <span
-                          class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                          class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
                             class="ai ai-box text-body-xs text-(--text-default)"
@@ -682,9 +682,9 @@
                             />
                           </Popover.Trigger>
                           <Popover.Content>
-                            <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                            <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
                               <p
-                                class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                                class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                               >
                                 Projects serving web-app
                               </p>
@@ -697,7 +697,7 @@
                                   class="flex w-full min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xs) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                                   @click="pickProject(entry.id)"
                                 >
-                                  <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                                  <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                                     <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                                       <span class="truncate text-body-sm text-(--text-default)">
                                         {{ entry.name }}

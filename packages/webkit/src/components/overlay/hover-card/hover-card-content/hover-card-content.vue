@@ -63,7 +63,7 @@
         :data-state="ctx.isOpen.value ? 'open' : 'closed'"
         :data-placement="ctx.placement.value"
         :style="ctx.panelStyle.value"
-        class="flex w-max min-w-(--container-3xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) text-body-sm text-(--text-default) shadow-(--shadow-sm) [transform-origin:var(--popup-origin,top_left)]"
+        class="flex w-max min-w-(--container-3xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) text-body-sm text-(--text-default) shadow-(--shadow-sm) [transform-origin:var(--popup-origin,top_left)]"
         @pointerenter="ctx.cancelClose()"
         @pointerleave="onPointerleave"
         @focusin="ctx.cancelClose()"

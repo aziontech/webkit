@@ -44,10 +44,10 @@ export const animate = {
   'content-enter': `contentEnter ${MODERATE_02} ${PRODUCTIVE_ENTRANCE} var(--content-enter-delay, 0s) backwards`,
   'popup-scale-in': `popupScaleIn ${MODERATE_01} ${PRODUCTIVE_ENTRANCE}`,
   'popup-scale-out': `popupScaleOut ${FAST_02} ${PRODUCTIVE_EXIT}`,
-  'slide-in-left': `slideInLeft ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
-  'slide-out-left': `slideOutLeft ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
-  'slide-in-right': `slideInRight ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
-  'slide-out-right': `slideOutRight ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
+  'slide-in-start': `slideInStart ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'slide-out-start': `slideOutStart ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
+  'slide-in-end': `slideInEnd ${MODERATE_02} ${PRODUCTIVE_ENTRANCE}`,
+  'slide-out-end': `slideOutEnd ${MODERATE_01} ${PRODUCTIVE_EXIT}`,
   'progress-indeterminate': `progressIndeterminate ${SLOW_04} ${PRODUCTIVE_ENTRANCE} infinite`,
   'progress-indeterminate-short': `progressIndeterminateShort ${SLOW_04} ${EXPRESSIVE_ENTRANCE} ${SLOW_03} infinite`,
   'flow-dash': `flowDash ${SLOW_02} linear infinite`,
@@ -74,12 +74,13 @@ export const useWhen = {
   'popup-scale-in':
     'Anchored overlays opening (dropdown, popover, tooltip, menu); set --popup-origin.',
   'popup-scale-out': 'Anchored overlays closing (pair of popup-scale-in).',
-  'slide-in-left':
-    'Left-anchored panel entering (sidebar, navigation drawer). Wrap the v-if region in a Vue Transition with enter-active-class.',
-  'slide-out-left':
-    'Left-anchored panel leaving (pair of slide-in-left; use as leave-active-class).',
-  'slide-in-right': 'Right-anchored panel entering (settings/detail drawer).',
-  'slide-out-right': 'Right-anchored panel leaving (pair of slide-in-right).',
+  'slide-in-start':
+    'Start-anchored panel entering (sidebar, navigation drawer); flips with the reading direction. Wrap the v-if region in a Vue Transition with enter-active-class.',
+  'slide-out-start':
+    'Start-anchored panel leaving (pair of slide-in-start; use as leave-active-class).',
+  'slide-in-end':
+    'End-anchored panel entering (settings/detail drawer); flips with the reading direction.',
+  'slide-out-end': 'End-anchored panel leaving (pair of slide-in-end).',
   'progress-indeterminate': 'Indeterminate linear progress bar (primary sweep).',
   'progress-indeterminate-short': 'Indeterminate linear progress bar (secondary short sweep).',
   'flow-dash':

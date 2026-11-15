@@ -5,7 +5,8 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 ## Do
 
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
-- Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `xxs…xxl`), `var(--shape-button)`.
+- Put text on a fill with that fill's pair: every fill colour has a `-foreground` text colour (`--primary` / `--primary-foreground`, `--danger` / `--danger-foreground`); the inverted surface `--bg-contrast` takes `--text-contrast`.
+- Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `2xs…2xl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
 - Import the theme once, near your app entry: `import '@aziontech/theme'`, plus `import '@aziontech/theme/fonts.css'` for the Azion font faces (leave it out when the app hosts its own fonts) and `import '@aziontech/icons'` for icons.
 
@@ -25,10 +26,10 @@ use it, so you can check a choice against a real one.
 
 | Job                                                 | Tokens                                                                        | Used by                                                                                                                                                                                           |
 | --------------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Main action                                         | `--primary`, `--primary-contrast`                                             | `Button kind="primary"`, `Checkbox` checked, `Progress` fill, `Tag severity="primary"`, `StatusIndicator severity="alt"`                                                                          |
-| Second action                                       | `--secondary`, `--secondary-contrast`                                         | `Button kind="secondary"`, `IconButton`, `Badge severity="secondary"`                                                                                                                             |
+| Main action                                         | `--primary`, `--primary-foreground`                                             | `Button kind="primary"`, `Checkbox` checked, `Progress` fill, `Tag severity="primary"`, `StatusIndicator severity="alt"`                                                                          |
+| Second action                                       | `--secondary`, `--secondary-foreground`                                         | `Button kind="secondary"`, `IconButton`, `Badge severity="secondary"`                                                                                                                             |
 | Brand text and tint                                 | `--text-primary`, `--primary-mask`, `--primary-selected`                      | `Overline` text, the required asterisk in `FieldLabel`, `Tag severity="highlight"`, `RadioGroup` selected card                                                                        |
-| Accent: a live state or connection, never an action | `--accent`, `--accent-contrast`                                               | `Switch` on, `Slider` fill, `Tag severity="accent"`, the `Overline` cursor, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `Flow` and `TopologyDiagram` edges and ports      |
+| Accent: a live state or connection, never an action | `--accent`, `--accent-foreground`                                               | `Switch` on, `Slider` fill, `Tag severity="accent"`, the `Overline` cursor, resize handles in `Sidebar` and `Resizable`, a dragged `Table` row, `Flow` and `TopologyDiagram` edges and ports      |
 | Selected item                                       | `--bg-selected`, `--border-selected`                                          | selected rows and options in `Table`, `MenuItem`, `DropdownMenu`, `ToggleGroup`, `Select`, `Combobox`, `Trace`; `RadioGroup` card and `Chip` borders                                                   |
 | Selected tab                                        | `--secondary-mask`                                                            | the sliding indicator in `Tabs`                                                                                                                                                                   |
 | Hover and press                                     | `--bg-hover`, `--bg-active`, `--bg-mask`                                      | every interactive component (`--bg-mask` is the hover layer on `Button kind="outlined"` and `kind="transparent"`)                                                                                 |
@@ -46,7 +47,7 @@ Defined but not used by any component yet: `--accent-mask`, `--accent-selected`,
 
 ## Use a variant only when the component has it
 
-A token pair is not a variant. `--accent` and `--accent-contrast` exist, but `Button` has no accent
+A token pair is not a variant. `--accent` and `--accent-foreground` exist, but `Button` has no accent
 kind, so there is no accent button: an "Upgrade" or "New" call to action is `Button kind="primary"`
 or `kind="secondary"`. Before you draw or build a variant, check that the component lists it in its
 `kind` or `severity` union in `catalog.json` (or the MCP `get_component`). If it is not there, use

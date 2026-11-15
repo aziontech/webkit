@@ -137,7 +137,7 @@
       <div
         v-for="group in groups"
         :key="group.key"
-        class="flex flex-col gap-(--spacing-xxs)"
+        class="flex flex-col gap-(--spacing-2xs)"
         :data-group="group.key"
       >
         <p
@@ -148,7 +148,7 @@
         </p>
         <ul
           :aria-labelledby="`${uid}-${group.key}`"
-          class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
+          class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
         >
           <template
             v-for="chunk in group.chunks"
@@ -168,13 +168,13 @@
                 :key="item.id"
                 :data-active="item.id === model || null"
                 :data-testid="`${testId}__item`"
-                class="group/item flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-elements) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected) motion-reduce:transition-none"
+                class="group/item flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected) motion-reduce:transition-none"
               >
                 <button
                   type="button"
                   :aria-current="item.id === model ? 'page' : undefined"
                   :title="item.title"
-                  class="flex h-8 min-w-0 flex-1 items-center rounded-(--shape-elements) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+                  class="flex h-8 min-w-0 flex-1 items-center rounded-(--shape-control) px-(--spacing-xs) text-start text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
                   @click="model = item.id"
                 >
                   <bdi

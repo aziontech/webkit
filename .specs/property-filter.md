@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: f513cb3457a9091f842cb01a7e201c9089c16c1fead86007e69876bde7926264
+checksum: 88efab9ffc71b8bf6990a0cb5ec1774258d120f66b1167ad45dc98e3782d348d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -191,9 +191,9 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 | active option       | `var(--bg-hover)`                                                 |
 | muted text          | `var(--text-muted)`                                               |
 | gaps                | `var(--spacing-xs)`                                               |
-| shape               | `var(--shape-elements)`                                           |
+| shape               | `var(--shape-control)`                                            |
 | group border        | `var(--border-default)`                                           |
-| group padding       | `var(--spacing-xxs)` / `var(--spacing-xs)`                        |
+| group padding       | `var(--spacing-2xs)` / `var(--spacing-xs)`                        |
 | value count         | `.text-label-sm` + `var(--text-muted)`, `tabular-nums`            |
 | section heading     | `.text-label-sm` + `var(--text-muted)`                            |
 | error row icon      | `var(--danger)`                                                   |

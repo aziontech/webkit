@@ -121,7 +121,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <div
       v-if="visiblePlans.length > 0"

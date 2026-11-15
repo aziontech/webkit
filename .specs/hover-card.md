@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 3
 template: 2
-checksum: 678a7f5250f086efbae55017e3a9255f8141cc50cd1c47da64680337a1718cb1
+checksum: 6bb302d11f06bfcb5962f598eef2fc0b697f5a5c9d92f1a6a741af98e983ab35
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -130,7 +130,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 | ------------ | ----------------------------------------- |
 | card surface | `var(--bg-surface-raised)`                |
 | card border  | `var(--border-default)`                   |
-| card shape   | `var(--shape-elements)`                   |
+| card shape   | `var(--shape-control)`                    |
 | card shadow  | `var(--shadow-sm)`                        |
 | card padding | `var(--spacing-md)`                       |
 | card gap     | `var(--spacing-sm)`                       |

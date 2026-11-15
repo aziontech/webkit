@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 6ec20934881ddb9471eec3b64a7cde8c880e697966425b97abbce537018f8abd
+checksum: ac99f2ae364b590b44d81e3006b8d804b5303c196c70110dd8d3fd04d86b722a
 created: 2026-09-23
 last_updated: 2026-11-15
 ---
@@ -86,7 +86,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`; an item is real text and rests at full ink
 - `data-size` mirrors the `size` prop and is what drives the mark height, the cell width and the row gap
-- `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-xxl` (never under twice `--spacing-xl`, so a phone keeps room between claims), and the label steps down to `text-body-sm` under `size="small"`
+- `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-2xl` (never under twice `--spacing-xl`, so a phone keeps room between claims), and the label steps down to `text-body-sm` under `size="small"`
 - `data-kind` mirrors the `kind` prop; `band` paints the page canvas and the strip's own vertical rhythm so nothing behind it shows through while the fill still matches the band it floors, `plain` leaves it transparent over whatever it sits on
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
@@ -104,9 +104,9 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 | Region                            | Token (DESIGN.md)                                      |
 | --------------------------------- | ------------------------------------------------------ |
-| typography (fallback wordmark)    | `.text-heading-xxs`                                    |
+| typography (fallback wordmark)    | `.text-heading-2xs`                                    |
 | typography (item label)           | `.text-body-md`, `.text-body-sm` under `small`         |
-| spacing (item row gap)            | `max(var(--spacing-xxl), calc(var(--spacing-xl) * 2))` |
+| spacing (item row gap)            | `max(var(--spacing-2xl), calc(var(--spacing-xl) * 2))` |
 | spacing (item icon ↔ label)       | `var(--spacing-xs)`                                    |
 | ink (mark)                        | `var(--text-default)` at 70% opacity, full on hover    |
 | spacing (label ↔ row)             | `var(--spacing-xl)`                                    |

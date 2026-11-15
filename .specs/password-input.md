@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: d663e2d0d34941afe956cb1f5b000a1dcbd1cf6df2025035cdd5ffa15e23f07c
+checksum: 2772522b3df09244217e2fafa44a9213e8431e20a8fcd63c288881c2419b76e2
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -142,7 +142,7 @@ _none_
 | spacing (padding-left)               | `var(--spacing-md)`                                                        |
 | spacing (padding-right)              | `var(--spacing-xs)`                                                        |
 | spacing (gap between icon and input) | `var(--spacing-xs)`                                                        |
-| shape                                | `var(--shape-elements)`                                                    |
+| shape                                | `var(--shape-control)`                                                    |
 | visibility toggle                    | `IconButton` `kind="transparent"` `size="small"` (28 px — `var(--size-7)`) |
 
 ## Theme gaps

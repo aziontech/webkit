@@ -52,7 +52,7 @@
     :data-testid="testId"
     :data-value="model ?? undefined"
     :data-loading="loading || null"
-    class="inline-flex items-center gap-(--spacing-xxs)"
+    class="inline-flex items-center gap-(--spacing-2xs)"
   >
     <Tooltip :text="t('chatMessage.helpful')">
       <IconButton

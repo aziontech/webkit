@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: d107b18f65f9fa989f54b9bf28f5e80b275a8e62eaf1fc44c185db2b57e243cd
+checksum: 83f31963230d5549fcc265211a8729fa0a930fb5dc6d580ee21b44d22a244230
 template: 2
 ---
 
@@ -129,7 +129,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 | Region             | Token (DESIGN.md)                                                                         |
 | ------------------ | ----------------------------------------------------------------------------------------- |
 | focus ring         | `var(--ring-color)`, offset `var(--bg-canvas)`                                            |
-| mark link shape    | `var(--shape-elements)`                                                                   |
+| mark link shape    | `var(--shape-control)`                                                                    |
 | panel column width | `var(--layout-measure-site-header)`, `var(--layout-boundary-inline)`, `var(--spacing-md)` |
 
 ## Theme gaps

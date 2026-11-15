@@ -370,11 +370,11 @@
               <div class="flex flex-col gap-(--spacing-xs)">
                 <p
                   :id="deleteLabelId"
-                  class="m-0 flex flex-wrap items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+                  class="m-0 flex flex-wrap items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
                 >
                   To confirm, type
                   <code
-                    class="rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-xxs) text-label-code-sm text-(--text-default)"
+                    class="rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-2xs) text-label-code-sm text-(--text-default)"
                     >{{ record.name }}</code
                   >
                   <CopyButton

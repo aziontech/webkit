@@ -164,7 +164,7 @@
           </div>
           <div class="flex flex-col">
             <dt class="text-label-sm text-(--text-muted)">Errors</dt>
-            <dd class="m-0 text-heading-xs tabular-nums text-(--danger-contrast)">
+            <dd class="m-0 text-heading-xs tabular-nums text-(--danger-foreground)">
               {{ formatNumber(ERRORS) }}
             </dd>
           </div>
@@ -176,7 +176,7 @@
       </ShellMockupPart>
 
       <ShellMockupPart :order="1">
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <div class="relative z-30">
             <div class="flex h-20 w-full items-end gap-px border-b border-(--border-default)">
               <div
@@ -190,7 +190,7 @@
                   v-for="level in STACK_ORDER"
                   :key="level"
                   :data-level="level"
-                  class="w-full data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast)"
+                  class="w-full data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)"
                   :style="{ height: share(bucket.levels[level]) }"
                 />
               </div>
@@ -218,7 +218,7 @@
               <div
                 v-if="activeBucket"
                 :data-align="cardAlign"
-                class="pointer-events-none absolute top-[calc(100%+var(--spacing-xxs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
+                class="pointer-events-none absolute top-[calc(100%+var(--spacing-2xs))] z-30 w-max min-w-(--container-3xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) shadow-(--shadow-sm) transition-[left] duration-fast-02 ease-productive-entrance data-[align=center]:-translate-x-1/2 data-[align=end]:-translate-x-full motion-reduce:transition-none"
                 :style="{ left: centre }"
               >
                 <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
@@ -227,7 +227,7 @@
                   </p>
 
                   <dl
-                    class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs)"
+                    class="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs)"
                   >
                     <template
                       v-for="level in LEVEL_ORDER"
@@ -236,7 +236,7 @@
                       <span
                         :data-level="level"
                         aria-hidden="true"
-                        class="size-2 shrink-0 rounded-(--shape-elements) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-contrast) data-[level=Warning]:bg-(--warning-contrast) data-[level=Error]:bg-(--danger-contrast)"
+                        class="size-2 shrink-0 rounded-(--shape-control) data-[level=Debug]:bg-(--text-muted) data-[level=Info]:bg-(--info-foreground) data-[level=Warning]:bg-(--warning-foreground) data-[level=Error]:bg-(--danger-foreground)"
                       />
                       <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
                         {{ level }}

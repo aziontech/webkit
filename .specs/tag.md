@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 9dead6f33c6d43ed75ab1b13fc79f8d0cea97f68fa6548b3e22c147578e82b99
+checksum: a57c34e9fcd700fdd3a83009e09636409866304ff787978f52656a4f29a6f9a2
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -94,9 +94,9 @@ _none_
 | typography (medium)    | `.text-tag-md` + `leading-none` (Figma Typography/Tag/md, 12px)                                                                                                |
 | typography (small)     | `.text-tag-sm` + `leading-none` (Figma Typography/Tag/sm, 11px)                                                                                                |
 | spacing (medium)       | `var(--spacing-xs)` horizontal padding and icon gap                                                                                                            |
-| spacing (small)        | `var(--spacing-xxs)` horizontal padding and icon gap                                                                                                           |
-| shape (all severities) | `var(--shape-elements)`                                                                                                                                        |
-| surface (primary)      | `var(--primary)` / `var(--primary-contrast)`, WCAG AA in both themes                                                                                           |
+| spacing (small)        | `var(--spacing-2xs)` horizontal padding and icon gap                                                                                                           |
+| shape (all severities) | `var(--shape-control)`                                                                                                                                         |
+| surface (primary)      | `var(--primary)` / `var(--primary-foreground)`, WCAG AA in both themes                                                                                         |
 | surface (contrast)     | `var(--bg-contrast)` / `var(--text-contrast)`                                                                                                                  |
 | surface (highlight)    | `var(--primary-mask)` / `color-mix(in srgb, var(--text-primary) 80%, var(--text-default))`, WCAG AA (5.1:1 or more) on every surface and canvas in both themes |
 | shape (pill)           | `rounded-full`                                                                                                                                                 |

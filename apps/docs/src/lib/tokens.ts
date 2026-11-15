@@ -16,7 +16,7 @@ export type TokenKind =
   | 'container'
 
 function colorUtility(name: string): string {
-  if (/^--(text|code-sintax)-/.test(name) || /-contrast$/.test(name)) return 'text'
+  if (/^--(text|code-syntax)-/.test(name) || /-foreground$/.test(name)) return 'text'
   if (/^--border-/.test(name) || /-border$/.test(name)) return 'border'
   if (/^--ring-/.test(name)) return 'ring'
   return 'bg'

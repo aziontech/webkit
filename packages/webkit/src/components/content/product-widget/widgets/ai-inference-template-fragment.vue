@@ -168,7 +168,7 @@
       <ShellMockupPart :order="0">
         <div class="flex flex-col gap-(--spacing-sm)">
           <div class="flex min-h-(--size-8) items-center justify-between gap-(--spacing-md)">
-            <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">
+            <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">
               Start from Template
             </p>
             <span class="relative flex shrink-0">
@@ -194,7 +194,7 @@
               size="medium"
               removable
             >
-              <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                 <span class="truncate text-(--text-muted)">Use Case</span>
                 <span class="truncate">AI/Agent</span>
               </span>
@@ -230,7 +230,7 @@
                   <template #content>
                     <div class="flex flex-col items-start gap-(--spacing-md) text-start">
                       <span
-                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
                           :class="[card.icon, card.markClass]"
@@ -238,7 +238,7 @@
                           aria-hidden="true"
                         />
                       </span>
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                         <h3 class="text-label-md text-(--text-default)">{{ card.title }}</h3>
                         <p class="text-pretty text-body-sm text-(--text-muted)">
                           {{ card.description }}
@@ -266,14 +266,14 @@
                   <template #content>
                     <div class="flex items-start gap-(--spacing-md)">
                       <span
-                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <AzionLogoMin
                           class="h-5 w-auto"
                           aria-label="Azion Marketplace"
                         />
                       </span>
-                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                         <div class="flex flex-wrap items-baseline gap-x-(--spacing-xs)">
                           <h3 class="text-label-md text-(--text-default)">{{ template.title }}</h3>
                           <span class="text-body-xs text-(--text-muted)">by Azion</span>
@@ -298,7 +298,7 @@
                   <template #content>
                     <div class="flex items-start gap-(--spacing-md)">
                       <span
-                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                        class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                       >
                         <i
                           :class="[framework.icon, framework.markClass]"
@@ -306,7 +306,7 @@
                           aria-hidden="true"
                         />
                       </span>
-                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                      <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                         <h3 class="text-label-md text-(--text-default)">{{ framework.title }}</h3>
                         <p class="text-pretty text-body-sm text-(--text-muted)">
                           {{ framework.description }}

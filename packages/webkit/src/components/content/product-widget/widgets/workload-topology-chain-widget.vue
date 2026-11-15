@@ -292,7 +292,7 @@
         class="min-w-0 self-center"
       >
         <div
-          class="flex min-w-0 flex-col gap-(--spacing-lg) group-data-[layout=compact]/topology:gap-(--spacing-xxl)"
+          class="flex min-w-0 flex-col gap-(--spacing-lg) group-data-[layout=compact]/topology:gap-(--spacing-2xl)"
         >
           <div
             v-for="node in column.nodes"
@@ -309,7 +309,7 @@
             />
             <div
               v-if="arrangement.key === 'compact'"
-              class="flex min-w-0 flex-col items-center gap-(--spacing-xs) py-(--spacing-xxs) text-center"
+              class="flex min-w-0 flex-col items-center gap-(--spacing-xs) py-(--spacing-2xs) text-center"
             >
               <i
                 :class="node.icon"
@@ -322,7 +322,7 @@
             </div>
             <div
               v-else
-              class="flex items-center gap-(--spacing-xxs)"
+              class="flex items-center gap-(--spacing-2xs)"
             >
               <i
                 :class="node.icon"

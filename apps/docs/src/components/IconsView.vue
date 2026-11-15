@@ -83,7 +83,7 @@
         class="flex flex-col gap-(--spacing-sm)"
         :aria-labelledby="`icons-${set.id}`"
       >
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <h2
             :id="`icons-${set.id}`"
             class="flex items-baseline gap-(--spacing-xs) text-heading-sm"

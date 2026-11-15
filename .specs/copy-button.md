@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 4bd55e76e9d3a3f95f3c41db8861cf4351f351bdb3d8e809f88b492843cedddf
+checksum: 91841800c50fe9892b265dd3497e1b8ce0f3fddf3711327fe83c08f6a9de664b
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -86,7 +86,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 | surface                | `var(--bg-surface)`                                           |
 | text                   | `var(--text-default)`                                         |
 | spacing                | `var(--spacing-3)`                                            |
-| shape                  | `var(--shape-elements)`                                       |
+| shape                  | `var(--shape-control)`                                        |
 | ring                   | `var(--ring-color)`                                           |
 | tooltip surface / text | `var(--bg-contrast)` / `var(--text-contrast)` (via `Tooltip`) |
 

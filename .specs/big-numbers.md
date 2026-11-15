@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 74ca9d458ed2cd8bba453b79d989b443e2f4d4fb084ff07137b830f8265ad57b
+checksum: 04830447f854f02710261b1610d3914ce08320da7b0551a0f9e7d1e39124496b
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -106,7 +106,7 @@ _none_
 | cell rules and marks        | `var(--border-default)` |
 | spacing (cell padding)      | `var(--spacing-xl)`     |
 | spacing (figure to caption) | `var(--spacing-sm)`     |
-| spacing (figure parts)      | `var(--spacing-xxs)`    |
+| spacing (figure parts)      | `var(--spacing-2xs)`    |
 
 ## Theme gaps
 

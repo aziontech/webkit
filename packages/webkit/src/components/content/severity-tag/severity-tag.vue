@@ -50,7 +50,7 @@
     :data-severity="severity"
     :data-size="size"
     :class="attrs.class"
-    class="group inline-flex items-center whitespace-nowrap h-6 data-[size=small]:h-5 px-(--spacing-xs) data-[size=small]:px-(--spacing-xxs) gap-(--spacing-xs) data-[size=small]:gap-(--spacing-xxs) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-canvas) text-(--text-default) text-label-sm"
+    class="group inline-flex items-center whitespace-nowrap h-6 data-[size=small]:h-5 px-(--spacing-xs) data-[size=small]:px-(--spacing-2xs) gap-(--spacing-xs) data-[size=small]:gap-(--spacing-2xs) rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-default) bg-(--bg-canvas) text-(--text-default) text-label-sm"
   >
     <span
       aria-hidden="true"

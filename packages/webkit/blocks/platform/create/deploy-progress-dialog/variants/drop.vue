@@ -274,7 +274,7 @@
 
 <template>
   <div class="layout-column-form layout-boundary flex min-w-0 flex-col gap-(--layout-group-gap)">
-    <header class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+    <header class="flex min-w-0 flex-col gap-(--spacing-2xs)">
       <h1 class="text-balance text-heading-lg text-(--text-default)">web-app</h1>
       <p class="text-body-md text-(--text-muted)">
         Deploys to {{ items.length }} {{ noun(items.length) }}, each going live on its own.
@@ -333,12 +333,12 @@
               <ul
                 aria-label="Dropped files"
                 tabindex="0"
-                class="m-0 flex max-h-64 min-w-0 list-none flex-col gap-(--spacing-xxs) overflow-auto overscroll-contain p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                class="m-0 flex max-h-64 min-w-0 list-none flex-col gap-(--spacing-2xs) overflow-auto overscroll-contain p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
                 <li
                   v-for="file in shownFiles"
                   :key="file.path"
-                  class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <i
                     class="ai ai-file shrink-0 text-(--text-muted)"
@@ -407,7 +407,7 @@
               :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
               class="shrink-0"
             />
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DialogTitle>{{ title }}</DialogTitle>
               <DialogDescription>
                 {{ tally }}
@@ -469,7 +469,7 @@
                   <Item.Description>{{ item.environments }}</Item.Description>
                   <span
                     v-if="item.message"
-                    class="text-body-xs text-(--danger-contrast)"
+                    class="text-body-xs text-(--danger-foreground)"
                   >
                     {{ item.message }}
                   </span>

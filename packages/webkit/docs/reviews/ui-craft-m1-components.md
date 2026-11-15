@@ -110,7 +110,7 @@ Each entry lists the findings, what was fixed (spec first, checksum recomputed, 
 
 ### SectionHeader
 
-- Finding: at `size="small"` the h2 was `text-label-md` in `--text-muted`, which is the same 14px size and the same colour as its `text-body-sm` muted description, so the title and the description could not be told apart. — Fixed: small is now `text-heading-xxs` in `--text-default`, the canonical section title from `webkit-baseline-ui`. Spec tokens table and JSDoc updated, and the test asserts the title is never a muted label.
+- Finding: at `size="small"` the h2 was `text-label-md` in `--text-muted`, which is the same 14px size and the same colour as its `text-body-sm` muted description, so the title and the description could not be told apart. — Fixed: small is now `text-heading-2xs` in `--text-default`, the canonical section title from `webkit-baseline-ui`. Spec tokens table and JSDoc updated, and the test asserts the title is never a muted label.
 - Finding: the copy-link is computed from `location` during render. — Not a defect: on the server it renders as `#anchor` and is only used when clicked, so nothing mismatches on hydration.
 
 ### SettingsSection
@@ -218,7 +218,7 @@ Each entry lists the findings, what was fixed (spec first, checksum recomputed, 
 
 ### Cards
 
-- Finding: cards and their skeletons used `rounded-(--shape-elements)`, while baseline-ui requires `--shape-card` for cards. Fixed: spec token table and SFC now use `var(--shape-card)`.
+- Finding: cards and their skeletons used `rounded-(--shape-control)`, while baseline-ui requires `--shape-card` for cards. Fixed: spec token table and SFC now use `var(--shape-card)`.
 - Finding: the empty state's built-in copy has no action. Not a defect: `Cards` cannot know the create action. The `empty` slot is where a screen puts it, and the lists skill makes the screen own that action.
 
 ### Tree
@@ -231,7 +231,7 @@ Each entry lists the findings, what was fixed (spec first, checksum recomputed, 
 - Finding (BarList, Tracker): the focus ring had `ring-offset-1` with no offset color, so Tailwind's white offset showed as a white gap in the dark theme. Fixed: `focus-visible:ring-offset-(--bg-surface)` in both specs and SFCs.
 - Finding (DonutChart): in the table view, the Value and Share headers and cells were start-aligned, so numbers did not line up. Fixed: numeric headers and cells are `text-end` (the name column stays `text-start`), matching `Chart`'s table view.
 - Finding (Chart, ChartLine, ChartArea, ChartLegend, DonutChart): opacity transitions name a duration token but no easing token. Not a defect: Tailwind's default transition curve applies, the change is a dim or fade only, and every one has `motion-reduce:transition-none`.
-- Finding (Tracker): the strip uses `gap-0.5` (2px). Not a defect: it is a hairline gap between blocks, and the smallest spacing token (`--spacing-xxs`, 4px) would break the strip into separate pills.
+- Finding (Tracker): the strip uses `gap-0.5` (2px). Not a defect: it is a hairline gap between blocks, and the smallest spacing token (`--spacing-2xs`, 4px) would break the strip into separate pills.
 - Finding (StatTile): the "No data" tag is centered with `left-1/2 -translate-x-1/2`. Not a defect: centering is the same in both directions.
 - No other findings in ChartCard (drag and resize keys already map through `logicalArrowKey`) or `_lib`.
 

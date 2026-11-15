@@ -364,7 +364,7 @@
   <div
     v-bind="$attrs"
     :id="anchor || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
   >
     <SectionContainer max-width="site">
@@ -397,7 +397,7 @@
           marks="all"
         >
           <div
-            class="grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-xxl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-2xl))_minmax(0,1fr)] lg:grid-rows-[auto_auto_1fr]"
+            class="grid gap-(--spacing-xl) p-(--spacing-xl) pb-(--spacing-2xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-2xl))_minmax(0,1fr)] lg:grid-rows-[auto_auto_1fr]"
           >
             <header class="flex min-w-0 flex-col gap-(--spacing-lg) lg:col-start-2">
               <Breadcrumb
@@ -452,7 +452,7 @@
 
             <article
               ref="prose"
-              class="min-w-0 lg:col-start-2 [&_h2]:scroll-mt-(--spacing-xxl) [&_h3]:scroll-mt-(--spacing-xxl)"
+              class="min-w-0 lg:col-start-2 [&_h2]:scroll-mt-(--spacing-2xl) [&_h3]:scroll-mt-(--spacing-2xl)"
             >
               <DocProse>
                 <template
@@ -602,7 +602,7 @@
                         :href="link.href"
                         :target="isExternal(link.href) ? '_blank' : undefined"
                         :rel="isExternal(link.href) ? 'noopener' : undefined"
-                        class="flex items-center gap-(--spacing-sm) rounded-(--shape-flat) py-(--spacing-xxs) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+                        class="flex items-center gap-(--spacing-sm) rounded-(--shape-flat) py-(--spacing-2xs) text-body-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
                       >
                         <i
                           :class="link.icon"

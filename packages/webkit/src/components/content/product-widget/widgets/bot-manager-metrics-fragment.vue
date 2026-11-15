@@ -93,7 +93,7 @@
               :key="metric.label"
             >
               <template #content>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="flex items-center gap-(--spacing-xs)">
                     <span class="min-w-0 truncate text-label-sm text-(--text-default)">
                       {{ metric.label }}
@@ -116,7 +116,7 @@
           >
             <Card>
               <template #content>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-sm text-(--text-default)">Impacted URLs</span>
                   <span class="text-heading-sm text-(--text-default)">38</span>
                   <span class="text-body-xs text-(--text-muted)">
@@ -133,7 +133,7 @@
                     <li
                       v-for="row in IMPACTED_URLS"
                       :key="row.url"
-                      class="flex flex-col gap-(--spacing-xxs)"
+                      class="flex flex-col gap-(--spacing-2xs)"
                     >
                       <span class="flex items-baseline justify-between gap-(--spacing-xs)">
                         <span class="truncate text-body-xs text-(--text-default)">
@@ -143,10 +143,10 @@
                           {{ row.requests }}
                         </span>
                       </span>
-                      <span class="h-1.5 rounded-(--shape-elements) bg-(--bg-hover)">
+                      <span class="h-1.5 rounded-(--shape-control) bg-(--bg-hover)">
                         <span
                           :style="{ width: `${row.share}%` }"
-                          class="block h-full rounded-(--shape-elements) bg-(--primary)"
+                          class="block h-full rounded-(--shape-control) bg-(--primary)"
                         />
                       </span>
                     </li>

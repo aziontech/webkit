@@ -318,7 +318,7 @@
             </Select.Option>
             <p
               v-if="!environmentMatches.length"
-              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
             >
               No environments match "{{ environmentQuery }}".
             </p>
@@ -457,7 +457,7 @@
                           <template v-if="row.environment">{{ value }}</template>
                         </template>
                         <template #cell-certificate="{ value }">
-                          <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                          <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                             <i
                               class="ai ai-verified shrink-0 text-(--text-muted)"
                               aria-hidden="true"

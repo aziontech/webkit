@@ -164,7 +164,7 @@
     </span>
     <span
       v-if="dirty"
-      class="size-1.5 shrink-0 rounded-full bg-(--warning-contrast) forced-colors:bg-[CanvasText]"
+      class="size-1.5 shrink-0 rounded-full bg-(--warning-foreground) forced-colors:bg-[CanvasText]"
       aria-hidden="true"
       :data-testid="`${testId}__dirty`"
     />

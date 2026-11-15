@@ -61,7 +61,7 @@
           v-for="column in columns"
           :key="column"
         >
-          <span class="flex items-center gap-(--spacing-xxs)">
+          <span class="flex items-center gap-(--spacing-2xs)">
             <code
               :data-live="isLive(token, column) || null"
               class="text-label-code-sm text-(--text-muted) data-[live]:text-(--text-default)"

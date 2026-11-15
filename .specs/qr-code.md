@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: b7c802c70710db950681168ae9b23ec8e78ccfc2563babfa43dadca735c048c6
+checksum: 8a5b797e96ce94364389a8d93c28b5292bfa54d2127b75896595ef6af65198f6
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # QrCode — Component Spec
@@ -89,7 +89,7 @@ _none_
 | plate        | `var(--bg-surface)` under `data-theme="light"`   |
 | plate border | `var(--border-default)`                          |
 | modules      | `var(--text-default)` under `data-theme="light"` |
-| plate radius | `var(--shape-elements)`                          |
+| plate radius | `var(--shape-control)`                           |
 
 ## Theme gaps
 

@@ -121,7 +121,7 @@
     >
       <div class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)">
         <ShellMockupPart :order="0">
-          <div class="flex flex-col gap-(--spacing-xxs)">
+          <div class="flex flex-col gap-(--spacing-2xs)">
             <FieldLabel>Workloads access</FieldLabel>
             <HelperText label="The access level workloads have to the objects in this bucket." />
           </div>

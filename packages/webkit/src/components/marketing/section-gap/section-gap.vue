@@ -13,7 +13,7 @@
   export type SectionGapSize = 'small' | 'medium' | 'large'
 
   interface Props {
-    /** How much vertical air the gap holds, as a multiple of the theme's largest spacing step: `small` is one `--spacing-xxl`, `medium` two, `large` three. The token is responsive, so every step scales with the viewport. */
+    /** How much vertical air the gap holds, as a multiple of the theme's largest spacing step: `small` is one `--spacing-2xl`, `medium` two, `large` three. The token is responsive, so every step scales with the viewport. */
     size?: SectionGapSize
     /** Draw the gap's ruled line texture — fine vertical rules at a fixed pitch. */
     hatch?: boolean
@@ -40,7 +40,7 @@
     :data-testid="testId"
     :data-size="size"
     :data-hatch="hatch || null"
-    class="h-[calc(var(--spacing-xxl)*2)] data-[size=small]:h-(--spacing-xxl) data-[size=large]:h-[calc(var(--spacing-xxl)*3)]"
+    class="h-[calc(var(--spacing-2xl)*2)] data-[size=small]:h-(--spacing-2xl) data-[size=large]:h-[calc(var(--spacing-2xl)*3)]"
   >
     <TextureMaterial
       v-if="hatch"

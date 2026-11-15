@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 600cabe2b30e432c00c738bced6d9e85293d89b9a8870752fc6334673f3a23ae
+checksum: e01e9dcce7926fe90e1a459b6b8e4e1ba6c0218f743f5c37662f0156b366d7d5
 created: 2026-05-28
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ Two more regions serve docs: a **label header** — a 40 px bar naming the block
 
 The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 
-**Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-sintax-*` palette:
+**Syntax highlighting** is driven by the active tab's `language` and resolves to one of these tokenisers, all of which emit the same seven token types (`keyword`, `string`, `function`, `type`, `punctuation`, `identifier`, `comment`) so every language shares the one `--code-syntax-*` palette:
 
 | `language`                              | Tokenised as                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -244,28 +244,28 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 | filename bar surface     | `var(--bg-surface-raised)`                                                             |
 | label header             | `.text-label-code-sm`, `var(--text-muted)`, `var(--border-default)` divider            |
 | output shell / text      | `var(--bg-canvas)` · `var(--text-muted)`                                               |
-| shell prompt `$ `        | `var(--code-sintax-line-number)`                                                       |
+| shell prompt `$ `        | `var(--code-syntax-line-number)`                                                       |
 | border                   | `var(--border-default)`                                                                |
 | tab strip surface        | `var(--bg-canvas)`                                                                     |
 | tab indicator (pill)     | `var(--bg-surface)` fill · `var(--border-default)` hairline · `var(--shadow-sm)`       |
 | text default / muted     | `var(--text-default)` / `var(--text-muted)`                                            |
-| spacing                  | `var(--spacing-xxs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
-| shape                    | `var(--shape-elements)` / `var(--shape-button)`                                        |
+| spacing                  | `var(--spacing-2xs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
+| shape                    | `var(--shape-control)` / `var(--shape-button)`                                         |
 | ring                     | `var(--ring-color)`                                                                    |
-| syntax keyword           | `var(--code-sintax-keyword)`                                                           |
-| syntax string            | `var(--code-sintax-string)`                                                            |
-| syntax function          | `var(--code-sintax-function)`                                                          |
-| syntax type              | `var(--code-sintax-type)`                                                              |
-| syntax punctuation       | `var(--code-sintax-punctuation)`                                                       |
-| syntax identifier        | `var(--code-sintax-identifier)`                                                        |
-| syntax comment           | `var(--code-sintax-comment)`                                                           |
-| syntax line number       | `var(--code-sintax-line-number)`                                                       |
+| syntax keyword           | `var(--code-syntax-keyword)`                                                           |
+| syntax string            | `var(--code-syntax-string)`                                                            |
+| syntax function          | `var(--code-syntax-function)`                                                          |
+| syntax type              | `var(--code-syntax-type)`                                                              |
+| syntax punctuation       | `var(--code-syntax-punctuation)`                                                       |
+| syntax identifier        | `var(--code-syntax-identifier)`                                                        |
+| syntax comment           | `var(--code-syntax-comment)`                                                           |
+| syntax line number       | `var(--code-syntax-line-number)`                                                       |
 | diff removed row         | `var(--danger)`                                                                        |
 | diff removed leading bar | `var(--danger-border)`                                                                 |
-| diff removed marker      | `var(--danger-contrast)`                                                               |
+| diff removed marker      | `var(--danger-foreground)`                                                             |
 | diff added row           | `var(--success)`                                                                       |
 | diff added leading bar   | `var(--success-border)`                                                                |
-| diff added marker        | `var(--success-contrast)`                                                              |
+| diff added marker        | `var(--success-foreground)`                                                            |
 | highlighted row          | `var(--info)`                                                                          |
 | highlighted leading bar  | `var(--info-border)`                                                                   |
 

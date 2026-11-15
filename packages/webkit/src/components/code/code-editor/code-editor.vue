@@ -634,7 +634,7 @@
     :data-fill="fill || null"
     :data-bordered="bordered || null"
     :aria-busy="mode === 'loading' || undefined"
-    class="@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out focus-within:ring-2 focus-within:ring-(--ring-color) not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-elements) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 data-[bordered]:focus-within:ring-offset-(--bg-canvas) data-[disabled]:bg-(--bg-disabled) data-[fill]:min-h-0 data-[fill]:flex-1 data-[invalid]:border-(--danger-border) motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]"
+    class="@container/code-editor flex w-full min-w-0 flex-col overflow-hidden border-(--border-default) bg-(--bg-surface) transition-colors duration-150 ease-out focus-within:ring-2 focus-within:ring-(--ring-color) not-data-[bordered]:focus-within:ring-inset data-[bordered]:rounded-(--shape-control) data-[bordered]:border data-[bordered]:focus-within:ring-offset-2 data-[bordered]:focus-within:ring-offset-(--bg-canvas) data-[disabled]:bg-(--bg-disabled) data-[fill]:min-h-0 data-[fill]:flex-1 data-[invalid]:border-(--danger-border) motion-reduce:transition-none forced-colors:data-[bordered]:border-[CanvasText]"
   >
     <div
       v-if="$slots['toolbar']"
@@ -667,7 +667,7 @@
         >
           <div
             v-if="diff"
-            class="shrink-0 border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+            class="shrink-0 border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
             :id="`${uid}-${pane.key}-label`"
           >
             {{ pane.label }}
@@ -688,7 +688,7 @@
                   diff && changesBySide
                 ]"
                 aria-hidden="true"
-                class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm text-(--code-sintax-line-number) select-none"
+                class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm text-(--code-syntax-line-number) select-none"
                 :data-testid="`${testId}__gutter`"
               >
                 <li
@@ -699,7 +699,7 @@
                     (diff && changesBySide[pane.main ? 'modified' : 'original'].get(index + 1)) ||
                     null
                   "
-                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-contrast) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-contrast) data-[severity]:font-medium data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast) forced-colors:data-[severity]:text-[Highlight]"
+                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-foreground) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-foreground) data-[severity]:font-medium data-[severity=error]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground) forced-colors:data-[severity]:text-[Highlight]"
                 >
                   {{ lineLabel(index + 1) }}
                 </li>
@@ -721,7 +721,7 @@
                 :aria-invalid="(pane.main && isInvalid) || undefined"
                 :aria-readonly="!pane.editable || undefined"
                 :aria-describedby="pane.main ? describedBy : undefined"
-                class="m-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm whitespace-pre text-(--code-sintax-identifier) caret-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+                class="m-0 block min-w-0 flex-1 resize-none overflow-hidden border-0 bg-transparent px-(--spacing-sm) py-(--spacing-xs) text-body-code-sm whitespace-pre text-(--code-syntax-identifier) caret-(--text-default) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
                 :data-testid="`${testId}__${pane.main ? 'input' : 'original'}`"
                 @input="onInput"
                 @keydown="onKeydown($event, pane.editable)"
@@ -742,7 +742,7 @@
 
     <p
       v-if="mode === 'loading' || loadFailed"
-      class="m-0 shrink-0 border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs) text-body-xs text-(--text-muted)"
+      class="m-0 shrink-0 border-t border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs) text-body-xs text-(--text-muted)"
       :data-testid="`${testId}__status`"
     >
       {{ loadFailed ? t('codeEditor.loadFailed') : t('codeEditor.loading') }}
@@ -763,7 +763,7 @@
       <ul
         v-if="markers.length"
         :aria-label="t('codeEditor.problems')"
-        class="m-0 flex max-h-32 list-none flex-col overflow-y-auto p-(--spacing-xxs)"
+        class="m-0 flex max-h-32 list-none flex-col overflow-y-auto p-(--spacing-2xs)"
       >
         <li
           v-for="(marker, index) in sortedMarkers"
@@ -772,7 +772,7 @@
           <button
             type="button"
             :data-severity="marker.severity"
-            class="flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) text-start text-body-xs text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11"
+            class="flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) text-start text-body-xs text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none pointer-coarse:min-h-11"
             :data-testid="`${testId}__problem`"
             @click="goTo(marker)"
           >
@@ -785,7 +785,7 @@
                     ? 'ai ai-exclamation-triangle'
                     : 'ai ai-info-circle'
               "
-              class="shrink-0 text-body-xs data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast)"
+              class="shrink-0 text-body-xs data-[severity=error]:text-(--danger-foreground) data-[severity=info]:text-(--info-foreground) data-[severity=warning]:text-(--warning-foreground)"
               aria-hidden="true"
             />
             <span class="sr-only">{{ `${severityLabel(marker.severity)}: ` }}</span>

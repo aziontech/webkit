@@ -99,7 +99,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="hasHeader ? title : undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasColumns"

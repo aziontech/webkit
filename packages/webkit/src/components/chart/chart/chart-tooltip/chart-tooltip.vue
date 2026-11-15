@@ -94,14 +94,14 @@
     >
       <div
         :data-side="readout.side"
-        class="flex w-max max-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
+        class="flex w-max max-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
       >
         <span
           class="border-b border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-label-md"
         >
           {{ readout.title }}
         </span>
-        <span class="flex flex-col gap-(--spacing-xxs) px-(--spacing-sm) py-(--spacing-xs)">
+        <span class="flex flex-col gap-(--spacing-2xs) px-(--spacing-sm) py-(--spacing-xs)">
           <span
             v-for="row in readout.rows"
             :key="row.id"

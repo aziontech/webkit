@@ -25,7 +25,7 @@
     class="flex scroll-mt-20 flex-col gap-(--spacing-sm)"
     :aria-labelledby="`${anchor}-title`"
   >
-    <div class="flex flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <h3
         :id="`${anchor}-title`"
         class="text-heading-sm"

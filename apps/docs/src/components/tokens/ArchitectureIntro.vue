@@ -32,7 +32,7 @@
     class="flex flex-col gap-(--spacing-sm)"
     aria-labelledby="token-architecture"
   >
-    <div class="flex flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <h2
         id="token-architecture"
         class="text-heading-sm"
@@ -56,7 +56,7 @@
         }}</code>
         <i
           v-if="at < layers.length - 1"
-          class="ai ai-arrow-right absolute end-[calc(var(--spacing-sm)/-2)] top-1/2 z-1 hidden -translate-y-1/2 translate-x-1/2 rounded-full bg-(--bg-canvas) p-(--spacing-xxs) text-(--text-muted) md:block rtl:-translate-x-1/2 rtl:rotate-180"
+          class="ai ai-arrow-right absolute end-[calc(var(--spacing-sm)/-2)] top-1/2 z-1 hidden -translate-y-1/2 translate-x-1/2 rounded-full bg-(--bg-canvas) p-(--spacing-2xs) text-(--text-muted) md:block rtl:-translate-x-1/2 rtl:rotate-180"
           aria-hidden="true"
         />
       </li>

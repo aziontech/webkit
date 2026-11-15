@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 726bb0bcd4542964ac09bb5d59843ed585b09293fc54bbe30c26d5202626cb6b
+checksum: 9dfded9de800d9ccbefdfce6f3c59f1a3526f96924acf69cb37fcc328aebbe83
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -171,7 +171,7 @@ Internal parts, not exported, shared with `date-range-picker`: `date-picker-grid
 | trigger / field surface (disabled)      | `var(--bg-disabled)`        |
 | trigger / field border                  | `var(--border-default)`     |
 | trigger / field border (hover)          | `var(--border-strong)`      |
-| trigger / field shape                   | `var(--shape-elements)`     |
+| trigger / field shape                   | `var(--shape-control)`     |
 | section divider                         | `var(--border-default)`     |
 | label typography                        | `.text-label-sm`            |
 | trigger / field value typography        | `.text-label-sm`            |
@@ -184,10 +184,10 @@ Internal parts, not exported, shared with `date-range-picker`: `date-picker-grid
 | default text                            | `var(--text-default)`       |
 | disabled text                           | `var(--text-disabled)`      |
 | selected day surface                    | `var(--secondary)`          |
-| selected day text                       | `var(--secondary-contrast)` |
+| selected day text                       | `var(--secondary-foreground)` |
 | hover surface                           | `var(--bg-hover)`           |
 | spacing (padding)                       | `var(--spacing-sm)`         |
-| spacing (gap)                           | `var(--spacing-xxs)`        |
+| spacing (gap)                           | `var(--spacing-2xs)`        |
 | spacing (sections)                      | `var(--spacing-md)`         |
 | ring                                    | `var(--ring-color)`         |
 

@@ -62,7 +62,7 @@
   >
     <ItemMedia
       v-if="icon"
-      class="size-8 rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+      class="size-8 rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
     >
       <i
         :class="icon"
@@ -70,7 +70,7 @@
         aria-hidden="true"
       />
     </ItemMedia>
-    <ItemContent class="gap-(--spacing-xxs)">
+    <ItemContent class="gap-(--spacing-2xs)">
       <ItemTitle>
         <a
           v-if="isLink"
@@ -84,7 +84,7 @@
         <template v-else>{{ title }}</template>
       </ItemTitle>
       <ItemDescription
-        class="line-clamp-none text-pretty [&_code]:rounded-(--shape-elements) [&_code]:border [&_code]:border-(--border-default) [&_code]:bg-(--bg-hover) [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default)"
+        class="line-clamp-none text-pretty [&_code]:rounded-(--shape-control) [&_code]:border [&_code]:border-(--border-default) [&_code]:bg-(--bg-hover) [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-label-code-sm [&_code]:text-(--text-default)"
       >
         <slot>{{ label }}</slot>
       </ItemDescription>

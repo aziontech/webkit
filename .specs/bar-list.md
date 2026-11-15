@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
-checksum: 2b6d7b1dc5fc4d82c4bb0da5ae56965ac80cba5ee3824d0eb49bc5280b121c32
+checksum: a9f051826637564fc125e2839b6646a4312ec161d37ed7a3020d93b245ef32be
 ---
 
 # BarList — Component Spec
@@ -118,8 +118,8 @@ The rows are data (`items`). The state surface matches `chart`, `donut-chart`, `
 | name      | `.text-label-md`, `var(--text-default)`                                                                                                            |
 | value     | `.text-label-md`, `tabular-nums`, `var(--text-default)`                                                                                            |
 | row hover | `var(--bg-hover)`                                                                                                                                  |
-| shape     | `var(--shape-elements)`                                                                                                                            |
-| spacing   | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                                     |
+| shape     | `var(--shape-control)`                                                                                                                             |
+| spacing   | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                                     |
 | ring      | `var(--ring-color)`                                                                                                                                |
 
 ## Theme gaps

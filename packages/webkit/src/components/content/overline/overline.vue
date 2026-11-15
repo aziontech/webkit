@@ -35,7 +35,7 @@
     :data-testid="testId"
     :data-cursor="cursor || null"
     :data-single-line="singleLine || null"
-    class="group/overline flex items-center gap-(--spacing-xxs) relative w-fit max-w-full ps-(--spacing-xxs) pe-(--spacing-xxs) data-[cursor]:pe-0"
+    class="group/overline flex items-center gap-(--spacing-2xs) relative w-fit max-w-full ps-(--spacing-2xs) pe-(--spacing-2xs) data-[cursor]:pe-0"
   >
     <span
       v-if="prefix"

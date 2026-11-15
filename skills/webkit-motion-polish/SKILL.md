@@ -52,8 +52,8 @@ The `animate-*` utilities from the animation token catalog (listed by the webkit
 | `animate-fade-in` / `animate-fade-out`               | opacity in / out                                                 |
 | `animate-slide-down`                                 | height 0 → auto (the one catalogued height animation — see note) |
 | `animate-popup-scale-in` / `animate-popup-scale-out` | scale + fade for popovers/menus                                  |
-| `animate-slide-in-left` / `animate-slide-out-left`   | left-anchored panel enter/leave (sidebar, nav drawer)            |
-| `animate-slide-in-right` / `animate-slide-out-right` | right-anchored panel enter/leave (settings/detail drawer)        |
+| `animate-slide-in-start` / `animate-slide-out-start` | start-anchored panel enter/leave (sidebar, nav drawer)           |
+| `animate-slide-in-end` / `animate-slide-out-end`     | end-anchored panel enter/leave (settings/detail drawer)          |
 | `animate-blink`                                      | caret/blink                                                      |
 | `animate-highlight-fade`                             | row-flash highlight                                              |
 
@@ -66,8 +66,8 @@ and hand the phases to the catalogued pair:
 
 ```vue
 <Transition
-  enter-active-class="animate-slide-in-left motion-reduce:animate-none"
-  leave-active-class="animate-slide-out-left motion-reduce:animate-none"
+  enter-active-class="animate-slide-in-start motion-reduce:animate-none"
+  leave-active-class="animate-slide-out-start motion-reduce:animate-none"
 >
   <aside v-if="sidebarOpen">...</aside>
 </Transition>
@@ -171,7 +171,7 @@ element's own `auto` width follow.
        `min-width: 0` cannot shrink it) and leaves dead space in the empty state —
        so the gap and padding live on the row INSIDE, which is clipped with the text. -->
   <span class="min-w-0 overflow-hidden">
-    <span class="flex min-w-0 items-center gap-(--spacing-xxs) whitespace-nowrap ps-(--spacing-xxs)">…</span>
+    <span class="flex min-w-0 items-center gap-(--spacing-2xs) whitespace-nowrap ps-(--spacing-2xs)">…</span>
   </span>
 </span>
 ```

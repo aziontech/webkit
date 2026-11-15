@@ -96,7 +96,7 @@ export function listTokens(catalog, { category } = {}) {
           class: `animate-${name}`,
           ...(tokens.animationGuide?.[name] || {})
         })),
-        hint: 'Every motion-bearing class pairs with a motion-reduce: fallback (e.g. `animate-slide-in-left motion-reduce:animate-none`). Panel/drawer open-close wraps the v-if region in a Vue Transition with enter-active-class / leave-active-class.'
+        hint: 'Every motion-bearing class pairs with a motion-reduce: fallback (e.g. `animate-slide-in-start motion-reduce:animate-none`). Panel/drawer open-close wraps the v-if region in a Vue Transition with enter-active-class / leave-active-class.'
       }
     }
     const group = tokens.groups[key]

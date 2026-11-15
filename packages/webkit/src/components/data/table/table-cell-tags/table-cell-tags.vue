@@ -154,7 +154,7 @@
       class="shrink-0 text-body-lg text-(--text-muted)"
       aria-hidden="true"
     />
-    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+    <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
       <Tag
         v-for="(item, index) in shown"
         :key="`${index}-${item}`"
@@ -183,7 +183,7 @@
     >
       <span
         ref="rulerRef"
-        class="flex w-max items-center gap-(--spacing-xxs) whitespace-nowrap"
+        class="flex w-max items-center gap-(--spacing-2xs) whitespace-nowrap"
       >
         <span
           v-for="(item, index) in items"

@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaSplit
       eyebrow="Deployment"
       title="The media is inert."

@@ -27,8 +27,6 @@
             localStorage.getItem('webkit-demos:theme') ||
             (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
           var root = document.documentElement
-          root.classList.remove('azion-dark', 'azion-light')
-          root.classList.add(stored === 'light' ? 'azion-light' : 'azion-dark')
           root.dataset.theme = stored === 'light' ? 'light' : 'dark'
         } catch (e) {}
       })()

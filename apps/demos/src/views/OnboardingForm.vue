@@ -94,7 +94,7 @@
         <a
           href="/"
           aria-label="Azion home"
-          class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
             kind="default"
@@ -116,7 +116,7 @@
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
-        class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-xxl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
+        class="mx-auto grid w-full max-w-(--container-7xl) flex-1 grid-cols-1 items-center gap-(--spacing-2xl) px-(--layout-boundary-inline) py-(--spacing-xl) lg:min-h-0 lg:grid-cols-2 lg:items-start lg:overflow-y-auto lg:px-(--spacing-xl)"
       >
         <div class="mx-auto flex w-full max-w-(--container-xl) flex-col lg:my-auto">
           <Card
@@ -143,7 +143,7 @@
                   @submit.prevent="next"
                 >
                   <header class="flex flex-col gap-(--spacing-xs)">
-                    <div class="flex flex-col gap-(--spacing-xxs)">
+                    <div class="flex flex-col gap-(--spacing-2xs)">
                       <p class="text-label-sm text-(--text-muted)">Step 1 of 3</p>
                       <h1
                         id="onboarding-title"
@@ -258,7 +258,7 @@
                 class="flex h-(--size-14) shrink-0 items-center gap-(--spacing-xs) border-b-(length:--border-width-default) border-(--border-muted) px-(--spacing-md)"
               >
                 <span
-                  class="size-(--size-5) shrink-0 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                  class="size-(--size-5) shrink-0 rounded-(--shape-control) bg-(--bg-placeholder)"
                 />
 
                 <span class="shrink-0 text-body-sm text-(--text-muted)">/</span>
@@ -317,10 +317,10 @@
                       class="flex items-center gap-(--spacing-sm)"
                     >
                       <span
-                        class="size-(--size-4) shrink-0 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                        class="size-(--size-4) shrink-0 rounded-(--shape-control) bg-(--bg-placeholder)"
                       />
                       <span
-                        class="h-(--size-2) rounded-(--shape-elements) bg-(--bg-placeholder)"
+                        class="h-(--size-2) rounded-(--shape-control) bg-(--bg-placeholder)"
                         :style="{ width }"
                       />
                     </span>
@@ -329,34 +329,34 @@
                   <span class="h-px w-full shrink-0 bg-(--border-muted)" />
 
                   <div class="flex shrink-0 flex-col gap-(--spacing-sm)">
-                    <span class="h-1.5 w-[28%] rounded-(--shape-elements) bg-(--bg-placeholder)" />
+                    <span class="h-1.5 w-[28%] rounded-(--shape-control) bg-(--bg-placeholder)" />
                     <span
                       v-for="width in ['70%', '44%', '80%', '54%']"
                       :key="width"
                       class="flex items-center gap-(--spacing-sm)"
                     >
                       <span
-                        class="size-(--size-4) shrink-0 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                        class="size-(--size-4) shrink-0 rounded-(--shape-control) bg-(--bg-placeholder)"
                       />
                       <span
-                        class="h-(--size-2) rounded-(--shape-elements) bg-(--bg-placeholder)"
+                        class="h-(--size-2) rounded-(--shape-control) bg-(--bg-placeholder)"
                         :style="{ width }"
                       />
                     </span>
                   </div>
 
                   <div class="flex shrink-0 flex-col gap-(--spacing-sm)">
-                    <span class="h-1.5 w-[28%] rounded-(--shape-elements) bg-(--bg-placeholder)" />
+                    <span class="h-1.5 w-[28%] rounded-(--shape-control) bg-(--bg-placeholder)" />
                     <span
                       v-for="width in ['62%', '78%', '50%']"
                       :key="width"
                       class="flex items-center gap-(--spacing-sm)"
                     >
                       <span
-                        class="size-(--size-4) shrink-0 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                        class="size-(--size-4) shrink-0 rounded-(--shape-control) bg-(--bg-placeholder)"
                       />
                       <span
-                        class="h-(--size-2) rounded-(--shape-elements) bg-(--bg-placeholder)"
+                        class="h-(--size-2) rounded-(--shape-control) bg-(--bg-placeholder)"
                         :style="{ width }"
                       />
                     </span>
@@ -385,7 +385,7 @@
                   <div
                     class="flex min-h-(--container-2xl) flex-col gap-(--spacing-lg) p-(--spacing-lg)"
                   >
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <p class="truncate text-heading-sm text-(--text-default)">
                         Hello, {{ ownerName }}
                       </p>
@@ -401,10 +401,10 @@
                         class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
                       >
                         <span
-                          class="h-(--size-2) w-2/3 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                          class="h-(--size-2) w-2/3 rounded-(--shape-control) bg-(--bg-placeholder)"
                         />
                         <span
-                          class="h-(--size-3) w-1/2 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                          class="h-(--size-3) w-1/2 rounded-(--shape-control) bg-(--bg-placeholder)"
                         />
                       </span>
                     </div>
@@ -416,7 +416,7 @@
                         class="flex shrink-0 items-center justify-between border-b-(length:--border-width-default) border-(--border-muted) p-(--spacing-md)"
                       >
                         <span
-                          class="h-(--size-2) w-[28%] rounded-(--shape-elements) bg-(--bg-placeholder)"
+                          class="h-(--size-2) w-[28%] rounded-(--shape-control) bg-(--bg-placeholder)"
                         />
                         <span
                           class="h-(--size-8) w-(--size-24) rounded-(--shape-button) bg-(--bg-placeholder)"
@@ -428,13 +428,13 @@
                         class="flex shrink-0 items-center gap-(--spacing-lg) px-(--spacing-md) py-(--spacing-md)"
                       >
                         <span
-                          class="h-(--size-2) flex-1 rounded-(--shape-elements) bg-(--bg-placeholder)"
+                          class="h-(--size-2) flex-1 rounded-(--shape-control) bg-(--bg-placeholder)"
                         />
                         <span
-                          class="h-(--size-2) w-[18%] rounded-(--shape-elements) bg-(--bg-placeholder)"
+                          class="h-(--size-2) w-[18%] rounded-(--shape-control) bg-(--bg-placeholder)"
                         />
                         <span
-                          class="h-(--size-2) w-[10%] rounded-(--shape-elements) bg-(--bg-placeholder)"
+                          class="h-(--size-2) w-[10%] rounded-(--shape-control) bg-(--bg-placeholder)"
                         />
                       </span>
                     </div>

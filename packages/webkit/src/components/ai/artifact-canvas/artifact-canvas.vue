@@ -100,7 +100,7 @@
     >
       <span
         aria-hidden="true"
-        class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) text-(--text-muted)"
+        class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) text-(--text-muted)"
       >
         <i :class="icon" />
       </span>
@@ -111,7 +111,7 @@
           tabindex="-1"
           dir="auto"
           :data-testid="`${testId}__title`"
-          class="m-0 truncate rounded-(--shape-elements) text-label-md text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          class="m-0 truncate rounded-(--shape-control) text-label-md text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         >
           {{ title }}
         </h2>
@@ -134,7 +134,7 @@
     <div
       v-if="hasToolbar()"
       :data-testid="`${testId}__toolbar`"
-      class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xxs)"
+      class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-2xs)"
     >
       <ResponseBranches
         v-model="version"
@@ -143,7 +143,7 @@
         :disabled="streaming"
         :data-testid="`${testId}__versions`"
       />
-      <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)">
+      <div class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)">
         <slot name="actions" />
         <CopyButton
           v-if="copyValue"

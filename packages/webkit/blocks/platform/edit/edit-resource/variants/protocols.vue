@@ -570,7 +570,7 @@
                             </Select.Option>
                             <p
                               v-if="!caMatches.length"
-                              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                             >
                               No certificate matches"{{ caQuery }}".
                             </p>

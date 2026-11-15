@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 44f0497ae830502428f9749be1bedd3feec00a4f97a03570f6992e40af976d63
+checksum: 077f150fbea36f71804b55c948647bcb3113890fbf4cb74277fa351ac75c5c62
 ---
 
 # ComparePlans — Component Spec
@@ -131,7 +131,7 @@ _none_
 | typography (column head)    | `.text-overline-md`                                                                   |
 | header fill                 | `var(--bg-canvas)`                                                                    |
 | accent bar                  | `var(--border-selected)`                                                              |
-| included mark               | `var(--success-contrast)`, `.text-body-md`                                            |
+| included mark               | `var(--success-foreground)`, `.text-body-md`                                            |
 | not-included mark           | `var(--text-muted)`, `.text-body-md`                                                  |
 | picker empty status         | `.text-label-sm`, `var(--text-muted)`                                                 |
 | muted text                  | `var(--text-muted)`                                                                   |

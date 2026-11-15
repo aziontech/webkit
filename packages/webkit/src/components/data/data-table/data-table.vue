@@ -1674,7 +1674,7 @@
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-xxs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
+    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
@@ -1828,7 +1828,7 @@
                 :key="'sk-' + n"
                 :class="
                   stacked
-                    ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
+                    ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
                     : undefined
                 "
               >
@@ -1925,7 +1925,7 @@
                   :data-live-boundary="row.id === liveBoundaryId || undefined"
                   :class="[
                     stacked
-                      ? 'flex-wrap rounded-(--shape-elements) border! py-(--spacing-xxs)'
+                      ? 'flex-wrap rounded-(--shape-control) border! py-(--spacing-2xs)'
                       : undefined,
                     striped && (windowStart + index) % 2 === 1
                       ? '[--table-row-bg:var(--bg-surface-raised)]'

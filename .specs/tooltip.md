@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: d9ccaed55b56832a02a901181e07831b9c578c19d52a88d2ed415d4a8b881e23
+checksum: 469be1cc91da530907cfef5de0e7d9f0b507753cceaddb236784ca99e2d8f979
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -117,16 +117,16 @@ The panel is positioned with the standalone **`translate`** property, never `top
 
 ## Tokens
 
-| Region             | Token (DESIGN.md)       |
-| ------------------ | ----------------------- |
-| typography (label) | `.text-body-sm`         |
-| surface            | `var(--bg-surface)`     |
-| text               | `var(--text-default)`   |
-| border             | `var(--border-muted)`   |
-| padding            | `var(--spacing-xs)`     |
-| max-width          | `var(--container-3xs)`  |
-| shape              | `var(--shape-elements)` |
-| ring               | `var(--ring-color)`     |
+| Region             | Token (DESIGN.md)      |
+| ------------------ | ---------------------- |
+| typography (label) | `.text-body-sm`        |
+| surface            | `var(--bg-surface)`    |
+| text               | `var(--text-default)`  |
+| border             | `var(--border-muted)`  |
+| padding            | `var(--spacing-xs)`    |
+| max-width          | `var(--container-3xs)` |
+| shape              | `var(--shape-control)` |
+| ring               | `var(--ring-color)`    |
 
 ## Theme gaps
 

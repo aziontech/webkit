@@ -38,7 +38,7 @@
         @submit.prevent
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Deploy</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Deploy project-01. Review what goes live and where.

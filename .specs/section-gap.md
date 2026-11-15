@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 28e81097de777e486209a50bcac6826c12e2fcc31a21b6694769eb619ef4997d
+checksum: 47f0318f1a6cf07574f1b24bec51f54bde821a244d9480b2482362fa6d6613a7
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
@@ -41,7 +41,7 @@ The empty registration frame that divides two page sections. On a page with no m
 ## Best practices
 
 - Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.
-- Do not override the height from the call site. The steps are multiples of `--spacing-xxl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
+- Do not override the height from the call site. The steps are multiples of `--spacing-2xl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
 - Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks="all"`): the shared rule is given away, the registration mark is not.
 - Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.
@@ -64,7 +64,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | How much vertical air the gap holds, as a multiple of `--spacing-xxl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | How much vertical air the gap holds, as a multiple of `--spacing-2xl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport. |
 | `hatch` | `boolean` | `false` | false | Draw the gap's ruled line texture — fine vertical rules at a fixed pitch. |
 
 ## Events
@@ -93,20 +93,20 @@ _none_
 | corner mark | `var(--border-default)` |
 | hatch line | `var(--text-default)` at 6%, via `texture-material`'s `lines` kind — mixed down so the step off the canvas is equal in both themes |
 | hatch pitch | 8 px (the `lines` kind at its `medium` step) |
-| height (small) | `var(--spacing-xxl)` — 1× |
-| height (medium) | `var(--spacing-xxl)` — 2× |
-| height (large) | `var(--spacing-xxl)` — 3× |
+| height (small) | `var(--spacing-2xl)` — 1× |
+| height (medium) | `var(--spacing-2xl)` — 2× |
+| height (large) | `var(--spacing-2xl)` — 3× |
 
 ## Theme gaps
 
-<!-- No new token group: the steps are multiples of `--spacing-xxl`, the largest step of the
-     existing semantic scale in `packages/theme/src/tokens/semantic/spacings.data.js`. That
+<!-- No new token group: the steps are multiples of `--spacing-2xl`, the largest step of the
+     existing semantic scale in `packages/theme/src/tokens/semantic/spacing.js`. That
      token is already responsive (2rem / 4rem / 6rem across breakpoints), so the gap inherits
      the responsiveness instead of declaring a scale of its own. -->
 
 | Figma variable | Temporary primitive | Follow-up |
 |---|---|---|
-| `--spacing-spacer-spacer-{sm,md,lg,xl}` (80 / 128 / 160 / 240) | `var(--spacing-xxl)` × 1 / 2 / 3 | The Figma spacer family is deliberately **not** ported as its own token group: the theme's existing spacing scale already carries the page's rhythm, and a second family would be a parallel source of truth for the same decision. The multiples land on the Figma weights in the middle of the responsive range (64/128/192 at `sm`) and scale past them on a wide screen. Revisit only if the design needs a step the existing scale cannot express. |
+| `--spacing-spacer-spacer-{sm,md,lg,xl}` (80 / 128 / 160 / 240) | `var(--spacing-2xl)` × 1 / 2 / 3 | The Figma spacer family is deliberately **not** ported as its own token group: the theme's existing spacing scale already carries the page's rhythm, and a second family would be a parallel source of truth for the same decision. The multiples land on the Figma weights in the middle of the responsive range (64/128/192 at `sm`) and scale past them on a wide screen. Revisit only if the design needs a step the existing scale cannot express. |
 
 ## Accessibility (WCAG 2.1 AA)
 

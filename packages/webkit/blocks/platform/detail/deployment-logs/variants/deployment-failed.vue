@@ -377,7 +377,7 @@
           <div
             class="grid grid-cols-1 gap-(--spacing-lg) p-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
           >
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Created</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <Tooltip text="John Smith · November 06, 2026, 10:30:58 AM">
@@ -392,7 +392,7 @@
                 <span class="shrink-0 text-body-sm text-(--text-muted)"> 1 hour ago </span>
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Status</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <StatusIndicator
@@ -401,7 +401,7 @@
                 />
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Duration</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
@@ -411,7 +411,7 @@
                 <span class="truncate text-body-sm text-(--text-default)"> 48s </span>
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Environment</span>
               <div class="flex min-w-0 items-center">
                 <Tag
@@ -421,12 +421,12 @@
                 />
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Service</span>
               <Tooltip text="Open web-app in Services">
                 <a
                   href="/services/1784675753"
-                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                 >
                   <span class="truncate underline-offset-2 group-hover/link:underline">
                     web-app
@@ -438,12 +438,12 @@
                 </a>
               </Tooltip>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Resource</span>
               <Tooltip text="Open web-app in Resources">
                 <a
                   href="/resources/1784552864"
-                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                 >
                   <span class="truncate underline-offset-2 group-hover/link:underline">
                     web-app
@@ -455,7 +455,7 @@
                 </a>
               </Tooltip>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Triggered by</span>
               <div class="flex min-w-0 items-center">
                 <Tooltip text="Console (UI)">
@@ -468,7 +468,7 @@
                 </Tooltip>
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Preset</span>
               <div class="flex min-w-0 items-center">
                 <Tooltip text="build.preset in platform.config.js">
@@ -481,7 +481,7 @@
                 </Tooltip>
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs) sm:col-span-2 lg:col-span-3">
+            <div class="flex flex-col gap-(--spacing-2xs) sm:col-span-2 lg:col-span-3">
               <span class="text-label-sm text-(--text-muted)">Storage</span>
               <div
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
@@ -499,7 +499,7 @@
                 <span class="text-label-code-sm text-(--text-muted)"> 20260730140211 </span>
               </div>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs) sm:col-span-2 lg:col-span-3">
+            <div class="flex flex-col gap-(--spacing-2xs) sm:col-span-2 lg:col-span-3">
               <span class="text-label-sm text-(--text-muted)">Domains</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
@@ -511,7 +511,7 @@
                     href="https://web-app-mh2saq.example.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                    class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                   >
                     <span class="truncate underline-offset-2 group-hover/link:underline">
                       web-app-mh2saq.example.com
@@ -550,13 +550,13 @@
                   </Accordion.Trigger>
 
                   <div
-                    class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
+                    class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                   >
                     <div class="pointer-events-auto">
                       <Tooltip text="Open Default in Build and deployment settings">
                         <a
                           href="/account/build-deployment"
-                          class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                          class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                         >
                           <span class="truncate underline-offset-2 group-hover/link:underline">
                             Default
@@ -575,21 +575,21 @@
                   <div
                     class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4"
                   >
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Binding policy</span>
-                      <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                         <span class="truncate text-body-sm text-(--text-default)"> Strict </span>
                       </span>
                     </div>
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Deployment policy</span>
-                      <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                         <span class="truncate text-body-sm text-(--text-default)"> Single </span>
                       </span>
                     </div>
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Canary</span>
-                      <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                         <svg
                           class="h-(--size-4) w-(--size-4) shrink-0 text-(--text-muted)"
                           viewBox="0 0 16 16"
@@ -604,9 +604,9 @@
                         <span class="truncate text-body-sm text-(--text-muted)"> Disabled </span>
                       </span>
                     </div>
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Skew protection</span>
-                      <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                      <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                         <svg
                           class="h-(--size-4) w-(--size-4) shrink-0 text-(--text-muted)"
                           viewBox="0 0 16 16"

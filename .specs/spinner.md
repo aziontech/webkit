@@ -4,7 +4,7 @@ category: utils
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 3cbaf7fc93ba834da5671974e32b75e5b373d3bc30a5937acf61ee40562cfef7
+checksum: f3674bb16e6430e69eb6d7654b2c46550b65ea7a022c79bfb7f46a8dac5ab646
 style_seam: true
 created: 2026-05-22
 last_updated: 2026-11-15
@@ -92,7 +92,7 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 | surface    | `var(--bg-surface)`     |
 | text       | `var(--text-default)`   |
 | spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
+| shape      | `var(--shape-control)` |
 | ring       | `var(--ring-color)`     |
 
 ## Theme gaps

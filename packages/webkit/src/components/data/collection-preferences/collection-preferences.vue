@@ -346,13 +346,13 @@
                 >
                   {{ t('collectionPreferences.columnsDescription') }}
                 </p>
-                <ul class="flex flex-col gap-(--spacing-xxs)">
+                <ul class="flex flex-col gap-(--spacing-2xs)">
                   <li
                     v-for="(column, index) in draftColumns"
                     :id="`${uid}-column-${column.id}`"
                     :key="column.id"
                     :data-testid="`${testId}__column`"
-                    class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs)"
+                    class="flex min-h-10 items-center gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs)"
                   >
                     <label
                       :data-locked="locked(column.id) || null"
@@ -402,7 +402,7 @@
                 class="flex cursor-pointer items-start gap-(--spacing-sm)"
               >
                 <Switch v-model="draftWrap" />
-                <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-md text-(--text-default)">{{
                     t('collectionPreferences.wrapLines')
                   }}</span>
@@ -418,7 +418,7 @@
                 class="flex cursor-pointer items-start gap-(--spacing-sm)"
               >
                 <Switch v-model="draftStriped" />
-                <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-md text-(--text-default)">{{
                     t('collectionPreferences.striped')
                   }}</span>

@@ -493,7 +493,7 @@
                       <template #cell-move="{ row }">
                         <div
                           :data-rule-id="row.id"
-                          class="flex items-center gap-(--spacing-xxs)"
+                          class="flex items-center gap-(--spacing-2xs)"
                         >
                           <Tooltip
                             :text="
@@ -558,7 +558,7 @@
                         </div>
                       </template>
                       <template #cell-name="{ row }">
-                        <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                        <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <Button
                             kind="link"
                             :label="row.name"
@@ -711,7 +711,7 @@
               >
                 {{ phase.label }} phase
               </h3>
-              <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0">
                 <li
                   v-for="line in phase.items"
                   :key="line.key"

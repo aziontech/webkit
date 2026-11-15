@@ -28,7 +28,7 @@
               <a
                 href="/resources/3344556677"
                 data-link
-                class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
               >
                 <span class="truncate underline-offset-2 group-hover/link:underline">web-app</span>
                 <i
@@ -94,7 +94,7 @@
       <div
         class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) lg:grid-cols-4"
       >
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="text-label-sm text-(--text-muted)">Status</span>
           <div class="flex min-h-7 min-w-0 items-center">
             <StatusIndicator
@@ -104,7 +104,7 @@
           </div>
         </div>
 
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="text-label-sm text-(--text-muted)">Environment</span>
           <div class="flex min-h-7 min-w-0 items-center">
             <Tag
@@ -116,7 +116,7 @@
           </div>
         </div>
 
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="text-label-sm text-(--text-muted)">Rules</span>
           <div class="flex min-h-7 min-w-0 items-center">
             <Button
@@ -126,7 +126,7 @@
           </div>
         </div>
 
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="text-label-sm text-(--text-muted)">Last modified</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <span class="truncate text-body-sm text-(--text-default)">
@@ -142,7 +142,7 @@
           </div>
         </div>
 
-        <div class="col-span-2 flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-4">
+        <div class="col-span-2 flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-4">
           <span class="text-label-sm text-(--text-muted)">Modules</span>
           <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tag

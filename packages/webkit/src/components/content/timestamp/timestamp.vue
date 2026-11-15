@@ -139,7 +139,7 @@
         ref="textRef"
         type="button"
         :data-testid="`${testId}__text`"
-        class="cursor-pointer rounded-(--shape-elements) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+        class="cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
       >
         <time
           :datetime="date.toISOString()"
@@ -153,7 +153,7 @@
       <dl
         v-if="open"
         :data-testid="`${testId}__details`"
-        class="flex flex-col py-(--spacing-xxs)"
+        class="flex flex-col py-(--spacing-2xs)"
       >
         <div
           v-for="row in rows"
@@ -201,7 +201,7 @@
       aria-haspopup="dialog"
       aria-expanded="false"
       :data-testid="`${testId}__text`"
-      class="cursor-pointer rounded-(--shape-elements) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+      class="cursor-pointer rounded-(--shape-control) text-start underline decoration-dotted decoration-(--border-strong) underline-offset-4 outline-none transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
       @click="arm"
     >
       <time

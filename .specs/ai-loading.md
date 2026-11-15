@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 0be4fe250238d02c13468aa38840f081d0b7e1a3521672413e4593395859dc6a
+checksum: bf070b128178ad87b08a64193ca4457ea5cb6990a142b3a041e977003a183aa7
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -96,7 +96,7 @@ _No slots._
 | text   | `.text-body-sm`, `var(--text-muted)`      |
 | dots   | `var(--text-muted)`, `var(--radius-full)` |
 | bar    | `Progress` small rounded, max `var(--container-xs)` |
-| gaps   | `var(--spacing-xs)`, `var(--spacing-xxs)` |
+| gaps   | `var(--spacing-xs)`, `var(--spacing-2xs)` |
 
 ## Theme gaps
 

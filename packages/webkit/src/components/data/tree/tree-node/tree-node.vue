@@ -134,13 +134,13 @@
       :data-state="state"
       :data-selected="selected || null"
       :data-disabled="item.disabled || null"
-      class="group/tree-row relative isolate flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 active:before:bg-(--bg-active) motion-reduce:before:transition-none data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-default [:focus-visible>&]:ring-2 [:focus-visible>&]:ring-(--ring-color) [:focus-visible>&]:ring-offset-1 [:focus-visible>&]:ring-offset-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+      class="group/tree-row relative isolate flex min-h-8 w-full cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance hover:before:opacity-100 active:before:bg-(--bg-active) motion-reduce:before:transition-none data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-default [:focus-visible>&]:ring-2 [:focus-visible>&]:ring-(--ring-color) [:focus-visible>&]:ring-offset-1 [:focus-visible>&]:ring-offset-(--bg-canvas) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
     >
       <span
         :role="grid ? 'gridcell' : undefined"
         :tabindex="grid ? -1 : undefined"
         :data-tree-cell="grid ? '' : undefined"
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       >
         <span class="flex w-4 shrink-0 items-center justify-center self-stretch">
           <button
@@ -173,7 +173,7 @@
             :data-testid="`${ctx.testId.value}__rename`"
             :value="item.label"
             :aria-label="ctx.renameLabel(item.label)"
-            class="h-6 min-w-0 flex-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-xxs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+            class="h-6 min-w-0 flex-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
             @keydown="onRenameKeydown"
             @blur="commitRename"
           />
@@ -191,7 +191,7 @@
         ref="actionsRef"
         :role="grid ? 'gridcell' : undefined"
         data-tree-actions
-        class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)"
+        class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
         @mousedown.self.prevent
       >
         <slot

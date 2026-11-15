@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: c6d6c04b059d2a29d5648ad2c32736b4c2fa6b30ee2fb8cb8cbac818287bc390
+checksum: 07a2cd40a665acb390916ed4f0c65a548a52d26df43f1cc26ee4e35d02cd5a12
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -112,11 +112,11 @@ One row of the documentation's related-content list: a leading glyph in a framed
 | text (trailing glyph)            | `var(--text-muted)`        |
 | tile surface                     | `var(--bg-surface-raised)` |
 | tile border                      | `var(--border-muted)`      |
-| tile shape                       | `var(--shape-elements)`    |
+| tile shape                       | `var(--shape-control)`     |
 | row hover + inline-code surface  | `var(--bg-hover)`          |
 | inline-code border               | `var(--border-default)`    |
 | inline-code shape                | `var(--shape-flat)`        |
-| spacing (title to copy)          | `var(--spacing-xxs)`       |
+| spacing (title to copy)          | `var(--spacing-2xs)`       |
 | ring                             | `var(--ring-color)`        |
 
 ## Theme gaps

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 9
 template: 2
-checksum: 1b1f9aa91aa011016f256de8f8fe56a96e12f42288dc56c86d71a34a5a73dce6
+checksum: 43fdfe75635b4fb40e20a91b4990317a9e2ef0d0e2c52ac80268d1edf0dce528
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -219,34 +219,34 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 
 ## Tokens
 
-| Region                                                    | Token (DESIGN.md)                                                                                                                                        |
-| --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| panel surface / border / shape / shadow                   | inherited from `Dialog` (`var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`, `var(--shadow-sm)`)                                          |
-| input header divider                                      | `border-b border-(--border-default)`                                                                                                                     |
-| input field chrome (border / surface / text / focus ring) | inherited from `Input` (`var(--border-default)`, `var(--bg-surface)`, `var(--text-default)`, `var(--ring-color)`)                                        |
-| input placeholder / search icon                           | `var(--text-muted)`                                                                                                                                      |
-| group heading typography                                  | `.text-label-sm` + `text-(--text-muted)`                                                                                                                 |
-| item label typography                                     | `.text-label-sm` + `text-(--text-default)`                                                                                                               |
-| item shape                                                | `var(--shape-button)`                                                                                                                                    |
-| item min-height                                           | `min-h-8` (32px)                                                                                                                                         |
-| item spacing.x                                            | `var(--spacing-sm)`                                                                                                                                      |
-| item spacing.y                                            | `var(--spacing-xxs)`                                                                                                                                     |
-| item gap                                                  | `var(--spacing-xs)`                                                                                                                                      |
-| item icon box                                             | `size-4` (16px), rendered only on an item that carries a `prefix`                                                                                        |
-| list spacing.x / spacing.y                                | `var(--spacing-xxs)` / `var(--spacing-xs)` — the vertical seam is one step up from the row inset, matching the DropdownMenu panel                        |
-| item active surface                                       | `var(--bg-selected)`                                                                                                                                     |
-| item hover surface                                        | `var(--bg-hover)`                                                                                                                                        |
-| item disabled text                                        | `var(--text-disabled)`                                                                                                                                   |
-| item match highlight                                      | `font-semibold` on a transparent `<mark>`, `text-inherit` (inherits the row's color)                                                                     |
-| item page chevron                                         | `ai ai-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                       |
-| back control                                              | `.text-label-sm` + `text-(--text-default)`, `var(--shape-elements)`, `h-8`, `px-(--spacing-xs)`, hover `var(--bg-hover)`, focus ring `var(--ring-color)` |
-| back control glyph                                        | `ai ai-chevron-left` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                        |
-| separator                                                 | `border-t border-(--border-default)`                                                                                                                     |
-| separator spacing.above                                   | `var(--spacing-sm)`                                                                                                                                      |
-| separator spacing.below                                   | `var(--spacing-xs)`                                                                                                                                      |
-| group spacing (after another group)                       | `var(--spacing-sm)`                                                                                                                                      |
-| empty-state text                                          | `.text-label-sm` + `text-(--text-muted)`                                                                                                                 |
-| focus ring                                                | `var(--ring-color)`                                                                                                                                      |
+| Region                                                    | Token (DESIGN.md)                                                                                                                                       |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| panel surface / border / shape / shadow                   | inherited from `Dialog` (`var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`, `var(--shadow-sm)`)                                         |
+| input header divider                                      | `border-b border-(--border-default)`                                                                                                                    |
+| input field chrome (border / surface / text / focus ring) | inherited from `Input` (`var(--border-default)`, `var(--bg-surface)`, `var(--text-default)`, `var(--ring-color)`)                                       |
+| input placeholder / search icon                           | `var(--text-muted)`                                                                                                                                     |
+| group heading typography                                  | `.text-label-sm` + `text-(--text-muted)`                                                                                                                |
+| item label typography                                     | `.text-label-sm` + `text-(--text-default)`                                                                                                              |
+| item shape                                                | `var(--shape-button)`                                                                                                                                   |
+| item min-height                                           | `min-h-8` (32px)                                                                                                                                        |
+| item spacing.x                                            | `var(--spacing-sm)`                                                                                                                                     |
+| item spacing.y                                            | `var(--spacing-2xs)`                                                                                                                                    |
+| item gap                                                  | `var(--spacing-xs)`                                                                                                                                     |
+| item icon box                                             | `size-4` (16px), rendered only on an item that carries a `prefix`                                                                                       |
+| list spacing.x / spacing.y                                | `var(--spacing-2xs)` / `var(--spacing-xs)` — the vertical seam is one step up from the row inset, matching the DropdownMenu panel                       |
+| item active surface                                       | `var(--bg-selected)`                                                                                                                                    |
+| item hover surface                                        | `var(--bg-hover)`                                                                                                                                       |
+| item disabled text                                        | `var(--text-disabled)`                                                                                                                                  |
+| item match highlight                                      | `font-semibold` on a transparent `<mark>`, `text-inherit` (inherits the row's color)                                                                    |
+| item page chevron                                         | `ai ai-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                      |
+| back control                                              | `.text-label-sm` + `text-(--text-default)`, `var(--shape-control)`, `h-8`, `px-(--spacing-xs)`, hover `var(--bg-hover)`, focus ring `var(--ring-color)` |
+| back control glyph                                        | `ai ai-chevron-left` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                       |
+| separator                                                 | `border-t border-(--border-default)`                                                                                                                    |
+| separator spacing.above                                   | `var(--spacing-sm)`                                                                                                                                     |
+| separator spacing.below                                   | `var(--spacing-xs)`                                                                                                                                     |
+| group spacing (after another group)                       | `var(--spacing-sm)`                                                                                                                                     |
+| empty-state text                                          | `.text-label-sm` + `text-(--text-muted)`                                                                                                                |
+| focus ring                                                | `var(--ring-color)`                                                                                                                                     |
 
 ## Theme gaps
 

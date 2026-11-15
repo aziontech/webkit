@@ -503,7 +503,7 @@
         borders="none"
         marks="all"
         data-hatch="true"
-        class="h-[calc(var(--spacing-xxl)*2)]"
+        class="h-[calc(var(--spacing-2xl)*2)]"
       >
         <TextureMaterial kind="lines" />
       </FrameBox>

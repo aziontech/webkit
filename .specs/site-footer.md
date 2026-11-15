@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c9ff5bf4ca6c580bb32b0f3d1eb91efb0fed387c548ff1bed7cc4a7abe5033de
+checksum: bccec23330506d72ada38bd29f40a3845283b64486314162d61b8cf52511b04f
 ---
 
 # SiteFooter — Component Spec
@@ -114,7 +114,7 @@ The footer under every marketing page: the link columns, then the social row bes
 | top hairline    | `var(--border-default)`            |
 | language glyph  | `var(--text-muted)`                |
 | external glyph  | `.text-body-xs`, the link's colour |
-| mark link shape | `var(--shape-elements)`            |
+| mark link shape | `var(--shape-control)`             |
 | mark gap        | `var(--spacing-xs)`                |
 
 ## Theme gaps

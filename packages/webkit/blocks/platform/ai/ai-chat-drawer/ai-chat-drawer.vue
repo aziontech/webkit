@@ -295,7 +295,7 @@
                 size="small"
               />
             </div>
-            <div class="flex items-center gap-(--spacing-xxs)">
+            <div class="flex items-center gap-(--spacing-2xs)">
               <IconButton
                 icon="ai ai-plus"
                 aria-label="New chat"

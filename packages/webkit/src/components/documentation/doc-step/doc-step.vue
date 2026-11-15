@@ -55,7 +55,7 @@
     </div>
     <div
       data-step-body
-      class="min-w-0 flex-1 pt-(--spacing-xxs) pb-(--spacing-lg)"
+      class="min-w-0 flex-1 pt-(--spacing-2xs) pb-(--spacing-lg)"
     >
       <span
         data-doc-chrome

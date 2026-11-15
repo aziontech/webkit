@@ -398,7 +398,7 @@
             :aria-label="`Account: ${currentAccount.name}. Switch account`"
             aria-haspopup="dialog"
             aria-keyshortcuts="Control+O Meta+O"
-            class="flex h-7 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            class="flex h-7 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="openSwitch"
           >
             <Avatar
@@ -531,7 +531,7 @@
         </DropdownMenu.Group>
         <DropdownMenu.Group>
           <div
-            class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
+            class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs)"
           >
             <span class="flex-1 truncate text-start text-label-sm text-(--text-default)"
               >Theme</span
@@ -567,7 +567,7 @@
           </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Group>
-          <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
+          <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
             <Button
               label="Upgrade to Pro"
               kind="secondary"
@@ -672,7 +672,7 @@
                   <template #cell-name="{ row }">
                     <div
                       :data-depth="row.depth"
-                      class="flex w-full min-w-0 items-center gap-(--spacing-xxs) data-[depth=1]:ps-(--spacing-lg) data-[depth=2]:ps-(--spacing-xxl)"
+                      class="flex w-full min-w-0 items-center gap-(--spacing-2xs) data-[depth=1]:ps-(--spacing-lg) data-[depth=2]:ps-(--spacing-2xl)"
                     >
                       <IconButton
                         v-if="row.hasChildren"

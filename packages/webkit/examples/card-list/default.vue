@@ -26,7 +26,7 @@
   <CardList :items="applications">
     <template #header="{ item }">{{ item.name }}</template>
     <template #default="{ item }">
-      <dl class="grid grid-cols-[auto_1fr] gap-x-(--spacing-sm) gap-y-(--spacing-xxs)">
+      <dl class="grid grid-cols-[auto_1fr] gap-x-(--spacing-sm) gap-y-(--spacing-2xs)">
         <dt class="text-(--text-muted)">Status</dt>
         <dd>
           <Tag

@@ -646,7 +646,7 @@
                   class="ai ai-table shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <span class="truncate text-heading-xxs text-(--text-default)">{{
+                <span class="truncate text-heading-2xs text-(--text-default)">{{
                   table?.name
                 }}</span>
                 <Tag
@@ -761,7 +761,7 @@
           @submit.prevent="submitCreate"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Create Table</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 Define the table name and its columns in {{ DATABASE }}, or start from a CSV file.
@@ -1091,7 +1091,7 @@
           @submit.prevent="submitColumn"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Add column</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 The column is added at the end of {{ table?.name }}.
@@ -1249,7 +1249,7 @@
           @submit.prevent="submitRow"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Insert row</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 One field per column of {{ table?.name }}, in the table's own order.

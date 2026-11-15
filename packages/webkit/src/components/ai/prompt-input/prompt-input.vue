@@ -292,7 +292,7 @@
       <div
         v-if="slots.attachments || references.length"
         :data-testid="`${testId}__attachments`"
-        class="flex flex-wrap gap-(--spacing-xs) px-(--spacing-xs) pt-(--spacing-xxs)"
+        class="flex flex-wrap gap-(--spacing-xs) px-(--spacing-xs) pt-(--spacing-2xs)"
       >
         <slot name="attachments" />
         <PromptInputReferences
@@ -313,7 +313,7 @@
         :aria-label="query?.menu.label"
         :data-testid="`${testId}__menu`"
         :data-trigger="query?.menu.trigger"
-        class="absolute inset-x-0 bottom-full z-(--z-input-overlay) m-0 mb-(--spacing-xxs) flex max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-xs)"
+        class="absolute inset-x-0 bottom-full z-(--z-control-overlay) m-0 mb-(--spacing-2xs) flex max-h-72 list-none flex-col overflow-y-auto rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
       >
         <li
           v-for="(option, index) in matches"
@@ -322,7 +322,7 @@
           role="option"
           :aria-selected="index === activeIndex"
           :data-active="index === activeIndex || null"
-          class="flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected)"
+          class="flex cursor-pointer items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) hover:bg-(--bg-hover) data-[active]:bg-(--bg-selected)"
           @mousedown.prevent
           @click="choose(option)"
           @keydown.enter.prevent="choose(option)"
@@ -356,7 +356,7 @@
         :disabled="disabled"
         :data-testid="`${testId}__textarea`"
         enterkeyhint="send"
-        class="w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-xxs) text-body-md text-(--text-default) placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        class="w-full resize-none bg-transparent px-(--spacing-xs) py-(--spacing-2xs) text-body-md text-(--text-default) placeholder:text-(--text-muted) outline-none disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @input="onInput"
         @keydown="onKeydown"
         @click="readQuery"
@@ -367,7 +367,7 @@
       <div class="flex items-center justify-between gap-(--spacing-xs)">
         <fieldset
           :disabled="disabled"
-          class="m-0 flex min-w-0 flex-wrap items-center gap-(--spacing-xxs) border-0 p-0"
+          class="m-0 flex min-w-0 flex-wrap items-center gap-(--spacing-2xs) border-0 p-0"
         >
           <slot name="actions" />
         </fieldset>
@@ -377,7 +377,7 @@
             :id="counterId"
             :data-invalid="overBy > 0 || null"
             :data-testid="`${testId}__counter`"
-            class="text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--danger-contrast)"
+            class="text-body-xs text-(--text-muted) tabular-nums data-[invalid]:text-(--danger-foreground)"
           >
             {{ t('promptInput.count', { count: length, max: maxLength }) }}
           </span>

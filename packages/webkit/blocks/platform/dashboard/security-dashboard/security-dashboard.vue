@@ -485,7 +485,7 @@
       >
         <ChartCard :span="8">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Matched requests over time</ChartCard.Title>
               <Hint text="Requests that matched a rule: blocked, or logged and allowed through." />
             </span>
@@ -571,7 +571,7 @@
         </ChartCard>
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Needs attention</ChartCard.Title>
               <Hint text="Settings and traffic on your services that ask for a decision." />
             </span>
@@ -621,7 +621,7 @@
         </ChartCard>
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
               <Hint
                 text="Blocked requests, broken down by the attack category of the rule they matched."
@@ -689,7 +689,7 @@
         </ChartCard>
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Blocked requests by country</ChartCard.Title>
               <Hint text="Blocked requests, broken down by the country they came from." />
             </span>
@@ -755,7 +755,7 @@
         </ChartCard>
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
               <Hint text="The addresses blocked most often, with their network and main attack." />
             </span>
@@ -865,7 +865,7 @@
     >
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DialogTitle>{{ expandedReport.label }}</DialogTitle>
             <DialogDescription>{{ expandedReport.description }}</DialogDescription>
           </div>

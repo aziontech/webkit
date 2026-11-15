@@ -16,7 +16,7 @@
         </Flow.Anchor>
         <Flow.Anchor side="start">
           <div
-            class="m-(--spacing-xxs) mt-0 flex items-center gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)"
+            class="m-(--spacing-2xs) mt-0 flex items-center gap-(--spacing-sm) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-label-md text-(--text-default)"
           >
             Bindings <span class="text-(--text-muted)">2</span>
           </div>

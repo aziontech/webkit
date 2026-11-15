@@ -60,13 +60,13 @@
       v-if="previous"
       :href="previous.href"
       :data-testid="`${testId}__previous`"
-      class="group flex flex-col items-start gap-(--spacing-xxs) rounded-(--shape-elements) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+      class="group flex flex-col items-start gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, previous)"
     >
       <span class="ps-5 text-label-sm text-(--text-muted)">{{
         previousLabel || t('docPrevNext.previous')
       }}</span>
-      <span class="flex items-center gap-(--spacing-xxs)">
+      <span class="flex items-center gap-(--spacing-2xs)">
         <i
           class="ai ai-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
           aria-hidden="true"
@@ -79,13 +79,13 @@
       v-if="next"
       :href="next.href"
       :data-testid="`${testId}__next`"
-      class="group flex flex-col items-end gap-(--spacing-xxs) rounded-(--shape-elements) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+      class="group flex flex-col items-end gap-(--spacing-2xs) rounded-(--shape-control) p-(--spacing-xs) no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
       @click="emit('navigate', $event, next)"
     >
       <span class="pe-5 text-label-sm text-(--text-muted)">{{
         nextLabel || t('docPrevNext.next')
       }}</span>
-      <span class="flex items-center gap-(--spacing-xxs)">
+      <span class="flex items-center gap-(--spacing-2xs)">
         <span class="text-label-md text-(--text-default)">{{ next.title }}</span>
         <i
           class="ai ai-chevron-right size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"

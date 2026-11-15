@@ -20,7 +20,7 @@
       @drop="onDrop"
       @reject="onReject"
     />
-    <div class="flex flex-col gap-(--spacing-xxs) text-body-sm">
+    <div class="flex flex-col gap-(--spacing-2xs) text-body-sm">
       <p class="text-(--text-default)">
         Accepted: {{ accepted.length ? accepted.join(', ') : 'none yet' }}
       </p>

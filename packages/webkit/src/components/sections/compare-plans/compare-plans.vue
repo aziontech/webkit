@@ -186,7 +186,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="columns.length > 0"
@@ -245,7 +245,7 @@
                   <p
                     v-if="matchingColumns.length === 0"
                     role="status"
-                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                    class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                   >
                     {{ t('comparePlans.empty') }}
                   </p>
@@ -330,7 +330,7 @@
                   {{ labelHead(row.label)
                   }}<span class="whitespace-nowrap"
                     >{{ labelTail(row.label)
-                    }}<span class="-my-(--spacing-xxs) ms-(--spacing-xxs) inline-flex align-middle"
+                    }}<span class="-my-(--spacing-2xs) ms-(--spacing-2xs) inline-flex align-middle"
                       ><Popover placement="auto">
                         <PopoverTrigger>
                           <IconButton
@@ -341,7 +341,7 @@
                           />
                         </PopoverTrigger>
                         <PopoverContent>
-                          <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-sm)">
+                          <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
                             <PopoverTitle>{{ row.label }}</PopoverTitle>
                             <PopoverDescription>{{ row.hint }}</PopoverDescription>
                           </div>
@@ -369,7 +369,7 @@
               <template v-if="isIncluded(row.values[index])">
                 <Tooltip :text="includedText">
                   <i
-                    class="ai ai-check-circle text-body-md text-(--success-contrast)"
+                    class="ai ai-check-circle text-body-md text-(--success-foreground)"
                     aria-hidden="true"
                   />
                 </Tooltip>

@@ -14,7 +14,7 @@
     "test": "node --test \"test/**/*.test.mjs\"",
     "format": "prettier --write scripts/ src/",
     "build": "pnpm build:tokens",
-    "build:tokens": "node src/scripts/build-tokens.mjs",
+    "build:tokens": "node scripts/build-tokens.mjs",
     "clean:dts": "find src -name '*.d.ts' -delete && find src -name '*.d.ts.map' -delete",
     "build:dts": "pnpm clean:dts && vue-tsc --declaration --emitDeclarationOnly",
     "prepack": "pnpm build:tokens && pnpm build:dts"
@@ -40,20 +40,20 @@
     "dist/",
     "LICENSE"
   ],
-  "types": "./dist/v4/globals.d.ts",
+  "types": "./dist/globals.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/v4/globals.d.ts",
-      "default": "./dist/v4/globals.css"
+      "types": "./dist/globals.d.ts",
+      "default": "./dist/globals.css"
     },
     "./fonts.css": {
-      "types": "./dist/v4/fonts.d.ts",
-      "default": "./dist/v4/fonts.css"
+      "types": "./dist/fonts.d.ts",
+      "default": "./dist/fonts.css"
     },
     "./animations": "./src/tokens/primitives/animations/animate.js",
     "./colors": "./src/tokens/primitives/colors/colors.js",
-    "./layouts": "./src/tokens/semantic/layouts.data.js",
-    "./texts": "./src/tokens/semantic/texts.data.js",
-    "./theme-colors": "./src/scripts/compile-theme.js"
+    "./layout": "./src/tokens/semantic/layout.js",
+    "./typography": "./src/tokens/semantic/typography.js",
+    "./theme-colors": "./src/tokens/theme-colors.js"
   }
 }

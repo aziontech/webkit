@@ -37,8 +37,8 @@ typography) are **blocked** by lint and hooks — the token is always the answer
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | **Color**      | `var(--primary)` · `var(--bg-surface)` · `var(--text-default)` · `var(--border-default)` · feedback `--success/--warning/--danger/--info`   | `#f3652b` · `text-blue-600` · `rgb(…)`                    |
 | **Typography** | the generated classes — `text-heading-md`, `text-body-sm`, `text-button-lg`, `text-label-md` (font + size + line-height + tracking bundled) | `text-sm` · `leading-*` · `tracking-*` · `font-family`    |
-| **Spacing**    | the semantic scale — `p-(--spacing-md)` · `gap-(--spacing-sm)` (`xxs…xxl`)                                                                  | primitive `--spacing-1…-96` · `p-4` when a token applies  |
-| **Shape**      | `rounded-(--shape-button)` · `--shape-card` · `--shape-elements`                                                                            | `rounded-lg` · numeric radii                              |
+| **Spacing**    | the semantic scale — `p-(--spacing-md)` · `gap-(--spacing-sm)` (`2xs…2xl`)                                                                  | primitive `--spacing-1…-96` · `p-4` when a token applies  |
+| **Shape**      | `rounded-(--shape-button)` · `--shape-card` · `--shape-control`                                                                             | `rounded-lg` · numeric radii                              |
 | **Shadow**     | `shadow-(--shadow-md)`                                                                                                                      | bare `shadow-md` · hex/rgb elevation                      |
 | **Motion**     | catalogued `animate-*` utilities + `transition-*` with token durations; **every** motion class pairs with `motion-reduce:`                  | local `@keyframes` · `duration-[…]` · animation libraries |
 

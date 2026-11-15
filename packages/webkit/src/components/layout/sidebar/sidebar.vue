@@ -287,8 +287,8 @@
   const scrollClass = () =>
     cn(
       'flex min-h-0 flex-1 flex-col gap-(--spacing-md) p-(--spacing-md)',
-      'scroll-py-(--spacing-xxs)',
-      slots['header'] ? 'pt-(--spacing-xxs)' : undefined,
+      'scroll-py-(--spacing-2xs)',
+      slots['header'] ? 'pt-(--spacing-2xs)' : undefined,
       rail.value ? 'px-(--spacing-xs)' : undefined
     )
 </script>
@@ -400,7 +400,7 @@
       @dblclick="collapsed = true"
     >
       <span
-        class="pointer-events-none absolute inset-y-0 end-0 w-(--border-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
+        class="pointer-events-none absolute inset-y-0 end-0 w-(--border-width-2) bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 group-data-[preview]:opacity-100 group-data-[resizing]:opacity-100 motion-reduce:transition-none"
       />
     </div>
   </aside>
@@ -438,7 +438,7 @@
       />
 
       <div
-        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-xxs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
+        class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
           :text="labels.expand"

@@ -122,7 +122,7 @@
     class="group/stat-tile @container/stat-tile flex min-w-0 flex-col overflow-hidden border-(--border-default) not-data-[grouped]:rounded-(--shape-card) not-data-[grouped]:border not-data-[grouped]:bg-(--bg-surface) data-[grouped]:border-e data-[grouped]:border-b"
   >
     <div
-      class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-xxs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
+      class="flex min-h-20 flex-1 flex-col justify-center gap-(--spacing-2xs) p-(--spacing-md) @max-3xs/stat-tile:p-(--spacing-sm)"
     >
       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
         <span
@@ -142,11 +142,11 @@
       />
       <div
         v-else
-        class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-xxs) group-data-[grouped]/stat-tile:justify-between"
+        class="flex min-w-0 flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs) group-data-[grouped]/stat-tile:justify-between"
       >
         <span
           aria-hidden="true"
-          class="inline-flex shrink-0 items-baseline gap-(--spacing-xxs) whitespace-nowrap"
+          class="inline-flex shrink-0 items-baseline gap-(--spacing-2xs) whitespace-nowrap"
         >
           <span
             :data-testid="`${testId}__value`"

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
-checksum: 65a304c7211f1b8c2c35fbc54d8a70b768bf4f1e6919d7b30339906e52bf91ff
+checksum: 13cffe4725ff41445728f6dad161907a07dbc19d9cc94a0866a2c2ce9a1b8679
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Citation — Component Spec
@@ -89,7 +89,7 @@ _No slots._
 
 | Region | Token                                                              |
 | ------ | ------------------------------------------------------------------ |
-| chip   | `var(--bg-surface-raised)`, hover `var(--bg-hover)`, `var(--shape-elements)` |
+| chip   | `var(--bg-surface-raised)`, hover `var(--bg-hover)`, `var(--shape-control)` |
 | number | `.text-label-sm`, `var(--text-link)` (linked) / `var(--text-muted)` |
 
 ## Theme gaps

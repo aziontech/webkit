@@ -223,7 +223,7 @@
         class="flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center group-data-[kind=overlay]:sticky group-data-[kind=overlay]:top-0 group-data-[kind=overlay]:h-dvh group-data-[kind=overlay]:max-h-full group-data-[kind=overlay]:p-(--spacing-lg)"
       >
         <span
-          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised)"
+          class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"
           aria-hidden="true"
         >
           <i
@@ -233,7 +233,7 @@
           />
         </span>
 
-        <div class="flex max-w-(--container-md) flex-col items-center gap-(--spacing-xxs)">
+        <div class="flex max-w-(--container-md) flex-col items-center gap-(--spacing-2xs)">
           <p
             :id="titleId"
             class="m-0 text-heading-xs text-(--text-default) group-data-[disabled]:text-(--text-disabled)"

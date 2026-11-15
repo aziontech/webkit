@@ -90,7 +90,7 @@
       </p>
       <p
         :id="confirmLabelId"
-        class="m-0 flex flex-wrap items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+        class="m-0 flex flex-wrap items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
       >
         <span>Type</span>
         <span class="text-label-code-sm text-(--text-default)">{{ name }}</span>

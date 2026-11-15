@@ -293,7 +293,7 @@
           <ChartCard>
             <ChartCard.Header>
               <ChartCard.DragHandle :aria-label="'Move ' + cards[card.id].title" />
-              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ cards[card.id].title }}</ChartCard.Title>
                 <Hint :text="cards[card.id].hint" />
               </span>

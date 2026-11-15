@@ -156,10 +156,10 @@ Behavior:
         <template #prefix><i class="ai ai-search" aria-hidden="true" /></template>
       </Input>
     </div>
-    <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)">
+    <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)">
       <!-- visible entries, Skeleton rows while loading, no-match line -->
     </div>
-    <div v-if="remaining" class="border-t border-(--border-default) p-(--spacing-xxs)">
+    <div v-if="remaining" class="border-t border-(--border-default) p-(--spacing-2xs)">
       <Button :label="`Load ${nextBatch} more`" kind="transparent" size="small" :loading="loading" class="w-full" @click.stop="loadMore" />
     </div>
     <span class="sr-only" role="status">{{ loading ? `Loading ${nextBatch} more domains` : summary }}</span>

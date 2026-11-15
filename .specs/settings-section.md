@@ -3,7 +3,7 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: 1800c0553a60863467dc54848af168ef78aadb78c56b46159adcdd0089c9d975
+checksum: ea99b11b3a87ae14d3f6d01df3da180eeed06e1fa570430beb879ad0570f1527
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -130,7 +130,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 
 | Region           | Token (DESIGN.md)                           |
 | ---------------- | ------------------------------------------- |
-| title            | `.text-heading-xxs` · `var(--text-default)` |
+| title            | `.text-heading-2xs` · `var(--text-default)` |
 | band gap         | `var(--layout-section-gap)`                 |
 | heading-body gap | `var(--spacing-md)`                         |
 | body gap         | `var(--spacing-lg)`                         |

@@ -581,7 +581,7 @@ describe('CodeBlock', () => {
     })
   })
 
-  // Shell is tokenised so a CLI snippet gets the same code-sintax palette as JS —
+  // Shell is tokenised so a CLI snippet gets the same code-syntax palette as JS —
   // asserted on the token stream, never on class strings.
   describe('shell highlighting', () => {
     // Adjacent same-type chunks are merged by design (whitespace rides along with the

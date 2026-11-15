@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: df4765b32c05c03110671dfa9aca1529aea24b830e18e1bafbb1bc357bb95eac
+checksum: b561bf054a24b793ab4f10a2fde65dd7c1500076dded60fbb383729b2502edd5
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -128,14 +128,14 @@ _none_
 
 ## Tokens
 
-| Region          | Token (DESIGN.md)       |
-| --------------- | ----------------------- |
-| typography      | `.text-label-lg`        |
-| text (ancestor) | `var(--text-muted)`     |
-| text (current)  | `var(--text-default)`   |
-| separator icon  | `var(--text-muted)`     |
-| spacing gap     | `var(--spacing-1)`      |
-| shape           | `var(--shape-elements)` |
+| Region          | Token (DESIGN.md)      |
+| --------------- | ---------------------- |
+| typography      | `.text-label-lg`       |
+| text (ancestor) | `var(--text-muted)`    |
+| text (current)  | `var(--text-default)`  |
+| separator icon  | `var(--text-muted)`    |
+| spacing gap     | `var(--spacing-1)`     |
+| shape           | `var(--shape-control)` |
 
 ## Theme gaps
 

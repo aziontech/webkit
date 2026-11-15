@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: d3689541c1c26184357a468819e0f02e31c382cfb5af30bf9f3f462239f2a816
+checksum: 1f7e4a6fbe5846fa1a5ab179e640db50b067dea5fba5b1c0b91c119c34110998
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -159,7 +159,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - The media half is grounded on a `texture-material` the band paints itself: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the cell's edges, so a transparent scene has something to sit on and the seam stays the only hard line. `texture="none"` leaves the cell bare; no media, no layer
 - `data-media-padded` mirrors the `mediaPadded` prop and is what insets the media from the cell's edges — off by default, because an exported asset already carries its own air and a padded cell pays for that margin twice. The ground fills the cell either way, so the texture reaches the seam even when the media does not
 - `data-media-fill` mirrors the `mediaFill` prop. `surface` paints the media cell `var(--bg-surface)`, so the asset sits on its own plate one step off the page; `canvas` paints it `var(--bg-canvas)` and, with `divided` off, the whole band sits on the page
-- `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-xxl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. The padding follows the type, so a call site never re-spaces a large band by hand
+- `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-2xl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. The padding follows the type, so a call site never re-spaces a large band by hand
 - `data-align` mirrors the `align` prop; `top` spreads the copy column so the headline sits at the cell's top and the actions on its floor, `center` gathers the stack and its actions on the cell's vertical middle. The text stays flush with the leading edge either way
 - `data-media-href` is present when `mediaHref` is set, and is what turns the band into a link: the media cell is a single `<a>` named by the band's `title`, and a chevron affordance sits at its closing lower corner — `opacity-0` at rest, revealed on `hover` anywhere on the band and on the cell's own `focus-visible`, so the keyboard reaches the same affordance the pointer does. The affordance is `aria-hidden` decoration, never a nested control: the cell is the link
 - A band carrying `mediaHref` is clickable as a whole: the pointer turns to `cursor-pointer`, and a click anywhere outside a control follows the URL — in a new tab with `Cmd`/`Ctrl` held, and not at all while the reader is selecting text or when a consumer's own `click` listener called `preventDefault()`. Links and buttons inside the band keep their own destinations. The keyboard path is the media cell's link, so the band adds no tab stop
@@ -173,24 +173,24 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Tokens
 
-| Region                         | Token (DESIGN.md)                                                        |
-| ------------------------------ | ------------------------------------------------------------------------ |
-| typography (headline)          | `.text-heading-md` (`medium`), `.text-heading-xl` (`large`)              |
-| typography (description)       | `.text-body-md` (`medium`), `.text-body-lg` (`large`)                    |
-| headline text                  | `var(--text-default)`                                                    |
-| description text               | `var(--text-muted)`                                                      |
-| copy cell fill (`canvas`)      | `var(--bg-canvas)`                                                       |
-| copy cell fill (`surface`)     | `var(--bg-surface)`                                                      |
-| media cell fill (`surface`)    | `var(--bg-surface)`                                                      |
-| media cell fill (`canvas`)     | `var(--bg-canvas)`                                                       |
-| media affordance               | `var(--secondary)` on `var(--secondary-contrast)`, `var(--shape-button)` |
-| band rules, marks and the seam | `var(--border-default)`                                                  |
-| spacing (cell padding)         | `var(--spacing-xl)`                                                      |
-| spacing (copy cell, `large`)   | `var(--spacing-xxl)`                                                     |
-| media ground ink               | `var(--text-default)`, mixed down by `texture-material`                  |
-| spacing (copy stack)           | `var(--spacing-lg)`                                                      |
-| spacing (copy to actions)      | `var(--spacing-xxl)`                                                     |
-| spacing (between actions)      | `var(--spacing-sm)`                                                      |
+| Region                         | Token (DESIGN.md)                                                          |
+| ------------------------------ | -------------------------------------------------------------------------- |
+| typography (headline)          | `.text-heading-md` (`medium`), `.text-heading-xl` (`large`)                |
+| typography (description)       | `.text-body-md` (`medium`), `.text-body-lg` (`large`)                      |
+| headline text                  | `var(--text-default)`                                                      |
+| description text               | `var(--text-muted)`                                                        |
+| copy cell fill (`canvas`)      | `var(--bg-canvas)`                                                         |
+| copy cell fill (`surface`)     | `var(--bg-surface)`                                                        |
+| media cell fill (`surface`)    | `var(--bg-surface)`                                                        |
+| media cell fill (`canvas`)     | `var(--bg-canvas)`                                                         |
+| media affordance               | `var(--secondary)` on `var(--secondary-foreground)`, `var(--shape-button)` |
+| band rules, marks and the seam | `var(--border-default)`                                                    |
+| spacing (cell padding)         | `var(--spacing-xl)`                                                        |
+| spacing (copy cell, `large`)   | `var(--spacing-2xl)`                                                       |
+| media ground ink               | `var(--text-default)`, mixed down by `texture-material`                    |
+| spacing (copy stack)           | `var(--spacing-lg)`                                                        |
+| spacing (copy to actions)      | `var(--spacing-2xl)`                                                       |
+| spacing (between actions)      | `var(--spacing-sm)`                                                        |
 
 ## Theme gaps
 

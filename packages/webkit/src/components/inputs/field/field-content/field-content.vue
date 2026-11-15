@@ -22,7 +22,7 @@
     v-bind="$attrs"
     data-slot="field-content"
     :data-testid="testId"
-    class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)"
+    class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)"
   >
     <slot />
   </div>

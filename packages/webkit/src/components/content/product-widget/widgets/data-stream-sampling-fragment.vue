@@ -165,7 +165,7 @@
         <div class="flex flex-col">
           <span class="flex items-start gap-(--spacing-sm)">
             <LegacySwitch :checked="frame.sampling" />
-            <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <span class="text-label-md text-(--text-default)">Sampling</span>
               <span class="text-body-xs text-(--text-muted)">
                 Enable sampling to collect a percentage of the data instead of the entire dataset,

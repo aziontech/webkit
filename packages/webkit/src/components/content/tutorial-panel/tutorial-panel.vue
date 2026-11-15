@@ -162,7 +162,7 @@
             <div class="flex flex-wrap items-center gap-(--spacing-xs)">
               <h3
                 :id="`${uid}-${tutorial.id}`"
-                class="text-heading-xxs text-(--text-default)"
+                class="text-heading-2xs text-(--text-default)"
               >
                 {{ tutorial.title }}
               </h3>
@@ -208,7 +208,7 @@
             :id="`${uid}-done`"
             ref="doneHeading"
             tabindex="-1"
-            class="flex items-center gap-(--spacing-xxs) text-heading-xxs text-(--text-default) outline-none"
+            class="flex items-center gap-(--spacing-2xs) text-heading-2xs text-(--text-default) outline-none"
           >
             <span
               aria-hidden="true"
@@ -253,7 +253,7 @@
             :title="task.title"
             :status="taskStatus(taskIndex)"
           >
-            <ol class="flex w-full flex-col gap-(--spacing-xxs)">
+            <ol class="flex w-full flex-col gap-(--spacing-2xs)">
               <li
                 v-for="(item, local) in task.steps"
                 :key="item.hotspotId"

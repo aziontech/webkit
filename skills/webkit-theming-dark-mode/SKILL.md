@@ -32,7 +32,7 @@ Never guess a token or an import path. Resolve both from the contract, not from 
 - Token names: read **`node_modules/@aziontech/theme`** (the semantic color set) — a name that is not
   defined there does not exist. Roles you will reach for most: `--bg-canvas`, `--bg-surface`,
   `--bg-surface-raised`, `--bg-surface-overlay`, `--text-default`, `--text-secondary`,
-  `--border-default`, `--primary`, `--primary-contrast`.
+  `--border-default`, `--primary`, `--primary-foreground`.
 - Components: ask the **webkit MCP** (`suggest_component`) or read
   **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real subpath.
 

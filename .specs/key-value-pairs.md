@@ -3,7 +3,7 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: e4916b9f6f3e954273a6a26b7e6bbeec9a5dd2926e09cc6cbcaa254c89b58283
+checksum: 9aa88f53f5a781a10f282c0d64d55369d3a3b7d23df0245ecc8270d449fa38ac
 spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -195,12 +195,12 @@ The loading shimmer belongs to the composed `Skeleton`, which already suppresses
 | key (`<dt>`)                                  | `.text-body-sm`, `var(--text-muted)`       |
 | value (`<dd>`)                                | `.text-body-sm`, `var(--text-default)`     |
 | empty-value marker                            | `.text-body-sm`, `var(--text-muted)`       |
-| group title                                   | `.text-heading-xxs`, `var(--text-default)` |
+| group title                                   | `.text-heading-2xs`, `var(--text-default)` |
 | grid gap (column / row)                       | `var(--spacing-lg)` / `var(--spacing-md)`  |
-| key → value gap                               | `var(--spacing-xxs)`                       |
+| key → value gap                               | `var(--spacing-2xs)`                       |
 | inline value components gap                   | `var(--spacing-xs)`                        |
 | group title → items gap; items inside a group | `var(--spacing-sm)`                        |
-| info slot gap after label                     | `var(--spacing-xxs)`                       |
+| info slot gap after label                     | `var(--spacing-2xs)`                       |
 | `split`: label → value gap; row gap           | `var(--spacing-md)`; `var(--spacing-sm)`   |
 
 Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `break-words`, so composed values line up on one row and long unbroken IDs or URLs wrap instead of overflowing the cell. No surface, border or shape tokens — the container (`card`, a page band) supplies them.

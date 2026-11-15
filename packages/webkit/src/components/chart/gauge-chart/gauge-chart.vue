@@ -292,7 +292,7 @@
         </g>
       </svg>
       <div
-        class="absolute inset-x-0 bottom-0 flex flex-col items-center gap-(--spacing-xxs) px-(--spacing-lg) text-center"
+        class="absolute inset-x-0 bottom-0 flex flex-col items-center gap-(--spacing-2xs) px-(--spacing-lg) text-center"
         :data-testid="`${testId}__value`"
       >
         <slot
@@ -318,7 +318,7 @@
       v-if="showDial"
       :id="rangeId"
       :data-size="size"
-      class="mt-(--spacing-xxs) flex w-full justify-between text-label-sm tabular-nums text-(--text-muted) data-[size=large]:max-w-72 data-[size=medium]:max-w-56 data-[size=small]:max-w-40"
+      class="mt-(--spacing-2xs) flex w-full justify-between text-label-sm tabular-nums text-(--text-muted) data-[size=large]:max-w-72 data-[size=medium]:max-w-56 data-[size=small]:max-w-40"
     >
       <span aria-hidden="true">{{ valueText(min) }}</span>
       <span class="sr-only">{{ rangeLabel }}</span>

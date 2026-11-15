@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 48a2dc0473cae7102264cf9c35540c827a3294c02b52b89b928de3121b78a71a
+checksum: 9cff8b1734fa38cda063d1f211ef557764222aadfcf63549739230b68210cf1d
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -94,7 +94,7 @@ _none_
 |---|---|
 | column rule | `var(--border-default)` |
 | column inset | `var(--layout-boundary-inline)` |
-| column rhythm | `var(--spacing-xxl)` |
+| column rhythm | `var(--spacing-2xl)` |
 | width cap | `var(--container-3xl)` … `var(--container-7xl)` |
 
 ## Theme gaps

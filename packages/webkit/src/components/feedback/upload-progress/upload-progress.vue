@@ -243,7 +243,7 @@
             :key="item.id"
             :data-status="item.status"
             :data-testid="`${testId}__row`"
-            class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+            class="flex min-w-0 flex-col gap-(--spacing-2xs)"
           >
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
               <div class="flex min-w-0 flex-1 flex-col">
@@ -254,7 +254,7 @@
                 >
                 <span
                   v-if="item.error"
-                  class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--danger-contrast)"
+                  class="flex items-center gap-(--spacing-2xs) text-label-sm text-(--danger-foreground)"
                 >
                   <i
                     class="ai ai-times-circle shrink-0"

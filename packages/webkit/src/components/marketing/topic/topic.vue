@@ -72,7 +72,7 @@
         <i
           v-if="isLink"
           aria-hidden="true"
-          class="ai ai-arrow-up-right ms-(--spacing-xxs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
+          class="ai ai-arrow-up-right ms-(--spacing-2xs) text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
         />
       </component>
     </div>

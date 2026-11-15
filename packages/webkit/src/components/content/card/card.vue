@@ -176,7 +176,7 @@
           class="flex min-w-0 items-start gap-(--spacing-md) group-data-[featured]/card:flex-col group-data-[featured]/card:items-center"
         >
           <span
-            class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+            class="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
             :data-testid="`${testId}__logo`"
           >
             <slot name="logo">
@@ -188,10 +188,10 @@
             </slot>
           </span>
           <div
-            class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) group-data-[featured]/card:items-center"
+            class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) group-data-[featured]/card:items-center"
           >
             <div
-              class="flex flex-wrap items-baseline gap-x-(--spacing-xs) group-data-[featured]/card:flex-col group-data-[featured]/card:items-center group-data-[featured]/card:gap-y-(--spacing-xxs)"
+              class="flex flex-wrap items-baseline gap-x-(--spacing-xs) group-data-[featured]/card:flex-col group-data-[featured]/card:items-center group-data-[featured]/card:gap-y-(--spacing-2xs)"
             >
               <h3
                 class="min-w-0 text-label-md text-(--text-default) group-data-[featured]/card:text-heading-xs"

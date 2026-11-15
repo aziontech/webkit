@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 62831ee3112b2022a917f8ce6db96086a63772b036ae89645bc5486917abad5c
+checksum: 00bc72e949e8bcaad2ee45e588aa66a4cb1f95a0d1c1ce677b3ab74181f4845e
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -104,7 +104,7 @@ _none_ besides `update:modelValue`.
 | Region  | Token                                     |
 | ------- | ----------------------------------------- |
 | counter | `.text-label-sm`, `var(--text-muted)`     |
-| gap     | `var(--spacing-xxs)`, `var(--spacing-xs)` |
+| gap     | `var(--spacing-2xs)`, `var(--spacing-xs)` |
 
 ## Theme gaps
 

@@ -93,7 +93,7 @@
     :data-size="size"
     :data-kind="kind"
     :class="attrs.class"
-    class="inline-flex items-center justify-center gap-(--spacing-xxs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 data-[kind=separate]:bg-transparent data-[kind=separate]:border-0 data-[kind=separate]:shadow-none data-[kind=separate]:px-0 data-[kind=separate]:min-w-0"
+    class="inline-flex items-center justify-center gap-(--spacing-2xs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 data-[kind=separate]:bg-transparent data-[kind=separate]:border-0 data-[kind=separate]:shadow-none data-[kind=separate]:px-0 data-[kind=separate]:min-w-0"
   >
     <template v-if="kind === 'separate'">
       <kbd
@@ -101,14 +101,14 @@
         :key="cap.id"
         :data-size="size"
         :data-testid="`${testId}__key`"
-        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
+        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
         >{{ cap.glyph }}</kbd
       >
       <kbd
         v-if="$slots['default']"
         :data-size="size"
         :data-testid="`${testId}__key`"
-        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-elements) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
+        class="inline-flex items-center justify-center bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:h-5 data-[size=small]:min-w-5"
         ><slot
       /></kbd>
     </template>

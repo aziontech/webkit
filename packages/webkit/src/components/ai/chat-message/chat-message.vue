@@ -169,7 +169,7 @@
       <div
         v-if="state === 'error'"
         :data-testid="`${testId}__error`"
-        class="flex flex-wrap items-center gap-(--spacing-sm) text-body-sm text-(--danger-contrast)"
+        class="flex flex-wrap items-center gap-(--spacing-sm) text-body-sm text-(--danger-foreground)"
       >
         <span class="inline-flex items-center gap-(--spacing-xs)">
           <i

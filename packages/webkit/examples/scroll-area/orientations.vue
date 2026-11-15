@@ -4,7 +4,7 @@
 
 <template>
   <div class="flex flex-wrap items-start gap-(--spacing-6)">
-    <div class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+    <div class="h-[160px] w-[240px] rounded-(--shape-control) border border-(--border-default)">
       <ScrollArea
         orientation="vertical"
         aria-label="Vertical scroll"
@@ -15,7 +15,7 @@
         </div>
       </ScrollArea>
     </div>
-    <div class="w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+    <div class="w-[240px] rounded-(--shape-control) border border-(--border-default)">
       <ScrollArea
         orientation="horizontal"
         aria-label="Horizontal scroll"
@@ -27,7 +27,7 @@
         </div>
       </ScrollArea>
     </div>
-    <div class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+    <div class="h-[160px] w-[240px] rounded-(--shape-control) border border-(--border-default)">
       <ScrollArea
         orientation="both"
         aria-label="Two-axis scroll"

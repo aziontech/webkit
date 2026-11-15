@@ -106,7 +106,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="ariaLabel || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasSubjects"
@@ -130,7 +130,7 @@
             :key="subject.slug || subject.title"
             borders="none"
             marks="all"
-            class="min-w-0 scroll-mt-(--spacing-xxl) bg-(--bg-canvas)"
+            class="min-w-0 scroll-mt-(--spacing-2xl) bg-(--bg-canvas)"
           >
             <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-xl)">
               <div class="flex flex-col gap-(--spacing-sm)">

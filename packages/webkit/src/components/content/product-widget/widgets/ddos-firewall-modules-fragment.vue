@@ -183,7 +183,7 @@
               :disabled="module.locked"
               :data-cursor="module.key"
             />
-            <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+            <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
               <span class="text-label-md text-(--text-default)">{{ module.title }}</span>
               <span class="text-body-xs text-(--text-muted)">{{ module.description }}</span>
               <span

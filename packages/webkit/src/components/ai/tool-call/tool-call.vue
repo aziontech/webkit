@@ -79,7 +79,7 @@
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="panelId"
         :data-testid="`${testId}__trigger`"
-        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-elements) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) rounded-(--shape-control) text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         @click="toggle"
       >
         <i
@@ -94,7 +94,7 @@
         </span>
         <code
           dir="ltr"
-          class="truncate rounded-(--shape-elements) bg-(--bg-surface-raised) px-1 text-label-code text-(--text-muted)"
+          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code text-(--text-muted)"
           >{{ name }}</code
         >
         <i
@@ -119,7 +119,7 @@
         </span>
         <code
           dir="ltr"
-          class="truncate rounded-(--shape-elements) bg-(--bg-surface-raised) px-1 text-label-code text-(--text-muted)"
+          class="truncate rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-code text-(--text-muted)"
           >{{ name }}</code
         >
       </div>

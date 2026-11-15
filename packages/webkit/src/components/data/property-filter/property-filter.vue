@@ -759,13 +759,13 @@
           :aria-busy="valueRows === 'loading' || undefined"
           :data-testid="`${testId}__suggestions`"
           :style="panelStyle"
-          class="fixed z-(--z-input-overlay) flex max-h-80 flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-xs)"
+          class="fixed z-(--z-control-overlay) flex max-h-80 flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
         >
           <li
             v-for="section in sections"
             :key="section.id"
             role="presentation"
-            class="flex flex-col gap-(--spacing-xxs)"
+            class="flex flex-col gap-(--spacing-2xs)"
           >
             <span
               v-if="section.title"
@@ -777,7 +777,7 @@
             <ul
               :role="section.title ? 'group' : 'presentation'"
               :aria-labelledby="section.title ? section.id : undefined"
-              class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
+              class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
             >
               <li
                 v-for="{ item, index } in section.items"
@@ -788,7 +788,7 @@
                 :data-active="index === active || null"
                 :data-group="item.group"
                 :data-testid="`${testId}__option`"
-                class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) motion-reduce:transition-none pointer-coarse:min-h-11"
+                class="flex min-h-8 cursor-pointer items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) motion-reduce:transition-none pointer-coarse:min-h-11"
                 @mousedown.prevent
                 @click="item.apply()"
                 @keydown.enter.prevent="item.apply()"
@@ -844,7 +844,7 @@
       role="group"
       :aria-label="t('propertyFilter.valueEditor', { property: editorStage.property.label })"
       :data-testid="`${testId}__value-editor`"
-      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs)"
+      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs)"
     >
       <slot
         name="value"
@@ -917,7 +917,7 @@
           role="group"
           :aria-label="t('propertyFilter.group', { index: groupIndex + 1 })"
           :data-testid="`${testId}__group`"
-          class="flex min-w-0 max-w-full flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs)"
+          class="flex min-w-0 max-w-full flex-wrap items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs)"
         >
           <template
             v-for="(token, index) in group.tokens"

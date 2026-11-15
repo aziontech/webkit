@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 6ccaa128666b22326ca5beb048527bc4e9113371a5abb2a4a2586df8fcc0de40
+checksum: 4b1be138142e29eeb7652e215598736cffffc6a21bfcf68f540a40657c4a94a5
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ConversationHistory — Component Spec
@@ -102,7 +102,7 @@ _none_
 | ----------- | -------------------------------------------------------------------------------- |
 | group label | `.text-overline-sm`, `var(--text-muted)`                                         |
 | row         | `.text-label-sm`, `var(--text-default)`, `var(--bg-hover)`, `var(--bg-selected)` |
-| row radius  | `var(--shape-elements)`                                                          |
+| row radius  | `var(--shape-control)`                                                           |
 | empty       | `.text-body-sm`, `var(--text-muted)`                                             |
 
 ## Theme gaps

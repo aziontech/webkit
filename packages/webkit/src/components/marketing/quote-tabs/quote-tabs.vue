@@ -311,7 +311,7 @@
               />
               <span
                 v-else
-                class="text-heading-xxs"
+                class="text-heading-2xs"
                 >{{ client.label }}</span
               >
             </template>
@@ -360,7 +360,7 @@
                 <span
                   v-else
                   aria-hidden="true"
-                  class="text-heading-xxs text-(--text-default)"
+                  class="text-heading-2xs text-(--text-default)"
                   >{{ current.label }}</span
                 >
               </template>
@@ -435,7 +435,7 @@
           <span
             v-else
             aria-hidden="true"
-            class="text-heading-xxs text-(--text-default)"
+            class="text-heading-2xs text-(--text-default)"
             >{{ client.label }}</span
           >
         </button>

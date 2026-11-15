@@ -124,8 +124,8 @@ packages/webkit/src/components/actions/button/
          transition-colors duration-150 ease-out motion-reduce:transition-none
          rounded-(--shape-button)
          focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
-         data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
-         data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-contrast)
+         data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
+         data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-foreground)
          data-[size=small]:h-7 data-[size=small]:px-(--spacing-2) data-[size=small]:text-button-md
          data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-3) data-[size=medium]:text-button-md
          data-[size=large]:h-10 data-[size=large]:px-(--spacing-4) data-[size=large]:text-button-lg

@@ -51,7 +51,7 @@
           :data-testid="`${testId}__warnings-filter`"
           :aria-pressed="ctx.level.value === 'warn'"
           :disabled="ctx.disabled.value"
-          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-elements) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:h-11"
+          class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-control) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:h-11"
           @click="ctx.toggleLevel('warn')"
         >
           <Tag
@@ -66,7 +66,7 @@
           role="group"
           :aria-label="t('logView.levels')"
           :data-testid="`${testId}__levels`"
-          class="flex min-w-0 flex-wrap items-center gap-(--spacing-xxs)"
+          class="flex min-w-0 flex-wrap items-center gap-(--spacing-2xs)"
         >
           <button
             v-for="name in ctx.levels.value"
@@ -80,13 +80,13 @@
             "
             :disabled="ctx.disabled.value"
             :data-testid="`${testId}__level`"
-            class="inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) text-label-code-sm text-(--text-muted) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) motion-reduce:transition-none pointer-coarse:h-11"
+            class="inline-flex h-8 shrink-0 cursor-pointer items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) text-label-code-sm text-(--text-muted) transition-colors duration-150 ease-out hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 data-[active]:border-(--border-selected) data-[active]:bg-(--bg-selected) data-[active]:text-(--text-default) motion-reduce:transition-none pointer-coarse:h-11"
             @click="ctx.toggleLevel(name)"
           >
             <span
               :data-level="name"
               aria-hidden="true"
-              class="size-2 shrink-0 rounded-full bg-(--text-muted) data-[level=error]:bg-(--danger-contrast) data-[level=info]:bg-(--info-contrast) data-[level=warn]:bg-(--warning-contrast) forced-colors:bg-[CanvasText]"
+              class="size-2 shrink-0 rounded-full bg-(--text-muted) data-[level=error]:bg-(--danger-foreground) data-[level=info]:bg-(--info-foreground) data-[level=warn]:bg-(--warning-foreground) forced-colors:bg-[CanvasText]"
             />
             <span>{{ name }}</span>
             <span class="tabular-nums text-(--text-default)">{{

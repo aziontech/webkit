@@ -163,7 +163,7 @@
       <div
         class="flex shrink-0 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs)"
       >
-        <span class="flex min-w-0 items-center gap-(--spacing-xxs) text-label-sm">
+        <span class="flex min-w-0 items-center gap-(--spacing-2xs) text-label-sm">
           <i
             class="ai ai-edge-application shrink-0 leading-none text-(--primary)"
             aria-hidden="true"
@@ -340,7 +340,7 @@
         :key="step.value"
         :data-animated="animated || null"
         :data-testid="`${testId}__drawer`"
-        class="absolute inset-y-0 end-0 flex w-[62%] data-animated:animate-slide-in-right rtl:data-animated:animate-slide-in-left motion-reduce:animate-none"
+        class="absolute inset-y-0 end-0 flex w-[62%] data-animated:animate-slide-in-end motion-reduce:animate-none"
       >
         <Panel
           data-fluid

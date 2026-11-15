@@ -7,7 +7,7 @@ spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 150aded1d6c1f3438bd91a306d7d4537975fe985be4c763e580205d697963469
+checksum: fb8ecc435b6981d97571906c620cedaace1a84fe0804329879099157cf4f193f
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -221,7 +221,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 | ------------------------- | --------------------------- |
 | panel surface             | `var(--bg-surface-raised)`  |
 | panel border              | `var(--border-default)`     |
-| panel shape               | `var(--shape-elements)`     |
+| panel shape               | `var(--shape-control)`      |
 | panel shadow              | `var(--shadow-sm)`          |
 | header / footer divider   | `border-(--border-default)` |
 | header / footer spacing.y | `var(--spacing-sm)`         |

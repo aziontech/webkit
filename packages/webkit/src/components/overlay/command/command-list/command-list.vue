@@ -27,7 +27,7 @@
     :role="ctx.hasVisibleItems.value ? 'listbox' : undefined"
     :data-testid="testId"
     :data-ranked="ctx.ranking.value || undefined"
-    class="data-[ranked]:flex data-[ranked]:flex-col max-h-[24rem] overflow-y-auto px-(--spacing-xxs) py-(--spacing-xs)"
+    class="data-[ranked]:flex data-[ranked]:flex-col max-h-[24rem] overflow-y-auto px-(--spacing-2xs) py-(--spacing-xs)"
   >
     <slot />
   </div>

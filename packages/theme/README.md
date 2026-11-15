@@ -2,7 +2,7 @@
 
 Azion's design-token system, compiled into a single **Tailwind CSS v4** stylesheet: primitive palettes, brand colors, light/dark semantic tokens, the full text-style scale, motion utilities and `@keyframes`, and the `@font-face` set — plus the raw token data as importable JavaScript.
 
-The package ships one prebuilt artifact (`dist/v4/globals.css`) and four small JS entry points. There is no Tailwind preset, plugin, or `tailwind.config.js` step — v4 reads the `@theme` / `@utility` definitions directly from the imported CSS.
+The package ships one prebuilt artifact (`dist/globals.css`) and four small JS entry points. There is no Tailwind preset, plugin, or `tailwind.config.js` step — v4 reads the `@theme` / `@utility` definitions directly from the imported CSS.
 
 ## Installation
 
@@ -64,16 +64,10 @@ script. Pin a theme with one attribute on `<html>`:
 </html>
 ```
 
-Dark mode also activates on the older hooks:
+Dark mode also activates on the `dark` class (the hook Tailwind's `dark:` variant knows):
 
 ```html
-<html data-theme="dark">
-  <!-- or -->
-  <body class="dark">
-    <!-- or the legacy pair -->
-    <div class="azion azion-dark"></div>
-  </body>
-</html>
+<body class="dark"></body>
 ```
 
 ```javascript
@@ -81,8 +75,8 @@ Dark mode also activates on the older hooks:
 document.documentElement.dataset.theme = 'dark' // or 'light'
 ```
 
-Light-mode selectors: `:root`, `[data-theme='light']`, `.azion.azion-light` (the last two pin light).
-Dark-mode selectors: `[data-theme='dark']`, `.dark`, `.azion.azion-dark`, and, on a dark device,
+Light-mode selectors: `:root`, `[data-theme='light']` (the last one pins light).
+Dark-mode selectors: `[data-theme='dark']`, `.dark`, and, on a dark device,
 `:root` without a light pin and `[data-theme='system']`.
 
 Each theme also sets `color-scheme`, so native scrollbars and form controls match, and Tailwind's
@@ -99,11 +93,12 @@ The entire public surface, from `package.json#exports`:
 
 | Path                            | What it is                                                                 |
 | ------------------------------- | -------------------------------------------------------------------------- |
-| `@aziontech/theme`              | the compiled stylesheet (`dist/v4/globals.css`)                            |
-| `@aziontech/theme/fonts.css`    | the `@font-face` declarations (`dist/v4/fonts.css`), optional              |
+| `@aziontech/theme`              | the compiled stylesheet (`dist/globals.css`)                               |
+| `@aziontech/theme/fonts.css`    | the `@font-face` declarations (`dist/fonts.css`), optional                 |
 | `@aziontech/theme/colors`       | color primitives: `primitives`, `brandPrimitives`                          |
 | `@aziontech/theme/animations`   | motion primitives: `animate`, `curve`, `duration`, `useWhen`               |
-| `@aziontech/theme/texts`        | `textsData` — font-size/line-height/weight bundles per text style          |
+| `@aziontech/theme/typography`   | `typography` — font-size/line-height/weight bundles per text style         |
+| `@aziontech/theme/layout`       | `layout`, `layoutUtilities` — the page layout tokens and utilities         |
 | `@aziontech/theme/theme-colors` | semantic compiler: `compileThemeVars`, `compileThemeCss`, `injectThemeCss` |
 
 ## JavaScript token access
@@ -137,9 +132,9 @@ animate.shimmer // keyframe-backed animation definition
 ### Text styles
 
 ```javascript
-import { textsData } from '@aziontech/theme/texts'
+import { typography } from '@aziontech/theme/typography'
 
-textsData['text-heading-2xl']
+typography['text-heading-2xl']
 // { fontSize: { _: '1.875rem', sm: '3rem', md: '3.5rem' }, lineHeight: 1.25, fontWeight: 400 }
 ```
 
@@ -154,7 +149,7 @@ compileThemeVars()
 // → { light: { '--primary': '#F3652B', '--text-default': '#141414', … }, dark: { … } }
 
 compileThemeCss()
-// → ':root, [data-theme=light], .azion.azion-light { … }\n\n[data-theme=dark], .dark, … { … }'
+// → ':root, [data-theme=light] { … }\n\n[data-theme=dark], .dark { … }'
 
 injectThemeCss() // appends a <style data-azion-theme> element to <head>
 ```
@@ -167,16 +162,14 @@ The semantic layer flips automatically between modes:
 
 ```css
 :root,
-[data-theme='light'],
-.azion.azion-light {
+[data-theme='light'] {
   --primary: #f3652b;
   --text-default: #141414;
   /* … */
 }
 
 [data-theme='dark'],
-.dark,
-.azion.azion-dark {
+.dark {
   --text-default: #fafafa;
   /* … */
 }
@@ -197,20 +190,42 @@ Utility equivalents are generated in the same stylesheet (e.g. `@utility text-de
 
 Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own CSS:
 
-| Removed                                              | Use instead                                                                                                                         |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `--surface-0` … `--surface-950` (18 variables)       | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed step     |
-| `--color-surface-0` … `--color-surface-950` (12)     | the same step of `--color-gray-*` (identical values; `--color-surface-0` is `--color-base-white`); the `surface-*` utilities go too |
-| `--height-2` … `--height-96` (28 variables)          | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                     |
-| `--width-3xs` … `--width-7xl` (13 variables)         | `--container-3xs` … `--container-7xl` (same values)                                                                                 |
-| `--z-input-popup`                                    | `--z-input-overlay`                                                                                                                 |
-| `surfacePrimitives` (from `@aziontech/theme/colors`) | `primitives.gray`                                                                                                                   |
+| Removed                                                                                                                              | Use instead                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `--surface-0` … `--surface-950` (18 variables)                                                                                       | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed step     |
+| `--color-surface-0` … `--color-surface-950` (12)                                                                                     | the same step of `--color-gray-*` (identical values; `--color-surface-0` is `--color-base-white`); the `surface-*` utilities go too |
+| `--height-2` … `--height-96` (28 variables)                                                                                          | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                     |
+| `--width-3xs` … `--width-7xl` (13 variables)                                                                                         | `--container-3xs` … `--container-7xl` (same values)                                                                                 |
+| `--z-input-popup`                                                                                                                    | `--z-control-overlay`                                                                                                               |
+| `--line-height-3` … `--line-height-10`, `--line-height-none`                                                                         | the `--leading-*` scale, or a length (`--code-editor-line-height` is now `1rem`)                                                    |
+| `--container-px`, `--container-py`, `--container-max-width` and the `.px-container`, `.py-container`, `.max-container-width` helpers | `--layout-boundary-inline`, `--layout-section-gap`, `--layout-measure` and the `layout-column*` utilities                           |
+| `.azion.azion-light` / `.azion.azion-dark` theme classes                                                                             | `data-theme="light"` / `data-theme="dark"` on `<html>` (`.dark` still turns dark mode on)                                           |
+| `textsData` (`@aziontech/theme/texts`), `layoutsData` / `layoutsUtilities` (`@aziontech/theme/layouts`)                              | `typography` (`@aziontech/theme/typography`), `layout` / `layoutUtilities` (`@aziontech/theme/layout`)                              |
+
+### Variables renamed in 6.0
+
+Same values, new names. `npx @aziontech/webkit migrate` rewrites them in `.vue`, `.css`, `.ts` and `.js` files:
+
+| Old                                                                                | New                                                                                                             |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `--primary-contrast`, `--secondary-contrast`, `--accent-contrast`                  | `--primary-foreground`, `--secondary-foreground`, `--accent-foreground`                                         |
+| `--success-contrast`, `--warning-contrast`, `--danger-contrast`, `--info-contrast` | `--success-foreground`, `--warning-foreground`, `--danger-foreground`, `--info-foreground`                      |
+| `--spacing-xxs`, `--spacing-xxl`                                                   | `--spacing-2xs`, `--spacing-2xl`                                                                                |
+| `text-heading-xxs`, `text-body-xxs` (and their `--text-*-xxs-*` parts)             | `text-heading-2xs`, `text-body-2xs`                                                                             |
+| `--code-sintax-*`                                                                  | `--code-syntax-*`                                                                                               |
+| `--border-0` … `--border-4` (widths)                                               | `--border-width-0` … `--border-width-4`                                                                         |
+| `--shape-elements`                                                                 | `--shape-control`                                                                                               |
+| `--z-input-field`, `--z-input-overlay`                                             | `--z-control`, `--z-control-overlay`                                                                            |
+| `animate-slide-in-left` / `-out-left`, `animate-slide-in-right` / `-out-right`     | `animate-slide-in-start` / `-out-start`, `animate-slide-in-end` / `-out-end` (they flip in right-to-left pages) |
+
+`--bg-contrast` and `--text-contrast` keep their names: they are the inverted surface and its text, not a fill colour's text pair.
+| `surfacePrimitives` (from `@aziontech/theme/colors`) | `primitives.gray` |
 
 The `--illustration-*` roles stay.
 
 ## Breakpoints and container sizes
 
-Two scales answer two different questions. Both ship in `dist/v4/globals.css` and Tailwind v4 reads
+Two scales answer two different questions. Both ship in `dist/globals.css` and Tailwind v4 reads
 them directly.
 
 **Viewport breakpoints** (`sm:`, `md:` … and `max-sm:`, `max-md:` …) say how big the **window** is.
@@ -267,7 +282,7 @@ Tokens use a reference system for maintainability:
 // Define token reference
 const textColor = tokenRef('primitives.gray.900')
 
-// The compilers (scripts/compile-primitives.js, scripts/compile-theme.js)
+// The compilers (scripts/lib/primitives.mjs, src/tokens/theme-colors.js)
 // resolve refs to literal values at build time — and throw, listing every
 // miss, if a ref does not resolve.
 compileThemeVars()
@@ -279,7 +294,7 @@ The full reference — supported `tokenRef` prefixes, the build pipeline, how to
 ## Development
 
 ```bash
-pnpm build:tokens # node src/scripts/build-tokens.mjs → dist/v4/globals.{css,scss}
+pnpm build:tokens # node scripts/build-tokens.mjs → dist/globals.{css,scss}
 pnpm build:dts    # vue-tsc --declaration (emit .d.ts next to sources)
 pnpm format       # prettier over scripts/ and src/
 pnpm pack:dry     # inspect the tarball contents
@@ -291,19 +306,19 @@ pnpm pack:dry     # inspect the tarball contents
 
 ```
 packages/theme/
-├── tokens.js                    # in-repo JS barrel (not shipped — use the subpath exports)
+├── scripts/
+│   ├── build-tokens.mjs         # main entrypoint: emits dist/
+│   └── lib/
+│       ├── primitives.mjs       # flattens the primitive scales into CSS variables
+│       └── zero-unit.mjs        # the zero-length assertion the build runs
 ├── src/
-│   ├── tokens/
-│   │   ├── primitives/          # colors (brand/alpha), typography, shape, effects, animations, …
-│   │   ├── semantic/            # texts/containers/spacings/z-indices data + semantic color refs
-│   │   ├── theme/               # light/dark semantic groups (primary, background, text, ring, feedback/…)
-│   │   └── README.md            # in-depth token documentation
-│   └── scripts/
-│       ├── refs.js              # tokenRef + isTokenRef + assertResolvedRefs
-│       ├── compile-primitives.js
-│       ├── compile-theme.js     # exported as ./theme-colors
-│       └── build-tokens.mjs     # main entrypoint: emits dist/v4
-├── dist/v4/globals.css          # the shipped stylesheet (committed; rebuilt on publish)
+│   └── tokens/
+│       ├── primitives/          # raw scales: colors (brand/alpha), typography, shape, effects, animations, …
+│       ├── semantic/            # one file per family: primary, background, text, border, spacing, typography, z-index, …
+│       ├── token-ref.js         # tokenRef + isTokenRef + assertResolvedRefs
+│       ├── theme-colors.js      # light/dark compiler, exported as ./theme-colors
+│       └── README.md            # in-depth token documentation
+├── dist/globals.css             # the shipped stylesheet (committed; rebuilt on publish)
 └── package.json
 ```
 

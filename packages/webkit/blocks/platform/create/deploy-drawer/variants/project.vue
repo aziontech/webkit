@@ -242,7 +242,7 @@
         @submit.prevent="open = false"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Deploy</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Deploy project-01. Review what goes live and where.
@@ -270,7 +270,7 @@
                     >
                       <Item.Media>
                         <span
-                          class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                          class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
                             :class="row.icon"
@@ -375,7 +375,7 @@
                             #bottom
                           >
                             <div
-                              class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                              class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
                             >
                               <Button
                                 :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
@@ -525,7 +525,7 @@
                                         #bottom
                                       >
                                         <div
-                                          class="border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xxs)"
+                                          class="border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-2xs)"
                                         >
                                           <Button
                                             :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"

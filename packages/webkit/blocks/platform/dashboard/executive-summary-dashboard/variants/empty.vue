@@ -308,7 +308,7 @@
             :span="1"
           >
             <ChartCard.Header>
-              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ trend.title }}</ChartCard.Title>
                 <Hint :text="trend.description" />
               </span>

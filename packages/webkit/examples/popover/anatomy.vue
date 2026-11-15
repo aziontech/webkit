@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <div class="flex flex-wrap items-start gap-(--spacing-xxl) p-(--spacing-xxl) min-h-[22rem]">
+  <div class="flex flex-wrap items-start gap-(--spacing-2xl) p-(--spacing-2xl) min-h-[22rem]">
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button

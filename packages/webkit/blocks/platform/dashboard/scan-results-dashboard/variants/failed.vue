@@ -120,7 +120,7 @@
       >
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Verdicts</ChartCard.Title>
               <Hint text="Every item analyzed in the period, by the verdict it received." />
             </span>
@@ -137,7 +137,7 @@
 
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Sources</ChartCard.Title>
               <Hint
                 text="Where the items came from: scanned inline, sent through the API, uploaded by hand or picked up by a scheduled scan."
@@ -169,7 +169,7 @@
 
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Submissions</ChartCard.Title>
               <Hint
                 text="Every item sent for analysis, newest first, with its verdict and where it came from."

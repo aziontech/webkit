@@ -41,7 +41,7 @@
   >
     <h2
       id="card-featured-heading"
-      class="text-heading-xxs text-(--text-default)"
+      class="text-heading-2xs text-(--text-default)"
     >
       Featured
     </h2>

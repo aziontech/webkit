@@ -109,10 +109,10 @@ export type CodeEditorMonacoModule = CodeEditorMonaco | { default: CodeEditorMon
 export const CODE_EDITOR_THEME = 'webkit'
 
 const RULES: { scopes: string[]; token: string; fontStyle?: string }[] = [
-  { scopes: [''], token: '--code-sintax-identifier' },
+  { scopes: [''], token: '--code-syntax-identifier' },
   {
     scopes: ['keyword', 'keyword.json', 'keyword.flow', 'constant.language', 'predefined'],
-    token: '--code-sintax-keyword'
+    token: '--code-syntax-keyword'
   },
   {
     scopes: [
@@ -124,31 +124,31 @@ const RULES: { scopes: string[]; token: string; fontStyle?: string }[] = [
       'attribute.value',
       'regexp'
     ],
-    token: '--code-sintax-string'
+    token: '--code-syntax-string'
   },
   {
     scopes: ['number', 'number.float', 'number.hex', 'constant', 'type', 'type.identifier', 'tag'],
-    token: '--code-sintax-type'
+    token: '--code-syntax-type'
   },
   {
     scopes: ['function', 'entity.name.function', 'support.function', 'annotation'],
-    token: '--code-sintax-function'
+    token: '--code-syntax-function'
   },
   {
     scopes: ['identifier', 'variable', 'attribute.name', 'key', 'string.key.json'],
-    token: '--code-sintax-identifier'
+    token: '--code-syntax-identifier'
   },
   {
     scopes: ['delimiter', 'delimiter.bracket', 'delimiter.parenthesis', 'operator'],
-    token: '--code-sintax-punctuation'
+    token: '--code-syntax-punctuation'
   },
-  { scopes: ['comment', 'comment.doc'], token: '--code-sintax-comment', fontStyle: 'italic' },
-  { scopes: ['invalid'], token: '--danger-contrast' }
+  { scopes: ['comment', 'comment.doc'], token: '--code-syntax-comment', fontStyle: 'italic' },
+  { scopes: ['invalid'], token: '--danger-foreground' }
 ]
 
 const COLORS: Record<string, string> = {
   'editor.background': '--bg-surface',
-  'editor.foreground': '--code-sintax-identifier',
+  'editor.foreground': '--code-syntax-identifier',
   'editorCursor.foreground': '--text-default',
   'editor.lineHighlightBackground': '--bg-hover',
   'editor.selectionBackground': '--bg-selected',
@@ -156,7 +156,7 @@ const COLORS: Record<string, string> = {
   'editor.wordHighlightBackground': '--bg-hover',
   'editorBracketMatch.background': '--bg-selected',
   'editorBracketMatch.border': '--border-strong',
-  'editorLineNumber.foreground': '--code-sintax-line-number',
+  'editorLineNumber.foreground': '--code-syntax-line-number',
   'editorLineNumber.activeForeground': '--text-default',
   'editorGutter.background': '--bg-canvas',
   'editorIndentGuide.background1': '--border-default',
@@ -183,11 +183,11 @@ const COLORS: Record<string, string> = {
   'diffEditor.removedTextBackground': '--danger',
   'diffEditor.insertedLineBackground': '--success',
   'diffEditor.removedLineBackground': '--danger',
-  'editorError.foreground': '--danger-contrast',
-  'editorWarning.foreground': '--warning-contrast',
-  'editorInfo.foreground': '--info-contrast',
-  'editorOverviewRuler.errorForeground': '--danger-contrast',
-  'editorOverviewRuler.warningForeground': '--warning-contrast',
+  'editorError.foreground': '--danger-foreground',
+  'editorWarning.foreground': '--warning-foreground',
+  'editorInfo.foreground': '--info-foreground',
+  'editorOverviewRuler.errorForeground': '--danger-foreground',
+  'editorOverviewRuler.warningForeground': '--warning-foreground',
   'scrollbarSlider.background': '--bg-selected',
   'scrollbarSlider.hoverBackground': '--bg-hover',
   'scrollbarSlider.activeBackground': '--bg-selected'

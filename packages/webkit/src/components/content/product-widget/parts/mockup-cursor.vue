@@ -44,7 +44,7 @@
       />
     </svg>
     <span
-      class="mt-3 -ms-1 rounded-(--shape-elements) bg-(--bg-contrast) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm whitespace-nowrap text-(--text-contrast) shadow-(--shadow-xs)"
+      class="mt-3 -ms-1 rounded-(--shape-control) bg-(--bg-contrast) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm whitespace-nowrap text-(--text-contrast) shadow-(--shadow-xs)"
     >
       {{ name }}
     </span>

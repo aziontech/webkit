@@ -360,7 +360,7 @@
     :outline-groups="outlineGroups"
   >
     <article
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-xxl)"
+      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
     >
       <DocPageHeader
         description="Terminal agent that reads your codebase, runs commands and edits files. Made by Anthropic."
@@ -373,7 +373,7 @@
             class="flex min-w-0 flex-col items-start gap-(--spacing-sm) sm:flex-1 sm:flex-row sm:items-center sm:gap-(--spacing-md)"
           >
             <span
-              class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16"
+              class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16"
             >
               <i
                 class="ai ai-claude text-heading-md text-(--text-default)"
@@ -398,7 +398,7 @@
                 rounded
               />
             </div>
-            <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-xxs)">
+            <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)">
               <template
                 v-for="(link, index) in headerLinks"
                 :key="link.href"
@@ -413,7 +413,7 @@
                   :href="link.href"
                   target="_blank"
                   rel="noreferrer"
-                  class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+                  class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
                 >
                   {{ link.label }}
                   <i
@@ -490,7 +490,7 @@
           >
             <template #cell-title="{ row }">
               <code
-                class="rounded-(--shape-elements) border border-(--border-default) bg-(--bg-hover) px-(--spacing-xs) py-0.5 text-label-code-sm text-(--text-default)"
+                class="rounded-(--shape-control) border border-(--border-default) bg-(--bg-hover) px-(--spacing-xs) py-0.5 text-label-code-sm text-(--text-default)"
                 >{{ row.title }}</code
               >
             </template>

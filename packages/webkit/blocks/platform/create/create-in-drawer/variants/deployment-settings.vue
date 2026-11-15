@@ -103,7 +103,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Create Deployment Settings</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               A Deployment Setting says how a deploy routes: whether versions lock the resource IDs
@@ -179,7 +179,7 @@
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                   <Field.Legend kind="label">
-                    <span class="inline-flex items-center gap-(--spacing-xxs)">
+                    <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Binding policy
                       <Hint
                         text="Defines whether each version locks its resource IDs or allows them to change."
@@ -204,7 +204,7 @@
 
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                   <Field.Legend kind="label">
-                    <span class="inline-flex items-center gap-(--spacing-xxs)">
+                    <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Deployment version policy
                       <Hint text="Defines how many versions can receive traffic." />
                     </span>

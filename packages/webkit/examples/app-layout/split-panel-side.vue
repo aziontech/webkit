@@ -36,7 +36,7 @@
         />
         <ul
           aria-label="Services"
-          class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
+          class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
         >
           <li
             v-for="service in services"

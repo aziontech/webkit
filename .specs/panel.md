@@ -4,7 +4,7 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 5
-checksum: 4bea0ff5402da78e5853ce807b3bbc67832d1d23f9cd9b45988fabbc24b5432f
+checksum: 91ad060aade028280988ebcdea1ed80a00a8653c707aed889acf63d1a061a131
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -111,14 +111,14 @@ _none_
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| Region     | Token (DESIGN.md)      |
+| ---------- | ---------------------- |
+| typography | .text-body-sm          |
+| surface    | `var(--bg-surface)`    |
+| text       | `var(--text-default)`  |
+| spacing    | `var(--spacing-3)`     |
+| shape      | `var(--shape-control)` |
+| ring       | `var(--ring-color)`    |
 
 ## Theme gaps
 

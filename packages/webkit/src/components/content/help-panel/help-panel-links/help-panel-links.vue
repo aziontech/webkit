@@ -46,11 +46,11 @@
       <h3
         v-if="heading"
         :id="headingId"
-        class="text-heading-xxs text-(--text-default)"
+        class="text-heading-2xs text-(--text-default)"
       >
         {{ heading }}
       </h3>
-      <div class="flex flex-col items-start gap-(--spacing-xxs)">
+      <div class="flex flex-col items-start gap-(--spacing-2xs)">
         <slot />
       </div>
     </div>

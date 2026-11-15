@@ -62,7 +62,7 @@
     >
       <slot name="breadcrumb" />
     </div>
-    <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
+    <div class="flex min-w-0 grow flex-col gap-(--spacing-2xs)">
       <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
         <span
           v-if="$slots['icon']"

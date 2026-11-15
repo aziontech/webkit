@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: df4de525acfd7440f4b0aa1ec1883886a532646afb11342bec57ee69317ce3ba
+checksum: 56501914b406b626aed2b151e126c506bc8f26bd570a6b3a5efa096a36df143b
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -98,8 +98,8 @@ Live checklist of password rules shown under a `PasswordInput`: a caption follow
 | Region                 | Token (DESIGN.md)       |
 | ---------------------- | ----------------------- |
 | chip gap               | `var(--spacing-xs)`     |
-| chip padding           | `var(--spacing-xxs)`    |
-| chip shape             | `var(--shape-elements)` |
+| chip padding           | `var(--spacing-2xs)`    |
+| chip shape             | `var(--shape-control)`  |
 | chip surface           | `var(--bg-placeholder)` |
 | chip validated surface | `var(--success)`        |
 | chip text              | `var(--text-muted)`     |

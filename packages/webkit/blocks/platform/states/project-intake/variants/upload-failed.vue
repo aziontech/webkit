@@ -49,9 +49,9 @@
 <template>
   <div class="relative h-dvh [contain:layout]">
     <div
-      class="animate-fade-in motion-reduce:animate-none fixed inset-0 z-(--z-input-overlay) flex flex-col items-center justify-center gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
+      class="animate-fade-in motion-reduce:animate-none fixed inset-0 z-(--z-control-overlay) flex flex-col items-center justify-center gap-(--spacing-lg) bg-(--bg-canvas) p-(--spacing-xl)"
     >
-      <header class="flex flex-col items-center gap-(--spacing-xxs) text-center">
+      <header class="flex flex-col items-center gap-(--spacing-2xs) text-center">
         <h1 class="text-heading-sm text-(--text-default)">Initializing</h1>
         <p class="text-body-sm text-(--text-muted)">
           Setting up your deployment. {{ doneCount }} of {{ files.length }} files.

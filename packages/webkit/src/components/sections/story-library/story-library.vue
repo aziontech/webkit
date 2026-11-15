@@ -258,7 +258,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       :divided="false"
@@ -361,7 +361,7 @@
                 <p
                   v-if="optionsOf(facet).length === 0"
                   role="status"
-                  class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                  class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
                   {{ t('storyLibrary.empty') }}
                 </p>
@@ -423,7 +423,7 @@
                 <span
                   v-if="linkLabel"
                   aria-hidden="true"
-                  class="mt-auto flex items-center gap-(--spacing-xxs) pt-(--spacing-sm) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/card:text-(--text-default) motion-reduce:transition-none"
+                  class="mt-auto flex items-center gap-(--spacing-2xs) pt-(--spacing-sm) text-overline-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-hover/card:text-(--text-default) motion-reduce:transition-none"
                 >
                   {{ linkLabel }}
                   <i
@@ -462,7 +462,7 @@
         <EmptyState
           :title="empty.title"
           icon="ai ai-search"
-          class="p-(--spacing-xxl)"
+          class="p-(--spacing-2xl)"
         >
           <template #actions>
             <Button

@@ -174,7 +174,7 @@
                         v-for="(rule, index) in phase.rules"
                         :key="rule.name"
                       >
-                        <Table.Cell class="w-24 flex-none! gap-(--spacing-xxs)">
+                        <Table.Cell class="w-24 flex-none! gap-(--spacing-2xs)">
                           <span class="w-12 shrink-0 [&>span]:w-full">
                             <Input
                               :model-value="String(index + 1)"

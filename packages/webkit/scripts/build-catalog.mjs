@@ -43,9 +43,9 @@ const V6_BLOCKS = resolve(PKG_ROOT, 'src/cli/migrations/v6-blocks.json')
 
 const THEME_GLOBALS_CANDIDATES = [
   resolve(REPO_ROOT, 'packages/theme/dist/v3/globals.css'),
-  resolve(REPO_ROOT, 'packages/theme/dist/v4/globals.css')
+  resolve(REPO_ROOT, 'packages/theme/dist/globals.css')
 ]
-const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/texts.data.js')
+const THEME_TEXTS = resolve(REPO_ROOT, 'packages/theme/src/tokens/semantic/typography.js')
 const ICONS_SVG = resolve(REPO_ROOT, 'packages/icons/src/svg-raw')
 const SRC = resolve(PKG_ROOT, 'src')
 const ASSET_PART_DIR = 'catalog/assets'

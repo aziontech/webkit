@@ -205,7 +205,7 @@
                       class="ai ai-edge-storage shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <span class="min-w-0 truncate text-heading-xxs text-(--text-default)">
+                    <span class="min-w-0 truncate text-heading-2xs text-(--text-default)">
                       {{ BUCKET }}
                     </span>
                   </div>

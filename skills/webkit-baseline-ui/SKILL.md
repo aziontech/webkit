@@ -53,7 +53,7 @@ hand-rolled, nothing hardcoded.
 ### Color — tokens only
 
 - **MUST** use `@aziontech/theme` semantic vars: `bg-(--bg-surface)`, `text-(--text-default)`,
-  `text-(--text-muted)`, `bg-(--primary)`, `text-(--primary-contrast)`,
+  `text-(--text-muted)`, `bg-(--primary)`, `text-(--primary-foreground)`,
   `border-(--border-default)`, `ring-(--ring-color)`, feedback `var(--success|--warning|--danger|--info)`.
 - **NEVER** HEX (`#0af`), `rgb()/rgba()/hsl()`, or Tailwind palette names (`bg-blue-500`, `text-gray-700`).
 - **SHOULD** limit accent color to one per view; the rest carries on surface + text + border tokens.
@@ -61,7 +61,7 @@ hand-rolled, nothing hardcoded.
 ### Typography — tokens + hierarchy (non-negotiable)
 
 - **MUST** use only the `text-*` typography tokens (the webkit MCP lists them; they ship in
-  `@aziontech/theme`): `text-heading-2xl … text-heading-sm`, `text-body-lg … text-body-xxs`,
+  `@aziontech/theme`): `text-heading-2xl … text-heading-sm`, `text-body-lg … text-body-2xs`,
   `text-label-sm/md/lg`, `text-overline-xs/sm/md`, `text-button-md/lg`, `text-link`,
   `text-big-number-*`.
 - **NEVER** raw `text-xs/sm/base/lg`, `leading-*` (except `leading-none` on an icon set to
@@ -76,7 +76,7 @@ hand-rolled, nothing hardcoded.
 A **content section** (a titled block sitting above a `Card`, an `Item.List`, or a table) is
 labelled with a **small heading**, not an overline:
 
-- **MUST** title the section with `text-heading-xxs text-(--text-default)` — the smallest heading
+- **MUST** title the section with `text-heading-2xs text-(--text-default)` — the smallest heading
   token. `text-overline-*` is **reserved for compact menu / popover group labels** (e.g.
   `DropdownMenu.Group`, a Popover section), **not** page section titles.
 - **MUST** give the title an optical inset of `px-(--spacing-xs)` so it lines up with the card's
@@ -93,7 +93,7 @@ This is the canonical section-title treatment. A section title written as
 
 ### Shape & elevation — tokens only
 
-- **MUST** use `rounded-(--shape-button)` (buttons), `rounded-(--shape-elements)` (inputs,
+- **MUST** use `rounded-(--shape-button)` (buttons), `rounded-(--shape-control)` (inputs,
   chips), `rounded-(--shape-card)` (cards), `rounded-(--shape-flat)` (none).
 - **NEVER** `rounded-md/lg` or a numeric radius.
 - **MUST** use `shadow-(--shadow-*)` for elevation (`--shadow-sm` cards, `--shadow-md` overlays);
@@ -101,7 +101,7 @@ This is the canonical section-title treatment. A section title written as
 
 ### Spacing rhythm — one scale
 
-- **MUST** use only `--spacing-xxs … --spacing-xxl` for padding, gap, and margin:
+- **MUST** use only `--spacing-2xs … --spacing-2xl` for padding, gap, and margin:
   `p-(--spacing-md)`, `gap-(--spacing-sm)`, `mt-(--spacing-xs)`.
 - **NEVER** arbitrary values (`p-[13px]`, `gap-[7px]`), Tailwind's default scale (`p-4`, `gap-3`), or
   the primitive `--spacing-1 … --spacing-96`.
@@ -139,7 +139,7 @@ Two rules from that system are worth repeating here because they are the ones a 
   grid views breathe to the full content width; don't box them into a narrower container.
 - **MUST** express every cap as `max-w-(--container-<size>)` — the `@aziontech/theme` container
   tokens, `--container-3xs … --container-7xl`. **NEVER** a raw `max-w-5xl` / `max-w-[768px]`, and
-  never a legacy helper (`.max-container-width`, `--container-max-width`).
+  never a hand-rolled width.
 
 ### Control size rhythm — same size on a horizontal line
 
@@ -188,7 +188,7 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - [ ] Every interactive primitive is a `@aziontech/webkit` component.
 - [ ] No HEX / rgb / Tailwind palette / arbitrary spacing / `rounded-md|lg` / raw `text-*` size remains.
 - [ ] Typography uses `text-*` tokens with correct hierarchy; spacing uses only `--spacing-*`.
-- [ ] Section titles use `text-heading-xxs text-(--text-default)` with a `px-(--spacing-xs)` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
+- [ ] Section titles use `text-heading-2xs text-(--text-default)` with a `px-(--spacing-xs)` optical inset (and `--spacing-sm` above the card) — not `text-overline-*`, which is reserved for menu/popover group labels.
 - [ ] `h-dvh` not `h-screen`; one accent per view; empty states have an action.
 - [ ] The app layout (`ConsoleLayout`'s rail, header and content region) is fluid; the page carries a column class from `/webkit-layout` rather than a hand-rolled cap; field and reading widths are capped via `max-w-(--container-*)`.
 - [ ] Buttons and fields on the same horizontal line share one `size` token and a common baseline.

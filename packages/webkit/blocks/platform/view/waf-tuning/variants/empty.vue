@@ -371,7 +371,7 @@
                 rule is created for each rule and path:
                 {{ pathCount }} in all.
               </DialogDescription>
-              <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0">
                 <li
                   v-for="row in selected"
                   :key="row.ruleId"

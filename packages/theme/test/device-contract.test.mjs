@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { breakpoints } from '../src/tokens/primitives/breakpoints.js';
 import { container } from '../src/tokens/primitives/shape/container.js';
 
-const css = readFileSync(new URL('../dist/v4/globals.css', import.meta.url), 'utf8');
+const css = readFileSync(new URL('../dist/globals.css', import.meta.url), 'utf8');
 const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
 
 test('the viewport breakpoints are the documented five', () => {

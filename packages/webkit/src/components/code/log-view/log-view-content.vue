@@ -73,7 +73,7 @@
   const segmentsFor = (text: string) => splitTextByQuery(text, searchQuery.value)
 
   const highlightMarkClass =
-    'rounded-(--shape-elements) bg-(--bg-selected) text-inherit motion-reduce:transition-none'
+    'rounded-(--shape-control) bg-(--bg-selected) text-inherit motion-reduce:transition-none'
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__content`
@@ -173,7 +173,7 @@
                 :data-testid="`${ctx.testId.value}__line`"
                 :data-type="line.type"
                 :data-level="line.level"
-                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
+                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-2xs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
               >
                 <span
                   v-if="line.time"
@@ -190,7 +190,7 @@
                   :data-testid="`${ctx.testId.value}__line-level`"
                   :data-level="line.level"
                   dir="ltr"
-                  class="relative z-1 w-12 shrink-0 uppercase text-(--text-muted) data-[level=error]:text-(--danger-contrast) data-[level=info]:text-(--info-contrast) data-[level=warn]:text-(--warning-contrast)"
+                  class="relative z-1 w-12 shrink-0 uppercase text-(--text-muted) data-[level=error]:text-(--danger-foreground) data-[level=info]:text-(--info-foreground) data-[level=warn]:text-(--warning-foreground)"
                 >
                   {{ line.level }}
                 </span>
@@ -199,7 +199,7 @@
                   v-if="line.type !== 'folder'"
                   :data-testid="`${ctx.testId.value}__line-message`"
                   dir="auto"
-                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-contrast) data-[type=success]:gap-(--spacing-xs) data-[level=warn]:text-(--warning-contrast) max-sm:whitespace-nowrap"
+                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-foreground) data-[type=success]:gap-(--spacing-xs) data-[level=warn]:text-(--warning-foreground) max-sm:whitespace-nowrap"
                   :data-type="line.type"
                   :data-level="line.level"
                 >
@@ -220,7 +220,7 @@
                     </span>
                     <span
                       v-if="line.suffix"
-                      class="shrink-0 whitespace-nowrap text-(--warning-contrast)"
+                      class="shrink-0 whitespace-nowrap text-(--warning-foreground)"
                     >
                       <template
                         v-for="(segment, segmentIndex) in segmentsFor(line.suffix)"
@@ -246,7 +246,7 @@
                       ✓
                     </span>
                     <span
-                      class="min-w-0 max-sm:whitespace-nowrap break-words whitespace-pre-wrap text-(--success-contrast)"
+                      class="min-w-0 max-sm:whitespace-nowrap break-words whitespace-pre-wrap text-(--success-foreground)"
                     >
                       <template
                         v-for="(segment, segmentIndex) in segmentsFor(line.message)"
@@ -303,7 +303,7 @@
                     </span>
                     <span
                       v-if="line.folderType"
-                      class="shrink-0 whitespace-nowrap text-(--warning-contrast)"
+                      class="shrink-0 whitespace-nowrap text-(--warning-foreground)"
                     >
                       <template
                         v-for="(segment, segmentIndex) in segmentsFor(line.folderType)"

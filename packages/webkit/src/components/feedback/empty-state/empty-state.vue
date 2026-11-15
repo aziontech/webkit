@@ -67,7 +67,7 @@
             class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-(--shape-card) border border-(--border-strong) bg-(--bg-canvas) opacity-10 group-data-[size=small]:size-10 group-data-[size=medium]:size-12"
           />
           <span
-            class="relative flex items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
+            class="relative flex items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) group-data-[size=small]:size-8 group-data-[size=medium]:size-10"
           >
             <i
               :class="icon"
@@ -81,7 +81,7 @@
       <p
         :data-testid="`${testId}__title`"
         :data-size="size"
-        class="text-(--text-default) data-[size=small]:text-heading-xxs data-[size=medium]:text-heading-sm"
+        class="text-(--text-default) data-[size=small]:text-heading-2xs data-[size=medium]:text-heading-sm"
       >
         {{ title }}
       </p>

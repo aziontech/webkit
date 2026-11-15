@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: b482f506c6e958d4564cd60fb389684134004f05b88a845845ee525fac05711c
+checksum: f86eb9707e7ec775363126ae2e9aa992f7e7b3f494b9c3ba209ff2f0c6ccb5a9
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -63,7 +63,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
 - In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.
 - In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.
-- `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-xxl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-xxl` stops reading as a floor and starts reading as a hole.
+- `lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-2xl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-2xl` stops reading as a floor and starts reading as a hole.
 - In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
 - In `primary`, compose one `texture-material` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `ticker` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
 - In `primary`, give the ticker enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.
@@ -205,19 +205,19 @@ _none_
 | panel surface (`panel`) | `var(--bg-surface)` |
 | lead cell surface (`split`, `lead`) | `var(--bg-surface-raised)` |
 | panel rules and marks | `var(--border-default)` |
-| spacing (panel padding, `panel`) | `var(--spacing-xxl)` |
+| spacing (panel padding, `panel`) | `var(--spacing-2xl)` |
 | spacing (cell padding, `split`, `lead`) | `var(--spacing-xl)` |
 | copy measure (`lead`) | `var(--container-2xl)` |
 | headline measure (`split`) | `var(--container-xl)` |
 | spacing (between controls, `lead`) | `var(--spacing-sm)` |
 | spacing (copy stack) | `var(--spacing-lg)` |
-| spacing (copy to actions, `panel`, `split`) | `var(--spacing-xxl)` |
+| spacing (copy to actions, `panel`, `split`) | `var(--spacing-2xl)` |
 | spacing (copy to actions, `lead`) | `var(--spacing-xl)` |
 | ground (`primary`) | `var(--bg-canvas)` |
 | texture light (`primary`, supplied by the composed `texture-material`) | `var(--primary)` |
 | floor hairline (`primary`) | `var(--border-default)` |
 | spacing (floor strip, `primary`) | `var(--spacing-lg)` |
-| spacing (band padding, `primary`) | `var(--spacing-xxl)`, `var(--spacing-xl)` |
+| spacing (band padding, `primary`) | `var(--spacing-2xl)`, `var(--spacing-xl)` |
 
 ## Theme gaps
 

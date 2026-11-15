@@ -166,7 +166,7 @@
     :data-required="ctx.required.value || null"
     :data-filled="ctx.filled.value || null"
     :class="attrs.class"
-    class="group relative flex w-full items-center gap-(--spacing-xs) overflow-hidden rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default"
+    class="group relative flex w-full items-center gap-(--spacing-xs) overflow-hidden rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[invalid]:focus-visible:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-visible:ring-0 data-[disabled]:focus-visible:ring-offset-0 data-[readonly]:cursor-default"
     @click="onClick"
     @keydown="onKeydown"
   >
@@ -205,7 +205,7 @@
     :data-required="ctx.required.value || null"
     :data-filled="ctx.filled.value || null"
     :class="attrs.class"
-    class="group relative flex w-full cursor-pointer flex-wrap items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) py-px ps-(--spacing-xxs) pe-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) has-[[data-control]:focus-visible]:ring-2 has-[[data-control]:focus-visible]:ring-(--ring-color) has-[[data-control]:focus-visible]:ring-offset-2 has-[[data-control]:focus-visible]:ring-offset-(--bg-canvas) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[invalid]:border-(--danger-border) data-[invalid]:has-[[data-control]:focus-visible]:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-default) data-[readonly]:cursor-default"
+    class="group relative flex w-full cursor-pointer flex-wrap items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) py-px ps-(--spacing-2xs) pe-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong) has-[[data-control]:focus-visible]:ring-2 has-[[data-control]:focus-visible]:ring-(--ring-color) has-[[data-control]:focus-visible]:ring-offset-2 has-[[data-control]:focus-visible]:ring-offset-(--bg-canvas) data-[size=small]:min-h-7 data-[size=medium]:min-h-8 data-[size=large]:min-h-10 data-[invalid]:border-(--danger-border) data-[invalid]:has-[[data-control]:focus-visible]:ring-(--danger) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:hover:border-(--border-default) data-[readonly]:cursor-default"
     @click="onFieldClick"
     @keydown="onFieldKeydown"
   >
@@ -258,7 +258,7 @@
       autocomplete="off"
       :spellcheck="false"
       dir="auto"
-      class="h-6 min-w-16 flex-1 bg-transparent ps-(--spacing-xxs) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) data-[filled]:placeholder:text-(--text-default) disabled:cursor-not-allowed disabled:placeholder:text-(--text-disabled)"
+      class="h-6 min-w-16 flex-1 bg-transparent ps-(--spacing-2xs) text-label-sm text-(--text-default) outline-none placeholder:text-(--text-muted) data-[filled]:placeholder:text-(--text-default) disabled:cursor-not-allowed disabled:placeholder:text-(--text-disabled)"
       @input="onInput"
     />
     <button
@@ -281,7 +281,7 @@
       :aria-disabled="ctx.disabled.value || undefined"
       :disabled="ctx.disabled.value"
       :data-testid="`${testId}__control`"
-      class="h-6 min-w-4 flex-1 truncate ps-(--spacing-xxs) text-start text-label-sm text-(--text-muted) outline-none disabled:cursor-not-allowed group-data-[disabled]:text-(--text-disabled)"
+      class="h-6 min-w-4 flex-1 truncate ps-(--spacing-2xs) text-start text-label-sm text-(--text-muted) outline-none disabled:cursor-not-allowed group-data-[disabled]:text-(--text-disabled)"
     >
       <template v-if="!ctx.filled.value">{{ ctx.placeholder.value }}</template>
     </button>

@@ -169,7 +169,7 @@
             <div
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
             >
-              <span class="shrink-0 text-heading-xxs text-(--text-default)">Results</span>
+              <span class="shrink-0 text-heading-2xs text-(--text-default)">Results</span>
               <span class="ms-(--spacing-sm) flex min-w-0 flex-1">
                 <Input
                   model-value=""

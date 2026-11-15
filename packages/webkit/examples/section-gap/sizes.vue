@@ -7,7 +7,7 @@
   <div>
     <FrameBox borders="y">
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
-        size="small" — one --spacing-xxl below
+        size="small" — one --spacing-2xl below
       </div>
     </FrameBox>
     <SectionGap size="small" />

@@ -24,7 +24,7 @@
     v-bind="attrs"
     :class="
       cn(
-        'flex min-w-0 flex-nowrap items-center gap-(--spacing-xxs) rounded-(--shape-button)',
+        'flex min-w-0 flex-nowrap items-center gap-(--spacing-2xs) rounded-(--shape-button)',
         '[&>li]:min-w-0',
         attrs.class as string | undefined
       )

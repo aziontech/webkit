@@ -128,7 +128,7 @@
                 class="ai ai-table shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
-              <span class="truncate text-heading-xxs text-(--text-default)">users</span>
+              <span class="truncate text-heading-2xs text-(--text-default)">users</span>
             </span>
             <ToggleGroup
               model-value="data"
@@ -196,7 +196,7 @@
                 <span
                   v-for="column in COLUMNS"
                   :key="column.name"
-                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span class="truncate text-label-md text-(--text-default)">
                     {{ column.name }}
@@ -226,7 +226,7 @@
                 <span
                   v-for="column in COLUMNS"
                   :key="column.name"
-                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span class="truncate text-label-md text-(--text-default)">
                     {{ cell(row, column.name) }}
@@ -256,7 +256,7 @@
                     <span
                       v-for="column in COLUMNS"
                       :key="column.name"
-                      class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
+                      class="flex w-(--container-3xs) shrink-0 items-center gap-(--spacing-2xs) border-e border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs)"
                     >
                       <span class="truncate text-label-md text-(--text-default)">
                         {{ cell(INSERTED, column.name) }}

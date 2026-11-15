@@ -113,7 +113,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasTabs"
@@ -170,7 +170,7 @@
                 v-if="codeFiles[index]?.length"
                 class="w-full min-w-0 p-(--spacing-xl)"
               >
-                <div class="min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)">
+                <div class="min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)">
                   <CodeBlock
                     :tabs="codeFiles[index]"
                     line-numbers

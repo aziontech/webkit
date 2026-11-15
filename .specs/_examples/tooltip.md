@@ -84,7 +84,7 @@ import IconButton from '@aziontech/webkit/icon-button'
 | text | `var(--text-default-inverted)` |
 | padding.x | `var(--spacing-2)` |
 | padding.y | `var(--spacing-1)` |
-| shape | `var(--shape-elements)` |
+| shape | `var(--shape-control)` |
 | shadow | `var(--shadow-md)` |
 | ring | `var(--ring-color)` |
 

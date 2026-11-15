@@ -75,7 +75,7 @@
               size="small"
             />
           </div>
-          <div class="flex h-2 gap-px overflow-hidden rounded-(--shape-elements)">
+          <div class="flex h-2 gap-px overflow-hidden rounded-(--shape-control)">
             <span class="w-[85%] bg-(--primary)" />
             <span class="flex-1 bg-(--bg-selected)" />
           </div>

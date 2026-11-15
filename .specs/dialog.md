@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: bd92fc8e2d7a0be70baebd82bcbc0d57b236bb1306f0eee3985d215b24819aac
+checksum: beefab8882fa2d3307934122746ad30302c1f4a0cc8460346f2a8053377e4604
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -154,14 +154,14 @@ No element sets an inline `transition` (an inline style beats `motion-reduce:tra
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| Region     | Token (DESIGN.md)      |
+| ---------- | ---------------------- |
+| typography | .text-body-sm          |
+| surface    | `var(--bg-surface)`    |
+| text       | `var(--text-default)`  |
+| spacing    | `var(--spacing-3)`     |
+| shape      | `var(--shape-control)` |
+| ring       | `var(--ring-color)`    |
 
 ## Theme gaps
 

@@ -126,7 +126,7 @@
           <template #content>
             <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
               <div
-                class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) px-(--spacing-xxs)"
+                class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) px-(--spacing-2xs)"
               >
                 <span
                   class="size-8"
@@ -147,7 +147,7 @@
                   <div
                     v-for="column in COLUMNS"
                     :key="column.name"
-                    class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) p-(--spacing-xxs)"
+                    class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) p-(--spacing-2xs)"
                   >
                     <span
                       class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
@@ -214,7 +214,7 @@
                     class="overflow-hidden [interpolate-size:allow-keywords]"
                   >
                     <div
-                      class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) px-(--spacing-xxs) pt-(--spacing-sm) pb-(--spacing-xxs)"
+                      class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) px-(--spacing-2xs) pt-(--spacing-sm) pb-(--spacing-2xs)"
                     >
                       <span
                         class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
@@ -226,7 +226,7 @@
                       </span>
                       <span
                         :data-focused="frame.focused || null"
-                        class="flex min-w-0 rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+                        class="flex min-w-0 rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
                       >
                         <Input
                           :model-value="frame.name"

@@ -10,7 +10,7 @@ import { compile } from 'tailwindcss'
 import { container } from '../../../theme/src/tokens/primitives/shape/container.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
-const themeCssPath = resolve(here, '../../../theme/dist/v4/globals.css')
+const themeCssPath = resolve(here, '../../../theme/dist/globals.css')
 const tailwindDir = dirname(createRequire(import.meta.url).resolve('tailwindcss/package.json'))
 
 const TAILWIND_DEFAULTS = {

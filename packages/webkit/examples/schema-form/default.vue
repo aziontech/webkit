@@ -52,7 +52,7 @@
       :schema="schema"
     />
     <pre
-      class="m-0 overflow-auto rounded-(--shape-elements) bg-(--bg-surface) p-(--spacing-sm) font-code text-body-xs text-(--text-muted)"
+      class="m-0 overflow-auto rounded-(--shape-control) bg-(--bg-surface) p-(--spacing-sm) font-code text-body-xs text-(--text-muted)"
       >{{ JSON.stringify(args, null, 2) }}</pre>
   </div>
 </template>

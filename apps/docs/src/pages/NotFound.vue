@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <div class="flex w-full justify-center px-(--spacing-md) py-(--spacing-xxl)">
+  <div class="flex w-full justify-center px-(--spacing-md) py-(--spacing-2xl)">
     <h1 class="sr-only">{{ t.notFound }}</h1>
     <EmptyState
       :title="t.notFound"

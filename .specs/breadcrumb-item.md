@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 77ea8cb0f6240530204e97b702932637fcabdd98f0d8353207fdafa3b07aabec
+checksum: a5a6348cbc03d78f459a594c94f3a681252e0cfc485e137a6731d3104dc40c16
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -104,7 +104,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 | spacing gap            | `var(--spacing-2)`      |
 | padding x              | `var(--spacing-2)`      |
 | padding y              | `var(--spacing-1)`      |
-| shape                  | `var(--shape-elements)` |
+| shape                  | `var(--shape-control)` |
 | ring                   | `var(--ring-color)`     |
 
 ## Theme gaps

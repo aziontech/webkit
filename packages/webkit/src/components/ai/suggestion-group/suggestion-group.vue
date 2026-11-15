@@ -74,7 +74,7 @@
       :disabled="disabled"
       :data-orientation="orientation"
       :data-testid="`${testId}__item`"
-      class="inline-flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:border-(--border-strong) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-(--bg-surface) data-[orientation=vertical]:w-full pointer-coarse:min-h-11"
+      class="inline-flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:border-(--border-strong) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled) disabled:hover:bg-(--bg-surface) data-[orientation=vertical]:w-full pointer-coarse:min-h-11"
       @click="(event: MouseEvent) => choose(event, item)"
     >
       <i

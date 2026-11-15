@@ -134,7 +134,7 @@
   >
     <div
       ref="stage"
-      class="relative flex flex-col gap-(--spacing-xxs) py-(--spacing-xs)"
+      class="relative flex flex-col gap-(--spacing-2xs) py-(--spacing-xs)"
     >
       <ShellMockupPart :order="0">
         <div class="flex items-center gap-(--spacing-xs)">
@@ -172,7 +172,7 @@
 
       <ShellMockupPart :order="1">
         <div
-          class="grid w-fit min-w-(--container-3xs) max-w-(--container-xs) overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm)"
+          class="grid w-fit min-w-(--container-3xs) max-w-(--container-xs) overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm)"
         >
           <div
             :data-shown="frame.level === 'fields' || null"
@@ -195,13 +195,13 @@
                 </template>
               </Input>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-2xs)">
               <span
                 v-for="field in FIELDS"
                 :key="field.id"
                 :data-cursor="`row-${field.id}`"
                 :data-hovered="(frame.level === 'fields' && frame.hovered === field.id) || null"
-                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
+                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
               >
                 <span class="grow truncate">{{ field.label }}</span>
                 <span
@@ -250,13 +250,13 @@
                 </template>
               </Input>
             </div>
-            <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-2xs)">
               <span
                 v-for="source in SOURCES"
                 :key="source.id"
                 :data-cursor="`row-${source.id}`"
                 :data-hovered="(frame.level === 'values' && frame.hovered === source.id) || null"
-                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
+                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
               >
                 <span class="grow truncate">{{ source.label }}</span>
                 <i
@@ -268,10 +268,10 @@
             </div>
             <div
               :data-shown="frame.picked || null"
-              class="border-t border-(--border-default) p-(--spacing-xxs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+              class="border-t border-(--border-default) p-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
             >
               <span
-                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
+                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
               >
                 <i
                   class="ai ai-filter-slash text-(--text-muted)"

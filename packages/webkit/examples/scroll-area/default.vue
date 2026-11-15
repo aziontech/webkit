@@ -4,7 +4,7 @@
 
 <template>
   <div
-    class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default)"
+    class="h-[200px] max-w-(--container-md) rounded-(--shape-control) border border-(--border-default)"
   >
     <ScrollArea
       orientation="vertical"

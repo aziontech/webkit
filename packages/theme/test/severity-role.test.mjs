@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { compileThemeVars } from '../src/scripts/compile-theme.js';
+import { compileThemeVars } from '../src/tokens/theme-colors.js';
 
 const LEVELS = ['critical', 'high', 'medium', 'low', 'info'].map((level) => `--severity-${level}`);
 

@@ -493,7 +493,7 @@
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-readonly="readonly || null"
-    class="flex w-full flex-col overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-default)"
+    class="flex w-full flex-col overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default) bg-(--bg-surface) text-body-sm text-(--text-default)"
   >
     <div
       v-if="$slots['toolbar']"
@@ -646,7 +646,7 @@
                 :value="draft"
                 :aria-label="columnAt(col - 1)?.header"
                 :data-testid="`${testId}__editor`"
-                class="size-full min-h-10 rounded-(--shape-elements) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
+                class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) pointer-coarse:min-h-11"
                 @keydown="onEditorKeydown"
                 @change="onEditorInput"
                 @blur="commit"
@@ -671,7 +671,7 @@
                   :data-align="columnAt(col - 1)?.align ?? 'start'"
                   :data-invalid="invalid || null"
                   :data-testid="`${testId}__editor`"
-                  class="size-full min-h-10 rounded-(--shape-elements) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
+                  class="size-full min-h-10 rounded-(--shape-control) border-none bg-(--bg-surface) px-(--spacing-sm) text-start text-body-sm text-(--text-default) outline-none ring-2 ring-inset ring-(--ring-color) data-[align=end]:text-end data-[invalid]:ring-(--danger-border) pointer-coarse:min-h-11"
                   @input="onEditorInput"
                   @keydown="onEditorKeydown"
                   @blur="commit"
@@ -681,7 +681,7 @@
                   :id="`${cellId(r, col - 1)}-error`"
                   role="alert"
                   :data-testid="`${testId}__error`"
-                  class="absolute start-0 top-full z-3 mt-(--spacing-xxs) whitespace-nowrap rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--danger-border) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default)"
+                  class="absolute start-0 top-full z-3 mt-(--spacing-2xs) whitespace-nowrap rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--danger-border) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default)"
                   >{{ t('dataGrid.invalidNumber') }}</span
                 >
               </template>

@@ -129,14 +129,14 @@
       />
       <span
         v-if="checked"
-        class="pointer-events-none absolute left-1/2 top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--primary-contrast) group-data-[disabled]:bg-(--text-disabled)"
+        class="pointer-events-none absolute left-1/2 top-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-(--primary-foreground) group-data-[disabled]:bg-(--text-disabled)"
         aria-hidden="true"
         :data-testid="`${testId}__indicator`"
       />
     </span>
-    <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+    <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
       <span
-        class="flex min-w-0 items-center gap-(--spacing-xxs) group-data-[kind=card]/radio-item:text-body-sm"
+        class="flex min-w-0 items-center gap-(--spacing-2xs) group-data-[kind=card]/radio-item:text-body-sm"
       >
         <i
           v-if="icon"

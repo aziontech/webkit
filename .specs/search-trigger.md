@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: f9d0e33f84afae2da24722ff5079d0ec90faa08764f55903c2b63a17d2ab9395
+checksum: ae171f5b2c64cb0b12653fefa742e2cde6027304f4cd72e748ba719196a59ff1
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -104,7 +104,7 @@ _none_
 | label    | `.text-label-sm`, `var(--text-muted)`                       |
 | icon     | `var(--text-muted)`                                         |
 | spacing  | `var(--spacing-xs)` gap, `var(--spacing-sm)` inline padding |
-| shape    | `var(--shape-elements)`                                     |
+| shape    | `var(--shape-control)`                                      |
 | ring     | `var(--ring-color)`, offset `var(--bg-canvas)`              |
 | disabled | `var(--bg-disabled)`, `var(--text-disabled)`                |
 

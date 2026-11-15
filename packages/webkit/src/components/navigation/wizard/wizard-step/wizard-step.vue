@@ -85,7 +85,7 @@
     :data-invalid="invalid || null"
   >
     <template v-if="active">
-      <div class="flex flex-col gap-(--spacing-xxs)">
+      <div class="flex flex-col gap-(--spacing-2xs)">
         <p
           :id="counterId"
           class="text-overline-xs text-(--text-muted) @max-2xl/wizard:hidden"

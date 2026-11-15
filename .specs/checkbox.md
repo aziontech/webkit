@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 2a0305a580cb7b2f890eb2ff66edd15ef9222b6d616c5a68054daf5e37bb3d45
+checksum: 0175ac331aedffebd563d19c3fb57cf0282cc5ac5638410d82822c1ef48d3979
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -109,19 +109,19 @@ The checkbox is a leaf primitive — no slots. Label/description live in the enc
 
 ## Tokens
 
-| Region                         | Token (DESIGN.md)         |
-| ------------------------------ | ------------------------- |
-| surface (unchecked)            | `var(--bg-surface)`       |
-| surface (checked)              | `var(--primary)`          |
-| surface (indeterminate)        | `var(--primary)`          |
-| surface (disabled)             | `var(--bg-disabled)`      |
-| icon (checked / indeterminate) | `var(--primary-contrast)` |
-| icon (disabled)                | `var(--text-disabled)`    |
-| border (default)               | `var(--border-default)`   |
-| border (checked)               | `var(--primary)`          |
-| ring (focus)                   | `var(--ring-color)`       |
-| ring offset (focus)            | `var(--bg-canvas)`        |
-| shape                          | `var(--shape-elements)`   |
+| Region                         | Token (DESIGN.md)           |
+| ------------------------------ | --------------------------- |
+| surface (unchecked)            | `var(--bg-surface)`         |
+| surface (checked)              | `var(--primary)`            |
+| surface (indeterminate)        | `var(--primary)`            |
+| surface (disabled)             | `var(--bg-disabled)`        |
+| icon (checked / indeterminate) | `var(--primary-foreground)` |
+| icon (disabled)                | `var(--text-disabled)`      |
+| border (default)               | `var(--border-default)`     |
+| border (checked)               | `var(--primary)`            |
+| ring (focus)                   | `var(--ring-color)`         |
+| ring offset (focus)            | `var(--bg-canvas)`          |
+| shape                          | `var(--shape-control)`      |
 
 ## Theme gaps
 

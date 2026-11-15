@@ -531,7 +531,7 @@
               <div
                 v-for="fact in facts"
                 :key="fact.label"
-                class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+                class="flex min-w-0 flex-col gap-(--spacing-2xs)"
               >
                 <span class="text-label-sm text-(--text-muted)">{{ fact.label }}</span>
                 <div class="flex min-h-7 min-w-0 items-center">
@@ -550,7 +550,7 @@
               >
                 <i
                   :data-severity="severity"
-                  class="ai ai-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-contrast)"
+                  class="ai ai-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-label-code-sm text-(--text-muted)">{{
@@ -566,7 +566,7 @@
               </div>
               <span
                 :data-severity="severity"
-                class="min-w-0 text-body-xs text-(--text-muted) data-[severity=danger]:text-(--danger-contrast)"
+                class="min-w-0 text-body-xs text-(--text-muted) data-[severity=danger]:text-(--danger-foreground)"
               >
                 {{ run.outcome }}
               </span>
@@ -602,7 +602,7 @@
                 >
                   <Flow.Anchor>
                     <div
-                      class="flex w-full items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"
+                      class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
                     >
                       <i
                         :class="node.icon"
@@ -648,7 +648,7 @@
                     <div
                       v-for="field in node.fields"
                       :key="field.label"
-                      class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+                      class="flex min-w-0 flex-col gap-(--spacing-2xs)"
                     >
                       <dt class="text-label-sm text-(--text-muted)">{{ field.label }}</dt>
                       <dd class="m-0 truncate text-body-xs text-(--text-default)">

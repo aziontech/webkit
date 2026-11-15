@@ -51,7 +51,7 @@
       :rel="external ? 'noopener noreferrer' : undefined"
       :aria-label="label"
       :data-testid="testId"
-      class="mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-link) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+      class="mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-link) no-underline transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
     >
       {{ index }}
     </a>
@@ -61,7 +61,7 @@
       :aria-label="label"
       role="note"
       :data-testid="testId"
-      class="mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-muted)"
+      class="mx-0.5 inline-flex min-w-4 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 align-super text-label-sm leading-none text-(--text-muted)"
     >
       {{ index }}
     </span>

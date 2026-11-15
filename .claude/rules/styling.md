@@ -15,8 +15,8 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 <script setup lang="ts">
   const sharedClasses = ['flex', 'items-center', 'transition-colors' /* ... */]
   const kindClasses: Record<Kind, string> = {
-    primary: 'bg-(--primary) text-(--primary-contrast)',
-    secondary: 'bg-(--secondary) text-(--secondary-contrast)',
+    primary: 'bg-(--primary) text-(--primary-foreground)',
+    secondary: 'bg-(--secondary) text-(--secondary-foreground)',
     outlined: 'border border-(--border-default)',
     text: 'bg-transparent'
   }
@@ -99,8 +99,8 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
       rounded-(--shape-button)
       focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
 
-      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
-      data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-contrast)
+      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
+      data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-foreground)
       data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
       data-[kind=text]:bg-transparent
 

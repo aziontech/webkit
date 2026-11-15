@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: c86b6d647ee9469b9b84f5a1639099dd7d8d6beee29a2d45ef2a662ca74e51b8
+checksum: e7fdb935129e89c4dcf056238746baea28d8858ee1d9aa4d6255a85e03a19569
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -134,7 +134,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 
 | Region              | Token (DESIGN.md)                            |
 | ------------------- | -------------------------------------------- |
-| gap between buttons | `var(--spacing-xxs)`                         |
+| gap between buttons | `var(--spacing-2xs)`                         |
 | pressed fill / text | `var(--bg-selected)` / `var(--text-default)` |
 | buttons             | `IconButton` tokens per `kind` and `size`    |
 | overflow check      | `var(--text-default)`                        |

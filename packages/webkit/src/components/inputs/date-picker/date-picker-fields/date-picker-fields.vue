@@ -102,7 +102,7 @@
     class="flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)]"
     data-testid="input-date-picker__fields"
   >
-    <div class="flex flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <label
         :for="startDateId"
         class="text-label-sm text-(--text-muted)"
@@ -140,7 +140,7 @@
 
     <div
       v-if="mode === 'range'"
-      class="flex flex-col gap-(--spacing-xxs)"
+      class="flex flex-col gap-(--spacing-2xs)"
     >
       <label
         :for="endDateId"

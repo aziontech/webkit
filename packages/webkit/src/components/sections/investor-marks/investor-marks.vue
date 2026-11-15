@@ -62,7 +62,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasItems"
@@ -128,7 +128,7 @@
               </span>
               <span
                 aria-hidden="true"
-                class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-md) flex translate-y-1 items-center justify-center gap-(--spacing-xxs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/investor:translate-y-0 group-hover/investor:opacity-100 group-focus-visible/investor:translate-y-0 group-focus-visible/investor:opacity-100 motion-reduce:transition-none"
+                class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-md) flex translate-y-1 items-center justify-center gap-(--spacing-2xs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/investor:translate-y-0 group-hover/investor:opacity-100 group-focus-visible/investor:translate-y-0 group-focus-visible/investor:opacity-100 motion-reduce:transition-none"
               >
                 {{ linkLabel }}
                 <i class="ai ai-arrow-up-right leading-none" />

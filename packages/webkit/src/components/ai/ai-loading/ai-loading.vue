@@ -71,7 +71,7 @@
         v-if="kind === 'inline'"
         aria-hidden="true"
         :data-testid="`${testId}__dots`"
-        class="inline-flex shrink-0 items-center gap-(--spacing-xxs)"
+        class="inline-flex shrink-0 items-center gap-(--spacing-2xs)"
       >
         <span
           class="size-1.5 rounded-(--radius-full) bg-(--text-muted) animate-pulse motion-reduce:animate-none"

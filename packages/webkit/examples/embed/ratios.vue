@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <Embed
       src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
       title="A placeholder document in a 16:9 frame"

@@ -208,7 +208,7 @@
                   <span
                     :style="peakStyle"
                     :data-shown="frame.tip || null"
-                    class="absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+                    class="absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
                   >
                     <span class="text-label-sm text-(--text-default)">
                       Oct 16, 2026, 02:02:40 PM

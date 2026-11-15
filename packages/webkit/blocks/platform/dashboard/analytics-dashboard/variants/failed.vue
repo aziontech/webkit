@@ -234,7 +234,7 @@
       >
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Requests over time</ChartCard.Title>
               <Hint text="Sum of requests served by every service, per interval." />
             </span>
@@ -310,7 +310,7 @@
 
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Status codes</ChartCard.Title>
               <Hint text="Sum of requests per status class. Switch to Bar to stack the classes." />
             </span>
@@ -385,7 +385,7 @@
 
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Requests by country</ChartCard.Title>
               <Hint text="Sum of requests per country of origin, top countries first." />
             </span>
@@ -447,7 +447,7 @@
 
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Top hosts</ChartCard.Title>
               <Hint text="Hosts that served the most requests in the period, with their service." />
             </span>

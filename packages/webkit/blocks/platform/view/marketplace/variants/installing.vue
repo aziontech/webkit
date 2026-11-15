@@ -295,7 +295,7 @@
           >
             <h2
               id="marketplace-featured"
-              class="text-heading-xxs text-(--text-default)"
+              class="text-heading-2xs text-(--text-default)"
             >
               Featured
             </h2>
@@ -327,7 +327,7 @@
           >
             <h2
               id="marketplace-all"
-              class="text-heading-xxs text-(--text-default)"
+              class="text-heading-2xs text-(--text-default)"
             >
               All integrations
             </h2>
@@ -406,7 +406,7 @@
           <PanelHeader class="w-full">
             <div class="flex min-w-0 items-center gap-(--spacing-sm)">
               <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
                   :class="selected.logo"
@@ -471,7 +471,7 @@
               >
                 <h3
                   id="integration-overview"
-                  class="text-heading-xxs text-(--text-default)"
+                  class="text-heading-2xs text-(--text-default)"
                 >
                   Overview
                 </h3>
@@ -490,7 +490,7 @@
               >
                 <h3
                   id="integration-permissions"
-                  class="text-heading-xxs text-(--text-default)"
+                  class="text-heading-2xs text-(--text-default)"
                 >
                   Permissions
                 </h3>
@@ -505,7 +505,7 @@
                     class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
                   >
                     <i
-                      class="ai ai-check shrink-0 text-(--success-contrast)"
+                      class="ai ai-check shrink-0 text-(--success-foreground)"
                       aria-hidden="true"
                     />
                     {{ permission }}
@@ -519,7 +519,7 @@
               >
                 <h3
                   id="integration-install"
-                  class="text-heading-xxs text-(--text-default)"
+                  class="text-heading-2xs text-(--text-default)"
                 >
                   {{ selected.installedOn.length ? 'Install on another application' : 'Install' }}
                 </h3>

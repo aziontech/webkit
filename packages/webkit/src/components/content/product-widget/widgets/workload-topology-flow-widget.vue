@@ -115,7 +115,7 @@
             >
               <FlowAnchor>
                 <div
-                  class="flex w-full items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"
+                  class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
                 >
                   <i
                     :class="node.icon"

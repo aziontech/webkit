@@ -128,7 +128,7 @@
           <div
             v-if="slots.social"
             :data-testid="`${testId}__social`"
-            class="order-4 flex min-w-0 flex-wrap items-center justify-center gap-(--spacing-xxs) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-1 md:row-start-2 md:min-h-14 md:justify-start md:py-0"
+            class="order-4 flex min-w-0 flex-wrap items-center justify-center gap-(--spacing-2xs) border-0 border-t border-t-(length:--border-width-default) border-t-(--border-default) px-(--spacing-lg) py-(--spacing-md) md:order-none md:col-start-1 md:row-start-2 md:min-h-14 md:justify-start md:py-0"
           >
             <slot name="social" />
           </div>

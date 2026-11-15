@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 9b2a367ab97fbd2699e55c349e637797c2c07549c6601315f9f77334af090952
+checksum: c80e71030fefdb8149db4db3fba0673a6bba44fe311269bfc06251c0ec9fcf90
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -120,7 +120,7 @@ A square control that triggers an action with a glyph and no visible text: close
 | surface    | `var(--bg-surface)`     |
 | text       | `var(--text-default)`   |
 | spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
+| shape      | `var(--shape-control)` |
 | ring       | `var(--ring-color)`     |
 
 ## Theme gaps

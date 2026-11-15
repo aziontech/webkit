@@ -109,9 +109,9 @@ test('listTokens surfaces the animations catalog with timing + use-when', () => 
   const res = listTokens(catalog, { category: 'animations' })
   assert.equal(res.ok, true)
   assert.equal(res.found, true)
-  const slideIn = res.tokens.find((t) => t.class === 'animate-slide-in-left')
-  assert.ok(slideIn, 'expected animate-slide-in-left in the animations catalog')
-  assert.match(slideIn.value, /slideInLeft/)
+  const slideIn = res.tokens.find((t) => t.class === 'animate-slide-in-start')
+  assert.ok(slideIn, 'expected animate-slide-in-start in the animations catalog')
+  assert.match(slideIn.value, /slideInStart/)
   assert.match(slideIn.useWhen, /sidebar/i)
   assert.match(res.hint, /motion-reduce/)
   // The index (no category) also advertises the animations group.

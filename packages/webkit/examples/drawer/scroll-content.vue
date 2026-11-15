@@ -43,7 +43,7 @@
           <section
             v-for="section in scrollSections"
             :key="section.title"
-            class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
+            class="flex flex-col gap-(--spacing-2) rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
           >
             <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
             <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>

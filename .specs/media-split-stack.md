@@ -7,7 +7,7 @@ spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: e36d853edb1df8df3a8a30b045a543c8f0a8f57b2fdc1684bff3555831af5129
+checksum: caa1b9084c8609b2f04cdc7c8698cf64cd183d82829fbde2da4782f68a8ac722
 ---
 
 # MediaSplitStack — Component Spec
@@ -104,7 +104,7 @@ _none_
 | band rules and marks | `var(--border-default)`                                           |
 | framed image plate   | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
 | framed image inset   | `var(--spacing-md)`                                               |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

@@ -1189,7 +1189,7 @@
                       <template #cell-move="{ row }">
                         <div
                           :data-rule-id="row.id"
-                          class="flex items-center gap-(--spacing-xxs)"
+                          class="flex items-center gap-(--spacing-2xs)"
                         >
                           <Tooltip
                             :text="
@@ -1254,7 +1254,7 @@
                         </div>
                       </template>
                       <template #cell-name="{ row }">
-                        <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                        <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <Button
                             kind="link"
                             :label="row.name"
@@ -1408,7 +1408,7 @@
               >
                 {{ phase.label }} phase
               </h3>
-              <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0">
                 <li
                   v-for="line in phase.items"
                   :key="line.key"
@@ -1462,7 +1462,7 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>{{ editing ? 'Edit Rule' : 'Add Rule' }}</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 Handle the conditional execution of behaviors through logical operators.
@@ -1647,7 +1647,7 @@
                             data-drag-row
                             :data-dragging="isDragging('behavior', bIdx) || null"
                             :data-drop="isDropTarget('behavior', bIdx) || null"
-                            class="relative grid grid-cols-1 items-start gap-(--spacing-xs) rounded-(--shape-card) transition-[opacity,scale,outline-color] motion-reduce:transition-none data-dragging:scale-[0.98] data-dragging:opacity-70 data-dragging:outline-2 data-dragging:outline-(--accent) data-dragging:outline-dashed data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-xxs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-[''] sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
+                            class="relative grid grid-cols-1 items-start gap-(--spacing-xs) rounded-(--shape-card) transition-[opacity,scale,outline-color] motion-reduce:transition-none data-dragging:scale-[0.98] data-dragging:opacity-70 data-dragging:outline-2 data-dragging:outline-(--accent) data-dragging:outline-dashed data-drop:before:pointer-events-none data-drop:before:absolute data-drop:before:inset-x-0 data-drop:before:-top-(--spacing-2xs) data-drop:before:border-t-2 data-drop:before:border-(--accent) data-drop:before:content-[''] sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]"
                             @dragenter.prevent="onDragEnter('behavior', bIdx)"
                             @dragover.prevent
                             @drop="dropOnBehavior(bIdx)"
@@ -1716,7 +1716,7 @@
                               <template
                                 v-else-if="behaviorArgument(behavior.type)?.kind === 'select'"
                               >
-                                <div class="flex flex-col gap-(--spacing-xxs)">
+                                <div class="flex flex-col gap-(--spacing-2xs)">
                                   <Select
                                     v-model="behavior[selectArgument(behavior.type).field]"
                                     size="large"
@@ -1783,7 +1783,7 @@
                               </template>
                             </div>
 
-                            <div class="flex items-center gap-(--spacing-xxs)">
+                            <div class="flex items-center gap-(--spacing-2xs)">
                               <span
                                 v-if="form.behaviors.length > 1"
                                 role="button"

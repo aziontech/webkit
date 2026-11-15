@@ -7,10 +7,11 @@
 # JOURNAL — C2b
 
 ## 14:48 Start
+
 Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 
-
 ## 14:53 Setup (≈25 min)
+
 - **medium** — `@aziontech/webkit@5.12.0` declares `@aziontech/theme ^4.0.0` as a dependency, but the brief ships theme 5.2.2. npm nests theme 4.3.1 under `node_modules/@aziontech/webkit/node_modules`, so two theme majors are installed side by side. `webkit.css` imports the top-level (v5) one. Nothing visibly broke, but it is unclear which theme the components were written against.
 - **low** — `npx @aziontech/webkit init -y` worked well. It wrote `.claude/` rules and skills, AGENTS.md, CLAUDE.md, eslint/stylelint/postcss config, `src/webkit.css` and a husky pre-commit hook, and patched main.ts. Surprise: it adds `eslint`, `stylelint` etc. as `"latest"` devDependencies and a `prepare: husky` script, and the hook runs strict lint on every commit. A first commit failed on Vite's own `// https://vite.dev/config/` comment in vite.config.ts (rule `webkit/authoring-standards` prose-comment).
 - **high** — `webkit add platform/account/team-permissions --variant create-team` copies a block (`variants/create-team.vue`) that **fails WebKit's own lint** as installed by `init`: `vuejs-accessibility/label-has-for` at two `<label>` wrapping a `Checkbox` (the matrix group row and the Status switch). So the CLAUDE.md promise "the block is reviewed, keep it as-is" and "if lint fails the change is not done" contradict each other.
@@ -20,6 +21,7 @@ Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 - **worked well** — `webkit search` found a block for 3 of the 4 screens on the first query (`platform/account/users`, `platform/account/team-permissions` variant CreateTeam, `platform/view/marketplace`), plus `shells/console`. The `shells/console` Menu drill with `Menu.Back` gives exactly the reference's '‹ Back' Settings sidebar.
 
 ## 14:55 console-users (≈15 min) and console-team-create (≈20 min)
+
 - **worked well** — `platform/account/users` + `shells/console` got within a few pixels of the reference on the first shot: sidebar with the Settings drill, Breadcrumb, SearchTrigger "Search CTRL K", Create, Agent (ButtonHighlight), square Avatar, PageHeader, the toolbar (Filter, search Input, Refresh/Download CSV/Columns IconButtons), Card + Table + Pagination "Showing 1 to 6 of 6 entries" + rows-per-page, Table.CellStatus pills, Table.CellActions kebab. `useCollection` wiring was easy.
 - **medium** — The users block's columns (Teams MultiSelect, Owner as muted text, email under the name, CellTime with avatar) differ from the reference (Email column, Role pill, plain "Last Active" text), so I rewrote the columns. "Keep the components, their order, the props and the classes" (CLAUDE.md) can't be followed when the content differs.
 - **medium** — The toolbar row (Filter + search + icon buttons) is in no block on its own: the users block has only the search Input, and the full toolbar exists only as the "stand-in body" of `shells/console`. I copied it from there. `Table` also has toolbar parts (`Table.Filter`, `Table.Export`, `Table.ColumnSelector`, `Table.RefreshButton`), but they render inside the card's toolbar band, whereas the reference puts them outside the card. It is unclear which one is canonical.
@@ -32,9 +34,10 @@ Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 - **low** — The CreateTeam block's General card uses `Field` stacked rows; the reference (and `single-page-create`) uses `SettingRow` with the control on the right. I took the row layout from `single-page-create`, so two blocks show two different anatomies for the same form.
 
 ## 14:56 console-billing (≈20 min)
-- **high** — No block for the Billing page. `platform/account/change-plan-drawer` and `payment-method-card` describe themselves as opened *from* "the Billing page", and `page-tabs` says "An account page split into tabs, such as Billing", but the page itself is not shipped. `webkit search billing plan` lists only those drawer pieces. Built from components: PageHeader (size large), PageTabs + Tabs.Item, Card (header/content/footer slots), Tag, SectionHeader, the console toolbar, Table + useCollection + Table.CellStatus.
-- **medium** — No key/value *row* component (label left, value right) for the Subscription Plan rows. `KeyValuePairs` lays out label-over-value. I used a hand-written `<dl>` with tokens.
-- **medium** — There is no feature-checklist component for the 2-column "Upgrade to Pro" list with check marks (`card-pricing` / `pricing-plans` are marketing sections). Hand-written `<ul>` with `pi pi-check` + `--success-contrast`.
+
+- **high** — No block for the Billing page. `platform/account/change-plan-drawer` and `payment-method-card` describe themselves as opened _from_ "the Billing page", and `page-tabs` says "An account page split into tabs, such as Billing", but the page itself is not shipped. `webkit search billing plan` lists only those drawer pieces. Built from components: PageHeader (size large), PageTabs + Tabs.Item, Card (header/content/footer slots), Tag, SectionHeader, the console toolbar, Table + useCollection + Table.CellStatus.
+- **medium** — No key/value _row_ component (label left, value right) for the Subscription Plan rows. `KeyValuePairs` lays out label-over-value. I used a hand-written `<dl>` with tokens.
+- **medium** — There is no feature-checklist component for the 2-column "Upgrade to Pro" list with check marks (`card-pricing` / `pricing-plans` are marketing sections). Hand-written `<ul>` with `pi pi-check` + `--success-foreground`.
 - **low** — `useCollection`'s pagination option is `pageSizeOptions`, but Table's prop is `rowsPerPageOptions`, and `webkit view table` doesn't document `useCollection` options. I read the composable's .ts source to find the name.
 - **low** — The PageHeader `actions` slot wraps on a phone with each child as its own row. The reference keeps 'Last Update' + refresh together, so I wrapped them in one span.
 - **low** — An inline link in running text: Link docs say "use a plain anchor with the text-link class", but nothing says that class is underlined; the reference's link is not underlined. I left it underlined.
@@ -42,13 +45,15 @@ Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 - **worked well** — PageTabs gave the full-bleed ruled tab strip at the right inset; Card header/footer slots draw the dividers exactly like the reference.
 
 ## 14:58 console-marketplace (≈20 min)
-- **high** — `platform/view/marketplace` (and its `templates` variant) doesn't match the console's marketplace. Its Templates tab is a "Popular templates" strip of 6 small cards in a 6-column grid with a "Browse all templates" link, and Integrations is the first tab. The grid of template cards with descriptions is in a *different* block, `platform/view/template-browser`, which uses a PropertyFilter, groups by category and adds a framework Tag. I built the page from the marketplace block's PageHeader + Tabs and the template-browser card anatomy (40 px icon tile, title button with a stretched hit area, description), with a plain search Input.
+
+- **high** — `platform/view/marketplace` (and its `templates` variant) doesn't match the console's marketplace. Its Templates tab is a "Popular templates" strip of 6 small cards in a 6-column grid with a "Browse all templates" link, and Integrations is the first tab. The grid of template cards with descriptions is in a _different_ block, `platform/view/template-browser`, which uses a PropertyFilter, groups by category and adds a framework Tag. I built the page from the marketplace block's PageHeader + Tabs and the template-browser card anatomy (40 px icon tile, title button with a stretched hit area, description), with a plain search Input.
 - **medium** — `Tabs` has no alignment option. The reference centres the tab list; `Tabs.List`'s root is `relative w-full` with its items at the start. I centred it with a `mx-auto w-fit` wrapper (layout only).
 - **high** — Icons: `ai ai-svelte` doesn't exist in the monochrome font, though the icons README says framework logos have a monochrome version. It exists only as a colour icon, and the docs give **three different class names**: README `ai-svelte-cor`, the header comment of `azionicons-color.css` `ai ai-google-cor`, and the real selector `.ai-cor.ai-svelte`. Only the last one works. Cost ~10 min. There are no glyphs for Nitro, Stencil, Rust/WASM or Emscripten, so I used `pi pi-server`, `pi pi-code`, `pi pi-cog` and `pi pi-microchip`.
 - **low** — The template-browser card grid is `grid-cols-1 sm:grid-cols-2 …`; the reference keeps 2 columns on a 393 px phone. I set `grid-cols-2`. Card density on phones isn't covered in the block guidelines.
 - **worked well** — The shell nav icons (`ai ai-workloads`, `ai-edge-firewall`, `ai-edge-sql` + `tagValue: 'Preview'` …) and Menu groups reproduce the reference rail almost exactly. The page height ended within ~20 px of the reference on both widths.
 
 ## 15:00 Wrap-up (≈15 min)
+
 - **medium** — `webkit check` (doctor) warns "8 pinned as latest — consider pinning". Those are exactly the devDependencies `webkit init` itself wrote as `"latest"`. I pinned them to the versions it suggested. It also warns "no WebkitProvider in src/" though nothing in the setup docs or `init` mentions it. I added `<WebkitProvider locale="en">` in App.vue.
 - **high** — The `init` lint wiring breaks once you run `npm run build`: `eslint.config.mjs` has no ignore for `dist/`, and the husky hook runs `npx stylelint "**/*.{css,scss,vue}"` with no `ignoreFiles`. So the pre-commit hook lints the built bundle and fails with hundreds of errors, including hex colours and literal ms timings **compiled from WebKit's own components** (e.g. `#F3652B` in global-header, `hsl(` in use-collection). Fixed with `{ ignores: ['dist/**'] }` and `ignoreFiles: ['dist/**','node_modules/**']`. Cost ~5 min.
 - **low** — `webkit check` reports no drift for `ConsoleUsers.vue`, although `webkit diff platform/account/users` shows +211/−477. The drift check only seems to flag missing files.
@@ -56,12 +61,12 @@ Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 - Process note: the first checkpoint commit was blocked by the lint hook (above), so setup, console-users and console-team-create landed in one commit (6edd6c0). Billing, marketplace and the wrap-up are separate commits.
 - Verified: `npm run build` passes; `vite preview` serves /, every page route and an unknown path with index.html (SPA fallback); final shots have no console errors on all 4 pages; `webkit check`: 0 errors, 0 warnings. `npm run typecheck` still fails only on WebKit's toast/index.ts.
 
-
 ---
 
 # DONE — job C2b (console)
 
 ## Pages
+
 - `console-billing`: **built**. Settings sidebar, breadcrumb, header (Documentation, Last Update, refresh), PageTabs Bills/Payment Methods, Subscription Plan and Upgrade to Pro cards, Invoices toolbar, 12-row table with 8 per page, pager. Desktop height 1281 vs 1282 in the reference. Missing: the Payment Methods tab is a placeholder EmptyState, and key/value rows and the check list are hand-written with tokens (no WebKit component for them).
 - `console-users`: **built**. Settings sidebar, header (Documentation, Invite User), toolbar, table with avatar initials, Role/Status pills, Last Active, kebab, pagination. Missing: the Owner pill is `accent` (no "orange-tint" Tag severity); Invite User doesn't open a drawer.
 - `console-team-create`: **built**. Focused header (back, brand, breadcrumb, avatar), Create Team heading, General card (SettingRow Name + stacked Description), Permissions card (filter, Select all, Clear, tri-state category rows, View/Edit matrix with the single-checkbox rows), collapsed Advanced, Cancel/Create bar. Differences: the action bar is SaveBar `floating`, a full-width bottom bar, not the reference's centred pill (WebKit has no such kind). Clicking a category label no longer toggles its checkbox (lint workaround).
@@ -69,9 +74,11 @@ Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 - `/` lists links to all four pages. Vue Router history mode, light theme.
 
 ## WebKit pieces used most
+
 `shells/console` (AppLayout, Sidebar, Menu with Settings drill + Menu.Back, GlobalHeader, SearchTrigger + Command, ButtonHighlight, Breadcrumb, Avatar, DropdownMenu), PageHeader, Button, IconButton + Tooltip, Input, Card, Table + `useCollection` + Table.CellStatus / Table.CellActions + Pagination, Tabs / PageTabs, SettingsSection, SettingRow, Item.List, Checkbox, Textarea, SaveBar, Tag, SectionHeader, EmptyState, ConfirmDialog, Toaster, `@aziontech/icons` (`ai ai-*`, `pi pi-*`). Blocks: `platform/account/users`, `platform/account/team-permissions` (CreateTeam), `platform/view/marketplace` + `platform/view/template-browser`, `platform/create/single-page-create`.
 
 ## Top 5 problems with WebKit, by impact
+
 1. **The tooling and the blocks contradict each other.** `webkit init` installs a strict lint + pre-commit hook. The canonical `create-team` block fails it (`label-has-for`). Turning a JS block into a reusable component forces `lang="ts"` (`authoring-standards`), and then the block's own data no longer type-checks (`path` not in `MenuNode`, ThemeSwitcher value). The hook also lints `dist/` (no ignores), so it fails on WebKit's own compiled CSS/JS after the first build.
 2. **`vue-tsc` fails inside WebKit's shipped source** (`src/components/feedback/toast/index.ts` TS2352), even though the README says it type-checks under strict. So the default Vite `npm run build` (`vue-tsc -b && vite build`) breaks; I had to switch it to `vite build` + a separate `typecheck` script.
 3. **Missing or mismatched screen blocks.** No Billing page block exists, though three components and blocks refer to it. The marketplace block's Templates tab doesn't match the console; the right card grid is in `template-browser`. The users block's columns differ from the console's. "Change only the content, keep the components" can't be followed.
@@ -79,4 +86,5 @@ Read BRIEF, pages.json, reference tiles. Setting up Vite+Vue3+TS app.
 5. **The docs are inconsistent or incomplete.** Colour icon class names are given three different ways (only `.ai-cor.ai-svelte` works), and the monochrome Svelte glyph is missing. `v-model:path` (Menu) and `v-model:open` (SettingsSection) are absent from `webkit view` props. `useCollection` options (`pageSizeOptions`) are undocumented in the CLI. `init` pins devDependencies as `latest` and then `doctor` warns about it. WebkitProvider is required by `doctor` but not mentioned in setup.
 
 ## Build
+
 `npm run build` passes (`vite build` → `app/dist/`). `vite preview` checked: `/`, all four routes and an unknown path all serve index.html (SPA fallback). `npx @aziontech/webkit check`: 0 errors, 0 warnings. `npm run typecheck` (vue-tsc) fails only on WebKit's `toast/index.ts`. Dev server stopped.

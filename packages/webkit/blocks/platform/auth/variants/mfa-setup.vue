@@ -63,7 +63,7 @@
         <a
           href="/home"
           aria-label="Azion home"
-          class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+          class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
             kind="default"
@@ -145,13 +145,13 @@
                         />
                       </div>
 
-                      <div class="flex flex-col gap-(--spacing-xxs)">
+                      <div class="flex flex-col gap-(--spacing-2xs)">
                         <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
                         <p class="text-body-sm text-(--text-muted)">
                           Enter this setup key in the app instead.
                         </p>
                         <div
-                          class="flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-xxs) py-(--spacing-xxs)"
+                          class="flex items-center justify-between gap-(--spacing-sm) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-2xs) py-(--spacing-2xs)"
                         >
                           <code
                             class="text-label-code text-(--text-default)"

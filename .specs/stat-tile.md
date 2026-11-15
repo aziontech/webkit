@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 37208a5548f1d395ebf7c4993cdd1c2967399abab4188e647a2442d1deea25cb
+checksum: 74e0353b77c94e2ba720f9d7772902859845950ed7b56e3913067eb12422e446
 spec_version: 5
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -123,7 +123,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 | delta        | `tag` at `size="small"` (`success` / `danger` / `neutral`); period in `.text-label-sm`, `var(--text-muted)`                             |
 | sparkline    | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge                                                      |
 | no-data band | `spark-chart` `color="other"` at reduced opacity, `separator`, `tag` `severity="neutral"` at `size="small"`                               |
-| spacing      | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                          |
+| spacing      | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                          |
 
 ## Theme gaps
 

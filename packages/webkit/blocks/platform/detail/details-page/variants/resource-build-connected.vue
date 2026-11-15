@@ -108,7 +108,7 @@
                             kind="compact"
                           >
                             <template #description>
-                              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+                              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                                 <i
                                   class="ai ai-github shrink-0"
                                   aria-hidden="true"
@@ -118,7 +118,7 @@
                                     :href="`https://github.com/${repository}`"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                    class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                                   >
                                     <span
                                       class="truncate underline-offset-2 group-hover/link:underline"

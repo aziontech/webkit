@@ -3,7 +3,7 @@ name: slider
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 74a210cb890406ec9101947653e7befd9601e9300fd63860b3fea2029f08a7a2
+checksum: a732aab8dcd1baee39c52c5c88fe7e18438ea425ddf5cb287273cfe654260819
 spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -129,11 +129,11 @@ The fill and the thumb position are not animated: they track the pointer every f
 | --------------------------------------------- | ----------------------- |
 | track — background                            | `var(--bg-surface)`     |
 | track — border                                | `var(--border-default)` |
-| track — shape                                 | `var(--shape-elements)` |
+| track — shape                                 | `var(--shape-control)`  |
 | fill                                          | `var(--accent)`         |
 | thumb — fill                                  | `var(--bg-surface)`     |
 | thumb — border                                | `var(--accent)`         |
-| thumb — shape                                 | `var(--shape-elements)` |
+| thumb — shape                                 | `var(--shape-control)`  |
 | thumb (hover) — overlay                       | `var(--bg-hover)`       |
 | focus-visible ring (on the thumb)             | `var(--ring-color)`     |
 | focus ring offset                             | `var(--bg-canvas)`      |
@@ -145,7 +145,7 @@ The fill and the thumb position are not animated: they track the pointer every f
 | fill + thumb border (readonly)                | `var(--text-muted)`     |
 | track (disabled)                              | `var(--bg-disabled)`    |
 | fill + thumb border + tick + label (disabled) | `var(--text-disabled)`  |
-| marks row gap                                 | `var(--spacing-xxs)`    |
+| marks row gap                                 | `var(--spacing-2xs)`    |
 
 ## Theme gaps
 

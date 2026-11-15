@@ -250,7 +250,7 @@
     :data-loading="loading || null"
     :data-submitted="submitted || null"
     :data-error="error || null"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <Hero
       v-if="title"
@@ -265,7 +265,7 @@
       bottom-height="clamp(7rem,16dvh,14rem)"
     >
       <div
-        class="grid grid-cols-1 gap-(--spacing-xxl) py-(--spacing-lg) gap-y-(--spacing-xl) lg:grid-cols-2 lg:grid-rows-[auto_1fr]"
+        class="grid grid-cols-1 gap-(--spacing-2xl) py-(--spacing-lg) gap-y-(--spacing-xl) lg:grid-cols-2 lg:grid-rows-[auto_1fr]"
       >
         <HeroTitle
           :eyebrow="eyebrow"

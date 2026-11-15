@@ -982,7 +982,7 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 A Deployment Setting says how a deploy routes: whether versions lock the resource

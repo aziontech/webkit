@@ -506,7 +506,7 @@
                       >
                         <Item.Media>
                           <span
-                            class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
+                            class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
                               :class="[provider.icon, 'text-body-lg text-(--text-default)']"

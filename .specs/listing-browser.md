@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 7de51441cc43e9cf57570e33e4e330bc7393d8dde88767a7a90973243759957b
+checksum: 9ca320374db8656f1f1a6f4b964ac5c8970a628cc61bc8b8c27ea895ea2e363a
 ---
 
 # ListingBrowser — Component Spec
@@ -156,7 +156,7 @@ _none_
 | list row hover fill                         | `var(--bg-hover)`                        |
 | rules                                       | `var(--border-default)`                  |
 | band inset                                  | `var(--spacing-xl)`                      |
-| header inset                                | `var(--spacing-xxl)`                     |
+| header inset                                | `var(--spacing-2xl)`                     |
 | toolbar inset and gap                       | `var(--spacing-lg)`, `var(--spacing-md)` |
 
 ## Theme gaps

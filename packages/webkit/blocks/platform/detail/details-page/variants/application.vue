@@ -357,7 +357,7 @@
                         :href="`https://${APP.host}`"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                        class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                       >
                         <span class="truncate underline-offset-2 group-hover/link:underline">{{
                           APP.host
@@ -410,7 +410,7 @@
               <dl
                 class="m-0 grid grid-cols-2 gap-(--spacing-sm) border-t border-(--border-muted) p-(--spacing-md) sm:grid-cols-3 lg:grid-cols-6"
               >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <dt class="text-label-sm text-(--text-muted)">Deployment</dt>
                   <dd class="m-0 flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                     <Link
@@ -426,7 +426,7 @@
                     />
                   </dd>
                 </div>
-                <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                   <dt class="text-label-sm text-(--text-muted)">Status</dt>
                   <dd class="m-0 flex min-h-7 items-center">
                     <StatusIndicator
@@ -438,7 +438,7 @@
                 <div
                   v-for="fact in facts"
                   :key="fact.label"
-                  class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+                  class="flex min-w-0 flex-col gap-(--spacing-2xs)"
                 >
                   <dt class="text-label-sm text-(--text-muted)">{{ fact.label }}</dt>
                   <dd class="m-0 flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
@@ -634,7 +634,7 @@
                 <li
                   v-for="change in stagedChanges"
                   :key="change.key"
-                  class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
                   <span class="text-body-sm text-(--text-muted)"

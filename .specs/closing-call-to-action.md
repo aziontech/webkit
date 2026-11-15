@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 5b6f1ec41161157a4ea7cf47f1b122536d2d78619c20f8829f4d04a28003e2d1
+checksum: 2feb182ef8ee070f8e69d01bab39bd525f388532cdc8f65a04f3bbeb47927d4c
 template: 2
 ---
 
@@ -118,8 +118,8 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
 
 | Region               | Token (DESIGN.md)    |
 | -------------------- | -------------------- |
-| closing frame height | `var(--spacing-xxl)` |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| closing frame height | `var(--spacing-2xl)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

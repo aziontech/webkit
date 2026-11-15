@@ -35,7 +35,7 @@
 <template>
   <ChartCard class="max-w-(--container-3xl)">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
         <Hint text="Requests carrying cross-site scripting attacks against your domains." />
       </span>

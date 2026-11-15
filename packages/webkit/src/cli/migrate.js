@@ -2,12 +2,14 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { migrateTokens } from './migrate-tokens.js'
+
 const PREFIX = '@aziontech/webkit/'
 const CLI_DIR = dirname(fileURLToPath(import.meta.url))
 const MIGRATIONS_DIR = join(CLI_DIR, 'migrations')
 const PACKAGE_JSON = join(CLI_DIR, '..', '..', 'package.json')
 const SUBPATH_LITERAL = /(['"`])@aziontech\/webkit\/([^'"`\s]+)\1/g
-const SOURCE_EXT = /\.(vue|ts|tsx|js|jsx|mjs|cjs)$/
+const SOURCE_EXT = /\.(vue|ts|tsx|js|jsx|mjs|cjs|css|scss|html)$/
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', '.nuxt', '.output', 'coverage'])
 
 export const SUPPORTED_VERSIONS = [6]
@@ -29,7 +31,8 @@ export function loadMigration(version) {
     legacy: base.legacy || null,
     exports: exportList(),
     props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`)),
-    icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`))
+    icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`)),
+    tokens: readJson(join(MIGRATIONS_DIR, `v${version}-tokens.json`))
   }
 }
 
@@ -253,10 +256,11 @@ export function referencedSubpaths(source) {
 
 export function migrateSource(input, migration, { fromMajor = null } = {}) {
   const { props, types } = migration
-  const iconPass = migrateIcons(input, migration.icons)
+  const tokenPass = migrateTokens(input, migration.tokens)
+  const iconPass = migrateIcons(tokenPass.source, migration.icons)
   const source = iconPass.source
-  const changes = [...iconPass.changes]
-  const warnings = [...iconPass.warnings]
+  const changes = [...tokenPass.changes, ...iconPass.changes]
+  const warnings = [...tokenPass.warnings, ...iconPass.warnings]
   const subpaths = referencedSubpaths(source)
   if (!subpaths.size) return { source, changes, warnings }
 

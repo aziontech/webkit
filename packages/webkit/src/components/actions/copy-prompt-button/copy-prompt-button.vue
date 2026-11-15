@@ -123,7 +123,7 @@
   <span
     v-if="open"
     :data-testid="`${testId}__frame`"
-    class="inline-flex max-w-full items-center gap-(--spacing-xxs)"
+    class="inline-flex max-w-full items-center gap-(--spacing-2xs)"
   >
     <Tooltip
       :text="t('copyPromptButton.tooltip')"
@@ -168,7 +168,7 @@
             >
             <span
               aria-hidden="true"
-              class="invisible inline-flex items-center gap-(--spacing-xxs) [grid-area:1/1] group-data-[state=copied]/copy-prompt:visible"
+              class="invisible inline-flex items-center gap-(--spacing-2xs) [grid-area:1/1] group-data-[state=copied]/copy-prompt:visible"
             >
               <i
                 class="ai ai-check text-body-sm"
@@ -180,7 +180,7 @@
             v-if="agents.length"
             aria-hidden="true"
             :data-testid="`${testId}__agents`"
-            class="inline-flex shrink-0 items-center gap-(--spacing-xxs) sm:gap-(--spacing-xs)"
+            class="inline-flex shrink-0 items-center gap-(--spacing-2xs) sm:gap-(--spacing-xs)"
           >
             <template
               v-for="agent in agents"

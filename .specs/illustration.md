@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 3acf10af71bf5283874cc09d9a86c5e4f50096dc93bd8eba559ed847ce7105ca
+checksum: 00f7a8b65a3d61b7f76ce0f914e513e43a2774161d8faa90dff4ba6e0400b6d8
 created: 2026-08-05
 last_updated: 2026-11-15
 ---
@@ -149,8 +149,8 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 - `--illustration-ink-muted` → `--text-muted` — secondary labels.
 - `--illustration-primary` → `--primary` — brand marks, active rims, connectors.
 - `--illustration-accent` → `--accent` — accent marks.
-- `--illustration-code-punctuation` → `--code-sintax-punctuation`, `--illustration-code-keyword` → `--code-sintax-keyword` — code samples.
-- `--illustration-success` / `--illustration-warning` / `--illustration-danger` / `--illustration-info` → `--success-contrast` / `--warning-contrast` / `--danger-contrast` / `--info-contrast`, and `--illustration-success-surface` / `--illustration-warning-surface` / `--illustration-info-surface` → `--success` / `--warning` / `--info` — status badges.
+- `--illustration-code-punctuation` → `--code-syntax-punctuation`, `--illustration-code-keyword` → `--code-syntax-keyword` — code samples.
+- `--illustration-success` / `--illustration-warning` / `--illustration-danger` / `--illustration-info` → `--success-foreground` / `--warning-foreground` / `--danger-foreground` / `--info-foreground`, and `--illustration-success-surface` / `--illustration-warning-surface` / `--illustration-info-surface` → `--success` / `--warning` / `--info` — status badges.
 
 ## Theme gaps
 

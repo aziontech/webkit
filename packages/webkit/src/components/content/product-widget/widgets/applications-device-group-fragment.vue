@@ -98,8 +98,8 @@
     >
       <ShellMockupPart :order="0">
         <div class="flex flex-col gap-(--spacing-md)">
-          <div class="flex items-center gap-(--spacing-xxs)">
-            <span class="text-heading-xxs text-(--text-default)">General</span>
+          <div class="flex items-center gap-(--spacing-2xs)">
+            <span class="text-heading-2xs text-(--text-default)">General</span>
             <Hint
               text="Names the group in the rules that reference it, so renaming it later means revisiting every rule that uses it."
             />
@@ -123,8 +123,8 @@
 
       <ShellMockupPart :order="1">
         <div class="flex flex-col gap-(--spacing-md)">
-          <div class="flex items-center gap-(--spacing-xxs)">
-            <span class="text-heading-xxs text-(--text-default)">Match to User-Agent</span>
+          <div class="flex items-center gap-(--spacing-2xs)">
+            <span class="text-heading-2xs text-(--text-default)">Match to User-Agent</span>
             <Hint
               text="Every request whose User-Agent header matches this expression belongs to the group."
             />
@@ -133,7 +133,7 @@
             <FieldLabel for="device-group-expression">Regular expression</FieldLabel>
             <span
               :data-focused="frame.focused || null"
-              class="flex rounded-(--shape-elements) ring-offset-2 ring-offset-(--bg-surface) data-focused:ring-2 data-focused:ring-(--ring-color)"
+              class="flex rounded-(--shape-control) ring-offset-2 ring-offset-(--bg-surface) data-focused:ring-2 data-focused:ring-(--ring-color)"
             >
               <Textarea
                 id="device-group-expression"

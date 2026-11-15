@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 6d33afc77643e9c4fc3dcf4282a53fa4b178da79d4e34009153c2161340fd94c
+checksum: d90c45aea0360667410867b0f0b77d1236f1e27292b8fab69e0c506b3294021d
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -139,7 +139,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 | cell inline padding | `var(--spacing-md)`                                  |
 | label               | `text-overline-md`, `var(--text-default)`            |
 | label ↔ mark gap    | `var(--spacing-xs)`                                  |
-| label ↔ arrow gap   | `var(--spacing-xxs)`                                 |
+| label ↔ arrow gap   | `var(--spacing-2xs)`                                 |
 | aside panel         | `var(--bg-canvas)`, padded by `var(--spacing-xl)`    |
 | ring                | `var(--ring-color)`                                  |
 

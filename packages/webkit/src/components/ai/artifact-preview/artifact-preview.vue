@@ -72,7 +72,7 @@
     <header class="flex items-center gap-(--spacing-sm) px-(--spacing-sm) py-(--spacing-xs)">
       <span
         aria-hidden="true"
-        class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) text-(--text-muted)"
+        class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) text-(--text-muted)"
       >
         <i :class="icon" />
       </span>
@@ -98,7 +98,7 @@
           <span v-if="meta">{{ meta }}</span>
         </p>
       </div>
-      <div class="flex shrink-0 items-center gap-(--spacing-xxs)">
+      <div class="flex shrink-0 items-center gap-(--spacing-2xs)">
         <slot name="actions" />
         <CopyButton
           v-if="copyValue"

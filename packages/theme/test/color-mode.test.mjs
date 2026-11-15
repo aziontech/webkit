@@ -4,10 +4,10 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { compileThemeCss, compileThemeVars } from '../src/scripts/compile-theme.js'
+import { compileThemeCss, compileThemeVars } from '../src/tokens/theme-colors.js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
-const globals = readFileSync(join(ROOT, 'dist/v4/globals.css'), 'utf8')
+const globals = readFileSync(join(ROOT, 'dist/globals.css'), 'utf8')
 const css = compileThemeCss()
 
 const block = (source, selector) => {
@@ -17,15 +17,15 @@ const block = (source, selector) => {
 }
 
 test('each theme declares its color-scheme so native controls and scrollbars follow it', () => {
-  assert.match(block(css, ':root, [data-theme=light], .azion.azion-light'), /color-scheme: light;/)
-  assert.match(block(css, '[data-theme=dark], .dark, .azion.azion-dark'), /color-scheme: dark;/)
+  assert.match(block(css, ':root, [data-theme=light]'), /color-scheme: light;/)
+  assert.match(block(css, '[data-theme=dark], .dark'), /color-scheme: dark;/)
 })
 
 test('with no pinned theme, or data-theme="system", the dark tokens follow the device', () => {
   const media = css.slice(css.indexOf('@media (prefers-color-scheme: dark)'))
   assert.match(
     media,
-    /^@media \(prefers-color-scheme: dark\) \{\n {2}:root:not\(\[data-theme=light\], \.azion-light\), \[data-theme=system\] \{\n {4}color-scheme: dark;/
+    /^@media \(prefers-color-scheme: dark\) \{\n {2}:root:not\(\[data-theme=light\]\), \[data-theme=system\] \{\n {4}color-scheme: dark;/
   )
   const { dark } = compileThemeVars()
   assert.ok(media.includes(`    --bg-canvas: ${dark['--bg-canvas']};`))
@@ -33,7 +33,7 @@ test('with no pinned theme, or data-theme="system", the dark tokens follow the d
 })
 
 test('derived tokens reference their source token, so overriding --primary rebrands them', () => {
-  const light = block(css, ':root, [data-theme=light], .azion.azion-light')
+  const light = block(css, ':root, [data-theme=light]')
   assert.match(light, /--border-selected: var\(--primary\);/)
   assert.match(light, /--illustration-primary: var\(--primary\);/)
   assert.match(light, /--illustration-ground: var\(--bg-canvas\);/)
@@ -50,7 +50,7 @@ test('the Tailwind dark variant follows data-theme, .dark and the system theme',
   )
   assert.match(
     variant,
-    /&:where\(:root:not\(\[data-theme=light\], \.azion-light\), :root:not\(\[data-theme=light\], \.azion-light\) \*\):not\(:where\(\[data-theme=light\], \.azion-light, \[data-theme=light\] \*, \.azion-light \*\)\)/
+    /&:where\(:root:not\(\[data-theme=light\]\), :root:not\(\[data-theme=light\]\) \*\):not\(:where\(\[data-theme=light\], \[data-theme=light\] \*\)\)/
   )
 })
 
@@ -71,8 +71,8 @@ test('globals.css is up to date with the token sources', () => {
 })
 
 test('dark mode carries its own elevation shadows, deeper and with a light edge', () => {
-  const light = block(css, ':root, [data-theme=light], .azion.azion-light')
-  const dark = block(css, '[data-theme=dark], .dark, .azion.azion-dark')
+  const light = block(css, ':root, [data-theme=light]')
+  const dark = block(css, '[data-theme=dark], .dark')
   assert.doesNotMatch(light, /--shadow-md:/)
   assert.match(globals, /--shadow-md: 0 4px 6px -1px rgb\(0 0 0 \/ 0\.1\)/)
   for (const step of ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']) {

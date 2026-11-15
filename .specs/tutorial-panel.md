@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: 9c9392da438aab52db50f79dbffdd61dd1b7f665bd8146ce6ac0d4ec3f19962d
+checksum: a0333a2d3c03b5a66d2d733b2d8be79c5d6ba7dfae93230db67a179f409e6d74
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -213,7 +213,7 @@ _No events on the panel — every action goes through the provider, which emits 
 
 | Region                              | Token (DESIGN.md)                                              |
 | ----------------------------------- | -------------------------------------------------------------- |
-| typography (tutorial title in list) | `.text-heading-xxs`                                            |
+| typography (tutorial title in list) | `.text-heading-2xs`                                            |
 | typography (description, steps)     | `.text-body-sm`                                                |
 | typography (counts, current step)   | `.text-label-sm`, `.text-label-md`                             |
 | title ink                           | `var(--text-default)`                                          |
@@ -223,7 +223,7 @@ _No events on the panel — every action goes through the provider, which emits 
 | list item border                    | `var(--border-default)`                                        |
 | shape                               | `var(--shape-card)`                                            |
 | padding (item)                      | `var(--spacing-sm)`                                            |
-| gap                                 | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-xxs)` |
+| gap                                 | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-2xs)` |
 
 ## Theme gaps
 

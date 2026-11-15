@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: fc448de522b05b0d15e94043275ede3970d5d5b0878fd4338af516bd119c0bf4
+checksum: 62960462c9840fd767fb971d6014711af94ea68e4840099aa93d591d64842fe1
 ---
 # FeatureScroll — Component Spec
 
@@ -95,7 +95,7 @@ _none_
 | stage inset | `var(--spacing-md)` |
 | stage inset (large) | `var(--spacing-xl)` |
 | frame rules and marks | `var(--border-default)` |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

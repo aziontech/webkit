@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 2
-checksum: 972c04974f768797ec2b9ed63ffa292c8e307e11c155717f15d035350fe042fa
+checksum: de83a66d45374ff4ef3b3f2254b48654722390d7be4fbd3cf2ce00fb1ef22ada
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -151,10 +151,10 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 | row hover glyph ink                               | `var(--primary)`           |
 | shape (row hover plate)                           | `var(--shape-card)`        |
 | spacing (column inset)                            | `var(--spacing-lg)`        |
-| spacing (glyph to text)                           | `calc(var(--spacing-md) + var(--spacing-xxs))` |
+| spacing (glyph to text)                           | `calc(var(--spacing-md) + var(--spacing-2xs))` |
 | spacing (row plate padding, inline)               | `var(--spacing-md)`        |
 | spacing (row plate padding, block)                | `var(--spacing-sm)`        |
-| spacing (title to description)                    | `calc(var(--spacing-xxs) / 2)` |
+| spacing (title to description)                    | `calc(var(--spacing-2xs) / 2)` |
 | ring                                              | `var(--ring-color)`        |
 
 ## Theme gaps

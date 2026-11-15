@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10789&m=dev
   node_id: 3714:10789
-checksum: 8e822db3546b40ea913b69e4591456c4d94740890dfb269027d084bcff4aca8e
+checksum: 1340002e2a1fdd229521071d19d06dd5c6e8360e18c9f346970d5ca516dd804b
 created: 2026-06-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Input Number — Component Spec
@@ -136,7 +136,7 @@ An optional field binds a `number | null` model and sets `nullable`:
 | text               | `var(--text-default)`   |
 | placeholder        | `var(--text-muted)`     |
 | spacing.x          | `var(--spacing-md)`     |
-| shape              | `var(--shape-elements)` |
+| shape              | `var(--shape-control)` |
 | ring               | `var(--ring-color)`     |
 | ring-offset        | `var(--bg-canvas)`      |
 | border             | `var(--border-default)` |

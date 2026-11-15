@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: be6cdc50abd412a60476b679f9f58f5bd70e224911f0641e52ae090e736cf4bb
+checksum: c2297157dc55425ac7fab97b306620bd6c0b22f9cf64b20f1519536c696eb3c9
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -93,20 +93,20 @@ _none_
 | border                  | `var(--border-default)` at `var(--border-width-default)`                                                                                                                           |
 | text                    | `var(--text-default)`                                                                                                                                                              |
 | spacing (medium)        | `var(--spacing-xs)` horizontal padding and glyph gap                                                                                                                               |
-| spacing (small)         | `var(--spacing-xxs)` horizontal padding and glyph gap                                                                                                                              |
-| shape                   | `var(--shape-elements)`                                                                                                                                                            |
+| spacing (small)         | `var(--spacing-2xs)` horizontal padding and glyph gap                                                                                                                              |
+| shape                   | `var(--shape-control)`                                                                                                                                                             |
 | glyph bar (filled)      | `var(--severity-critical)` · `var(--severity-high)` · `var(--severity-medium)` · `var(--severity-low)`; info fills no bar, and `var(--severity-info)` colors info series in charts |
 | glyph bar (empty)       | `var(--border-default)`                                                                                                                                                            |
 
 ## Theme gaps
 
-| Figma variable      | Temporary primitive                                              | Follow-up                                                                                           |
-| ------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `severity-critical` | `primitives.red.600` (light) · `primitives.red.400` (dark)       | Add the `severity` theme role in `packages/theme/src/tokens/theme/severity.js` with this component. |
-| `severity-high`     | `primitives.orange.600` (light) · `primitives.orange.400` (dark) | Same role.                                                                                          |
-| `severity-medium`   | `primitives.yellow.700` (light) · `primitives.yellow.500` (dark) | Same role.                                                                                          |
-| `severity-low`      | `primitives.blue.600` (light) · `primitives.blue.400` (dark)     | Same role.                                                                                          |
-| `severity-info`     | `primitives.gray.500` (light) · `primitives.gray.400` (dark)     | Same role.                                                                                          |
+| Figma variable      | Temporary primitive                                              | Follow-up                                                                                              |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `severity-critical` | `primitives.red.600` (light) · `primitives.red.400` (dark)       | Add the `severity` theme role in `packages/theme/src/tokens/semantic/severity.js` with this component. |
+| `severity-high`     | `primitives.orange.600` (light) · `primitives.orange.400` (dark) | Same role.                                                                                             |
+| `severity-medium`   | `primitives.yellow.700` (light) · `primitives.yellow.500` (dark) | Same role.                                                                                             |
+| `severity-low`      | `primitives.blue.600` (light) · `primitives.blue.400` (dark)     | Same role.                                                                                             |
+| `severity-info`     | `primitives.gray.500` (light) · `primitives.gray.400` (dark)     | Same role.                                                                                             |
 
 ## Accessibility (WCAG 2.1 AA)
 

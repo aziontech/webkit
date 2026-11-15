@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: b6d1a842b6e2095e27780075c87a8a1ee27cf89eb062baef17d3ab4e8104820c
+checksum: bc379ed7c53ea75fc6e5e1e4fed6bb49460b128fd9d381ae9c1fdd3eee39392b
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -113,13 +113,13 @@ _No motion of its own._
 
 ## Tokens
 
-| Region      | Token                                                                    |
-| ----------- | ------------------------------------------------------------------------ |
-| frame       | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`        |
-| icon tile   | `var(--bg-surface-raised)`, `var(--shape-elements)`, `var(--text-muted)` |
-| title       | `.text-label-md`, `var(--text-default)`                                  |
-| description | `.text-body-xs`, `var(--text-muted)`                                     |
-| padding     | `var(--spacing-sm)`, `var(--spacing-xs)`                                 |
+| Region      | Token                                                                   |
+| ----------- | ----------------------------------------------------------------------- |
+| frame       | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`       |
+| icon tile   | `var(--bg-surface-raised)`, `var(--shape-control)`, `var(--text-muted)` |
+| title       | `.text-label-md`, `var(--text-default)`                                 |
+| description | `.text-body-xs`, `var(--text-muted)`                                    |
+| padding     | `var(--spacing-sm)`, `var(--spacing-xs)`                                |
 
 ## Theme gaps
 

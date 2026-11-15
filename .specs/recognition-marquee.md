@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 30792376205b4ae509361ee3183e812c34914f19bc712c6639d90b094ba16644
+checksum: 27360c5af223b0c9575bfbcaed26fe082a1e6a593bc8ca8eb579ed63951c7915
 template: 2
 ---
 
@@ -109,7 +109,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 | card width            | `var(--container-md)`   |
 | focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
-| anchor scroll offset  | `var(--spacing-xxl)`    |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 

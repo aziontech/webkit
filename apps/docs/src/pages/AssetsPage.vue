@@ -36,7 +36,7 @@
 
 <template>
   <div
-    class="flex w-full flex-col gap-(--spacing-xxl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
+    class="flex w-full flex-col gap-(--spacing-2xl) px-(--spacing-md) py-(--spacing-lg) lg:px-(--spacing-xl)"
   >
     <DocPageHeader
       :title="t.assets"
@@ -48,7 +48,7 @@
       class="flex scroll-mt-20 flex-col gap-(--spacing-md)"
       aria-labelledby="brand-title"
     >
-      <div class="flex flex-col gap-(--spacing-xxs)">
+      <div class="flex flex-col gap-(--spacing-2xs)">
         <h2
           id="brand-title"
           class="text-heading-md"
@@ -64,12 +64,12 @@
         <li
           v-for="lockup in lockups"
           :key="lockup.kind"
-          class="relative flex min-h-60 items-center justify-center px-(--spacing-xl) pb-(--spacing-xl) pt-(--spacing-xxl)"
+          class="relative flex min-h-60 items-center justify-center px-(--spacing-xl) pb-(--spacing-xl) pt-(--spacing-2xl)"
         >
           <div
             class="absolute inset-x-0 top-0 flex items-start justify-between gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-md)"
           >
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <h3 class="text-heading-xs">{{ lockup.label }}</h3>
               <p class="max-w-sm text-body-xs text-(--text-muted)">{{ lockup.text }}</p>
             </div>
@@ -90,7 +90,7 @@
       aria-labelledby="illustrations-title"
     >
       <div class="flex flex-wrap items-end justify-between gap-(--spacing-sm)">
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <h2
             id="illustrations-title"
             class="flex items-baseline gap-(--spacing-xs) text-heading-md"
@@ -117,7 +117,7 @@
           class="flex flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
         >
           <div
-            class="flex aspect-video items-center justify-center overflow-hidden rounded-(--shape-elements) bg-(--bg-canvas)"
+            class="flex aspect-video items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas)"
           >
             <Illustration
               :name="name"
@@ -135,7 +135,7 @@
       aria-labelledby="line-figures-title"
     >
       <div class="flex flex-wrap items-end justify-between gap-(--spacing-sm)">
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <h2
             id="line-figures-title"
             class="flex items-baseline gap-(--spacing-xs) text-heading-md"
@@ -162,7 +162,7 @@
           class="flex flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
         >
           <div
-            class="flex aspect-square items-center justify-center overflow-hidden rounded-(--shape-elements) bg-(--bg-canvas) p-(--spacing-sm)"
+            class="flex aspect-square items-center justify-center overflow-hidden rounded-(--shape-control) bg-(--bg-canvas) p-(--spacing-sm)"
           >
             <LineFigure
               :name="figure.name"

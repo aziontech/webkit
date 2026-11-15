@@ -7,7 +7,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 947346fed88c2975d657eeac7fbdc7e1e8f39b789e68c0d67690c8054d90b96d
+checksum: df0fd1d39a9bf8a39dd73d9f333b91ef9379f2469722c7087a6f018e34d9072e
 ---
 
 # PlatformDirectory — Component Spec
@@ -121,7 +121,7 @@ _none_
 | --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
 | column fill           | `var(--bg-canvas)`      |
-| anchor scroll offset  | `var(--spacing-xxl)`    |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 

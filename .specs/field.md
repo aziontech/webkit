@@ -4,7 +4,7 @@ category: inputs
 structure: composition
 status: implemented
 spec_version: 5
-checksum: d63dc2989b5b7a6d66b57f21e90ea1c0233cb1078204a01512f9753545cd8061
+checksum: e4e55f96853da9af3751856297f48bcb3874c56e6600a0effe784b77339030fa
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -190,7 +190,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 | field gap             | `var(--spacing-xs)`      |
 | group gap             | `var(--spacing-lg)`      |
 | set gap               | `var(--spacing-md)`      |
-| content gap           | `var(--spacing-xxs)`     |
+| content gap           | `var(--spacing-2xs)`     |
 | label typography      | `.text-label-sm`         |
 | legend typography     | `.text-label-md`         |
 | title typography      | `.text-body-sm`          |

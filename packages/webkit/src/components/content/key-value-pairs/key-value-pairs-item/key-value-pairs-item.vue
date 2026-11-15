@@ -43,9 +43,9 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="context.kind.value"
-    class="flex min-w-0 flex-col gap-(--spacing-xxs) data-[kind=split]:flex-row data-[kind=split]:flex-wrap data-[kind=split]:items-center data-[kind=split]:justify-between data-[kind=split]:gap-x-(--spacing-md)"
+    class="flex min-w-0 flex-col gap-(--spacing-2xs) data-[kind=split]:flex-row data-[kind=split]:flex-wrap data-[kind=split]:items-center data-[kind=split]:justify-between data-[kind=split]:gap-x-(--spacing-md)"
   >
-    <dt class="flex shrink-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-muted)">
+    <dt class="flex shrink-0 items-center gap-(--spacing-2xs) text-body-sm text-(--text-muted)">
       <span>{{ label }}</span>
       <slot name="info" />
     </dt>

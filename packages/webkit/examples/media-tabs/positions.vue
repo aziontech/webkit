@@ -35,7 +35,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaTabs
       position="left"
       :autoplay="false"
