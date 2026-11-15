@@ -4,7 +4,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
 
 ## The rule
 
-> Props are declared with a **named `interface Props`** consumed by `defineProps<Props>()`, wrapped in **`withDefaults`**. Every public prop carries a **JSDoc** line. No `any`. Variant unions are **named, exported types**. Optional text defaults to `''` (not `undefined`); booleans default to `false`.
+> Props are declared with a **named, exported `interface <Component>Props`** consumed by `defineProps<ButtonProps>()`, wrapped in **`withDefaults`**. Every public prop carries a **JSDoc** line. No `any`. Variant unions are **named, exported types**. Optional text defaults to `''` (not `undefined`); booleans default to `false`.
 
 ```vue
 <script setup lang="ts">
@@ -13,7 +13,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
   /** Size token. */
   export type ButtonSize = 'small' | 'medium' | 'large'
 
-  interface Props {
+  export interface ButtonProps {
     /** Visual variant. */
     kind?: ButtonKind
     /** Size token. */
@@ -24,7 +24,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
     icon?: string
   }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<ButtonProps>(), {
     kind: 'primary',
     size: 'large',
     disabled: false,
@@ -35,7 +35,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
 
 ### Typing
 
-- **Named `interface Props`** + `defineProps<Props>()`. Not the runtime object form (`defineProps({ kind: { type: String } })`), not an inline literal — a named interface is what `vue-tsc` and the consumer's tooling read.
+- **Named, exported `interface <Component>Props`** + `defineProps<ButtonProps>()`, on every root and public part. Not the runtime object form (`defineProps({ kind: { type: String } })`), not an inline literal, never a bare exported `Props` — a named interface is what `vue-tsc` and the consumer's tooling read, and a consumer wrapping the component imports it (see [`naming.md`](./naming.md)). A generic component (`<script setup generic>`) keeps its inline `defineProps<{ … }>()`.
 - **No `any`** and no `@ts-ignore` (blocked by [`validate-tokens.mjs`](../hooks/validate-tokens.mjs)). Use generics or precise unions.
 - **Never declare `class` in `defineProps`** — consumer classes flow through `useAttrs()` (see [`root-element.md`](./root-element.md) and [`styling.md`](./styling.md)).
 
@@ -57,7 +57,7 @@ Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the do
 
 ## Hard prohibitions
 
-- Do not use the runtime object form of `defineProps` for a typed component; use `defineProps<Props>()` + `withDefaults`.
+- Do not use the runtime object form of `defineProps` for a typed component; use `defineProps<ButtonProps>()` (the exported `<Component>Props`) + `withDefaults`.
 - Do not use `any` / `@ts-ignore` in a prop type.
 - Do not declare `class` (or `style`) in `defineProps`.
 - Do not default an optional text prop to `undefined`; default it to `''`.
@@ -69,7 +69,7 @@ Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the do
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** blocks props not in the spec, off-vocabulary names, `is`/`has` booleans, and default drift; **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** blocks `any` / `@ts-ignore` / `class` in `defineProps`.
 - `type-coverage` (95% threshold, CI) backstops the "no `any`" rule.
-- The component-scaffolder emits the `interface Props` + `withDefaults` + JSDoc shape from the spec's Props table.
+- The component-scaffolder emits the `export interface <Component>Props` + `withDefaults` + JSDoc shape from the spec's Props table.
 
 ## Why this rule exists
 
