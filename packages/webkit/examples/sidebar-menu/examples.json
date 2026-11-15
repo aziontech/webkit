@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A console-style menu: two titled groups and a selected row carrying `aria-current=\"page\"`. A group title is static text — it separates rows without folding them, so it never competes with the rows it labels; folding belongs to a condensed row, which has a chevron and a rail to say which rows it owns. The host supplies the width, the surface and the scrolling; the menu adds no outer margin. Paste a tree into the `groups` control to switch the same root into data-driven mode — `groups` then renders through these very sub-components, with `navigate` firing per activated leaf.",
+      "summary": "A console-style menu: two titled groups and an active row carrying `aria-current=\"page\"`. A group title is static text — it separates rows without folding them, so it never competes with the rows it labels; folding belongs to a condensed row, which has a chevron and a rail to say which rows it owns. The host supplies the width, the surface and the scrolling; the menu adds no outer margin. Paste a tree into the `groups` control to switch the same root into data-driven mode — `groups` then renders through these very sub-components, with `navigate` firing per activated leaf.",
       "file": "default.vue"
     },
     {

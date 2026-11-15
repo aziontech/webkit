@@ -254,14 +254,14 @@ describe('Pagination', () => {
         expect(emitted().click[0][0]).toBeInstanceOf(MouseEvent)
       })
 
-      it('selected -> aria-current="page" and data-selected', () => {
+      it('active -> aria-current="page" and data-active', () => {
         const { getByRole } = render(PaginationButton, {
-          props: { kind: 'number', selected: true },
+          props: { kind: 'number', active: true },
           slots: { default: '4' }
         })
         const btn = getByRole('button')
         expect(btn.getAttribute('aria-current')).toBe('page')
-        expect(btn.getAttribute('data-selected')).toBe('true')
+        expect(btn.getAttribute('data-active')).toBe('true')
       })
 
       it('disabled -> guards the click (no emit) and sets aria-disabled', async () => {
@@ -424,7 +424,7 @@ describe('Pagination', () => {
             <PaginationInfo>Showing 1 to 10 of 20 entries</PaginationInfo>
           </template>
           <PaginationButton kind="previous" aria-label="Previous page" disabled />
-          <PaginationButton kind="number" selected>1</PaginationButton>
+          <PaginationButton kind="number" active>1</PaginationButton>
           <PaginationButton kind="number">2</PaginationButton>
           <PaginationButton kind="next" aria-label="Next page" />
           <template #controls>
@@ -488,7 +488,7 @@ describe('Pagination', () => {
               <PaginationInfo>Showing 1 to 10 of 20 entries</PaginationInfo>
             </template>
             <PaginationButton kind="previous" aria-label="Previous page" />
-            <PaginationButton kind="number" selected>1</PaginationButton>
+            <PaginationButton kind="number" active>1</PaginationButton>
             <PaginationButton kind="number">2</PaginationButton>
             <PaginationButton kind="next" aria-label="Next page" />
             <template #controls>

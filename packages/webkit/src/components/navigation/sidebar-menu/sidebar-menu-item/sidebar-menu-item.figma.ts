@@ -26,7 +26,7 @@ export default {
   example:
     kind === 'group'
       ? figma.code`<SidebarMenu.Group label="${label}" />`
-      : figma.code`<SidebarMenu.Item${label === 'Option 1' ? '' : figma.code` label="${label}"`}${showIcon ? '' : ' icon=""'}${selected ? ' selected' : ''}${tagValue ? figma.code` tag-value="${tagValue}"` : ''} />`,
+      : figma.code`<SidebarMenu.Item${label === 'Option 1' ? '' : figma.code` label="${label}"`}${showIcon ? '' : ' icon=""'}${selected ? ' active' : ''}${tagValue ? figma.code` tag-value="${tagValue}"` : ''} />`,
   imports: ["import SidebarMenu from '@aziontech/webkit/sidebar-menu'"],
   id: 'sidebar-menu-item',
   metadata: { nestable: true }

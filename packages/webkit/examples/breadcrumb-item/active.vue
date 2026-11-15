@@ -5,6 +5,6 @@
 <template>
   <BreadcrumbItem
     label="Current Page"
-    current
+    active
   />
 </template>

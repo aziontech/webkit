@@ -10,8 +10,8 @@
 
   defineSlots<{
     default(): unknown
-    top(): unknown
-    bottom(): unknown
+    header(): unknown
+    footer(): unknown
   }>()
 
   interface Props {
@@ -64,21 +64,21 @@
         </div>
 
         <div
-          v-if="$slots['top']"
-          :data-testid="`${testId}__top`"
+          v-if="$slots['header']"
+          :data-testid="`${testId}__header`"
           class="px-(--spacing-sm) py-(--spacing-2xs)"
         >
-          <slot name="top" />
+          <slot name="header" />
         </div>
 
         <slot />
 
         <div
-          v-if="$slots['bottom']"
-          :data-testid="`${testId}__bottom`"
+          v-if="$slots['footer']"
+          :data-testid="`${testId}__footer`"
           class="px-(--spacing-sm) py-(--spacing-2xs)"
         >
-          <slot name="bottom" />
+          <slot name="footer" />
         </div>
       </div>
     </div>

@@ -170,7 +170,7 @@
             v-for="item in pageItems"
             :key="item.key"
             :kind="item.type === 'more' ? 'more' : 'number'"
-            :selected="item.type === 'page' && item.value === currentPage"
+            :active="item.type === 'page' && item.value === currentPage"
             :aria-label="
               item.type === 'page' ? t('pagination.page', { page: item.value }) : undefined
             "

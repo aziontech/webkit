@@ -33,14 +33,14 @@
       "file": "option-affordances.vue"
     },
     {
-      "name": "WithTopAndBottomSlots",
-      "summary": "Root `top` and `bottom` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
-      "file": "with-top-and-bottom-slots.vue"
+      "name": "WithHeaderAndFooter",
+      "summary": "Root `header` and `footer` named slots in use — typically a search input at the top and a footer action at the bottom. Both regions stick to their edges and stay outside the scrollable group list.",
+      "file": "with-header-and-footer.vue"
     },
     {
-      "name": "GroupsWithTopAndBottomSlots",
-      "summary": "Two groups each using the `top` and `bottom` slots — a per-section caption above the options and a footer action below. Different from the root `top`/`bottom` (which are sticky outside the scroll area), group-level slots render inline within the section.",
-      "file": "groups-with-top-and-bottom-slots.vue"
+      "name": "GroupsWithHeaderAndFooter",
+      "summary": "Two groups each using the `header` and `footer` slots — a per-section caption above the options and a footer action below. Different from the root `header`/`footer` (which are sticky outside the scroll area), group-level slots render inline within the section.",
+      "file": "groups-with-header-and-footer.vue"
     },
     {
       "name": "SubMenus",

@@ -219,7 +219,7 @@
         target: node.target ?? '_self',
         tagValue: node.tagValue,
         disabled: node.disabled ?? false,
-        selected: props.activeId !== '' && node.id === props.activeId,
+        active: props.activeId !== '' && node.id === props.activeId,
         onClick: (event: globalThis.MouseEvent) => emit('navigate', event, node)
       })
     }

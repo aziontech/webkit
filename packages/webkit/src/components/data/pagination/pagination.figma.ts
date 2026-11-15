@@ -39,7 +39,7 @@ const buttons = instance
   <Pagination.Button kind="more" />`
       }
       return figma.code`${acc}
-  <Pagination.Button${selected ? figma.code` selected` : ''}>${page}</Pagination.Button>`
+  <Pagination.Button${selected ? figma.code` active` : ''}>${page}</Pagination.Button>`
     },
     figma.code``
   )

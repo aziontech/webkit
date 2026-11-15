@@ -33,7 +33,7 @@ export interface NavigationMenuRootEmit {
     value: NavigationMenuItemValue | null,
     details: NavigationMenuChangeEventDetails
   ): void
-  (event: 'open-change-complete', open: boolean): void
+  (event: 'open-transition-end', open: boolean): void
 }
 
 export interface UseNavigationMenuRootStateOptions {
@@ -153,7 +153,7 @@ export function useNavigationMenuRootState(
       await waitForCloseTransition(popupEl.value)
     }
 
-    emit('open-change-complete', isOpen)
+    emit('open-transition-end', isOpen)
   }
 
   function setValue(
@@ -260,7 +260,7 @@ export function useNavigationMenuRootState(
       await nextTick()
       await waitForCloseTransition(popupEl.value)
       setPopupMounted(false)
-      emit('open-change-complete', false)
+      emit('open-transition-end', false)
     }
   )
 

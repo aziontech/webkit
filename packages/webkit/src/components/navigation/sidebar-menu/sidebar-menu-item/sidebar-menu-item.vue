@@ -17,8 +17,8 @@
   interface Props {
     /** Visible label of the row. */
     label?: string
-    /** When true, applies the selected surface. */
-    selected?: boolean
+    /** Marks the row as the page you are on: applies the selected surface and `aria-current`. */
+    active?: boolean
     /** Disables interaction. */
     disabled?: boolean
     /** Azion icon class for the leading icon. */
@@ -35,7 +35,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
-    selected: false,
+    active: false,
     disabled: false,
     icon: '',
     href: '',
@@ -78,16 +78,16 @@
     rail.value && sidebar?.tooltip
       ? {
           is: sidebar.tooltip,
-          props: { text: props.label, placement: sidebar?.tooltipPlacement ?? 'right' }
+          props: { content: props.label, placement: sidebar?.tooltipPlacement ?? 'right' }
         }
       : { is: Passthrough, props: {} }
   )
 
   const INTERACTIVE_CLASS =
-    'group relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) pe-(--spacing-xs) py-(--spacing-2xs) ps-(--spacing-sm) data-[icon]:ps-(--spacing-2xs) text-(--text-default) transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--menu-item-ring-offset,var(--bg-canvas))] not-data-[selected]:hover:bg-(--bg-hover) not-data-[selected]:focus-visible:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:pointer-events-none data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent data-[disabled]:focus-visible:bg-transparent data-[rail]:size-8 data-[rail]:justify-center data-[rail]:p-0!'
+    'group relative flex h-8 w-full shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) pe-(--spacing-xs) py-(--spacing-2xs) ps-(--spacing-sm) data-[icon]:ps-(--spacing-2xs) text-(--text-default) transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--menu-item-ring-offset,var(--bg-canvas))] not-data-[active]:hover:bg-(--bg-hover) not-data-[active]:focus-visible:bg-(--bg-hover) data-[active]:bg-(--bg-selected) data-[disabled]:pointer-events-none data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent data-[disabled]:focus-visible:bg-transparent data-[rail]:size-8 data-[rail]:justify-center data-[rail]:p-0!'
 
   const ICON_CLASS =
-    'size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default) group-data-[selected]:text-(--text-default) group-data-[disabled]:text-(--text-disabled)'
+    'size-4 shrink-0 leading-none text-[length:inherit] text-(--text-muted) group-hover:text-(--text-default) group-focus-visible:text-(--text-default) group-data-[active]:text-(--text-default) group-data-[disabled]:text-(--text-disabled)'
 
   const handleClick = (event: MouseEvent) => {
     if (props.disabled) {
@@ -108,7 +108,7 @@
         attrs.class as string | undefined
       )
     "
-    :data-selected="selected ? '' : undefined"
+    :data-active="active ? '' : undefined"
     :data-disabled="disabled ? '' : undefined"
     :data-rail="rail ? '' : undefined"
     :data-icon="icon ? '' : undefined"
@@ -124,11 +124,11 @@
         :target="target"
         :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
         :class="INTERACTIVE_CLASS"
-        :data-selected="selected ? '' : undefined"
+        :data-active="active ? '' : undefined"
         :data-disabled="disabled ? '' : undefined"
         :data-icon="icon ? '' : undefined"
         :data-rail="rail ? '' : undefined"
-        :aria-current="selected ? 'page' : undefined"
+        :aria-current="active ? 'page' : undefined"
         :aria-disabled="disabled || undefined"
         :tabindex="disabled ? -1 : undefined"
         :data-testid="`${testId}__link`"
@@ -170,11 +170,11 @@
         v-else
         type="button"
         :class="INTERACTIVE_CLASS"
-        :data-selected="selected ? '' : undefined"
+        :data-active="active ? '' : undefined"
         :data-disabled="disabled ? '' : undefined"
         :data-icon="icon ? '' : undefined"
         :data-rail="rail ? '' : undefined"
-        :aria-current="selected ? 'page' : undefined"
+        :aria-current="active ? 'page' : undefined"
         :aria-disabled="disabled || undefined"
         :disabled="disabled"
         :data-testid="`${testId}__button`"

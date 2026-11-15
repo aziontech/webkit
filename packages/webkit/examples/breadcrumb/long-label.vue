@@ -3,7 +3,7 @@
 
   const items = [
     { label: 'Page Name', href: '#' },
-    { label: 'production-edge-application-with-a-very-long-configuration-name', current: true }
+    { label: 'production-edge-application-with-a-very-long-configuration-name', active: true }
   ]
 </script>
 

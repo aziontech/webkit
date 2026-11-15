@@ -38,7 +38,7 @@
   })
 
   const emit = defineEmits<{
-    'open-change-complete': [open: boolean]
+    'open-transition-end': [open: boolean]
   }>()
 
   const model = defineModel<NavigationMenuValue | undefined>({ default: undefined })
@@ -89,7 +89,7 @@
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
     :aria-label="ariaLabel || t('navigationMenu.label')"
-    :data-open="rootState.open.value ? '' : undefined"
+    :data-state="rootState.open.value ? 'open' : 'closed'"
     :data-orientation="orientation"
   >
     <slot />

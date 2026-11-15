@@ -56,8 +56,7 @@
   const exitWidth = ref<number | null>(null)
 
   const contentDataAttrs = computed(() => ({
-    'data-open': contentOpen.value ? '' : undefined,
-    'data-closed': !contentOpen.value ? '' : undefined,
+    'data-state': contentOpen.value ? 'open' : 'closed',
     'data-starting-style': transitionStatus.value === 'starting' ? '' : undefined,
     'data-ending-style': transitionStatus.value === 'ending' ? '' : undefined,
     'data-activation-direction': root.activationDirection.value ?? undefined

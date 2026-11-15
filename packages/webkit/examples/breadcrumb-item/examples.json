@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Current",
-      "summary": "Current page segment: rendered as a span with `aria-current=\"page\"` and default (non-muted) text.",
-      "file": "current.vue"
+      "name": "Active",
+      "summary": "Active segment (the current page): rendered as a span with `aria-current=\"page\"` and default (non-muted) text.",
+      "file": "active.vue"
     },
     {
       "name": "WithIcon",

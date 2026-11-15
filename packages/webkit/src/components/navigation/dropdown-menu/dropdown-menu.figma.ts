@@ -28,12 +28,12 @@ export default {
   </DropdownMenu.Trigger>${
     showTop
       ? figma.code`
-  <template #top>${top}</template>`
+  <template #header>${top}</template>`
       : ''
   }${groups}${
     showBottom
       ? figma.code`
-  <template #bottom>${bottom}</template>`
+  <template #footer>${bottom}</template>`
       : ''
   }
 </DropdownMenu>`,

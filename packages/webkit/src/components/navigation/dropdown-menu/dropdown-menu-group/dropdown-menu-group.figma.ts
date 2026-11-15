@@ -29,12 +29,12 @@ export default {
   example: figma.code`<DropdownMenu.Group${label ? figma.code` label="${label}"` : ''}>${
     showTop
       ? figma.code`
-  <template #top>${top}</template>`
+  <template #header>${top}</template>`
       : ''
   }${options}${
     showBottom
       ? figma.code`
-  <template #bottom>${bottom}</template>`
+  <template #footer>${bottom}</template>`
       : ''
   }
 </DropdownMenu.Group>`,

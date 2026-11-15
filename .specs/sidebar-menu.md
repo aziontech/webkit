@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 47167ecffbf0226aeedaccd91c96f16e637b624b0263deb8e0524babbb0d49df
+checksum: 1cfbe8e0442cd0895f1fa6014c50dd4f00e792c62cc36e0806b170bd290c3e26
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -105,7 +105,7 @@ is the shape every story below uses.
           label="End User"
           icon="ai ai-user"
           href="/end-user"
-          selected
+          active
         />
         <SidebarMenu.Item
           label="Web Browser"
@@ -177,7 +177,7 @@ element instead of three.
   - **Two changes made to it**, both fixing drift against the rows around it:
     1. The leading icon box renders **only when `icon` is set**. An empty `size-8` box reserved a column the row did not use, pushing an icon-less row's label off the column its siblings hold and leaving the rail anchored to blank space.
     2. Its **two branches now share one label class**. The anchor branch was `.text-label-sm` (12 px) and the button branch `.text-body-sm` (14 px), so the same menu rendered two sizes depending on whether a row happened to carry an `href` — children came out _smaller than their parents_. Both are now `.text-label-md`.
-  - Props: `label?: string` (default `''` — visible text of the row), `selected?: boolean` (default `false` — applies the selected surface), `disabled?: boolean` (default `false` — blocks interaction), `icon?: string` (default `''` — Azion icon class for the leading glyph; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: SidebarMenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | neutral | success | info | warning | danger | accent`).
+  - Props: `label?: string` (default `''` — visible text of the row), `active?: boolean` (default `false` — marks the page you are on: applies the selected surface and `aria-current="page"`), `disabled?: boolean` (default `false` — blocks interaction), `icon?: string` (default `''` — Azion icon class for the leading glyph; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: SidebarMenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | neutral | success | info | warning | danger | accent`).
   - Events: `click` — `(event: MouseEvent, item: { label: string; href: string })`. `item` carries the row's `label` and `href`, identifying which row was activated (event-first per `event-payloads.md`).
   - Slots: `default` — replaces the label text; `tag` — replaces the trailing `Tag` (its presence alone renders the tag region, with or without `tagValue`).
   - **This spec is menu-item's only spec.** It previously carried its own `.specs/menu-item.md`, which is removed with this change: a sub-component of a compound is documented in the compound's spec, the way `sidebar-menu-sub` and `sidebar-menu-group` already are. The `./menu-item` export path stays public, so its API lives here (that is what `build-catalog.mjs` reads to give the path an entry in `catalog.json`).
@@ -308,7 +308,7 @@ export type SidebarMenuGroupNode = {
 | Prop           | Type                     | Default | Required | JSDoc                                                                                                                                                                                                |
 | -------------- | ------------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `groups`       | `SidebarMenuGroupNode[]` | `[]`    | false    | Data-driven navigation tree; each entry renders through `SidebarMenu.Group` and its items through `SidebarMenu.Item` / `SidebarMenu.Sub`. Composes with the `default` slot rather than replacing it. |
-| `activeId`     | `string`                 | `''`    | false    | Id of the node rendered as selected in data-driven mode.                                                                                                                                             |
+| `activeId`     | `string`                 | `''`    | false    | Id of the node rendered as active (`aria-current`) in data-driven mode.                                                                                                                              |
 | `enterOnMount` | `boolean`                | `false` | false    | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in.                  |
 | `ariaLabel`    | `string`                 | `''`    | false    | Accessible name for the navigation region. Empty uses the locale catalog (`SidebarMenu`).                                                                                                            |
 
@@ -345,10 +345,10 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 
 ## States
 
-- Visual states: `default`, `hover`, `focus-visible`, `active`, `selected`, `disabled`
+- Visual states: `default`, `hover`, `focus-visible`, `active`, `current page` (the `active` prop), `disabled`
 - `data-state` values: `open` | `closed` — on `Sub`, `SubTrigger` and `SubContent`. A `Group` has none: it never closes.
 - `data-kind` values: `inline` | `drill` — on `SubTrigger` and `SubContent`. On a trigger they sit on its root, which is always the row **box** holding its label control and its arrow.
-- `data-selected` mirrors the `selected` prop on `SidebarMenu.Item` (on the `li` and on its link or button, which also carries `data-disabled` and, with an `icon`, `data-icon`; the row styles switch on these, not on class bindings)
+- `data-active` mirrors the `active` prop on `SidebarMenu.Item` (on the `li` and on its link or button, which also carries `data-disabled` and, with an `icon`, `data-icon`; the row styles switch on these, not on class bindings)
 - `data-disabled` mirrors the `disabled` prop on `SidebarMenu.Item` and `SubTrigger` (on the row box and on its label alike, so a test can read it from either)
 - `data-level` on `SubContent` — nesting depth, drives the indent step
 - `data-motion` values: `push` | `pop` | `none` — on a drill level, so the direction of the slide is a Tailwind `data-[motion=…]` variant instead of a `:class` ternary (see Motion)
@@ -517,7 +517,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-cont
   - An inline `SubTrigger` puts `aria-expanded` + `aria-controls` on **whichever control expands the children** — its arrow when an `href` makes the label a link, the label itself otherwise — and never on both. When the label owns them the arrow is `aria-hidden` + `tabindex="-1"`: a redundant pointer target, not a second announced control. An announced arrow is named `Expand <label>` / `Collapse <label>`, so the state is given twice over: by the name it moves to and by `aria-expanded`.
   - A drill `SubTrigger` carries **no** `aria-expanded` on any control — it replaces the view rather than expanding one. An announced drill arrow is named `Open <label> menu`. On push, focus moves to the level's `Back` button and the pushed `<ul>` takes `aria-label` from the trigger's label; on pop, focus returns to whichever control pushed it. A level that is not current carries **both `aria-hidden` and `inert`** while it is still mounted for the slide, so it leaves the accessibility tree and the tab order together (the pattern Kumo's `SlidingViews` uses).
   - `Back` is a `<button>` whose **visible text** names its destination (`Back to Settings`, or a bare `Back` when that destination is the unnamed root) and is therefore also its accessible name — it renders no `aria-label`, so the two cannot disagree (2.5.3 Label in Name).
-  - A selected `SidebarMenu.Item` rendered as an anchor carries `aria-current="page"`; a disabled row carries `aria-disabled` and is removed from the tab order.
+  - An active `SidebarMenu.Item` rendered as an anchor carries `aria-current="page"`; a disabled row carries `aria-disabled` and is removed from the tab order.
   - In a sidebar icon rail every visible row keeps its label as its accessible name (visually hidden, not removed); the `Tooltip` repeats it on hover and focus toward the inline end (`left` under `rtl`).
   - The connector rail and every chevron are `aria-hidden="true"` — decorative, and the indentation already conveys the hierarchy.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
@@ -534,7 +534,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-cont
 
 ## Examples
 
-- Default — a console-style menu inside a `Sidebar` host: two titled `Group`s with a selected row.
+- Default — a console-style menu inside a `Sidebar` host: two titled `Group`s with an active row.
 - Types — composite story rendering both `SubTrigger` `kind` values side-by-side, so the `chevron-down` and `chevron-right` affordances are directly comparable.
 - Condensed — **justified addition.** A three-level recursive tree with the nested indent rail. `Default` renders flat groups and cannot show the rail's nesting, which is the primary reason this component exists over a flat list of groups.
 - Drill — **justified addition.** The view stack is stateful: pushing a level, the `Back` row, and focus restoration on pop cannot be shown by any static args delta.

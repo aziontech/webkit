@@ -784,25 +784,25 @@ describe('SidebarMenu', () => {
   })
 
   describe('audit fixes', () => {
-    it('puts the selected, disabled and icon state on the interactive element as data attributes', () => {
+    it('puts the active, disabled and icon state on the interactive element as data attributes', () => {
       const view = render(
         defineComponent({
           components: { SidebarMenuItem },
           template: `
           <ul>
-            <SidebarMenuItem label="Home" href="https://example.com" icon="ai ai-home" selected />
+            <SidebarMenuItem label="Home" href="https://example.com" icon="ai ai-home" active />
             <SidebarMenuItem label="Billing" disabled />
           </ul>`
         })
       )
       const [home, billing] = view.getAllByTestId('navigation-sidebar-menu-item')
       const link = home!.querySelector('a') as HTMLElement
-      expect(link.hasAttribute('data-selected')).toBe(true)
+      expect(link.hasAttribute('data-active')).toBe(true)
       expect(link.hasAttribute('data-icon')).toBe(true)
       expect(link.hasAttribute('data-disabled')).toBe(false)
       const button = billing!.querySelector('button') as HTMLElement
       expect(button.hasAttribute('data-disabled')).toBe(true)
-      expect(button.hasAttribute('data-selected')).toBe(false)
+      expect(button.hasAttribute('data-active')).toBe(false)
     })
 
     it('emits click on a sub-trigger with the event and its label and href', async () => {

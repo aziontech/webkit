@@ -3,8 +3,8 @@ name: pagination-button
 category: data
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: efae0a7923c438a6a1e139fd0fe00fed263afdac3f8fb0110e06487041d8f8e2
+spec_version: 4
+checksum: a30f9d7d002453401f7a0a0e43208832036ae9016091f684e14fb57332ba325f
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -13,12 +13,12 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), selected by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
+PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), chosen by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`active`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
 
 ## When to use
 
 - Compose a custom page strip inside `pagination`'s default slot (composition mode), one button per Previous, page number, overflow and Next.
-- Render the current page of a hand-wired pagination with `selected`, and the unavailable Previous / Next ends with `disabled`.
+- Render the current page of a hand-wired pagination with `active`, and the unavailable Previous / Next ends with `disabled`.
 
 ## When NOT to use
 
@@ -40,7 +40,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 - Place it only inside `pagination`'s default slot: the strip's border and frame come from the root, and the outer radius is applied through `first:` / `last:`, so only the first and last buttons of the strip round their corners.
 - Pass `aria-label` on every `previous` and `next` button: those kinds render an `aria-hidden` icon only and have no accessible name otherwise. `more` is decorative and hidden from assistive tech, so it takes no `aria-label`.
 - Put the page number in the default slot of `kind="number"` only; the other kinds ignore the slot.
-- Set `selected` on exactly one number button (it sets `aria-current="page"`), and `disabled` on Previous at the first page and Next at the last.
+- Set `active` on exactly one number button (it sets `aria-current="page"`), and `disabled` on Previous at the first page and Next at the last.
 - In composition mode you own every click: listen to `click` and update the page yourself; a `disabled` button never emits it.
 
 ## Usage
@@ -60,7 +60,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
     />
     <PaginationButton
       kind="number"
-      selected
+      active
       >1</PaginationButton
     >
     <PaginationButton kind="number">2</PaginationButton>
@@ -78,7 +78,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 | Prop       | Type                                         | Default    | Required | JSDoc                                                   |
 | ---------- | -------------------------------------------- | ---------- | -------- | ------------------------------------------------------- |
 | `kind`     | `'previous' \| 'next' \| 'number' \| 'more'` | `'number'` | false    | Button role within the pagination.                      |
-| `selected` | `boolean`                                    | `false`    | false    | Marks the current page (filled surface + aria-current). |
+| `active`   | `boolean`                                    | `false`    | false    | Marks the current page (filled surface + aria-current). |
 | `disabled` | `boolean`                                    | `false`    | false    | Disables interaction and applies disabled tokens.       |
 
 ## Events
@@ -95,21 +95,21 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 
 ## States
 
-- Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`.
-- Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `kind` is `more` (inert: not focusable, no hover / active layer, no `selected` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
+- Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`.
+- Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `kind` is `more` (inert: not focusable, no hover / active layer, no `active` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
 - `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
-- `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
+- `data-active` is present when `active` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.
 - Coarse pointer: a `number`, `previous` or `next` button renders an empty `aria-hidden` `span` (`data-slot="touch-target"`) that is shown only under `pointer-coarse:` and extends the hit area vertically to 44 px; the drawn button does not grow.
 - Test ids: `<pagination testId>__button` when rendered inside a `pagination` (`data-pagination__button` by default), `data-pagination__button` outside one; a consumer `data-testid` wins.
 
 ## Motion & Animations
 
-| Trigger                          | Animation / Transition                                                                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                        |
-| -------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------ |
-| selected / disabled color change | `transition-colors duration-150 ease-out`                                             | inline                                            | `motion-reduce:transition-none`                                                |
-| hover / active layer             | `before:transition-opacity` / `after:transition-opacity` with `duration-150 ease-out` | inline                                            | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
+| Trigger                        | Animation / Transition                                                                | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------ |
+| active / disabled color change | `transition-colors duration-150 ease-out`                                             | inline                                            | `motion-reduce:transition-none`                                                |
+| hover / active layer           | `before:transition-opacity` / `after:transition-opacity` with `duration-150 ease-out` | inline                                            | `motion-reduce:before:transition-none` / `motion-reduce:after:transition-none` |
 
 ## Tokens
 
@@ -120,8 +120,8 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 | surface (number / more)                   | `var(--bg-surface)`                                     |
 | surface (hover layer)                     | `var(--bg-hover)`                                       |
 | surface (active layer)                    | `var(--bg-active)`                                      |
-| surface (selected)                        | `var(--bg-selected)`                                    |
-| border (selected)                         | `var(--border-default)` · `var(--border-width-default)` |
+| surface (current page)                    | `var(--bg-selected)`                                    |
+| border (current page)                     | `var(--border-default)` · `var(--border-width-default)` |
 | text                                      | `var(--text-default)`                                   |
 | text (disabled)                           | `var(--text-disabled)`                                  |
 | gap (content)                             | `var(--spacing-xs)`                                     |
@@ -138,7 +138,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 
 - Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: native button — `Tab` focuses; `Enter` / `Space` activates; a `disabled` button is skipped by `Tab`; the `more` ellipsis is a `span` and never receives focus.
-- ARIA: `aria-current="page"` when `selected`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron icons are `aria-hidden="true"`, so `previous` and `next` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on both); the `more` ellipsis root is `aria-hidden="true"` and decorative, so it needs no name.
+- ARIA: `aria-current="page"` when `active`; `disabled` attribute and `aria-disabled="true"` when `disabled`; the chevron icons are `aria-hidden="true"`, so `previous` and `next` take their accessible name from a consumer `aria-label` (data-driven `pagination` sets one on both); the `more` ellipsis root is `aria-hidden="true"` and decorative, so it needs no name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons): `var(--text-default)` on `var(--bg-surface)` / `var(--bg-selected)`; disabled uses `var(--text-disabled)`.
 - `motion-reduce:transition-none`, `motion-reduce:before:transition-none` and `motion-reduce:after:transition-none` on the state transitions.
 - Touch target: drawn 28×28 on every pointer (above the 24×24 minimum of WCAG 2.5.8); on a coarse pointer an invisible `aria-hidden` child (`data-slot="touch-target"`) extends the hit area to 28×44. The width stays 28 because the buttons are butted into the strip (see `pagination`). The inert `more` span has no hit area.

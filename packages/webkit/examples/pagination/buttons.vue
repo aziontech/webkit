@@ -12,7 +12,7 @@
       <Pagination.Button kind="number">1</Pagination.Button>
       <Pagination.Button
         kind="number"
-        selected
+        active
         >2</Pagination.Button
       >
       <Pagination.Button kind="more" />
