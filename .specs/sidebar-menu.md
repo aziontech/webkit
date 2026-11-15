@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 6632a7edc9f1f9882726ec0980ea999d14e60bae14b3fc5440cbbd2c3f60d2b2
+checksum: ca4d30593a969093f2e624533c20e965fd6dd1b9273034b41850780851d773dd
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -312,7 +312,7 @@ export type SidebarMenuGroupNode = {
 | `enterOnMount` | `boolean`                | `false` | false    | Plays the level entrance when the stack is already populated at mount, for a restored stack whose arrival is an entrance rather than a move inside a level the user was already in.                  |
 | `ariaLabel`    | `string`                 | `''`    | false    | Accessible name for the navigation region. Empty uses the locale catalog (`SidebarMenu`).                                                                                                            |
 
-The root also owns **`v-model:expanded`** — `string[]`, default `[]` — the ids of the inline subs
+The root also owns **`v-model:openKeys`** — `string[]`, default `[]` — the ids of the inline subs
 currently open. Expansion belongs to the root, not to each sub, for two reasons: one sub opening
 must not disturb another, and a consumer whose shell remounts on navigation (a per-page layout,
 say) can persist the list and hand it back, which per-sub local state cannot survive. A sub's
@@ -323,7 +323,7 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 | Model              | Type       | Default | Emits             | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------ | ---------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model:path`     | `string[]` | `[]`    | `update:path`     | `v-model:path` — the drill stack as ancestor node ids, outermost first. Empty at the root level. **Persist it when the host remounts** (and always when a drill row navigates, which remounts the shell in most routers) or the level closes on the very navigation that opened it. A stack supplied this way is restored **with its label, its trigger, and its entrance**: every drill sub announces the first two to the root when its trigger mounts (not only when pushed), so the restored level still names itself in the a11y tree, `SidebarMenu.Back` can still name it as a destination from a deeper level, and popping still returns focus to the row that owns it; and the level _arrives_ rather than simply being there — see the restored-level row in Motion. |
-| `v-model:expanded` | `string[]` | `[]`    | `update:expanded` | `v-model:expanded` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `v-model:openKeys` | `string[]` | `[]`    | `update:openKeys` | `v-model:openKeys` — ids of the inline subs currently open. Persist it when the host remounts, or expansion resets and one sub appearing to close another.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 ## Events
 

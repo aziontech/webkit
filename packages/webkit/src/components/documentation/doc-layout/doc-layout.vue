@@ -380,7 +380,7 @@
           >
             <SidebarMenu
               v-model:path="menuPath"
-              v-model:expanded="menuExpanded"
+              v-model:open-keys="menuExpanded"
               :groups="menuGroups"
               :active-id="currentId"
               role="presentation"
@@ -441,7 +441,7 @@
         <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
           <SidebarMenu
             v-model:path="menuPath"
-            v-model:expanded="menuExpanded"
+            v-model:open-keys="menuExpanded"
             :groups="menuGroups"
             :active-id="currentId"
             :aria-label="ariaLabel || t('docLayout.navigation')"

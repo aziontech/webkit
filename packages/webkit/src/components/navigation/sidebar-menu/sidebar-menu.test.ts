@@ -829,13 +829,13 @@ describe('SidebarMenu', () => {
       expect(calls[0]?.[1]).toEqual({ label: 'Guides', href: '/guides' })
     })
 
-    it('still emits update:path and update:expanded through defineModel', async () => {
-      const expanded = ref<string[]>([])
+    it('still emits update:path and update:openKeys through defineModel', async () => {
+      const openKeys = ref<string[]>([])
       const { getByTestId } = render(
         defineComponent({
           components: { SidebarMenu },
           setup: () => ({
-            expanded,
+            openKeys,
             groups: [
               {
                 items: [
@@ -844,11 +844,11 @@ describe('SidebarMenu', () => {
               }
             ]
           }),
-          template: `<SidebarMenu v-model:expanded="expanded" :groups="groups" />`
+          template: `<SidebarMenu v-model:open-keys="openKeys" :groups="groups" />`
         })
       )
       await fireEvent.click(getByTestId('navigation-sidebar-menu-sub-trigger__control'))
-      await waitFor(() => expect(expanded.value).toContain('guides'))
+      await waitFor(() => expect(openKeys.value).toContain('guides'))
     })
   })
 })

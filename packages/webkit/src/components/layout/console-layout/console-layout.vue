@@ -510,7 +510,7 @@
           >
             <SidebarMenu
               v-model:path="menuPath"
-              v-model:expanded="menuExpanded"
+              v-model:open-keys="menuExpanded"
               :groups="menuGroups"
               :active-id="currentId"
               role="presentation"
@@ -731,7 +731,7 @@
           >
             <template
               v-if="item.icon"
-              #prefix
+              #leading
             >
               <i
                 :class="item.icon"

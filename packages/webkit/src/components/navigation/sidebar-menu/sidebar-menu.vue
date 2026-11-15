@@ -59,7 +59,7 @@
 
   const path = defineModel<string[]>('path', { default: () => [] })
 
-  const expandedModel = defineModel<string[]>('expanded', { default: () => [] })
+  const expandedModel = defineModel<string[]>('openKeys', { default: () => [] })
 
   const slots = defineSlots<{
     default(): unknown

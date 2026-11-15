@@ -94,7 +94,7 @@ export interface UseCollectionOptions<
   /** Server mode: loads every item an export writes (`Table.Export`, `exportCsv()`, `exportItems`); without it the loaded page is exported. */
   exportAll?: (params: CollectionExportParams) => Promise<T[]>
   /** Field that identifies an item (selection, row keys). */
-  trackBy?: keyof T & string
+  itemKey?: keyof T & string
   /** Columns bound to a Table; their order and visibility follow the preferences. */
   columns?: MaybeRefOrGetter<readonly C[]>
   /** Free-text filtering: fields searched (all scalar fields by default), initial text, server debounce in ms. */
@@ -272,8 +272,8 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   options: UseCollectionOptions<T, C>
 ): UseCollectionReturn<T, C> {
   const serverMode = typeof options.fetch === 'function'
-  const trackBy = (options.trackBy ?? 'id') as string
-  const keyOf = (item: T): string => String((item as Record<string, unknown>)[trackBy] ?? '')
+  const itemKey = (options.itemKey ?? 'id') as string
+  const keyOf = (item: T): string => String((item as Record<string, unknown>)[itemKey] ?? '')
   const paginated = Boolean(options.pagination)
   const pageSizeOptions = options.pagination?.pageSizeOptions ?? DEFAULT_PAGE_SIZES
   const multiSort = options.sorting?.multiple ?? false
@@ -698,7 +698,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   const tableProps = computed<CollectionTableProps<T, C>>(() => ({
     data: items.value,
     columns: orderedColumns.value,
-    rowKey: trackBy,
+    rowKey: itemKey,
     loading: loading.value,
     sorting: sorting.value,
     manualSorting: true,
@@ -769,7 +769,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
 
   const cardListProps = computed<CollectionCardListProps<T>>(() => ({
     items: items.value,
-    itemKey: trackBy,
+    itemKey,
     loading: loading.value,
     selectionMode: selectionEnabled ? selectionMode : 'none',
     selectedKeys: pageKeys.value.filter(isSelected),
