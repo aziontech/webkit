@@ -18,7 +18,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the instance's function is picked from its list while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -85,7 +85,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -160,8 +160,8 @@
 
         <ShellMockupPart
           :order="1"
-          :data-open="frame.open || null"
-          class="relative data-open:z-1"
+          :data-state="frame.open ? 'open' : 'closed'"
+          class="relative data-[state=open]:z-1"
         >
           <div class="flex flex-col gap-(--spacing-xs)">
             <FieldLabel
@@ -173,7 +173,7 @@
               :value="frame.picked"
               :options="FUNCTIONS"
               :open="frame.open"
-              :highlight="frame.highlight"
+              :highlighted-index="frame.highlight"
               :focused="frame.focused"
               control-id="firewall-function-select"
               data-cursor="function"

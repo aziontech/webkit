@@ -18,7 +18,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; a second condition is added, its operator picked from the list, while it is, and taken back out after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -114,7 +114,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const goingBack = ref(false)
@@ -210,8 +210,8 @@
         >
           <div
             v-if="frame.added"
-            :data-open="frame.open || null"
-            class="overflow-hidden [interpolate-size:allow-keywords] data-open:overflow-visible"
+            :data-state="frame.open ? 'open' : 'closed'"
+            class="overflow-hidden [interpolate-size:allow-keywords] data-[state=open]:overflow-visible"
           >
             <div class="flex flex-col gap-(--spacing-sm) pt-(--spacing-md)">
               <span class="flex items-center gap-(--spacing-sm)">
@@ -235,7 +235,7 @@
                   :value="frame.operator"
                   :options="OPERATORS"
                   :open="frame.open"
-                  :highlight="frame.highlight"
+                  :highlighted-index="frame.highlight"
                   :focused="frame.focused"
                   data-cursor="operator"
                   aria-label="Operator"

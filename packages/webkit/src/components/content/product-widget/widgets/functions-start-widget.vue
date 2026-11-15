@@ -19,7 +19,7 @@
     /** Whether this widget is the one showing. */
     active?: boolean
     /** Whether the pointer is over the host. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   withDefaults(defineProps<Props>(), { tab: 'agents', active: true, hover: false })

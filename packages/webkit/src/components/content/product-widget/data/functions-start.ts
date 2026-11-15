@@ -19,7 +19,7 @@ export interface AgentTranscriptEntry {
   text?: string
   server?: string
   action?: string
-  state?: 'preview' | 'running' | 'done'
+  status?: 'preview' | 'running' | 'success'
   detail?: [string, string][]
 }
 
@@ -86,7 +86,7 @@ export const AGENT_TRANSCRIPT: AgentTranscriptEntry[] = [
     kind: 'tool',
     server: 'build',
     action: 'Create function',
-    state: 'preview',
+    status: 'preview',
     detail: [
       ['name', FUNCTION_NAME],
       ['runtime', 'JavaScript'],
@@ -98,21 +98,21 @@ export const AGENT_TRANSCRIPT: AgentTranscriptEntry[] = [
     kind: 'tool',
     server: 'build',
     action: 'Create function',
-    state: 'done',
+    status: 'success',
     detail: [[FUNCTION_NAME, 'created']]
   },
   {
     kind: 'tool',
     server: 'build',
     action: 'Create function instance',
-    state: 'done',
+    status: 'success',
     detail: [[`${FUNCTION_NAME} instance`, `on ${FUNCTION_APPLICATION}`]]
   },
   {
     kind: 'tool',
     server: 'build',
     action: 'Create rule',
-    state: 'done',
+    status: 'success',
     detail: [[`Run ${FUNCTION_NAME}`, 'Request phase']]
   },
   {

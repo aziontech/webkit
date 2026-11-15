@@ -47,7 +47,7 @@
     nodes: TopologyNode[]
   }
 
-  type TopologySide = 'left' | 'right'
+  type TopologySide = 'start' | 'end'
 
   interface TopologyEdge {
     from: string
@@ -166,8 +166,8 @@
   const portsOf = (arrangement: TopologyArrangement, key: string): TopologySide[] => [
     ...new Set(
       arrangement.edges.flatMap((edge): TopologySide[] => [
-        ...(edge.to === key ? (['left'] as const) : []),
-        ...(edge.from === key ? (['right'] as const) : [])
+        ...(edge.to === key ? (['start'] as const) : []),
+        ...(edge.from === key ? (['end'] as const) : [])
       ])
     )
   ]
@@ -191,7 +191,7 @@
   ) => {
     const { left, top } = offsetWithin(node, canvas)
     const y = top + node.offsetHeight / 2
-    return side === 'left' ? { x: left, y } : { x: left + node.offsetWidth, y }
+    return side === 'start' ? { x: left, y } : { x: left + node.offsetWidth, y }
   }
 
   const elbow = (fromX: number, fromY: number, toX: number, toY: number) => {
@@ -218,8 +218,8 @@
       const source = nodeOf(edge.from)
       const target = nodeOf(edge.to)
       if (!source || !target) return []
-      const from = anchor(source, canvas, 'right')
-      const to = anchor(target, canvas, 'left')
+      const from = anchor(source, canvas, 'end')
+      const to = anchor(target, canvas, 'start')
       return [elbow(from.x, from.y, to.x, to.y)]
     })
     return { viewBox: `0 0 ${canvas.offsetWidth} ${canvas.offsetHeight}`, paths }
@@ -304,7 +304,7 @@
               v-for="side in portsOf(arrangement, node.key)"
               :key="side"
               :data-side="side"
-              class="absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) data-[side=left]:-start-px data-[side=left]:-translate-x-full data-[side=right]:-end-px data-[side=right]:translate-x-full"
+              class="absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent) data-[side=start]:-start-px data-[side=start]:-translate-x-full data-[side=end]:-end-px data-[side=end]:translate-x-full"
               aria-hidden="true"
             />
             <div

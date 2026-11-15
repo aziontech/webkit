@@ -17,7 +17,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the form switches to override and scrolls through its fields while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -59,7 +59,7 @@
   const LAST = FRAMES.length - 1
   const LEAD = 72
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])

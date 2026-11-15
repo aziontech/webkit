@@ -14,7 +14,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the pointer reads the volume bars toward the error spike while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -90,7 +90,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const stage = ref<globalThis.HTMLElement | null>(null)

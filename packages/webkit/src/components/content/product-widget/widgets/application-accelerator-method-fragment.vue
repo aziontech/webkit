@@ -14,7 +14,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; POST and then OPTIONS are checked while it is, and unchecked after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -65,7 +65,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])

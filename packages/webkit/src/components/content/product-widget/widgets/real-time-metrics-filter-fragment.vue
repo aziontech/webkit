@@ -19,7 +19,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the Period chip is reopened and Last 7 days picked while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -81,7 +81,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -136,8 +136,8 @@
       <div class="flex flex-col gap-(--layout-group-gap) py-(--spacing-xs)">
         <ShellMockupPart
           :order="0"
-          :data-open="frame.open || null"
-          class="relative data-open:z-1"
+          :data-state="frame.open ? 'open' : 'closed'"
+          class="relative data-[state=open]:z-1"
         >
           <span class="relative inline-flex">
             <Button
@@ -203,8 +203,8 @@
                 >
                   <span class="grow truncate">{{ period }}</span>
                   <i
-                    :data-picked="frame.period === period || null"
-                    class="ai ai-check invisible shrink-0 text-(--text-default) data-picked:visible"
+                    :data-selected="frame.period === period || null"
+                    class="ai ai-check invisible shrink-0 text-(--text-default) data-selected:visible"
                     aria-hidden="true"
                   />
                 </span>

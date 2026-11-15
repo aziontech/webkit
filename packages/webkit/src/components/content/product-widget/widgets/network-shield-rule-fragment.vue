@@ -15,7 +15,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the rule's network list is picked from its list, qa-nl-ipcidr to qa-nl-countries, while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -74,7 +74,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -130,8 +130,8 @@
       <div class="relative flex flex-col gap-(--spacing-md) py-(--spacing-xs)">
         <ShellMockupPart
           :order="0"
-          :data-open="frame.open || null"
-          class="relative data-open:z-1"
+          :data-state="frame.open ? 'open' : 'closed'"
+          class="relative data-[state=open]:z-1"
         >
           <div class="flex flex-col gap-(--spacing-sm)">
             <span class="flex items-center gap-(--spacing-sm)">
@@ -143,7 +143,7 @@
                 value="Network"
                 aria-label="Variable"
               >
-                <template #prefix>
+                <template #leading>
                   <span class="text-body-sm text-(--text-muted)">$</span>
                 </template>
               </MockupSelect>
@@ -155,7 +155,7 @@
                 :value="frame.list"
                 :options="NETWORK_LISTS"
                 :open="frame.open"
-                :highlight="frame.highlight"
+                :highlighted-index="frame.highlight"
                 :focused="frame.focused"
                 data-cursor="network-list"
                 aria-label="Network list"

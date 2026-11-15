@@ -15,7 +15,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; SQL Injection's sensitivity is picked from its list and File Upload is switched on while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -127,7 +127,7 @@
   const LAST = FRAMES.length - 1
   const LEAD = 28
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -223,13 +223,13 @@
           v-for="(threat, index) in THREATS"
           :key="threat.key"
           :order="Math.min(index, 3)"
-          :data-open="(picking(threat.key) && frame.open) || null"
-          class="relative data-open:z-1"
+          :data-state="picking(threat.key) && frame.open ? 'open' : 'closed'"
+          class="relative data-[state=open]:z-1"
           data-anchor
         >
           <div
-            :data-enabled="enabled(threat.key) || null"
-            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-enabled:border-(--primary) motion-reduce:transition-none"
+            :data-on="enabled(threat.key) || null"
+            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-on:border-(--primary) motion-reduce:transition-none"
           >
             <LegacySwitch
               :checked="enabled(threat.key)"
@@ -243,7 +243,7 @@
                   :value="sensitivity(threat.key)"
                   :options="picking(threat.key) ? SENSITIVITIES : []"
                   :open="picking(threat.key) && frame.open"
-                  :highlight="picking(threat.key) ? frame.highlight : -1"
+                  :highlighted-index="picking(threat.key) ? frame.highlight : -1"
                   :focused="picking(threat.key) && frame.focused"
                   :data-cursor="picking(threat.key) ? 'sensitivity' : undefined"
                   :aria-label="`${threat.title} sensitivity`"

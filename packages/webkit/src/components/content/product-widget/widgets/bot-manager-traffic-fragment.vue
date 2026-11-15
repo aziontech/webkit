@@ -12,7 +12,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the Bad Bot slice is brought forward while it is, and the rest of the traffic dims. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -53,7 +53,7 @@
     offset: 25 - SLICES.slice(0, index).reduce((total, previous) => total + previous.share, 0)
   }))
 
-  const focused = computed(() => props.active && (props.hover || !canHover.value))
+  const focused = computed(() => props.active && (props.hovered || !canHover.value))
 
   const dimmed = (key: string) => focused.value && key !== FOCUS
 </script>
@@ -113,15 +113,15 @@
                   </svg>
                   <span class="grid place-items-center text-center">
                     <span
-                      :data-shown="!focused || null"
-                      class="col-start-1 row-start-1 flex flex-col opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+                      :data-active="!focused || null"
+                      class="col-start-1 row-start-1 flex flex-col opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-active:opacity-100 motion-reduce:transition-none"
                     >
                       <span class="text-label-md text-(--text-default)">1,842,310</span>
                       <span class="text-body-xs text-(--text-muted)">Requests</span>
                     </span>
                     <span
-                      :data-shown="focused || null"
-                      class="col-start-1 row-start-1 flex flex-col opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+                      :data-active="focused || null"
+                      class="col-start-1 row-start-1 flex flex-col opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-active:opacity-100 motion-reduce:transition-none"
                     >
                       <span class="text-label-md text-(--text-default)">13.9%</span>
                       <span class="text-body-xs text-(--text-muted)">Bad Bot</span>

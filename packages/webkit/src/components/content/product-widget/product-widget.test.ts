@@ -8,6 +8,7 @@ import Types from '../../../../examples/product-widget/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { useHydrationHost } from '../../../test/hydration-shared'
 import { ProductWidgetInjectionKey } from './injection-key'
+import DeploymentLogs from './parts/deployment-logs.vue'
 import ProductWidget, { type ProductWidgetName } from './product-widget.vue'
 import { productWidgets } from './registry'
 import ObjectStorageBrowser from './widgets/object-storage-browser-fragment.vue'
@@ -195,12 +196,12 @@ describe('ProductWidget', () => {
 
     it('never leaks a prop the widget does not declare onto its root', async () => {
       const view = render(
-        host({ name: 'workloads-list', hover: true, interval: 80, tab: 'deploy' })
+        host({ name: 'workloads-list', hovered: true, autoplayInterval: 80, tab: 'deploy' })
       )
       const frame = await frameOf(view)
 
-      expect(frame.hasAttribute('hover')).toBe(false)
-      expect(frame.hasAttribute('interval')).toBe(false)
+      expect(frame.hasAttribute('hovered')).toBe(false)
+      expect(frame.hasAttribute('autoplay-interval')).toBe(false)
       expect(frame.hasAttribute('tab')).toBe(false)
     })
 
@@ -320,7 +321,7 @@ describe('ProductWidget', () => {
         <div>
           <div style="height: 300vh"></div>
           <div style="width: 600px; height: 480px">
-            <ProductWidget name="workload-deploy-logs" :interval="40" />
+            <ProductWidget name="workload-deploy-logs" :autoplay-interval="40" />
           </div>
         </div>
       `
@@ -403,6 +404,23 @@ describe('ProductWidget', () => {
 
       expect(mismatches, mismatches.join('\n')).toEqual([])
       expect(shown).toEqual([true])
+    })
+  })
+
+  describe('deploy logs', () => {
+    it('marks each step with a job status and lets a fragment take hovered', async () => {
+      const view = render(DeploymentLogs, { props: { failAt: 'build' } })
+      const status = (title: string) =>
+        view.getByText(title, { selector: 'span[data-status]' }).getAttribute('data-status')
+
+      expect(status('Clone Template')).toBe('success')
+      expect(status('Build')).toBe('error')
+      expect(status('Upload')).toBe('skipped')
+
+      const { default: fragment } = await import('./widgets/edge-dns-record-fragment.vue')
+      const declared = Object.keys((fragment as { props?: object }).props ?? {})
+      expect(declared).toContain('hovered')
+      expect(declared).not.toContain('hover')
     })
   })
 })

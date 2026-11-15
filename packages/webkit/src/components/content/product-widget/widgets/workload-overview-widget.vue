@@ -399,9 +399,9 @@
                         :key="node.key"
                         :style="{ gridColumn: node.column, gridRow: node.row }"
                         :data-dashed="node.dashed || null"
-                        :data-focus="(tab === 'topology' && node.key === 'workload') || null"
+                        :data-focused="(tab === 'topology' && node.key === 'workload') || null"
                         :data-gap="node.key === 'application' || null"
-                        class="min-w-0 self-start rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm data-dashed:border-dashed data-focus:border-(--primary) data-gap:mb-(--spacing-sm)"
+                        class="min-w-0 self-start rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm data-dashed:border-dashed data-focused:border-(--primary) data-gap:mb-(--spacing-sm)"
                       >
                         <div
                           class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
@@ -460,12 +460,12 @@
 
     <template #overlay>
       <div
-        :data-open="tab === 'deploy' || null"
-        class="absolute inset-0 bg-(--bg-backdrop) opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-open:opacity-100 motion-reduce:transition-none"
+        :data-state="tab === 'deploy' ? 'open' : 'closed'"
+        class="absolute inset-0 bg-(--bg-backdrop) opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
       />
       <aside
-        :data-open="tab === 'deploy' || null"
-        class="absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ease-productive-entrance data-open:translate-x-0 motion-reduce:transition-none"
+        :data-state="tab === 'deploy' ? 'open' : 'closed'"
+        class="absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ease-productive-entrance data-[state=open]:translate-x-0 motion-reduce:transition-none"
       >
         <div
           class="flex shrink-0 items-start gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"

@@ -10,7 +10,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; this fragment holds still either way. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })

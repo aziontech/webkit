@@ -13,7 +13,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the Bot Manager dashboard switches from Overview to Breakdown while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -56,7 +56,7 @@
   ]
 
   const dashboard = computed(() =>
-    props.active && (props.hover || !canHover.value) ? 'breakdown' : 'overview'
+    props.active && (props.hovered || !canHover.value) ? 'breakdown' : 'overview'
   )
 </script>
 
@@ -85,8 +85,8 @@
       <ShellMockupPart :order="1">
         <div class="grid">
           <div
-            :data-shown="dashboard === 'overview' || null"
-            class="col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-shown:translate-y-0 data-shown:opacity-100 motion-reduce:transition-none"
+            :data-active="dashboard === 'overview' || null"
+            class="col-start-1 row-start-1 grid translate-y-1 grid-cols-2 gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
           >
             <Card
               v-for="metric in BIG_NUMBERS"
@@ -111,8 +111,8 @@
           </div>
 
           <div
-            :data-shown="dashboard === 'breakdown' || null"
-            class="col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-shown:translate-y-0 data-shown:opacity-100 motion-reduce:transition-none"
+            :data-active="dashboard === 'breakdown' || null"
+            class="col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
           >
             <Card>
               <template #content>
