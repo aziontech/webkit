@@ -15,7 +15,7 @@ You measure design-system adoption. Given the app source (or a chosen set of scr
 ### Coverage (the count)
 
 - Scan `.vue` files (templates + `<script setup>`). Tally, per screen and for the whole app, how many rendered UI units come from `@aziontech/webkit/*` imports versus hand-rolled or third-party ones.
-- Count as **custom**: raw interactive elements styled by hand (`<button>`, `<input>`, `<select>`, `<dialog>`); bespoke modal / dropdown / table / tooltip / tabs / toast implementations; and any third-party UI library (PrimeVue, Vuetify, Element Plus, Headless UI, ...).
+- Count as **custom**: raw interactive elements styled by hand (`<button>`, `<input>`, `<select>`, `<dialog>`); bespoke modal / dropdown / table / tooltip / tabs / toast implementations; and any third-party UI library (Vuetify, Element Plus, Headless UI, ...).
 - Coverage % = webkit-rendered units ÷ (webkit + custom) units. Report it per screen and rolled up for the app.
 
 ### Equivalents (the backlog)

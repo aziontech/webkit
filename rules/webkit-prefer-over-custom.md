@@ -11,7 +11,7 @@ Before you write UI, check whether the design system already has it. It almost a
 ## Do not
 
 - Do not hand-roll a button, input, modal, table, tooltip, badge, or any common UI when webkit already ships one.
-- Do not pull in another component library (PrimeVue, a headless UI kit, a random npm widget) for something webkit covers.
+- Do not pull in another component library (a third-party UI kit, a headless UI kit, a random npm widget) for something webkit covers.
 - Do not copy a component's markup into your own file to tweak it — use the real component so it stays themed and accessible.
 
 ## When webkit genuinely lacks it

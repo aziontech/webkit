@@ -902,7 +902,7 @@ export function checkFillPairs(keys, file = 'packages/theme/src/tokens/theme') {
 }
 
 export function iconProblem(name, ctx) {
-  if (name.startsWith('pi-')) return 'is a PrimeIcons name; the set is removed'
+  if (name.startsWith('pi-')) return 'is from the removed pi icon set'
   const renamed = ctx?.iconRenames?.[name]
   if (renamed) return `was renamed to "${typeof renamed === 'string' ? renamed : 'nothing'}"`
   const legacy = name
@@ -949,9 +949,7 @@ export function checkIconFile(rel) {
   if (!m) return []
   const [, set, name] = m
   if (set === 'pi')
-    return [
-      v('icon-name', rel, 1, `the PrimeIcons set (svg-raw/pi) is removed in 6.0 (${RULE_DOC}).`)
-    ]
+    return [v('icon-name', rel, 1, `the pi icon set (svg-raw/pi) is removed in 6.0 (${RULE_DOC}).`)]
   if (set === 'ai-cor')
     return [v('icon-name', rel, 1, `colour icon folder "ai-cor" is "ai-color" (${RULE_DOC}).`)]
   const problem = iconProblem(name, { iconRenames: {} })
