@@ -19,11 +19,11 @@
     <PanelFooter>
       <Button
         label="Cancel"
-        kind="outlined"
+        variant="outline"
       />
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
       />
     </PanelFooter>
   </Panel>

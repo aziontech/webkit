@@ -227,7 +227,7 @@
           v-if="asTag(item).markedForRemoval"
           :label="t('tagEditor.undo')"
           :aria-label="t('tagEditor.undoLabel', { index: index + 1 })"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           :disabled="isDisabled || left === 0"
           :data-testid="`${testId}__undo`"
@@ -239,7 +239,7 @@
         >
           <IconButton
             icon="ai ai-trash"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :ariaLabel="removeLabel"
             :data-testid="`${testId}__remove`"

@@ -3,11 +3,11 @@ name: helper-text
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: 0119aff90f79479e3ff8f5e7cef026cff69118b25c4a4c67ad7ed5ced77203cd
+checksum: 6209fe1401c37a242f660332febd5a2f16faec31fd8f94eabb0c7c84a201c43c
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -22,7 +22,7 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 
 - Use HelperText only under a control that is not inside Field; inside Field use Field.Description or Field.Error. For a one-sentence note beside a label use Hint.
 - Guidance under a bare input you compose yourself (format hints, limits).
-- A validation error (`kind="invalid"`), a required reminder (`kind="required"`), or a locked-field notice (`kind="disabled"`) under a field.
+- A validation error (`type="invalid"`), a required reminder (`type="required"`), or a locked-field notice (`type="disabled"`) under a field.
 
 ## When NOT to use
 
@@ -33,14 +33,14 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 ## Related
 
 - `Field.Label` — sits above the input; HelperText sits below it.
-- `field` — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
+- `field` — `Field.Description` switches the helper `type` from the Field's `disabled`, `invalid` and `required` state.
 - `alert` — banner-level feedback with severity and an optional action.
 
 ## Best practices
 
 - Give it an `id` and point the input's `aria-describedby` at it so screen readers read it with the field.
-- Pick `kind` from the field state: `invalid` for errors, `required` for a missing required value, `disabled` when the field is locked.
-- Keep it to one short line; `kind="disabled"` already prepends the lock icon, so do not add another.
+- Pick `type` from the field state: `invalid` for errors, `required` for a missing required value, `disabled` when the field is locked.
+- Keep it to one short line; `type="disabled"` already prepends the lock icon, so do not add another.
 
 ## Usage
 
@@ -53,7 +53,7 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 <template>
   <Input id="email" />
   <HelperText
-    kind="invalid"
+    type="invalid"
     label="Enter a valid email address."
   />
 </template>
@@ -64,7 +64,7 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 | Prop    | Type                                                | Default    | Required | JSDoc                                                         |
 | ------- | --------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------- |
 | `label` | `string`                                            | `''`       | false    | Fallback text when the default slot is empty.                 |
-| `kind`  | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false    | Visual variant; `disabled` also prepends a `ai ai-lock` icon. |
+| `type`  | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false    | Visual variant; `disabled` also prepends a `ai ai-lock` icon. |
 
 ## Events
 
@@ -79,7 +79,7 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 ## States
 
 - Visual states: `helper`, `invalid`, `required`, `disabled`
-- `data-kind` mirrors the `kind` prop
+- `data-type` mirrors the `type` prop
 
 ## Motion & Animations
 
@@ -104,16 +104,16 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - Root is a `<p>` element so the text is part of the document flow; consumers wire the input with `aria-describedby="<helper-id>"` to expose the helper text to assistive tech.
-- Keyboard map: not focusable (descriptive text); the lock icon for `kind="disabled"` is decorative and marked `aria-hidden="true"`.
-- ARIA: when `kind="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
-- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified with the theme by the styled visual suite).
+- Keyboard map: not focusable (descriptive text); the lock icon for `type="disabled"` is decorative and marked `aria-hidden="true"`.
+- ARIA: when `type="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
+- Contrast ≥4.5:1 between each `type` color and `var(--bg-canvas)` (verified with the theme by the styled visual suite).
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
 - Touch target: text is non-interactive; not subject to the 40×40 px rule.
 
 ## Examples
 
 - Default
-- Types — composite story rendering every `kind` label side-by-side.
+- Types — composite story rendering every `type` label side-by-side.
 
 ## Constraints — DO NOT
 

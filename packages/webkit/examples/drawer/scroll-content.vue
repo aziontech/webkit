@@ -27,7 +27,7 @@
     <DrawerTrigger>
       <Button
         label="Open scrollable drawer"
-        kind="primary"
+        variant="primary"
       />
     </DrawerTrigger>
     <DrawerContent>
@@ -54,12 +54,12 @@
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             @click="open = false"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
           />
         </div>
       </PanelFooter>

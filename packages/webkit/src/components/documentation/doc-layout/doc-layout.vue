@@ -179,10 +179,10 @@
     (id) => {
       const ancestors = navTrail(props.navigation, id).slice(0, -1)
       menuPath.value = ancestors
-        .filter((item) => item.groups || item.kind === 'drill')
+        .filter((item) => item.groups || item.type === 'drill')
         .map((item) => item.id)
       const inline = ancestors
-        .filter((item) => item.children && !item.groups && item.kind !== 'drill')
+        .filter((item) => item.children && !item.groups && item.type !== 'drill')
         .map((item) => item.id)
       menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
     },
@@ -303,7 +303,7 @@
             <IconButton
               v-if="navigation.length"
               icon="ai ai-menu"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :ariaLabel="t('docLayout.openNavigation')"
               class="shrink-0 lg:hidden"
@@ -316,7 +316,7 @@
                 class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               >
                 <Brand
-                  kind="default"
+                  variant="default"
                   size="small"
                 />
                 <span

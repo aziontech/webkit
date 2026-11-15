@@ -81,7 +81,7 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
   },
   'closing-call-to-action-agents': {
     target: 'closing-call-to-action',
-    props: (p) => ({ ...p, kind: 'primary' })
+    props: (p) => ({ ...p, variant: 'primary' })
   },
   'closing-call-to-action-templates': {
     target: 'template-gallery',
@@ -92,7 +92,7 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
     props: (p) => {
       const action = p['primaryAction']
       return action && typeof action === 'object'
-        ? { ...p, primaryAction: { kind: 'secondary', ...action } }
+        ? { ...p, primaryAction: { variant: 'secondary', ...action } }
         : p
     }
   },
@@ -113,12 +113,12 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
   },
   'hero-copy-on-top-art': {
     target: 'hero-band',
-    props: (p) => ({ ...p, kind: 'copy-on-top-art' })
+    props: (p) => ({ ...p, variant: 'copy-on-top-art' })
   },
   'hero-with-opening': {
     target: 'hero-band',
     props: (p) => ({
-      kind: 'title-band',
+      variant: 'title-band',
       size: 'large',
       ...p,
       titleLength:
@@ -130,7 +130,7 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
     target: 'capability-grid',
     props: (p) => ({
       ...p,
-      titleKind: 'split',
+      titleVariant: 'split',
       items: records(p['items']).filter((item) => Boolean(item['title']))
     })
   },
@@ -140,14 +140,14 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
       ...without(p, 'items', 'headerOffset'),
       steps: records(p['items']),
       pinned: true,
-      titleKind: 'center',
+      titleVariant: 'center',
       ...(p['headerOffset'] ? { headerOffset: p['headerOffset'] } : {})
     })
   },
   'sticky-scroll-code': { target: 'feature-scroll' },
   'use-case-links': {
     target: 'capability-grid',
-    props: (p) => ({ ...p, titleKind: 'start' })
+    props: (p) => ({ ...p, titleVariant: 'start' })
   }
 }
 

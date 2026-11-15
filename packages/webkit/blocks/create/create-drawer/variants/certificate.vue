@@ -258,7 +258,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
         <Button
           label="Create Certificate"
           icon="ai ai-plus"
-          kind="primary"
+          variant="primary"
           size="large"
           class="w-full"
         />
@@ -330,7 +330,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
                       type="button"
                       label="Upload file"
                       icon="ai ai-upload"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="fileInputEl?.click()"
                     />
@@ -440,7 +440,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
             <Button
               type="submit"
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
             /></div

@@ -23,7 +23,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `orientation` is `horizontal` (the default) or `vertical`, which stacks the media under the copy; `texture` picks the texture under the media (`pixelate` by default).
 - `anchor` is the band's id for in-page links.
 - The media is one of `scene` (`{ component, props? }`, naming a webkit scene asset such as `BrandGlobeScene`, `SpinningGlobe` or `ProductWidget`, and the props bound onto it), `codeTabs` (the files of a code sample, each with `label`, `value`, `language`, `code`, `fileName` and `fileIcon`, plus `defaultFile` and `copyAriaLabel`), `widget`, `diagram`, `image` (`src`, `alt`, `width`, `height`) or `illustration` with `illustrationAriaLabel`. When several are set, that order decides.
-- `primaryAction` and `secondaryAction` are optional, each a `label`, an `href`, an optional `target`, an optional `trailing` chevron, an optional leading `icon` and an optional `kind` (`secondary`, `outlined` or `transparent`) that wins over the drawn one: one renders outlined with the chevron and makes the whole band a link to it (set `linked` to `false` when the media holds controls), two leave the band unlinked. A band showing code is never a link.
+- `primaryAction` and `secondaryAction` are optional, each a `label`, an `href`, an optional `target`, an optional `trailing` chevron, an optional leading `icon` and an optional `variant` (`secondary`, `outline` or `ghost`) that wins over the drawn one: one renders outlined with the chevron and makes the whole band a link to it (set `linked` to `false` when the media holds controls), two leave the band unlinked. A band showing code is never a link.
 
 Example:
 

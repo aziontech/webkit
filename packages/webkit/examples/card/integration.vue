@@ -9,7 +9,7 @@
 <template>
   <div class="flex w-full max-w-[400px] flex-col gap-(--spacing-sm)">
     <Card
-      kind="integration"
+      variant="integration"
       title="Request Signer"
       vendor="Acme Inc."
       logo="ai ai-key"
@@ -20,7 +20,7 @@
       <template #actions>
         <Button
           label="Install"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
       </template>

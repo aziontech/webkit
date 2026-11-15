@@ -4,7 +4,7 @@
 
 <template>
   <Hero
-    kind="screen"
+    variant="screen"
     max-width="site"
   >
     <Hero.Title

@@ -7,11 +7,11 @@
 <template>
   <div class="flex flex-col gap-8">
     <CardGridRoot
-      kind="gap"
+      variant="gap"
       :columns="2"
     >
       <MediaTile
-        kind="frame"
+        variant="frame"
         title="Framed."
         description="The frame wraps the media alone, and the caption sits under it on the page column."
       >
@@ -20,7 +20,7 @@
         </template>
       </MediaTile>
       <MediaTile
-        kind="frame"
+        variant="frame"
         title="One frame per tile."
         description="The gutters of the gap register keep every frame its own, marks included."
       >
@@ -30,11 +30,11 @@
       </MediaTile>
     </CardGridRoot>
     <CardGridRoot
-      kind="divider"
+      variant="divider"
       :columns="2"
     >
       <MediaTile
-        kind="plain"
+        variant="plain"
         title="Plain."
         description="No rules of its own: the tile is the cell, filled and inset, and the grid draws the seam."
       >
@@ -43,7 +43,7 @@
         </template>
       </MediaTile>
       <MediaTile
-        kind="plain"
+        variant="plain"
         title="One rule per seam."
         description="The divider register rules every column, so a frame here would double each line."
       >

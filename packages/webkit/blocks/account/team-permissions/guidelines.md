@@ -53,7 +53,7 @@ A Delete team section at the end of the form opens a `ConfirmDialog` that says h
 
 Variants CreateTeam and EditTeam only; they add `GlobalHeader`, `Brand` and `Breadcrumb`.
 
-Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar kind="centered"` floats at the bottom of that scroll region on both pages.
+Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar variant="centered"` floats at the bottom of that scroll region on both pages.
 
 ### J. Permission matrix — `Table`, `EmptyState` (CreateTeam, EditTeam)
 
@@ -101,7 +101,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
-- CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region, as on Edit Team. A filter with no match shows a small `EmptyState` with Clear filter.
+- CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar variant="centered"`, a raised card centred over the bottom of the scroll region, as on Edit Team. A filter with no match shows a small `EmptyState` with Clear filter.
 - EditTeam: in the same creation frame, a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the controls row and the table's loading rows.

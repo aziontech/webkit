@@ -15,7 +15,7 @@
 
 <template>
   <ClosingCallToAction
-    kind="split"
+    variant="split"
     anchor="contact"
     eyebrow="Build"
     title="Build once."

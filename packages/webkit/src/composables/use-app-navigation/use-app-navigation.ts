@@ -11,7 +11,7 @@ import {
 import type {
   SidebarMenuGroupNode,
   SidebarMenuNode,
-  SidebarMenuSubKind
+  SidebarMenuSubType
 } from '../../components/navigation/sidebar-menu/injection-key'
 
 /** One row of a layout's navigation tree. */
@@ -31,7 +31,7 @@ export interface AppNavItem {
   /** Blocks activation of the row. */
   disabled?: boolean
   /** Whether the children expand in place or replace the menu. */
-  kind?: SidebarMenuSubKind
+  type?: SidebarMenuSubType
   /** Initial state of an inline row that owns children. */
   defaultOpen?: boolean
   /** Nested rows. */
@@ -184,7 +184,7 @@ export const toMenuGroups = (
     if (item.target) node.target = item.target
     if (item.tagValue) node.tagValue = item.tagValue
     if (item.disabled) node.disabled = item.disabled
-    if (item.kind) node.kind = item.kind
+    if (item.type) node.type = item.type
     if (item.defaultOpen) node.defaultOpen = item.defaultOpen
     if (item.groups) {
       node.groups = item.groups.map((group) => ({

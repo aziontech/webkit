@@ -14,7 +14,7 @@
     },
     {
       "name": "Rectangle",
-      "summary": "Nine customers beside one of them speaking. `kind: 'rectangle'` sets every cell at 3:2, and beside `aside` the wall holds three columns from `lg`, so three rows of rectangles take exactly the height two rows of squares do — the band grows by three names without growing taller. Below `sm` the wall keeps three columns, so nine marks never leave a ragged row. Every mark links to its story, so hover or `Tab` reveals `Read story` under it.",
+      "summary": "Nine customers beside one of them speaking. `variant: 'rectangle'` sets every cell at 3:2, and beside `aside` the wall holds three columns from `lg`, so three rows of rectangles take exactly the height two rows of squares do — the band grows by three names without growing taller. Below `sm` the wall keeps three columns, so nine marks never leave a ragged row. Every mark links to its story, so hover or `Tab` reveals `Read story` under it.",
       "file": "rectangle.vue"
     },
     {

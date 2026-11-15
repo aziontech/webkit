@@ -38,7 +38,7 @@
         <SettingRow
           title="Billing emails"
           description="Billing is forwarded to every address listed here. Separate each one with a semicolon ( ; )."
-          kind="stacked"
+          variant="stacked"
         >
           <Textarea
             v-model="form.billingEmails"

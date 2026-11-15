@@ -61,7 +61,7 @@
           />
         </div>
         <Skeleton
-          kind="circle"
+          variant="circle"
           width="2rem"
           height="2rem"
         />

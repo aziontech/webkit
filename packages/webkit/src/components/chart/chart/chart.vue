@@ -40,7 +40,7 @@
     stackedMax
   } from '../lib'
   import {
-    type ChartAxisKind,
+    type ChartAxisType,
     ChartInjectionKey,
     type ChartMarkRegistration,
     type ChartOrientation,
@@ -155,7 +155,7 @@
   const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
 
   const marks = shallowReactive(new Map<symbol, () => ChartMarkRegistration>())
-  const axes = shallowReactive(new Map<symbol, () => ChartAxisKind>())
+  const axes = shallowReactive(new Map<symbol, () => ChartAxisType>())
   const brushes = shallowReactive(new Set<symbol>())
   const references = shallowReactive(new Map<symbol, () => ChartReferenceRegistration | null>())
   const emphasized = ref<string | null>(null)
@@ -209,7 +209,7 @@
   const markList = computed(() => [...marks.values()].map((read) => read()))
   const axisKinds = computed(() => new Set([...axes.values()].map((read) => read())))
   const banded = computed(
-    () => !vertical.value || markList.value.some((mark) => mark.kind === 'bar')
+    () => !vertical.value || markList.value.some((mark) => mark.type === 'bar')
   )
 
   const resolveSeries = (ids: readonly string[]) =>
@@ -465,7 +465,7 @@
     }
   }
 
-  function registerAxis(read: () => ChartAxisKind) {
+  function registerAxis(read: () => ChartAxisType) {
     const key = Symbol('axis')
     axes.set(key, read)
     return () => {

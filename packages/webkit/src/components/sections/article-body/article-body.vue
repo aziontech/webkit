@@ -423,7 +423,7 @@
                   <Avatar
                     v-for="person in authors"
                     :key="person.name"
-                    kind="circle"
+                    variant="circle"
                     size="large"
                     :src="person.avatar || undefined"
                     :label="person.avatar ? undefined : person.name"
@@ -542,7 +542,7 @@
                   <div class="flex items-center gap-(--spacing-sm)">
                     <Tooltip :content="share.copyLink">
                       <IconButton
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-link"
                         :ariaLabel="share.copyLink"
@@ -554,7 +554,7 @@
                       :content="share.copyFeed ?? ''"
                     >
                       <IconButton
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-rss"
                         :ariaLabel="share.copyFeed ?? ''"
@@ -563,7 +563,7 @@
                     </Tooltip>
                     <Tooltip :content="share.shareX">
                       <IconButton
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-x-brand"
                         :ariaLabel="share.shareX"
@@ -573,7 +573,7 @@
                     </Tooltip>
                     <Tooltip :content="share.shareLinkedIn">
                       <IconButton
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-linkedin"
                         :ariaLabel="share.shareLinkedIn"
@@ -617,7 +617,7 @@
 
                 <SplitButton
                   v-if="copyPage"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-copy"
                   :label="copyPage.label"

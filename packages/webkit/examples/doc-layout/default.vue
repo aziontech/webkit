@@ -48,7 +48,7 @@
     <template #actions>
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         href="https://console.azion.com"
       />

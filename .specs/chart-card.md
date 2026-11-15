@@ -3,8 +3,8 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: a03ae77f78fd16476c4774fe50ea054a6062dfde4f98ae89381741bb7a4ee11b
-spec_version: 5
+checksum: 33b9b11a277eb6b0688ec85b7253893a048445910750eafbeab52f9dcb9dc841
+spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
 ---
@@ -237,7 +237,7 @@ A pointer resize follows the pointer 1:1 with no transition; it is direct manipu
 - Resizable — `resizable` in a 12-column grid, span and height bound with `v-model`.
 - Draggable — three cards in a 12-column grid, reordered by drag and by keyboard.
 
-Justification: ChartCard has no `kind` / `size` axis; its axes are the content inset and the two optional handles, and each handle is a behavior the consumer must see wired to a grid.
+Justification: ChartCard has no `variant` / `size` axis; its axes are the content inset and the two optional handles, and each handle is a behavior the consumer must see wired to a grid.
 
 ## Constraints — DO NOT
 

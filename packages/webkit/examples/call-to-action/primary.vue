@@ -7,13 +7,13 @@
 
 <template>
   <CallToAction
-    kind="primary"
+    variant="primary"
     title="Build once. Run everywhere."
     description="Get a faster path to launch, lower latency, and less infrastructure overhead."
   >
     <template #background>
       <TextureMaterial
-        kind="pixelate"
+        variant="pixelate"
         size="small"
         fade="bottom"
       />
@@ -21,12 +21,12 @@
     <template #actions>
       <Button
         label="Start for free"
-        kind="secondary"
+        variant="secondary"
         size="large"
       />
       <Button
         label="Docs"
-        kind="outlined"
+        variant="outline"
         size="large"
         icon="ai ai-chevron-right"
         icon-position="trailing"

@@ -112,17 +112,17 @@ describe('FileDropzone', () => {
   describe('data attributes', () => {
     it('defaults to inline and idle with no disabled or invalid flag', () => {
       const root = render(FileDropzone).getByTestId(TEST_ID)
-      expect(root.getAttribute('data-kind')).toBe('inline')
+      expect(root.getAttribute('data-variant')).toBe('inline')
       expect(root.getAttribute('data-state')).toBe('idle')
       expect(root.hasAttribute('data-disabled')).toBe(false)
       expect(root.hasAttribute('data-invalid')).toBe(false)
     })
 
-    it('mirrors kind, disabled and invalid', () => {
+    it('mirrors variant, disabled and invalid', () => {
       const root = render(FileDropzone, {
-        props: { kind: 'overlay', disabled: true, invalid: true }
+        props: { variant: 'overlay', disabled: true, invalid: true }
       }).getByTestId(TEST_ID)
-      expect(root.getAttribute('data-kind')).toBe('overlay')
+      expect(root.getAttribute('data-variant')).toBe('overlay')
       expect(root.hasAttribute('data-disabled')).toBe(true)
       expect(root.hasAttribute('data-invalid')).toBe(true)
     })
@@ -145,7 +145,7 @@ describe('FileDropzone', () => {
 
     it('overlay is aria-hidden with no role and no slot content', () => {
       const root = render(FileDropzone, {
-        props: { kind: 'overlay' },
+        props: { variant: 'overlay' },
         slots: { default: '<button type="button">Browse files</button>' }
       }).getByTestId(TEST_ID)
       expect(root.getAttribute('aria-hidden')).toBe('true')
@@ -380,7 +380,7 @@ describe('FileDropzone', () => {
 
   describe('overlay', () => {
     it('is hidden at rest and shown while files are dragged over the window', async () => {
-      const root = render(FileDropzone, { props: { kind: 'overlay' } }).getByTestId(TEST_ID)
+      const root = render(FileDropzone, { props: { variant: 'overlay' } }).getByTestId(TEST_ID)
       expect(root.getAttribute('data-state')).toBe('idle')
       expect(root.style.display).toBe('none')
 
@@ -394,27 +394,27 @@ describe('FileDropzone', () => {
     })
 
     it('ignores window drags that carry no files', async () => {
-      const root = render(FileDropzone, { props: { kind: 'overlay' } }).getByTestId(TEST_ID)
+      const root = render(FileDropzone, { props: { variant: 'overlay' } }).getByTestId(TEST_ID)
       await fireEvent(document.body, textDrag('dragenter'))
       expect(root.getAttribute('data-state')).toBe('idle')
     })
 
     it('hides on Escape', async () => {
-      const root = render(FileDropzone, { props: { kind: 'overlay' } }).getByTestId(TEST_ID)
+      const root = render(FileDropzone, { props: { variant: 'overlay' } }).getByTestId(TEST_ID)
       await fireEvent(document.body, fileDrag('dragenter'))
       await fireEvent.keyDown(document.body, { key: 'Escape' })
       expect(root.getAttribute('data-state')).toBe('idle')
     })
 
     it('hides on window dragend', async () => {
-      const root = render(FileDropzone, { props: { kind: 'overlay' } }).getByTestId(TEST_ID)
+      const root = render(FileDropzone, { props: { variant: 'overlay' } }).getByTestId(TEST_ID)
       await fireEvent(document.body, fileDrag('dragenter'))
       await fireEvent(document.body, fileDrag('dragend'))
       expect(root.getAttribute('data-state')).toBe('idle')
     })
 
     it('blocks a drop outside its area without emitting', async () => {
-      const { getByTestId, emitted } = render(FileDropzone, { props: { kind: 'overlay' } })
+      const { getByTestId, emitted } = render(FileDropzone, { props: { variant: 'overlay' } })
       const root = getByTestId(TEST_ID)
       await fireEvent(document.body, fileDrag('dragenter'))
       const over = fileDrag('dragover')
@@ -430,7 +430,7 @@ describe('FileDropzone', () => {
     })
 
     it('does not override a drop another handler already claimed', async () => {
-      render(FileDropzone, { props: { kind: 'overlay' } })
+      render(FileDropzone, { props: { variant: 'overlay' } })
       await fireEvent(document.body, fileDrag('dragenter'))
       const other = document.createElement('div')
       document.body.appendChild(other)
@@ -446,7 +446,7 @@ describe('FileDropzone', () => {
     })
 
     it('emits drop when files land on the visible overlay', async () => {
-      const { getByTestId, emitted } = render(FileDropzone, { props: { kind: 'overlay' } })
+      const { getByTestId, emitted } = render(FileDropzone, { props: { variant: 'overlay' } })
       const root = getByTestId(TEST_ID)
       await fireEvent(document.body, fileDrag('dragenter'))
       const over = fileDrag('dragover')
@@ -463,7 +463,7 @@ describe('FileDropzone', () => {
 
     it('stays inert when disabled', async () => {
       const root = render(FileDropzone, {
-        props: { kind: 'overlay', disabled: true }
+        props: { variant: 'overlay', disabled: true }
       }).getByTestId(TEST_ID)
       await fireEvent(document.body, fileDrag('dragenter'))
       expect(root.getAttribute('data-state')).toBe('idle')
@@ -490,7 +490,7 @@ describe('FileDropzone', () => {
 
     it('has no axe violations as an active overlay', async () => {
       const { container, getByTestId } = render(FileDropzone, {
-        props: { kind: 'overlay', description: 'A project folder.' }
+        props: { variant: 'overlay', description: 'A project folder.' }
       })
       await fireEvent(document.body, fileDrag('dragenter'))
       await waitFor(() => expect(getByTestId(TEST_ID).style.display).not.toBe('none'))

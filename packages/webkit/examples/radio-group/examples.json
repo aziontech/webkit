@@ -19,7 +19,7 @@
     },
     {
       "name": "Card",
-      "summary": "`kind=\"card\"` with `options`: each option is a bordered card with an icon and a description, the `tag` slot adds a price, and the cards share a row that wraps.",
+      "summary": "`variant=\"card\"` with `options`: each option is a bordered card with an icon and a description, the `tag` slot adds a price, and the cards share a row that wraps.",
       "file": "card.vue"
     },
     {

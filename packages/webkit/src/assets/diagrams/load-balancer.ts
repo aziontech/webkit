@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: balance the origin pool',
       icon: 'ai ai-rules-engine',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'balancer',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Load Balancer',
       title: 'Weighted, with health checks',
       icon: 'ai ai-load-balancer',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'east',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin-a · us-east',
       icon: 'ai ai-server',
@@ -42,14 +42,14 @@ const spec: DiagramSpec = {
     },
     {
       key: 'west',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin-b · eu-west',
       icon: 'ai ai-server'
     },
     {
       key: 'south',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'origin-c · sa-east',
       icon: 'ai ai-server',

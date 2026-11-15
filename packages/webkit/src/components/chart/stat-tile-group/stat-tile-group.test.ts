@@ -2,7 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
-import VariantsExample from '../../../../examples/stat-tile/variants.vue'
+import KindsExample from '../../../../examples/stat-tile/variants.vue'
 import BesideCardExample from '../../../../examples/stat-tile-group/beside-card.vue'
 import DefaultExample from '../../../../examples/stat-tile-group/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -77,7 +77,7 @@ describe('StatTileGroup', () => {
     const strip = render(DefaultExample)
     await expectNoA11yViolations(strip.container)
     strip.unmount()
-    const kinds = render(VariantsExample)
+    const kinds = render(KindsExample)
     await expectNoA11yViolations(kinds.container)
   })
 

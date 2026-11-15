@@ -265,10 +265,10 @@
     (id) => {
       const ancestors = navTrail(props.navigation, id).slice(0, -1)
       menuPath.value = ancestors
-        .filter((item) => item.groups || item.kind === 'drill')
+        .filter((item) => item.groups || item.type === 'drill')
         .map((item) => item.id)
       const inline = ancestors
-        .filter((item) => item.children && !item.groups && item.kind !== 'drill')
+        .filter((item) => item.children && !item.groups && item.type !== 'drill')
         .map((item) => item.id)
       menuExpanded.value = [...new Set([...menuExpanded.value, ...inline])]
     },
@@ -486,7 +486,7 @@
                   class="flex h-6 w-fit items-center rounded-(--shape-button) px-(--spacing-xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                 >
                   <Brand
-                    kind="default"
+                    variant="default"
                     size="small"
                   />
                 </a>
@@ -533,7 +533,7 @@
                 :label="account.name"
                 :alt="account.name"
                 size="small"
-                kind="square"
+                variant="square"
               />
               <span
                 dir="auto"
@@ -550,7 +550,7 @@
                     <IconButton
                       icon="ai ai-ellipsis-vertical"
                       :ariaLabel="t('consoleLayout.accountMenu')"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                     />
                   </Tooltip>
@@ -575,7 +575,7 @@
                     <IconButton
                       icon="ai ai-menu"
                       :ariaLabel="t('consoleLayout.openNavigation')"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       @click="openNavigation"
                     />
@@ -586,7 +586,7 @@
                     class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                   >
                     <Brand
-                      kind="default"
+                      variant="default"
                       size="small"
                     />
                   </a>
@@ -663,7 +663,7 @@
                       :src="account.src"
                       :label="account.name"
                       size="medium"
-                      kind="square"
+                      variant="square"
                     />
                   </button>
                 </DropdownMenuTrigger>
@@ -675,7 +675,7 @@
                 :label="account.name"
                 :alt="account.name"
                 size="medium"
-                kind="square"
+                variant="square"
               />
             </GlobalHeaderEnd>
           </GlobalHeader>

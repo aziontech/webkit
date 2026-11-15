@@ -186,22 +186,22 @@ describe('Select', () => {
     })
 
     // ---- Root renders + reflects state via data-* -----------------------------
-    it('defaults to the outlined kind and mirrors kind on the root, trigger and panel', async () => {
+    it('defaults to the outlined variant and mirrors variant on the root, trigger and panel', async () => {
       const outlined = render(Host)
-      expect(outlined.getByTestId('input-select').getAttribute('data-kind')).toBe('outlined')
-      expect(outlined.getByTestId('input-select-trigger').getAttribute('data-kind')).toBe(
-        'outlined'
+      expect(outlined.getByTestId('input-select').getAttribute('data-variant')).toBe('outline')
+      expect(outlined.getByTestId('input-select-trigger').getAttribute('data-variant')).toBe(
+        'outline'
       )
       outlined.unmount()
 
       const view = render(Ghost)
       const trigger = view.getByRole('combobox', { name: 'Switch environment' })
-      expect(view.getByTestId('input-select').getAttribute('data-kind')).toBe('transparent')
-      expect(trigger.getAttribute('data-kind')).toBe('transparent')
+      expect(view.getByTestId('input-select').getAttribute('data-variant')).toBe('ghost')
+      expect(trigger.getAttribute('data-variant')).toBe('ghost')
       expect(trigger).toHaveTextContent('Production')
       await fireEvent.click(trigger)
       const content = getContent()!
-      expect(content.getAttribute('data-kind')).toBe('transparent')
+      expect(content.getAttribute('data-variant')).toBe('ghost')
       await fireEvent.click(within(content).getByRole('option', { name: 'Staging' }))
       expect(trigger).toHaveTextContent('Staging')
       expect(trigger.getAttribute('aria-expanded')).toBe('false')

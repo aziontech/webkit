@@ -7,7 +7,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <FeatureTiles
-      kind="artwork"
+      variant="artwork"
       eyebrow="Why Azion"
       title="From commit to live traffic, on one platform"
       description="Build, ship, and run an application on the same platform that serves it — one place to deploy from, one place to watch it from."
@@ -27,7 +27,7 @@
       ]"
     />
     <FeatureTiles
-      kind="illustrated"
+      variant="illustrated"
       anchor="why-pricing"
       :tiles="[
         {

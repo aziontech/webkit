@@ -16,7 +16,7 @@
     </template>
     <template #actions>
       <Button
-        kind="secondary"
+        variant="secondary"
         href="/"
         label="Go to home"
       />

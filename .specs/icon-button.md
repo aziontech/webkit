@@ -3,9 +3,9 @@ name: icon-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: bbc4d28828f852fe806799dd8d3e8b2d0a18b687c615f02af936c8319a07c555
+checksum: d6a6fa63d6fb1c5dc9026856c9985d54bca58a29fcc95bcdb705096ccb3c117b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ A square control that triggers an action with a glyph and no visible text: close
 
 ## Related
 
-- `button` — labelled counterpart; sizes line up and its `text` kind matches `transparent` here.
+- `button` — labelled counterpart; sizes line up and its `text` variant matches `ghost` here.
 - `copy-button` — IconButton plus Tooltip with the clipboard write built in.
 - `tooltip` — wrap an IconButton to show its name on hover and focus.
 - `split-button` — uses an IconButton as its chevron menu toggle.
@@ -40,7 +40,7 @@ A square control that triggers an action with a glyph and no visible text: close
 - Always name it with the kebab attribute `aria-label="Delete domain"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action ("Delete domain"), not the glyph ("Trash"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.
 - The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
 - Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
-- Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
+- Use `variant="ghost"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
 - Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
 - Use `iconClass` for glyph-level tweaks instead of styling the root.
 
@@ -59,13 +59,13 @@ A square control that triggers an action with a glyph and no visible text: close
   <IconButton
     icon="ai ai-refresh"
     aria-label="Refresh"
-    kind="transparent"
+    variant="ghost"
     size="medium"
   />
   <IconButton
     icon="ai ai-trash"
     aria-label="Delete domain"
-    kind="danger"
+    variant="danger"
     size="small"
   />
 </template>
@@ -73,19 +73,19 @@ A square control that triggers an action with a glyph and no visible text: close
 
 ## Props
 
-| Prop             | Type                                                                  | Default     | Required | JSDoc                                                                                                                                                                       |
-| ---------------- | --------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `icon`           | `string`                                                              | `—`         | true     | Azion icon class for the leading/trailing icon.                                                                                                                             |
-| `ariaLabel`      | `string`                                                              | `''`        | false    | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders.         |
-| `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                                                             |
-| `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                        |
-| `disabled`       | `boolean`                                                             | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                           |
-| `loading`        | `boolean`                                                             | `false`     | false    | Shows loading state and disables activation.                                                                                                                                |
-| `href`           | `string`                                                              | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                                                        |
-| `target`         | `'_blank' \| '_self'`                                                 | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                             |
-| `iconTransition` | `boolean`                                                             | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                           |
-| `iconClass`      | `string`                                                              | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                                    |
-| `type`           | `'button' \| 'submit' \| 'reset'`                                     | `'button'`  | false    | Native button type. `submit` lets an icon-only control submit its form (a search submit, a chat send); `disabled` and `loading` still block it. Ignored when `href` is set. |
+| Prop             | Type                                                           | Default     | Required | JSDoc                                                                                                                                                                       |
+| ---------------- | -------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icon`           | `string`                                                       | `—`         | true     | Azion icon class for the leading/trailing icon.                                                                                                                             |
+| `ariaLabel`      | `string`                                                       | `''`        | false    | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders.         |
+| `variant`        | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                                                             |
+| `size`           | `'small' \| 'medium' \| 'large'`                               | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                        |
+| `disabled`       | `boolean`                                                      | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                           |
+| `loading`        | `boolean`                                                      | `false`     | false    | Shows loading state and disables activation.                                                                                                                                |
+| `href`           | `string`                                                       | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                                                        |
+| `target`         | `'_blank' \| '_self'`                                          | `'_self'`   | false    | Link target when `href` is set.                                                                                                                                             |
+| `iconTransition` | `boolean`                                                      | `false`     | false    | Animates icon swaps with enter/leave transitions.                                                                                                                           |
+| `iconClass`      | `string`                                                       | `''`        | false    | Extra classes applied to the icon glyph.                                                                                                                                    |
+| `type`           | `'button' \| 'submit' \| 'reset'`                              | `'button'`  | false    | Native button type. `submit` lets an icon-only control submit its form (a search submit, a chat send); `disabled` and `loading` still block it. Ignored when `href` is set. |
 
 ## Events
 
@@ -101,8 +101,8 @@ A square control that triggers an action with a glyph and no visible text: close
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
-- `data-kind` mirrors `kind` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
-- `IconButtonType` is exported beside `IconButtonKind`, `IconButtonSize` and `IconButtonTarget`
+- `data-variant` mirrors `variant` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
+- `IconButtonType` is exported beside `IconButtonVariant`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
 
 ## Motion & Animations
@@ -163,11 +163,11 @@ A square control that triggers an action with a glyph and no visible text: close
 ## Examples
 
 - Default
-- Primary (kind)
-- Secondary (kind)
-- Outlined (kind)
-- Transparent (kind)
-- Danger (kind)
+- Primary (variant)
+- Secondary (variant)
+- Outlined (variant)
+- Transparent (variant)
+- Danger (variant)
 - Small (size)
 - Medium (size)
 - Large (size)
@@ -187,7 +187,7 @@ A square control that triggers an action with a glyph and no visible text: close
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

@@ -106,7 +106,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:82%]"
     :chrome="false"
@@ -154,7 +154,7 @@
                 <InputGroupAddon>
                   <Switch
                     :model-value="true"
-                    kind="privacy"
+                    variant="privacy"
                     aria-label="Repository is public — toggle to make it private"
                   />
                 </InputGroupAddon>
@@ -203,7 +203,7 @@
             <Button
               class="w-full"
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="large"
               :disabled="!model"
             />

@@ -5,7 +5,7 @@
   import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
-  export type ChipKind = 'filled' | 'outlined' | 'dashed'
+  export type ChipVariant = 'filled' | 'outline' | 'dashed'
   export type ChipSize = 'small' | 'medium'
 
   defineOptions({
@@ -17,7 +17,7 @@
     /** Fallback text when the default slot is empty. */
     label?: string
     /** Visual variant. Filled (grey fill) is an applied value, outlined an available one, dashed the control that adds one. */
-    kind?: ChipKind
+    variant?: ChipVariant
     /** Size token; `small` is a fixed 24px, `medium` a fixed 32px. */
     size?: ChipSize
     /** When true, renders a trailing remove button that emits remove. */
@@ -33,7 +33,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
-    kind: 'filled',
+    variant: 'filled',
     size: 'medium',
     removable: false,
     clickable: false,
@@ -104,7 +104,7 @@
   <span
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-removable="removable || null"
     :data-clickable="active || null"
@@ -115,7 +115,7 @@
     :aria-pressed="selectable && !splitBody ? selected : undefined"
     :aria-disabled="disabled ? 'true' : undefined"
     :class="attrs.class"
-    class="relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[kind=filled]:bg-(--bg-selected) data-[kind=filled]:shadow-(--shadow-sm) data-[kind=dashed]:border-dashed data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pe-(--spacing-2xs) data-[size=medium]:data-[removable]:pe-(--spacing-2xs) data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas) has-[[data-slot=chip-body]:focus-visible]:ring-2 has-[[data-slot=chip-body]:focus-visible]:ring-(--ring-color) has-[[data-slot=chip-body]:focus-visible]:ring-offset-2 has-[[data-slot=chip-body]:focus-visible]:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) data-[selected]:border-(--border-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
+    class="relative inline-flex w-fit items-center justify-center overflow-hidden rounded-full border border-solid border-(--border-default) bg-(--bg-surface) text-(--text-default) leading-none transition-[color,background-color,border-color,box-shadow] duration-fast-02 ease-productive-entrance motion-reduce:transition-none text-label-sm before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance motion-reduce:before:transition-none data-[variant=filled]:bg-(--bg-selected) data-[variant=filled]:shadow-(--shadow-sm) data-[variant=dashed]:border-dashed data-[size=small]:h-6 data-[size=small]:px-(--spacing-xs) data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=small]:data-[removable]:pe-(--spacing-2xs) data-[size=medium]:data-[removable]:pe-(--spacing-2xs) data-[clickable]:cursor-pointer data-[clickable]:hover:border-(--border-strong) data-[clickable]:hover:before:opacity-100 data-[clickable]:active:before:opacity-100 data-[clickable]:active:border-(--border-strong) data-[clickable]:focus-visible:outline-none data-[clickable]:focus-visible:ring-2 data-[clickable]:focus-visible:ring-(--ring-color) data-[clickable]:focus-visible:ring-offset-2 data-[clickable]:focus-visible:ring-offset-(--bg-canvas) has-[[data-slot=chip-body]:focus-visible]:ring-2 has-[[data-slot=chip-body]:focus-visible]:ring-(--ring-color) has-[[data-slot=chip-body]:focus-visible]:ring-offset-2 has-[[data-slot=chip-body]:focus-visible]:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) data-[selected]:border-(--border-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
     @click="onClick"
     @keydown="splitBody ? undefined : onKeydown($event)"
   >

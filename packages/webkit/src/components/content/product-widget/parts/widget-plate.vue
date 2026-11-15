@@ -2,7 +2,7 @@
   import { type Component, computed } from 'vue'
 
   import type { ProductWidgetPlating } from '../plates'
-  import ShellMockup, { type ShellMockupKind } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockup, { type ShellMockupVariant } from '../shell-mockup/shell-mockup.vue'
 
   defineOptions({ name: 'WidgetPlate' })
 
@@ -10,7 +10,7 @@
     /** Testid of the ProductWidget root the widget is drawn in. */
     testId: string
     /** Plating of a fragment; a window frames it, anything else draws the widget alone. */
-    kind?: ShellMockupKind | null
+    variant?: ShellMockupVariant | null
     /** Registry plating of the widget; its title labels the window's console bar. */
     plate?: ProductWidgetPlating | null
     /** The loaded widget. */
@@ -21,12 +21,12 @@
     values: Record<string, unknown>
   }
 
-  const props = withDefaults(defineProps<Props>(), { kind: null, plate: null })
+  const props = withDefaults(defineProps<Props>(), { variant: null, plate: null })
 
   const FORWARDED = [
     'active',
     'hovered',
-    'kind',
+    'variant',
     'chrome',
     'width',
     'fade',
@@ -46,9 +46,9 @@
 
 <template>
   <ShellMockup
-    v-if="kind === 'window'"
+    v-if="variant === 'window'"
     :data-testid="`${testId}__frame`"
-    kind="window"
+    variant="window"
     fade="bottom"
     :title="plate?.title"
     :chrome="values['chrome'] !== false"

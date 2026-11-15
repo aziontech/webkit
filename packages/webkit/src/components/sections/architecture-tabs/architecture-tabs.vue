@@ -108,7 +108,7 @@
         #header
       >
         <SectionTitle
-          kind="split"
+          variant="split"
           padding="small"
           :eyebrow="eyebrow"
           :title="title"
@@ -121,7 +121,7 @@
             <Button
               :label="primaryAction.label"
               :href="primaryAction.href"
-              kind="secondary"
+              variant="secondary"
               size="large"
               :target="primaryAction.target"
               :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"

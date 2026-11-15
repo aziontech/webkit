@@ -13,7 +13,7 @@
   /** How many rows the cell claims from the medium breakpoint up. */
   export type BentoGridCellRows = '1' | '2'
   /** The cell's fill. */
-  export type BentoGridCellKind = 'surface' | 'canvas' | 'none'
+  export type BentoGridCellVariant = 'surface' | 'canvas' | 'none'
 
   interface Props {
     /** How many columns the cell claims from the medium breakpoint up; below it every cell claims one, and only `full` takes the whole row. */
@@ -21,7 +21,7 @@
     /** How many rows the cell claims from the medium breakpoint up. */
     rows?: BentoGridCellRows
     /** The cell's fill; `none` leaves the surface to the content composed inside it. */
-    kind?: BentoGridCellKind
+    variant?: BentoGridCellVariant
     /** Pads the cell's content away from its rules; off for content that reaches the cell's edges. */
     padded?: boolean
   }
@@ -29,7 +29,7 @@
   withDefaults(defineProps<Props>(), {
     span: '1',
     rows: '1',
-    kind: 'surface',
+    variant: 'surface',
     padded: true
   })
 
@@ -59,9 +59,9 @@
       class="h-full w-full min-w-0"
     >
       <div
-        :data-kind="kind"
+        :data-variant="variant"
         :data-padded="padded || null"
-        class="h-full data-[kind=canvas]:bg-(--bg-canvas) data-[kind=surface]:bg-(--bg-surface) data-[padded]:p-(--spacing-xl)"
+        class="h-full data-[variant=canvas]:bg-(--bg-canvas) data-[variant=surface]:bg-(--bg-surface) data-[padded]:p-(--spacing-xl)"
       >
         <slot />
       </div>

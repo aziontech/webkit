@@ -9,7 +9,7 @@
   })
 
   /** Register of the grid. */
-  export type CardGridKind = 'gap' | 'divider' | 'frame'
+  export type CardGridVariant = 'gap' | 'divider' | 'frame'
   /** Column count at the large breakpoint. */
   export type CardGridColumns = 2 | 3 | 4 | 5
   /** Column count below the small breakpoint. */
@@ -21,7 +21,7 @@
 
   interface Props {
     /** Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks. */
-    kind?: CardGridKind
+    variant?: CardGridVariant
     /** How many columns the grid fans out to at the large breakpoint. */
     columns?: CardGridColumns
     /** How many columns the grid holds below the small breakpoint. */
@@ -35,7 +35,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'gap',
+    variant: 'gap',
     columns: 3,
     mobileColumns: 1,
     dividerColor: 'default',
@@ -70,7 +70,7 @@
   ])
 
   const fillsTrailingTracks = computed(
-    () => props.kind === 'divider' && props.layout === 'balanced' && hasCells.value
+    () => props.variant === 'divider' && props.layout === 'balanced' && hasCells.value
   )
 
   const gridStyle = computed(() => {
@@ -95,7 +95,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-columns="columns"
     :data-mobile-columns="mobileColumns"
     :data-divider-color="dividerColor"
@@ -105,7 +105,7 @@
     :data-filled="hasCells || null"
     :data-fill-trailing="fillsTrailingTracks || null"
     :style="gridStyle"
-    class="grid grid-cols-[repeat(var(--card-grid-columns),minmax(0,1fr))] [--card-grid-columns:var(--card-grid-columns-base)] sm:[--card-grid-columns:var(--card-grid-columns-sm)] lg:[--card-grid-columns:var(--card-grid-columns-lg)] [&>*]:h-auto [&>*]:min-w-0 data-[fill-trailing]:[--card-grid-rest:var(--card-grid-rest-base)] data-[fill-trailing]:sm:[--card-grid-rest:var(--card-grid-rest-sm)] data-[fill-trailing]:lg:[--card-grid-rest:var(--card-grid-rest-lg)] data-[fill-trailing]:[--card-grid-fill:var(--card-grid-fill-base)] data-[fill-trailing]:sm:[--card-grid-fill:var(--card-grid-fill-sm)] data-[fill-trailing]:lg:[--card-grid-fill:var(--card-grid-fill-lg)] data-[fill-trailing]:after:[display:var(--card-grid-fill)] data-[fill-trailing]:after:bg-(--bg-canvas) data-[fill-trailing]:after:content-[''] data-[fill-trailing]:after:[grid-column:span_var(--card-grid-rest)/span_var(--card-grid-rest)] data-[kind=gap]:gap-(--spacing-md) data-[kind=divider]:gap-px data-[kind=divider]:data-[divider-color=default]:bg-(--border-default) data-[kind=divider]:data-[divider-color=muted]:bg-(--border-muted) data-[kind=frame]:border-(--border-default) data-[kind=frame]:data-[filled]:data-[flush=false]:border-s data-[kind=frame]:data-[filled]:data-[flush=false]:border-t data-[kind=frame]:data-[flush=true]:-mb-px data-[kind=frame]:data-[flush=true]:-me-px"
+    class="grid grid-cols-[repeat(var(--card-grid-columns),minmax(0,1fr))] [--card-grid-columns:var(--card-grid-columns-base)] sm:[--card-grid-columns:var(--card-grid-columns-sm)] lg:[--card-grid-columns:var(--card-grid-columns-lg)] [&>*]:h-auto [&>*]:min-w-0 data-[fill-trailing]:[--card-grid-rest:var(--card-grid-rest-base)] data-[fill-trailing]:sm:[--card-grid-rest:var(--card-grid-rest-sm)] data-[fill-trailing]:lg:[--card-grid-rest:var(--card-grid-rest-lg)] data-[fill-trailing]:[--card-grid-fill:var(--card-grid-fill-base)] data-[fill-trailing]:sm:[--card-grid-fill:var(--card-grid-fill-sm)] data-[fill-trailing]:lg:[--card-grid-fill:var(--card-grid-fill-lg)] data-[fill-trailing]:after:[display:var(--card-grid-fill)] data-[fill-trailing]:after:bg-(--bg-canvas) data-[fill-trailing]:after:content-[''] data-[fill-trailing]:after:[grid-column:span_var(--card-grid-rest)/span_var(--card-grid-rest)] data-[variant=gap]:gap-(--spacing-md) data-[variant=divider]:gap-px data-[variant=divider]:data-[divider-color=default]:bg-(--border-default) data-[variant=divider]:data-[divider-color=muted]:bg-(--border-muted) data-[variant=frame]:border-(--border-default) data-[variant=frame]:data-[filled]:data-[flush=false]:border-s data-[variant=frame]:data-[filled]:data-[flush=false]:border-t data-[variant=frame]:data-[flush=true]:-mb-px data-[variant=frame]:data-[flush=true]:-me-px"
   >
     <slot />
   </div>

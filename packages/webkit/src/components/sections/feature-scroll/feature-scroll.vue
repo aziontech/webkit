@@ -28,12 +28,12 @@
     trailing?: boolean
     /** Link target of the action; `_blank` opens it in a new tab. */
     target?: '_blank' | '_self'
-    /** Button kind; defaults to secondary, and transparent draws a quiet text button. */
-    kind?: FeatureScrollActionKind
+    /** Button variant; defaults to secondary, and transparent draws a quiet text button. */
+    variant?: FeatureScrollActionVariant
   }
 
-  /** Button kind of a step's action. */
-  export type FeatureScrollActionKind = 'secondary' | 'outlined' | 'transparent'
+  /** Button variant of a step's action. */
+  export type FeatureScrollActionVariant = 'secondary' | 'outline' | 'ghost'
 
   /** The one-file code sample a step shows as its media. */
   export type FeatureScrollCode = {
@@ -61,7 +61,7 @@
     code?: FeatureScrollCode
     /** Registry name of the illustration pinned for this step and shown as the tile's media when neither a scene nor code is set. */
     illustration?: string
-    /** Small button under the step; `{ label, href, trailing?, target?, kind? }`, secondary unless `kind` says otherwise. Omitted when absent. */
+    /** Small button under the step; `{ label, href, trailing?, target?, variant? }`, secondary unless `variant` says otherwise. Omitted when absent. */
     action?: FeatureScrollAction
   }
 
@@ -74,7 +74,7 @@
     title?: string
     /** Supporting sentence under the headline. */
     description?: string
-    /** The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the step, secondary unless `kind` says otherwise. */
+    /** The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. */
     items?: FeatureScrollItem[]
   }
 
@@ -147,17 +147,17 @@
       >
         <CardGrid
           flush
-          kind="frame"
+          variant="frame"
           :columns="3"
         >
           <CardGridCell
             v-for="(item, index) in items"
             :key="item.title"
-            kind="canvas"
+            variant="canvas"
             :padded="false"
           >
             <MediaTile
-              kind="plain"
+              variant="plain"
               :title="item.title"
               :description="item.description"
             >
@@ -204,7 +204,7 @@
                 class="relative h-[30rem] w-full min-w-0 overflow-hidden rounded-(--shape-card) bg-(--bg-surface) lg:absolute lg:inset-0 lg:h-auto lg:rounded-none lg:border-0 [background-clip:var(--illustration-rim-boxes)] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),var(--illustration-rim),linear-gradient(var(--bg-surface),var(--bg-surface))] [background-origin:var(--illustration-rim-boxes)] [border:var(--illustration-rim-width-hairline)_solid_transparent]"
               >
                 <TextureMaterial
-                  kind="dots"
+                  variant="dots"
                   size="small"
                   class="opacity-40"
                 />
@@ -247,7 +247,7 @@
               :label="items[index].action.label"
               :href="items[index].action.href"
               :target="items[index].action.target"
-              :kind="items[index].action.kind ?? 'secondary'"
+              :variant="items[index].action.variant ?? 'secondary'"
               size="small"
               :icon="items[index].action.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"

@@ -99,7 +99,7 @@
     { id: 'domain', accessorKey: 'domain', header: 'Domain', grow: 2 },
     { id: 'status', accessorKey: 'status', header: 'Status', minWidth: 112 },
     { id: 'lastModified', accessorKey: 'modifiedAt', header: 'Last modified', minWidth: 184 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const activity: ActivityRow[] = [
@@ -457,7 +457,7 @@
               <Tooltip content="Previous template">
                 <IconButton
                   icon="ai ai-chevron-left"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Previous template"
                   @click="stepTemplate(-1)"
@@ -477,7 +477,7 @@
               <Tooltip content="Next template">
                 <IconButton
                   icon="ai ai-chevron-right"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Next template"
                   @click="stepTemplate(1)"

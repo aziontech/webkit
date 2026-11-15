@@ -75,7 +75,7 @@
         <IconButton
           icon="ai ai-window-maximize"
           aria-label="Expand the production checklist"
-          kind="outlined"
+          variant="outline"
           size="small"
           @click="open = true"
         />
@@ -198,7 +198,7 @@
               <Button
                 v-else
                 :label="step.actionLabel || step.title"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 @click="open = false"
               />
@@ -211,7 +211,7 @@
         <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
           <Button
             label="Done"
-            kind="primary"
+            variant="primary"
             size="medium"
             @click="open = false"
           />

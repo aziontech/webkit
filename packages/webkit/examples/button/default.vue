@@ -4,7 +4,7 @@
 
 <template>
   <Button
-    kind="primary"
+    variant="primary"
     size="large"
     label="Button"
   />

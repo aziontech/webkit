@@ -18,7 +18,7 @@
     <template #trigger>
       <Button
         label="Leave page"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

@@ -96,7 +96,7 @@
                 <div class="flex items-center gap-(--spacing-xs)">
                   <Button
                     label="Create Project"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                   />
                 </div>
@@ -184,7 +184,7 @@
                             <Button
                               v-if="!check.registered"
                               label="Register"
-                              kind="secondary"
+                              variant="secondary"
                               size="medium"
                               class="w-full"
                             />
@@ -220,7 +220,7 @@
                 <div class="flex items-center gap-(--spacing-xs)">
                   <Button
                     label="Copy prompt"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     icon="ai ai-copy"
                   />

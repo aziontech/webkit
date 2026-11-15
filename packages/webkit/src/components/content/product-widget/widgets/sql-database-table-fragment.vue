@@ -112,7 +112,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:78%]"
     :chrome="false"
@@ -196,7 +196,7 @@
                     </span>
                     <IconButton
                       icon="ai ai-x"
-                      kind="outlined"
+                      variant="outline"
                       size="large"
                       ariaLabel="Remove column"
                     />
@@ -268,7 +268,7 @@
                       </span>
                       <IconButton
                         icon="ai ai-x"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         ariaLabel="Remove column"
                       />
@@ -283,7 +283,7 @@
               >
                 <Button
                   label="Add column"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-plus"
                   class="w-full"

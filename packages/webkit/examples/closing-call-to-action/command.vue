@@ -9,7 +9,7 @@
     <SectionGap hatch />
 
     <ClosingCallToAction
-      kind="primary"
+      variant="primary"
       anchor="contact"
       title="Start your first project from the terminal."
       description="One command scaffolds a project and deploys it to every data center."

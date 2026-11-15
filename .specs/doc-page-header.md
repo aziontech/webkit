@@ -3,8 +3,8 @@ name: doc-page-header
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: f8587aa7785e41c099bdedbb3288ef3b97bcd20daf52b67be632ba23827a35ee
+spec_version: 6
+checksum: a05b41d6f014a957c052260df572a3248188deb4e9d5578b0566826972054d9a
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -112,17 +112,17 @@ _none_
 
 ## Tokens
 
-| Region                    | Token (DESIGN.md)                            |
-| ------------------------- | -------------------------------------------- |
-| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl`  |
-| typography (deck)         | `.text-body-md`                              |
-| typography (last updated) | `.text-label-sm`                             |
-| typography (meta entry)   | `Button` `kind="transparent"` `size="small"` |
-| text                      | `var(--text-default)`                        |
-| text (last updated)       | `var(--text-muted)`                          |
-| border (the closing rule) | `var(--border-default)`                      |
-| border (entry separator)  | `Separator` `orientation="vertical"`         |
-| spacing                   | `var(--spacing-lg)` / `var(--spacing-2xs)`   |
+| Region                    | Token (DESIGN.md)                           |
+| ------------------------- | ------------------------------------------- |
+| typography (title)        | `.text-heading-2xl` / `sm:.text-heading-xl` |
+| typography (deck)         | `.text-body-md`                             |
+| typography (last updated) | `.text-label-sm`                            |
+| typography (meta entry)   | `Button` `variant="ghost"` `size="small"`   |
+| text                      | `var(--text-default)`                       |
+| text (last updated)       | `var(--text-muted)`                         |
+| border (the closing rule) | `var(--border-default)`                     |
+| border (entry separator)  | `Separator` `orientation="vertical"`        |
+| spacing                   | `var(--spacing-lg)` / `var(--spacing-2xs)`  |
 
 ## Theme gaps
 

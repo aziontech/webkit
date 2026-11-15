@@ -4,7 +4,7 @@ import type {
   CategoryLayout,
   ChartLabel,
   ChartLabelScale,
-  ChartMarkKind,
+  ChartMarkType,
   ChartRange,
   LinearScale,
   NormalizedSeries
@@ -12,7 +12,7 @@ import type {
 
 export type ChartOrientation = 'vertical' | 'horizontal'
 
-export type ChartAxisKind = 'x' | 'y'
+export type ChartAxisType = 'x' | 'y'
 
 export interface ChartPlotBox {
   left: number
@@ -22,7 +22,7 @@ export interface ChartPlotBox {
 }
 
 export interface ChartMarkRegistration {
-  kind: ChartMarkKind
+  type: ChartMarkType
   stacked: boolean
   labeled: boolean
   ids: readonly string[]
@@ -63,7 +63,7 @@ export interface ChartContext {
   setEmphasized: (id: string | null) => void
   toggleSeries: (event: MouseEvent, id: string) => void
   registerMark: (read: () => ChartMarkRegistration) => () => void
-  registerAxis: (read: () => ChartAxisKind) => () => void
+  registerAxis: (read: () => ChartAxisType) => () => void
   registerBrush: () => () => void
   registerReference: (read: () => ChartReferenceRegistration | null) => () => void
 }

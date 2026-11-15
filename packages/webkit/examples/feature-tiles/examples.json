@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "Both layouts stacked: the `artwork` band with its header and picture tiles in the four-column frame with marks on every corner, then the `illustrated` band with no header, an `anchor`, and three illustration tiles in the three-column frame with marks on the bottom rule.",
-      "file": "types.vue"
+      "file": "variants.vue"
     }
   ],
   "site": [

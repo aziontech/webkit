@@ -3,12 +3,12 @@ name: split-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 9b459f9788cadbe12eb7fcfed887dd24d025848cc688e75b6d6c679d684f5352
+checksum: ea4e93e9a9a408386fb6a7dfc6370920e0489eefb42b6396de6e004aa591bc4e
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 
 ## Related
 
-- `button` — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.
+- `button` — the primary segment; `variant` here is limited to `primary`, `secondary` and `outline`.
 - `dropdown-menu` — the overlay menu the toggle composes; use it alone when there is no default action.
 - `icon-button` — the chevron toggle segment.
 
@@ -70,16 +70,16 @@ A primary command button visually joined to a chevron toggle that opens an overl
 
 ## Props
 
-| Prop                  | Type                                     | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
-| --------------------- | ---------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`               | `string`                                 | `''`        | false    | Visible label text on the primary command button.                                                                                                                                                                                                                                 |
-| `icon`                | `string`                                 | `''`        | false    | Azion icon class for the primary button's leading icon.                                                                                                                                                                                                                           |
-| `items`               | `SplitButtonItem[]`                      | `[]`        | false    | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions.                                                                                                                                                                                        |
-| `kind`                | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false    | Visual variant applied to both joined segments.                                                                                                                                                                                                                                   |
-| `size`                | `'small' \| 'medium' \| 'large'`         | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                                                                                                                              |
-| `disabled`            | `boolean`                                | `false`     | false    | Disables both segments and prevents the menu from opening.                                                                                                                                                                                                                        |
-| `loading`             | `boolean`                                | `false`     | false    | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves.                                                                                                                                       |
-| `updateLabelOnSelect` | `boolean`                                | `false`     | false    | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
+| Prop                  | Type                                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
+| --------------------- | --------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`               | `string`                                | `''`        | false    | Visible label text on the primary command button.                                                                                                                                                                                                                                 |
+| `icon`                | `string`                                | `''`        | false    | Azion icon class for the primary button's leading icon.                                                                                                                                                                                                                           |
+| `items`               | `SplitButtonItem[]`                     | `[]`        | false    | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions.                                                                                                                                                                                        |
+| `variant`             | `'primary' \| 'secondary' \| 'outline'` | `'primary'` | false    | Visual variant applied to both joined segments.                                                                                                                                                                                                                                   |
+| `size`                | `'small' \| 'medium' \| 'large'`        | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                                                                                                                              |
+| `disabled`            | `boolean`                               | `false`     | false    | Disables both segments and prevents the menu from opening.                                                                                                                                                                                                                        |
+| `loading`             | `boolean`                               | `false`     | false    | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves.                                                                                                                                       |
+| `updateLabelOnSelect` | `boolean`                               | `false`     | false    | When true, selecting a menu action updates the primary button's label and icon to mirror that action and marks it as selected in the menu. Opt-in; the mirrored action is also reported as the primary `click`'s second argument, so the consumer decides what each segment does. |
 
 `SplitButtonItem` is the menu-action shape: `{ label: string; value?: string; icon?: string; disabled?: boolean }`. When `value` is omitted, `label` identifies the action.
 
@@ -103,7 +103,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `loading`
-- `data-kind` mirrors the `kind` prop
+- `data-variant` mirrors the `variant` prop
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
@@ -187,7 +187,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
 - Default
-- Types — composite story rendering every `kind` value side-by-side.
+- Types — composite story rendering every `variant` value side-by-side.
 - Sizes — composite story rendering every `size` value side-by-side.
 - Loading — `loading` prop demonstrated: the whole control takes the disabled status (spinner on the primary segment, toggle disabled, menu blocked).
 - Disabled — `disabled` prop demonstrated.

@@ -9,20 +9,20 @@
     </template>
 
     <Pagination.Button
-      kind="previous"
+      type="previous"
       aria-label="Previous page"
       disabled
     />
     <Pagination.Button
-      kind="number"
+      type="number"
       active
       >1</Pagination.Button
     >
-    <Pagination.Button kind="number">2</Pagination.Button>
-    <Pagination.Button kind="number">3</Pagination.Button>
-    <Pagination.Button kind="more" />
+    <Pagination.Button type="number">2</Pagination.Button>
+    <Pagination.Button type="number">3</Pagination.Button>
+    <Pagination.Button type="more" />
     <Pagination.Button
-      kind="next"
+      type="next"
       aria-label="Next page"
     />
 

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import Default from '../../../../examples/skeleton/default.vue'
 import OnSurfaces from '../../../../examples/skeleton/on-surfaces.vue'
 import Static from '../../../../examples/skeleton/static.vue'
-import Types from '../../../../examples/skeleton/types.vue'
+import Types from '../../../../examples/skeleton/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Skeleton from './skeleton.vue'
 
@@ -28,13 +28,13 @@ describe('Skeleton', () => {
   it('defaults to the rectangle geometry', () => {
     const { getByTestId } = render(Skeleton)
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
+    expect(getByTestId('feedback-skeleton').getAttribute('data-variant')).toBe('rectangle')
   })
 
-  it('reflects kind="circle" on data-kind', () => {
-    const { getByTestId } = render(Skeleton, { props: { kind: 'circle' } })
+  it('reflects variant="circle" on data-variant', () => {
+    const { getByTestId } = render(Skeleton, { props: { variant: 'circle' } })
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('circle')
+    expect(getByTestId('feedback-skeleton').getAttribute('data-variant')).toBe('circle')
   })
 
   it('exposes data-animated when animated is true (the default)', () => {
@@ -68,10 +68,10 @@ describe('Skeleton', () => {
     expect(el.style.height).toBe('1rem')
   })
 
-  it.each(['rectangle', 'circle'] as const)('renders the %s geometry', (kind) => {
-    const { getByTestId } = render(Skeleton, { props: { kind } })
+  it.each(['rectangle', 'circle'] as const)('renders the %s geometry', (variant) => {
+    const { getByTestId } = render(Skeleton, { props: { variant: variant } })
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe(kind)
+    expect(getByTestId('feedback-skeleton').getAttribute('data-variant')).toBe(variant)
   })
 
   it('has no a11y violations for the default rectangle', async () => {
@@ -84,7 +84,7 @@ describe('Skeleton', () => {
 
   it('has no a11y violations for the circle geometry', async () => {
     const { container } = render(Skeleton, {
-      props: { kind: 'circle', width: '100px', height: '100px' }
+      props: { variant: 'circle', width: '100px', height: '100px' }
     })
 
     await expectNoA11yViolations(container)
@@ -94,16 +94,18 @@ describe('Skeleton', () => {
     const { getByTestId } = render(Default)
     const el = getByTestId('feedback-skeleton')
 
-    expect(el.getAttribute('data-kind')).toBe('rectangle')
+    expect(el.getAttribute('data-variant')).toBe('rectangle')
     expect(el.hasAttribute('data-animated')).toBe(true)
   })
 
   it('renders the composed Types story with both geometries', () => {
     const { getAllByTestId } = render(Types)
-    const kinds = getAllByTestId('feedback-skeleton').map((el) => el.getAttribute('data-kind'))
+    const variants = getAllByTestId('feedback-skeleton').map((el) =>
+      el.getAttribute('data-variant')
+    )
 
-    expect(kinds).toContain('rectangle')
-    expect(kinds).toContain('circle')
+    expect(variants).toContain('rectangle')
+    expect(variants).toContain('circle')
   })
 
   it('renders the composed Static story without the animated attribute', () => {

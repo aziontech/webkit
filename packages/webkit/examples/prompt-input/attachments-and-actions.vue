@@ -24,7 +24,7 @@
         <IconButton
           icon="ai ai-paperclip"
           aria-label="Attach a file"
-          kind="transparent"
+          variant="ghost"
           size="medium"
         />
       </template>

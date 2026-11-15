@@ -118,7 +118,7 @@
         {
           id: 'agent-setup-group',
           label: 'Agent setup',
-          kind: 'inline',
+          type: 'inline',
           defaultOpen: true,
           children: [
             { id: 'agent-setup', label: 'Overview', href: '/docs/agent-setup' },
@@ -448,7 +448,7 @@
             />
             <DocCallout
               v-if="step.note"
-              kind="warning"
+              variant="warning"
               :label="step.note"
             />
             <DocPrompt
@@ -567,7 +567,7 @@
         <DocCallout
           v-for="tip in tips"
           :key="tip"
-          kind="tip"
+          variant="tip"
           :label="tip"
         />
 
@@ -627,7 +627,7 @@
                 <Logo
                   :name="other.name"
                   :src="other.logo"
-                  :kind="other.mono ? 'current' : 'color'"
+                  :variant="other.mono ? 'current' : 'color'"
                   decorative
                 />
               </span>
@@ -645,7 +645,7 @@
     <template #actions>
       <IconButton
         icon="ai ai-github"
-        kind="outlined"
+        variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
@@ -654,7 +654,7 @@
       />
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         class="shrink-0"
         href="https://console.azion.com"
@@ -681,7 +681,7 @@
     <template #footer>
       <div class="w-full border-t border-(--border-default)">
         <Footer
-          kind="content"
+          variant="content"
           aria-label="Footer"
         >
           <Footer.Column

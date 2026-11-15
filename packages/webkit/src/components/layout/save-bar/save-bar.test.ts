@@ -13,12 +13,12 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import SaveBar from './save-bar.vue'
 
 describe('SaveBar', () => {
-  it('renders a footer with the default testid and the floating kind', () => {
+  it('renders a footer with the default testid and the floating variant', () => {
     const { getByTestId } = within(render(SaveBar).container)
 
     const root = getByTestId('layout-save-bar')
     expect(root.tagName).toBe('FOOTER')
-    expect(root.getAttribute('data-kind')).toBe('floating')
+    expect(root.getAttribute('data-variant')).toBe('floating')
   })
 
   it('honours a consumer data-testid', () => {
@@ -35,11 +35,11 @@ describe('SaveBar', () => {
   })
 
   it.each(['floating', 'docked', 'plain', 'fade', 'centered'] as const)(
-    'renders the leading slot in place of the icon and sentence (kind=%s)',
-    (kind) => {
+    'renders the leading slot in place of the icon and sentence (variant=%s)',
+    (variant) => {
       const { getByTestId } = within(
         render(SaveBar, {
-          props: { kind },
+          props: { variant: variant },
           slots: {
             leading: '<span data-testid="status">Saving…</span>',
             default: 'You have unsaved changes.'
@@ -55,16 +55,16 @@ describe('SaveBar', () => {
   )
 
   it.each(['floating', 'docked', 'plain', 'fade', 'centered'] as const)(
-    'mirrors kind=%s and renders the actions',
-    (kind) => {
+    'mirrors variant=%s and renders the actions',
+    (variant) => {
       const { getByTestId, getByRole } = within(
         render(SaveBar, {
-          props: { kind },
+          props: { variant: variant },
           slots: { actions: '<button type="button">Save</button>' }
         }).container
       )
 
-      expect(getByTestId('layout-save-bar').getAttribute('data-kind')).toBe(kind)
+      expect(getByTestId('layout-save-bar').getAttribute('data-variant')).toBe(variant)
       expect(getByTestId('layout-save-bar__actions').contains(getByRole('button'))).toBe(true)
     }
   )
@@ -83,9 +83,9 @@ describe('SaveBar', () => {
 
   it.each(['floating', 'docked', 'plain', 'fade', 'centered'] as const)(
     'announces the status sentence through a polite live region (%s)',
-    (kind) => {
+    (variant) => {
       const { getByRole } = render(SaveBar, {
-        props: { kind },
+        props: { variant: variant },
         slots: {
           default: 'You have unsaved changes',
           actions: '<button type="button">Save</button>'
@@ -98,7 +98,7 @@ describe('SaveBar', () => {
   it('renders the examples', () => {
     expect(within(render(Default).container).getByRole('button', { name: 'Save' })).toBeTruthy()
     expect(
-      within(render(Docked).container).getByTestId('layout-save-bar').getAttribute('data-kind')
+      within(render(Docked).container).getByTestId('layout-save-bar').getAttribute('data-variant')
     ).toBe('docked')
     expect(within(render(Plain).container).getByRole('button', { name: 'Cancel' })).toBeTruthy()
   })
@@ -120,7 +120,7 @@ describe('SaveBar', () => {
     const card = view.getByTestId('layout-save-bar__card')
     const buttons = within(card).getAllByRole('button')
 
-    expect(view.getByTestId('layout-save-bar').getAttribute('data-kind')).toBe('centered')
+    expect(view.getByTestId('layout-save-bar').getAttribute('data-variant')).toBe('centered')
     expect(buttons.map((button) => button.textContent?.trim())).toEqual(['Cancel', 'Create'])
     expect(view.queryByTestId('layout-save-bar__message')).toBeNull()
   })
@@ -128,7 +128,7 @@ describe('SaveBar', () => {
   it('renders the status sentence inside the centered card when given', () => {
     const view = within(
       render(SaveBar, {
-        props: { kind: 'centered' },
+        props: { variant: 'centered' },
         slots: {
           default: '3 permissions selected',
           actions: '<button type="button">Create</button>'
@@ -157,7 +157,7 @@ describe('SaveBar', () => {
   describe('in a narrow box', () => {
     const mountIn = (width: number) =>
       render(SaveBar, {
-        props: { kind: 'plain' },
+        props: { variant: 'plain' },
         slots: {
           default: 'You have unsaved changes',
           actions: '<button type="button">Discard</button><button type="button">Save</button>'
@@ -221,10 +221,10 @@ describe('SaveBar', () => {
     })
 
     it.each(['docked', 'plain', 'fade', 'centered'] as const)(
-      'publishes nothing for kind=%s',
-      async (kind) => {
+      'publishes nothing for variant=%s',
+      async (variant) => {
         const view = render(SaveBar, {
-          props: { kind },
+          props: { variant: variant },
           slots: { default: 'You have unsaved changes.' }
         })
         await nextTick()
@@ -236,11 +236,11 @@ describe('SaveBar', () => {
       }
     )
 
-    it('clears the inset when the kind changes away from floating', async () => {
+    it('clears the inset when the variant changes away from floating', async () => {
       const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
       await vi.waitFor(() => expect(inset()).not.toBe(''))
 
-      await view.rerender({ kind: 'docked' })
+      await view.rerender({ variant: 'docked' })
       await nextTick()
 
       expect(inset()).toBe('')

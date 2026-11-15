@@ -10,7 +10,7 @@
   export type LogoArtwork = 'color' | 'light' | 'dark'
 
   /** How the mark is inked: its own colours, one theme silhouette, the surrounding text colour, or black pinned for a coloured fill. */
-  export type LogoKind = 'color' | 'monochrome' | 'current' | 'knockout'
+  export type LogoVariant = 'color' | 'monochrome' | 'current' | 'knockout'
 
   /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px. */
   export type LogoSize = 'small' | 'medium' | 'large'
@@ -22,10 +22,10 @@
     src?: string
     /** URL of the light-theme file; with `src` both files render and the theme reveals one. */
     srcLight?: string
-    /** The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`. */
+    /** The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`. */
     artwork?: LogoArtwork
     /** Ink: `color` keeps the vendor's colours, `monochrome` paints one silhouette black on light and white on dark, `current` paints it in the surrounding text colour, `knockout` pins it black for a mark on a coloured fill. */
-    kind?: LogoKind
+    variant?: LogoVariant
     /** Accessible name when it should differ from `name`. */
     ariaLabel?: string
     /** Height of the mark: `small` 16 px, `medium` 24 px, `large` 32 px; the width follows the file's aspect ratio. */
@@ -38,7 +38,7 @@
     src: '',
     srcLight: '',
     artwork: 'color',
-    kind: 'color',
+    variant: 'color',
     ariaLabel: '',
     size: 'medium',
     decorative: false
@@ -52,7 +52,7 @@
 
   const route = computed(() => {
     if (!file.value) return 'wordmark'
-    if (props.kind === 'color' && props.src && props.srcLight) return 'pair'
+    if (props.variant === 'color' && props.src && props.srcLight) return 'pair'
     return 'single'
   })
 
@@ -65,7 +65,7 @@
   <span
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-route="route"
     :data-artwork="artwork"
     :data-size="size"
@@ -99,12 +99,12 @@
         alt=""
         aria-hidden="true"
         decoding="async"
-        :data-ink="kind"
+        :data-ink="variant"
         :data-artwork="artwork"
         class="block h-full w-auto max-w-full object-contain data-[ink=color]:data-[artwork=light]:invert [[data-theme=dark]_&]:data-[ink=color]:data-[artwork=light]:invert-0 [[data-theme=dark]_&]:data-[ink=color]:data-[artwork=dark]:invert data-[ink=monochrome]:brightness-0 [[data-theme=dark]_&]:data-[ink=monochrome]:invert data-[ink=knockout]:brightness-0 data-[ink=current]:opacity-0"
       />
       <span
-        v-if="kind === 'current'"
+        v-if="variant === 'current'"
         aria-hidden="true"
         data-ink-layer=""
         :style="maskStyle"
@@ -114,7 +114,7 @@
     <span
       v-else
       dir="auto"
-      :data-ink="kind"
+      :data-ink="variant"
       class="whitespace-nowrap text-heading-2xs text-(--text-default) data-[ink=current]:text-current data-[ink=knockout]:text-(--color-base-black)"
       >{{ name }}</span
     >

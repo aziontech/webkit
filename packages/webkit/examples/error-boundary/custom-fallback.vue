@@ -44,7 +44,7 @@
               <template #actions>
                 <Button
                   label="Try again"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-refresh"
                   @click="retry"
@@ -57,7 +57,7 @@
     </Card>
     <Button
       label="Simulate a failure"
-      kind="outlined"
+      variant="outline"
       size="medium"
       class="self-start"
       :disabled="broken"

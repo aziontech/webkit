@@ -8,8 +8,8 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import TextureMaterial, {
     type TextureMaterialFade,
-    type TextureMaterialKind,
-    type TextureMaterialSize
+    type TextureMaterialSize,
+    type TextureMaterialVariant
   } from '../texture-material/texture-material.vue'
 
   defineOptions({
@@ -52,7 +52,7 @@
     /** Advances a hairline along the active row's bottom edge while the timer runs. */
     showProgress?: boolean
     /** Texture the media column is grounded with; `none` leaves it bare. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Pitch of the ground's tiling — how far apart its cells sit. */
     textureSize?: TextureMaterialSize
     /** How the ground fades out before the column's edges. */
@@ -295,7 +295,7 @@
         class="relative hidden overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:block lg:min-w-0 group-data-[orientation=vertical]/media-tabs:lg:flex-1"
       >
         <TextureMaterial
-          :kind="texture"
+          :variant="texture"
           :size="textureSize"
           :fade="textureFade"
         />
@@ -331,7 +331,7 @@
       v-if="hasItems && autoplayEnabled"
       :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
       :aria-label="pauseLabel"
-      kind="outlined"
+      variant="outline"
       size="small"
       class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
       @click="togglePause"

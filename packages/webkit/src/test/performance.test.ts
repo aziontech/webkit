@@ -143,8 +143,8 @@ function chartCase(): Case {
             {
               default: () => [
                 h(Chart.Grid),
-                h(Chart.Axis, { kind: 'y' }),
-                h(Chart.Axis, { kind: 'x' }),
+                h(Chart.Axis, { type: 'y' }),
+                h(Chart.Axis, { type: 'x' }),
                 h(Chart.Area, { ids: ['allowed'] }),
                 h(Chart.Line, { ids: ['blocked'] }),
                 h(Chart.Crosshair),
@@ -307,7 +307,7 @@ function multiSelectTypedCase(): Case {
           MultiSelect,
           {
             modelValue: ['v1', 'v2', 'v3'],
-            kind: 'chips',
+            variant: 'chips',
             searchable: true,
             open: open.value,
             'onUpdate:open': (v: boolean) => (open.value = v),
@@ -1063,7 +1063,7 @@ function scatterCase(): Case {
               activeIndex: active.value,
               'onUpdate:activeIndex': (v: number | null) => (active.value = v)
             },
-            { default: () => [h(Chart.Axis, { kind: 'y' }), h(Chart.Scatter)] }
+            { default: () => [h(Chart.Axis, { type: 'y' }), h(Chart.Scatter)] }
           )
         ])
     }),
@@ -1091,7 +1091,7 @@ function barCase(): Case {
           h(
             Chart,
             { series: data.value, labels, ariaLabel: 'Requests' },
-            { default: () => [h(Chart.Axis, { kind: 'y' }), h(Chart.Bar)] }
+            { default: () => [h(Chart.Axis, { type: 'y' }), h(Chart.Bar)] }
           )
         ])
     }),

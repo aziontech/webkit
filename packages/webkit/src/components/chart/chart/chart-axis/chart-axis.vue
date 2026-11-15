@@ -3,13 +3,13 @@
 
   import { maxOf } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
-  import type { ChartAxisKind } from '../injection-key'
+  import type { ChartAxisType } from '../injection-key'
 
   defineOptions({ name: 'ChartAxis', inheritAttrs: false })
 
   interface Props {
     /** Which axis this is: the category axis or the value axis, by orientation. */
-    kind: ChartAxisKind
+    type: ChartAxisType
     /** The most category labels drawn; the rest are thinned. */
     ticks?: number
   }
@@ -21,7 +21,7 @@
   const attrs = useAttrs()
   const ctx = useChartContext()
 
-  onScopeDispose(ctx.registerAxis(() => props.kind))
+  onScopeDispose(ctx.registerAxis(() => props.type))
 
   const LABEL_OFFSET = 8
   const LABEL_DROP = 18
@@ -30,11 +30,11 @@
   const LABEL_SPACING = 16
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__axis-${props.kind}`
+    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__axis-${props.type}`
   )
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const plot = computed(() => ctx.plot.value)
-  const showsCategories = computed(() => (props.kind === 'x') === vertical.value)
+  const showsCategories = computed(() => (props.type === 'x') === vertical.value)
 
   const rtl = computed(() => ctx.rtl.value)
   const room = computed(() =>

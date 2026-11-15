@@ -194,7 +194,7 @@ describe('Field', () => {
       '<Field v-bind="state"><Input /><FieldDescription>Note</FieldDescription></Field>',
       () => ({ state })
     )
-    const description = () => getByTestId('input-field-description').getAttribute('data-kind')
+    const description = () => getByTestId('input-field-description').getAttribute('data-type')
     expect(description()).toBe('helper')
     state.value = { required: true }
     await nextTick()
@@ -212,8 +212,8 @@ describe('Field', () => {
       '<Field invalid><Input /><FieldDescription>Note</FieldDescription><FieldError>Bad</FieldError></Field>'
     )
     await nextTick()
-    expect(getByTestId('input-field-description').getAttribute('data-kind')).toBe('helper')
-    expect(getByTestId('input-field-error').getAttribute('data-kind')).toBe('invalid')
+    expect(getByTestId('input-field-description').getAttribute('data-type')).toBe('helper')
+    expect(getByTestId('input-field-error').getAttribute('data-type')).toBe('invalid')
   })
 
   it('wires the Select trigger as the control and isolates its inner parts', async () => {
@@ -258,7 +258,7 @@ describe('Field', () => {
 
   it('renders a fieldset named by its legend', () => {
     const { getByRole } = mount(
-      '<FieldSet><FieldLegend kind="label">Plan</FieldLegend><FieldSeparator>Or</FieldSeparator></FieldSet>'
+      '<FieldSet><FieldLegend type="label">Plan</FieldLegend><FieldSeparator>Or</FieldSeparator></FieldSet>'
     )
     expect(getByRole('group', { name: 'Plan' }).tagName).toBe('FIELDSET')
     expect(getByRole('separator')).toBeTruthy()

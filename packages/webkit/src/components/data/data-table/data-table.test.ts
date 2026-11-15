@@ -1052,7 +1052,7 @@ describe('DataTable', () => {
       { id: 'name', label: 'Name', type: 'text' as const }
     ]
     const applied = { field: 'status', operator: 'eq' as const, value: 'Active' }
-    const renderFiltered = (kind: 'menu' | 'property' = 'menu') =>
+    const renderFiltered = (type: 'menu' | 'property' = 'menu') =>
       render(DataTable, {
         props: {
           data: rows,
@@ -1066,7 +1066,7 @@ describe('DataTable', () => {
           ariaLabel: 'People'
         },
         slots: {
-          toolbar: () => h(Table.Filter, { kind }),
+          toolbar: () => h(Table.Filter, { type: type }),
           filters: () => h(FilterMenu.Chips)
         }
       })
@@ -1092,7 +1092,7 @@ describe('DataTable', () => {
       expect(payload[1]).toEqual(applied)
     })
 
-    it('renders the applied filters as PropertyFilter tokens with kind="property", AND only', async () => {
+    it('renders the applied filters as PropertyFilter tokens with type="property", AND only', async () => {
       const view = renderFiltered('property')
       const field = await view.findByTestId('data-data-table__filter')
       await waitFor(() => expect(field.textContent).toContain('Active'))

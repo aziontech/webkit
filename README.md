@@ -98,39 +98,39 @@ Once the project is wired, import components by path:
 
 <template>
   <Button
-    kind="primary"
+    variant="primary"
     label="Button"
     icon="ai ai-arrow-right"
   />
   <Button
-    kind="secondary"
+    variant="secondary"
     label="Button"
     icon="ai ai-arrow-right"
   />
   <Button
-    kind="outlined"
+    variant="outline"
     label="Button"
     icon="ai ai-arrow-right"
   />
   <Button
-    kind="transparent"
+    variant="ghost"
     label="Button"
     icon="ai ai-arrow-right"
   />
   <Button
-    kind="danger"
+    variant="danger"
     label="Button"
     icon="ai ai-trash"
   />
 
   <!-- statment buttons -->
   <Button
-    kind="outlined"
+    variant="outline"
     label="Button"
     disabled
   />
   <Button
-    kind="outlined"
+    variant="outline"
     label="Button"
     loading
   />

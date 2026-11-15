@@ -217,7 +217,7 @@
         >
           <Button
             :label="t('overflowCount.loadMore', { count: nextBatch })"
-            kind="transparent"
+            variant="ghost"
             size="small"
             class="w-full"
             :data-testid="`${testId}__load-more`"

@@ -31,13 +31,13 @@
       <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
         <Button
           label="Browse files"
-          kind="secondary"
+          variant="secondary"
           size="medium"
           @click="filesInputEl?.click()"
         />
         <Button
           label="Browse folder"
-          kind="secondary"
+          variant="secondary"
           size="medium"
           icon="ai ai-folder-open"
           @click="folderInputEl?.click()"

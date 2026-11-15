@@ -111,7 +111,7 @@
         <template #actions>
           <Button
             label="Add rule set"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-plus"
             href="/security/rules"

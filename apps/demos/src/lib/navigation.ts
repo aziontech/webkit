@@ -42,7 +42,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
         id: 'metrics-module',
         label: 'Metrics',
         icon: 'ai ai-chart-bar',
-        kind: 'drill',
+        type: 'drill',
         groups: [
           { items: [{ id: 'metrics', label: 'Overview' }] },
           {
@@ -81,7 +81,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
         id: 'settings',
         label: 'Settings',
         icon: 'ai ai-settings',
-        kind: 'drill',
+        type: 'drill',
         groups: [
           {
             label: 'Settings',

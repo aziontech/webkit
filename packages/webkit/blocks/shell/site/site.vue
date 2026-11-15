@@ -363,7 +363,7 @@
   }
 
   const footer: SiteLayoutFooter = {
-    kind: 'site',
+    variant: 'site',
     home: '/en/',
     homeAriaLabel: 'Azion home',
     columns: [
@@ -453,7 +453,7 @@
     search-placeholder="Search azion.com"
   >
     <Hero
-      kind="band"
+      variant="band"
       size="large"
       max-width="site"
     >
@@ -467,13 +467,13 @@
         <template #actions>
           <Button
             label="Start for free"
-            kind="primary"
+            variant="primary"
             size="large"
             href="https://console.azion.com/signup"
           />
           <Button
             label="Talk to a specialist"
-            kind="outlined"
+            variant="outline"
             size="large"
             href="/en/contact-sales/"
           />
@@ -505,7 +505,7 @@
         data-hatch="true"
         class="h-[calc(var(--spacing-2xl)*2)]"
       >
-        <TextureMaterial kind="lines" />
+        <TextureMaterial variant="lines" />
       </FrameBox>
     </SectionContainer>
   </SiteLayout>

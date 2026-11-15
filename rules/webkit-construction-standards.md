@@ -7,12 +7,12 @@ with. One pattern per concern — follow ✅, avoid ❌.
 | Pattern         | ❌ Avoid                                                        | ✅ Do                                                                                                           |
 | --------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | Two-way value   | `defineProps({ modelValue })` + `emit('update:modelValue')`     | `const model = defineModel<string>()`                                                                           |
-| Props           | runtime `defineProps({ kind: { type: String } })` · `any`       | typed `withDefaults(defineProps<Props>(), {…})` + JSDoc per prop                                                |
-| Prop vocabulary | `variant` · `sm/md/lg` · `isDisabled` · `closeable`             | `kind` · `small/medium/large` · `disabled` · `dismissible`                                                      |
+| Props           | runtime `defineProps({ variant: { type: String } })` · `any`    | typed `withDefaults(defineProps<Props>(), {…})` + JSDoc per prop                                                |
+| Prop vocabulary | `kind` · `sm/md/lg` · `isDisabled` · `closeable`                | `variant` · `small/medium/large` · `disabled` · `dismissible`                                                   |
 | Emits           | `defineEmits(['click'])` · `emit('click', item)`                | typed `defineEmits<{ 'item-click': [e, item] }>()` — DOM event first                                            |
 | Slots           | `<slot/>` with no declaration                                   | typed `defineSlots<{ default(): unknown }>()`                                                                   |
 | Composables     | `return reactive({…})` · listeners with no cleanup              | `return { value: readonly(v), set }` · args via `toValue()` · cleanup in `onScopeDispose`                       |
-| Styling         | `const kindClasses = {…}` · `<style>` blocks · hex/palette      | utilities inline on the root, variants via `data-*` + theme tokens                                              |
+| Styling         | `const variantClasses = {…}` · `<style>` blocks · hex/palette   | utilities inline on the root, variants via `data-*` + theme tokens                                              |
 | Structure       | one file, many components · random script order                 | one component per folder/file · fixed `<script setup>` order (options → props → emits → models → slots → state) |
 | Root element    | wrapper `<div>` swallowing attrs · `as` prop · `class` in props | own the root · `inheritAttrs: false` + `v-bind="$attrs"` · polymorphism via `href`                              |
 | States          | ad-hoc spinner / "no results" string                            | `data-*` states + `@aziontech/webkit/skeleton` / `empty-state`                                                  |

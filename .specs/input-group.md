@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 6fa68d536400666bc42160909f3029c7bd417988c3eed24fbd8f2916b01f9ea3
+checksum: 55c8db47a2d96a6ba1aa23f9ae04c392e5363331e77c30678f4416e4ab217c75
 created: 2026-07-01
 last_updated: 2026-11-15
 ---
@@ -107,7 +107,7 @@ Composition container that joins an input primitive with any number of adjacent 
     />
     <Button
       label="Search"
-      kind="primary"
+      variant="primary"
     />
   </InputGroup>
 </template>
@@ -250,7 +250,7 @@ Root props:
 - Required — `required=true` (warning border, always visible).
 - Disabled — `disabled=true` (muted fill, not-allowed cursor, no focus ring).
 
-Justification for eleven stories (deviates from Default+Types+Sizes+state pattern): the component has no `kind`, so `Types` does not apply. `Sizes` documents the three-height axis. Four addon-composition stories (Default, WithAddonLeft, WithAddonRight, BothAddons) document the static-content path. Three integration stories (WithButton, WithSelect, WithAll) prove Button/Select-as-children — the whole point of v4. Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
+Justification for eleven stories (deviates from Default+Types+Sizes+state pattern): the component has no `variant`, so `Types` does not apply. `Sizes` documents the three-height axis. Four addon-composition stories (Default, WithAddonLeft, WithAddonRight, BothAddons) document the static-content path. Three integration stories (WithButton, WithSelect, WithAll) prove Button/Select-as-children — the whole point of v4. Three state stories exercise `Invalid`, `Required`, and `Disabled` — the visual signals the component can emit.
 
 ## Constraints — DO NOT
 

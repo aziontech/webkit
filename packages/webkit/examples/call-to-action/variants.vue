@@ -13,14 +13,14 @@
       <template #actions>
         <Button label="Start for free" />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Talk to a specialist"
         />
       </template>
     </CallToAction>
 
     <CallToAction
-      kind="split"
+      variant="split"
       eyebrow="Build"
       title="Build once."
       title-muted="Run anywhere."
@@ -28,20 +28,20 @@
     >
       <template #actions>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Start for free"
         />
       </template>
       <template #aside>
         <Button
-          kind="outlined"
+          variant="outline"
           label="Talk to our team"
         />
       </template>
     </CallToAction>
 
     <CallToAction
-      kind="lead"
+      variant="lead"
       eyebrow="Build"
       title="Built by you,"
       title-muted="or your agents."
@@ -49,11 +49,11 @@
     >
       <template #actions>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Deploy now"
         />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Docs"
         />
       </template>

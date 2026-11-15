@@ -15,7 +15,7 @@
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="bottom-start"
         />
       </PopoverTrigger>
@@ -31,7 +31,7 @@
     <PopoverRoot placement="bottom-end">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="bottom-end"
         />
       </PopoverTrigger>
@@ -47,7 +47,7 @@
     <PopoverRoot placement="top-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="top-start"
         />
       </PopoverTrigger>
@@ -63,7 +63,7 @@
     <PopoverRoot placement="top-end">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="top-end"
         />
       </PopoverTrigger>
@@ -79,7 +79,7 @@
     <PopoverRoot placement="right-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="right-start"
         />
       </PopoverTrigger>
@@ -95,7 +95,7 @@
     <PopoverRoot placement="left-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="left-start"
         />
       </PopoverTrigger>

@@ -18,7 +18,7 @@
   defineOptions({ name: 'SparkChart', inheritAttrs: false })
 
   /** Mark drawn for the series. */
-  export type SparkChartKind = 'area' | 'line' | 'bar'
+  export type SparkChartType = 'area' | 'line' | 'bar'
   /** Height of the spark: 32, 48 or 64 pixels. */
   export type SparkChartSize = 'small' | 'medium' | 'large'
 
@@ -26,7 +26,7 @@
     /** The series, oldest first; null leaves a gap. */
     values?: (number | null)[]
     /** Mark drawn for the series. */
-    kind?: SparkChartKind
+    type?: SparkChartType
     /** Hue of the mark: a categorical slot (1–6), other, or a status. */
     color?: ChartColor
     /** Height: 32, 48 or 64 pixels. Width follows the container. */
@@ -39,7 +39,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     values: () => [],
-    kind: 'area',
+    type: 'area',
     color: 1,
     size: 'medium',
     fromZero: false,
@@ -79,7 +79,7 @@
   const hasValue = computed(() => finite.value.length > 0)
 
   const stroke = computed(() => {
-    if (!hasValue.value || props.kind === 'bar') return null
+    if (!hasValue.value || props.type === 'bar') return null
     const low = minOf(finite.value, Infinity)
     const high = maxOf(finite.value, -Infinity)
     const floor = props.fromZero ? Math.min(0, low) : low
@@ -97,12 +97,12 @@
     const lower = upper.map((point) => (point ? ([point[0], height.value] as const) : null))
     return {
       edge: linePath(upper, 'linear'),
-      fill: props.kind === 'area' ? areaPath(upper, lower, 'linear') : ''
+      fill: props.type === 'area' ? areaPath(upper, lower, 'linear') : ''
     }
   })
 
   const bars = computed(() => {
-    if (!hasValue.value || props.kind !== 'bar') return []
+    if (!hasValue.value || props.type !== 'bar') return []
     const low = minOf(finite.value, 0)
     const high = maxOf(finite.value, 0)
     const scale = linearScale([low, high], [height.value, 0])
@@ -148,7 +148,7 @@
     v-bind="$attrs"
     ref="rootEl"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-size="size"
     class="relative block w-full min-w-0 data-[size=large]:h-16 data-[size=medium]:h-12 data-[size=small]:h-8"
   >
@@ -161,7 +161,7 @@
       class="absolute inset-0 block size-full overflow-visible [--spark-bar-from:1_0]"
     >
       <template v-if="stroke">
-        <defs v-if="kind === 'area'">
+        <defs v-if="type === 'area'">
           <linearGradient
             :id="gradientId"
             x1="0"
@@ -182,7 +182,7 @@
           </linearGradient>
         </defs>
         <path
-          v-if="kind === 'area'"
+          v-if="type === 'area'"
           :d="stroke.fill"
           :fill="`url(#${gradientId})`"
           :data-entered="entered || null"

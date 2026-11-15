@@ -110,7 +110,7 @@
               <SettingRow
                 title="Queue visitors"
                 description="Off lets every visitor in and keeps the settings below."
-                kind="compact"
+                variant="compact"
               >
                 <Switch
                   v-model="form.enabled"
@@ -186,7 +186,7 @@
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
@@ -194,7 +194,7 @@
           <Button
             type="button"
             label="Save"
-            kind="primary"
+            variant="primary"
             size="medium"
             :loading="saving"
             @click="save"

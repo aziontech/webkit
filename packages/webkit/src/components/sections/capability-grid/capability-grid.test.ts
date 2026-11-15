@@ -25,8 +25,8 @@ describe('CapabilityGrid', () => {
       }
     })
     expect(getByRole('link', { name: 'Start now' })).toHaveAttribute('href', '/signup')
-    expect(getByRole('link', { name: 'Start now' })).toHaveAttribute('data-kind', 'secondary')
-    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('data-kind', 'outlined')
+    expect(getByRole('link', { name: 'Start now' })).toHaveAttribute('data-variant', 'secondary')
+    expect(getByRole('link', { name: 'Docs' })).toHaveAttribute('data-variant', 'outline')
   })
 
   it('draws no button from the removed actions array', () => {
@@ -49,13 +49,13 @@ describe('CapabilityGrid', () => {
     expect(getAllByRole('heading', { level: 3 })).toHaveLength(3)
   })
 
-  it('centers the title by default and sets it at the start edge with titleKind start', () => {
+  it('centers the title by default and sets it at the start edge with titleVariant start', () => {
     const { getByTestId, unmount } = render(Default)
-    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'center')
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-variant', 'center')
     unmount()
 
     const left = render(TitleStart)
-    expect(left.getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'start')
+    expect(left.getByTestId('marketing-section-title')).toHaveAttribute('data-variant', 'start')
     expect(left.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(
       'Why you should be a partner'
     )

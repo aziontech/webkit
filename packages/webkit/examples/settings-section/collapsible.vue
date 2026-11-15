@@ -24,7 +24,7 @@
             <SettingRow
               title="Active"
               description="Inactive teams keep their permissions but can't be assigned."
-              kind="compact"
+              variant="compact"
             >
               <Switch
                 v-model="active"

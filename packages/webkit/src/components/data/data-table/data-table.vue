@@ -75,7 +75,7 @@
 
   type TableColumnMeta = Pick<
     TableColumn,
-    'grow' | 'frozen' | 'align' | 'kind' | 'resizable' | 'label' | 'principal'
+    'grow' | 'frozen' | 'align' | 'type' | 'resizable' | 'label' | 'principal'
   >
 
   defineOptions({
@@ -97,7 +97,7 @@
       sortable?: boolean
       /** Adds a leading selection-checkbox column. */
       selectable?: boolean
-      /** Decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. */
+      /** Decides per row whether it can be selected (`(row) => row.type === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. */
       rowSelectable?: (row: TRow) => boolean
       /** Clicking a row toggles its selection (requires selectable). */
       selectOnRowClick?: boolean
@@ -425,7 +425,7 @@
   const principalIndex = computed<number>(() => {
     const flagged = props.columns.findIndex((col) => col.principal)
     if (flagged !== -1) return flagged
-    return props.columns.findIndex((col) => col.kind !== 'action')
+    return props.columns.findIndex((col) => col.type !== 'action')
   })
 
   const tableColumns = computed<ColumnDef<RowRecord>[]>(() =>
@@ -434,14 +434,14 @@
       accessorKey: col.accessorKey,
       header: col.header,
       enableSorting: col.sortable ?? props.sortable,
-      enableHiding: col.hideable ?? col.kind !== 'action',
+      enableHiding: col.hideable ?? col.type !== 'action',
       filterFn: appliedFilterFn,
       size: col.width,
       meta: {
         grow: col.grow ?? (index === principalIndex.value ? 2 : 1),
         frozen: col.frozen,
         align: col.align,
-        kind: col.kind,
+        type: col.type,
         resizable: col.resizable,
         label: col.label,
         principal: index === principalIndex.value
@@ -642,7 +642,7 @@
     if (hasExportListener()) return
     const columns = table
       .getVisibleLeafColumns()
-      .filter((column) => metaOf(column).kind !== 'action')
+      .filter((column) => metaOf(column).type !== 'action')
       .map((column) => ({
         id: (column.columnDef as { accessorKey?: string }).accessorKey ?? column.id,
         header: typeof column.columnDef.header === 'string' ? column.columnDef.header : column.id
@@ -779,7 +779,7 @@
   type ColumnLike = { columnDef: { meta?: unknown } }
   const metaOf = (column: ColumnLike): TableColumnMeta => {
     const meta = (column.columnDef.meta as TableColumnMeta | undefined) ?? {}
-    return meta.kind === 'action' && !meta.frozen ? { ...meta, frozen: 'end' } : meta
+    return meta.type === 'action' && !meta.frozen ? { ...meta, frozen: 'end' } : meta
   }
 
   type SortableColumn = { getIsSorted: () => 'asc' | 'desc' | false }
@@ -800,9 +800,9 @@
   const SELECTION_WIDTH = 40
   const columnId = (c: TableColumn): string => c.id ?? c.accessorKey ?? c.header ?? ''
   const frozenEdgeOf = (c: TableColumn): 'start' | 'end' | undefined =>
-    c.frozen ?? (c.kind === 'action' ? 'end' : undefined)
+    c.frozen ?? (c.type === 'action' ? 'end' : undefined)
   const frozenWidthOf = (c: TableColumn): number =>
-    c.width ?? autoWidths.value[columnId(c)] ?? (c.kind === 'action' ? SELECTION_WIDTH : 0)
+    c.width ?? autoWidths.value[columnId(c)] ?? (c.type === 'action' ? SELECTION_WIDTH : 0)
   const leftFrozenCols = computed<TableColumn[]>(() =>
     props.columns.filter((c: TableColumn) => frozenEdgeOf(c) === 'start')
   )
@@ -866,7 +866,7 @@
     const style: Record<string, string> = {}
     const meta = metaOf(column)
     const width =
-      meta.kind === 'action'
+      meta.type === 'action'
         ? undefined
         : (resizeWidths.value[column.id] ?? widthOf(column.id) ?? autoWidths.value[column.id])
     if (width) {
@@ -880,7 +880,7 @@
   }
 
   const isResizableColumn = (column: ColumnLike & { id: string }): boolean =>
-    metaOf(column).resizable === true && !metaOf(column).frozen && metaOf(column).kind !== 'action'
+    metaOf(column).resizable === true && !metaOf(column).frozen && metaOf(column).type !== 'action'
 
   const initialColumnWidth = (column: ColumnLike & { id: string }): number =>
     widthOf(column.id) ?? autoWidths.value[column.id] ?? (metaOf(column).grow ?? 1) * 150
@@ -1235,7 +1235,7 @@
 
   const isStackedField = (column: ColumnLike): boolean => {
     const meta = metaOf(column)
-    return !meta.principal && (meta.kind ?? 'default') === 'default'
+    return !meta.principal && (meta.type ?? 'default') === 'default'
   }
   const stackedLabelOf = (column: ColumnLike & { id: string }): string => {
     const header = (column.columnDef as { header?: unknown }).header
@@ -1246,7 +1246,7 @@
     'order-1 basis-full! min-h-8! justify-start! text-start! whitespace-normal static! before:hidden! after:hidden!'
   const STACKED_CELL_CLASS = 'static! before:hidden! after:hidden!'
   interface ColumnView {
-    kind: 'default' | 'action'
+    type: 'default' | 'action'
     grow: 1 | 2 | 3
     align: 'start' | 'center' | 'end'
     frozen: 'start' | 'end' | undefined
@@ -1262,7 +1262,7 @@
       const meta = metaOf(column)
       const stackedField = stacked.value && isStackedField(column)
       views.set(column.id, {
-        kind: meta.kind ?? 'default',
+        type: meta.type ?? 'default',
         grow: meta.grow ?? 1,
         align: meta.align ?? 'start',
         frozen: meta.frozen,
@@ -1509,7 +1509,7 @@
       const snapshot = { ...resizeWidths.value }
       headers.value.forEach((header, columnIndex: number) => {
         const m = metaOf(header.column)
-        if (m.frozen || m.kind === 'action' || snapshot[header.column.id] != null) return
+        if (m.frozen || m.type === 'action' || snapshot[header.column.id] != null) return
         const cell = headerCells[columnIndex + offset]
         if (cell) snapshot[header.column.id] = Math.round(cell.getBoundingClientRect().width)
       })
@@ -1763,7 +1763,7 @@
                 <TableHeadCell
                   v-if="reorderActive"
                   key="reorder"
-                  kind="checkbox"
+                  type="checkbox"
                   :frozen="reorderHandleFrozen ? 'start' : undefined"
                   data-slot="reorder-cell"
                 >
@@ -1772,7 +1772,7 @@
                 <TableHeadCell
                   v-if="selectable"
                   key="select"
-                  kind="checkbox"
+                  type="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
                   :style="selectionStyle"
                 >
@@ -1787,7 +1787,7 @@
                 <TableHeadCell
                   v-for="header in headers"
                   :key="header.id"
-                  :kind="metaOf(header.column).kind ?? 'default'"
+                  :type="metaOf(header.column).type ?? 'default'"
                   :grow="metaOf(header.column).grow ?? 1"
                   :align="metaOf(header.column).align ?? 'start'"
                   :frozen="metaOf(header.column).frozen"
@@ -1828,20 +1828,20 @@
                 <TableCell
                   v-if="reorderActive"
                   key="reorder"
-                  kind="checkbox"
+                  type="checkbox"
                   :frozen="reorderHandleFrozen ? 'start' : undefined"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 />
                 <TableCell
                   v-if="selectable"
                   key="select"
-                  kind="checkbox"
+                  type="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
                   :style="selectionStyle"
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 >
                   <Skeleton
-                    kind="rectangle"
+                    variant="rectangle"
                     width="16px"
                     height="16px"
                   />
@@ -1853,11 +1853,11 @@
                   :grow="viewOf(header.column.id).grow"
                   :align="viewOf(header.column.id).align"
                   :frozen="viewOf(header.column.id).frozen"
-                  :kind="viewOf(header.column.id).kind"
+                  :type="viewOf(header.column.id).type"
                   :class="viewOf(header.column.id).stackedClass"
                 >
                   <Skeleton
-                    v-if="viewOf(header.column.id).kind !== 'action'"
+                    v-if="viewOf(header.column.id).type !== 'action'"
                     height="0.875rem"
                   />
                 </TableCell>
@@ -1932,14 +1932,14 @@
                   <TableCell
                     v-if="reorderActive"
                     key="reorder"
-                    kind="checkbox"
+                    type="checkbox"
                     :frozen="reorderHandleFrozen ? 'start' : undefined"
                     data-slot="reorder-cell"
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <IconButton
                       icon="ai ai-menu"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       :ariaLabel="reorderHandleLabelOf(row.id, windowStart + index)"
                       :aria-describedby="reorderHintId"
@@ -1958,7 +1958,7 @@
                   <TableCell
                     v-if="selectable"
                     key="select"
-                    kind="checkbox"
+                    type="checkbox"
                     :frozen="selectionFrozen ? 'start' : undefined"
                     :style="selectionStyle"
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
@@ -1977,7 +1977,7 @@
                     :grow="viewOf(cell.column.id).grow"
                     :align="viewOf(cell.column.id).align"
                     :frozen="viewOf(cell.column.id).frozen"
-                    :kind="viewOf(cell.column.id).kind"
+                    :type="viewOf(cell.column.id).type"
                     :class="viewOf(cell.column.id).stackedClass"
                   >
                     <span
@@ -2064,7 +2064,7 @@
           </template>
           <Button
             v-else-if="moreRows"
-            kind="transparent"
+            variant="ghost"
             size="small"
             :label="t('tableLoadMore.action')"
             :data-testid="`${testId}__more-button`"

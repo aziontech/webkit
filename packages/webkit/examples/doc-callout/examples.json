@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One row of prose beside the glyph — the whole component, for every kind.",
+      "summary": "One row of prose beside the glyph — the whole component, for every variant.",
       "file": "default.vue"
     },
     {
@@ -14,7 +14,7 @@
     },
     {
       "name": "Variants",
-      "summary": "The six kinds together. Five carry a severity — they say something about the copy's stakes — and `tip` carries none: it takes the page's own surface and rule so a friendly shortcut is not painted the same green as a confirmed success.",
+      "summary": "The six variants together. Five carry a severity — they say something about the copy's stakes — and `tip` carries none: it takes the page's own surface and rule so a friendly shortcut is not painted the same green as a confirmed success.",
       "file": "variants.vue"
     }
   ]

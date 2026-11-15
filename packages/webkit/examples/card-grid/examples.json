@@ -29,7 +29,7 @@
     },
     {
       "name": "Frame",
-      "summary": "The framed register and everything its cell carries: the two fills, and an unpadded `kind=\"none\"` cell whose content reaches the rules. Each cell draws only its right and bottom rules — the grid draws the matching top and left ones, so every edge is one hairline.",
+      "summary": "The framed register and everything its cell carries: the two fills, and an unpadded `variant=\"none\"` cell whose content reaches the rules. Each cell draws only its right and bottom rules — the grid draws the matching top and left ones, so every edge is one hairline.",
       "file": "frame.vue"
     }
   ]

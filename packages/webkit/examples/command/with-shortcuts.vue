@@ -13,7 +13,7 @@
 <template>
   <Button
     label="Open palette with shortcuts"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 

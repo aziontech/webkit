@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <Item kind="outlined">
+  <Item variant="outline">
     <Item.Media>
       <Avatar
         alt="Sam Lee"
@@ -20,7 +20,7 @@
     <Item.Actions>
       <Button
         label="Invite"
-        kind="outlined"
+        variant="outline"
         size="small"
         icon="ai ai-plus"
       />

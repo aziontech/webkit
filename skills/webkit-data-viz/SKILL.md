@@ -40,7 +40,7 @@ Never guess an import path or a hex value. Resolve both from the contract:
   `Chart.Tooltip`, `Chart.Legend`), `@aziontech/webkit/donut-chart`, `@aziontech/webkit/stat-tile`
   and `@aziontech/webkit/chart-card` already carry the palette, the tooltip, the legend, the keyboard
   model, the table twin and the state surface. Use them before adding a charting library.
-  Event volume over time buckets (a log histogram) is `Chart.Bar kind="histogram"` (add `stacked`
+  Event volume over time buckets (a log histogram) is `Chart.Bar type="histogram"` (add `stacked`
   for one segment per level): solid columns that touch and end at the busiest bucket. The default
   `Chart.Bar` keeps rounded, gapped bars for separate categories compared one against another.
 - **Other components** (`Skeleton`, `EmptyState`, `Alert`, `Card`, `StatusIndicator`): ask the
@@ -149,7 +149,7 @@ card, the grid or the `nth-child` dividers.
 - Pass the delta as the raw percentage (`12.4`): the tile prints at most two decimals and drops
   trailing zeros (`+12.4%`). Put the unit in `unit` (`GB`, `/s`, `%`): it renders smaller, muted and
   sans beside the figure, never in the figure's face.
-- `kind` picks the figure face: `mono` (default, the big-number figure of a usage strip) or `sans`
+- `variant` picks the figure face: `mono` (default, the big-number figure of a usage strip) or `sans`
   (the large heading figure of a summary row of plain figures above its charts). One kind per row.
 
 ## Theme

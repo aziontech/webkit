@@ -37,7 +37,7 @@ const socials = [
 const footer = (props: Record<string, unknown> = {}) =>
   render(SiteFooter, {
     props: {
-      kind: 'site',
+      variant: 'site',
       home: '/',
       columns,
       socials,
@@ -64,16 +64,16 @@ describe('SiteFooter', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['site', 'content'] as const)('mirrors kind=%s on data-kind', (kind) => {
-    const { getByTestId } = footer({ kind })
+  it.each(['site', 'content'] as const)('mirrors variant=%s on data-variant', (variant) => {
+    const { getByTestId } = footer({ variant })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
   })
 
-  it('defaults to the site kind', () => {
+  it('defaults to the site variant', () => {
     const { getByTestId } = render(SiteFooter, { props: { columns } })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('site')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('site')
   })
 
   it('renders the contentinfo landmark named by ariaLabel', () => {

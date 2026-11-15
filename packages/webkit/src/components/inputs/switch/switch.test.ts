@@ -6,7 +6,7 @@ import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/switch/default.vue'
 import Disabled from '../../../../examples/switch/disabled.vue'
-import Types from '../../../../examples/switch/types.vue'
+import Types from '../../../../examples/switch/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Switch from './switch.vue'
 
@@ -80,22 +80,22 @@ describe('Switch', () => {
     })
   })
 
-  describe('data-kind variant', () => {
-    it('reflects the default type on data-kind', () => {
+  describe('data-variant variant', () => {
+    it('reflects the default type on data-variant', () => {
       const { getByTestId } = render(Switch, {
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
-      expect(getByTestId('input-switch').getAttribute('data-kind')).toBe('default')
+      expect(getByTestId('input-switch').getAttribute('data-variant')).toBe('default')
     })
 
-    it('reflects the privacy type on data-kind', () => {
+    it('reflects the privacy type on data-variant', () => {
       const { getByTestId } = render(Switch, {
-        props: { kind: 'privacy' },
+        props: { variant: 'privacy' },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
-      expect(getByTestId('input-switch').getAttribute('data-kind')).toBe('privacy')
+      expect(getByTestId('input-switch').getAttribute('data-variant')).toBe('privacy')
     })
   })
 
@@ -320,7 +320,7 @@ describe('Switch', () => {
 
     it('has no violations in the on privacy state with an accessible name', async () => {
       const { container } = render(Switch, {
-        props: { modelValue: true, kind: 'privacy' },
+        props: { modelValue: true, variant: 'privacy' },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
@@ -329,13 +329,13 @@ describe('Switch', () => {
   })
 
   describe('smoke over type variants', () => {
-    it.each([['default'], ['privacy']] as const)('renders data-kind=%s', (type) => {
+    it.each([['default'], ['privacy']] as const)('renders data-variant=%s', (type) => {
       const { getByTestId } = render(Switch, {
-        props: { kind: type },
+        props: { variant: type },
         attrs: { 'aria-label': 'Toggle setting' }
       })
 
-      expect(getByTestId('input-switch').getAttribute('data-kind')).toBe(type)
+      expect(getByTestId('input-switch').getAttribute('data-variant')).toBe(type)
     })
   })
 
@@ -397,9 +397,9 @@ describe('Switch', () => {
       host.remove()
     })
 
-    it('renders both lock glyphs for kind="privacy" and none for default', () => {
+    it('renders both lock glyphs for variant="privacy" and none for default', () => {
       const privacy = render(Switch, {
-        props: { kind: 'privacy' },
+        props: { variant: 'privacy' },
         attrs: { 'aria-label': 'Public' }
       })
       expect(privacy.getByTestId('input-switch__lock')).toBeTruthy()

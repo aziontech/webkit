@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 0198baa1cce5df8c6a574b303ff5fbc1157afba8bb9cc1e2c31599f7ac6ea2cd
+checksum: c0379c0cb9873ad48bb4fcb8db1b28e2c1b74b4aebd8fc4fa0b6be8547d90188
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 - Write the prompt once, in the default slot. It is both the visible text and the copied string, so the two cannot drift.
 - Give `title` only when the surrounding page has not already said what the block is. Three one-line prompts under a "Prompts to try" heading want the bare shape.
-- Use `kind="line"` for a single instruction and `kind="block"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.
+- Use `variant="line"` for a single instruction and `variant="block"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.
 - Keep the prompt in the imperative and free of placeholders the reader must fill silently — if a value must be substituted, name it in the prose above.
 
 ## Usage
@@ -58,12 +58,12 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## Props
 
-| Prop    | Type                | Default            | Required | JSDoc                                                                          |
-| ------- | ------------------- | ------------------ | -------- | ------------------------------------------------------------------------------ |
-| `kind`  | `'block' \| 'line'` | `'block'`          | false    | Wrapping paragraph capped at four lines, or one line that scrolls sideways.    |
-| `title` | `string`            | `''`               | false    | What the block is, in a word or two. Renders as a titled row above the prompt. |
-| `icon`  | `string`            | `'ai ai-sparkles'` | false    | Azion icon class for the glyph beside the title.                               |
-| `label` | `string`            | `''`               | false    | Fallback prompt text when the default slot is empty.                           |
+| Prop      | Type                | Default            | Required | JSDoc                                                                          |
+| --------- | ------------------- | ------------------ | -------- | ------------------------------------------------------------------------------ |
+| `variant` | `'block' \| 'line'` | `'block'`          | false    | Wrapping paragraph capped at four lines, or one line that scrolls sideways.    |
+| `title`   | `string`            | `''`               | false    | What the block is, in a word or two. Renders as a titled row above the prompt. |
+| `icon`    | `string`            | `'ai ai-sparkles'` | false    | Azion icon class for the glyph beside the title.                               |
+| `label`   | `string`            | `''`               | false    | Fallback prompt text when the default slot is empty.                           |
 
 ## Events
 
@@ -78,7 +78,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 ## States
 
 - Visual states: `default`, `focus-visible` (on the `line` shape, which is a scroll container)
-- `data-kind` mirrors the `kind` prop: `block` | `line`
+- `data-variant` mirrors the `variant` prop: `block` | `line`
 - `data-state` — `open` | `closed` on the prompt text of a capped `block`: `open` once the reader has opened it
 - `data-capped` — present on the root when a `block` prompt is taller than its four-line cap; absent when it fits, so a prompt that fits earns no disclosure control
 - `data-overflow` — on the `line` shape: `start` | `end` | `both`, whichever edge has text scrolled behind it; absent when the line fits

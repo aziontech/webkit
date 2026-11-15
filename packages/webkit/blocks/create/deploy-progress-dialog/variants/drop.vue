@@ -283,7 +283,7 @@
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
       <Button
         label="Deploy a folder"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-upload"
         @click="dropOpen = true"
@@ -372,7 +372,7 @@
               <Button
                 class="w-full"
                 label="Cancel"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 @click="dropOpen = false"
               />
@@ -381,7 +381,7 @@
               <Button
                 class="w-full"
                 label="Deploy to Production"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 icon="ai ai-cloud-upload"
                 @click="deployDropped"
@@ -447,7 +447,7 @@
               <Item
                 v-for="item in visibleItems"
                 :key="item.id"
-                kind="outlined"
+                variant="outline"
                 size="small"
               >
                 <Item.Media>
@@ -513,7 +513,7 @@
               <Button
                 class="w-full"
                 label="Retry failed"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="retryFailed"
@@ -523,7 +523,7 @@
               <Button
                 class="w-full"
                 :label="running ? 'Hide' : 'Close'"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 @click="open = false"
               />

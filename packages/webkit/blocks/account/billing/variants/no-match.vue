@@ -193,7 +193,7 @@
     { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
@@ -221,7 +221,7 @@
     },
     { accessorKey: 'last4', header: 'Card', grow: 2, minWidth: 200 },
     { accessorKey: 'expires', header: 'Expiration date', minWidth: 140 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const pendingRemoval = ref<PaymentMethod | null>(null)
@@ -270,7 +270,7 @@
           >
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :loading="loading"
               aria-label="Refresh billing data"
@@ -280,7 +280,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/billing"
             target="_blank"
@@ -308,7 +308,7 @@
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="load"
             />
@@ -326,7 +326,7 @@
                     <h2 class="text-heading-xs text-(--text-default)">Subscription plan</h2>
                     <Button
                       label="Change plan"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       href="/account/billing/plans"
                       :disabled="loading"
@@ -351,7 +351,7 @@
                       </template>
                     </div>
                     <KeyValuePairs
-                      kind="split"
+                      variant="split"
                       :loading="loading"
                       aria-label="Subscription details"
                     >
@@ -426,7 +426,7 @@
                     >
                     <Button
                       label="Contact sales"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       href="https://example.com/contact-sales"
                       target="_blank"
@@ -459,7 +459,7 @@
                 >
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh invoices"
@@ -472,7 +472,7 @@
                 >
                   <IconButton
                     icon="ai ai-download"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="!matchingItems.length"
                     aria-label="Download CSV"
@@ -501,7 +501,7 @@
                   <template #actions>
                     <Button
                       label="How billing works"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       icon="ai ai-external-link"
                       href="https://example.com/docs/billing"
@@ -571,7 +571,7 @@
                     <Tooltip content="Download invoice">
                       <IconButton
                         icon="ai ai-file-pdf"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`https://example.com/invoices/${row.id}.pdf`"
                         download
@@ -589,7 +589,7 @@
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />
@@ -612,7 +612,7 @@
               <template #actions>
                 <Button
                   label="Update"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   href="/account/billing/payment-information"
                   :disabled="loading"
@@ -654,7 +654,7 @@
                 <Button
                   label="Add payment method"
                   icon="ai ai-plus"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   href="/account/billing/payment-methods/new"
                   :disabled="loading"

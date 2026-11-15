@@ -24,7 +24,7 @@
       <Item
         v-for="name in visible"
         :key="name"
-        kind="option"
+        variant="option"
         clickable
         :aria-pressed="selected === name"
         @click="selected = name"

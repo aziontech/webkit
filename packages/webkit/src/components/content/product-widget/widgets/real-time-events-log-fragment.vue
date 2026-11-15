@@ -155,7 +155,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:70%]"
     :chrome="false"
@@ -172,7 +172,7 @@
           <span class="relative shrink-0">
             <Button
               label="Filter"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-filter"
             />
@@ -200,7 +200,7 @@
           </Input>
           <IconButton
             icon="ai ai-refresh"
-            kind="outlined"
+            variant="outline"
             size="medium"
             ariaLabel="Refresh"
           />
@@ -211,7 +211,7 @@
           >
             <IconButton
               icon="ai ai-download"
-              kind="outlined"
+              variant="outline"
               size="medium"
               ariaLabel="Download CSV"
             />

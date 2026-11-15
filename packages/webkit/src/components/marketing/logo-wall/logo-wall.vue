@@ -16,7 +16,7 @@
   export type LogoWallShape = 'wide' | 'compact'
 
   /** The cell's proportion: `square` cells, or `rectangle` cells at 3:2 that fit nine marks in the height six squares take. */
-  export type LogoWallKind = 'square' | 'rectangle'
+  export type LogoWallVariant = 'square' | 'rectangle'
 
   /** One company mark in the wall, optionally linked. */
   export type LogoWallItem = {
@@ -32,7 +32,7 @@
 
   interface Props {
     /** The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`. */
-    kind?: LogoWallKind
+    variant?: LogoWallVariant
     /** The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. */
     items?: LogoWallItem[]
     /** Accessible name for the group of marks, announced instead of an unnamed region. */
@@ -42,7 +42,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'square',
+    variant: 'square',
     items: () => [],
     ariaLabel: '',
     linkLabel: ''
@@ -82,24 +82,24 @@
     v-bind="$attrs"
     class="group/logo-wall grid data-[aside]:lg:grid-cols-2"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-aside="hasAside() || null"
     :aria-label="ariaLabel || undefined"
   >
     <CardGrid
       v-if="hasItems"
-      kind="frame"
+      variant="frame"
       layout="fixed"
       flush
       :columns="3"
       :mobile-columns="2"
       role="list"
-      class="sm:grid-cols-3! lg:grid-cols-6! group-data-[aside]/logo-wall:lg:grid-cols-2! group-data-[aside]/logo-wall:xl:grid-cols-3! group-data-[kind=rectangle]/logo-wall:max-sm:grid-cols-3! group-data-[kind=rectangle]/logo-wall:group-data-[aside]/logo-wall:lg:grid-cols-3!"
+      class="sm:grid-cols-3! lg:grid-cols-6! group-data-[aside]/logo-wall:lg:grid-cols-2! group-data-[aside]/logo-wall:xl:grid-cols-3! group-data-[variant=rectangle]/logo-wall:max-sm:grid-cols-3! group-data-[variant=rectangle]/logo-wall:group-data-[aside]/logo-wall:lg:grid-cols-3!"
     >
       <CardGridCell
         v-for="(item, index) in items"
         :key="`${item.alt}-${index}`"
-        kind="surface"
+        variant="surface"
         :padded="false"
         role="listitem"
       >
@@ -107,7 +107,7 @@
           v-if="item.href"
           :href="item.href"
           :aria-label="`${linkText}, ${item.alt}`"
-          class="group/logo relative isolate flex aspect-square group-data-[kind=rectangle]/logo-wall:aspect-3/2 items-center justify-center px-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 motion-reduce:before:transition-none"
+          class="group/logo relative isolate flex aspect-square group-data-[variant=rectangle]/logo-wall:aspect-3/2 items-center justify-center px-(--spacing-md) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-moderate-01 before:ease-productive-entrance hover:before:opacity-100 motion-reduce:before:transition-none"
           @click="onItemClick($event, item)"
         >
           <span
@@ -138,7 +138,7 @@
         </a>
         <div
           v-else
-          class="flex aspect-square items-center justify-center px-(--spacing-md) group-data-[kind=rectangle]/logo-wall:aspect-3/2"
+          class="flex aspect-square items-center justify-center px-(--spacing-md) group-data-[variant=rectangle]/logo-wall:aspect-3/2"
         >
           <span class="flex h-7 max-w-full items-center justify-center">
             <slot

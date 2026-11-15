@@ -9,8 +9,8 @@
   import {
     type MultiSelectCommitEvent,
     MultiSelectInjectionKey,
-    type MultiSelectKind,
-    type MultiSelectSize
+    type MultiSelectSize,
+    type MultiSelectVariant
   } from './injection-key'
 
   defineOptions({
@@ -39,8 +39,8 @@
       /** Form field name: renders one hidden input per selected value, so a native form submits them; required then blocks an empty submit. */
       name?: string
       /** How the trigger shows the selection: joined labels, or one removable chip per value. */
-      kind?: MultiSelectKind
-      /** With kind chips, the most chips shown before a +N more chip; 0 shows every chip. */
+      variant?: MultiSelectVariant
+      /** With variant chips, the most chips shown before a +N more chip; 0 shows every chip. */
       chipLimit?: number
       /** Types in the trigger: the text filters the options, Backspace in an empty field removes the last value. */
       searchable?: boolean
@@ -65,7 +65,7 @@
       invalid: false,
       displayValue: undefined,
       name: '',
-      kind: 'summary',
+      variant: 'summary',
       chipLimit: 0,
       searchable: false,
       filter: true,
@@ -238,7 +238,7 @@
     registerLabel,
     labelsPending,
     labelOf,
-    kind: computed(() => props.kind),
+    variant: computed(() => props.variant),
     chipLimit: computed(() => Math.max(0, Math.floor(props.chipLimit))),
     searchable: computed(() => props.searchable),
     allowCustom: computed(() => props.allowCustom),
@@ -270,7 +270,7 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-filled="filled || null"
-    :data-kind="kind"
+    :data-variant="variant"
     :class="attrs.class"
     class="relative inline-block w-full"
   >

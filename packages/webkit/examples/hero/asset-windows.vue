@@ -5,7 +5,7 @@
 <template>
   <div class="[--banner-top-height:42%]">
     <Hero
-      kind="screen"
+      variant="screen"
       align="center"
       max-width="site"
       texture="dots"

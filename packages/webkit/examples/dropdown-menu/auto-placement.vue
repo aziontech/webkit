@@ -19,7 +19,7 @@
       <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
-            kind="outlined"
+            variant="outline"
             label="top-left trigger"
           />
         </DropdownMenuTrigger>
@@ -40,7 +40,7 @@
       <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
-            kind="outlined"
+            variant="outline"
             label="top-right trigger"
           />
         </DropdownMenuTrigger>
@@ -61,7 +61,7 @@
       <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
-            kind="outlined"
+            variant="outline"
             label="bottom-left trigger"
           />
         </DropdownMenuTrigger>
@@ -82,7 +82,7 @@
       <DropdownMenuRoot placement="auto">
         <DropdownMenuTrigger>
           <Button
-            kind="outlined"
+            variant="outline"
             label="bottom-right trigger"
           />
         </DropdownMenuTrigger>

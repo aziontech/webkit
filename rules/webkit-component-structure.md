@@ -60,11 +60,11 @@ src/components/<name>/
   defineOptions({ name: 'TagChip', inheritAttrs: false })
 
   // 3. types (props interfaces, exported variant unions)
-  export type TagChipKind = 'primary' | 'secondary'
-  interface Props { kind?: TagChipKind; disabled?: boolean }
+  export type TagChipVariant = 'primary' | 'secondary'
+  interface Props { variant?: TagChipVariant; disabled?: boolean }
 
   // 4. props
-  const props = withDefaults(defineProps<Props>(), { kind: 'primary', disabled: false })
+  const props = withDefaults(defineProps<Props>(), { variant: 'primary', disabled: false })
 
   // 5. emits
   const emit = defineEmits<{ click: [event: MouseEvent, label: string] }>()
@@ -89,7 +89,7 @@ src/components/<name>/
 ```vue
 <script setup>
   // runtime macros, manual v-model wiring, no defineOptions, imports out of order
-  const props = defineProps({ modelValue: String, kind: { type: String, default: 'primary' } })
+  const props = defineProps({ modelValue: String, variant: { type: String, default: 'primary' } })
   const emit = defineEmits(['update:modelValue', 'click'])
   import { computed } from 'vue'
 </script>

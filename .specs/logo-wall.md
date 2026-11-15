@@ -3,8 +3,8 @@ name: logo-wall
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: d90c45aea0360667410867b0f0b77d1236f1e27292b8fab69e0c506b3294021d
+spec_version: 6
+checksum: 69151ca70ab9724be991af6728dd173bd2c7ca0c727d8cdfe0487556f4066743
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -15,7 +15,7 @@ last_updated: 2026-11-15
 
 The customer-proof band of a marketing page: a framed grid of square cells, one company mark to a cell, each one optionally linked to that customer's story, under one accessible group name. It is deliberately a static grid rather than an auto-scrolling strip — moving content needs a pause control to meet WCAG 2.2.2, and a wall a reader can scan beats one they have to wait for.
 
-The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `kind` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.
+The cells are `card-grid` frame cells, so the wall draws the same hairlines and registration marks as every other framed band on the page. A linked cell is the whole square: on hover and focus a wash rises behind it, the mark lifts, and a `Read story` label slides in under it, so the wall doubles as the way into the case studies. Fill the `aside` slot and the band splits from `lg` up — the wall on the start edge, one of those customers speaking on the end edge on a padded canvas panel framed like the cells, a registration mark in each of its corners and one shared hairline at its seam with the wall — and the wall narrows from six columns to three to sit in half the width at the same cell size. Every cell is a perfect square in every layout, and the wall alone sets the band's height: the `aside` panel is size-contained from `lg` up, so its content never stretches a row, and the statement sits centred in it. Between `lg` and `xl` the wall is two columns wide, so its three rows are tall enough for a client sentence; from `xl` it is three columns, two rows. Set `variant` to `rectangle` and every cell becomes a 3:2 rectangle instead: beside `aside` the wall holds three columns from `lg`, so nine rectangles take exactly the height six squares do, and below `sm` it keeps three columns so nine marks never leave a ragged row.
 
 ## When to use
 
@@ -50,7 +50,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 - Link a mark with `href` only when there is somewhere worth going, such as a case study; a wall of links to nowhere costs a reader a tab stop per cell. In an app with a client-side router, handle `item-click`: call `event.preventDefault()` and push `item.href`.
 - Put one statement in `aside`, not a second grid. The band's argument is _many customers, one of them talking_; two things of equal weight leave a reader with neither.
 - Give the wall exactly six marks when `aside` is filled — two full rows of three squares beside the statement, and three rows of two between `lg` and `xl` — and a multiple of six when it is not, so the last row is never ragged.
-- Reach for `kind: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall.
+- Reach for `variant: 'rectangle'` when the band names nine customers beside `aside`: three rows of three 3:2 cells at the height of the six-square wall. Nine is the count the rectangle wall is drawn for; without `aside` it runs six to a row like the square wall.
 
 ## Usage
 
@@ -74,7 +74,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
   >
     <template #aside>
       <Quote
-        kind="signed"
+        variant="signed"
         logo="/logos/herospark.svg"
         logo-alt="HeroSpark"
         text="Azion transformed our operations, reducing costs and improving performance."
@@ -88,14 +88,14 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 ## Props
 
-| Prop        | Type             | Default    | Required | JSDoc                                                                                                                                                                                                                                                    |
-| ----------- | ---------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`      | `LogoWallKind`   | `'square'` | false    | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.                                                                                                             |
-| `items`     | `LogoWallItem[]` | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
-| `ariaLabel` | `string`         | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
-| `linkLabel` | `string`         | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
+| Prop        | Type              | Default    | Required | JSDoc                                                                                                                                                                                                                                                    |
+| ----------- | ----------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`   | `LogoWallVariant` | `'square'` | false    | The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`.                                                                                                             |
+| `items`     | `LogoWallItem[]`  | `[]`       | false    | The marks rendered in the grid, in order; each item is `{ src, alt, href?, shape? }` where `src` is the mark's URL, `alt` names the company, `href` links the cell to that customer's story, and `shape` sets a near-square mark taller than a wordmark. |
+| `ariaLabel` | `string`          | `''`       | false    | Accessible name for the group of marks, announced instead of an unnamed region.                                                                                                                                                                          |
+| `linkLabel` | `string`          | `''`       | false    | Words revealed under a linked mark on hover and focus, and the lead of that link's accessible name. Empty uses the locale catalog (`Read story`).                                                                                                        |
 
-`LogoWallItem` is `{ src: string; alt: string; href?: string; shape?: LogoWallShape }`, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallKind` is `'square' | 'rectangle'`. All three types are exported.
+`LogoWallItem` is `{ src: string; alt: string; href?: string; shape?: LogoWallShape }`, `LogoWallShape` is `'wide' | 'compact'` (`wide` when omitted), and `LogoWallVariant` is `'square' | 'rectangle'`. All three types are exported.
 
 ## Events
 
@@ -114,7 +114,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 - Visual states: an unlinked cell is static; a linked cell on `hover` / `focus-visible` raises a `--bg-hover` wash behind the whole square, lifts the mark by `--spacing-sm`, and fades the `linkLabel` in beneath it with a trailing arrow
 - `data-aside` is present when the `aside` slot is filled; from `lg` up it splits the band into two columns and narrows the wall from six columns to two, and to three from `xl`, so a cell is the same size in both layouts
-- `data-kind` on the root is `square` or `rectangle`; `rectangle` sets every cell at 3:2 instead of 1:1
+- `data-variant` on the root is `square` or `rectangle`; `rectangle` sets every cell at 3:2 instead of 1:1
 - Columns: two below `sm`, three from `sm`, six from `lg` (with `aside`: two from `lg`, three from `xl`); a `rectangle` wall is three below `sm` and three from `lg` beside `aside`
 - `data-shape` on the built image is `wide` or `compact`; `compact` sets the mark 28px tall instead of 20px
 - A cell's mark is the `mark` slot's content when it is filled, and the image built from the item otherwise
@@ -162,7 +162,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 - Default — six linked marks beside a `quote`, the Web Apps band (justified: this is the composition the component exists for, and the `aside` split, the three-column wall and the canvas panel only exist when the slot is filled, which no arg can produce)
 - Wall — the same marks with no `aside`, six to a row (justified: the full-width six-column wall is the other layout the component has)
-- Rectangle — nine linked marks beside a `quote` in 3:2 cells (justified: the rectangle cell and its three-column wall beside `aside` only exist with `kind: 'rectangle'` and nine items, which the square Default cannot show)
+- Rectangle — nine linked marks beside a `quote` in 3:2 cells (justified: the rectangle cell and its three-column wall beside `aside` only exist with `variant: 'rectangle'` and nine items, which the square Default cannot show)
 - Unlinked — marks with no `href` (justified: the static cell, with no wash, lift, label or tab stop, only exists without an `href`, and every other story links its marks)
 
 ## Constraints — DO NOT

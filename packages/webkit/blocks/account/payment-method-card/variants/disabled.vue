@@ -123,7 +123,7 @@
           <Button
             id="card-change"
             label="Change"
-            kind="outlined"
+            variant="outline"
             size="small"
             disabled
             @click="startEditingCard"
@@ -244,7 +244,7 @@
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 disabled
                 @click="cancelEditingCard"
@@ -255,7 +255,7 @@
                 class="w-full"
                 type="submit"
                 label="Update"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 disabled
               />

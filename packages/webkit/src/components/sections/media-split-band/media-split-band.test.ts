@@ -144,15 +144,15 @@ describe('MediaSplitBand', () => {
     const { getByRole } = band({ primaryAction: { label: 'Join us', href: '/careers' } })
 
     const button = getByRole('link', { name: 'Join us' })
-    expect(button).toHaveAttribute('data-kind', 'outlined')
+    expect(button).toHaveAttribute('data-variant', 'outline')
   })
 
   it('draws a lone secondary action the same way and links the band to it', () => {
     const { getByRole, getByTestId } = band({ secondaryAction })
 
     expect(getByRole('link', { name: secondaryAction.label })).toHaveAttribute(
-      'data-kind',
-      'outlined'
+      'data-variant',
+      'outline'
     )
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-href')).toBe(true)
   })
@@ -160,9 +160,9 @@ describe('MediaSplitBand', () => {
   it('draws two actions as secondary then outlined', () => {
     const { getAllByRole } = band({ primaryAction, secondaryAction })
 
-    expect(getAllByRole('link').map((link) => link.getAttribute('data-kind'))).toEqual([
+    expect(getAllByRole('link').map((link) => link.getAttribute('data-variant'))).toEqual([
       'secondary',
-      'outlined'
+      'outline'
     ])
   })
 
@@ -195,7 +195,7 @@ describe('MediaSplitBand', () => {
 
     expect(
       getByTestId(TESTID).querySelector('[data-testid="marketing-texture-material"]')
-    ).toHaveAttribute('data-kind', 'dots')
+    ).toHaveAttribute('data-variant', 'dots')
   })
 
   it('sets the anchor as the band id', () => {
@@ -316,15 +316,15 @@ describe('MediaSplitBand', () => {
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-href')).toBe(false)
   })
 
-  it('lets an action kind win over the drawn kind and draws its leading icon', () => {
+  it('lets an action variant win over the drawn variant and draws its leading icon', () => {
     const { getByRole } = band({
-      primaryAction: { ...primaryAction, kind: 'transparent' },
+      primaryAction: { ...primaryAction, variant: 'ghost' },
       secondaryAction: { ...secondaryAction, icon: 'ai ai-github', trailing: false }
     })
 
-    expect(getByRole('link', { name: 'Join us' })).toHaveAttribute('data-kind', 'transparent')
+    expect(getByRole('link', { name: 'Join us' })).toHaveAttribute('data-variant', 'ghost')
     const second = getByRole('link', { name: secondaryAction.label })
-    expect(second).toHaveAttribute('data-kind', 'outlined')
+    expect(second).toHaveAttribute('data-variant', 'outline')
     expect(second.querySelector('.ai-github')).not.toBeNull()
   })
 

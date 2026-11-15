@@ -62,7 +62,7 @@
       <template #actions>
         <Button
           label="See success stories"
-          kind="secondary"
+          variant="secondary"
           size="large"
           href="https://www.azion.com/en/success-case/"
           target="_blank"

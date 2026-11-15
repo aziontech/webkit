@@ -6,7 +6,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -19,7 +19,7 @@
   import { computed, reactive, ref, watch } from 'vue'
 
   interface PurgeError {
-    kind: HelperTextKind
+    type: HelperTextType
     message: string
   }
 
@@ -66,7 +66,7 @@
   const TIERED_CACHE_TYPES = ['cachekey']
 
   const form = reactive({ layer: 'cache', type: 'url', arguments: '' })
-  const error = reactive<PurgeError>({ kind: 'required', message: '' })
+  const error = reactive<PurgeError>({ type: 'required', message: '' })
 
   const tiered = computed(() => form.layer === 'tiered_cache')
   const typeAllowed = (value: string) => !tiered.value || TIERED_CACHE_TYPES.includes(value)
@@ -104,13 +104,13 @@
 
   const validate = () => {
     if (!entries.value.length) {
-      error.kind = 'required'
+      error.type = 'required'
       error.message = 'This field is required.'
       return false
     }
     const issue = entries.value.map(lineIssue).find(Boolean)
     if (issue) {
-      error.kind = 'invalid'
+      error.type = 'invalid'
       error.message = issue
       return false
     }
@@ -159,7 +159,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Cache"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -169,7 +169,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -186,7 +186,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -226,11 +226,11 @@
                       <SettingRow
                         title="Layer"
                         description="The cache layer the objects are evicted from."
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <RadioGroup
                           v-model="form.layer"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="purge-layer"
                           aria-label="Layer"
@@ -247,11 +247,11 @@
                       <SettingRow
                         title="Purge type"
                         description="How the arguments below identify the objects."
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <RadioGroup
                           v-model="form.type"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="purge-type"
                           aria-label="Purge type"
@@ -285,7 +285,7 @@
                       <SettingRow
                         title="List"
                         :description="selectedType.description"
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <template #title> {{ selectedType.label }} List </template>
                         <Textarea
@@ -295,8 +295,8 @@
                           :rows="6"
                           :aria-label="selectedType.label + ' list'"
                           :placeholder="selectedType.placeholder"
-                          :required="!!error.message && error.kind === 'required'"
-                          :invalid="!!error.message && error.kind === 'invalid'"
+                          :required="!!error.message && error.type === 'required'"
+                          :invalid="!!error.message && error.type === 'invalid'"
                           aria-describedby="create-purge-arguments-message"
                           :spellcheck="false"
                           autocomplete="off"
@@ -304,7 +304,7 @@
 
                         <HelperText
                           id="create-purge-arguments-message"
-                          :kind="error.message ? error.kind : 'helper'"
+                          :type="error.message ? error.type : 'helper'"
                           :label="guidance"
                         />
                       </SettingRow>
@@ -320,17 +320,17 @@
               </SettingsSection>
             </fieldset>
           </div>
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template #actions>
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
               />
               <Button
                 label="Purge"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"

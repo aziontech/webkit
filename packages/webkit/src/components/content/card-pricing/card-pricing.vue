@@ -13,7 +13,7 @@
   /** Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. */
   export type CardPricingActionsPosition = 'bottom' | 'middle'
   /** Whether the card draws its own surface. */
-  export type CardPricingKind = 'contained' | 'transparent'
+  export type CardPricingVariant = 'contained' | 'ghost'
 
   interface CardPricingProps {
     /** Plan name shown as the card heading. */
@@ -30,8 +30,8 @@
     equalHeight?: boolean
     /** Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. */
     actionsPosition?: CardPricingActionsPosition
-    /** Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page. */
-    kind?: CardPricingKind
+    /** Whether the card draws its own surface: `contained` has a border and a surface, `ghost` sits on the page. */
+    variant?: CardPricingVariant
     /** Price amount, already formatted, without the currency symbol. */
     value?: string
     /** Text before the amount, usually the currency symbol. */
@@ -56,7 +56,7 @@
     tagLabel: 'Popular',
     equalHeight: false,
     actionsPosition: 'bottom',
-    kind: 'contained',
+    variant: 'contained',
     value: '20',
     prefix: '$',
     suffix: '/ mon',
@@ -90,10 +90,10 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-actions-position="actionsPosition"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-equal-height="equalHeight || null"
     :data-animated="animated || null"
-    class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[actions-position=bottom]:gap-(--spacing-lg) data-[actions-position=middle]:justify-between data-[kind=contained]:rounded-(--shape-card) data-[kind=contained]:border-(length:--border-width-default) data-[kind=contained]:border-(--border-default) data-[kind=contained]:bg-(--bg-surface)"
+    class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[actions-position=bottom]:gap-(--spacing-lg) data-[actions-position=middle]:justify-between data-[variant=contained]:rounded-(--shape-card) data-[variant=contained]:border-(length:--border-width-default) data-[variant=contained]:border-(--border-default) data-[variant=contained]:bg-(--bg-surface)"
   >
     <div
       class="flex w-full flex-col items-start group-data-[actions-position=bottom]/card:shrink-0 group-data-[actions-position=middle]/card:min-h-px group-data-[actions-position=middle]/card:flex-1 group-data-[actions-position=middle]/card:gap-(--spacing-lg)"
@@ -170,7 +170,7 @@
       <slot name="actions">
         <Button
           v-if="actionLabel"
-          :kind="isMiddle ? 'secondary' : 'outlined'"
+          :variant="isMiddle ? 'secondary' : 'outline'"
           size="large"
           :label="actionLabel"
           class="w-full"

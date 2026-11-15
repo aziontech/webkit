@@ -135,7 +135,7 @@
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
     { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 160 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const statusOptions = [...new Set(rows.value.map((row) => row.status))]
@@ -304,7 +304,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/personal-tokens"
             target="_blank"
@@ -312,7 +312,7 @@
           <Button
             label="Create Personal Token"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             @click="openCreate"
           />
@@ -338,7 +338,7 @@
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
@@ -351,7 +351,7 @@
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -373,7 +373,7 @@
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="retryLoad"
             />
@@ -396,7 +396,7 @@
                 <Button
                   label="Create Personal Token"
                   icon="ai ai-plus"
-                  kind="secondary"
+                  variant="secondary"
                   size="small"
                   @click="openCreate"
                 />
@@ -495,7 +495,7 @@
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />
@@ -594,7 +594,7 @@
                   </Select>
                   <HelperText
                     id="token-expiry-hint"
-                    kind="helper"
+                    type="helper"
                     >{{ expiryHint }}</HelperText
                   >
                 </Field>
@@ -606,7 +606,7 @@
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 type="button"
                 :disabled="submitting"
@@ -614,7 +614,7 @@
               />
               <Button
                 label="Create Personal Token"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"
@@ -658,7 +658,7 @@
                 </div>
                 <CopyButton
                   :value="revealed.secret"
-                  kind="outlined"
+                  variant="outline"
                   size="large"
                   aria-label="Copy token"
                   copied-label="Token copied"
@@ -679,7 +679,7 @@
           <div class="flex w-full justify-end">
             <Button
               :label="copied ? 'Done' : 'I copied the token'"
-              kind="primary"
+              variant="primary"
               size="medium"
               @click="closeReveal"
             />

@@ -260,7 +260,7 @@
         #header
       >
         <SectionTitle
-          kind="start"
+          variant="start"
           :title="title"
         />
       </template>
@@ -280,7 +280,7 @@
               v-if="facets.length > 0"
               :data-testid="`${testId}__filter-button`"
               :label="filterButtonLabel"
-              kind="outlined"
+              variant="outline"
               size="large"
               icon="ai ai-filter"
               :aria-expanded="filtersOpen ? 'true' : 'false'"
@@ -435,7 +435,7 @@
           <div class="flex justify-center p-(--spacing-xl)">
             <Button
               :label="moreLabel"
-              kind="outlined"
+              variant="outline"
               size="large"
               @click="pages += 1"
             />
@@ -461,7 +461,7 @@
           >
             <Button
               :label="emptyActionLabel"
-              kind="secondary"
+              variant="secondary"
               size="large"
               @click="clear"
             />

@@ -17,7 +17,7 @@ export default {
   :value="textToCopy"${
     outlined
       ? figma.code`
-  kind="outlined"`
+  variant="outline"`
       : ''
   }${
     disabled

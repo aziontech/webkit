@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 import Default from '../../../../examples/button/default.vue'
 import Disabled from '../../../../examples/button/disabled.vue'
 import Loading from '../../../../examples/button/loading.vue'
-import Types from '../../../../examples/button/types.vue'
+import Types from '../../../../examples/button/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Button from './button.vue'
 
@@ -52,11 +52,11 @@ describe('Button', () => {
       expect(getByTestId('save-button').tagName).toBe('BUTTON')
     })
 
-    it.each(['primary', 'secondary', 'outlined', 'transparent', 'danger', 'link'] as const)(
-      'reflects kind=%s on data-kind',
-      (kind) => {
-        const { getByRole } = render(Button, { props: { label: 'Skip', kind } })
-        expect(getByRole('button', { name: 'Skip' }).getAttribute('data-kind')).toBe(kind)
+    it.each(['primary', 'secondary', 'outline', 'ghost', 'danger', 'link'] as const)(
+      'reflects variant=%s on data-variant',
+      (variant) => {
+        const { getByRole } = render(Button, { props: { label: 'Skip', variant: variant } })
+        expect(getByRole('button', { name: 'Skip' }).getAttribute('data-variant')).toBe(variant)
       }
     )
 
@@ -81,29 +81,29 @@ describe('Button', () => {
     })
   })
 
-  describe('kind="link"', () => {
-    it('stays a native button that emits click, marked with data-kind', async () => {
-      const view = render(Button, { props: { label: 'Connect Git Repository', kind: 'link' } })
+  describe('variant="link"', () => {
+    it('stays a native button that emits click, marked with data-variant', async () => {
+      const view = render(Button, { props: { label: 'Connect Git Repository', variant: 'link' } })
       const node = view.getByRole('button', { name: 'Connect Git Repository' })
       expect(node.tagName).toBe('BUTTON')
       expect(node.getAttribute('type')).toBe('button')
-      expect(node.getAttribute('data-kind')).toBe('link')
+      expect(node.getAttribute('data-variant')).toBe('link')
       await fireEvent.click(node)
       expect(view.emitted('click')).toHaveLength(1)
     })
 
     it('suppresses click while disabled or loading', async () => {
       for (const state of [{ disabled: true }, { loading: true }]) {
-        const view = render(Button, { props: { label: 'Show rules', kind: 'link', ...state } })
+        const view = render(Button, { props: { label: 'Show rules', variant: 'link', ...state } })
         await fireEvent.click(view.getByRole('button', { name: 'Show rules' }))
         expect(view.emitted('click')).toBeUndefined()
         view.unmount()
       }
     })
 
-    it('has no axe violations beside the other kinds', async () => {
+    it('has no axe violations beside the other variants', async () => {
       const { container, getByRole } = render(Types)
-      expect(getByRole('button', { name: 'Link button' }).getAttribute('data-kind')).toBe('link')
+      expect(getByRole('button', { name: 'Link button' }).getAttribute('data-variant')).toBe('link')
       await expectNoA11yViolations(container)
     })
   })

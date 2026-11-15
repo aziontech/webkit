@@ -223,7 +223,7 @@
       </p>
       <IconButton
         icon="ai ai-arrow-up"
-        kind="primary"
+        variant="primary"
         size="small"
         ariaLabel="Send"
         :disabled="!draft"

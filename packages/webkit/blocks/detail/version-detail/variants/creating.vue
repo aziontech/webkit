@@ -200,7 +200,7 @@
       ]"
     >
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="versionId"
         :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
@@ -276,7 +276,7 @@
       <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           href="/resources/1784552864?tab=versions"
           aria-label="Back to web-app versions"
@@ -385,7 +385,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       aria-label="Version actions"
                     />
@@ -496,7 +496,7 @@
                     <template #actions>
                       <Button
                         :label="`Open ${tabLabel}`"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`/resources/web-app/${activeTab}`"
                       />
@@ -544,14 +544,14 @@
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <Button
                       label="Add Version"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       icon="ai ai-plus"
                       loading
                     />
                     <Button
                       label="Redeploy"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       icon="ai ai-refresh"
                       disabled
@@ -592,7 +592,7 @@
               </h2>
               <IconButton
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Close version history"
                 @click="historyExpanded = false"
@@ -641,7 +641,7 @@
                           :alt="version.author"
                           :label="version.author"
                           size="small"
-                          kind="square"
+                          variant="square"
                         />
                       </span>
                       <span class="truncate">{{ version.author }} · {{ version.createdAgo }}</span>
@@ -696,7 +696,7 @@
                             :alt="entry.author"
                             :label="entry.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
@@ -712,7 +712,7 @@
               >
                 <Button
                   label="Show older"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="shown += 5"
                 />

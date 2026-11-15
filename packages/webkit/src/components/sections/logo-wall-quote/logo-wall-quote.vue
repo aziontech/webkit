@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Logo, { type LogoArtwork, type LogoKind } from '../../content/logo/logo.vue'
+  import Logo, { type LogoArtwork, type LogoVariant } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import LogoWall from '../../marketing/logo-wall/logo-wall.vue'
   import Quote from '../../marketing/quote/quote.vue'
@@ -34,10 +34,10 @@
   }
 
   /** Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band. */
-  export type LogoWallQuoteKind = 'wall' | 'quote'
+  export type LogoWallQuoteVariant = 'wall' | 'quote'
 
   /** Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence. */
-  export type LogoWallQuoteQuoteKind = 'highlight' | 'signed'
+  export type LogoWallQuoteQuoteVariant = 'highlight' | 'signed'
 
   /** The signed quote set in the wall's aside. */
   export type LogoWallQuoteQuote = {
@@ -71,9 +71,9 @@
 
   interface Props {
     /** Layout of the band; `quote` renders the quote alone and needs no logos. */
-    kind?: LogoWallQuoteKind
+    variant?: LogoWallQuoteVariant
     /** Register of the quote in the `quote` layout. */
-    quoteKind?: LogoWallQuoteQuoteKind
+    quoteVariant?: LogoWallQuoteQuoteVariant
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Overline above the section title. */
@@ -93,8 +93,8 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'wall',
-    quoteKind: 'signed',
+    variant: 'wall',
+    quoteVariant: 'signed',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -113,13 +113,13 @@
 
   const hasLogos = computed(() => props.logos.length > 0)
 
-  const isQuoteBand = computed(() => props.kind === 'quote' && Boolean(props.quote?.text))
+  const isQuoteBand = computed(() => props.variant === 'quote' && Boolean(props.quote?.text))
 
-  const renders = computed(() => props.kind !== 'quote' || isQuoteBand.value)
+  const renders = computed(() => props.variant !== 'quote' || isQuoteBand.value)
 
   const hasActions = computed(() => Boolean(props.primaryAction || props.secondaryAction))
 
-  const markKind = (logo: LogoWallQuoteLogo): LogoKind =>
+  const markKind = (logo: LogoWallQuoteLogo): LogoVariant =>
     logo.logoTreatment === 'monochrome' ? 'monochrome' : 'color'
 
   const markArtwork = (logo: LogoWallQuoteLogo): LogoArtwork =>
@@ -141,7 +141,7 @@
     :id="anchor || undefined"
     class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title || undefined"
   >
     <SectionModule
@@ -156,11 +156,11 @@
         marks="bottom"
       >
         <div
-          :data-kind="quoteKind"
-          class="p-(--spacing-xl) lg:data-[kind=signed]:max-w-(--container-5xl)"
+          :data-variant="quoteVariant"
+          class="p-(--spacing-xl) lg:data-[variant=signed]:max-w-(--container-5xl)"
         >
           <Quote
-            :kind="quoteKind"
+            :variant="quoteVariant"
             :text="quote.text"
             :name="quote.name"
             :job-title="quote.jobTitle"
@@ -174,7 +174,7 @@
                 :src="quote.logo"
                 :src-light="quote.logoLight"
                 :artwork="quote.artwork"
-                class="h-8 max-w-(--size-40) group-data-[kind=highlight]:md:h-24 group-data-[kind=highlight]:md:max-w-none"
+                class="h-8 max-w-(--size-40) group-data-[variant=highlight]:md:h-24 group-data-[variant=highlight]:md:max-w-none"
               />
             </template>
             <template
@@ -185,7 +185,7 @@
                 v-if="primaryAction"
                 :label="primaryAction.label"
                 :href="primaryAction.href"
-                kind="secondary"
+                variant="secondary"
                 size="large"
                 :target="primaryAction.target"
                 :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
@@ -197,7 +197,7 @@
                 v-if="secondaryAction"
                 :label="secondaryAction.label"
                 :href="secondaryAction.href"
-                kind="outlined"
+                variant="outline"
                 size="large"
                 :target="secondaryAction.target"
                 :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
@@ -232,7 +232,7 @@
         marks="all"
       >
         <LogoWall
-          kind="rectangle"
+          variant="rectangle"
           :aria-label="ariaLabel || undefined"
           :items="wallItems"
         >
@@ -243,7 +243,7 @@
               :src="logos[index].logo"
               :src-light="logos[index].logoLight"
               :artwork="markArtwork(logos[index])"
-              :kind="markKind(logos[index])"
+              :variant="markKind(logos[index])"
               :data-treatment="logos[index].logoTreatment ?? 'as-is'"
               class="h-5 sm:max-w-24"
             />
@@ -253,7 +253,7 @@
             #aside
           >
             <Quote
-              kind="signed"
+              variant="signed"
               :text="quote.text"
               :name="quote.name"
               :job-title="quote.jobTitle"
@@ -275,7 +275,7 @@
                   v-if="primaryAction"
                   :label="primaryAction.label"
                   :href="primaryAction.href"
-                  kind="secondary"
+                  variant="secondary"
                   size="large"
                   :target="primaryAction.target"
                   :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
@@ -287,7 +287,7 @@
                   v-if="secondaryAction"
                   :label="secondaryAction.label"
                   :href="secondaryAction.href"
-                  kind="outlined"
+                  variant="outline"
                   size="large"
                   :target="secondaryAction.target"
                   :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"

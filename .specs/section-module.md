@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 5681520e7d3dc6aa45d1767b6477038f14020e004ea4d35ae9598c3b2250f6ac
+checksum: 1872e3b7035e2cfdd8196902d975bfa925e37c85f32fd5c75869fe358a9a6a4f
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -68,7 +68,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 | `title` | `string` | `''` | false | Headline of the module's header row, rendered as its `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `SectionModuleKind` | `'start'` | false | Layout of the default header row. |
+| `variant` | `SectionModuleVariant` | `'start'` | false | Layout of the default header row. |
 | `divided` | `boolean` | `true` | false | Draw the top rule that divides this module from the one above it. |
 | `padded` | `boolean` | `true` | false | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 
@@ -87,7 +87,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 ## States
 
 - Visual states: `default`
-- `data-kind` carries the header layout
+- `data-variant` carries the header layout
 - `data-divided` present when the top rule is drawn
 - `data-padded` present when the body is padded
 

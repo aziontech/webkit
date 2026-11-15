@@ -21,7 +21,7 @@
   const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
 
   onScopeDispose(
-    ctx.registerMark(() => ({ kind: 'scatter', stacked: false, labeled: false, ids: ids.value }))
+    ctx.registerMark(() => ({ type: 'scatter', stacked: false, labeled: false, ids: ids.value }))
   )
 
   const testId = computed(

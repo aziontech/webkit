@@ -43,7 +43,7 @@
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Rules"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             icon="ai ai-list"
           />
@@ -53,7 +53,7 @@
               <Tooltip content="Policy actions">
                 <IconButton
                   icon="ai ai-ellipsis"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Policy actions"
                 />
@@ -120,7 +120,7 @@
           <span class="text-label-sm text-(--text-muted)">Rules</span>
           <div class="flex min-h-7 min-w-0 items-center">
             <Button
-              kind="link"
+              variant="link"
               label="14 rules"
             />
           </div>
@@ -136,7 +136,7 @@
               alt="Ethan Brooks"
               label="Ethan Brooks"
               size="small"
-              kind="square"
+              variant="square"
               class="shrink-0"
             />
           </div>
@@ -187,7 +187,7 @@
           <Button
             class="w-full"
             label="Documentation"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-book"
             href="https://example.com/docs/policies"

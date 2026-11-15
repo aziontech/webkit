@@ -116,7 +116,7 @@ addEventListener("fetch", (event) => {
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     fade="bottom"
     :chrome="false"

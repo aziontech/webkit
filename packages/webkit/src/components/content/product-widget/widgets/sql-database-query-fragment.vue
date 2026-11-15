@@ -106,7 +106,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:80%]"
     :chrome="false"
@@ -128,7 +128,7 @@
             >
               <Button
                 label="Run Query"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 icon="ai ai-play"
                 :loading="running"
@@ -137,14 +137,14 @@
             <span class="ms-auto flex items-center gap-(--spacing-xs)">
               <Button
                 label="Prettify"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-align-left"
                 :disabled="running"
               />
               <Button
                 label="Templates"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-bolt"
                 :disabled="running"
@@ -194,7 +194,7 @@
                 />
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   ariaLabel="Refresh results"
                   :loading="running"

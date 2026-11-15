@@ -21,7 +21,7 @@ The bar in its default `content` placement, labelled `aria-label="Console"`. Fil
 
 ### B. Brand — `Brand` (required)
 
-`kind="default"`, `size="small"`, wrapped in a link to the home route with `aria-label="Azion home"`. The link carries the focus ring and a hover opacity that respects `motion-reduce`.
+`variant="default"`, `size="small"`, wrapped in a link to the home route with `aria-label="Azion home"`. The link carries the focus ring and a hover opacity that respects `motion-reduce`.
 
 ### C. Documentation — `Button` (required)
 

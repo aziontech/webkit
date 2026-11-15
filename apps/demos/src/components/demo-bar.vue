@@ -91,7 +91,7 @@
         <Tooltip :content="t.flows">
           <IconButton
             icon="ai ai-compass"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :aria-label="t.flows"
           />
@@ -116,7 +116,7 @@
     <Tooltip :content="settings.theme === 'dark' ? t.light : t.dark">
       <IconButton
         :icon="settings.theme === 'dark' ? 'ai ai-sun' : 'ai ai-moon'"
-        kind="outlined"
+        variant="outline"
         size="medium"
         :aria-label="settings.theme === 'dark' ? t.light : t.dark"
         @click="toggleTheme"
@@ -125,7 +125,7 @@
     <Tooltip :content="settings.dir === 'rtl' ? t.ltr : t.rtl">
       <IconButton
         icon="ai ai-arrow-right-left"
-        kind="outlined"
+        variant="outline"
         size="medium"
         :aria-label="settings.dir === 'rtl' ? t.ltr : t.rtl"
         :aria-pressed="settings.dir === 'rtl'"

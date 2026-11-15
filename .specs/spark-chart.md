@@ -3,10 +3,10 @@ name: spark-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-10
-last_updated: 2026-11-10
-checksum: 799ab391b7030a1f8978589232c634badc0face4099d9f52e348650a7be38707
+last_updated: 2026-11-15
+checksum: 181c09790db4f3424c7c1af4bf7dfea76129aebb6a7b99bca7dfef4b84b16344
 ---
 
 # SparkChart — Component Spec
@@ -57,7 +57,7 @@ import SparkChart from '@aziontech/webkit/spark-chart'
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `values` | `(number \| null)[]` | `[]` | false | The series, oldest first; null leaves a gap. |
-| `kind` | `'area' \| 'line' \| 'bar'` | `'area'` | false | Mark drawn for the series. |
+| `type` | `'area' \| 'line' \| 'bar'` | `'area'` | false | Mark drawn for the series. |
 | `color` | `ChartColor` | `1` | false | Hue of the mark: a categorical slot (1–6), `other`, or a status. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height: 32, 48 or 64 pixels. Width follows the container. |
 | `fromZero` | `boolean` | `false` | false | Starts the value range at zero instead of the lowest value; bars always start at zero. |
@@ -74,7 +74,7 @@ _No slots._
 ## States
 
 - Visual states: `default`, `empty` (no finite value — renders nothing at its reserved height)
-- `data-kind`: `area` | `line` | `bar`
+- `data-type`: `area` | `line` | `bar`
 - `data-size`: `small` | `medium` | `large`
 - Lines and area edges are linear segments with round joins and caps; 2px stroke; the area fill fades from the hue to transparent. Bars have a 1px rounded data end and a 1px gap between them.
 

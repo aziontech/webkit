@@ -29,7 +29,7 @@
       />
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />

@@ -1,6 +1,6 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.Chips and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, type:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.Chips and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
 last_updated: 2026-11-15
 scope: general
@@ -159,14 +159,14 @@ const columns = [
   { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
   { accessorKey: 'status', header: 'Status', sortable: true },
   { accessorKey: 'lastModified', header: 'Last Modified', sortable: true, grow: 2 },
-  { id: 'actions', kind: 'action', hideable: false } // auto-pinned to the right edge
+  { id: 'actions', type: 'action', hideable: false } // auto-pinned to the right edge
 ]
 ```
 
 - **`principal: true`** marks the emphasized identity column (the name) — one per table.
 - **`grow: N`** gives a flexible column a larger share of the width (default share is `1`). Use it for
   long-content columns (repository, domain, timestamps).
-- **`kind: 'action'`** is the trailing actions column; it auto-pins to the right edge. Pair with
+- **`type: 'action'`** is the trailing actions column; it auto-pins to the right edge. Pair with
   `hideable: false` so CollectionPreferences lists it locked.
 - **`sortable: true`** per sortable column (with `sortable` on the root).
 
@@ -179,13 +179,13 @@ surface (a drawer, a panel) and does not page through a collection.
 The toolbar is a fixed, ordered set of context-aware controls in the `#toolbar` slot; the
 applied-filter chips render in `#filters` via `FilterMenu.Chips` (with no `fields`, it reads the
 table). `filterFields` (`{ id, label, type, options? }`) drives `Table.Filter`, which hosts one of the
-two filters, picked by data shape: `kind="menu"` (the default) is the `FilterMenu` of facets picked
-from known values, and `kind="property"` is a `PropertyFilter` for typed conditions with operators
+two filters, picked by data shape: `type="menu"` (the default) is the `FilterMenu` of facets picked
+from known values, and `type="property"` is a `PropertyFilter` for typed conditions with operators
 (it shows its own tokens, so it needs no chips row). Columns are chosen in `CollectionPreferences`
 (`:sections="['columns']"` for columns only), which reads and writes the table's columns from
 context. Do not add your own `Badge` to a filter button: `Button` takes no count.
-An applied filter is a `Chip` of the default `kind="filled"` (the grey `--bg-selected` fill),
-`clickable` to edit it and `removable` to drop it; a value it could still take is `outlined`, and
+An applied filter is a `Chip` of the default `variant="filled"` (the grey `--bg-selected` fill),
+`clickable` to edit it and `removable` to drop it; a value it could still take is `outline`, and
 "Add filter" is `dashed`. Never restyle a chip's fill with a class to get one of those looks.
 
 ```vue
@@ -445,7 +445,7 @@ detail panel alike. It carries three rules, and each is a real bug when a hand-m
   glyph of a workload) is `icon="ai ai-github"` / `icon="ai ai-workloads"`: muted, outside the
   link, hidden from screen readers. Never a hand-written `<i>` beside the preset.
 - An action that only looks like a link (`Connect Git Repository` in an empty repository cell) is
-  `Button kind="link"`, not a `CellLink` with no destination.
+  `Button variant="link"`, not a `CellLink` with no destination.
 - Do not re-type its markup per call site. The hand-made copies drift on every axis at once (glyph,
   icon size, underline at rest, tooltip or none), and a `Tooltip` trigger in a flex cell needs
   `shrink!` to let the name truncate, which the preset already sets.
@@ -552,7 +552,7 @@ and the browser read different clocks, so hydration mismatches across a minute b
 
 ### Actions — `Table.CellActions`
 
-The trailing `kind: 'action'` column renders `Table.CellActions`: an outlined ellipsis trigger named
+The trailing `type: 'action'` column renders `Table.CellActions`: an outlined ellipsis trigger named
 `Actions for <row name>` (so a screen reader's button list tells the rows apart) opening a
 `DropdownMenu`. Destructive options go in their own last `DropdownMenu.Group`. Give the column a
 visually hidden header (`#header-actions` → `<span class="sr-only">Actions</span>`).
@@ -592,9 +592,9 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] A table that lists a collection is bound with `v-bind="tableProps"` from `useCollection`; filters, sort, page and selection are not kept in loose refs.
 - [ ] More than a few hundred rows on one screen → `virtual` with a `max-height`; otherwise paginate.
 - [ ] Density, wrap and stripes come from the saved preferences, not hard-coded per page.
-- [ ] Exactly one `principal: true` column; the actions column is `{ kind: 'action', hideable: false }`.
+- [ ] Exactly one `principal: true` column; the actions column is `{ type: 'action', hideable: false }`.
 - [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
-- [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.Chips` (menu kind).
+- [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.Chips` (menu type).
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen is `Table.CellLink` (12px `ai-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.

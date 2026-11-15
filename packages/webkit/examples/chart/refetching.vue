@@ -45,8 +45,8 @@
     refetching
   >
     <Chart.Grid />
-    <Chart.Axis kind="y" />
-    <Chart.Axis kind="x" />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
     <Chart.Area :ids="['allowed']" />
     <Chart.Line :ids="['blocked', 'threat']" />
     <Chart.Crosshair />

@@ -5,7 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 import Default from '../../../../examples/diagram/default.vue'
 import Flow from '../../../../examples/diagram/flow.vue'
 import Groups from '../../../../examples/diagram/groups.vue'
-import Nodes from '../../../../examples/diagram/nodes.vue'
+import NodeKinds from '../../../../examples/diagram/nodes.vue'
 import Spec from '../../../../examples/diagram/spec.vue'
 import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -20,10 +20,10 @@ const TESTID = 'marketing-diagram'
 
 const spec: DiagramSpec = {
   nodes: [
-    { key: 'user', kind: 'pill', title: 'User', icon: 'ai ai-user', active: true },
-    { key: 'workload', kind: 'card', eyebrow: 'Workload', title: 'shop.example.com', lit: true },
-    { key: 'cache', kind: 'item', eyebrow: 'Cache', title: 'Served from cache' },
-    { key: 'origin', kind: 'item', eyebrow: 'Origin', title: 'origin.example.com' }
+    { key: 'user', type: 'pill', title: 'User', icon: 'ai ai-user', active: true },
+    { key: 'workload', type: 'card', eyebrow: 'Workload', title: 'shop.example.com', lit: true },
+    { key: 'cache', type: 'item', eyebrow: 'Cache', title: 'Served from cache' },
+    { key: 'origin', type: 'item', eyebrow: 'Origin', title: 'origin.example.com' }
   ],
   layout: {
     gap: 'wide',
@@ -134,13 +134,18 @@ describe('Diagram', () => {
     it('frames a group under its label and lets an edge reach it', async () => {
       const grouped: DiagramSpec = {
         nodes: [
-          { key: 'user', kind: 'pill', title: 'User' },
-          { key: 'origin', kind: 'item', title: 'origin.example.com' }
+          { key: 'user', type: 'pill', title: 'User' },
+          { key: 'origin', type: 'item', title: 'origin.example.com' }
         ],
         layout: {
           row: [
             { node: 'user' },
-            { group: 'backend', label: 'Your backend', kind: 'dashed', content: { node: 'origin' } }
+            {
+              group: 'backend',
+              label: 'Your backend',
+              variant: 'dashed',
+              content: { node: 'origin' }
+            }
           ]
         },
         edges: [{ from: 'user', to: 'backend' }]
@@ -258,7 +263,7 @@ describe('Diagram', () => {
     it.each([
       ['Default', Default],
       ['Spec', Spec],
-      ['Nodes', Nodes],
+      ['NodeKinds', NodeKinds],
       ['Groups', Groups],
       ['Flow', Flow]
     ])('renders the %s story as a named image', async (_name, Story) => {
@@ -285,7 +290,7 @@ describe('Diagram', () => {
 
     it('lets a consumer override the node and layout testids', () => {
       const node = render(DiagramNode, {
-        props: { node: { key: 'user', kind: 'pill', title: 'User' } },
+        props: { node: { key: 'user', type: 'pill', title: 'User' } },
         attrs: { 'data-testid': 'custom-node' }
       })
       expect(node.getByTestId('custom-node').getAttribute('data-diagram-node')).toBe('user')
@@ -294,7 +299,7 @@ describe('Diagram', () => {
       const layout = render(DiagramLayout, {
         props: {
           item: { row: [{ node: 'user' }] },
-          nodes: { user: { key: 'user', kind: 'pill', title: 'User' } }
+          nodes: { user: { key: 'user', type: 'pill', title: 'User' } }
         },
         attrs: { 'data-testid': 'custom-layout' }
       })

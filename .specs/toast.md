@@ -3,13 +3,13 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 9676a114b59e560075a1b64e14e310b5c16192f7910fbcb94d5337741ebb3e0c
+checksum: a112785b3db2b39ef306c159cb140fbda0c8e1bb4a0262febf75af7fab2c7e6e
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -171,8 +171,8 @@ Each part is also a standalone import (`import ToastItem from '@aziontech/webkit
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-2xs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-label-md` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — an Azion glyph by `severity` sized with the `text-label-md` token to match the title (`ai ai-check` / `ai ai-circle-info` / `ai ai-triangle-alert` / `ai ai-circle-alert`); the `neutral` severity has **no** icon, and a `loading` toast renders a `Spinner` in its place. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `danger`). Props `severity?: ToastSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`, default `'neutral'`) and `loading?: boolean` (default `false`; a spinner replaces the leading icon, `aria-busy`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-severity` and `data-loading`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
-- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="transparent"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
-- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`ai ai-x`, `kind="transparent"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
+- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`variant="ghost"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
+- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`ai ai-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
@@ -265,7 +265,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 | description typography      | `.text-body-xs`                                                                                      |
 | title text                  | `var(--text-default)`                                                                                |
 | description text            | `var(--text-muted)`                                                                                  |
-| progress bar                | `Progress` (`kind="rounded"`, `size="small"`): `var(--bg-placeholder)` track, `var(--primary)` fill |
+| progress bar                | `Progress` (`variant="rounded"`, `size="small"`): `var(--bg-placeholder)` track, `var(--primary)` fill |
 | progress percentage         | `.text-body-xs` · `var(--text-muted)` · `tabular-nums`                                               |
 | progress row gap            | `var(--spacing-xs)`; `var(--spacing-2xs)` above                                                      |
 | success icon                | `var(--success-foreground)`                                                                            |
@@ -325,7 +325,7 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 ## Examples
 
-This component has no `kind`/`size` on its root, and it is driven imperatively rather than by props, so the canonical Types/Sizes/state stories do not apply to the root. Each story renders `<Toast.Toaster />` once plus button(s) that call `toast(…)`, so the docs "Show code" is copy-paste runnable. Every story justifies its existence below.
+This component has no `variant`/`size` on its root, and it is driven imperatively rather than by props, so the canonical Types/Sizes/state stories do not apply to the root. Each story renders `<Toast.Toaster />` once plus button(s) that call `toast(…)`, so the docs "Show code" is copy-paste runnable. Every story justifies its existence below.
 
 - Default — a single `<Toast.Toaster />` plus a button calling `toast('…')`; justified because it documents the minimal mount-once + imperative-call usage that is the component's whole point.
 - Types — buttons triggering each `type` (`toast.success` / `toast.info` / `toast.warning` / `toast.error` / `toast.loading` / default); justified because the severity icons are a distinct axis (the equivalent of a composite Types story for an imperative API).

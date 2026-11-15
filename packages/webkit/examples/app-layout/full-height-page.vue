@@ -37,7 +37,7 @@
           >
             <template #actions>
               <Button
-                kind="primary"
+                variant="primary"
                 label="Add domain"
               />
             </template>

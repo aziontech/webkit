@@ -15,7 +15,7 @@
   })
 
   /** Placement of the band heading. */
-  export type ArticleCardsKind = 'start' | 'center'
+  export type ArticleCardsVariant = 'start' | 'center'
 
   /** The client mark drawn in the media cell of a card that has no cover. */
   export type ArticleCardsMark = {
@@ -47,7 +47,7 @@
 
   interface Props {
     /** Placement of the heading: `start` sets it at the start, `center` centres it over the cards. */
-    kind?: ArticleCardsKind
+    variant?: ArticleCardsVariant
     /** Id set on the band so an in-page hash link can target it. */
     anchor?: string
     /** Overline above the heading. */
@@ -61,7 +61,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'start',
+    variant: 'start',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -86,7 +86,7 @@
     :data-testid="testId"
     :id="anchor || undefined"
     class="scroll-mt-(--spacing-2xl)"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title || undefined"
   >
     <SectionModule
@@ -99,7 +99,7 @@
         #header
       >
         <SectionTitle
-          :kind="kind"
+          :variant="variant"
           :eyebrow="eyebrow"
           :title="title"
         />
@@ -112,7 +112,7 @@
       >
         <CardGrid
           flush
-          kind="frame"
+          variant="frame"
           :columns="3"
           :mobile-columns="1"
           :role="ariaLabel ? 'group' : undefined"
@@ -121,7 +121,7 @@
           <CardGridCell
             v-for="item in items"
             :key="item.id"
-            kind="canvas"
+            variant="canvas"
             :padded="false"
           >
             <a

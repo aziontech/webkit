@@ -236,7 +236,7 @@
           <Button
             class="w-full"
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="busy"
             href="/variables"
@@ -247,7 +247,7 @@
             class="w-full"
             type="submit"
             label="Create"
-            kind="primary"
+            variant="primary"
             size="medium"
             :disabled="status === 'loading'"
             :loading="status === 'submitting'"

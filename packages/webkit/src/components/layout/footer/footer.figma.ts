@@ -41,7 +41,7 @@ const taglineLayer = instance.findLayers((node) => node.type === 'TEXT', {
 const tagline = taglineLayer && taglineLayer.type === 'TEXT' ? taglineLayer.textContent : ''
 
 export default {
-  example: figma.code`<Footer kind="site">${columns}${
+  example: figma.code`<Footer variant="site">${columns}${
     status
       ? figma.code`
   <template #status>${status}

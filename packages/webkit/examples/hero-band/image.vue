@@ -12,7 +12,7 @@
 
 <template>
   <HeroBand
-    kind="copy-beside-art"
+    variant="copy-beside-art"
     eyebrow="Careers"
     eyebrow-prefix="</>"
     title="Build the platform developers ship on"

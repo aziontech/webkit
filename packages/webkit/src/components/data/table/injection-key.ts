@@ -45,7 +45,7 @@ export interface FilterField {
 }
 
 /** What Table.Filter hosts: the FilterMenu (facets) or the PropertyFilter (typed conditions). */
-export type TableFilterKind = 'menu' | 'property'
+export type TableFilterType = 'menu' | 'property'
 
 /** One committed filter condition (a chip). */
 export interface AppliedFilter {
@@ -173,8 +173,8 @@ export interface TableColumn {
   minWidth?: number
   /** Cell alignment. */
   align?: 'start' | 'center' | 'end'
-  /** Body cell kind (action renders a 40px trailing cell, auto-pinned to the right edge). */
-  kind?: 'default' | 'action'
+  /** Body cell type (action renders a 40px trailing cell, auto-pinned to the right edge). */
+  type?: 'default' | 'action'
   /** Allow drag-to-resize on this column's header (ignored for frozen/action columns). */
   resizable?: boolean
   /** Column label in CollectionPreferences and the stacked layout when `header` is not a string. */

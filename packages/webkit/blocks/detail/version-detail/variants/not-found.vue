@@ -28,7 +28,7 @@
         <template #actions>
           <Button
             label="View Versions"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="/resources/1784552864?tab=versions"
           />

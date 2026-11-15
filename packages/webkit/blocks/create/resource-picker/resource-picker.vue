@@ -223,7 +223,7 @@
 
             <HelperText
               v-if="projectPicker.message"
-              kind="required"
+              type="required"
               >{{ projectPicker.message }}</HelperText
             >
           </div>
@@ -270,7 +270,7 @@
                 >
                   <Item.Media>
                     <Skeleton
-                      kind="rectangle"
+                      variant="rectangle"
                       width="2rem"
                       height="2rem"
                     />
@@ -298,7 +298,7 @@
               <Button
                 type="button"
                 :label="'Load ' + projectPicker.nextBatch + ' more'"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 class="w-full"
                 :loading="projectPicker.loading"

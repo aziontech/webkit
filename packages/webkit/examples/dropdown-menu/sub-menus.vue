@@ -7,7 +7,7 @@
   <DropdownMenu :open="true">
     <DropdownMenu.Trigger>
       <Button
-        kind="secondary"
+        variant="secondary"
         icon="ai ai-ellipsis"
         label="Actions"
       />

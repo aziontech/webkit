@@ -12,7 +12,7 @@
     <template #actions>
       <Button
         label="Update"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

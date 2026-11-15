@@ -13,7 +13,7 @@ import Footer from './index'
  * own testid as `${ctx.testId}__<part>`, so overriding the root testid proves
  * provide/inject flows through the whole tree.
  *
- * The root has no emits and no v-model — its props are `ariaLabel` and `kind` — so
+ * The root has no emits and no v-model — its props are `ariaLabel` and `variant` — so
  * this file asserts the compound API resolution, the injected-state propagation, slot
  * placement (including each conditional band), the two placements and the frame parts
  * each one renders, testid derivation/override, the landmark a11y contract, and axe.
@@ -56,9 +56,9 @@ const composedBands = `
 `
 
 // Same tree in either placement, so a difference in what renders can only come from
-// `kind` — which is the whole claim: the bands are identical and the FRAME is not.
+// `variant` — which is the whole claim: the bands are identical and the FRAME is not.
 const composedTemplate = `<Footer>${composedBands}</Footer>`
-const composedSiteTemplate = `<Footer kind="site">${composedBands}</Footer>`
+const composedSiteTemplate = `<Footer variant="site">${composedBands}</Footer>`
 
 const renderComposed = (options = {}) =>
   render({ components: compoundComponents, template: composedTemplate }, options)
@@ -202,19 +202,19 @@ describe('Footer', () => {
     })
   })
 
-  describe('kind — the two placements (data-kind drives the cap; the frame is site-only)', () => {
+  describe('variant — the two placements (data-variant drives the cap; the frame is site-only)', () => {
     it('defaults to the content placement', () => {
       const { getByTestId } = render(Footer)
-      // withDefaults: kind: 'content' — a footer with no kind closes an app or docs zone,
+      // withDefaults: variant: 'content' — a footer with no variant closes an app or docs zone,
       // which is the placement that draws no frame. The cap and the side rules are read off
-      // this attribute by `group-data-[kind=site]:`; the geometry belongs to the visual gate,
+      // this attribute by `group-data-[variant=site]:`; the geometry belongs to the visual gate,
       // since this env renders without Tailwind.
-      expect(getByTestId('layout-footer').getAttribute('data-kind')).toBe('content')
+      expect(getByTestId('layout-footer').getAttribute('data-variant')).toBe('content')
     })
 
     it('marks the site placement on the root', () => {
-      const { getByTestId } = render(Footer, { props: { kind: 'site' } })
-      expect(getByTestId('layout-footer').getAttribute('data-kind')).toBe('site')
+      const { getByTestId } = render(Footer, { props: { variant: 'site' } })
+      expect(getByTestId('layout-footer').getAttribute('data-variant')).toBe('site')
     })
 
     it('draws no frame in the content placement — no gutters, no rules, no marks', () => {

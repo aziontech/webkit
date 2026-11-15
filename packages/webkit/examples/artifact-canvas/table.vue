@@ -29,7 +29,7 @@
       <ArtifactCanvas
         title="cache-hits-by-country.csv"
         meta="Last 7 days · 3 rows"
-        kind="table"
+        type="table"
         :streaming="streaming"
         download-href="data:text/csv;charset=utf-8,country,requests,hit"
       >
@@ -77,7 +77,7 @@
     <Button
       class="self-start"
       label="Regenerate"
-      kind="outlined"
+      variant="outline"
       size="small"
       icon="ai ai-refresh"
       :loading="streaming"

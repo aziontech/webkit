@@ -200,7 +200,7 @@
                             <HelperText
                               v-if="nameError"
                               id="resource-name-message"
-                              kind="required"
+                              type="required"
                               label="This field is required."
                             />
                           </div>
@@ -208,7 +208,7 @@
                         <SettingRow
                           title="Active"
                           description="When disabled, the project stops serving traffic."
-                          kind="compact"
+                          variant="compact"
                         >
                           <Switch
                             v-model="form.active"
@@ -234,7 +234,7 @@
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
-                          kind="compact"
+                          variant="compact"
                         >
                           <Switch
                             v-model="form.modules[mod.key]"
@@ -259,7 +259,7 @@
                           v-for="mod in subscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
-                          kind="compact"
+                          variant="compact"
                         >
                           <template #description>
                             {{ mod.description }}
@@ -295,12 +295,12 @@
                         <SettingRow
                           title="Delete this project"
                           description="Once deleted, the project, its domains and its deployments cannot be recovered."
-                          kind="compact"
+                          variant="compact"
                         >
                           <Button
                             type="button"
                             label="Delete project"
-                            kind="danger"
+                            variant="danger"
                             size="medium"
                             icon="ai ai-trash"
                             data-testid="danger-zone-delete"
@@ -329,14 +329,14 @@
                   <Button
                     type="button"
                     label="Discard"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="saving"
                     @click="discard"
                   />
                   <Button
                     label="Save"
-                    kind="primary"
+                    variant="primary"
                     size="medium"
                     :loading="saving"
                     @click="save"
@@ -398,14 +398,14 @@
             <template #actions="{ close }">
               <Button
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="deleting"
                 @click="close"
               />
               <Button
                 label="Delete project"
-                kind="danger"
+                variant="danger"
                 size="medium"
                 :disabled="!canDelete"
                 :loading="deleting"

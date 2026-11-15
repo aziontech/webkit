@@ -15,7 +15,7 @@
   })
 
   /** Layout of the grid. */
-  export type FeatureTilesKind = 'artwork' | 'illustrated'
+  export type FeatureTilesVariant = 'artwork' | 'illustrated'
 
   /** One reason, rendered as a frame cell. */
   export type FeatureTilesTile = {
@@ -35,7 +35,7 @@
 
   interface Props {
     /** Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule. */
-    kind?: FeatureTilesKind
+    variant?: FeatureTilesVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -49,7 +49,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'artwork',
+    variant: 'artwork',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -71,7 +71,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
@@ -94,23 +94,23 @@
       <FrameBox
         flush
         borders="y"
-        :marks="kind === 'artwork' ? 'all' : 'bottom'"
+        :marks="variant === 'artwork' ? 'all' : 'bottom'"
       >
         <CardGrid
           flush
-          kind="frame"
-          :columns="kind === 'artwork' ? 4 : 3"
+          variant="frame"
+          :columns="variant === 'artwork' ? 4 : 3"
         >
           <CardGridCell
             v-for="tile in tiles"
             :key="tile.title"
-            kind="canvas"
+            variant="canvas"
             :padded="false"
           >
             <MediaTile
               key="media-tile-1"
               v-if="tile.illustration"
-              kind="plain"
+              variant="plain"
               :title="tile.title"
               :description="tile.description"
               :media-scale="tile.scale ?? 1"
@@ -123,7 +123,7 @@
             <MediaTile
               key="media-tile-2"
               v-else
-              kind="plain"
+              variant="plain"
               :title="tile.title"
               :description="tile.description"
               :src="tile.image"

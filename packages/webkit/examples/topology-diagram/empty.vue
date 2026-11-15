@@ -15,7 +15,7 @@
             <p>web-app serves no resources yet. Deploy it to build its topology.</p>
             <Button
               label="Deploy"
-              kind="outlined"
+              variant="outline"
               size="small"
             />
           </div>

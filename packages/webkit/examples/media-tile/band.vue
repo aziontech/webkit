@@ -6,7 +6,7 @@
 
 <template>
   <CardGridRoot
-    kind="gap"
+    variant="gap"
     :columns="4"
     :mobile-columns="1"
   >

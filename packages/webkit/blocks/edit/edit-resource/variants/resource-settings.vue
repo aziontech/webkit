@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -12,7 +12,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref } from 'vue'
 
-  type FieldProblem = { kind: HelperTextKind; message: string }
+  type FieldProblem = { type: HelperTextType; message: string }
 
   const typeOptions = [
     {
@@ -57,18 +57,18 @@
     Object.keys(errors).forEach((key) => delete errors[key])
     const name = form.name.trim()
     const items = form.items.trim()
-    if (!name) errors.name = { kind: 'required', message: 'This field is required.' }
+    if (!name) errors.name = { type: 'required', message: 'This field is required.' }
     else if (name.length > 250)
-      errors.name = { kind: 'invalid', message: 'Use at most 250 characters.' }
-    if (!items) errors.items = { kind: 'required', message: 'This field is required.' }
+      errors.name = { type: 'invalid', message: 'Use at most 250 characters.' }
+    if (!items) errors.items = { type: 'required', message: 'This field is required.' }
     else if (form.type === 'countries' && !COUNTRY_PATTERN.test(items))
       errors.items = {
-        kind: 'invalid',
+        type: 'invalid',
         message: 'Enter one two-letter country code per line. Example: BR.'
       }
     else if (form.type !== 'countries' && !LIST_PATTERN.test(items))
       errors.items = {
-        kind: 'invalid',
+        type: 'invalid',
         message: 'Remove the empty lines. Every line holds one entry.'
       }
     return Object.keys(errors).length === 0
@@ -129,8 +129,8 @@
                       aria-label="Name"
                       placeholder="office-ranges"
                       autocomplete="off"
-                      :required="errors.name?.kind === 'required'"
-                      :invalid="errors.name?.kind === 'invalid'"
+                      :required="errors.name?.type === 'required'"
+                      :invalid="errors.name?.type === 'invalid'"
                       :aria-describedby="errors.name ? 'access-lists-name-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('name')"
@@ -138,7 +138,7 @@
                     <HelperText
                       v-if="errors.name"
                       id="access-lists-name-message"
-                      :kind="errors.name.kind"
+                      :type="errors.name.type"
                       :label="errors.name.message"
                     />
                   </SettingRow>
@@ -162,11 +162,11 @@
                   <SettingRow
                     key="type"
                     title="Type"
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <RadioGroup
                       v-model="form.type"
-                      kind="card"
+                      variant="card"
                       name="access-lists-type"
                       aria-label="Type"
                       :disabled="saving"
@@ -185,7 +185,7 @@
                     key="items-asn"
                     title="List"
                     description="One ASN per line, such as 13335. Public ASNs run from 1 to 64511, private ones from 64512 to 65535. Duplicate entries are removed."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <Textarea
                       v-model="form.items"
@@ -193,8 +193,8 @@
                       :rows="5"
                       aria-label="List"
                       placeholder="13335&#10;53331"
-                      :required="errors.items?.kind === 'required'"
-                      :invalid="errors.items?.kind === 'invalid'"
+                      :required="errors.items?.type === 'required'"
+                      :invalid="errors.items?.type === 'invalid'"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('items')"
@@ -202,7 +202,7 @@
                     <HelperText
                       v-if="errors.items"
                       id="access-lists-items-message"
-                      :kind="errors.items.kind"
+                      :type="errors.items.type"
                       :label="errors.items.message"
                     />
                   </SettingRow>
@@ -211,7 +211,7 @@
                     key="items-ip-cidr"
                     title="List"
                     description="One address or range per line. Add a comment after #, and a date with --LT. Duplicate entries are removed."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <Textarea
                       v-model="form.items"
@@ -219,8 +219,8 @@
                       :rows="5"
                       aria-label="List"
                       placeholder="192.0.2.10&#10;198.51.100.24&#10;203.0.113.7 #comment"
-                      :required="errors.items?.kind === 'required'"
-                      :invalid="errors.items?.kind === 'invalid'"
+                      :required="errors.items?.type === 'required'"
+                      :invalid="errors.items?.type === 'invalid'"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('items')"
@@ -228,7 +228,7 @@
                     <HelperText
                       v-if="errors.items"
                       id="access-lists-items-message"
-                      :kind="errors.items.kind"
+                      :type="errors.items.type"
                       :label="errors.items.message"
                     />
                   </SettingRow>
@@ -237,7 +237,7 @@
                     key="items-countries"
                     title="Countries"
                     description="One or more countries, one two-letter ISO 3166-1 code per line, such as BR."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <Textarea
                       v-model="form.items"
@@ -245,8 +245,8 @@
                       :rows="5"
                       aria-label="Countries"
                       placeholder="BR&#10;US"
-                      :required="errors.items?.kind === 'required'"
-                      :invalid="errors.items?.kind === 'invalid'"
+                      :required="errors.items?.type === 'required'"
+                      :invalid="errors.items?.type === 'invalid'"
                       :aria-describedby="errors.items ? 'access-lists-items-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('items')"
@@ -254,7 +254,7 @@
                     <HelperText
                       v-if="errors.items"
                       id="access-lists-items-message"
-                      :kind="errors.items.kind"
+                      :type="errors.items.type"
                       :label="errors.items.message"
                     />
                   </SettingRow>
@@ -279,14 +279,14 @@
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
             size="medium"
             :loading="saving"
             @click="save"

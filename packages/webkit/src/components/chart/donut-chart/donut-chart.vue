@@ -13,14 +13,14 @@
 
   defineOptions({ name: 'DonutChart', inheritAttrs: false })
 
-  export type DonutChartKind = 'donut' | 'pie'
+  export type DonutChartType = 'donut' | 'pie'
   export type DonutChartSize = 'small' | 'medium' | 'large'
 
   interface Props {
     /** One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. */
     series?: ChartSeries[]
     /** Ring or solid disc. */
-    kind?: DonutChartKind
+    type?: DonutChartType
     /** Diameter of the ring: 128, 176 or 240 pixels. */
     size?: DonutChartSize
     /** Slices kept before the rest fold into Other. */
@@ -49,7 +49,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     series: () => [],
-    kind: 'donut',
+    type: 'donut',
     size: 'medium',
     cap: 6,
     otherLabel: '',
@@ -253,7 +253,7 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-size="size"
     :data-loading="loading || null"
     :data-error="(!loading && hasError) || null"
@@ -265,7 +265,7 @@
   >
     <Skeleton
       v-if="loading"
-      kind="circle"
+      variant="circle"
       :width="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
       :height="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
       :data-testid="`${testId}__skeleton`"
@@ -375,7 +375,7 @@
             :key="slice.id"
             cx="50"
             cy="50"
-            :r="RADIUS[kind]"
+            :r="RADIUS[type]"
             fill="none"
             :stroke="slice.color"
             pathLength="100"
@@ -387,8 +387,8 @@
             :data-dimmed="(activeIndex !== null && activeIndex !== index) || null"
             :style="{
               '--donut-dash': slice.dash,
-              '--donut-width': `${WIDTH[kind]}`,
-              '--donut-lift': `${WIDTH[kind] + LIFT[kind]}`,
+              '--donut-width': `${WIDTH[type]}`,
+              '--donut-lift': `${WIDTH[type] + LIFT[type]}`,
               transitionDelay: slice.delay
             }"
             class="cursor-pointer [stroke-dasharray:0_100] [stroke-width:var(--donut-width)] transition-[stroke-dasharray,stroke-width,opacity] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[active]:[stroke-width:var(--donut-lift)] data-[dimmed]:opacity-40 data-[entered]:[stroke-dasharray:var(--donut-dash)]"
@@ -396,7 +396,7 @@
           />
         </svg>
         <div
-          v-if="kind === 'donut'"
+          v-if="type === 'donut'"
           class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-(--spacing-2xs) px-(--spacing-lg) text-center"
           :data-testid="`${testId}__center`"
         >

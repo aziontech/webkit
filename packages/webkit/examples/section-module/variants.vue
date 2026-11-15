@@ -6,21 +6,21 @@
   <div>
     <SectionModule
       :divided="false"
-      kind="start"
+      variant="start"
       eyebrow="Platform"
       title="Left"
     >
       <p class="m-0 text-body-md text-(--text-muted)">The header sits at the start edge.</p>
     </SectionModule>
     <SectionModule
-      kind="center"
+      variant="center"
       eyebrow="Platform"
       title="Centered"
     >
       <p class="m-0 text-body-md text-(--text-muted)">The header is centered.</p>
     </SectionModule>
     <SectionModule
-      kind="split"
+      variant="split"
       eyebrow="Platform"
       title="Horizontal"
       description="The description takes its own column."

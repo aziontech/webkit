@@ -26,7 +26,7 @@ const navigation = (withAccessRules: boolean): ConsoleLayoutNavGroup[] => [
       {
         id: 'settings',
         label: 'Settings',
-        kind: 'drill',
+        type: 'drill',
         groups: [
           {
             label: 'Settings',

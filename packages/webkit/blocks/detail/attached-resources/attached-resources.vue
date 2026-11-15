@@ -41,7 +41,7 @@
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'policy', header: 'Policy' },
     { accessorKey: 'certificate', header: 'Certificate' },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const countLabel = computed(
@@ -121,7 +121,7 @@
           <Button
             type="button"
             label="Add Domain"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-plus"
           />

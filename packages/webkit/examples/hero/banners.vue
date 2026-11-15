@@ -6,7 +6,7 @@
 <template>
   <div>
     <Hero
-      kind="screen"
+      variant="screen"
       max-width="site"
     >
       <template #background>
@@ -27,7 +27,7 @@
 
     <div class="[--banner-top-height:44%]">
       <Hero
-        kind="screen"
+        variant="screen"
         max-width="site"
       >
         <template #top>
@@ -49,7 +49,7 @@
     </div>
 
     <Hero
-      kind="screen"
+      variant="screen"
       max-width="site"
     >
       <Hero.Title

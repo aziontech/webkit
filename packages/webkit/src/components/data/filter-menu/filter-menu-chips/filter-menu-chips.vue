@@ -104,7 +104,7 @@
       <Chip
         :data-testid="`${testId}__chip-${field.id}`"
         :label="field.label"
-        kind="filled"
+        variant="filled"
         size="medium"
         clickable
         removable
@@ -124,7 +124,7 @@
               :alt="option.label"
               :label="option.label"
               size="small"
-              kind="circle"
+              variant="circle"
               :data-stacked="index > 0 || null"
               class="size-4 ring-1 ring-(--bg-surface) data-[stacked]:-ms-1"
             />

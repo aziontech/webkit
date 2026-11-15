@@ -56,7 +56,7 @@
   >
     <div class="flex flex-col bg-(--bg-surface) px-(--spacing-lg) py-(--spacing-md)">
       <Brand
-        kind="default"
+        variant="default"
         size="small"
         class="mb-(--spacing-md)"
       />
@@ -92,7 +92,7 @@
           key="secondary"
           :label="secondaryAction.label"
           :href="secondaryAction.href"
-          kind="outlined"
+          variant="outline"
           size="medium"
           class="w-full"
         />

@@ -251,7 +251,7 @@
         <template #actions>
           <Button
             label="Deploy"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-cloud-upload"
             :loading="deploying"
@@ -323,7 +323,7 @@
                   <Item.List>
                     <SettingRow
                       title="Connected repository"
-                      kind="compact"
+                      variant="compact"
                     >
                       <template #description>
                         <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
@@ -344,7 +344,7 @@
                       <Button
                         type="button"
                         label="Disconnect"
-                        kind="danger"
+                        variant="danger"
                         size="small"
                       />
                     </SettingRow>
@@ -447,7 +447,7 @@
                           />
                         </div>
                         <CopyButton
-                          kind="transparent"
+                          variant="ghost"
                           :value="`${APP.name} build token`"
                           aria-label="Copy API token"
                           size="small"
@@ -474,14 +474,14 @@
               <Button
                 type="button"
                 label="Discard"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="saving"
                 @click="guard.discard()"
               />
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="saving"
                 @click="commitSave"
@@ -537,7 +537,7 @@
                 <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                   <Button
                     label="Visit"
-                    kind="secondary"
+                    variant="secondary"
                     size="medium"
                     icon="ai ai-external-link"
                     :href="`https://${APP.host}`"
@@ -548,7 +548,7 @@
                       <Tooltip content="Application actions">
                         <IconButton
                           icon="ai ai-ellipsis"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           aria-label="Application actions"
                         />
@@ -628,7 +628,7 @@
                       alt="Priya Patel"
                       label="Priya Patel"
                       size="small"
-                      kind="square"
+                      variant="square"
                       class="shrink-0"
                     />
                   </div>
@@ -689,7 +689,7 @@
                   <Button
                     class="w-full"
                     label="Documentation"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     icon="ai ai-book"
                     href="https://example.com/docs/cli"
@@ -712,7 +712,7 @@
             <template #actions>
               <Button
                 label="Add Version"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-plus"
               />
@@ -834,12 +834,12 @@
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               @click="deployOpen = false"
             />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               icon="ai ai-cloud-upload"
               @click="runDeploy"
             />
@@ -852,21 +852,21 @@
       <template #actions>
         <Button
           :label="leaveLabels.keepEditing"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           :disabled="leaveDialog.loading"
           @click="guard.keepEditing"
         />
         <Button
           :label="leaveLabels.discard"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="leaveDialog.loading"
           @click="guard.discardAndLeave"
         />
         <Button
           :label="leaveLabels.save"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="leaveDialog.loading"
           @click="guard.saveAndLeave"

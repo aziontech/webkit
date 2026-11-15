@@ -23,7 +23,7 @@ const threats: ChartSeries[] = [
 
 const mount = (
   props: Record<string, unknown> = {},
-  children: () => unknown[] = () => [h(ChartAxis, { kind: 'y' }), h(ChartAxis, { kind: 'x' })],
+  children: () => unknown[] = () => [h(ChartAxis, { type: 'y' }), h(ChartAxis, { type: 'x' })],
   dir: 'ltr' | 'rtl' = 'ltr'
 ) =>
   render({
@@ -197,8 +197,8 @@ describe('Chart', () => {
       const view = mount(
         {},
         () => [
-          h(ChartAxis, { kind: 'y' }),
-          h(ChartAxis, { kind: 'x' }),
+          h(ChartAxis, { type: 'y' }),
+          h(ChartAxis, { type: 'x' }),
           h(ChartLine, { markers: true })
         ],
         'rtl'
@@ -276,13 +276,13 @@ describe('Chart', () => {
 
     it('draws a labelled line and extends the value axis to show it', async () => {
       const view = mount({}, () => [
-        h(ChartAxis, { kind: 'y' }),
+        h(ChartAxis, { type: 'y' }),
         h(ChartLine),
         h(ChartReference, { value: 2000, label: 'Rate limit', severity: 'danger' })
       ])
       await measured(view)
       const reference = view.getByTestId('chart-chart__reference')
-      expect(reference.getAttribute('data-kind')).toBe('line')
+      expect(reference.getAttribute('data-type')).toBe('line')
       expect(reference.getAttribute('data-severity')).toBe('danger')
       const lines = reference.querySelectorAll('line')
       expect(lines).toHaveLength(1)
@@ -301,7 +301,7 @@ describe('Chart', () => {
       const view = mount({}, () => [h(ChartReference, { from: 400, to: 300, label: 'Normal' })])
       await measured(view)
       const reference = view.getByTestId('chart-chart__reference')
-      expect(reference.getAttribute('data-kind')).toBe('band')
+      expect(reference.getAttribute('data-type')).toBe('band')
       expect(reference.querySelectorAll('rect')).toHaveLength(1)
       expect(reference.querySelectorAll('line')).toHaveLength(2)
       expect(reference.querySelector('g')?.getAttribute('stroke')).toBe('var(--chart-label)')
@@ -315,9 +315,9 @@ describe('Chart', () => {
       ])
       await measured(view)
       const [outside, inside] = view.getAllByTestId('chart-chart__reference')
-      expect(outside?.getAttribute('data-kind')).toBeNull()
+      expect(outside?.getAttribute('data-type')).toBeNull()
       expect(outside?.querySelector('line')).toBeNull()
-      expect(inside?.getAttribute('data-kind')).toBe('line')
+      expect(inside?.getAttribute('data-type')).toBe('line')
       expect(inside?.querySelector('text')).toBeNull()
       expect(summaryOf(view)).toContain('Reference at 500.')
     })

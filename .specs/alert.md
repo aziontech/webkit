@@ -3,12 +3,12 @@ name: alert
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 031cfbca6a11f4b80c4e80ebb20cbe0b56077f69cb6a6f890086066d6c24600f
+checksum: ef5a1c91d42583eef08f202796137c4e2600e2bdb175e5dff9ea2cc0370cb0e5
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 - A transient confirmation of an action → use `toast`.
 - Validation feedback under one form field → use `helper-text`.
 - An admonition inside documentation prose → use `doc-callout`.
-- A promotional band between page sections → use `call-to-action` with `kind="announcement"`.
+- A promotional band between page sections → use `call-to-action` with `variant="announcement"`.
 
 ## Related
 
@@ -137,7 +137,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 | action surface                                        | `var(--secondary)` — the built-in action is a `secondary` Button, so it reads as a control against every severity surface rather than as body copy                                                                                                                                    |
 | action text                                           | `var(--secondary-foreground)`                                                                                                                                                                                                                                                         |
 | close control size                                    | tracks `size`: `small` → IconButton `small` (28px), `medium` → IconButton `medium` (32px)                                                                                                                                                                                             |
-| close control surface                                 | transparent — the close is a `transparent` IconButton, so the severity surface shows through and the glyph does not compete with the action                                                                                                                                           |
+| close control surface                                 | transparent — the close is a `ghost` IconButton, so the severity surface shows through and the glyph does not compete with the action                                                                                                                                                 |
 | close control glyph                                   | `var(--text-default)`                                                                                                                                                                                                                                                                 |
 | surface (info)                                        | `var(--info)`                                                                                                                                                                                                                                                                         |
 | surface (success)                                     | `var(--success)`                                                                                                                                                                                                                                                                      |

@@ -330,13 +330,13 @@
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="redeploy"

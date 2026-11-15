@@ -94,12 +94,12 @@ describe('StatTile', () => {
     }
   })
 
-  it('maps kind to data-kind, mono by default', () => {
+  it('maps variant to data-variant, mono by default', () => {
     const mono = mount()
-    expect(mono.getByTestId('chart-stat-tile')).toHaveAttribute('data-kind', 'mono')
+    expect(mono.getByTestId('chart-stat-tile')).toHaveAttribute('data-variant', 'mono')
     mono.unmount()
-    const sans = mount({ kind: 'sans', unit: 'M', value: 48.2 })
-    expect(sans.getByTestId('chart-stat-tile')).toHaveAttribute('data-kind', 'sans')
+    const sans = mount({ variant: 'sans', unit: 'M', value: 48.2 })
+    expect(sans.getByTestId('chart-stat-tile')).toHaveAttribute('data-variant', 'sans')
     expect(sans.getByTestId('chart-stat-tile__unit').textContent?.trim()).toBe('M')
   })
 
@@ -117,7 +117,7 @@ describe('StatTile', () => {
   it('draws a sparkline from the trend', () => {
     const view = mount({ trend: [1, 3, 2, 5, 4] })
     const spark = view.getByTestId('chart-stat-tile__sparkline')
-    expect(spark.getAttribute('data-kind')).toBe('area')
+    expect(spark.getAttribute('data-type')).toBe('area')
     expect(spark.querySelectorAll('path').length).toBeGreaterThan(0)
   })
 

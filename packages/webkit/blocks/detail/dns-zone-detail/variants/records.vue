@@ -121,7 +121,7 @@
     { accessorKey: 'policy', header: 'Policy', minWidth: 80 },
     { accessorKey: 'weight', header: 'Weight', minWidth: 80 },
     { accessorKey: 'description', header: 'Description', grow: 2 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const rows: DnsRecord[] = [
@@ -238,7 +238,7 @@
                         <HelperText
                           v-if="errors.name"
                           :id="nameMessageId"
-                          kind="required"
+                          type="required"
                           :label="errors.name"
                         />
                       </SettingRow>
@@ -261,7 +261,7 @@
                         <HelperText
                           v-if="errors.domain"
                           :id="domainMessageId"
-                          kind="required"
+                          type="required"
                           :label="errors.domain"
                         />
                       </SettingRow>
@@ -299,7 +299,7 @@
                               />
                             </div>
                             <CopyButton
-                              kind="transparent"
+                              variant="ghost"
                               :value="ns"
                               :aria-label="'Copy nameserver ' + (index + 1)"
                               size="small"
@@ -308,7 +308,7 @@
                         </div>
                         <HelperText
                           :id="nameserverMessageId"
-                          kind="helper"
+                          type="helper"
                           label="Add the nameservers in your domain provider."
                         />
                       </SettingRow>
@@ -328,7 +328,7 @@
                       <SettingRow
                         title="Enable DNSSEC"
                         description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="settings.dnssec"
@@ -357,7 +357,7 @@
                               />
                             </div>
                             <CopyButton
-                              kind="transparent"
+                              variant="ghost"
                               :value="key.value"
                               :aria-label="'Copy ' + key.label"
                               size="small"
@@ -381,7 +381,7 @@
                       <SettingRow
                         title="Active"
                         description="When active, the zone answers authoritative DNS queries for the domain."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="settings.active"
@@ -404,7 +404,7 @@
         >
           <SaveBar
             v-if="dirty || saving"
-            kind="docked"
+            variant="docked"
           >
             You have unsaved changes.
 
@@ -412,7 +412,7 @@
               <Button
                 type="button"
                 label="Discard"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="saving"
                 @click="discard"
@@ -420,7 +420,7 @@
               <Button
                 type="submit"
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="saving"
               />
@@ -444,7 +444,7 @@
             <Button
               label="Documentation"
               icon="ai ai-book"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="https://example.com/docs/records"
               target="_blank"
@@ -452,7 +452,7 @@
             <Button
               label="Add Record"
               icon="ai ai-plus"
-              kind="outlined"
+              variant="outline"
               size="medium"
             />
           </template>
@@ -474,7 +474,7 @@
                 >
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh"
@@ -487,7 +487,7 @@
                 >
                   <IconButton
                     icon="ai ai-download"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="!matchingItems.length"
                     aria-label="Download CSV"
@@ -581,7 +581,7 @@
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />
@@ -600,13 +600,13 @@
                           <Button
                             label="Add Record"
                             icon="ai ai-plus"
-                            kind="secondary"
+                            variant="secondary"
                             size="small"
                           />
                           <Button
                             label="Import zone file"
                             icon="ai ai-upload"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                           />
                         </div>

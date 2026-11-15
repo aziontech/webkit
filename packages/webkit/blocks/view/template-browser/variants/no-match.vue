@@ -219,7 +219,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/templates"
             target="_blank"
@@ -246,7 +246,7 @@
           <template #actions>
             <Button
               label="Clear filters"
-              kind="outlined"
+              variant="outline"
               size="small"
               @click="clearFilters"
             />
@@ -275,7 +275,7 @@
                 class="flex min-w-0"
               >
                 <Card
-                  kind="integration"
+                  variant="integration"
                   class="w-full"
                   :title="item.title"
                   :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"
@@ -371,7 +371,7 @@ npm run dev</code></pre>
               label="View repository"
               icon="ai ai-external-link"
               icon-position="trailing"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :href="`https://example.com/${selected.repository}`"
               target="_blank"
@@ -379,7 +379,7 @@ npm run dev</code></pre>
             <Button
               label="Deploy"
               icon="ai ai-cloud-upload"
-              kind="primary"
+              variant="primary"
               size="medium"
               :href="`/create/deploy?template=${selected.id}`"
             />

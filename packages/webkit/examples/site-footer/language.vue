@@ -26,7 +26,7 @@
   <div class="flex w-full flex-col gap-(--spacing-md)">
     <SiteFooter
       v-model:language="language"
-      kind="content"
+      variant="content"
       home="#"
       :columns="columns"
       :languages="['EN', 'PT-BR', 'ES']"

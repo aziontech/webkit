@@ -5,19 +5,19 @@
     nodes: [
       {
         key: 'app',
-        kind: 'app',
+        type: 'app',
         title: 'App'
       },
       {
         key: 'user',
-        kind: 'pill',
+        type: 'pill',
         title: 'User',
         icon: 'ai ai-user',
         active: true
       },
       {
         key: 'gateway',
-        kind: 'card',
+        type: 'card',
         eyebrow: 'AI Gateway',
         title: 'Route by cost',
         icon: 'ai ai-gateway',
@@ -30,7 +30,7 @@
       },
       {
         key: 'model',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'provider · general',
         title: 'General model',
         icon: 'ai ai-sparkles',
@@ -42,7 +42,7 @@
       },
       {
         key: 'cache',
-        kind: 'tile',
+        type: 'tile',
         title: 'Response cache',
         icon: 'ai ai-tiered-cache'
       }

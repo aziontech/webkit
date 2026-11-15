@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   /** Geometry of the placeholder. */
-  export type SkeletonKind = 'rectangle' | 'circle'
+  export type SkeletonVariant = 'rectangle' | 'circle'
 
   defineOptions({
     name: 'Skeleton',
@@ -11,7 +11,7 @@
 
   interface Props {
     /** Geometry: a rounded rectangular block (`rectangle`) or a circle. */
-    kind?: SkeletonKind
+    variant?: SkeletonVariant
     /** CSS width (any length). */
     width?: string
     /** CSS height (any length); for a circle, set equal to `width`. */
@@ -21,7 +21,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    kind: 'rectangle',
+    variant: 'rectangle',
     width: '100%',
     height: '1rem',
     animated: true
@@ -38,9 +38,9 @@
     role="presentation"
     aria-hidden="true"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-animated="animated || null"
     :style="{ width, height }"
-    class="block bg-(--bg-placeholder) data-[kind=rectangle]:rounded-(--shape-control) data-[kind=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
+    class="block bg-(--bg-placeholder) data-[variant=rectangle]:rounded-(--shape-control) data-[variant=circle]:rounded-full data-[animated]:motion-safe:bg-[linear-gradient(90deg,transparent_0%,transparent_35%,var(--bg-placeholder-highlight)_50%,transparent_65%,transparent_100%)] data-[animated]:motion-safe:bg-[length:200%_100%] data-[animated]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
   />
 </template>

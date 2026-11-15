@@ -23,7 +23,7 @@
         h(Button, {
           label: 'Find a workload',
           icon: 'ai ai-search',
-          kind: 'outlined',
+          variant: 'outline',
           size: 'medium',
           onClick: openSearch
         })

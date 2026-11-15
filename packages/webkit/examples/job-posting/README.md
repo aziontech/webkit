@@ -2,7 +2,7 @@
 
 The body of a careers posting page. The description runs down the page in rows, one per section of the posting, each a heading with its paragraphs and bullet lists. From the large breakpoint a rail beside it restates the posting (its area, its title and its facets) and stays on screen with the link to the application while the description scrolls. The application form follows, and a dialog confirms a sent application with a way back to the open positions.
 
-The band is the `JobPosting` component from `@aziontech/webkit/job-posting`. Place it under a `hero-band` (`kind: 'title-band'`) that carries the posting's title and an action pointing at `#apply`. It never sends the form: it validates on submit, emits `submit` with the DOM event and the values, and the site sends the application and sets `loading`, `submitted` or `failed`.
+The band is the `JobPosting` component from `@aziontech/webkit/job-posting`. Place it under a `hero-band` (`variant: 'title-band'`) that carries the posting's title and an action pointing at `#apply`. It never sends the form: it validates on submit, emits `submit` with the DOM event and the values, and the site sends the application and sets `loading`, `submitted` or `failed`.
 
 ## Examples
 
@@ -29,8 +29,8 @@ Example: [`site-default.vue`](./site-default.vue)
 Add this entry to the `sections` array of the page JSON, after the title band. `_id` picks the block and `props` are bound straight onto it:
 
 - `area`, `title` and `facets` (`label`, `icon`) fill the rail; `applyLabel` is its button, which links to `#` plus `form.anchor`.
-- `sections[]` are the description rows: a `title` and `blocks`, each `{ kind: 'text', text }` or `{ kind: 'list', items }`.
-- `form` is the application form: `title`, `description`, `submitLabel`, `anchor` and `fields` (`name`, `kind` of `text`, `email`, `phone`, `url` or `file`, `label`, `required`, `helper`, `accept`).
+- `sections[]` are the description rows: a `title` and `blocks`, each `{ variant: 'text', text }` or `{ type: 'list', items }`.
+- `form` is the application form: `title`, `description`, `submitLabel`, `anchor` and `fields` (`name`, `type` of `text`, `email`, `phone`, `url` or `file`, `label`, `required`, `helper`, `accept`).
 - `messages` holds the field messages, the failure alert, the confirmation dialog copy and the browse button label.
 - `secondaryAction` is the dialog's link back to the open positions.
 - The page handles `submit`: a file field's value is its file name, and the file itself is in `new FormData(event.target)`.

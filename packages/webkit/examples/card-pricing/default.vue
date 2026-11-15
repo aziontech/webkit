@@ -7,7 +7,7 @@
     title="Pro"
     pricing-details="Billed annually or $25/mo billed monthly."
     actions-position="bottom"
-    kind="contained"
+    variant="contained"
     value="20"
     prefix="$"
     suffix="/ mon"

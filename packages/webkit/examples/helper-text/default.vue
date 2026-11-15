@@ -4,7 +4,7 @@
 
 <template>
   <HelperText
-    kind="helper"
+    type="helper"
     label="Helper Text"
   />
 </template>

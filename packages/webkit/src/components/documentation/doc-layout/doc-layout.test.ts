@@ -253,13 +253,13 @@ describe('DocLayout', () => {
           {
             id: 'agreements',
             label: 'Agreements and Policies',
-            kind: 'drill',
+            type: 'drill',
             children: [
               { id: 'privacy', label: 'Privacy Policy', href: '/docs/privacy' },
               {
                 id: 'versions',
                 label: 'Previous versions',
-                kind: 'drill',
+                type: 'drill',
                 children: [{ id: 'privacy-2024', label: 'Privacy Policy 2024', href: '/docs/p24' }]
               }
             ]

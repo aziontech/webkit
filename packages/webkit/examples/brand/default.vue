@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <Brand kind="default" />
+  <Brand variant="default" />
 </template>

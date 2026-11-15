@@ -87,7 +87,7 @@
         <template #media>
           <CardGrid
             flush
-            kind="frame"
+            variant="frame"
             :columns="3"
             :mobile-columns="2"
             role="list"
@@ -97,7 +97,7 @@
             <CardGridCell
               v-for="certification in certifications"
               :key="certification.label"
-              kind="surface"
+              variant="surface"
               :padded="false"
               role="listitem"
             >
@@ -126,7 +126,7 @@
             </CardGridCell>
             <CardGridCell
               v-if="primaryAction"
-              kind="surface"
+              variant="surface"
               :padded="false"
               role="listitem"
             >

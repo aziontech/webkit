@@ -4,7 +4,7 @@ A framed section that makes the case for Azion's distributed infrastructure: a h
 
 The headline sits at the top and the claims at the bottom, so the map shows between them. On phones the map moves into its own box between the headline and the claims, so no text ever sits on it.
 
-The band is the `NetworkSection` component from `@aziontech/webkit/network-section`; it composes `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for figures. `kind` picks the floor: `outcomes` (the default), `benefits` or `stats`.
+The band is the `NetworkSection` component from `@aziontech/webkit/network-section`; it composes `SectionModule`, `FrameBox`, `NetworkMap`, `SectionTitle`, and, on the floor, `CardGrid` with a `Quote` per client or a `Topic` per benefit, or `BigNumbers` for figures. `variant` picks the floor: `outcomes` (the default), `benefits` or `stats`.
 
 ## Examples
 
@@ -23,7 +23,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `claimsEyebrow` is the overline sentence above the claims.
 - `claims` are the network figures drawn as pills. A claim given as `{ label, mobile: false }` stays off phones.
 - `anchor` sets the band's id, so a page can link to it with a `#hash`.
-- With `kind` set to `stats`, `stats[]` fill the floor with headline figures, each a `value`, a `label` and an optional `prefix` and `suffix`.
+- With `variant` set to `stats`, `stats[]` fill the floor with headline figures, each a `value`, a `label` and an optional `prefix` and `suffix`.
 - `outcomes[]` fill the floor, one column each: two to four fill the row. `highlights` are phrases of `text` kept in full color, copied exactly.
 - `logoTreatment` is `as-is` or `monochrome` (one ink that follows the theme). Empty means as-is.
 
@@ -47,7 +47,7 @@ Example: [`site-benefits.vue`](./site-benefits.vue)
 
 ##### Use it on the site
 
-Same entry, with `kind` set to `benefits` and `benefits[]` in place of `outcomes[]`:
+Same entry, with `variant` set to `benefits` and `benefits[]` in place of `outcomes[]`:
 
 - `benefits[]` fill the floor on up to three columns: three fill one row, four split 2 × 2. Each has an optional `icon`, a `title` and a `description`.
 

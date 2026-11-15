@@ -93,9 +93,9 @@
       marks="all"
     >
       <div
-        :data-kind="item.kind ?? 'solid'"
+        :data-variant="item.variant ?? 'solid'"
         :data-fill="item.fill ?? 'none'"
-        class="flex flex-col gap-(--spacing-md) rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) p-(--spacing-lg) data-[fill=primary]:bg-(--primary-mask) data-[fill=secondary]:bg-(--secondary-mask) data-[kind=dashed]:border-dashed"
+        class="flex flex-col gap-(--spacing-md) rounded-(--shape-flat) border-(length:--border-width-default) border-(--border-default) p-(--spacing-lg) data-[fill=primary]:bg-(--primary-mask) data-[fill=secondary]:bg-(--secondary-mask) data-[variant=dashed]:border-dashed"
       >
         <span class="text-label-sm text-(--text-muted)">{{ item.label }}</span>
         <DiagramLayout

@@ -3,9 +3,9 @@ name: artifact-canvas
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 65336fedded9de5ed89d24fcf1a7697b524bde40658b75962f770f44199ba6a3
+checksum: f57dfdc2118608d0f3616de0f1b9c994e00be24537e8174a0ca1329acbbc632a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -79,7 +79,7 @@ The side panel that shows one generated artifact in full next to the conversatio
         v-model:version="version"
         title="top-orders.sql"
         meta="SQL"
-        kind="code"
+        type="code"
         :versions="versions.length"
         :copy-value="versions[version]"
         @close="open = false"
@@ -104,7 +104,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 | -------------- | --------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------- |
 | `title`        | `string`                          | —            | true     | File name or title of the artifact (`top-orders.sql`); names the panel.                                 |
 | `meta`         | `string`                          | `''`         | false    | Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`).                 |
-| `kind`         | `'code' \| 'table' \| 'document'` | `'document'` | false    | What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot.              |
+| `type`         | `'code' \| 'table' \| 'document'` | `'document'` | false    | What the artifact is; picks the icon and `data-type`. The body is always the owner's slot.              |
 | `versions`     | `number`                          | `1`          | false    | How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager.            |
 | `copyValue`    | `string`                          | `''`         | false    | Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy.                    |
 | `downloadHref` | `string`                          | `''`         | false    | URL of the version shown, for Download (`download` takes the title). Empty hides Download.              |
@@ -132,7 +132,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 
 ## States
 
-- `data-kind` on the root (`code`, `table`, `document`); `data-streaming` while a version is generated.
+- `data-type` on the root (`code`, `table`, `document`); `data-streaming` while a version is generated.
 - One version: no pager; the toolbar keeps Copy and Download, and is not drawn when neither is set and the `actions` slot is empty.
 - `streaming`: the pager is disabled, the body has `aria-busy="true"`, and the status reads `Generating a new version`.
 - No `copyValue` / `downloadHref`: that control is not drawn.

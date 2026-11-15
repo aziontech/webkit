@@ -23,12 +23,12 @@
   <div class="flex flex-wrap items-center gap-(--spacing-sm)">
     <Button
       label="Open palette with pages"
-      kind="primary"
+      variant="primary"
       @click="open = true"
     />
     <Button
       label="Switch project"
-      kind="outlined"
+      variant="outline"
       @click="openProjects"
     />
     <span class="text-body-sm text-(--text-muted)">Current project: {{ project }}</span>

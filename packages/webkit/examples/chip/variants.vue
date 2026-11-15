@@ -6,19 +6,19 @@
   <div class="flex flex-wrap items-center gap-4">
     <Chip
       label="Production"
-      kind="filled"
+      variant="filled"
       size="medium"
       removable
     />
     <Chip
       label="Status"
-      kind="outlined"
+      variant="outline"
       size="medium"
       clickable
     />
     <Chip
       label="Add filter"
-      kind="dashed"
+      variant="dashed"
       size="medium"
       clickable
     />

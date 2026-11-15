@@ -3,11 +3,11 @@ name: client-mosaic
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 2a1d58668f2bc54b9699d18e7a177ec7b452caadcd5fccb643e5d13758c63e4e
+checksum: 7d416186cc3b406dc90f5d633614ca1a13296880f3ab5394c0fb543edd7446a8
 ---
 
 # ClientMosaic — Component Spec
@@ -95,7 +95,7 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 ## States
 
 - Visual states: `default`, `hover` and `focus-visible` on each cell
-- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `Logo` with `data-treatment` and `data-kind` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
+- `data-cell` (`story` or `logo`), `data-span` and `data-rows` on every grid cell; `data-fill` on every cell face drives its fill; every mark is a `Logo` with `data-treatment` and `data-variant` for its ink and `data-stacked` for a stacked lockup; `data-lead` sets the larger text of the first story (from `stories`) or of a story spanning two columns (from `cells`)
 - Empty: when `cells`, `stories` and `logos` are all empty the band renders nothing
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 

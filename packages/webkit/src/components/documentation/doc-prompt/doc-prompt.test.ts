@@ -4,7 +4,7 @@ import { nextTick, ref } from 'vue'
 
 import Bare from '../../../../examples/doc-prompt/bare.vue'
 import Default from '../../../../examples/doc-prompt/default.vue'
-import Variants from '../../../../examples/doc-prompt/variants.vue'
+import Kinds from '../../../../examples/doc-prompt/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPrompt from './doc-prompt.vue'
 
@@ -70,50 +70,50 @@ describe('DocPrompt', () => {
     })
   })
 
-  describe('kind', () => {
-    it('defaults to block and mirrors it onto data-kind', () => {
+  describe('variant', () => {
+    it('defaults to block and mirrors it onto data-variant', () => {
       const { getByTestId } = render(DocPrompt, { slots: { default: PROMPT } })
-      const text = getByTestId('documentation-doc-prompt').querySelector('[data-kind]')
-      expect(text?.getAttribute('data-kind')).toBe('block')
+      const text = getByTestId('documentation-doc-prompt').querySelector('[data-variant]')
+      expect(text?.getAttribute('data-variant')).toBe('block')
       expect(text?.getAttribute('data-state')).toBe('closed')
       expect(text?.hasAttribute('data-expanded')).toBe(false)
     })
 
     it('carries no disclosure state on the line shape', () => {
       const { getByTestId } = render(DocPrompt, {
-        props: { kind: 'line' },
+        props: { variant: 'line' },
         slots: { default: PROMPT }
       })
-      const text = getByTestId('documentation-doc-prompt').querySelector('[data-kind]')
+      const text = getByTestId('documentation-doc-prompt').querySelector('[data-variant]')
       expect(text?.hasAttribute('data-state')).toBe(false)
     })
 
-    it('mirrors kind="line" onto data-kind', () => {
+    it('mirrors variant="line" onto data-variant', () => {
       const { getByTestId } = render(DocPrompt, {
-        props: { kind: 'line' },
+        props: { variant: 'line' },
         slots: { default: PROMPT }
       })
-      const text = getByTestId('documentation-doc-prompt').querySelector('[data-kind]')
-      expect(text?.getAttribute('data-kind')).toBe('line')
+      const text = getByTestId('documentation-doc-prompt').querySelector('[data-variant]')
+      expect(text?.getAttribute('data-variant')).toBe('line')
     })
 
     it('gives the line shape a tab stop and the block shape none', () => {
       // A scroll container with no focusable child is unreachable by keyboard
       // (axe: scrollable-region-focusable). Only `line` scrolls.
-      const line = render(DocPrompt, { props: { kind: 'line' }, slots: { default: PROMPT } })
+      const line = render(DocPrompt, { props: { variant: 'line' }, slots: { default: PROMPT } })
       expect(
         line
           .getByTestId('documentation-doc-prompt')
-          .querySelector('[data-kind]')
+          .querySelector('[data-variant]')
           ?.getAttribute('tabindex')
       ).toBe('0')
       line.unmount()
 
-      const block = render(DocPrompt, { props: { kind: 'block' }, slots: { default: PROMPT } })
+      const block = render(DocPrompt, { props: { variant: 'block' }, slots: { default: PROMPT } })
       expect(
         block
           .getByTestId('documentation-doc-prompt')
-          .querySelector('[data-kind]')
+          .querySelector('[data-variant]')
           ?.getAttribute('tabindex')
       ).toBeNull()
     })
@@ -216,8 +216,8 @@ describe('DocPrompt', () => {
       await expectNoA11yViolations(container)
     })
 
-    it('has no violations across both kinds', async () => {
-      const { container } = render(Variants)
+    it('has no violations across both variants', async () => {
+      const { container } = render(Kinds)
       await expectNoA11yViolations(container)
     })
 

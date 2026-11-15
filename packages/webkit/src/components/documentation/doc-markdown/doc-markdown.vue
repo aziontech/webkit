@@ -70,7 +70,7 @@
   const DocTab = defineAsyncComponent(() => import('../doc-tab/doc-tab.vue'))
   const DocTabs = defineAsyncComponent(() => import('../doc-tabs/doc-tabs.vue'))
 
-  const CALLOUT_KINDS: Record<string, string> = {
+  const CALLOUT_VARIANTS: Record<string, string> = {
     Note: 'note',
     Info: 'info',
     Tip: 'tip',
@@ -221,8 +221,8 @@
     }
     const component = override ?? BLOCK_COMPONENTS[node.name]
     if (!component) return null
-    const kind = !override ? CALLOUT_KINDS[node.name] : undefined
-    const values: Record<string, unknown> = kind ? { kind, ...node.props } : { ...node.props }
+    const variant = !override ? CALLOUT_VARIANTS[node.name] : undefined
+    const values: Record<string, unknown> = variant ? { variant, ...node.props } : { ...node.props }
     if (!override && node.name === 'CardGroup' && 'cols' in values) {
       values['columns'] ??= values['cols']
       delete values['cols']

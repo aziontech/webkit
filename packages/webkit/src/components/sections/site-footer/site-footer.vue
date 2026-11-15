@@ -20,7 +20,7 @@
   })
 
   /** Where the footer sits. */
-  export type SiteFooterKind = 'content' | 'site'
+  export type SiteFooterVariant = 'content' | 'site'
 
   /** One link of a footer column. */
   export type SiteFooterLink = {
@@ -52,7 +52,7 @@
 
   interface Props {
     /** Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. */
-    kind?: SiteFooterKind
+    variant?: SiteFooterVariant
     /** Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
     /** Destination of the Azion mark; the mark is not rendered when empty. */
@@ -72,7 +72,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'site',
+    variant: 'site',
     ariaLabel: '',
     home: '',
     homeAriaLabel: '',
@@ -107,11 +107,11 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     class="w-full border-t border-(--border-default)"
   >
     <Footer
-      :kind="kind"
+      :variant="variant"
       signature="compact"
       :aria-label="ariaLabel || t('siteFooter.label')"
     >
@@ -151,7 +151,7 @@
         <IconButton
           v-for="social in socials"
           :key="social.label"
-          kind="transparent"
+          variant="ghost"
           size="small"
           :icon="social.icon"
           :ariaLabel="social.label"

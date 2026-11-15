@@ -6,7 +6,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -24,7 +24,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
-  type FieldProblem = { kind: HelperTextKind; message: string }
+  type FieldProblem = { type: HelperTextType; message: string }
   type LabeledOption = SelectOptionItem<string | number>
 
   const port = (value: number, label = String(value)) => ({ value, label })
@@ -128,13 +128,13 @@
     Object.keys(uploadErrors).forEach((key) => delete uploadErrors[key])
     if (!/^[a-z0-9-]+$/.test(upload.name.trim())) {
       uploadErrors.name = upload.name.trim()
-        ? { kind: 'invalid', message: 'Use lowercase letters, numbers and hyphens only.' }
-        : { kind: 'required', message: 'Enter a name for the certificate.' }
+        ? { type: 'invalid', message: 'Use lowercase letters, numbers and hyphens only.' }
+        : { type: 'required', message: 'Enter a name for the certificate.' }
     }
     if (!upload.pem.includes('BEGIN CERTIFICATE')) {
       uploadErrors.pem = upload.pem.trim()
-        ? { kind: 'invalid', message: 'Paste a PEM certificate, starting with BEGIN CERTIFICATE.' }
-        : { kind: 'required', message: 'Paste the CA certificate.' }
+        ? { type: 'invalid', message: 'Paste a PEM certificate, starting with BEGIN CERTIFICATE.' }
+        : { type: 'required', message: 'Paste the CA certificate.' }
     }
     if (Object.keys(uploadErrors).length) return
     const value = upload.name.trim()
@@ -149,17 +149,17 @@
   const validate = () => {
     Object.keys(errors).forEach((key) => delete errors[key])
     if (!form.httpPorts.length) {
-      errors.httpPorts = { kind: 'required', message: 'Select at least one HTTP port.' }
+      errors.httpPorts = { type: 'required', message: 'Select at least one HTTP port.' }
     }
     if (form.useHttps && !form.httpsPorts.length) {
-      errors.httpsPorts = { kind: 'required', message: 'Select at least one HTTPS port.' }
+      errors.httpsPorts = { type: 'required', message: 'Select at least one HTTPS port.' }
     }
     if (form.useHttp3 && !form.http3Ports.length) {
-      errors.http3Ports = { kind: 'required', message: 'Select at least one HTTP/3 port.' }
+      errors.http3Ports = { type: 'required', message: 'Select at least one HTTP/3 port.' }
     }
     if (armed.value && !form.trustedCa) {
       errors.trustedCa = {
-        kind: 'required',
+        type: 'required',
         message: 'Mutual authentication needs a trusted CA certificate.'
       }
     }
@@ -269,8 +269,8 @@
                         placeholder="Select an HTTP port"
                         :display-value="portsLabel"
                         :disabled="saving"
-                        :required="errors.httpPorts?.kind === 'required'"
-                        :invalid="errors.httpPorts?.kind === 'invalid'"
+                        :required="errors.httpPorts?.type === 'required'"
+                        :invalid="errors.httpPorts?.type === 'invalid'"
                         :aria-describedby="
                           errors.httpPorts ? 'protocols-httpPorts-message' : undefined
                         "
@@ -293,7 +293,7 @@
                       <HelperText
                         v-if="errors.httpPorts"
                         id="protocols-httpPorts-message"
-                        :kind="errors.httpPorts.kind"
+                        :type="errors.httpPorts.type"
                         :label="errors.httpPorts.message"
                       />
                     </SettingRow>
@@ -301,7 +301,7 @@
                       key="useHttps"
                       title="HTTPS support"
                       description="Answer on HTTPS as well as HTTP. HTTP/3 and mutual authentication need it."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         :model-value="form.useHttps"
@@ -324,8 +324,8 @@
                         placeholder="Select an HTTPS port"
                         :display-value="portsLabel"
                         :disabled="saving"
-                        :required="errors.httpsPorts?.kind === 'required'"
-                        :invalid="errors.httpsPorts?.kind === 'invalid'"
+                        :required="errors.httpsPorts?.type === 'required'"
+                        :invalid="errors.httpsPorts?.type === 'invalid'"
                         :aria-describedby="
                           errors.httpsPorts ? 'protocols-httpsPorts-message' : undefined
                         "
@@ -348,7 +348,7 @@
                       <HelperText
                         v-if="errors.httpsPorts"
                         id="protocols-httpsPorts-message"
-                        :kind="errors.httpsPorts.kind"
+                        :type="errors.httpsPorts.type"
                         :label="errors.httpsPorts.message"
                       />
                     </SettingRow>
@@ -356,7 +356,7 @@
                       key="useHttp3"
                       title="HTTP/3 support"
                       description="Serve over HTTP/3 where the client supports it. Turns HTTPS support on with it."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         :model-value="form.useHttp3"
@@ -379,8 +379,8 @@
                         placeholder="Select an HTTP/3 port"
                         :display-value="portsLabel"
                         :disabled="saving"
-                        :required="errors.http3Ports?.kind === 'required'"
-                        :invalid="errors.http3Ports?.kind === 'invalid'"
+                        :required="errors.http3Ports?.type === 'required'"
+                        :invalid="errors.http3Ports?.type === 'invalid'"
                         :aria-describedby="
                           errors.http3Ports ? 'protocols-http3Ports-message' : undefined
                         "
@@ -403,7 +403,7 @@
                       <HelperText
                         v-if="errors.http3Ports"
                         id="protocols-http3Ports-message"
-                        :kind="errors.http3Ports.kind"
+                        :type="errors.http3Ports.type"
                         :label="errors.http3Ports.message"
                       />
                     </SettingRow>
@@ -477,7 +477,7 @@
                       key="mtls"
                       title="Mutual authentication"
                       description="Clients without a valid certificate are refused or flagged, depending on the mode."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.mtls"
@@ -494,12 +494,12 @@
                       key="mtlsMode"
                       title="Mode"
                       description="What happens when a client certificate cannot be verified."
-                      kind="stacked"
+                      variant="stacked"
                       :depth="1"
                     >
                       <RadioGroup
                         v-model="form.mtlsMode"
-                        kind="card"
+                        variant="card"
                         name="protocols-mtls-mode"
                         aria-label="Mutual authentication mode"
                         :disabled="saving"
@@ -527,7 +527,7 @@
                         placeholder="Select a trusted CA certificate"
                         :display-value="caLabel"
                         :disabled="saving"
-                        :required="errors.trustedCa?.kind === 'required'"
+                        :required="errors.trustedCa?.type === 'required'"
                         @update:model-value="pickCa"
                         @update:open="(open) => !open && (caQuery = '')"
                       >
@@ -594,7 +594,7 @@
                       <HelperText
                         v-if="errors.trustedCa"
                         id="protocols-trustedCa-message"
-                        :kind="errors.trustedCa.kind"
+                        :type="errors.trustedCa.type"
                         :label="errors.trustedCa.message"
                       />
                     </SettingRow>
@@ -650,14 +650,14 @@
             <Button
               type="button"
               label="Discard"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="saving"
               @click="discard"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="saving"
               @click="save"
@@ -698,8 +698,8 @@
                   class="w-full"
                   placeholder="partners-ca"
                   autocomplete="off"
-                  :required="uploadErrors.name?.kind === 'required'"
-                  :invalid="uploadErrors.name?.kind === 'invalid'"
+                  :required="uploadErrors.name?.type === 'required'"
+                  :invalid="uploadErrors.name?.type === 'invalid'"
                   :aria-describedby="
                     uploadErrors.name ? 'protocols-upload-name-message' : undefined
                   "
@@ -707,7 +707,7 @@
                 <HelperText
                   v-if="uploadErrors.name"
                   id="protocols-upload-name-message"
-                  :kind="uploadErrors.name.kind"
+                  :type="uploadErrors.name.type"
                   :label="uploadErrors.name.message"
                 />
               </Field>
@@ -721,14 +721,14 @@
                   class="w-full"
                   :rows="8"
                   placeholder="-----BEGIN CERTIFICATE-----"
-                  :required="uploadErrors.pem?.kind === 'required'"
-                  :invalid="uploadErrors.pem?.kind === 'invalid'"
+                  :required="uploadErrors.pem?.type === 'required'"
+                  :invalid="uploadErrors.pem?.type === 'invalid'"
                   :aria-describedby="uploadErrors.pem ? 'protocols-upload-pem-message' : undefined"
                 />
                 <HelperText
                   v-if="uploadErrors.pem"
                   id="protocols-upload-pem-message"
-                  :kind="uploadErrors.pem.kind"
+                  :type="uploadErrors.pem.type"
                   :label="uploadErrors.pem.message"
                 />
               </Field>
@@ -739,13 +739,13 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 @click="uploadOpen = false"
               />
               <Button
                 type="submit"
                 label="Upload"
-                kind="primary"
+                variant="primary"
               />
             </div>
           </PanelFooter>

@@ -24,7 +24,7 @@
         <SidebarMenuSub>
           <SidebarMenuSubTrigger
             label="Settings"
-            kind="inline"
+            type="inline"
             disabled
           />
           <SidebarMenuSubContent>

@@ -8,9 +8,9 @@ template: 2
 figma:
   url: <https://figma.com/design/...>
   node_id: <e.g. 10:42>
-checksum: <sha256-of-body — filled by spec-validator on approval>
+checksum: a96fab27115eca203399795410d2c0c32ef312a713c30f239af715302847fba4
 created: <YYYY-MM-DD>
-last_updated: <YYYY-MM-DD>
+last_updated: 2026-11-15
 ---
 
 # <Name> — Component Spec
@@ -161,13 +161,13 @@ export default Object.assign(Root, { Part: RootPart })
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
 | `label` | `string` | `''` | false | Text content rendered inside the component. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'primary'` | false | Visual variant. |
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost'` | `'primary'` | false | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 <!-- Rules enforced by spec-validator:
      - kebab-case prop names; no `is`/`has` prefix on booleans.
-     - Visual variants always named `kind`. Sizes always named `size`.
+     - Visual variants always named `variant` (a sort of part is `type`). Sizes always named `size`.
      - Every prop has a JSDoc one-liner; no empty cells.
      - Types are union literals or primitives; no `any`.
      - Required is `true` / `false` — never `yes` / `no`, so the column reads as the
@@ -300,10 +300,10 @@ export default Object.assign(Root, { Part: RootPart })
 
 ## Examples
 
-Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
+Canonical layout — composite examples (`variants.vue`, `sizes.vue`) render every variant of one axis side-by-side in a single frame; state examples (`loading.vue`, `disabled.vue`) change only the prop they demonstrate.
 
 - Default
-- Types — composite example rendering every `kind` value side-by-side. Omit when the component has only one `kind`.
+- Variants — composite example rendering every `variant` value side-by-side. Omit when the component has only one `variant`.
 - Sizes — composite example rendering every `size` value side-by-side. Omit when the component has only one `size`.
 - Loading — only when the component has a `loading` prop.
 - Disabled — only when the component has a `disabled` prop.
@@ -312,7 +312,7 @@ Canonical layout — composite examples (`types.vue`, `sizes.vue`) render every 
      - DO NOT add LightDark, Accessibility (with play), Playground, WithSlots, WithComposition, Controlled, Uncontrolled examples unless the spec explicitly justifies them in writing here.
      - The harnesses (a11y, hydration, server render) and the styled visual suite cover every example automatically.
      - For each additional state example (Loading/Disabled), the prop delta is the prop being demonstrated — nothing else.
-     - Do NOT replace Types/Sizes with one-example-per-variant (Primary/Secondary/...). The composite examples are the canonical pattern. -->
+     - Do NOT replace Variants/Sizes with one-example-per-variant (Primary/Secondary/...). The composite examples are the canonical pattern. -->
 
 
 ## Constraints — DO NOT

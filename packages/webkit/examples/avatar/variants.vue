@@ -6,7 +6,7 @@
   <div class="flex flex-wrap items-end gap-6">
     <div class="flex flex-col items-center gap-2">
       <Avatar
-        kind="circle"
+        variant="circle"
         label="AB"
         size="medium"
       />
@@ -14,7 +14,7 @@
     </div>
     <div class="flex flex-col items-center gap-2">
       <Avatar
-        kind="square"
+        variant="square"
         label="AB"
         size="medium"
       />

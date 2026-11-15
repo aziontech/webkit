@@ -5,7 +5,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -23,7 +23,7 @@
   const form = reactive(blank())
   const baseline = ref(JSON.stringify(form))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
-  const errors = reactive<{ name: string; nameKind: HelperTextKind }>({
+  const errors = reactive<{ name: string; nameKind: HelperTextType }>({
     name: '',
     nameKind: 'required'
   })
@@ -112,7 +112,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Databases"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -122,7 +122,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -139,7 +139,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -198,7 +198,7 @@
                         <HelperText
                           v-if="errors.name"
                           id="create-database-name-message"
-                          :kind="errors.nameKind"
+                          :type="errors.nameKind"
                           :label="errors.name"
                         />
                       </SettingRow>
@@ -219,7 +219,7 @@
                       <SettingRow
                         title="Active"
                         description="An inactive database keeps its data and refuses connections."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -233,7 +233,7 @@
             </fieldset>
           </div>
 
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template
               v-if="dirty"
               #leading
@@ -244,14 +244,14 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="submitting"
                 @click="cancel"
               />
               <Button
                 label="Create Database"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"

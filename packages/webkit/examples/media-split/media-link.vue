@@ -27,7 +27,7 @@
       <template #actions>
         <Button
           label="Read the guide"
-          kind="outlined"
+          variant="outline"
           size="small"
           icon="ai ai-chevron-right"
           icon-position="trailing"

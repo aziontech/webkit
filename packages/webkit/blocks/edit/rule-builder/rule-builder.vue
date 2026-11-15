@@ -525,7 +525,7 @@
         <Button
           label="Add Rule"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           class="w-full"
         />
@@ -609,7 +609,7 @@
                     <div class="flex flex-col gap-(--spacing-xs)">
                       <RadioGroup
                         v-model="form.phase"
-                        kind="card"
+                        variant="card"
                         name="rule-phase"
                         aria-label="Phase"
                         :disabled="submitting || editing"
@@ -624,7 +624,7 @@
                       </RadioGroup>
                       <HelperText
                         v-if="editing"
-                        kind="disabled"
+                        type="disabled"
                         label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
                       />
                     </div>
@@ -883,7 +883,7 @@
                     <SettingRow
                       title="Active"
                       description="Turn the rule on right after it is created."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.active"
@@ -902,7 +902,7 @@
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

@@ -30,7 +30,7 @@
         <template #trigger>
           <Button
             label="Remover domínio"
-            kind="outlined"
+            variant="outline"
             size="medium"
           />
         </template>

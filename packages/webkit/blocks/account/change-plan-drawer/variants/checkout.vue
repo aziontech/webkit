@@ -377,7 +377,7 @@
 <template>
   <Button
     label="Change plan"
-    kind="outlined"
+    variant="outline"
     size="medium"
     @click="changePlanOpen = true"
   />
@@ -422,7 +422,7 @@
                 :show-tag="plan.current"
                 tag-label="Current plan"
                 actions-position="bottom"
-                kind="contained"
+                variant="contained"
                 action-label=""
               >
                 <div class="flex w-full flex-col gap-(--spacing-md)">
@@ -437,7 +437,7 @@
                 <template #actions>
                   <Button
                     :label="plan.actionLabel"
-                    :kind="plan.action === 'upgrade' ? 'primary' : 'outlined'"
+                    :variant="plan.action === 'upgrade' ? 'primary' : 'outline'"
                     :disabled="plan.current"
                     size="large"
                     class="w-full"
@@ -579,7 +579,7 @@
                       <Button
                         id="card-change"
                         label="Change"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :disabled="submitting"
                         @click="startEditingCard"
@@ -694,7 +694,7 @@
                             class="w-full"
                             type="button"
                             label="Cancel"
-                            kind="outlined"
+                            variant="outline"
                             size="medium"
                             :disabled="submitting"
                             @click="cancelEditingCard"
@@ -705,7 +705,7 @@
                             class="w-full"
                             type="button"
                             label="Update"
-                            kind="primary"
+                            variant="primary"
                             size="medium"
                             :disabled="submitting"
                             @click="updateCard"
@@ -877,7 +877,7 @@
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="submitting"
                 @click="upgradeOpen = false"
@@ -887,7 +887,7 @@
               <Button
                 class="w-full"
                 label="Upgrade"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="submitting"
                 type="submit"

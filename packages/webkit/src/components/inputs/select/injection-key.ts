@@ -5,7 +5,7 @@ import type { ListboxFocusIntent } from '../../../composables/use-listbox-conten
 export type SelectSize = 'small' | 'medium' | 'large'
 
 /** Trigger look: the bordered field, or no border or fill until hover for a switcher inside a line of text. */
-export type SelectKind = 'outlined' | 'transparent'
+export type SelectVariant = 'outline' | 'ghost'
 
 export type SelectValue = string | number | undefined
 
@@ -36,7 +36,7 @@ export interface SelectContext {
   /** Static state flags. */
   size: ComputedRef<SelectSize>
   /** Trigger look. */
-  kind: ComputedRef<SelectKind>
+  variant: ComputedRef<SelectVariant>
   disabled: ComputedRef<boolean>
   readonly: ComputedRef<boolean>
   invalid: ComputedRef<boolean>

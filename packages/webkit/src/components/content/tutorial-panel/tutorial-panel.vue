@@ -188,7 +188,7 @@
             <div class="flex">
               <Button
                 :label="tutorial.completed ? t('tutorialPanel.restart') : t('tutorialPanel.start')"
-                :kind="tutorial.completed ? 'outlined' : 'primary'"
+                :variant="tutorial.completed ? 'outline' : 'primary'"
                 size="small"
                 :aria-describedby="`${uid}-${tutorial.id}`"
                 :data-testid="`${testId}__start`"
@@ -228,7 +228,7 @@
           <div class="flex flex-wrap items-center gap-(--spacing-xs)">
             <Button
               :label="t('tutorialPanel.restart')"
-              kind="outlined"
+              variant="outline"
               size="small"
               :data-testid="`${testId}__restart`"
               @click="
@@ -238,7 +238,7 @@
             />
             <Button
               :label="t('tutorialPanel.back')"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :data-testid="`${testId}__back`"
               @click="exit"
@@ -280,7 +280,7 @@
           >
             <Button
               :label="t('tutorialPanel.exit')"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-log-out"
               :data-testid="`${testId}__exit`"

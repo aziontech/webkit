@@ -12,7 +12,7 @@
     <FileDropzone description="Or browse for files on your computer.">
       <Button
         label="Browse files"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         @click="browse"
       />

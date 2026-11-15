@@ -10,7 +10,7 @@
       <SectionGap hatch />
 
       <ClosingCallToAction
-        kind="panel"
+        variant="panel"
         :hatch="false"
         title="Ready to join us?"
         description="See our open positions and find the right fit."
@@ -20,7 +20,7 @@
       <SectionGap hatch />
 
       <ClosingCallToAction
-        kind="primary"
+        variant="primary"
         anchor="contact"
         title="Build, run, and protect applications everywhere."
         description="Get faster launches, lower latency, and less infrastructure overhead from day one."
@@ -29,7 +29,7 @@
     </SectionContainer>
 
     <SectionContainer max-width="site">
-      <ClosingCallToAction kind="frame" />
+      <ClosingCallToAction variant="frame" />
     </SectionContainer>
   </div>
 </template>

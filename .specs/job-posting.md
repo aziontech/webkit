@@ -3,9 +3,9 @@ name: job-posting
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: a465f8e4d88432345f879cda07b474ae3aeb11d2083b76788dd4b3a277642760
+checksum: 0a6bd1757845d8738bc17d7a3542423ae3db3f089a73da7fdbe625a21ec9972e
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ The body of a careers posting page, under the posting's title band: the descript
 
 ## When to use
 
-- On the page of one open position, under a `hero-band` (`kind: 'title-band'`) that carries the posting's title and its apply link.
+- On the page of one open position, under a `hero-band` (`variant: 'title-band'`) that carries the posting's title and its apply link.
 
 ## When NOT to use
 
@@ -74,7 +74,7 @@ The body of a careers posting page, under the posting's title band: the descript
     :sections="[
       {
         title: 'About the role',
-        blocks: [{ kind: 'text', text: 'You will build the tools our engineers ship with.' }]
+        blocks: [{ variant: 'text', text: 'You will build the tools our engineers ship with.' }]
       }
     ]"
     :form="{
@@ -82,8 +82,8 @@ The body of a careers posting page, under the posting's title band: the descript
       title: 'Apply for this position',
       submitLabel: 'Submit application',
       fields: [
-        { name: 'name', kind: 'text', label: 'Name', required: true },
-        { name: 'email', kind: 'email', label: 'Email address', required: true }
+        { name: 'name', variant: 'text', label: 'Name', required: true },
+        { name: 'email', type: 'email', label: 'Email address', required: true }
       ]
     }"
     :messages="{
@@ -108,14 +108,14 @@ The body of a careers posting page, under the posting's title band: the descript
 
 | Prop              | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                         |
 | ----------------- | --------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `form`            | `JobPostingForm`      | —           | true     | The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, kind, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. |
+| `form`            | `JobPostingForm`      | —           | true     | The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. |
 | `messages`        | `JobPostingMessages`  | —           | true     | Copy of the form and its outcomes: `{ missing, invalidEmail, invalidUrl, error, successTitle, successDescription, done, browse }`.                                                                                                                                            |
 | `anchor`          | `string`              | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                |
 | `area`            | `string`              | `''`        | false    | Area the posting is filed under, the overline of the rail.                                                                                                                                                                                                                    |
 | `title`           | `string`              | `''`        | false    | Title of the posting, restated at the top of the rail; the band renders nothing when empty.                                                                                                                                                                                   |
 | `facets`          | `JobPostingFacet[]`   | `[]`        | false    | Facts about the posting listed in the rail, in order; each is `{ label, icon? }`.                                                                                                                                                                                             |
 | `applyLabel`      | `string`              | `''`        | false    | Label of the rail button that links to the application form; the button is left out when empty.                                                                                                                                                                               |
-| `sections`        | `JobPostingSection[]` | `[]`        | false    | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ kind: 'text', text }` or `{ kind: 'list', items }`.                                                                                                                            |
+| `sections`        | `JobPostingSection[]` | `[]`        | false    | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ variant: 'text', text }` or `{ type: 'list', items }`.                                                                                                                         |
 | `secondaryAction` | `JobPostingAction`    | `undefined` | false    | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent.                                                                                                                                                                           |
 | `loading`         | `boolean`             | `false`     | false    | The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored.                                                                                                                                            |
 | `submitted`       | `boolean`             | `false`     | false    | The site sent the application: the confirmation dialog opens.                                                                                                                                                                                                                 |

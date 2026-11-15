@@ -12,7 +12,7 @@
   <PopoverRoot>
     <PopoverTrigger>
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Open popover"
       />
     </PopoverTrigger>

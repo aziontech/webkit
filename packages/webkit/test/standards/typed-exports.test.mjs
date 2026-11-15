@@ -62,10 +62,10 @@ test('typesVersions mirrors every typed export for node10 resolution', () => {
 test('components export their props as <Name>Props and the consumer smoke app uses them', () => {
   const button = readFileSync(resolve(PKG, 'src/components/actions/button/button.vue'), 'utf8')
   assert.match(button, /export type ButtonProps = Props/)
-  assert.match(button, /export type ButtonKind = /)
+  assert.match(button, /export type ButtonVariant = /)
   assert.match(
     APP_VUE,
-    /import Button, \{ type ButtonKind, type ButtonProps \} from '@aziontech\/webkit\/button'/
+    /import Button, \{ type ButtonVariant, type ButtonProps \} from '@aziontech\/webkit\/button'/
   )
   assert.match(APP_VUE, /const saveProps: ButtonProps = /)
 })

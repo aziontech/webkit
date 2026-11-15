@@ -120,7 +120,7 @@
         component,
         scenes: resolveScenes(entry),
         gapSize:
-          entry.gap === 'none' || (closing && bound['kind'] === 'frame')
+          entry.gap === 'none' || (closing && bound['variant'] === 'frame')
             ? null
             : entry.gap === 'small'
               ? 'small'

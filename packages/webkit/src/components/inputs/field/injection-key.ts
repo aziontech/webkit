@@ -2,7 +2,7 @@ import type { ComputedRef, InjectionKey } from 'vue'
 
 export type FieldOrientation = 'vertical' | 'horizontal' | 'responsive'
 
-export type FieldPartKind = 'description' | 'error' | 'title'
+export type FieldPartType = 'description' | 'error' | 'title'
 
 export interface FieldContext {
   /** Id the wrapped control renders and FieldLabel targets with `for`. */
@@ -20,7 +20,7 @@ export interface FieldContext {
   /** Whether a FieldError is mounted; FieldDescription then keeps its neutral tone. */
   hasError: ComputedRef<boolean>
   /** Registers a description, error or title id; returns the function that unregisters it. */
-  register: (kind: FieldPartKind, id: string) => () => void
+  register: (kind: FieldPartType, id: string) => () => void
 }
 
 export const FieldInjectionKey: InjectionKey<FieldContext | null> = Symbol('Field')

@@ -12,7 +12,7 @@
   <DropdownMenuRoot :open="true">
     <DropdownMenuTrigger>
       <IconButton
-        kind="outlined"
+        variant="outline"
         icon="ai ai-plus"
         aria-label="Open menu"
       />
@@ -45,7 +45,7 @@
     <template #footer>
       <div class="flex justify-end p-(--spacing-2xs)">
         <Button
-          kind="transparent"
+          variant="ghost"
           size="small"
           label="View all"
         />

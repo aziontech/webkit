@@ -87,20 +87,20 @@
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="redeploy"
               />
               <Button
                 label="Open service"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
               />
             </div>

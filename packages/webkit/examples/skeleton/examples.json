@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "Both geometries side by side: a `rectangle` and a `circle`.",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "OnSurfaces",

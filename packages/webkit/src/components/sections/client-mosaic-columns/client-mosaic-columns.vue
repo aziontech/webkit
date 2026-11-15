@@ -246,7 +246,7 @@
           >
             <div class="group/card flex h-full flex-col gap-px bg-(--border-default)">
               <LogoWall
-                kind="rectangle"
+                variant="rectangle"
                 :aria-label="cell.name"
                 :link-label="linkLabel"
                 :items="[{ src: cell.logo, alt: cell.name, href: cell.href }]"

@@ -11,7 +11,7 @@
   import { ContextMenuInjectionKey } from './injection-key'
 
   export type {
-    DropdownMenuOptionKind,
+    DropdownMenuOptionType,
     DropdownMenuOptionValue
   } from '../dropdown-menu/injection-key'
 

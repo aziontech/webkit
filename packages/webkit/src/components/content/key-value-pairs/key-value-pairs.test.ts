@@ -229,25 +229,27 @@ describe('KeyValuePairs', () => {
       await expectNoA11yViolations(view.container)
     })
 
-    it('defaults to the stacked kind on the root and on every Item', () => {
+    it('defaults to the stacked variant on the root and on every Item', () => {
       const view = render(Facts)
-      expect(view.getByTestId('content-key-value-pairs').getAttribute('data-kind')).toBe('stacked')
-      for (const item of itemsOf(view)) expect(item.getAttribute('data-kind')).toBe('stacked')
+      expect(view.getByTestId('content-key-value-pairs').getAttribute('data-variant')).toBe(
+        'stacked'
+      )
+      for (const item of itemsOf(view)) expect(item.getAttribute('data-variant')).toBe('stacked')
     })
 
-    it('passes kind split to every Item, inside Groups too', () => {
+    it('passes variant split to every Item, inside Groups too', () => {
       const view = render({
         components: { KeyValuePairs, KeyValuePairsGroup, KeyValuePairsItem },
         template: `
-          <KeyValuePairs kind="split" aria-label="Plan">
+          <KeyValuePairs variant="split" aria-label="Plan">
             <KeyValuePairsGroup title="Plan">
               <KeyValuePairsItem label="Plan Price">$0.00 / month</KeyValuePairsItem>
             </KeyValuePairsGroup>
           </KeyValuePairs>
         `
       })
-      expect(view.getByTestId('content-key-value-pairs').getAttribute('data-kind')).toBe('split')
-      expect(itemsOf(view)[0]?.getAttribute('data-kind')).toBe('split')
+      expect(view.getByTestId('content-key-value-pairs').getAttribute('data-variant')).toBe('split')
+      expect(itemsOf(view)[0]?.getAttribute('data-variant')).toBe('split')
     })
 
     it('keeps the term and description pairs and the empty marker in the Split example', async () => {

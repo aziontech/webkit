@@ -29,7 +29,7 @@
     :id="id"
     role="alert"
     data-slot="field-error"
-    kind="invalid"
+    type="invalid"
     :data-testid="testId"
   >
     <slot />

@@ -3,8 +3,8 @@ name: column-navigation
 category: marketing
 structure: composition
 status: implemented
-spec_version: 2
-checksum: de83a66d45374ff4ef3b3f2254b48654722390d7be4fbd3cf2ce00fb1ef22ada
+spec_version: 3
+checksum: 45f8b28d8fb3e1b9a480d978646e1a99a8847ee3119c3c13c8ad018903492af7
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -175,7 +175,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Examples
 
 - Default
-- Columns — the same directory at two, three and four tracks (justified: `columns` is the block's only variant axis — it declares no `kind` and no `size` — so this composite story is what `Types` is for every other component, and the fan-out is invisible on a single default block).
+- Columns — the same directory at two, three and four tracks (justified: `columns` is the block's only variant axis — it declares no `variant` and no `size` — so this composite story is what `Types` is for every other component, and the fan-out is invisible on a single default block).
 - Rows — one column holding a row with no description and a row with nowhere to go (justified: `description` and an empty `href` are the row's two state deltas, and neither of them renders on the default block).
 
 ## Constraints — DO NOT

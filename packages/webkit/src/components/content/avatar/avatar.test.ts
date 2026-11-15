@@ -6,7 +6,7 @@ import Pattern from '../../../../examples/avatar/pattern.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Avatar from './avatar.vue'
 
-const KINDS = ['circle', 'square'] as const
+const VARIANTS = ['circle', 'square'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 const SAMPLE_SRC =
@@ -130,9 +130,9 @@ describe('Avatar', () => {
     expect(getByTestId('my-avatar__label')).toHaveTextContent('AB')
   })
 
-  it.each(KINDS)('mirrors kind=%s on data-kind', (kind) => {
-    const { getByTestId } = render(Avatar, { props: { label: 'AB', kind } })
-    expect(getByTestId('content-avatar')).toHaveAttribute('data-kind', kind)
+  it.each(VARIANTS)('mirrors variant=%s on data-variant', (variant) => {
+    const { getByTestId } = render(Avatar, { props: { label: 'AB', variant: variant } })
+    expect(getByTestId('content-avatar')).toHaveAttribute('data-variant', variant)
   })
 
   it.each(SIZES)('mirrors size=%s on data-size', (size) => {

@@ -28,7 +28,7 @@
 
 <template>
   <HeroBand
-    kind="pixel-floor"
+    variant="pixel-floor"
     eyebrow="AI Inference"
     title="Build and deploy AI agents and applications in seconds"
     description="Run AI inference close to users on Azion’s distributed infrastructure, with low latency, lower cost, and data kept local."

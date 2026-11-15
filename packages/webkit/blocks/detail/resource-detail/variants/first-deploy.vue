@@ -58,7 +58,7 @@
                 <Tooltip content="Resource actions">
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     aria-label="Resource actions"
                   />
@@ -161,7 +161,7 @@
             <Button
               class="w-full"
               label="Documentation"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-book"
               href="https://example.com/docs/cli"
@@ -213,7 +213,7 @@
           <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
             <Button
               label="Visit"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               icon="ai ai-external-link"
               :href="`https://${service.domain}`"
@@ -225,7 +225,7 @@
                 <Tooltip content="Service actions">
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     aria-label="Service actions"
                   />
@@ -297,7 +297,7 @@
                 service.id
               }}</span>
               <CopyButton
-                kind="outlined"
+                variant="outline"
                 :value="service.id"
                 aria-label="Copy service ID"
                 class="shrink-0"
@@ -316,7 +316,7 @@
                 :alt="service.createdBy"
                 :label="service.createdBy"
                 size="small"
-                kind="square"
+                variant="square"
                 class="shrink-0"
               />
             </div>

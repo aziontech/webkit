@@ -10,11 +10,11 @@
   export type {
     DiagramEdge,
     DiagramGroupFill,
-    DiagramGroupKind,
+    DiagramGroupVariant,
     DiagramLayoutItem,
     DiagramNode,
-    DiagramNodeKind,
     DiagramNodeStatus,
+    DiagramNodeType,
     DiagramRowAlign,
     DiagramRowGap,
     DiagramSpec

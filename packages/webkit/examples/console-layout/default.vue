@@ -48,7 +48,7 @@
           id: 'settings',
           label: 'Settings',
           icon: 'ai ai-settings',
-          kind: 'drill',
+          type: 'drill',
           groups: [
             {
               label: 'Settings',
@@ -87,7 +87,7 @@
       >
         <IconButton
           icon="ai ai-circle-plus"
-          kind="primary"
+          variant="primary"
           size="medium"
           aria-label="Create"
         />
@@ -95,7 +95,7 @@
       <template v-else>
         <Button
           label="Create"
-          kind="primary"
+          variant="primary"
           size="medium"
           icon="ai ai-circle-plus"
         />

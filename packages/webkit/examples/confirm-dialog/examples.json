@@ -14,7 +14,7 @@
     },
     {
       "name": "RunAgain",
-      "summary": "A commit rather than a removal, so the confirm button is primary (`kind=\"primary\"`).",
+      "summary": "A commit rather than a removal, so the confirm button is primary (`variant=\"primary\"`).",
       "file": "run-again.vue"
     },
     {

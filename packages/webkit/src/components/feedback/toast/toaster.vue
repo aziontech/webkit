@@ -494,7 +494,7 @@
                   <Progress
                     :value="progressOf(item.entry)"
                     :aria-label="item.entry.message"
-                    kind="rounded"
+                    variant="rounded"
                     class="min-w-0 flex-1"
                   />
                   <span

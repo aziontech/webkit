@@ -3,12 +3,12 @@ name: tooltip
 category: feedback
 structure: monolithic
 status: draft
-spec_version: 1
+spec_version: 2
 figma:
   url: https://figma.com/design/example/?node-id=10-42
   node_id: 10:42
 created: 2026-05-22
-last_updated: 2026-05-22
+last_updated: 2026-11-15
 ---
 
 # Tooltip — Component Spec
@@ -111,7 +111,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ## Examples
 
-Canonical layout. Tooltip has no `kind` and no `size`, but it has a `placement` axis — we treat `Placements` as the composite story (one frame, all four placements side-by-side), mirroring how Button uses `Types`/`Sizes`.
+Canonical layout. Tooltip has no `variant` and no `size`, but it has a `placement` axis — we treat `Placements` as the composite story (one frame, all four placements side-by-side), mirroring how Button uses `Types`/`Sizes`.
 
 - Default — tooltip rendered **closed**; viewer hovers/focuses the trigger to see it open.
 - Placements — composite story with all four placements (top/right/bottom/left) side-by-side; each instance defaults to **closed**.

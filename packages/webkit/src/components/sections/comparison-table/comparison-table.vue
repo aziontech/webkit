@@ -159,7 +159,7 @@
         #header
       >
         <SectionTitle
-          kind="start"
+          variant="start"
           :eyebrow="eyebrow"
           :title="title"
         />
@@ -200,7 +200,7 @@
                 class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
               >
                 <Brand
-                  kind="default"
+                  variant="default"
                   size="small"
                   class="[&>svg]:h-3! sm:[&>svg]:h-4! md:[&>svg]:h-6!"
                 />
@@ -254,7 +254,7 @@
                     <Popover placement="auto">
                       <PopoverTrigger>
                         <IconButton
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           icon="ai ai-circle-info"
                           :ariaLabel="t('comparisonTable.about', { capability: item.capability })"

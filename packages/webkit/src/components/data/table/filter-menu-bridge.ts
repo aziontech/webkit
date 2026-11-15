@@ -6,7 +6,7 @@ import type {
 import type { FilterMenuField, FilterMenuModel, FilterMenuValue } from '../filter-menu/types'
 import type { AppliedFilter, FilterField, FilterOperator, FilterValue } from './injection-key'
 
-const KINDS: Partial<Record<FilterField['type'], FilterMenuField['kind']>> = {
+const TYPES: Partial<Record<FilterField['type'], FilterMenuField['type']>> = {
   'multi-select': 'multiple',
   select: 'single',
   date: 'date'
@@ -14,13 +14,13 @@ const KINDS: Partial<Record<FilterField['type'], FilterMenuField['kind']>> = {
 
 export const toMenuFields = (fields: FilterField[]): FilterMenuField[] =>
   fields.flatMap((field) => {
-    const kind = KINDS[field.type]
-    if (!kind) return []
+    const type = TYPES[field.type]
+    if (!type) return []
     const options = (field.options ?? [])
       .filter((option) => typeof option.value !== 'boolean')
       .map((option) => ({ value: option.value as string | number, label: option.label }))
-    if (kind !== 'date' && options.length === 0) return []
-    return [{ id: field.id, label: field.label, kind, options }]
+    if (type !== 'date' && options.length === 0) return []
+    return [{ id: field.id, label: field.label, type, options }]
   })
 
 const toTime = (value: string | number | undefined): Date | null =>
@@ -51,7 +51,7 @@ const toAppliedFilter = (
 ): AppliedFilter | null => {
   const first = values[0]
   if (first === undefined) return null
-  if (field.kind === 'multiple')
+  if (field.type === 'multiple')
     return {
       field: field.id,
       operator: 'in',
@@ -63,7 +63,7 @@ const toAppliedFilter = (
       operator: 'between',
       value: [first.start ? first.start.getTime() : '', first.end ? first.end.getTime() : '']
     }
-  return { field: field.id, operator: field.kind === 'date' ? 'within' : 'eq', value: first }
+  return { field: field.id, operator: field.type === 'date' ? 'within' : 'eq', value: first }
 }
 
 export const toAppliedFilters = (

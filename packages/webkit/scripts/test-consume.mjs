@@ -31,7 +31,7 @@ const tarballs = packWorkspace(ROOT, join(work, 'tarballs'))
 const app = join(work, 'app')
 writeConsumerApp(app, {
   ...tarballs,
-  appVue: `<script setup lang="ts">\nimport Button from '@aziontech/webkit/button'\n</script>\n<template>\n  <Button kind="primary" size="large">Deploy</Button>\n</template>\n`
+  appVue: `<script setup lang="ts">\nimport Button from '@aziontech/webkit/button'\n</script>\n<template>\n  <Button variant="primary" size="large">Deploy</Button>\n</template>\n`
 })
 
 installConsumerApp(app)

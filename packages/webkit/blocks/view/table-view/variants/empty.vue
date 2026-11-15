@@ -61,7 +61,7 @@
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const rows: Resource[] = []
@@ -105,7 +105,7 @@
       'resources.csv',
       toCsv({
         columns: columns
-          .filter((column) => column.kind !== 'action')
+          .filter((column) => column.type !== 'action')
           .map((column) => ({ id: column.accessorKey ?? '', header: column.header ?? '' })),
         rows: matchingItems.value
       })
@@ -144,7 +144,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/resources"
             target="_blank"
@@ -152,7 +152,7 @@
           <Button
             label="Create Resource"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
           />
         </template>
@@ -174,7 +174,7 @@
               >
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :loading="loading"
                   aria-label="Refresh"
@@ -187,7 +187,7 @@
               >
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
                   aria-label="Download CSV"
@@ -218,13 +218,13 @@
                       <Button
                         label="Create Resource"
                         icon="ai ai-plus"
-                        kind="secondary"
+                        variant="secondary"
                         size="small"
                       />
                       <Button
                         label="Documentation"
                         icon="ai ai-book"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         href="https://example.com/docs/resources"
                         target="_blank"
@@ -343,7 +343,7 @@
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />
@@ -387,13 +387,13 @@
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="close"
         />
         <Button
           label="Delete resource"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           @click="confirmDelete"

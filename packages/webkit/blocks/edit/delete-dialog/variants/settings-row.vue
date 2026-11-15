@@ -46,7 +46,7 @@
       size="small"
     />
 
-    <Item kind="outlined">
+    <Item variant="outline">
       <Item.Content>
         <Item.Title>Delete resource</Item.Title>
         <Item.Description>
@@ -70,7 +70,7 @@
           <template #trigger>
             <Button
               label="Delete resource"
-              kind="danger"
+              variant="danger"
               size="medium"
               icon="ai ai-trash"
             />

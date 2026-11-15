@@ -37,5 +37,5 @@ const ItemRoot = Object.assign(Item, {
 }) as CompoundItem
 
 export default ItemRoot
-export type { ItemKind, ItemSize } from './item.vue'
-export type { ItemMediaKind } from './item-media.vue'
+export type { ItemSize, ItemVariant } from './item.vue'
+export type { ItemMediaType } from './item-media.vue'

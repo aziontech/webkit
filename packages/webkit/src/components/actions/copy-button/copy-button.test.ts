@@ -232,11 +232,11 @@ describe('CopyButton', () => {
     })
   })
 
-  describe('kind and size forwarded to IconButton', () => {
-    const kinds = ['primary', 'secondary', 'outlined', 'transparent', 'danger'] as const
-    it.each(kinds)('renders an accessible button for kind=%s', (kind) => {
-      const { getByRole } = render(CopyButton, { props: { value: 'token', kind } })
-      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-kind')).toBe(kind)
+  describe('variant and size forwarded to IconButton', () => {
+    const variants = ['primary', 'secondary', 'outline', 'ghost', 'danger'] as const
+    it.each(variants)('renders an accessible button for variant=%s', (variant) => {
+      const { getByRole } = render(CopyButton, { props: { value: 'token', variant: variant } })
+      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-variant')).toBe(variant)
     })
 
     it('defaults to the large action size', () => {

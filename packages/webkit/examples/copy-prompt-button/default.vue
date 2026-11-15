@@ -10,7 +10,7 @@
   <div class="flex flex-wrap items-center gap-(--spacing-sm)">
     <Button
       label="Get started"
-      kind="primary"
+      variant="primary"
       size="large"
       href="#"
     />

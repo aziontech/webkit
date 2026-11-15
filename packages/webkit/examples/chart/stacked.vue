@@ -45,8 +45,8 @@
       aria-label="Requests stacked as areas"
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
-      <Chart.Axis kind="x" />
+      <Chart.Axis type="y" />
+      <Chart.Axis type="x" />
       <Chart.Area stacked />
       <Chart.Crosshair />
       <Chart.Tooltip />
@@ -58,8 +58,8 @@
       aria-label="Requests stacked as bars"
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
-      <Chart.Axis kind="x" />
+      <Chart.Axis type="y" />
+      <Chart.Axis type="x" />
       <Chart.Bar stacked />
       <Chart.Tooltip />
       <Chart.Legend />

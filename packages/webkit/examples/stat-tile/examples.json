@@ -14,7 +14,7 @@
     },
     {
       "name": "Variants",
-      "summary": "kind=\"mono\" (default) draws the big-number mono figure of a usage strip; kind=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
+      "summary": "variant=\"mono\" (default) draws the big-number mono figure of a usage strip; variant=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
       "file": "variants.vue"
     },
     {

@@ -72,9 +72,9 @@ describe('SidebarMenuItem', () => {
     expect(emitted().click).toBeUndefined()
   })
 
-  it('treats a removed kind attribute as a plain attribute and stays a row', () => {
+  it('treats a removed type attribute as a plain attribute and stays a row', () => {
     const { getByTestId } = render(SidebarMenuItem, {
-      attrs: { kind: 'group' },
+      attrs: { type: 'group' },
       props: { label: 'Section' }
     })
 

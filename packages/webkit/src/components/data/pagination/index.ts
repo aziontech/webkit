@@ -16,4 +16,4 @@ const PaginationRoot = Object.assign(Pagination, {
 }) as CompoundPagination
 
 export default PaginationRoot
-export type { PaginationButtonKind } from './pagination-button/pagination-button.vue'
+export type { PaginationButtonType } from './pagination-button/pagination-button.vue'

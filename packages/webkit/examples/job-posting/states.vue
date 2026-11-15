@@ -11,14 +11,14 @@
     fields: [
       {
         name: 'name',
-        kind: 'text',
+        type: 'text',
         label: 'Name',
         required: true,
         autocomplete: 'name'
       },
       {
         name: 'email',
-        kind: 'email',
+        type: 'email',
         label: 'Email address',
         required: true,
         helper: 'We answer every application at this address.'
@@ -52,7 +52,7 @@
     <div class="flex">
       <Button
         label="Show the confirmation"
-        kind="outlined"
+        variant="outline"
         size="medium"
         @click="confirm"
       />
@@ -65,7 +65,7 @@
       :sections="[
         {
           title: 'About the role',
-          blocks: [{ kind: 'text', text: 'You will build the tools our engineers ship with.' }]
+          blocks: [{ type: 'text', text: 'You will build the tools our engineers ship with.' }]
         }
       ]"
       :form="form"

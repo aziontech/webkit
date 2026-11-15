@@ -49,7 +49,7 @@
           <IconButton
             icon="ai ai-refresh"
             aria-label="Regenerate response"
-            kind="transparent"
+            variant="ghost"
             size="small"
             :loading="regenerating"
             @click="regenerate"

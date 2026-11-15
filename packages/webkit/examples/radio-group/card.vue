@@ -30,7 +30,7 @@
 <template>
   <RadioGroup
     v-model="plan"
-    kind="card"
+    variant="card"
     orientation="horizontal"
     name="plan"
     :options="plans"

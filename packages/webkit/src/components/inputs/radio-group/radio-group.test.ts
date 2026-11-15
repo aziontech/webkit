@@ -171,7 +171,7 @@ describe('RadioGroup', () => {
     }
   })
 
-  describe('kind="card" and options', () => {
+  describe('variant="card" and options', () => {
     const options = [
       { value: 'free', label: 'Free', description: 'For side projects.', icon: 'ai ai-user' },
       { value: 'pro', label: 'Pro', description: 'For production apps.' },
@@ -196,15 +196,15 @@ describe('RadioGroup', () => {
       expect(description?.textContent).toBe('For side projects.')
     })
 
-    it('marks the group and every item data-kind="card" and selects by clicking the card', async () => {
+    it('marks the group and every item data-variant="card" and selects by clicking the card', async () => {
       const value = ref<string | undefined>('free')
       const view = host(
-        `<RadioGroup v-model="value" kind="card" :options="options" aria-label="Plan" />`,
+        `<RadioGroup v-model="value" variant="card" :options="options" aria-label="Plan" />`,
         () => ({ value, options })
       )
-      expect(view.getByRole('radiogroup').getAttribute('data-kind')).toBe('card')
+      expect(view.getByRole('radiogroup').getAttribute('data-variant')).toBe('card')
       const items = view.getAllByTestId('input-radio-group__item')
-      expect(items.every((item) => item.getAttribute('data-kind') === 'card')).toBe(true)
+      expect(items.every((item) => item.getAttribute('data-variant') === 'card')).toBe(true)
       await fireEvent.click(view.getByText('For production apps.'))
       expect(value.value).toBe('pro')
       expect(items[1].hasAttribute('data-checked')).toBe(true)
@@ -213,7 +213,7 @@ describe('RadioGroup', () => {
     it('keeps the card radios one tab stop moved by the arrow keys', async () => {
       const value = ref<string | undefined>('free')
       const view = host(
-        `<RadioGroup v-model="value" kind="card" :options="options" aria-label="Plan" />`,
+        `<RadioGroup v-model="value" variant="card" :options="options" aria-label="Plan" />`,
         () => ({ value, options })
       )
       view.getByRole('radio', { name: 'Free' }).focus()
@@ -232,7 +232,7 @@ describe('RadioGroup', () => {
 
     it('renders the option and tag slots for each data-driven option', () => {
       const view = host(
-        `<RadioGroup :options="options" kind="card" aria-label="Plan">
+        `<RadioGroup :options="options" variant="card" aria-label="Plan">
          <template #option="{ option, selected }"><b :data-selected="selected">{{ option.value }}</b></template>
          <template #tag="{ option }"><i data-testid="tag">{{ option.label }} tag</i></template>
        </RadioGroup>`,
@@ -248,11 +248,11 @@ describe('RadioGroup', () => {
 
     it('renders composed items with the card look, description and tag', () => {
       const view = host(
-        `<RadioGroup kind="card" aria-label="Plan">
+        `<RadioGroup variant="card" aria-label="Plan">
          <RadioGroupItem value="a" description="First">A<template #tag><span data-testid="t">Tag</span></template></RadioGroupItem>
        </RadioGroup>`
       )
-      expect(view.getByTestId('input-radio-group__item').getAttribute('data-kind')).toBe('card')
+      expect(view.getByTestId('input-radio-group__item').getAttribute('data-variant')).toBe('card')
       expect(view.getByTestId('input-radio-group__item__description').textContent).toBe('First')
       expect(view.getByTestId('t')).toBeTruthy()
     })

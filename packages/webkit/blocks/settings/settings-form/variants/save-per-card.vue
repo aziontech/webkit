@@ -118,7 +118,7 @@
             />
             <Button
               label="Save"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               :loading="savingToolbar"
               @click="saveToolbar"
@@ -183,7 +183,7 @@
           <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Save"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               :loading="savingProtection"
               @click="saveProtection"

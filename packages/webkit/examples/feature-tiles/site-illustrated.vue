@@ -33,7 +33,7 @@
     <SectionGap hatch />
 
     <FeatureTiles
-      kind="illustrated"
+      variant="illustrated"
       anchor="why-pricing"
       :tiles="tiles"
     />

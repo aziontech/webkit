@@ -5,7 +5,7 @@
   import Tag from '../../tag/tag.vue'
   import ShellMockup, {
     type ShellMockupFade,
-    type ShellMockupKind
+    type ShellMockupVariant
   } from '../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -13,7 +13,7 @@
 
   interface Props {
     /** How the mockup is plated. */
-    kind?: ShellMockupKind
+    variant?: ShellMockupVariant
     /** Draw the console bar over the body. */
     chrome?: boolean
     /** Design width of the frame from `md` up. */
@@ -25,7 +25,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    kind: 'bare',
+    variant: 'bare',
     chrome: false,
     width: 600,
     fade: 'none',
@@ -251,7 +251,7 @@
 
 <template>
   <ShellMockup
-    :kind="kind"
+    :variant="variant"
     :chrome="chrome"
     :width="width"
     :fade="fade"

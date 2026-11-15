@@ -15,7 +15,7 @@
     >
       <Button
         label="Browse files"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         disabled
         @click="browse"

@@ -113,7 +113,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:76%]"
     :chrome="false"
@@ -186,7 +186,7 @@
                           </span>
                           <IconButton
                             icon="ai ai-menu"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             :disabled="index === 0"
                             :ariaLabel="`Reorder ${rule.name}`"

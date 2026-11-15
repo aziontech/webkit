@@ -138,7 +138,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
     class="[--mockup-fade-edge:16%] [--mockup-fade-start:74%]"
@@ -176,7 +176,7 @@
         <div class="flex flex-col gap-(--spacing-sm)">
           <RadioGroup
             model-value="ip_cidr"
-            kind="card"
+            variant="card"
             name="network-list-type"
             aria-label="Type"
           >

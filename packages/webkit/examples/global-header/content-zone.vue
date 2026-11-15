@@ -16,7 +16,7 @@
       <GlobalHeader.End>
         <Button
           label="Create"
-          kind="secondary"
+          variant="secondary"
           size="medium"
           icon="ai ai-circle-plus"
         />

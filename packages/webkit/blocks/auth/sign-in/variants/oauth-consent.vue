@@ -67,7 +67,7 @@
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -76,7 +76,7 @@
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="/docs"
@@ -102,7 +102,7 @@
                   >
                     <div class="flex items-center gap-(--spacing-sm)">
                       <Avatar
-                        kind="square"
+                        variant="square"
                         size="large"
                         :label="client.initials"
                         :alt="client.name"
@@ -132,7 +132,7 @@
                     <div class="flex flex-col gap-(--spacing-xs)">
                       <h2 class="text-label-md text-(--text-muted)">Signed in as</h2>
                       <Item
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                       >
                         <Item.Media>
@@ -148,7 +148,7 @@
                         <Item.Actions>
                           <Button
                             label="Switch account"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             href="/login?prompt=select_account"
                             :disabled="!!pending || settled"
@@ -171,7 +171,7 @@
                           size="small"
                           role="listitem"
                         >
-                          <Item.Media kind="icon">
+                          <Item.Media type="icon">
                             <i
                               :class="scope.icon"
                               aria-hidden="true"
@@ -201,7 +201,7 @@
                     <div class="grid grid-cols-2 gap-(--spacing-sm)">
                       <Button
                         label="Deny"
-                        kind="secondary"
+                        variant="secondary"
                         size="large"
                         class="w-full"
                         :loading="pending === 'deny'"
@@ -210,7 +210,7 @@
                       />
                       <Button
                         label="Allow"
-                        kind="primary"
+                        variant="primary"
                         size="large"
                         class="w-full"
                         :loading="pending === 'allow'"

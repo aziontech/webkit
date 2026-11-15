@@ -183,20 +183,20 @@ describe('MediaTile', () => {
   it('frames the media in the default register', () => {
     const { getByTestId } = render(MediaTile, { props: { title: TITLE } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'frame')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'frame')
     expect(getByTestId(FRAME)).toHaveAttribute('data-borders')
   })
 
   it('draws no rules around the media in the plain register', () => {
-    const { getByTestId } = render(MediaTile, { props: { title: TITLE, kind: 'plain' } })
+    const { getByTestId } = render(MediaTile, { props: { title: TITLE, variant: 'plain' } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'plain')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'plain')
     expect(getByTestId(FRAME)).not.toHaveAttribute('data-borders')
   })
 
   it('captions a plain tile the same way it captions a framed one', () => {
     const { container } = render(MediaTile, {
-      props: { title: TITLE, description: DESCRIPTION, kind: 'plain' }
+      props: { title: TITLE, description: DESCRIPTION, variant: 'plain' }
     })
 
     expect(captionOf(container)?.textContent).toBe(`${TITLE} ${DESCRIPTION}`)
@@ -204,7 +204,7 @@ describe('MediaTile', () => {
 
   it('has no a11y violations as a plain tile', async () => {
     const { container } = render(MediaTile, {
-      props: { title: TITLE, description: DESCRIPTION, kind: 'plain', src: SRC, alt: ALT }
+      props: { title: TITLE, description: DESCRIPTION, variant: 'plain', src: SRC, alt: ALT }
     })
 
     await expectNoA11yViolations(container)

@@ -34,15 +34,15 @@ Each band is a `SettingsSection` with a title and a `hint` (the glyph that revea
 
 ### D. Field rows — `SettingRow`, `Input`, `HelperText` (required)
 
-A `SettingRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `HelperText kind="required"`; a value the endpoint rejects gets `:invalid` and `kind="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `kind="stacked"` so it takes the full measure below the name.
+A `SettingRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `HelperText type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
 
 ### E. Switch rows — `Switch` (optional)
 
-On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
+On/off settings use `SettingRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
+`SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
 ## Do
 
@@ -56,7 +56,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 ## Don't
 
 - Don't show the sidebar on this page, or open it as a modal over the list.
-- Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar kind="centered"`.
+- Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar variant="centered"`.
 - Don't print the band's guidance as a paragraph under its title; use the `hint`.
 - Don't mark fields required or invalid before the first submit, or show both states on one field.
 - Don't make Save deploy, publish or charge as a side effect; creating is not deploying.
@@ -87,7 +87,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 - Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
-- CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`kind="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
+- CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.

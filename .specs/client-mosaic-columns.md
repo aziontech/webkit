@@ -3,10 +3,10 @@ name: client-mosaic-columns
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: dfc1fd83aa37f651f3e390f1800dd5f9bd90329b316a060093a81772b22b674d
+checksum: 3204d01464e7784b4a4a5a665866af4b775029265a40048b6c939c2d3040b5e3
 ---
 
 # ClientMosaicColumns — Component Spec
@@ -22,7 +22,7 @@ Three featured success stories side by side: each column is a client's mark on a
 ## When NOT to use
 
 - For a bento of client stories with photos and logos → use `client-mosaic`.
-- For a quotation → use `client-quotes` or `logo-wall-quote` `kind="quote"`.
+- For a quotation → use `client-quotes` or `logo-wall-quote` `variant="quote"`.
 
 ## Related
 

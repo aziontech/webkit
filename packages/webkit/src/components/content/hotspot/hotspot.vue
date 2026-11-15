@@ -152,14 +152,14 @@
             <Button
               v-if="entry.index > 0"
               :label="t('hotspot.previous')"
-              kind="outlined"
+              variant="outline"
               size="small"
               :data-testid="`${testId}__previous`"
               @click="context?.previous()"
             />
             <Button
               :label="isLast ? t('hotspot.finish') : t('hotspot.next')"
-              kind="primary"
+              variant="primary"
               size="small"
               :data-testid="`${testId}__next`"
               @click="(event: Event) => context?.next(event)"

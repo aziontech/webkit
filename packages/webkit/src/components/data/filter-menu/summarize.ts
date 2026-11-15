@@ -1,6 +1,6 @@
 import type {
   FilterMenuField,
-  FilterMenuFieldKind,
+  FilterMenuFieldType,
   FilterMenuModel,
   FilterMenuOption,
   FilterMenuRange,
@@ -14,7 +14,7 @@ export interface FilterMenuSummary {
 
 export const DATE_PERIODS = ['24h', '7d', '30d', '3m'] as const
 
-export const kindOf = (field: FilterMenuField): FilterMenuFieldKind => field.kind ?? 'multiple'
+export const kindOf = (field: FilterMenuField): FilterMenuFieldType => field.type ?? 'multiple'
 
 export const isRange = (value: FilterMenuValue | undefined): value is FilterMenuRange =>
   typeof value === 'object' && value !== null

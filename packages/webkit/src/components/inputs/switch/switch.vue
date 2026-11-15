@@ -10,11 +10,11 @@
   })
 
   /** Visual variant of the switch. */
-  export type SwitchKind = 'default' | 'privacy'
+  export type SwitchVariant = 'default' | 'privacy'
 
   interface Props {
     /** Visual variant. Privacy renders a lock icon inside the handle. */
-    kind?: SwitchKind
+    variant?: SwitchVariant
     /** Moves focus to the switch once, when it mounts. */
     autofocus?: boolean
     /** Disables interaction and applies the disabled tokens. */
@@ -27,7 +27,7 @@
   export type SwitchProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'default',
+    variant: 'default',
     autofocus: false,
     disabled: false,
     invalid: false,
@@ -99,7 +99,7 @@
     :aria-disabled="isDisabled || undefined"
     :disabled="isDisabled"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-checked="isChecked || null"
     :data-disabled="isDisabled || null"
     :data-invalid="isInvalid || null"
@@ -114,7 +114,7 @@
       class="pointer-events-none relative inline-flex h-4 w-4 items-center justify-center rounded-(--radius) bg-(--text-muted) transition-transform duration-150 ease-out motion-reduce:transition-none motion-reduce:transform-none group-data-[checked]:translate-x-3.5 rtl:group-data-[checked]:-translate-x-3.5 group-data-[checked]:bg-(--color-base-white) group-data-[disabled]:bg-(--text-disabled) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText] forced-colors:group-data-[checked]:bg-[Highlight] forced-colors:group-data-[disabled]:bg-[GrayText]"
       :data-testid="`${testId}__handle`"
     >
-      <template v-if="kind === 'privacy'">
+      <template v-if="variant === 'privacy'">
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock`"

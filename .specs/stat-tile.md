@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: d21750bdfd61e69c1db83d3eee7d9859db6e49d7015c24203a91090de9f07a5f
+checksum: 3a889e75215e79da80d19920bb7f32e18720d77e26e72373443276a73184fd5e
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -15,7 +15,7 @@ last_updated: 2026-11-15
 
 Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a Currency.
 
-A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `kind` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
+A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `variant` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 
 ## When to use
 
@@ -47,7 +47,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 - Leave `trend` out for a strip of figures with no history; the tile then has no chart band.
 - Give the sparkline the same buckets as the chart below it, about twelve points.
 - For a KPI strip that reads as one band (an overview's usage row), put the tiles in a `StatTileGroup`; do not hand-build the card, the grid or the dividers. Separate tiles are for figures that stand alone.
-- Use `kind="mono"` (default) for usage figures with a delta, `kind="sans"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one kind per row.
+- Use `variant="mono"` (default) for usage figures with a delta, `variant="sans"` for a summary row of plain figures (requests, data transferred, error rate) above its charts. Keep one variant per row.
 - Pass the delta as the raw percentage (`12.4`); the tile prints at most two decimals and drops trailing zeros (`+12.4%`, `+3%`).
 
 ## Usage
@@ -76,7 +76,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 | `label`       | `string`                    | `''`            | false    | Metric name, in sentence case. Fallback for the default slot.                                                                      |
 | `value`       | `number \| null`            | `null`          | false    | The current value. It counts up from the previous value on change; null renders a dash.                                            |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false    | Formats the figure.                                                                                                                |
-| `kind`        | `StatTileKind`              | `'mono'`        | false    | Figure face: `mono` is the big-number mono figure, `sans` the large heading figure.                                                |
+| `variant`        | `StatTileVariant`              | `'mono'`        | false    | Figure face: `mono` is the big-number mono figure, `sans` the large heading figure.                                                |
 | `unit`        | `string`                    | `''`            | false    | Unit read after the figure, smaller and in a muted sans tone. Empty hides it.                                                      |
 | `delta`       | `number \| null`            | `null`          | false    | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel`  | `string`                    | `''`            | false    | The comparison period, read after the delta.                                                                                       |
@@ -99,7 +99,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 
 - Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
 - The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
-- `data-loading` mirrors `loading`; `data-kind` mirrors `kind` (`mono` | `sans`)
+- `data-loading` mirrors `loading`; `data-variant` mirrors `variant` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
 - Responsive: the root is the `@container/stat-tile`; below `@3xs` of the tile the padding tightens to `--spacing-sm`.
@@ -121,7 +121,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 | figure       | `mono`: `.text-big-number-sm`; `sans`: `.text-heading-lg`; `var(--text-default)`                                                        |
 | unit         | `mono`: `.text-body-xs`; `sans`: `.text-body-md`; `var(--text-muted)`                                                                   |
 | delta        | `tag` at `size="small"` (`success` / `danger` / `neutral`); period in `.text-label-sm`, `var(--text-muted)`                             |
-| sparkline    | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge                                                      |
+| sparkline    | `spark-chart` at `size="medium"`, area variant, `var(--chart-series-1)`, edge to edge                                                      |
 | no-data band | `spark-chart` `color="other"` at reduced opacity, `separator`, `tag` `severity="neutral"` at `size="small"`                               |
 | spacing      | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                          |
 
@@ -147,7 +147,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - CountUp — a value that changes on a button press; excluded from visual regression because the count-up is timer driven, Default is its static sibling.
 - Loading — `loading`.
 - Empty — `value` null with no delta and no trend: a dash, announced as No value, over the no-data band.
-- Variants — composite: the same figures with `kind="mono"` and `kind="sans"`; justified because the figure face is the prop and only a side-by-side row shows both.
+- Variants — composite: the same figures with `variant="mono"` and `variant="sans"`; justified because the figure face is the prop and only a side-by-side row shows both.
 
 ## Constraints — DO NOT
 

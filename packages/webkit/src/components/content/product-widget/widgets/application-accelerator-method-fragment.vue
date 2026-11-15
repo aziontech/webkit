@@ -113,7 +113,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     fade="bottom"
     class="[--mockup-fade-start:74%]"

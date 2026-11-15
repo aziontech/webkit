@@ -5,22 +5,22 @@
   import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'
   import Logo from '@aziontech/webkit/logo'
 
-  const kinds = [
-    { kind: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },
+  const variants = [
+    { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },
     {
-      kind: 'monochrome',
+      variant: 'monochrome',
       label: 'Monochrome',
       fill: 'bg-(--bg-canvas)',
       ink: 'text-(--text-muted)'
     },
     {
-      kind: 'current',
+      variant: 'current',
       label: 'Current',
       fill: 'bg-(--bg-canvas) text-(--text-muted)',
       ink: 'text-(--text-muted)'
     },
     {
-      kind: 'knockout',
+      variant: 'knockout',
       label: 'Knockout',
       fill: 'bg-(--color-base-white)',
       ink: 'text-(--color-base-black)'
@@ -31,8 +31,8 @@
 <template>
   <div class="flex flex-col gap-(--spacing-md)">
     <div
-      v-for="row in kinds"
-      :key="row.kind"
+      v-for="row in variants"
+      :key="row.variant"
       class="flex flex-wrap items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)"
       :class="row.fill"
     >
@@ -45,24 +45,24 @@
         name="Netshoes"
         :src="netshoesExtendedReversed"
         :src-light="netshoesExtendedColor"
-        :kind="row.kind"
+        :variant="row.variant"
         class="max-w-32"
       />
       <Logo
         name="Itaú"
         :src="itauExtendedReversed"
         artwork="light"
-        :kind="row.kind"
+        :variant="row.variant"
         class="max-w-32"
       />
       <Logo
         name="Claude"
         :src="claudeSymbol"
-        :kind="row.kind"
+        :variant="row.variant"
       />
       <Logo
         name="Acme Inc."
-        :kind="row.kind"
+        :variant="row.variant"
       />
     </div>
   </div>

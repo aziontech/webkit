@@ -32,13 +32,13 @@
     <div class="flex gap-(--spacing-xs)">
       <Button
         label="Save view"
-        kind="secondary"
+        variant="secondary"
         size="small"
         @click="save"
       />
       <Button
         label="Restore view"
-        kind="secondary"
+        variant="secondary"
         size="small"
         :disabled="!saved"
         @click="restore"

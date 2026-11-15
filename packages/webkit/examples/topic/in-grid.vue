@@ -5,7 +5,7 @@
 
 <template>
   <CardGridRoot
-    kind="divider"
+    variant="divider"
     :columns="3"
   >
     <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">

@@ -3,9 +3,9 @@ name: hotspot
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 2b769524fd9762e1c4f270637bbb01fac1cbceeeb75c1fa7e22cc9f6142eb631
+checksum: 5067102c195935d44c58728fd7953e236cb6f0ff20b531efaea0437fa1000e97
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -56,7 +56,7 @@ Previous / Next (Finish on the last step). Outside a running tutorial, or outsid
   <Hotspot hotspot-id="deploy">
     <Button
       label="Deploy"
-      kind="primary"
+      variant="primary"
     />
   </Hotspot>
 </template>

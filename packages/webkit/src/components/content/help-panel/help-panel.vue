@@ -51,23 +51,23 @@
       class="flex w-full flex-col gap-(--spacing-xs)"
     >
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="60%"
         height="1.25rem"
       />
       <div class="flex w-full flex-col gap-(--spacing-sm)">
         <Skeleton
-          kind="rectangle"
+          variant="rectangle"
           width="100%"
           height="0.875rem"
         />
         <Skeleton
-          kind="rectangle"
+          variant="rectangle"
           width="100%"
           height="0.875rem"
         />
         <Skeleton
-          kind="rectangle"
+          variant="rectangle"
           width="75%"
           height="0.875rem"
         />

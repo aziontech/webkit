@@ -43,7 +43,7 @@
     :data-live="isLive || undefined"
     :aria-pressed="isLive ? 'true' : 'false'"
     :label="t('tableLiveButton.label')"
-    kind="outlined"
+    variant="outline"
     size="medium"
     :disabled="isDisabled"
     @click="onClick"

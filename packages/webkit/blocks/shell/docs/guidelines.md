@@ -18,7 +18,7 @@ Composed once around the router view. `navigation` is the docs tree as data (gro
 
 ### B. Header actions — `IconButton` (required)
 
-In the `actions` slot: GitHub, `kind="outlined"`, with an `ariaLabel`. In the footer, the small `transparent` social links.
+In the `actions` slot: GitHub, `variant="outline"`, with an `ariaLabel`. In the footer, the small `ghost` social links.
 
 ### C. Console — `Button` (required)
 
@@ -46,7 +46,7 @@ One per outline entry, with the same `id` the `outline` item carries: the layout
 
 ### I. Footer — `Footer` (required)
 
-In the `footer` slot, `kind="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
+In the `footer` slot, `variant="content"`, under a top rule: `Footer.Column` with `Footer.Link` items, then the social, status, language and brand slots. With `signature="compact"` the brand leads the social row from `lg` (`hidden lg:inline-flex`) and the signature band carries it below `lg`, in CSS.
 
 ### J. Brand — `Brand` (required)
 

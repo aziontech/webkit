@@ -592,9 +592,9 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
+              <Chart.Axis type="y" />
               <Chart.Axis
-                kind="x"
+                type="x"
                 :ticks="6"
               />
               <Chart.Bar stacked />

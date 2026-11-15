@@ -5,27 +5,27 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Button
-      kind="primary"
+      variant="primary"
       label="Button"
     />
     <Button
-      kind="secondary"
+      variant="secondary"
       label="Button"
     />
     <Button
-      kind="outlined"
+      variant="outline"
       label="Button"
     />
     <Button
-      kind="transparent"
+      variant="ghost"
       label="Button"
     />
     <Button
-      kind="danger"
+      variant="danger"
       label="Button"
     />
     <Button
-      kind="link"
+      variant="link"
       label="Link button"
     />
   </div>

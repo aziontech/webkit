@@ -4,34 +4,34 @@
   const fields = [
     {
       name: 'firstname',
-      kind: 'text',
+      type: 'text',
       label: 'First name',
       half: true,
       required: true
     },
     {
       name: 'lastname',
-      kind: 'text',
+      type: 'text',
       label: 'Last name',
       half: true
     },
     {
       name: 'email',
-      kind: 'email',
+      type: 'email',
       label: 'Work email',
       placeholder: 'm@example.com',
       required: true
     },
     {
       name: 'company',
-      kind: 'text',
+      type: 'text',
       label: 'Company',
       half: true,
       required: true
     },
     {
       name: 'mobilephone',
-      kind: 'phone',
+      type: 'phone',
       label: 'Phone',
       placeholder: '555-0100',
       country: 'US',

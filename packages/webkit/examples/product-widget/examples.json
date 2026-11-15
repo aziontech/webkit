@@ -8,13 +8,13 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "A workload screen plated as a console window and bare, and a fragment framed in a console window titled with its module beside the same fragment bare on the host surface.",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Still fragment",
-      "summary": "The same fragment with its collaborator cursor, as a feature grid shows it, and with `:cursor=\"false\"`, as a product band that reads like a screenshot wants it. Each fragment keeps its own plating unless `kind` asks for the other one; `width` and `fade` re-plate only the workload screens, and setting them on a fragment warns in development.",
+      "summary": "The same fragment with its collaborator cursor, as a feature grid shows it, and with `:cursor=\"false\"`, as a product band that reads like a screenshot wants it. Each fragment keeps its own plating unless `variant` asks for the other one; `width` and `fade` re-plate only the workload screens, and setting them on a fragment warns in development.",
       "file": "still-fragment.vue"
     },
     {

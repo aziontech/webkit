@@ -592,7 +592,7 @@
           v-if="zoomed"
           :label="t('trace.resetZoom')"
           :data-testid="`${testId}__reset-zoom`"
-          kind="transparent"
+          variant="ghost"
           size="small"
           class="ms-auto shrink-0"
           @click="resetZoom"
@@ -817,7 +817,7 @@
           >
             <Button
               :label="t('trace.clearSearch')"
-              kind="transparent"
+              variant="ghost"
               size="medium"
               @click="search = ''"
             />
@@ -868,7 +868,7 @@
         <CopyButton
           :value="detail.name"
           :aria-label="t('trace.copyName')"
-          kind="outlined"
+          variant="outline"
           class="shrink-0"
           size="small"
         />
@@ -876,7 +876,7 @@
           <Button
             :label="t('trace.close')"
             :data-testid="`${testId}__close`"
-            kind="transparent"
+            variant="ghost"
             size="medium"
             @click="close"
           />

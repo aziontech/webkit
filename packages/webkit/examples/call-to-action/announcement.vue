@@ -5,7 +5,7 @@
 
 <template>
   <CallToAction
-    kind="announcement"
+    variant="announcement"
     eyebrow="Edge Runtime"
     title="WebAssembly now runs in every edge location."
   >

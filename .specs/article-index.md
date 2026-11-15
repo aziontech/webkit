@@ -3,11 +3,11 @@ name: article-index
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-15
-checksum: 684fadfc291d1b387a24e96c06fe7e8702eca62048017037001c277c4d2e9a3c
+checksum: ec1fca0fe26762cad0acca775351294d3e033fd491fd244ebfa07b7b136b2b10
 ---
 
 # ArticleIndex — Component Spec
@@ -38,7 +38,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 - With `filters="facets"`, give every item a `facets` entry per facet `id` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.
 - Set `emptyTitle` (and `emptyActionLabel`) so a reader who filters everything away gets a way back; without it the list just disappears.
 - Set `leading` to the number of entries a highlight band above already shows, so they are not listed twice until the reader filters.
-- Leave `rowKind` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`.
+- Leave `rowVariant` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`.
 
 ## Usage
 
@@ -124,7 +124,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 | `emptyTitle`    | `string`               | `''`                | false    | Headline of the state when nothing matches; the state renders only with it. |
 | `emptyDescription` | `string`            | `''`                | false    | Sentence under the empty-state headline. |
 | `emptyActionLabel` | `string`            | `''`                | false    | Label of the empty-state button that clears every filter; no button renders without it. |
-| `rowKind`       | `ArticleIndexRowKind`  | `undefined`         | false    | Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. |
+| `rowVariant`       | `ArticleIndexRowVariant`  | `undefined`         | false    | Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. |
 | `categoryParam` | `string`               | `''`                | false    | Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty. |
 | `ariaLabel`     | `string`               | `''`                | false    | Accessible name of the list. |
 
@@ -146,7 +146,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 - Paged: with `moreLabel` set, the first `pageSize` matches render and the load-more button, shown while more remain, adds the next `pageSize`; changing a filter returns to the first page
 - Leading: until a filter applies, the first `leading` entries are skipped
 - Empty: when no entry matches, the list and the load-more button are not rendered; with `emptyTitle` set, an `EmptyState` (search icon) renders `emptyTitle` and `emptyDescription`, and an `emptyActionLabel` button clears every filter
-- `data-kind` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
+- `data-variant` on the list mirrors the row layout: `byline` spreads the copy so the byline sits at the foot, `center` centres it
 - A row with no `image` draws its `mark` (the client's logo, flattened to one ink that inverts in the dark theme); an author with an `avatar` URL shows the photo, otherwise the initials
 - A row whose `target` is `_blank` opens in a new tab (with `rel="noopener"`)
 - `categoryParam` (`category-search`): on mount (client only) a query value that matches one of `categories` selects it and scrolls the band into view

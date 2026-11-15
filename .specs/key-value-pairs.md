@@ -3,8 +3,8 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: cfac5817a3fb0759cf7ed6587c998f2ade767742b91c072fabc92445fd4959ca
-spec_version: 3
+checksum: 9c95ab7e9cab5db42e107744b2f817a9859f6e7707ec14fddf700986ac56d4c4
+spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 - A read-only summary of settings before a confirm step (review step, deploy summary).
 - Any set of named attributes of a single subject where the reader scans keys to find a value.
 - Facts that fall into named clusters (General, Networking, Source) shown side by side as titled columns.
-- The rows of a summary card, label on the left and value on the right (a subscription plan: Plan Price, Billing Period, Next Invoice): `kind="split"`.
+- The rows of a summary card, label on the left and value on the right (a subscription plan: Plan Price, Billing Period, Next Invoice): `variant="split"`.
 
 ## When NOT to use
 
@@ -46,7 +46,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
 
 - Keep keys short nouns in sentence case ("Created", "Region"), never sentences or trailing colons.
 - Order pairs by what the reader looks for first: identity, status, then the rest.
-- Pick `kind` by the box: `stacked` (label over value) for a facts band that spans a page; `split` (label at the start, value at the end of one row) for a narrow summary card where each row reads as a line of a receipt. Do not hand-write a `<dl>` with `justify-between` for it.
+- Pick `variant` by the box: `stacked` (label over value) for a facts band that spans a page; `split` (label at the start, value at the end of one row) for a narrow summary card where each row reads as a line of a receipt. Do not hand-write a `<dl>` with `justify-between` for it.
 - Use `columns` for width, not for grouping; use `KeyValuePairs.Group` when the facts form named clusters, one group per column.
 - Do not mix bare Items and Groups at the same level; pick one shape per instance.
 - Leave the value slot out (or render nothing in it) when a value is absent; the component shows the em dash and its accessible "Not set". Do not type your own "-", "N/A" or "None".
@@ -154,7 +154,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 | Prop        | Type                   | Default     | Required | JSDoc                                                                                                                                        |
 | ----------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`      | `'stacked' \| 'split'` | `'stacked'` | false    | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
+| `variant`   | `'stacked' \| 'split'` | `'stacked'` | false    | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
 | `columns`   | `1 \| 2 \| 3 \| 4`     | `1`         | false    | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`.                                                  |
 | `loading`   | `boolean`              | `false`     | false    | Replaces every value with a skeleton while the data loads; labels stay visible.                                                              |
 | `ariaLabel` | `string`               | `''`        | false    | Accessible name of the list when no visible heading names it.                                                                                |
@@ -174,7 +174,7 @@ Read-only display; interactive values (links, copy buttons) emit their own event
 ## States
 
 - Visual states: `default`, `loading`, empty value (per Item)
-- `data-kind` on the root and on each Item mirrors `kind`; `split` turns each Item into one row (label start, value end, wrapping under the label only when the value does not fit)
+- `data-variant` on the root and on each Item mirrors `variant`; `split` turns each Item into one row (label start, value end, wrapping under the label only when the value does not fit)
 - `data-columns` on the root mirrors `columns` and drives the grid template through `data-[columns=n]:` variants
 - `data-loading` on the root mirrors `loading`; `aria-busy="true"` while loading
 - Empty value: the Item's `<dd>` shows `—` (`aria-hidden`) plus a visually hidden "Not set"
@@ -229,9 +229,9 @@ Layout notes: the `<dd>` is `flex flex-wrap items-center` with `min-w-0` and `br
 - Columns — composite: the same facts at `columns` 2, 3 and 4 stacked in one frame (the `Types` equivalent for the `columns` axis).
 - Groups — two to three `KeyValuePairs.Group` columns (General, Networking, Source) with an `info` `Hint` on one key and one empty value.
 - Loading — `loading: true` on the Default facts.
-- Split — a subscription plan card with `kind="split"` (Plan Price, Billing Period, Next Invoice, Payment Method); justified because `kind` changes the layout of every pair.
+- Split — a subscription plan card with `variant="split"` (Plan Price, Billing Period, Next Invoice, Payment Method); justified because `variant` changes the layout of every pair.
 
-Justification: KeyValuePairs has a two-value `kind` axis (`Split` shows the non-default one) and no `size` axis; its other axes are `columns` (shown as the composite `Columns` story) and the Group shape, a distinct anatomy the consumer must see composed. `Loading` is the state story for the declared `loading` prop.
+Justification: KeyValuePairs has a two-value `variant` axis (`Split` shows the non-default one) and no `size` axis; its other axes are `columns` (shown as the composite `Columns` story) and the Group shape, a distinct anatomy the consumer must see composed. `Loading` is the state story for the declared `loading` prop.
 
 ## Decisions and open questions
 

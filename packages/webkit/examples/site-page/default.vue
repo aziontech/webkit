@@ -5,7 +5,7 @@
     {
       _id: 'hero-band',
       props: {
-        kind: 'title-band',
+        variant: 'title-band',
         size: 'large',
         eyebrow: 'SQL Database',
         title: 'Relational data, next to every user',
@@ -69,7 +69,7 @@
     {
       _id: 'closing-call-to-action',
       props: {
-        kind: 'primary',
+        variant: 'primary',
         anchor: 'contact',
         title: 'Build, run, and protect applications everywhere.',
         description: 'Get faster launches, lower latency, and less infrastructure overhead.',

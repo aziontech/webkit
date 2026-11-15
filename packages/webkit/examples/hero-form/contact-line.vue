@@ -4,28 +4,28 @@
   const fields = [
     {
       name: 'firstname',
-      kind: 'text',
+      type: 'text',
       label: 'First name',
       half: true,
       required: true
     },
     {
       name: 'lastname',
-      kind: 'text',
+      type: 'text',
       label: 'Last name',
       half: true,
       required: true
     },
     {
       name: 'email',
-      kind: 'email',
+      type: 'email',
       label: 'Work email',
       placeholder: 'm@example.com',
       required: true
     },
     {
       name: 'role',
-      kind: 'select',
+      type: 'select',
       label: 'Role',
       placeholder: 'Select your role',
       half: true,
@@ -75,21 +75,21 @@
     },
     {
       name: 'company',
-      kind: 'text',
+      type: 'text',
       label: 'Company',
       half: true,
       required: true
     },
     {
       name: 'mobilephone',
-      kind: 'phone',
+      type: 'phone',
       label: 'Phone',
       country: 'US',
       required: true
     },
     {
       name: 'message',
-      kind: 'textarea',
+      type: 'textarea',
       label: 'How can we help?',
       placeholder:
         'Tell us about your current stack, your use case, and what you want to run on Azion.',

@@ -26,7 +26,7 @@ function harness(props: Record<string, unknown> = {}) {
           ref: canvas,
           title: 'top-orders.sql',
           meta: 'SQL',
-          kind: 'code',
+          type: 'code',
           versions: versions.length,
           copyValue: versions[version.value],
           ...props,
@@ -50,7 +50,7 @@ describe('ArtifactCanvas', () => {
   it('is a region named by its title with a named close, copy and content region', () => {
     const view = harness()
     expect(view.getByRole('region', { name: 'top-orders.sql' })).toHaveAttribute(
-      'data-kind',
+      'data-type',
       'code'
     )
     expect(view.getByRole('heading', { level: 2, name: 'top-orders.sql' })).toBeTruthy()

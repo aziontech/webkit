@@ -5,13 +5,13 @@
 
 <template>
   <CardGridRoot
-    kind="frame"
+    variant="frame"
     :columns="3"
   >
-    <CardGridCell kind="canvas">A canvas cell, padded by default.</CardGridCell>
+    <CardGridCell variant="canvas">A canvas cell, padded by default.</CardGridCell>
     <CardGridCell>A surface cell — the cell's default fill.</CardGridCell>
     <CardGridCell
-      kind="none"
+      variant="none"
       :padded="false"
     >
       <div

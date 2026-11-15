@@ -3,11 +3,11 @@ name: tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 8b566f5166412ed520dbc335b061d3c244b0927c565fef3ca13774a06c3aa579
+checksum: e104e46126103e89be5ab0d59337e51513b2e60c6bf01eb4e0d1e1f2adbda69f
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -145,7 +145,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=label]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

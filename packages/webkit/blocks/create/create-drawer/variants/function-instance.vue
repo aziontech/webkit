@@ -274,7 +274,7 @@
       <Button
         type="button"
         label="Add Function Instance"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-plus"
         @click="openFor()"
@@ -295,7 +295,7 @@
             <Item.Actions>
               <IconButton
                 icon="ai ai-pencil"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 :aria-label="`Edit ${instance.name}`"
                 @click="openFor(instance)"
@@ -367,7 +367,7 @@
                   </Select>
                   <HelperText
                     id="instance-function-helper"
-                    :kind="errors.functionId ? 'required' : 'helper'"
+                    :type="errors.functionId ? 'required' : 'helper'"
                     >{{
                       errors.functionId ||
                       (selected
@@ -441,7 +441,7 @@
                     @update:model-value="onJson"
                   />
                   <HelperText
-                    :kind="jsonMarkers.length ? 'invalid' : 'helper'"
+                    :type="jsonMarkers.length ? 'invalid' : 'helper'"
                     :label="
                       jsonMarkers.length
                         ? 'Fix the JSON to keep these arguments. The fields keep the last valid value.'
@@ -458,7 +458,7 @@
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               :label="editingId ? 'Save' : 'Add Function Instance'"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

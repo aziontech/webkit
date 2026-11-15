@@ -84,7 +84,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     :fade="lifted ? 'y' : 'bottom'"
     class="[--mockup-fade-edge:14%] [--mockup-fade-start:80%]"
     :chrome="false"

@@ -419,7 +419,7 @@
           <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               aria-label="Refresh metrics"
               :loading="refetching"
@@ -442,7 +442,7 @@
             class="flex min-w-0 flex-col"
           >
             <StatTile
-              kind="sans"
+              variant="sans"
               :label="tile.label"
               :value="tile.value"
               :format-value="formatters[tile.format]"
@@ -485,7 +485,7 @@
                 <Tooltip content="Expand">
                   <IconButton
                     icon="ai ai-window-maximize"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     :aria-label="`Expand ${card.title}`"
                     @click="openExpanded(card.id)"
@@ -498,7 +498,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       :aria-label="`More options for ${card.title}`"
                     />
@@ -527,8 +527,8 @@
                 empty-description="Metrics appear here once a product serves requests."
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="forms[card.id] === 'bar'"
                   :stacked="card.series.length > 1"
@@ -586,8 +586,8 @@
               empty-description="Metrics appear here once a product serves requests."
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="forms[expandedCard.id] === 'bar'"
                 :stacked="expandedCard.series.length > 1"

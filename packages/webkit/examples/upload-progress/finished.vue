@@ -19,7 +19,7 @@
       <template #actions>
         <Button
           label="Open folder"
-          kind="secondary"
+          variant="secondary"
           size="small"
         />
       </template>

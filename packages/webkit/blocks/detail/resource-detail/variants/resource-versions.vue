@@ -36,7 +36,7 @@
     { accessorKey: 'description', header: 'Description', grow: 2 },
     { accessorKey: 'state', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const versions = [
@@ -217,7 +217,7 @@
                 <Button
                   label="Add Version"
                   icon="ai ai-plus"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                 />
               </template>
@@ -229,7 +229,7 @@
                   <div class="flex shrink-0 items-center">
                     <Button
                       label="Filter"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       icon="ai ai-filter"
                     />
@@ -258,7 +258,7 @@
                   >
                     <IconButton
                       icon="ai ai-refresh"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       :loading="loading"
                       aria-label="Refresh"
@@ -271,7 +271,7 @@
                   >
                     <IconButton
                       icon="ai ai-download"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       :disabled="!tableEl"
                       aria-label="Download CSV"
@@ -284,7 +284,7 @@
                   >
                     <IconButton
                       icon="ai ai-column"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       aria-label="Columns"
                     />
@@ -344,7 +344,7 @@
                             :alt="row.author"
                             :label="row.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </Tooltip>
                         <span class="truncate text-body-sm text-(--text-muted)">{{
@@ -359,7 +359,7 @@
                           <Tooltip content="Version actions">
                             <IconButton
                               icon="ai ai-ellipsis"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               aria-label="Version actions"
                             />
@@ -415,7 +415,7 @@
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`/resources/analytics-app/${activeTab}`"
               />

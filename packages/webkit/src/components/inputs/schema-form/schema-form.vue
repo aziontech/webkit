@@ -628,7 +628,7 @@
                 <IconButton
                   v-if="scope.removable"
                   icon="ai ai-trash"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   :aria-label="scope.removeLabel"
                   :data-testid="`${testId}__remove`"

@@ -7,7 +7,7 @@
 <template>
   <div class="flex flex-col">
     <LogoWallQuote
-      kind="quote"
+      variant="quote"
       :quote="{
         text: 'We stopped planning capacity for campaigns. Traffic peaks just work now.',
         name: 'Jane Doe',
@@ -18,8 +18,8 @@
       :primary-action="{ label: 'Read the story', href: '/customers/agibank', trailing: true }"
     />
     <LogoWallQuote
-      kind="quote"
-      quote-kind="highlight"
+      variant="quote"
+      quote-variant="highlight"
       :quote="{
         text: 'Our checkout got faster in every country on the first deploy.',
         name: 'John Smith',

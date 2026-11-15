@@ -25,12 +25,12 @@
         <div class="flex gap-(--spacing-sm)">
           <Button
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             size="small"
           />
           <Button
             label="Save"
-            kind="outlined"
+            variant="outline"
             size="small"
           />
         </div>

@@ -333,7 +333,7 @@
     <DrawerTrigger>
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />
@@ -360,7 +360,7 @@
               hint="The service version this deployment sends live, and the version of every module and integration it references."
             >
               <Item
-                kind="outlined"
+                variant="outline"
                 size="small"
                 aria-live="polite"
               >
@@ -419,7 +419,7 @@
                 <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                     <Item
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                     >
                       <Item.Media>
@@ -535,7 +535,7 @@
                                 >
                                   <Button
                                     :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                    kind="transparent"
+                                    variant="ghost"
                                     size="small"
                                     class="w-full"
                                   />
@@ -560,7 +560,7 @@
                           <DropdownMenu.Trigger>
                             <Button
                               label="Change"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               icon="ai ai-chevron-down"
                               icon-position="trailing"
@@ -601,7 +601,7 @@
             >
               <RadioGroup
                 v-model="environment"
-                kind="card"
+                variant="card"
                 name="service-deploy-environment"
                 aria-label="Environment"
               >
@@ -648,7 +648,7 @@
                       class="min-w-0"
                     >
                       <Item
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                       >
                         <Item.Media>
@@ -758,7 +758,7 @@
                                   >
                                     <Button
                                       :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                      kind="transparent"
+                                      variant="ghost"
                                       size="small"
                                       class="w-full"
                                     />
@@ -794,7 +794,7 @@
             <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               disabled
               type="submit"

@@ -319,7 +319,7 @@
             />
             <Button
               label="Deploy"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-cloud-upload"
               :loading="deploying"
@@ -376,7 +376,7 @@
                     label="Visit"
                     :href="`https://${APP.host}`"
                     target="_blank"
-                    kind="secondary"
+                    variant="secondary"
                     size="medium"
                     icon="ai ai-external-link"
                   />
@@ -385,7 +385,7 @@
                       <Tooltip content="Application actions">
                         <IconButton
                           icon="ai ai-ellipsis"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           aria-label="Application actions"
                         />
@@ -465,7 +465,7 @@
                 </p>
                 <Button
                   label="Open active version"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="activeTab = 'versions'"
                 />
@@ -485,7 +485,7 @@
             <template #actions>
               <Button
                 label="Add Version"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-plus"
               />
@@ -655,12 +655,12 @@
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               @click="deployOpen = false"
             />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               icon="ai ai-cloud-upload"
               @click="runDeploy"
             />

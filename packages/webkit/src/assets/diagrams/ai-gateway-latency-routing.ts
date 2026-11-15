@@ -7,18 +7,18 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'app',
-      kind: 'app',
+      type: 'app',
       title: 'App'
     },
     {
       key: 'realtime',
-      kind: 'pill',
+      type: 'pill',
       title: 'Real-time task?',
       active: true
     },
     {
       key: 'inference',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'AI Inference',
       title: 'Mistral 3 Small',
       icon: 'ai ai-edge-ai',
@@ -31,7 +31,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'gpt',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'OpenAI',
       title: 'GPT-5.5',
       mark: openaiMark

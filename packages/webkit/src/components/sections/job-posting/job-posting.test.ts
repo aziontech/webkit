@@ -13,16 +13,16 @@ const form = {
   description: 'Fill in the form to apply.',
   submitLabel: 'Submit application',
   fields: [
-    { name: 'name', kind: 'text' as const, label: 'Name', required: true },
-    { name: 'email', kind: 'email' as const, label: 'Email address', required: true },
+    { name: 'name', type: 'text' as const, label: 'Name', required: true },
+    { name: 'email', type: 'email' as const, label: 'Email address', required: true },
     {
       name: 'resume',
-      kind: 'file' as const,
+      type: 'file' as const,
       label: 'Resume',
       accept: '.pdf',
       helper: '.pdf, up to 5 MB'
     },
-    { name: 'portfolio', kind: 'url' as const, label: 'Portfolio URL', helper: 'Optional.' }
+    { name: 'portfolio', type: 'url' as const, label: 'Portfolio URL', helper: 'Optional.' }
   ]
 }
 
@@ -40,11 +40,11 @@ const messages = {
 const sections = [
   {
     title: 'About the role',
-    blocks: [{ kind: 'text' as const, text: 'You will build the tools our engineers ship with.' }]
+    blocks: [{ type: 'text' as const, text: 'You will build the tools our engineers ship with.' }]
   },
   {
     title: 'What you will do',
-    blocks: [{ kind: 'list' as const, items: ['Own the release pipeline', 'Mentor engineers'] }]
+    blocks: [{ type: 'list' as const, items: ['Own the release pipeline', 'Mentor engineers'] }]
   }
 ]
 

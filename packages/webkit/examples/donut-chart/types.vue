@@ -39,13 +39,13 @@
   <div class="flex flex-wrap gap-(--spacing-xl)">
     <DonutChart
       :series="series"
-      kind="donut"
+      type="donut"
       total-label="Blocked threats"
       aria-label="Donut"
     />
     <DonutChart
       :series="series"
-      kind="pie"
+      type="pie"
       aria-label="Pie"
     />
   </div>

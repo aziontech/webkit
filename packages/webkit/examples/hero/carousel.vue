@@ -7,7 +7,7 @@
     class="[--banner-floor-bg:var(--bg-surface)] [--texture-pool-a:95%_64%] [--texture-pool-b:-2%_38%]"
   >
     <Hero
-      kind="screen"
+      variant="screen"
       align="center"
       max-width="site"
       floor-texture="pixelate"

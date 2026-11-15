@@ -36,7 +36,7 @@
   />
   <ShellMockup
     v-else-if="tab === 'cli'"
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:82%]"
     :chrome="false"
@@ -66,7 +66,7 @@
     </span>
     <div class="min-h-0 flex-1">
       <ShellMockup
-        kind="bare"
+        variant="bare"
         :chrome="false"
         :active="active"
         :width="480"

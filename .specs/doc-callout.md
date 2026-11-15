@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 33d34adc5bf9ce69a1a38b0bbeb16052c1a78948e691b2fac1eb69d78a89c979
+checksum: 2d834fb6106abae25ce4af4b8cb48d2da423c2861064653b260ac20677627c88
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -46,7 +46,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 </script>
 
 <template>
-  <DocCallout kind="warning">
+  <DocCallout variant="warning">
     Deleting a workload releases its domain. Anything still pointing at it will stop resolving.
   </DocCallout>
 </template>
@@ -54,12 +54,12 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## Props
 
-| Prop    | Type                                                            | Default  | Required | JSDoc                                                             |
-| ------- | --------------------------------------------------------------- | -------- | -------- | ----------------------------------------------------------------- |
-| `kind`  | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
-| `label` | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
+| Prop      | Type                                                            | Default  | Required | JSDoc                                                             |
+| --------- | --------------------------------------------------------------- | -------- | -------- | ----------------------------------------------------------------- |
+| `variant` | `'note' \| 'info' \| 'tip' \| 'check' \| 'warning' \| 'danger'` | `'note'` | false    | Which admonition this is; drives the severity color and the icon. |
+| `label`   | `string`                                                        | `''`     | false    | Fallback copy when the default slot is empty.                     |
 
-`kind` names the admonition type (Mintlify's Note, Info, Tip, Check, Warning, Danger), not a severity: `note` and `tip` are not severities. It maps onto `Alert` severities for color and adds an icon (`note` and `info` → info, `tip` → info drawn neutral, `check` → success, `warning` → warning, `danger` → danger), which is why it is not called `severity`.
+`variant` names the admonition type (Mintlify's Note, Info, Tip, Check, Warning, Danger), not a severity: `note` and `tip` are not severities. It maps onto `Alert` severities for color and adds an icon (`note` and `info` → info, `tip` → info drawn neutral, `check` → success, `warning` → warning, `danger` → danger), which is why it is not called `severity`.
 
 ## Events
 
@@ -74,8 +74,8 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 ## States
 
 - Visual states: `default` (the component is not interactive and holds no state)
-- `data-kind` mirrors the `kind` prop, so a test or a consumer can target one flavour
-- `data-neutral` is present only for `tip`, the one kind that carries no severity
+- `data-variant` mirrors the `variant` prop, so a test or a consumer can target one flavour
+- `data-neutral` is present only for `tip`, the one variant that carries no severity
 - `data-doc-block` + `data-doc-chrome` are the `DocProse` contract (block rung; prose stops here)
 
 ## Motion & Animations
@@ -84,19 +84,19 @@ _none_
 
 ## Tokens
 
-| Region                            | Token (DESIGN.md)                                                                                 |
-| --------------------------------- | ------------------------------------------------------------------------------------------------- |
-| typography (copy)                 | `.text-body-sm`                                                                                   |
-| typography (inline code)          | `.text-label-code-sm`                                                                             |
-| text                              | `var(--text-default)`                                                                             |
-| surface (neutral kind)            | `var(--bg-surface)`                                                                               |
-| border (neutral kind)             | `var(--border-default)`                                                                           |
-| glyph (neutral kind)              | `var(--primary)`                                                                                  |
-| surface + border (severity kinds) | `Alert`'s own `data-severity` tokens                                                              |
-| surface (inline code, neutral)    | `var(--bg-hover)`                                                                                 |
-| border (inline code, severity)    | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
-| shape (inline code)               | `var(--shape-flat)`                                                                               |
-| spacing                           | `var(--spacing-sm)`                                                                               |
+| Region                               | Token (DESIGN.md)                                                                                 |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| typography (copy)                    | `.text-body-sm`                                                                                   |
+| typography (inline code)             | `.text-label-code-sm`                                                                             |
+| text                                 | `var(--text-default)`                                                                             |
+| surface (neutral variant)            | `var(--bg-surface)`                                                                               |
+| border (neutral variant)             | `var(--border-default)`                                                                           |
+| glyph (neutral variant)              | `var(--primary)`                                                                                  |
+| surface + border (severity variants) | `Alert`'s own `data-severity` tokens                                                              |
+| surface (inline code, neutral)       | `var(--bg-hover)`                                                                                 |
+| border (inline code, severity)       | `var(--info-border)` / `var(--success-border)` / `var(--warning-border)` / `var(--danger-border)` |
+| shape (inline code)                  | `var(--shape-flat)`                                                                               |
+| spacing                              | `var(--spacing-sm)`                                                                               |
 
 ## Theme gaps
 
@@ -109,14 +109,14 @@ _none_
 - Visible focus: the callout is not focusable; a link inside it inherits the prose focus ring.
 - Keyboard map: none of its own — `Tab` reaches only a link in the copy.
 - ARIA: the role comes from `Alert`; the glyph is decorative (`aria-hidden`), so the copy is the accessible content.
-- Contrast ≥4.5:1: the copy is `--text-default` in every kind, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
+- Contrast ≥4.5:1: the copy is `--text-default` in every variant, measured 13.31:1–18.97:1 across the six fills in both themes. The inline-code chip keeps `--text-default` too, measured 10.05:1–14.43:1 — the severity ink on that chip drops to 4.03:1 in dark danger, which is why it is not used.
 - `tip` deliberately does **not** speak in `--text-muted` (3.95:1 light, under AA).
 - Touch target: not applicable; the component is not interactive.
 
 ## Examples
 
-- Default — a single callout with the default `kind`.
-- Variants — composite story rendering all six kinds side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
+- Default — a single callout with the default `variant`.
+- Variants — composite story rendering all six variants side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
 
 ## Constraints — DO NOT
 

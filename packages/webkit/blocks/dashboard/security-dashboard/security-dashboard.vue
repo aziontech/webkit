@@ -517,7 +517,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
                   @click="openExpanded('matched')"
@@ -530,7 +530,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Matched requests over time"
                   />
@@ -558,8 +558,8 @@
               empty-description="Nothing was recorded in this period."
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="form === 'bar'"
                 stacked
@@ -591,7 +591,7 @@
                 v-for="entry in attention"
                 :key="entry.id"
                 role="listitem"
-                kind="inline"
+                variant="inline"
                 size="small"
               >
                 <Item.Media>
@@ -649,7 +649,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
                   @click="openExpanded('categories')"
@@ -662,7 +662,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
                   />
@@ -715,7 +715,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
                   @click="openExpanded('countries')"
@@ -728,7 +728,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by country"
                   />
@@ -784,7 +784,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
                   @click="openExpanded('ips')"
@@ -797,7 +797,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
                   />
@@ -895,8 +895,8 @@
                 :aria-label="expandedReport.label"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="form === 'bar'"
                   stacked

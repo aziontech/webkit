@@ -51,7 +51,7 @@
       <template #actions="{ item }">
         <IconButton
           icon="ai ai-pencil"
-          kind="transparent"
+          variant="ghost"
           size="small"
           :aria-label="`Rename ${item.label}`"
           @click="treeEl?.startRename(item.id)"

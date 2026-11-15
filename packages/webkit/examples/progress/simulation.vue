@@ -21,7 +21,7 @@
     <div class="flex items-center gap-2">
       <Button
         label="Next"
-        kind="primary"
+        variant="primary"
         size="small"
         @click="advance"
       />
@@ -29,7 +29,7 @@
         icon="ai ai-refresh"
         aria-label="Reset"
         size="small"
-        kind="outlined"
+        variant="outline"
         @click="reset"
       />
       <span class="ms-auto">{{ value }}%</span>

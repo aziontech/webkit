@@ -202,7 +202,7 @@
     <template #actions>
       <IconButton
         icon="ai ai-github"
-        kind="outlined"
+        variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
@@ -211,7 +211,7 @@
       />
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         class="shrink-0"
         href="https://console.azion.com"
@@ -238,7 +238,7 @@
     <template #footer>
       <div class="w-full border-t border-(--border-default)">
         <Footer
-          kind="content"
+          variant="content"
           signature="compact"
           aria-label="Footer"
         >
@@ -266,7 +266,7 @@
             <IconButton
               v-for="social in socials"
               :key="social.label"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :icon="social.icon"
               :aria-label="social.label"

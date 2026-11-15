@@ -140,7 +140,7 @@
                       <HelperText
                         v-if="submitted && nameEmpty"
                         id="full-name-error"
-                        kind="required"
+                        type="required"
                         label="This field is required."
                       />
                     </div>
@@ -167,7 +167,7 @@
                       <HelperText
                         v-if="submitted && emailInvalid"
                         id="email-error"
-                        :kind="emailEmpty ? 'required' : 'invalid'"
+                        :type="emailEmpty ? 'required' : 'invalid'"
                         :label="
                           emailEmpty ? 'This field is required.' : 'Enter a valid email address.'
                         "
@@ -260,7 +260,7 @@
                 <SettingRow
                   title="Product updates"
                   description="Occasional emails about new features and changes."
-                  kind="compact"
+                  variant="compact"
                 >
                   <Switch
                     v-model="form.productUpdates"
@@ -275,19 +275,19 @@
       </fieldset>
     </div>
 
-    <SaveBar kind="plain">
+    <SaveBar variant="plain">
       <template #actions>
         <Button
           type="button"
           label="Discard"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="submitting || !dirty"
           @click="discard"
         />
         <Button
           label="Save"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="submitting"
           :disabled="!dirty"

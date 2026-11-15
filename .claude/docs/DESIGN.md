@@ -189,7 +189,7 @@ The marketing site is measured by two more tokens. `--layout-measure-site` (1388
 section, the docs home and the footer share it, which is the only reason the border-x running down
 the page is continuous — and `--layout-measure-site-header` (1620px) is the top bar's own column,
 one rung wider, since a bar's payload is chrome held apart at the two ends of the window rather than
-content read across it. `GlobalHeader kind="site"` is the one consumer of the header token. The page
+content read across it. `GlobalHeader variant="site"` is the one consumer of the header token. The page
 frame has its own column class, `.layout-column-site`, whose `min()` cap hands off from the measure to
 a window-less-boundary inset below it — so the frame stays inset on a phone, where a bare
 `max-w-(--layout-measure-site)` would land its rules on the window edges.
@@ -315,7 +315,7 @@ Every fill colour pairs with a `-foreground` text colour of the same role (`--pr
 | Code syntax   | `--code-syntax-identifier`, `--code-syntax-line-number`, `--code-syntax-keyword`, `--code-syntax-string`, `--code-syntax-function`, `--code-syntax-type`, `--code-syntax-punctuation`, `--code-syntax-comment`                                                                                                                                                                                                                                                        |
 | Code editor   | `--code-editor-line-height` (16 px line step of code in `CodeEditor`; Monaco reads it when the editor is created)                                                                                                                                                                                                                                                                                                                                                     |
 
-Which token does which job, and which components use each one, is in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `kind` / `severity` union lists.
+Which token does which job, and which components use each one, is in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `variant` / `severity` union lists.
 
 Text on `--bg-surface-overlay` is `--text-default`. In dark the overlay fill is `#4D4D4D`, and `--text-muted` (`#B2B2B2`) on it is 3.99:1, under the 4.5:1 that WCAG 1.4.3 asks for (found by the a11y harness, M2.9 WP a11y).
 
@@ -357,7 +357,7 @@ Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Moti
 - Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 - Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
-Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-foreground)`, etc.).
+Reference: `button.vue` variants (`bg-(--secondary)`, `text-(--secondary-foreground)`, etc.).
 
 ---
 

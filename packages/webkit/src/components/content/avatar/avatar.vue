@@ -10,7 +10,7 @@
     inheritAttrs: false
   })
 
-  export type AvatarKind = 'circle' | 'square'
+  export type AvatarVariant = 'circle' | 'square'
   export type AvatarSize = 'small' | 'medium' | 'large'
   /** Generated fallback drawn when there is no image. */
   export type AvatarPattern = 'marble'
@@ -25,7 +25,7 @@
     /** Icon class for the fallback when no image or label (Azion icon class). */
     icon?: string
     /** Visual shape of the avatar container. */
-    kind?: AvatarKind
+    variant?: AvatarVariant
     /** Size preset matching Figma sm / md / lg (24 / 32 / 48 px). */
     size?: AvatarSize
     /** Generated fallback drawn when there is no image: marble blends three soft shapes seeded by label (or alt). */
@@ -39,7 +39,7 @@
     alt: '',
     label: '',
     icon: 'ai ai-user',
-    kind: 'circle',
+    variant: 'circle',
     size: 'medium',
     pattern: undefined,
     colors: () => ['var(--text-primary)', 'var(--primary)', 'var(--warning)']
@@ -102,12 +102,12 @@
     v-bind="$attrs"
     :class="
       cn(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden bg-(--bg-surface-raised) text-(--text-default) uppercase select-none text-label-sm rounded-full size-8 data-[kind=square]:rounded-(--shape-button) data-[size=small]:size-6 data-[size=large]:size-12 data-[size=large]:text-label-md data-[content=label]:border data-[content=label]:border-(--border-default)',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden bg-(--bg-surface-raised) text-(--text-default) uppercase select-none text-label-sm rounded-full size-8 data-[variant=square]:rounded-(--shape-button) data-[size=small]:size-6 data-[size=large]:size-12 data-[size=large]:text-label-md data-[content=label]:border data-[content=label]:border-(--border-default)',
         attrs.class as string | undefined
       )
     "
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-content="content"
     :data-pattern="showPattern ? pattern : undefined"

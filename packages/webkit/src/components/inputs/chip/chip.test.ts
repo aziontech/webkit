@@ -8,7 +8,7 @@ import Disabled from '../../../../examples/chip/disabled.vue'
 import Removable from '../../../../examples/chip/removable.vue'
 import Selectable from '../../../../examples/chip/selectable.vue'
 import Sizes from '../../../../examples/chip/sizes.vue'
-import Types from '../../../../examples/chip/types.vue'
+import Types from '../../../../examples/chip/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Chip from './chip.vue'
 
@@ -19,16 +19,16 @@ describe('Chip', () => {
     const root = getByTestId('input-chip')
     expect(root.tagName).toBe('SPAN')
     expect(root).toHaveAttribute('data-size', 'medium')
-    expect(root).toHaveAttribute('data-kind', 'filled')
+    expect(root).toHaveAttribute('data-variant', 'filled')
   })
 
   it.each([
     ['filled', 'filled' as const],
-    ['outlined', 'outlined' as const],
+    ['outline', 'outline' as const],
     ['dashed', 'dashed' as const]
-  ])('maps kind=%s onto data-kind', (expected, kind) => {
-    const { getByTestId } = render(Chip, { props: { label: 'K', kind } })
-    expect(getByTestId('input-chip')).toHaveAttribute('data-kind', expected)
+  ])('maps variant=%s onto data-variant', (expected, variant) => {
+    const { getByTestId } = render(Chip, { props: { label: 'K', variant: variant } })
+    expect(getByTestId('input-chip')).toHaveAttribute('data-variant', expected)
   })
 
   it('shows the label prop text via the label sub-node', () => {
@@ -138,7 +138,7 @@ describe('Chip', () => {
       await fireEvent.click(getByTestId('input-chip__remove'))
 
       // The chip must not hide or unmount itself: a filter bar keeps the field on
-      // screen as an `outlined` offer after its value is dropped, and a self-hiding
+      // screen as an `outline` offer after its value is dropped, and a self-hiding
       // chip made that impossible (the instance stayed invisible forever).
       expect(getByTestId('input-chip')).toBeInTheDocument()
       expect(getByTestId('input-chip')).toBeVisible()
@@ -437,11 +437,11 @@ describe('Chip', () => {
     expect(getByTestId('input-chip')).not.toHaveAttribute('data-removable')
   })
 
-  it('composes the Types story fixture with all three kinds', () => {
+  it('composes the Types story fixture with all three variants', () => {
     const { getAllByTestId } = render(Types)
 
-    const kinds = getAllByTestId('input-chip').map((chip) => chip.getAttribute('data-kind'))
-    expect(kinds).toEqual(expect.arrayContaining(['filled', 'outlined', 'dashed']))
+    const variants = getAllByTestId('input-chip').map((chip) => chip.getAttribute('data-variant'))
+    expect(variants).toEqual(expect.arrayContaining(['filled', 'outline', 'dashed']))
   })
 
   it('composes the Sizes story fixture with both size tokens', () => {
@@ -467,13 +467,13 @@ describe('Chip', () => {
     expect(getByTestId('input-chip')).toHaveAttribute('role', 'button')
   })
 
-  it('draws an applied filter (clickable + removable) as the default filled kind, with a body and a named remove control', async () => {
+  it('draws an applied filter (clickable + removable) as the default filled variant, with a body and a named remove control', async () => {
     const { getByTestId, container } = render(Chip, {
       props: { label: 'Period', clickable: true, removable: true }
     })
 
     const root = getByTestId('input-chip')
-    expect(root).toHaveAttribute('data-kind', 'filled')
+    expect(root).toHaveAttribute('data-variant', 'filled')
     expect(root).not.toHaveAttribute('data-selected')
     expect(getByTestId('input-chip__body')).toHaveAttribute('role', 'button')
     expect(getByTestId('input-chip__remove')).toHaveAccessibleName('Remove Period')
@@ -486,7 +486,7 @@ describe('Chip', () => {
     })
 
     const root = getByTestId('input-chip')
-    expect(root).toHaveAttribute('data-kind', 'filled')
+    expect(root).toHaveAttribute('data-variant', 'filled')
     expect(root).toHaveAttribute('aria-pressed', 'false')
     expect(root).not.toHaveAttribute('data-selected')
 
@@ -495,12 +495,12 @@ describe('Chip', () => {
     expect(root).toHaveAttribute('data-selected')
   })
 
-  describe('accessibility of the new kinds', () => {
-    it.each([['outlined' as const], ['dashed' as const]])(
+  describe('accessibility of the new variants', () => {
+    it.each([['outline' as const], ['dashed' as const]])(
       'has no a11y violations for a clickable %s chip',
-      async (kind) => {
+      async (variant) => {
         const { container } = render(Chip, {
-          props: { label: 'Offer', kind, clickable: true }
+          props: { label: 'Offer', variant: variant, clickable: true }
         })
         await expectNoA11yViolations(container)
       }

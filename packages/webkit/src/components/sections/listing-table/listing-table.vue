@@ -131,7 +131,7 @@
         #header
       >
         <SectionTitle
-          kind="start"
+          variant="start"
           :title="title"
         />
       </template>
@@ -176,7 +176,7 @@
             <Button
               :label="primaryAction.label"
               :href="primaryAction.href"
-              kind="outlined"
+              variant="outline"
               size="large"
               :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
@@ -248,7 +248,7 @@
                 <Button
                   :label="primaryAction.label"
                   :href="primaryAction.href"
-                  kind="outlined"
+                  variant="outline"
                   size="large"
                   :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"

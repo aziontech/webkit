@@ -3,9 +3,9 @@ name: copy-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: c0ddee7eeea73c083b97778caab89940d70c7b735a7bb7ad28eae3d983bc14b8
+checksum: a9ebc48bc98fa09ab88dc69611098154ee40bcd9b76d88dea1d0b33095378c57
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Related
 
-- `icon-button` — the control it composes; `kind` and `size` are forwarded to it.
+- `icon-button` — the control it composes; `variant` and `size` are forwarded to it.
 - `tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.
 - `code-block` — already embeds a copy-button for its content.
 
@@ -44,14 +44,14 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## Props
 
-| Prop          | Type                                                                  | Default         | Required | JSDoc                                                                                      |
-| ------------- | --------------------------------------------------------------------- | --------------- | -------- | ------------------------------------------------------------------------------------------ |
-| `value`       | `string`                                                              | `—`             | true     | Text copied to the clipboard on activation.                                                |
-| `ariaLabel`   | `string`                                                              | `''`            | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                        |
-| `copiedLabel` | `string`                                                              | `''`            | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
-| `kind`        | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false    | Visual variant forwarded to `IconButton`.                                                  |
-| `size`        | `'small' \| 'medium' \| 'large'`                                      | `'large'`       | false    | Size token forwarded to `IconButton`.                                                      |
-| `disabled`    | `boolean`                                                             | `false`         | false    | Disables interaction and applies disabled tokens.                                          |
+| Prop          | Type                                                           | Default   | Required | JSDoc                                                                                      |
+| ------------- | -------------------------------------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------------ |
+| `value`       | `string`                                                       | `—`       | true     | Text copied to the clipboard on activation.                                                |
+| `ariaLabel`   | `string`                                                       | `''`      | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                        |
+| `copiedLabel` | `string`                                                       | `''`      | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
+| `variant`     | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'` | false    | Visual variant forwarded to `IconButton`.                                                  |
+| `size`        | `'small' \| 'medium' \| 'large'`                               | `'large'` | false    | Size token forwarded to `IconButton`.                                                      |
+| `disabled`    | `boolean`                                                      | `false`   | false    | Disables interaction and applies disabled tokens.                                          |
 
 ## Events
 
@@ -164,7 +164,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

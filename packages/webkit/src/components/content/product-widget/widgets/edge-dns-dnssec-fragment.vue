@@ -120,7 +120,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:74%]"
     :chrome="false"
@@ -135,7 +135,7 @@
       <div class="flex flex-col py-(--spacing-xs)">
         <ShellMockupPart :order="0">
           <Item
-            kind="inline"
+            variant="inline"
             size="small"
           >
             <Item.Content>
@@ -177,7 +177,7 @@
             >
               <div class="pt-(--spacing-lg)">
                 <Item
-                  kind="inline"
+                  variant="inline"
                   size="small"
                   class="flex-col items-stretch gap-(--spacing-sm)"
                 >
@@ -195,7 +195,7 @@
                         readonly
                       />
                       <CopyButton
-                        kind="transparent"
+                        variant="ghost"
                         :value="key.value"
                         :aria-label="`Copy ${key.label}`"
                         size="small"
@@ -213,7 +213,7 @@
           class="pt-(--spacing-lg)"
         >
           <Item
-            kind="inline"
+            variant="inline"
             size="small"
           >
             <Item.Content>

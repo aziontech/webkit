@@ -55,13 +55,13 @@ Each is a `scope: general` standard. Follow ✅, avoid ❌.
 | Pattern                 | ❌ Avoid                                                             | ✅ Do                                                                                   |
 | ----------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | **Two-way value**       | `defineProps({ modelValue }) + emit('update:modelValue')`            | `const model = defineModel<string>()`                                                   |
-| **Props**               | `defineProps({ kind: { type: String } })` · `variant` · `isDisabled` | `withDefaults(defineProps<Props>(), {…})` · `kind` · `disabled`                         |
-| **Prop vocabulary**     | `sm/md/lg` · `variant` · `closeable`                                 | `small/medium/large` · `kind` · `dismissible`                                           |
+| **Props**               | `defineProps({ variant: { type: String } })` · `kind` · `isDisabled` | `withDefaults(defineProps<Props>(), {…})` · `variant` · `disabled`                      |
+| **Prop vocabulary**     | `sm/md/lg` · `kind` · `closeable`                                    | `small/medium/large` · `variant` · `dismissible`                                        |
 | **Emits**               | `defineEmits(['click'])` · echo events (`value-change`)              | `defineEmits<{ 'item-click':[e,item] }>()` · `v-model`/`@update:*` only                 |
 | **Event payloads**      | `emit('click', item)` · `{ value, event }` payload objects           | activation events emit `(event, item?)` — DOM event always first                        |
 | **Slots**               | `<slot/>` with no declaration                                        | `defineSlots<{ default():unknown }>()`                                                  |
 | **Composables**         | `return reactive({…})`                                               | `return { value: readonly(v), set }` · args via `toValue` · cleanup in `onScopeDispose` |
-| **Styling**             | `const kindClasses = {…}` · `#f3652b` · `text-blue-600`              | `data-[kind=primary]:bg-(--primary)` inline · tokens only                               |
+| **Styling**             | `const variantClasses = {…}` · `#f3652b` · `text-blue-600`           | `data-[variant=primary]:bg-(--primary)` inline · tokens only                            |
 | **Component structure** | random `<script setup>` order                                        | fixed order: options → props → emits → models → slots → state                           |
 | **Root element**        | wrapper `<div>` that swallows attrs · `as` prop                      | own the root · `inheritAttrs:false` + `$attrs` + `cn` · polymorphism via `href`         |
 | **States**              | ad-hoc spinner / "no results" string                                 | `data-*` + `Skeleton` / `EmptyState`                                                    |

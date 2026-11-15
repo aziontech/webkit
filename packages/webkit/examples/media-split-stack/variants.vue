@@ -105,11 +105,11 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <MediaSplitStack
-      kind="media-end"
+      variant="media-end"
       :bands="solutionBands"
     />
     <MediaSplitStack
-      kind="alternating"
+      variant="alternating"
       eyebrow="Managed Infrastructure"
       title="Stop managing regions and capacity by hand"
       :bands="networkBands"

@@ -55,7 +55,7 @@
         :data-testid="testId"
         icon="ai ai-download"
         :ariaLabel="t('tableExport.label')"
-        kind="outlined"
+        variant="outline"
         size="medium"
         @click="onExport"
       />

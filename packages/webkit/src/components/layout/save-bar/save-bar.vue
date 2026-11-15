@@ -2,7 +2,7 @@
   import { computed, nextTick, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
   /** `floating` overlays the bottom of the scroll region without moving the content, `docked` takes its own row at the bottom, `plain` closes a form column with its actions on the right, `fade` closes a wizard step with no border, the content fading into the canvas above it, `centered` floats the actions as a raised card centred over the bottom of a create page. */
-  export type SaveBarKind = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
+  export type SaveBarVariant = 'floating' | 'docked' | 'plain' | 'fade' | 'centered'
 
   defineOptions({
     name: 'SaveBar',
@@ -11,11 +11,11 @@
 
   interface Props {
     /** How the bar sits at the bottom of its scroll region. */
-    kind?: SaveBarKind
+    variant?: SaveBarVariant
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'floating'
+    variant: 'floating'
   })
 
   defineSlots<{
@@ -100,10 +100,10 @@
   }
 
   watch(
-    [shellEl, () => props.kind],
-    ([element, kind]) => {
+    [shellEl, () => props.variant],
+    ([element, variant]) => {
       release()
-      if (!element || kind !== 'floating' || typeof ResizeObserver === 'undefined') return
+      if (!element || variant !== 'floating' || typeof ResizeObserver === 'undefined') return
       observer = new ResizeObserver(() => measure(element))
       observer.observe(element)
       measure(element)
@@ -119,16 +119,16 @@
     ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :style="rootStyle"
-    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface) data-[kind=fade]:bg-linear-to-b data-[kind=fade]:from-transparent data-[kind=fade]:to-(--bg-canvas) data-[kind=centered]:pointer-events-none"
+    class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[variant=floating]:h-0 data-[variant=plain]:border-t-(length:--border-width-default) data-[variant=plain]:border-(--border-muted) data-[variant=plain]:bg-(--bg-surface) data-[variant=fade]:bg-linear-to-b data-[variant=fade]:from-transparent data-[variant=fade]:to-(--bg-canvas) data-[variant=centered]:pointer-events-none"
   >
     <div
       ref="shellEl"
-      class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:@xl/save-bar:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:@xl/save-bar:h-14"
+      class="group-data-[variant=docked]/save-bar:border-t group-data-[variant=docked]/save-bar:border-(--border-default) group-data-[variant=docked]/save-bar:bg-(--bg-canvas) group-data-[variant=docked]/save-bar:@xl/save-bar:h-14 group-data-[variant=floating]/save-bar:absolute group-data-[variant=floating]/save-bar:inset-x-0 group-data-[variant=floating]/save-bar:bottom-0 group-data-[variant=floating]/save-bar:border-t group-data-[variant=floating]/save-bar:border-(--border-default) group-data-[variant=floating]/save-bar:bg-(--bg-canvas) group-data-[variant=floating]/save-bar:@xl/save-bar:h-14"
     >
       <div
-        v-if="kind === 'plain'"
+        v-if="variant === 'plain'"
         class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) py-(--spacing-md) @max-md/save-bar:flex-col @max-md/save-bar:items-stretch"
       >
         <div
@@ -155,7 +155,7 @@
         </div>
       </div>
       <div
-        v-else-if="kind === 'centered'"
+        v-else-if="variant === 'centered'"
         class="flex justify-center px-(--spacing-md) pt-(--spacing-xl) pb-[max(var(--spacing-lg),env(safe-area-inset-bottom))]"
       >
         <div
@@ -179,7 +179,7 @@
         </div>
       </div>
       <div
-        v-else-if="kind === 'fade'"
+        v-else-if="variant === 'fade'"
         class="layout-column-form layout-boundary-inline flex items-center justify-end gap-(--spacing-sm) pt-(--spacing-xl) pb-(--spacing-lg)"
       >
         <div

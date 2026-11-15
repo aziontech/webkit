@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: bb3d21fc9c72ae43ec1799df056dc64263004df25c7b2268225e4bf32d39edf4
+checksum: d325ad4886a233d2c422fd3e8eaf5b4d0ae11a6ca5273bec5b492b1e83914abe
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -16,14 +16,14 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `kind` picks the layout — `center` for a symmetric opener, `start` for a reading-order one, and `split` for a wide row that sets the headline against its description.
+The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `variant` picks the layout — `center` for a symmetric opener, `start` for a reading-order one, and `split` for a wide row that sets the headline against its description.
 
 ## When to use
 
 - Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.
 - Opening a marketing or landing page section that needs a framed header.
 - Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.
-- For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind="split"`.
+- For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `variant="split"`.
 
 ## When NOT to use
 
@@ -49,7 +49,7 @@ The framed header row that opens a page section: an optional overline, the secti
 - Reach for `split` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.
 - In `split`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.
 - In `split`, set `descriptionWidth="wide"` when the description runs to a paragraph and would stack six or more lines in the third column alone; it then spans the middle and third columns, capped at `--container-xl` and aligned to the right edge so it ends where the narrow description ends. It takes the column a `--section-title-headline-span` of `2` would claim, so use one or the other. Outside `split` the prop has no effect.
-- Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.
+- Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `variant` above it.
 - The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component.
 
 ## Usage
@@ -80,7 +80,7 @@ import Button from '@aziontech/webkit/button'
 | `title` | `string` | `—` | true | Headline of the section, rendered as the section's `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `'center' \| 'start' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
+| `variant` | `'center' \| 'start' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. |
 | `framed` | `boolean` | `true` | false | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. |
 | `padding` | `'small' \| 'medium'` | `'medium'` | false | Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. |
@@ -95,12 +95,12 @@ import Button from '@aziontech/webkit/button'
 | Slot | Scope | Notes |
 |---|---|---|
 | `default` | — | Description body; replaces the `description` prop when provided. |
-| `actions` | — | Call-to-action row under the copy, aligned with the chosen `kind`. |
+| `actions` | — | Call-to-action row under the copy, aligned with the chosen `variant`. |
 
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop: `center` | `start` | `split`
+- `data-variant` mirrors the `variant` prop: `center` | `start` | `split`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-framed` present when the header draws its own frame and padding
 - `data-padding` mirrors the `padding` prop: `small` | `medium`
@@ -146,7 +146,7 @@ _none_
 ## Examples
 
 - Default
-- Variants — composite story rendering every `kind` value stacked, so the three layouts can be compared (justified: the difference between the layouts is structural)
+- Variants — composite story rendering every `variant` value stacked, so the three layouts can be compared (justified: the difference between the layouts is structural)
 - Sizes — composite story rendering every `size` value stacked, so the three steps of the headline scale can be compared
 - WithActions — an `actions` row under the description (justified: the slot owns its own responsive layout, which no prop-driven story shows)
 - DescriptionWidths — composite story rendering the horizontal layout with every `descriptionWidth` value stacked, so the two column spans can be compared

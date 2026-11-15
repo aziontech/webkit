@@ -6,7 +6,7 @@ import TextureMaterial from './texture-material.vue'
 
 const TESTID = 'marketing-texture-material'
 
-const KINDS = ['dots', 'grid', 'dither', 'pixelate', 'none'] as const
+const VARIANTS = ['dots', 'grid', 'dither', 'pixelate', 'none'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 const FADES = ['none', 'top', 'bottom', 'left', 'right', 'edges', 'vignette'] as const
 
@@ -16,7 +16,7 @@ describe('TextureMaterial', () => {
     const root = getByTestId(TESTID)
 
     expect(root).toBeInTheDocument()
-    expect(root).toHaveAttribute('data-kind', 'dots')
+    expect(root).toHaveAttribute('data-variant', 'dots')
     expect(root).toHaveAttribute('data-size', 'medium')
     expect(root).toHaveAttribute('data-fade', 'none')
   })
@@ -28,9 +28,9 @@ describe('TextureMaterial', () => {
     expect(getByTestId('custom-texture')).toBeInTheDocument()
   })
 
-  it.each(KINDS)('carries the %s texture on data-kind', (kind) => {
-    const { getByTestId } = render(TextureMaterial, { props: { kind } })
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+  it.each(VARIANTS)('carries the %s texture on data-variant', (variant) => {
+    const { getByTestId } = render(TextureMaterial, { props: { variant: variant } })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
   })
 
   it.each(SIZES)('carries the %s pitch on data-size', (size) => {
@@ -64,7 +64,7 @@ describe('TextureMaterial', () => {
   })
 
   it('builds the dither ramp from sixteen dispersed planes', () => {
-    const { getByTestId } = render(TextureMaterial, { props: { kind: 'dither' } })
+    const { getByTestId } = render(TextureMaterial, { props: { variant: 'dither' } })
     const planes = [...getByTestId(TESTID).children] as HTMLElement[]
 
     expect(planes).toHaveLength(16)
@@ -80,7 +80,7 @@ describe('TextureMaterial', () => {
   })
 
   it('draws two counter-travelling waves for the pixelate field', () => {
-    const { getByTestId } = render(TextureMaterial, { props: { kind: 'pixelate' } })
+    const { getByTestId } = render(TextureMaterial, { props: { variant: 'pixelate' } })
     const field = getByTestId(TESTID).firstElementChild as HTMLElement
     const waves = [...field.children] as HTMLElement[]
 
@@ -93,13 +93,13 @@ describe('TextureMaterial', () => {
     }
   })
 
-  it.each(['dots', 'grid', 'none'] as const)('paints %s with no child layers', (kind) => {
-    const { getByTestId } = render(TextureMaterial, { props: { kind } })
+  it.each(['dots', 'grid', 'none'] as const)('paints %s with no child layers', (variant) => {
+    const { getByTestId } = render(TextureMaterial, { props: { variant: variant } })
     expect(getByTestId(TESTID).children).toHaveLength(0)
   })
 
-  it.each(KINDS)('has no accessibility violations rendering %s', async (kind) => {
-    const { container } = render(TextureMaterial, { props: { kind } })
+  it.each(VARIANTS)('has no accessibility violations rendering %s', async (variant) => {
+    const { container } = render(TextureMaterial, { props: { variant: variant } })
     await expectNoA11yViolations(container)
   })
 })

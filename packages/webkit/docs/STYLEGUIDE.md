@@ -127,23 +127,23 @@ wrapped in `withDefaults`. Every public prop carries JSDoc. No `any`.**
 ```ts
 // ✅
 /** Visual variant. */
-export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
 
 interface Props {
   /** Visual variant. */
-  kind?: ButtonKind
+  variant?: ButtonVariant
   /** Disables interaction. */
   disabled?: boolean
   /** Leading icon name. */
   icon?: string
 }
-const props = withDefaults(defineProps<Props>(), { kind: 'primary', disabled: false, icon: '' })
+const props = withDefaults(defineProps<Props>(), { variant: 'primary', disabled: false, icon: '' })
 
 // ❌
-defineProps({ kind: { type: String }, isDisabled: Boolean })   // runtime form, is- prefix
+defineProps({ variant: { type: String }, isDisabled: Boolean })   // runtime form, is- prefix
 ```
 
-- **Variant unions are named, exported types** (`ButtonKind`) so consumers and examples can
+- **Variant unions are named, exported types** (`ButtonVariant`) so consumers and examples can
   reference them.
 - **Optional text props default to `''`**, never `undefined` (stable bindings, no
   `"undefined"` rendering). `undefined` is only for props where absence ≠ empty
@@ -165,21 +165,21 @@ defaults) · type-coverage ≥ 95%.
 
 **The same concept ships under the same prop name, type, and default on every component.**
 
-| Concept                              | Canonical                                                      | Banned aliases                                              |
-| ------------------------------------ | -------------------------------------------------------------- | ----------------------------------------------------------- |
-| Visual/structural variant            | `kind` (string union)                                          | `variant`, `appearance`, `intent`, `cardStyle`, `mediaKind` |
-| Severity / status color              | `severity`                                                     | `status`                                                    |
-| Size                                 | `size: 'small' \| 'medium' \| 'large'` (this order; subset ok) | `xs/sm/md/lg/xl`, reordered unions                          |
-| Light-dismiss (outside-click / Esc)  | `dismissible`                                                  | `dismissable`, `closeable`                                  |
-| Explicit close affordance (X button) | `closable`                                                     | — (distinct concept)                                        |
-| Primary heading text                 | `title`                                                        | `heading`, `header`                                         |
-| Primary two-way value                | `modelValue` (default `v-model`)                               | `value`, `isToggled`                                        |
-| Overlay open state                   | `open` (+ `v-model:open`), seed `defaultOpen`                  | `visible`, `show`, `opened`                                 |
-| Disabled / Loading                   | `disabled` / `loading`, default `false`                        | `isDisabled`, `isLoading`, `enabled`                        |
-| Icon                                 | `icon: string`                                                 | `iconName`, `leadingIcon`                                   |
-| Accessible name                      | `ariaLabel` (+ `xAriaLabel` for sub-parts)                     | `aria-label` as a prop                                      |
-| Booleans (any)                       | positive polarity — `visible`, `open`, `active`, `expanded`    | `hidden`, `closed`, `inactive`, `collapsed`                 |
-| Value change                         | `v-model` / `update:<x>` only                                  | a redundant `<x>-change` echo alongside `update:<x>`        |
+| Concept                              | Canonical                                                      | Banned aliases                                           |
+| ------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------- |
+| Visual variant (the look)            | `variant` (string union); `type` for a sort of part            | `kind`, `appearance`, `intent`, `cardStyle`, `mediaKind` |
+| Severity / status color              | `severity`                                                     | `status`                                                 |
+| Size                                 | `size: 'small' \| 'medium' \| 'large'` (this order; subset ok) | `xs/sm/md/lg/xl`, reordered unions                       |
+| Light-dismiss (outside-click / Esc)  | `dismissible`                                                  | `dismissable`, `closeable`                               |
+| Explicit close affordance (X button) | `closable`                                                     | — (distinct concept)                                     |
+| Primary heading text                 | `title`                                                        | `heading`, `header`                                      |
+| Primary two-way value                | `modelValue` (default `v-model`)                               | `value`, `isToggled`                                     |
+| Overlay open state                   | `open` (+ `v-model:open`), seed `defaultOpen`                  | `visible`, `show`, `opened`                              |
+| Disabled / Loading                   | `disabled` / `loading`, default `false`                        | `isDisabled`, `isLoading`, `enabled`                     |
+| Icon                                 | `icon: string`                                                 | `iconName`, `leadingIcon`                                |
+| Accessible name                      | `ariaLabel` (+ `xAriaLabel` for sub-parts)                     | `aria-label` as a prop                                   |
+| Booleans (any)                       | positive polarity — `visible`, `open`, `active`, `expanded`    | `hidden`, `closed`, `inactive`, `collapsed`              |
+| Value change                         | `v-model` / `update:<x>` only                                  | a redundant `<x>-change` echo alongside `update:<x>`     |
 
 `size` house default: **actions/links default to `large`; everything else `medium`.**
 
@@ -224,7 +224,7 @@ commit + CI) · `validate-authoring` (write-time) · the DS CI ratchet.
 ## 7. Events (emits)
 
 **Events are declared with the type-only `defineEmits` form, named in kebab-case, and
-split into two kinds with two payload shapes.**
+split into two variants with two payload shapes.**
 
 <!-- prettier-ignore -->
 ```ts
@@ -345,12 +345,12 @@ blocks, no component-local CSS.**
 ```vue
 <!-- ✅ one class attribute; data-* switches variants -->
 <button
-  :data-kind="kind"
+  :data-variant="variant"
   :data-disabled="disabled || null"
   class="inline-flex items-center rounded-(--shape-button)
     transition-colors duration-150 ease-out motion-reduce:transition-none
-    data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
-    data-[kind=secondary]:bg-(--secondary)
+    data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+    data-[variant=secondary]:bg-(--secondary)
     data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed"
 >
   <slot />
@@ -360,8 +360,8 @@ blocks, no component-local CSS.**
 <!-- prettier-ignore -->
 ```ts
 // ❌ the whole class-map pattern is banned
-const kindClasses = { primary: 'bg-(--primary)' }
-const rootClasses = computed(() => [shared, kindClasses[props.kind]])
+const variantClasses = { primary: 'bg-(--primary)' }
+const rootClasses = computed(() => [shared, variantClasses[props.variant]])
 ```
 
 - Conditional styling = a `data-*` attribute + a Tailwind variant — never a `:class`
@@ -488,7 +488,7 @@ applies from 6.0 on: 6.0 itself was the clean break that removed every older nam
 
 <!-- prettier-ignore -->
 ```ts
-/** @deprecated since 4.2 — use `kind` instead. Removed in 5.0. */
+/** @deprecated since 4.2 — use `variant` instead. Removed in 5.0. */
 variant?: string
 ```
 

@@ -34,6 +34,6 @@ export {
 }
 export type { FieldProps } from './field.vue'
 export type { FieldLabelProps } from './field-label/field-label.vue'
-export type { FieldLegendKind } from './field-legend/field-legend.vue'
+export type { FieldLegendType } from './field-legend/field-legend.vue'
 export type { FieldLegendProps } from './field-legend/field-legend.vue'
 export type { FieldOrientation } from './injection-key'

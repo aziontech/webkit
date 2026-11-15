@@ -12,7 +12,7 @@
     <template #actions>
       <Button
         label="Add payment method"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-plus"
       />

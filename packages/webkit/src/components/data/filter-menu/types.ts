@@ -9,7 +9,7 @@ export interface FilterMenuOption {
 }
 
 /** How a field is picked: several values, one value, or a date period. */
-export type FilterMenuFieldKind = 'multiple' | 'single' | 'date'
+export type FilterMenuFieldType = 'multiple' | 'single' | 'date'
 
 /** One field the menu lists. */
 export interface FilterMenuField {
@@ -18,7 +18,7 @@ export interface FilterMenuField {
   /** Name of the field in the menu and in its chip. */
   label: string
   /** Defaults to `multi`. */
-  kind?: FilterMenuFieldKind
+  type?: FilterMenuFieldType
   /** Values offered; a date field without options offers the built-in periods. */
   options?: FilterMenuOption[]
 }

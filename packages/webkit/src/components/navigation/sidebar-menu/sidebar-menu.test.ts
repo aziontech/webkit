@@ -48,7 +48,7 @@ const composed = (
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Azion platform">
           <SidebarMenuSub :default-open="inlineOpen">
-            <SidebarMenuSubTrigger label="Getting started" kind="inline" />
+            <SidebarMenuSubTrigger label="Getting started" type="inline" />
             <SidebarMenuSubContent>
               <SidebarMenuItem label="Installation" href="/docs/install" />
             </SidebarMenuSubContent>
@@ -56,7 +56,7 @@ const composed = (
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              kind="drill"
+              type="drill"
               href="/settings"
               :disabled="disabled"
             />
@@ -85,7 +85,7 @@ const GROUPS: SidebarMenuGroupNode[] = [
       {
         id: 'settings',
         label: 'Settings',
-        kind: 'drill',
+        type: 'drill',
         href: '/settings',
         children: [{ id: 'general', label: 'General', href: '/settings/general' }]
       },
@@ -116,7 +116,7 @@ const NESTED: SidebarMenuGroupNode[] = [
       {
         id: 'settings',
         label: 'Settings',
-        kind: 'drill',
+        type: 'drill',
         href: '/settings',
         groups: [
           {
@@ -124,7 +124,7 @@ const NESTED: SidebarMenuGroupNode[] = [
               {
                 id: 'security',
                 label: 'Security',
-                kind: 'drill',
+                type: 'drill',
                 href: '/settings/security',
                 children: [{ id: 'tokens', label: 'Tokens', href: '/settings/tokens' }]
               }
@@ -150,12 +150,12 @@ const nested = (backProps = '') =>
 const arrow = (view: ReturnType<typeof render>, label: string) =>
   view.getByRole('button', { name: `Open ${label} menu` })
 
-const arrowOfKind = (view: ReturnType<typeof render>, kind: string) => {
+const arrowOfKind = (view: ReturnType<typeof render>, type: string) => {
   const row = view
     .getAllByTestId('navigation-sidebar-menu-sub-trigger')
-    .find((el) => el.getAttribute('data-kind') === kind)
+    .find((el) => el.getAttribute('data-type') === type)
   const el = row?.querySelector('[data-testid="navigation-sidebar-menu-sub-trigger__arrow"]')
-  if (!(el instanceof globalThis.HTMLElement)) throw new Error(`no ${kind} arrow rendered`)
+  if (!(el instanceof globalThis.HTMLElement)) throw new Error(`no ${type} arrow rendered`)
   return el
 }
 
@@ -227,7 +227,7 @@ describe('SidebarMenu', () => {
       expect(view.getByRole('link', { name: 'End User' })).toBeTruthy()
       expect(view.getByRole('link', { name: 'Web Browser' })).toBeTruthy()
       expect(
-        view.getByTestId('navigation-sidebar-menu-sub-trigger').getAttribute('data-kind')
+        view.getByTestId('navigation-sidebar-menu-sub-trigger').getAttribute('data-type')
       ).toBe('drill')
     })
 
@@ -382,7 +382,7 @@ describe('SidebarMenu', () => {
                   id: 'settings',
                   label: 'Settings',
                   icon: 'ai ai-settings',
-                  kind: 'drill',
+                  type: 'drill',
                   children: [{ id: 'general', label: 'General', href: '/settings/general' }]
                 },
                 {
@@ -433,7 +433,7 @@ describe('SidebarMenu', () => {
       expect(
         trigger
           .closest('[data-testid="navigation-sidebar-menu-sub-trigger"]')
-          ?.getAttribute('data-kind')
+          ?.getAttribute('data-type')
       ).toBe('inline')
       expect(trigger.getAttribute('aria-expanded')).toBe('false')
 
@@ -448,7 +448,7 @@ describe('SidebarMenu', () => {
       await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
       const content = view.getByRole('list', { name: 'Getting started' })
       expect(trigger.getAttribute('aria-controls')).toBe(content.id)
-      expect(content.getAttribute('data-kind')).toBe('inline')
+      expect(content.getAttribute('data-type')).toBe('inline')
       expect(content.getAttribute('data-level')).toBe('0')
       expect(view.getByRole('link', { name: 'Installation' })).toBeTruthy()
     })
@@ -476,7 +476,7 @@ describe('SidebarMenu', () => {
               v-if="open.value === undefined"
               @update:open="(value) => open.events.push(value)"
             >
-              <SidebarMenuSubTrigger label="Getting started" kind="inline" />
+              <SidebarMenuSubTrigger label="Getting started" type="inline" />
               <SidebarMenuSubContent>
                 <SidebarMenuItem label="Installation" href="/docs/install" />
               </SidebarMenuSubContent>
@@ -486,7 +486,7 @@ describe('SidebarMenu', () => {
               v-model:open="open.value"
               @update:open="(value) => open.events.push(value)"
             >
-              <SidebarMenuSubTrigger label="Getting started" kind="inline" />
+              <SidebarMenuSubTrigger label="Getting started" type="inline" />
               <SidebarMenuSubContent>
                 <SidebarMenuItem label="Installation" href="/docs/install" />
               </SidebarMenuSubContent>
@@ -550,7 +550,7 @@ describe('SidebarMenu', () => {
       await waitFor(() => expect(document.activeElement).toBe(back))
 
       const level = view.getByRole('group', { name: 'Settings' })
-      expect(level.getAttribute('data-kind')).toBe('drill')
+      expect(level.getAttribute('data-type')).toBe('drill')
       expect(level.getAttribute('data-state')).toBe('open')
       expect(view.getByRole('link', { name: 'General' })).toBeTruthy()
 
@@ -815,7 +815,7 @@ describe('SidebarMenu', () => {
           <SidebarMenu aria-label="Docs">
             <SidebarMenuGroup>
               <SidebarMenuSub>
-                <SidebarMenuSubTrigger label="Guides" kind="inline" href="/guides" @click="onClick" />
+                <SidebarMenuSubTrigger label="Guides" type="inline" href="/guides" @click="onClick" />
                 <SidebarMenuSubContent><SidebarMenuItem label="Intro" /></SidebarMenuSubContent>
               </SidebarMenuSub>
             </SidebarMenuGroup>

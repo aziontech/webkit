@@ -11,11 +11,11 @@
   defineOptions({ name: 'FileDropzone', inheritAttrs: false })
 
   /** Placement of the drop target. */
-  export type FileDropzoneKind = 'inline' | 'overlay'
+  export type FileDropzoneVariant = 'inline' | 'overlay'
 
   interface Props {
     /** Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. */
-    kind?: FileDropzoneKind
+    variant?: FileDropzoneVariant
     /** Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). */
     title?: string
     /** Secondary line under the title, typically the accepted types and limits. Not rendered when empty. */
@@ -36,7 +36,7 @@
   export type FileDropzoneProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'inline',
+    variant: 'inline',
     title: '',
     description: '',
     accept: '',
@@ -55,7 +55,7 @@
   }>()
 
   defineSlots<{
-    /** Actions or extra content under the description, typically a Browse files button. Rendered only in the inline kind. */
+    /** Actions or extra content under the description, typically a Browse files button. Rendered only in the inline variant. */
     default(): unknown
   }>()
 
@@ -82,8 +82,8 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-file-dropzone'
   )
-  const isInline = computed(() => props.kind === 'inline')
-  const isOverlayLive = computed(() => props.kind === 'overlay' && !isDisabled.value)
+  const isInline = computed(() => props.variant === 'inline')
+  const isOverlayLive = computed(() => props.variant === 'overlay' && !isDisabled.value)
   const isActive = computed(() => !isDisabled.value && depth.value > 0)
   const labelIds = computed(() => [fieldLabelledBy.value, titleId].filter(Boolean).join(' '))
   const descriptionIds = computed(
@@ -93,7 +93,7 @@
   )
 
   watch(
-    () => [props.kind, isDisabled.value],
+    () => [props.variant, isDisabled.value],
     () => {
       depth.value = 0
     }
@@ -202,7 +202,7 @@
       v-show="isInline || isActive"
       v-bind="$attrs"
       :data-testid="testId"
-      :data-kind="kind"
+      :data-variant="variant"
       :data-state="isActive ? 'active' : 'idle'"
       :id="isInline ? controlId : undefined"
       :data-disabled="isDisabled || null"
@@ -213,14 +213,14 @@
       :aria-labelledby="isInline ? labelIds : undefined"
       :aria-describedby="isInline ? descriptionIds : undefined"
       :aria-hidden="isInline ? undefined : 'true'"
-      class="group flex flex-col rounded-(--shape-card) data-[kind=inline]:w-full data-[kind=inline]:border data-[kind=inline]:border-dashed data-[kind=inline]:border-(--border-strong) data-[kind=inline]:bg-(--bg-surface) data-[kind=inline]:p-(--spacing-lg) data-[kind=inline]:transition-[background-color,border-color] data-[kind=inline]:duration-fast-02 data-[kind=inline]:ease-productive-entrance motion-reduce:transition-none data-[kind=inline]:data-[state=active]:border-(--border-selected) data-[kind=inline]:data-[state=active]:bg-(--bg-selected) data-[kind=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[kind=inline]:data-[disabled]:border-(--border-default) data-[kind=inline]:data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed data-[kind=overlay]:absolute data-[kind=overlay]:inset-0 data-[kind=overlay]:border-2 data-[kind=overlay]:border-dashed data-[kind=overlay]:border-(--border-selected) data-[kind=overlay]:bg-(--bg-canvas) data-[kind=overlay]:data-[state=idle]:pointer-events-none"
+      class="group flex flex-col rounded-(--shape-card) data-[variant=inline]:w-full data-[variant=inline]:border data-[variant=inline]:border-dashed data-[variant=inline]:border-(--border-strong) data-[variant=inline]:bg-(--bg-surface) data-[variant=inline]:p-(--spacing-lg) data-[variant=inline]:transition-[background-color,border-color] data-[variant=inline]:duration-fast-02 data-[variant=inline]:ease-productive-entrance motion-reduce:transition-none data-[variant=inline]:data-[state=active]:border-(--border-selected) data-[variant=inline]:data-[state=active]:bg-(--bg-selected) data-[variant=inline]:data-[state=idle]:data-[invalid]:not-data-[disabled]:border-(--danger-border) data-[variant=inline]:data-[disabled]:border-(--border-default) data-[variant=inline]:data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed data-[variant=overlay]:absolute data-[variant=overlay]:inset-0 data-[variant=overlay]:border-2 data-[variant=overlay]:border-dashed data-[variant=overlay]:border-(--border-selected) data-[variant=overlay]:bg-(--bg-canvas) data-[variant=overlay]:data-[state=idle]:pointer-events-none"
       @dragenter="onRootDragenter"
       @dragleave="onRootDragleave"
       @dragover="onRootDragover"
       @drop="onRootDrop"
     >
       <div
-        class="flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center group-data-[kind=overlay]:sticky group-data-[kind=overlay]:top-0 group-data-[kind=overlay]:h-dvh group-data-[kind=overlay]:max-h-full group-data-[kind=overlay]:p-(--spacing-lg)"
+        class="flex w-full flex-col items-center justify-center gap-(--spacing-md) text-center group-data-[variant=overlay]:sticky group-data-[variant=overlay]:top-0 group-data-[variant=overlay]:h-dvh group-data-[variant=overlay]:max-h-full group-data-[variant=overlay]:p-(--spacing-lg)"
       >
         <span
           class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised)"

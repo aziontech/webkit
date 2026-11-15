@@ -133,7 +133,7 @@
           :height="160"
         >
           <Chart.Grid />
-          <Chart.Axis kind="y" />
+          <Chart.Axis type="y" />
           <Chart.Line />
           <Chart.Tooltip />
         </Chart>

@@ -15,7 +15,7 @@
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
@@ -51,7 +51,7 @@
   type Variable = VariableSeed & { type: string }
   type VariableDraft = { key: string; value: string; secret: boolean; scope: ScopeRef[] }
   type Entry = { id: number; key: string; value: string; secret: boolean; visible: boolean }
-  type EntryProblem = { kind: HelperTextKind; message: string }
+  type EntryProblem = { type: HelperTextType; message: string }
   type Pair = { key: string; value: string }
   type ScopeOption = { value: string; label: string }
   type ScopeState = {
@@ -71,7 +71,7 @@
     { accessorKey: 'value', header: 'Value', grow: 2 },
     { accessorKey: 'scope', header: 'Scope', minWidth: 80 },
     { accessorKey: 'lastModified', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
   const seed: VariableSeed[] = [
     {
@@ -328,13 +328,13 @@
   const keyError = (entry: Entry): EntryProblem | null => {
     if (!submitted.value || isEmptyEntry(entry)) return null
     const key = entry.key.trim()
-    if (!key) return { kind: 'required', message: 'Key is required.' }
+    if (!key) return { type: 'required', message: 'Key is required.' }
     if (!/^[A-Z0-9_]+$/.test(key))
-      return { kind: 'invalid', message: 'Use only uppercase letters, numbers, and underscores.' }
+      return { type: 'invalid', message: 'Use only uppercase letters, numbers, and underscores.' }
     if ((keyCounts.value.get(key) ?? 0) > 1)
-      return { kind: 'invalid', message: `Duplicated key: ${duplicatedKeys.value.join(', ')}` }
+      return { type: 'invalid', message: `Duplicated key: ${duplicatedKeys.value.join(', ')}` }
     if (existingKeys.value.includes(key))
-      return { kind: 'invalid', message: `${key} already exists in this list.` }
+      return { type: 'invalid', message: `${key} already exists in this list.` }
     return null
   }
   const keepsSecret = (entry: Entry) =>
@@ -342,7 +342,7 @@
   const valueError = (entry: Entry): EntryProblem | null => {
     if (!submitted.value || isEmptyEntry(entry) || entry.value.trim() || keepsSecret(entry))
       return null
-    return { kind: 'required', message: 'Value is required.' }
+    return { type: 'required', message: 'Value is required.' }
   }
 
   const noVariables = computed(() => filledEntries.value.length === 0)
@@ -638,7 +638,7 @@
         <Button
           label="Documentation"
           icon="ai ai-book"
-          kind="outlined"
+          variant="outline"
           href="https://example.com/docs/variables"
           target="_blank"
           size="medium"
@@ -646,7 +646,7 @@
         <Button
           label="Create Variable"
           icon="ai ai-plus"
-          kind="primary"
+          variant="primary"
           size="large"
           @click="openCreate"
         />
@@ -670,7 +670,7 @@
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="loading"
                 aria-label="Refresh"
@@ -683,7 +683,7 @@
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -715,14 +715,14 @@
                     <Button
                       label="Create Variable"
                       icon="ai ai-plus"
-                      kind="secondary"
+                      variant="secondary"
                       size="small"
                       @click="openCreate"
                     />
                     <Button
                       label="Documentation"
                       icon="ai ai-book"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       href="https://example.com/docs/variables"
                       target="_blank"
@@ -784,7 +784,7 @@
                         :alt="row.lastEditor"
                         :label="row.lastEditor"
                         size="small"
-                        kind="square"
+                        variant="square"
                       />
                     </Tooltip>
                     <span class="truncate text-body-sm text-(--text-muted)">{{ value }}</span>
@@ -864,7 +864,7 @@
                     <template #actions>
                       <Button
                         label="Clear filters"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         @click="clearFilters"
                       />
@@ -928,7 +928,7 @@
                     <Button
                       label="Upload"
                       icon="ai ai-upload"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       @click="fileInputEl?.click()"
                     />
@@ -965,8 +965,8 @@
                           <Field>
                             <InputGroupRoot
                               size="large"
-                              :required="keyError(entries[index])?.kind === 'required'"
-                              :invalid="keyError(entries[index])?.kind === 'invalid'"
+                              :required="keyError(entries[index])?.type === 'required'"
+                              :invalid="keyError(entries[index])?.type === 'invalid'"
                             >
                               <InputGroupAddon>
                                 <span class="inline-block w-20">
@@ -996,7 +996,7 @@
                               >
                                 <IconButton
                                   icon="ai ai-trash"
-                                  kind="outlined"
+                                  variant="outline"
                                   size="large"
                                   :aria-label="removeLabel"
                                   @click="remove"
@@ -1043,7 +1043,7 @@
                               >
                                 <IconButton
                                   :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"
-                                  kind="outlined"
+                                  variant="outline"
                                   size="large"
                                   :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
                                   :aria-pressed="entries[index].visible"
@@ -1075,14 +1075,14 @@
                           v-if="keyError(entries[index])"
                           key="key-error"
                           :id="messageId(entries[index], 'key')"
-                          :kind="keyError(entries[index])?.kind"
+                          :type="keyError(entries[index])?.type"
                           :label="keyError(entries[index])?.message"
                         />
                         <HelperText
                           v-if="valueError(entries[index])"
                           key="value-error"
                           :id="messageId(entries[index], 'value')"
-                          :kind="valueError(entries[index])?.kind"
+                          :type="valueError(entries[index])?.type"
                           :label="valueError(entries[index])?.message"
                         />
                       </template>
@@ -1110,7 +1110,7 @@
                     <HelperText
                       v-if="jsonError"
                       :id="formId + '-json-message'"
-                      kind="invalid"
+                      type="invalid"
                       :label="jsonError"
                     />
                   </template>
@@ -1118,7 +1118,7 @@
                   <HelperText :label="SECRET_HINT" />
                   <HelperText
                     v-if="submitted && noVariables"
-                    kind="required"
+                    type="required"
                     label="Add at least one variable."
                   />
                 </div>
@@ -1204,7 +1204,7 @@
                     <HelperText
                       v-if="scopeError(scope)"
                       :id="formId + '-scope-' + scope.type"
-                      kind="required"
+                      type="required"
                       label="Select at least one resource for this scope."
                     />
                   </div>
@@ -1218,7 +1218,7 @@
               <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="submitting"
                 type="submit"
@@ -1260,13 +1260,13 @@
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="close"
         />
         <Button
           label="Delete variable"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           @click="confirmDelete"

@@ -124,12 +124,12 @@ test('exportedTypes reads declarations and type-only lists, and skips value list
   const names = exportedTypes(
     [
       'export interface TableColumn { id?: string }',
-      "  export type SelectKind = 'a' | 'b'",
+      "  export type SelectVariant = 'a' | 'b'",
       "export type { SelectValue, Inner as Outer } from './injection-key'",
       "export { SelectOption } from './select-option.vue'"
     ].join('\n')
   )
-  assert.deepEqual([...names].sort(), ['Outer', 'SelectKind', 'SelectValue', 'TableColumn'])
+  assert.deepEqual([...names].sort(), ['Outer', 'SelectValue', 'SelectVariant', 'TableColumn'])
 })
 
 test('every type a compound root exports is re-exported by its compound index.ts', () => {

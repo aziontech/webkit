@@ -67,7 +67,7 @@ validated against [`.specs/_schema.json`](../../.specs/_schema.json). It declare
   composition components).
 - **Props / Events / Slots / Sub-components tables** — the complete public API. Names must
   come from the [prop-vocabulary](../rules/prop-vocabulary.md) dictionary
-  (`kind`, not `variant`; `dismissible` for light-dismiss; `(event, item?)` payloads per
+  (`variant`, not `kind`; `type` for a sort of part; `dismissible` for light-dismiss; `(event, item?)` payloads per
   [event-payloads](../rules/event-payloads.md)).
 - **Tokens & Motion tables** — every visual decision mapped to a theme token (list_tokens in the webkit MCP) or a
   catalogued `animate-*` utility (each motion class paired with `motion-reduce:`).
@@ -470,7 +470,7 @@ Construction patterns for **any** Vue component, anywhere. These are the future
 
 | Standard                                               | One line                                                                                   |
 | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| [prop-vocabulary](../rules/prop-vocabulary.md)         | one canonical name/type/default per concept (`kind`, `small/medium/large`, `dismissible`…) |
+| [prop-vocabulary](../rules/prop-vocabulary.md)         | one canonical name/type/default per concept (`variant`, `small/medium/large`, `dismissible`…) |
 | [props](../rules/props.md)                             | typed `interface Props` + `withDefaults` + JSDoc; no negative/prefixed booleans            |
 | [v-model](../rules/v-model.md)                         | two-way state via `defineModel`, never manual prop+emit                                    |
 | [emits](../rules/emits.md)                             | typed `defineEmits`; no echo events duplicating `update:*`                                 |

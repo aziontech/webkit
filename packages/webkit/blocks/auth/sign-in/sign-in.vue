@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
-  import Button, { type ButtonKind } from '@aziontech/webkit/button'
+  import Button, { type ButtonVariant } from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -120,12 +120,12 @@
     return { title: 'Welcome back', description: 'Sign in to your account.' }
   })
 
-  const primaryAction = computed<{ label: string; kind: ButtonKind }>(() => {
-    if (step.value === 'password') return { label: 'Sign in', kind: 'primary' }
-    if (step.value === 'reset') return { label: 'Send reset link', kind: 'primary' }
-    if (step.value === 'new-password') return { label: 'Reset password', kind: 'primary' }
-    if (step.value === 'sent') return { label: 'Return to sign in', kind: 'secondary' }
-    return { label: 'Continue with email', kind: 'primary' }
+  const primaryAction = computed<{ label: string; variant: ButtonVariant }>(() => {
+    if (step.value === 'password') return { label: 'Sign in', variant: 'primary' }
+    if (step.value === 'reset') return { label: 'Send reset link', variant: 'primary' }
+    if (step.value === 'new-password') return { label: 'Reset password', variant: 'primary' }
+    if (step.value === 'sent') return { label: 'Return to sign in', variant: 'secondary' }
+    return { label: 'Continue with email', variant: 'primary' }
   })
 
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
@@ -237,7 +237,7 @@
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -246,7 +246,7 @@
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="/docs"
@@ -299,7 +299,7 @@
                         >
                           <Button
                             label="Retry"
-                            kind="secondary"
+                            variant="secondary"
                             size="small"
                             :loading="verifying"
                             @click="signIn"
@@ -320,7 +320,7 @@
                             <Button
                               type="button"
                               label="Continue with Google"
-                              kind="outlined"
+                              variant="outline"
                               size="large"
                               icon="ai-color ai-google"
                               class="w-full"
@@ -328,7 +328,7 @@
                             <Button
                               type="button"
                               label="Continue with GitHub"
-                              kind="outlined"
+                              variant="outline"
                               size="large"
                               icon="ai ai-github"
                               class="w-full"
@@ -358,7 +358,7 @@
                             <HelperText
                               v-if="errors.email"
                               id="login-email-error"
-                              :kind="email.trim() ? 'invalid' : 'required'"
+                              :type="email.trim() ? 'invalid' : 'required'"
                               :label="errors.email"
                             />
                           </Field>
@@ -373,7 +373,7 @@
                               <IconButton
                                 icon="ai ai-chevron-left"
                                 aria-label="Change email"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="backToEmail"
                               />
@@ -406,7 +406,7 @@
                             <Button
                               type="button"
                               label="Forgot your password?"
-                              kind="link"
+                              variant="link"
                               @click="forgotPassword"
                             />
                           </div>
@@ -421,7 +421,7 @@
                               <IconButton
                                 icon="ai ai-chevron-left"
                                 aria-label="Back to sign in"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="backToSignIn"
                               />
@@ -452,7 +452,7 @@
                             <HelperText
                               v-if="errors.resetEmail"
                               id="reset-email-error"
-                              :kind="resetEmail.trim() ? 'invalid' : 'required'"
+                              :type="resetEmail.trim() ? 'invalid' : 'required'"
                               :label="errors.resetEmail"
                             />
                           </Field>
@@ -511,7 +511,7 @@
                             <Button
                               type="button"
                               label="Resend email"
-                              kind="link"
+                              variant="link"
                               @click="resendEmail"
                             />
                           </div>
@@ -520,7 +520,7 @@
                             <Button
                               type="button"
                               label="Set a new password"
-                              kind="link"
+                              variant="link"
                               @click="openResetLink"
                             />
                           </div>
@@ -530,7 +530,7 @@
                       <div class="relative">
                         <Button
                           :label="primaryAction.label"
-                          :kind="primaryAction.kind"
+                          :variant="primaryAction.variant"
                           size="large"
                           class="w-full"
                           type="submit"

@@ -6,7 +6,7 @@
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
     SectionTitleDescriptionWidth,
-    SectionTitleKind
+    SectionTitleVariant
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
@@ -27,7 +27,7 @@
     /** Overline above the title. */
     eyebrow?: string
     /** Alignment of the section title over the card row. */
-    titleKind?: SectionTitleKind
+    titleVariant?: SectionTitleVariant
     /** Headline of the band, rendered as its `h2`; the band renders nothing when empty. */
     title?: string
     /** Paragraph beside the headline. */
@@ -47,7 +47,7 @@
   const props = withDefaults(defineProps<Props>(), {
     anchor: '',
     eyebrow: '',
-    titleKind: 'split',
+    titleVariant: 'split',
     title: '',
     description: '',
     descriptionWidth: 'narrow',
@@ -106,7 +106,7 @@
       >
         <template #header>
           <SectionTitle
-            :kind="titleKind"
+            :variant="titleVariant"
             :eyebrow="eyebrow"
             :title="title"
             :description="description"
@@ -141,7 +141,7 @@
                 class="relative row-span-3 grid min-w-0 snap-start grid-rows-subgrid gap-y-(--spacing-sm) overflow-hidden border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) not-last:border-e lg:p-(--spacing-lg)"
               >
                 <TextureMaterial
-                  kind="pixelate"
+                  variant="pixelate"
                   size="small"
                 />
                 <div

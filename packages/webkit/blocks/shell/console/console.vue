@@ -131,7 +131,7 @@
           id: 'settings',
           label: 'Settings',
           icon: 'ai ai-settings',
-          kind: 'drill',
+          type: 'drill',
           groups: [
             {
               label: 'Settings',
@@ -204,7 +204,7 @@
         >
           <IconButton
             icon="ai ai-circle-plus"
-            kind="primary"
+            variant="primary"
             size="medium"
             aria-label="Create"
           />
@@ -215,7 +215,7 @@
         >
           <IconButton
             icon="ai ai-ask-azion"
-            kind="outlined"
+            variant="outline"
             size="medium"
             aria-label="Agent"
           />
@@ -224,7 +224,7 @@
       <template v-else>
         <Button
           label="Create"
-          kind="primary"
+          variant="primary"
           size="medium"
           icon="ai ai-circle-plus"
         />
@@ -350,7 +350,7 @@
         <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
           <Button
             label="Upgrade to Pro"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             class="w-full"
           />
@@ -374,7 +374,7 @@
             <Button
               label="Documentation"
               icon="ai ai-book"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="https://www.azion.com/en/documentation/"
               target="_blank"
@@ -382,7 +382,7 @@
             <Button
               label="Create Application"
               icon="ai ai-plus"
-              kind="outlined"
+              variant="outline"
               size="medium"
             />
           </template>

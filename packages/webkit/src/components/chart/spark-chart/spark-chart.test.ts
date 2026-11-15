@@ -21,12 +21,12 @@ describe('SparkChart', () => {
 
   it('defaults to an area at medium size', () => {
     const root = mount().getByTestId('chart-spark-chart')
-    expect(root.getAttribute('data-kind')).toBe('area')
+    expect(root.getAttribute('data-type')).toBe('area')
     expect(root.getAttribute('data-size')).toBe('medium')
   })
 
-  it.each(['area', 'line', 'bar'] as const)('maps kind %s to data-kind', (kind) => {
-    expect(mount({ kind }).getByTestId('chart-spark-chart').getAttribute('data-kind')).toBe(kind)
+  it.each(['area', 'line', 'bar'] as const)('maps type %s to data-type', (type) => {
+    expect(mount({ type }).getByTestId('chart-spark-chart').getAttribute('data-type')).toBe(type)
   })
 
   it.each(['small', 'medium', 'large'] as const)('maps size %s to data-size', (size) => {
@@ -34,7 +34,7 @@ describe('SparkChart', () => {
   })
 
   it('draws a line as one unfilled stroked path in the chosen hue', () => {
-    const marks = paths(mount({ kind: 'line', color: 3 }).getByTestId('chart-spark-chart'))
+    const marks = paths(mount({ type: 'line', color: 3 }).getByTestId('chart-spark-chart'))
     expect(marks).toHaveLength(1)
     const [line] = marks
     expect(line?.getAttribute('d')).toMatch(/^M[\d.,-]+L/)
@@ -43,7 +43,7 @@ describe('SparkChart', () => {
   })
 
   it('draws an area as a gradient fill plus an edge', () => {
-    const root = mount({ kind: 'area', color: 'success' }).getByTestId('chart-spark-chart')
+    const root = mount({ type: 'area', color: 'success' }).getByTestId('chart-spark-chart')
     const marks = paths(root)
     expect(marks).toHaveLength(2)
     const [fill, edge] = marks
@@ -56,31 +56,31 @@ describe('SparkChart', () => {
   })
 
   it('draws one bar per finite value', () => {
-    const marks = paths(mount({ kind: 'bar' }).getByTestId('chart-spark-chart'))
+    const marks = paths(mount({ type: 'bar' }).getByTestId('chart-spark-chart'))
     expect(marks).toHaveLength(values.length)
     expect(marks.every((bar) => bar.getAttribute('fill') === 'var(--chart-series-1)')).toBe(true)
   })
 
   it('leaves no bar where a value is null', () => {
     const bars = paths(
-      mount({ kind: 'bar', values: [4, 6, null, 8, 5] }).getByTestId('chart-spark-chart')
+      mount({ type: 'bar', values: [4, 6, null, 8, 5] }).getByTestId('chart-spark-chart')
     )
     expect(bars).toHaveLength(4)
   })
 
   it('breaks the line where a value is null', () => {
     const marks = paths(
-      mount({ kind: 'line', values: [4, 6, null, 8, 5] }).getByTestId('chart-spark-chart')
+      mount({ type: 'line', values: [4, 6, null, 8, 5] }).getByTestId('chart-spark-chart')
     )
     expect(marks).toHaveLength(1)
     expect(marks[0]?.getAttribute('d')?.match(/M/g)).toHaveLength(2)
   })
 
-  it.each(['area', 'line', 'bar'] as const)('renders no %s mark without a finite value', (kind) => {
-    const empty = mount({ kind, values: [] })
+  it.each(['area', 'line', 'bar'] as const)('renders no %s mark without a finite value', (type) => {
+    const empty = mount({ type, values: [] })
     expect(paths(empty.getByTestId('chart-spark-chart'))).toHaveLength(0)
     empty.unmount()
-    const nulls = mount({ kind, values: [null, null] })
+    const nulls = mount({ type, values: [null, null] })
     expect(paths(nulls.getByTestId('chart-spark-chart'))).toHaveLength(0)
   })
 
@@ -101,7 +101,7 @@ describe('SparkChart', () => {
     const decorative = mount()
     await expectNoA11yViolations(decorative.container)
     decorative.unmount()
-    const labelled = mount({ kind: 'bar', ariaLabel: 'Requests over the last hour' })
+    const labelled = mount({ type: 'bar', ariaLabel: 'Requests over the last hour' })
     await expectNoA11yViolations(labelled.container)
   })
 })

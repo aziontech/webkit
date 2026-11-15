@@ -104,7 +104,7 @@ Do not:
 - open an external resource in the same tab, or open an in-app route in a new tab;
 - put the mark on a link that stays in the app's tab, or on an action that goes nowhere — a `Link`
   for an in-app route leaves `icon` empty and keeps the same tab;
-- use a `Button` (any `kind`, `link` included) for a link — those are actions, not destinations.
+- use a `Button` (any `variant`, `link` included) for a link — those are actions, not destinations.
 
 ### 2. Long lists: count → search → list → Load more
 
@@ -127,7 +127,7 @@ The anatomy, top to bottom, the same in all three:
    threshold (more than 7 items).
 3. **List** — scrolls inside the popover (`max-h-(--container-xs) overflow-auto
 overscroll-contain`). Each entry truncates; an entry that is an external resource follows rule 1.
-4. **Load more** — a full-width `Button kind="transparent" size="small"` in a bordered footer, labelled
+4. **Load more** — a full-width `Button variant="ghost" size="small"` in a bordered footer, labelled
    with the count it adds (`Load 10 more`), present only while items remain. While it loads, the
    button shows `loading` and `Skeleton` rows hold the place of the incoming batch.
 5. **No match** — a one-line muted message quoting the query: `No domain matches "api"`. In a
@@ -160,7 +160,7 @@ Behavior:
       <!-- visible entries, Skeleton rows while loading, no-match line -->
     </div>
     <div v-if="remaining" class="border-t border-(--border-default) p-(--spacing-2xs)">
-      <Button :label="`Load ${nextBatch} more`" kind="transparent" size="small" :loading="loading" class="w-full" @click.stop="loadMore" />
+      <Button :label="`Load ${nextBatch} more`" variant="ghost" size="small" :loading="loading" class="w-full" @click.stop="loadMore" />
     </div>
     <span class="sr-only" role="status">{{ loading ? `Loading ${nextBatch} more domains` : summary }}</span>
   </Popover.Content>

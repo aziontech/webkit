@@ -12,7 +12,7 @@
     />
     <Button
       label="Send"
-      kind="primary"
+      variant="primary"
     />
   </InputGroup>
 </template>

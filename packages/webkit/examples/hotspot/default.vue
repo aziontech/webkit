@@ -42,14 +42,14 @@
       <Hotspot hotspot-id="preview">
         <Button
           label="Preview"
-          kind="outlined"
+          variant="outline"
           size="medium"
         />
       </Hotspot>
       <Hotspot hotspot-id="deploy">
         <Button
           label="Deploy"
-          kind="primary"
+          variant="primary"
           size="medium"
         />
       </Hotspot>

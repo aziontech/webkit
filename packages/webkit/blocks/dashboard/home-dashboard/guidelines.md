@@ -46,8 +46,8 @@ belongs on a dashboard.
 ### D. Agent onboarding — `Card`, `Item`, `Logo` (optional)
 
 A whole-card link (`Item` with `href` to the agent setup page): the agent marks, `Set up your coding agent` and one sentence. Each mark is a
-decorative `Logo` at `size="small"` in a bordered tile; a mono mark takes `kind="current"` and the
-tile's text colour, a coloured one `kind="color"`. Its dismiss `IconButton` sits outside the button
+decorative `Logo` at `size="small"` in a bordered tile; a mono mark takes `variant="current"` and the
+tile's text colour, a coloured one `variant="color"`. Its dismiss `IconButton` sits outside the button
 so the two controls never nest.
 
 ### E. Resource rows — `Item`, `Link`, `EmptyState` (required)

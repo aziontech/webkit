@@ -103,7 +103,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="frame.review ? 'y' : 'bottom'"
     class="[--mockup-fade-edge:12%] [--mockup-fade-start:88%]"
@@ -174,7 +174,7 @@
       >
         <Button
           label="Discard Changes"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <span

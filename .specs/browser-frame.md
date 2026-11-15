@@ -3,10 +3,10 @@ name: browser-frame
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-15
-checksum: 6fbdddf131ee87e057d595a13727dc4360e345e329f0a09d072ce8549403923a
+checksum: 418b20db58801cb9cbb2879fbd131c1bbba9c2bfb933cdd2b895ff8e4e2c7f30
 ---
 
 # BrowserFrame — Component Spec
@@ -119,7 +119,7 @@ The frame is static apart from its resize handles.
 - **Size readout.** While any handle is dragged or focused, the chrome shows the viewport size (`768 × 1024`) at its trailing end; it is hidden otherwise.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
-- **Copy.** The address bar's trailing end composes the package's `CopyButton` (`kind="transparent"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
+- **Copy.** The address bar's trailing end composes the package's `CopyButton` (`variant="ghost"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
 - **Test ids.** Root fallback `content-browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
 - **Composable.** The document mirroring and teleport target live in a co-located lifecycle composable, `composables/use-frame-document.ts`, that disconnects every observer on scope dispose.
 
@@ -190,10 +190,10 @@ Resizing itself is not animated — the size follows the pointer or key press im
 ## Examples
 
 - Default — a composed screen of real components filling the container width at the default height, with an address.
-- Breakpoints — composite story rendering the same composed screen at `375 × 812`, `768 × 1024` and `1280 × 800`, each pinned with `width` and `height`. Justified addition: showing device sizes is the component's purpose, and there is no `kind`/`size` axis that would otherwise demonstrate it.
+- Breakpoints — composite story rendering the same composed screen at `375 × 812`, `768 × 1024` and `1280 × 800`, each pinned with `width` and `height`. Justified addition: showing device sizes is the component's purpose, and there is no `variant`/`size` axis that would otherwise demonstrate it.
 - LongAddress — a single frame whose `address` is a long URL in a narrow container. Justified addition: middle truncation is the chrome's only behavior and nothing else shows it.
 
-<!-- Types/Sizes omitted: BrowserFrame has no `kind` or `size` axis. Loading/Disabled omitted: it declares neither prop. -->
+<!-- Types/Sizes omitted: BrowserFrame has no `variant` or `size` axis. Loading/Disabled omitted: it declares neither prop. -->
 
 ## Constraints — DO NOT
 

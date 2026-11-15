@@ -54,13 +54,13 @@
       <ContextMenu.Item
         value="hidden"
         label="Show hidden files"
-        kind="checkbox"
+        type="checkbox"
         :selected="view.hidden"
       />
       <ContextMenu.Item
         value="grid"
         label="Grid layout"
-        kind="checkbox"
+        type="checkbox"
         :selected="view.grid"
       />
     </ContextMenu.Group>

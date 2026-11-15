@@ -158,12 +158,12 @@ describe('ButtonGroup', () => {
     expect(view.getByRole('toolbar').getAttribute('data-size')).toBe('large')
   })
 
-  it('maps kind and size onto the buttons', () => {
+  it('maps variant and size onto the buttons', () => {
     const view = render(ButtonGroup, {
-      props: { items, ariaLabel: 'Actions', kind: 'outlined', size: 'small' }
+      props: { items, ariaLabel: 'Actions', variant: 'outline', size: 'small' }
     })
     const root = view.getByRole('toolbar')
-    expect(root.getAttribute('data-kind')).toBe('outlined')
+    expect(root.getAttribute('data-variant')).toBe('outline')
     expect(root.getAttribute('data-size')).toBe('small')
     expect(buttons(root)[0]!.className).toContain('size-7')
   })

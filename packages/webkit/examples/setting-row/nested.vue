@@ -34,7 +34,7 @@
         <SettingRow
           title="HTTP ports"
           description="One port per line. 80 is the default."
-          kind="stacked"
+          variant="stacked"
         >
           <Textarea
             v-model="form.httpPorts"
@@ -46,7 +46,7 @@
         <SettingRow
           title="HTTPS support"
           description="Serve HTTPS as well as HTTP, on the HTTPS ports you choose."
-          kind="compact"
+          variant="compact"
         >
           <Switch
             v-model="form.useHttps"
@@ -57,7 +57,7 @@
           v-if="form.useHttps"
           title="HTTPS ports"
           description="One port per line. 443 is the default."
-          kind="stacked"
+          variant="stacked"
           :depth="1"
         >
           <Textarea
@@ -100,7 +100,7 @@
           v-if="form.useHttps"
           title="HTTP/3 support"
           description="Serve HTTP/3 over QUIC. It runs on top of HTTPS."
-          kind="compact"
+          variant="compact"
           :depth="1"
         >
           <Switch
@@ -113,7 +113,7 @@
           v-if="form.useHttps && form.useHttp3"
           title="HTTP/3 ports"
           description="One port per line. 443 is the default."
-          kind="stacked"
+          variant="stacked"
           :depth="2"
         >
           <Textarea

@@ -24,7 +24,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ### B. Attached table — `DataTable` (required)
 
-A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
+A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `type: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
 
 ### C. Environment chip — `Tag` (optional)
 

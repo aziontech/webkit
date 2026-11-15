@@ -46,7 +46,7 @@
       :data-testid="testId"
       icon="ai ai-refresh"
       :ariaLabel="t('tableRefreshButton.label')"
-      kind="outlined"
+      variant="outline"
       size="medium"
       :disabled="isDisabled"
       :loading="loading"

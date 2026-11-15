@@ -6,7 +6,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import CardPricing from './card-pricing.vue'
 
 const ACTIONS_POSITIONS = ['bottom', 'middle'] as const
-const CARD_STYLES = ['contained', 'transparent'] as const
+const CARD_STYLES = ['contained', 'ghost'] as const
 
 const ROOT = 'content-card-pricing'
 
@@ -171,8 +171,8 @@ describe('CardPricing', () => {
     }
   )
 
-  it.each(CARD_STYLES)('renders kind=%s without dropping the root', (cardStyle) => {
-    const { getByTestId } = render(CardPricing, { props: { kind: cardStyle } })
+  it.each(CARD_STYLES)('renders variant=%s without dropping the root', (cardStyle) => {
+    const { getByTestId } = render(CardPricing, { props: { variant: cardStyle } })
     expect(getByTestId(ROOT)).toBeInTheDocument()
   })
 

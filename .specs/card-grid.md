@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 9e5eb97980799b038526fa96886164b88c1cf58eb15c4e8ad112447dbd81e0f4
+checksum: 02457e10ca073346bada52cd357e6c722cc96b6e897c280377e720f3e1a723f2
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -19,8 +19,8 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 ## When to use
 
 - For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.
-- With `kind` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.
-- For the hairline cell grid a `section-module` body holds, with `kind` set to `divider`.
+- With `variant` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.
+- For the hairline cell grid a `section-module` body holds, with `variant` set to `divider`.
 - For a row of self-contained cards with gutters between them, with the default `gap`.
 
 ## When NOT to use
@@ -49,7 +49,7 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 - Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.
 - Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.
 - Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.
-- Give a cell `kind="none"` and `:padded="false"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.
+- Give a cell `variant="none"` and `:padded="false"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.
 - Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone.
 
 ## Usage
@@ -62,17 +62,17 @@ The responsive cell grid of the page language, in three registers: spaced cards 
 
 <template>
   <CardGrid
-    kind="frame"
+    variant="frame"
     :columns="3"
   >
-    <CardGrid.Cell kind="canvas">
+    <CardGrid.Cell variant="canvas">
       <Topic
         icon="ai ai-edge-nodes"
         title="Consistent global speed"
         description="Serve content across hundreds of locations."
       />
     </CardGrid.Cell>
-    <CardGrid.Cell kind="canvas">
+    <CardGrid.Cell variant="canvas">
       <Topic
         icon="ai ai-load-balancer"
         title="Safer high-traffic launches"
@@ -80,7 +80,7 @@ The responsive cell grid of the page language, in three registers: spaced cards 
       />
     </CardGrid.Cell>
     <CardGrid.Cell
-      kind="none"
+      variant="none"
       :padded="false"
     >
       <a href="/platform">A cell that paints itself</a>
@@ -100,9 +100,9 @@ Tree-shaking alternative — the standalone root and cell from their own entries
 
 ## Sub-components
 
-- `card-grid-cell/card-grid-cell.vue` — one cell of the `frame` register; wraps `frame-box` so the cell owns its own rules and corner marks, and takes the fill it carries (`kind`) and whether it pads its content (`padded`). It claims exactly one column — a cell that claims more belongs in `bento-grid`.
+- `card-grid-cell/card-grid-cell.vue` — one cell of the `frame` register; wraps `frame-box` so the cell owns its own rules and corner marks, and takes the fill it carries (`variant`) and whether it pads its content (`padded`). It claims exactly one column — a cell that claims more belongs in `bento-grid`.
 
-Cell props: `kind` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges.
+Cell props: `variant` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges.
 
 The cell's `frame-box` is set `flush` on its top and left edges, so it draws only its right and bottom rules; the grid root draws the matching top and left ones. That is what gives the block one hairline per edge instead of two at every junction.
 
@@ -112,7 +112,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 | Prop            | Type                    | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                          |
 | --------------- | ----------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`          | `CardGridKind`          | `'gap'`      | false    | Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks.                                                                                                                                                             |
+| `variant`          | `CardGridVariant`          | `'gap'`      | false    | Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks.                                                                                                                                                             |
 | `columns`       | `CardGridColumns`       | `3`          | false    | How many columns the grid fans out to at the large breakpoint.                                                                                                                                                                                                                                                 |
 | `mobileColumns` | `CardGridMobileColumns` | `1`          | false    | How many columns the grid holds below the small breakpoint.                                                                                                                                                                                                                                                    |
 | `dividerColor`  | `CardGridDividerColor`  | `'default'`  | false    | Weight of the hairline rules in the `divider` register.                                                                                                                                                                                                                                                        |
@@ -132,7 +132,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## States
 
 - Visual states: `default`
-- `data-kind` carries the register
+- `data-variant` carries the register
 - `data-columns` carries the large-breakpoint column count
 - `data-mobile-columns` carries the small-breakpoint column count
 - `data-divider-color` carries the hairline weight
@@ -141,7 +141,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - The root is a CSS grid of equal tracks; it sets `--card-grid-columns-base`, `--card-grid-columns-sm` and `--card-grid-columns-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
 - `data-fill-trailing` marks a `balanced` `divider` grid: its `::after` fills the trailing empty tracks of a short last row with `--bg-canvas` (spanning `--card-grid-rest`, hidden when the row is full), so the rule colour the gaps show through never shows as a block
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
-- `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding
+- `data-variant` and `data-padded` on each cell's content box mirror its fill and its padding
 - Empty: a `frame` grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page
 
 ## Motion & Animations
@@ -154,8 +154,8 @@ _none_
 | ------------------------------- | ----------------------- |
 | hairline rule                   | `var(--border-default)` |
 | hairline rule, muted            | `var(--border-muted)`   |
-| cell surface (`kind="surface"`) | `var(--bg-surface)`     |
-| cell surface (`kind="canvas"`)  | `var(--bg-canvas)`      |
+| cell surface (`variant="surface"`) | `var(--bg-surface)`     |
+| cell surface (`variant="canvas"`)  | `var(--bg-canvas)`      |
 | gutter                          | `var(--spacing-md)`     |
 | spacing (cell padding)          | `var(--spacing-xl)`     |
 
@@ -170,7 +170,7 @@ _none_
 - Visible focus: not applicable — the grid and its cells are containers; controls composed into a cell keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color)` ring.
 - Keyboard map: none — the grid is not focusable; `Tab` order follows the cells in DOM order, which is reading order at every breakpoint.
 - ARIA: the root adds no role, so a list composed into it keeps its own semantics and the cells reach the accessibility tree unchanged; a cell adds no role either, so headings composed inside it keep the document outline the page intends.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the rules are non-informational decoration; a `frame` cell provides `var(--bg-surface)` or `var(--bg-canvas)`, and a `kind="none"` cell hands both the fill and its contrast to the composed content.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — the rules are non-informational decoration; a `frame` cell provides `var(--bg-surface)` or `var(--bg-canvas)`, and a `variant="none"` cell hands both the fill and its contrast to the composed content.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive control of its own.
 
@@ -181,7 +181,7 @@ _none_
 - Columns — composite story rendering the column counts side-by-side (justified: a column count is only legible against another)
 - Balanced — composite rendering two, four, five and seven framed cells under `columns: 3` (justified: the default row rule only reads across item counts, and it is the behaviour an author most needs to see)
 - DividerColor — the muted hairline weight (mutually-exclusive state of the `dividerColor` prop)
-- Frame — a framed grid whose cells carry a fill and an unpadded one (justified: `CardGrid.Cell`'s `kind` and `padded` only read as a set, on the register the sub-component exists for; one story shows the whole possibility space instead of three near-identical ones)
+- Frame — a framed grid whose cells carry a fill and an unpadded one (justified: `CardGrid.Cell`'s `variant` and `padded` only read as a set, on the register the sub-component exists for; one story shows the whole possibility space instead of three near-identical ones)
 
 ## Constraints — DO NOT
 

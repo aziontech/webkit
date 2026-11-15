@@ -31,7 +31,7 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
   `FrameBox`, `SectionContainer`) when a container must accept your classes.
 - Size or align the component in its parent with the layout utilities above
   (`<Button class="w-full" />`, `<Card class="w-full max-w-(--container-sm)" />`).
-- Change behavior/appearance through the component's **props** (`kind`, `size`, `severity`).
+- Change behavior/appearance through the component's **props** (`variant`, `size`, `severity`).
 - If no prop or slot covers a legitimate need, request the variant in the design system —
   do not patch it locally.
 
@@ -52,7 +52,7 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
 ```html
 <!-- compose around it: your markup, your classes; the text goes through its props -->
 <div class="flex items-center gap-(--spacing-xs)">
-  <Button kind="primary" label="Create account" @click="submit" />
+  <Button variant="primary" label="Create account" @click="submit" />
 </div>
 
 <!-- layout utilities only: fill the column, cap the width; content in the default slot -->

@@ -3,8 +3,8 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 6
-checksum: a6789ca4aeaf160e3b0af935b4308639cf3c28d73b433bbb7f38491bca87a60e
+spec_version: 7
+checksum: a66e943cc17b36742eb3a45be0db16b7dd869a3f6f7f69dbce852ceb09c8342f
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -22,7 +22,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - As the opening band of a marketing, hub or documentation page.
 - Whenever a band must span the window while its copy stays on the page's measure.
 - For any band that carries a decorative backdrop behind its content.
-- With `kind="screen"` when the opening should measure exactly one viewport.
+- With `variant="screen"` when the opening should measure exactly one viewport.
 
 ## When NOT to use
 
@@ -30,21 +30,21 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - For the framed column of bands below the opening → use `section-container`.
 - For one band inside that column → use `section-module`.
 - For a section header further down the page → use `section-title`, which renders an `h2`.
-- For a mid-page announcement → use `call-to-action` with `kind="announcement"`; for the closing ask → use `call-to-action`.
+- For a mid-page announcement → use `call-to-action` with `variant="announcement"`; for the closing ask → use `call-to-action`.
 - For a copy-and-media pairing that is not the page opening → use `media-split`.
 
 ## Related
 
 - `section-container` — the framed column below it; this band's `border-b` is that column's top edge.
 - `section-module` — the brick stacked inside that column.
-- `texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.
+- `texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than variant, size and fade.
 - `media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.
-- `call-to-action` — the mid-page announcement band (`kind="announcement"`) and the closing ask.
+- `call-to-action` — the mid-page announcement band (`variant="announcement"`) and the closing ask.
 
 ## Best practices
 
 - One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.
-- Pass `kind="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.
+- Pass `variant="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
 - Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.
 - Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
@@ -64,7 +64,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 <template>
   <Hero
-    kind="screen"
+    variant="screen"
     max-width="site"
     texture="dots"
     texture-fade="bottom"
@@ -79,7 +79,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
       <template #actions>
         <Button label="Start for free" />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Talk to sales"
         />
       </template>
@@ -94,19 +94,19 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 
 | Prop               | Type                  | Default    | Required | JSDoc                                                                                                                                                                  |
 | ------------------ | --------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`             | `HeroKind`            | `'band'`   | false    | Height of the band; `screen` fills one viewport minus `--hero-banner-offset`.                                                                                               |
+| `variant`             | `HeroVariant`            | `'band'`   | false    | Height of the band; `screen` fills one viewport minus `--hero-banner-offset`.                                                                                               |
 | `maxWidth`         | `HeroWidth`           | `'7xl'`    | false    | Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset.                                                                     |
 | `bordered`         | `boolean`             | `true`     | false    | Draw the band's bottom rule, which is the top edge of whatever follows it.                                                                                             |
 | `padded`           | `boolean`             | `true`     | false    | Apply the band's own vertical rhythm. The inline inset is always applied.                                                                                              |
 | `size`             | `HeroSize`            | `'medium'` | false    | Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with.                                                       |
-| `texture`          | `TextureMaterialKind` | `'none'`   | false    | Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot.                                                                     |
+| `texture`          | `TextureMaterialVariant` | `'none'`   | false    | Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot.                                                                     |
 | `textureSize`      | `TextureMaterialSize` | `'medium'` | false    | Pitch of the tiling the `texture` prop paints — how far apart its cells sit.                                                                                           |
 | `textureFade`      | `TextureMaterialFade` | `'none'`   | false    | Fade applied to the layer the `texture` prop paints.                                                                                                                   |
-| `floorTexture`     | `TextureMaterialKind` | `'none'`   | false    | Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip.                                                                    |
+| `floorTexture`     | `TextureMaterialVariant` | `'none'`   | false    | Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip.                                                                    |
 | `floorTextureSize` | `TextureMaterialSize` | `'medium'` | false    | Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit.                                                                                      |
 | `align`            | `HeroAlign`           | `'center'` | false    | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom).                                                                                            |
 | `mediaAlign`       | `HeroMediaAlign`      | `'center'` | false    | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
-| `offset`           | `string`              | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length.                                                       |
+| `offset`           | `string`              | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length.                                                       |
 | `bottomHeight`     | `string`              | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
 | `ticker`           | `boolean`             | `false`    | false    | Stand the brand ticker on the band's floor, under the `bottom` window.                                                                                                 |
 | `tickerMarks`      | `string[]`            | `[]`       | false    | Registry names of the marks the ticker shows, in order.                                                                                                                |
@@ -138,7 +138,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 ## States
 
 - Visual states: `default`
-- `data-kind` carries the band's height mode (`band` or `screen`)
+- `data-variant` carries the band's height mode (`band` or `screen`)
 - `data-width` carries the resolved width key
 - `data-bordered` present when the bottom rule is drawn
 - `data-padded` present when the band applies its own vertical rhythm
@@ -201,7 +201,7 @@ _none_
 
 - Default
 - Widths — composite story rendering the width keys side-by-side (justified: a cap is only legible when two are compared in one view)
-- Screen — the band filling one viewport (mutually-exclusive state of the `kind` prop)
+- Screen — the band filling one viewport (mutually-exclusive state of the `variant` prop)
 - Media — the band with the copy beside a media column (justified: the two-column split is a structural mode the default story cannot show)
 - MediaMobileCentered — the `media` band with `Hero.Title` `mobile-align="center"` set, opened at the mobile viewport (justified: the copy only re-aligns below `md`, where the media stacks under it, so the default `Media` story cannot show it)
 - Background — the band with a backdrop in its `background` slot (justified: the layering of backdrop beneath copy is the band's one non-obvious behaviour)

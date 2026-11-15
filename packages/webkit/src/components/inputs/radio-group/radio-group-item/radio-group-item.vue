@@ -59,7 +59,7 @@
 
   const checked = computed(() => ctx.value.value === props.value)
   const inactive = computed(() => props.disabled || groupDisabled.value || ctx.disabled.value)
-  const isCard = computed(() => ctx.kind.value === 'card')
+  const isCard = computed(() => ctx.variant.value === 'card')
   const descriptionId = computed(() => (props.description ? `${uid}-description` : undefined))
   const labelId = `${uid}-label`
   const labelledBy = computed(() =>
@@ -83,11 +83,11 @@
   <label
     v-bind="rootAttrs"
     :data-testid="testId"
-    :data-kind="ctx.kind.value"
+    :data-variant="ctx.variant.value"
     :data-checked="checked || null"
     :data-disabled="inactive || null"
     :data-invalid="isInvalid || null"
-    class="group/radio-item relative inline-flex w-fit max-w-full cursor-pointer items-start gap-(--spacing-xs) text-label-sm text-(--text-default) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[kind=card]:flex data-[kind=card]:w-full data-[kind=card]:min-w-0 data-[kind=card]:rounded-(--shape-button) data-[kind=card]:border data-[kind=card]:border-(--border-muted) data-[kind=card]:bg-(--bg-surface) data-[kind=card]:p-(--spacing-sm) data-[kind=card]:transition-colors data-[kind=card]:duration-fast-02 data-[kind=card]:ease-productive-entrance motion-reduce:transition-none data-[kind=card]:hover:bg-(--bg-hover) data-[kind=card]:has-[:focus-visible]:outline-none data-[kind=card]:has-[:focus-visible]:ring-2 data-[kind=card]:has-[:focus-visible]:ring-(--ring-color) data-[kind=card]:has-[:focus-visible]:ring-offset-1 data-[kind=card]:has-[:focus-visible]:ring-offset-(--bg-canvas) data-[kind=card]:data-[invalid]:not-data-[checked]:border-(--danger-border) data-[kind=card]:data-[checked]:border-(--border-selected) data-[kind=card]:data-[checked]:bg-(--primary-selected) data-[kind=card]:data-[disabled]:opacity-50 data-[kind=card]:data-[disabled]:hover:bg-(--bg-surface) group-data-[orientation=horizontal]/radio-group:data-[kind=card]:flex-1 group-data-[orientation=horizontal]/radio-group:data-[kind=card]:basis-48"
+    class="group/radio-item relative inline-flex w-fit max-w-full cursor-pointer items-start gap-(--spacing-xs) text-label-sm text-(--text-default) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[variant=card]:flex data-[variant=card]:w-full data-[variant=card]:min-w-0 data-[variant=card]:rounded-(--shape-button) data-[variant=card]:border data-[variant=card]:border-(--border-muted) data-[variant=card]:bg-(--bg-surface) data-[variant=card]:p-(--spacing-sm) data-[variant=card]:transition-colors data-[variant=card]:duration-fast-02 data-[variant=card]:ease-productive-entrance motion-reduce:transition-none data-[variant=card]:hover:bg-(--bg-hover) data-[variant=card]:has-[:focus-visible]:outline-none data-[variant=card]:has-[:focus-visible]:ring-2 data-[variant=card]:has-[:focus-visible]:ring-(--ring-color) data-[variant=card]:has-[:focus-visible]:ring-offset-1 data-[variant=card]:has-[:focus-visible]:ring-offset-(--bg-canvas) data-[variant=card]:data-[invalid]:not-data-[checked]:border-(--danger-border) data-[variant=card]:data-[checked]:border-(--border-selected) data-[variant=card]:data-[checked]:bg-(--primary-selected) data-[variant=card]:data-[disabled]:opacity-50 data-[variant=card]:data-[disabled]:hover:bg-(--bg-surface) group-data-[orientation=horizontal]/radio-group:data-[variant=card]:flex-1 group-data-[orientation=horizontal]/radio-group:data-[variant=card]:basis-48"
   >
     <input
       v-if="isCard"
@@ -136,7 +136,7 @@
     </span>
     <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
       <span
-        class="flex min-w-0 items-center gap-(--spacing-2xs) group-data-[kind=card]/radio-item:text-body-sm"
+        class="flex min-w-0 items-center gap-(--spacing-2xs) group-data-[variant=card]/radio-item:text-body-sm"
       >
         <i
           v-if="icon"

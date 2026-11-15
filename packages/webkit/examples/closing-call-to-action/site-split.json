@@ -1,7 +1,7 @@
 {
   "_id": "closing-call-to-action",
   "props": {
-    "kind": "split",
+    "variant": "split",
     "anchor": "contact",
     "eyebrow": "Build",
     "title": "Build once.",

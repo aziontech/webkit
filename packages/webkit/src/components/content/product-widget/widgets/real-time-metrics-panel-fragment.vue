@@ -82,7 +82,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     :chrome="false"
     :active="active"
     :width="420"

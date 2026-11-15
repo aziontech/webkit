@@ -13,7 +13,7 @@
 <template>
   <Button
     label="Open palette with a disabled item"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 

@@ -72,7 +72,7 @@ describe('CopyPromptButton', () => {
     await waitFor(() => expect(marks.querySelector('[data-agent="Claude"]')).not.toBeNull())
     const logo = marks.querySelector<HTMLElement>('[data-agent="Claude"]')!
     expect(logo).toHaveAttribute('data-testid', 'content-logo')
-    expect(logo).toHaveAttribute('data-kind', 'current')
+    expect(logo).toHaveAttribute('data-variant', 'current')
     expect(logo).toHaveAttribute('aria-hidden', 'true')
     expect(marks.querySelector('i[data-agent="Cursor"]')).toHaveClass('ai-cursor')
   })

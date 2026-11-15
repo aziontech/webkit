@@ -5,7 +5,7 @@
 <template>
   <div class="grid grid-cols-1 gap-(--spacing-md) lg:grid-cols-3">
     <Hero
-      kind="screen"
+      variant="screen"
       align="start"
       max-width="full"
       offset="75dvh"
@@ -18,7 +18,7 @@
       />
     </Hero>
     <Hero
-      kind="screen"
+      variant="screen"
       align="center"
       max-width="full"
       offset="75dvh"
@@ -31,7 +31,7 @@
       />
     </Hero>
     <Hero
-      kind="screen"
+      variant="screen"
       align="end"
       max-width="full"
       offset="75dvh"

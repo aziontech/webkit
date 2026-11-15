@@ -138,7 +138,7 @@
           id: 'settings',
           label: 'Settings',
           icon: 'ai ai-settings',
-          kind: 'drill',
+          type: 'drill',
           groups: [
             {
               label: 'Settings',
@@ -298,7 +298,7 @@
         >
           <IconButton
             icon="ai ai-circle-plus"
-            kind="primary"
+            variant="primary"
             size="medium"
             aria-label="Create"
           />
@@ -309,7 +309,7 @@
         >
           <IconButton
             icon="ai ai-ask-azion"
-            kind="outlined"
+            variant="outline"
             size="medium"
             aria-label="Agent"
           />
@@ -318,7 +318,7 @@
       <template v-else>
         <Button
           label="Create"
-          kind="primary"
+          variant="primary"
           size="medium"
           icon="ai ai-circle-plus"
         />
@@ -335,7 +335,7 @@
         >
           <IconButton
             icon="ai ai-bell"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :aria-label="bellLabel"
             :aria-pressed="notificationsOpen"
@@ -470,7 +470,7 @@
         <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
           <Button
             label="Upgrade to Pro"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             class="w-full"
           />
@@ -496,12 +496,12 @@
           <div class="flex shrink-0 items-center gap-(--spacing-xs)">
             <Button
               label="Edit"
-              kind="outlined"
+              variant="outline"
               size="small"
             />
             <Button
               label="Redeploy"
-              kind="primary"
+              variant="primary"
               size="small"
               icon="ai ai-refresh"
             />
@@ -523,14 +523,14 @@
           <div class="flex items-center gap-(--spacing-2xs)">
             <Button
               label="Mark all as read"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :disabled="!unread"
               @click="markAllRead"
             />
             <Button
               label="Clear all"
-              kind="transparent"
+              variant="ghost"
               size="small"
               @click="clearAll"
             />
@@ -546,11 +546,11 @@
             :key="item.id"
             size="small"
           >
-            <Item.Media kind="icon">
+            <Item.Media type="icon">
               <i
                 :class="icons[item.kind]"
-                :data-kind="item.kind"
-                class="data-[kind=deploy-failed]:text-(--danger) data-[kind=deploy-succeeded]:text-(--success) data-[kind=info]:text-(--text-muted)"
+                :data-type="item.kind"
+                class="data-[type=deploy-failed]:text-(--danger) data-[type=deploy-succeeded]:text-(--success) data-[type=info]:text-(--text-muted)"
                 aria-hidden="true"
               />
             </Item.Media>
@@ -575,13 +575,13 @@
               <Item.Actions v-if="item.kind !== 'info'">
                 <Button
                   label="Edit"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="markRead(item.id)"
                 />
                 <Button
                   label="Redeploy"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   icon="ai ai-refresh"
                   @click="markRead(item.id)"
@@ -596,7 +596,7 @@
         >
           <Button
             :label="`Show ${Math.min(hiddenCount, PAGE_SIZE)} older`"
-            kind="transparent"
+            variant="ghost"
             size="small"
             @click="showOlder"
           />
@@ -626,7 +626,7 @@
             <Button
               label="Documentation"
               icon="ai ai-book"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="https://www.azion.com/en/documentation/"
               target="_blank"
@@ -634,7 +634,7 @@
             <Button
               label="Create Application"
               icon="ai ai-plus"
-              kind="outlined"
+              variant="outline"
               size="medium"
             />
           </template>

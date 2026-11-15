@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: dynamic routes',
       icon: 'ai ai-rules-engine',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'accelerator',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application Accelerator',
       title: 'Tuned route, fewer round trips',
       icon: 'ai ai-app-accelerator',
@@ -30,7 +30,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'api.example.com',
       icon: 'ai ai-database',
@@ -38,7 +38,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Cache',
       title: 'Static assets, no origin call',
       icon: 'ai ai-tiered-cache'

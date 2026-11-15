@@ -134,7 +134,7 @@
 
                       <Button
                         label="Visit site"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-external-link"
                         icon-position="trailing"
@@ -166,7 +166,7 @@
                         </span>
                         <Button
                           label="Add custom domain"
-                          kind="link"
+                          variant="link"
                           size="small"
                           icon="ai ai-circle-plus"
                           href="/services/1482736015?name=web-app&tab=settings"
@@ -252,7 +252,7 @@
                 <Card
                   v-for="step in nextSteps"
                   :key="step.title"
-                  kind="integration"
+                  variant="integration"
                   :title="step.title"
                   :logo="step.icon"
                   :description="step.description"
@@ -265,7 +265,7 @@
             <Button
               class="w-full"
               label="Manage service"
-              kind="secondary"
+              variant="secondary"
               size="large"
             />
           </div>

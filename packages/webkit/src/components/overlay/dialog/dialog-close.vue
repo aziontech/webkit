@@ -34,7 +34,7 @@
   <IconButton
     v-if="ctx"
     icon="ai ai-x"
-    kind="outlined"
+    variant="outline"
     size="small"
     :ariaLabel="props.ariaLabel || t('dialog.close')"
     :data-testid="`${ctx.testId}__close`"

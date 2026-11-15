@@ -3,8 +3,8 @@ name: card-pricing
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 3d917d2a72d95f772d2a19a0f67257ae38e336488fcb0ba04621255c332e69a7
+spec_version: 6
+checksum: 41072faa24f1865ecdc3920791b67eee5f6604ccf871d764d45a8dd0e05d6a46
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ One tier of a pricing table: what it is called, what it costs, what that price i
 
 `actionsPosition` is the axis that decides which of the two compositions the card is. **`bottom`** is the compact tier: the name, a `medium` amount and the caveat stack at the top, the action follows, and the slot sits under it — a card sized by its own content, for a row of tiers a reader scans. **`middle`** is the full tier: the amount becomes the `large` headline figure, the caveat moves up to `body-md`, the slot grows to fill the card, and the action is pinned to the bottom edge so a row of `middle` cards has its buttons on one line whatever each tier's feature list holds.
 
-`kind` decides only whether the card draws its own surface (`contained`) or sits on the one behind it (`transparent`); it never changes the composition.
+`variant` decides only whether the card draws its own surface (`contained`) or sits on the one behind it (`ghost`); it never changes the composition.
 
 The name, the amount and the caveat are **one column**, capped at `--container-xs` (348px) rather than at the card's full width: the caveat is a sentence about the price directly above it, so it wraps on the price's measure. The cap shipped as `--container-3xs` (256px) — two rungs down the ladder, and too narrow for the copy it holds. 256px sets `body-md` at roughly 33 characters, under the 45–75 a prose measure wants, and all three billing caveats on the sample pricing page (66, 69 and 84 characters) ran to three lines there. At 348px the measure is ~46 characters and the same three set in two, while the card's own content box at 1440 is 413px — so the caveat is still held to the price's column instead of the card's.
 
@@ -31,7 +31,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 - One tier in a row of plans: plan name, price, billing caveat, one action and the tier's feature list.
 - A compact tier sized by its content (`actions-position="bottom"`), or a full tier whose action is pinned to the bottom so a row's buttons line up (`actions-position="middle"`).
-- A tier set on the surface behind it (`kind="transparent"`) inside a section that already draws the frame.
+- A tier set on the surface behind it (`variant="ghost"`) inside a section that already draws the frame.
 
 ## When NOT to use
 
@@ -73,7 +73,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
     suffix="/ mon"
     pricing-details="Billed annually or $25/mo billed monthly."
     actions-position="middle"
-    kind="contained"
+    variant="contained"
     tag-label="Popular"
     show-tag
     equal-height
@@ -85,7 +85,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
     <template #actions>
       <Button
         label="Upgrade to Pro"
-        kind="secondary"
+        variant="secondary"
         size="large"
         @click="upgrade"
       />
@@ -105,7 +105,7 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 | `tagLabel`           | `string`                       | `'Popular'`   | false    | Text of the tag beside the plan name.                                                                                                              |
 | `equalHeight`            | `boolean`                      | `false`       | false    | Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row.                                                  |
 | `actionsPosition`       | `'bottom' \| 'middle'`         | `'bottom'`    | false    | Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. |
-| `kind`               | `'contained' \| 'transparent'` | `'contained'` | false    | Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page.                                    |
+| `variant`               | `'contained' \| 'ghost'` | `'contained'` | false    | Whether the card draws its own surface: `contained` has a border and a surface, `ghost` sits on the page.                                    |
 | `value`              | `string`                       | `'20'`        | false    | Price amount, already formatted, without the currency symbol.                                                                                      |
 | `prefix`             | `string`                       | `'$'`         | false    | Text before the amount, usually the currency symbol.                                                                                               |
 | `suffix`             | `string`                       | `'/ mon'`     | false    | Text after the amount, usually the billing period.                                                                                                 |
@@ -172,7 +172,7 @@ _none_
 ## Examples
 
 - Default
-- Variants (`actionsPosition` × `kind`)
+- Variants (`actionsPosition` × `variant`)
 - Aligned (a row of three tiers with uneven copy)
 - WithTag
 - Slots
@@ -192,7 +192,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

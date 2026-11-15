@@ -73,7 +73,7 @@
                   v-if="compact"
                   icon="ai ai-menu"
                   aria-label="Open navigation"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   @click="openNavigation"
                 />
@@ -88,7 +88,7 @@
               <IconButton
                 icon="ai ai-circle-help"
                 aria-label="Help"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :aria-pressed="toolsOpen"
                 @click="toggleTools"
@@ -135,7 +135,7 @@
         <div class="flex flex-wrap gap-(--spacing-xs)">
           <Button
             label="Show details"
-            kind="outlined"
+            variant="outline"
             size="medium"
             @click="splitPanelOpen = true"
           />

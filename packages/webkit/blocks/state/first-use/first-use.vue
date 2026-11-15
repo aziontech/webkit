@@ -45,7 +45,7 @@
         <div class="border-t border-(--border-muted)">
           <Item.List>
             <Item>
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   class="ai ai-github text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -60,13 +60,13 @@
               <Item.Actions>
                 <Button
                   label="Import"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                 />
               </Item.Actions>
             </Item>
             <Item>
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   class="ai ai-code text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -105,7 +105,7 @@
               </div>
             </Item>
             <Item>
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   class="ai ai-globe text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -118,7 +118,7 @@
               <Item.Actions>
                 <Button
                   label="Create"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                 />
               </Item.Actions>
@@ -217,7 +217,7 @@
                 <Logo
                   :name="agent.name"
                   :src="agent.src"
-                  :kind="agent.mono ? 'current' : 'color'"
+                  :variant="agent.mono ? 'current' : 'color'"
                   decorative
                   size="small"
                 />

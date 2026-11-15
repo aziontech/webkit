@@ -19,7 +19,7 @@
       v-for="p in positions"
       :key="p"
       :label="p"
-      kind="secondary"
+      variant="secondary"
       @click="() => toast(p, { position: p })"
     />
   </div>

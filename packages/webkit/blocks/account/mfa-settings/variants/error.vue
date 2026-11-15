@@ -90,7 +90,7 @@
     { accessorKey: 'status', header: 'MFA', minWidth: 120 },
     { accessorKey: 'method', header: 'Method', minWidth: 160 },
     { accessorKey: 'since', header: 'Set up', minWidth: 160 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
   const rows = computed(() =>
     members.value.map((member) => ({
@@ -204,7 +204,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/mfa"
             target="_blank"
@@ -218,7 +218,7 @@
             <Item.List>
               <SettingRow
                 title="Require MFA"
-                kind="compact"
+                variant="compact"
                 description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
               >
                 <Switch
@@ -259,7 +259,7 @@
               >
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :loading="refreshing"
                   aria-label="Refresh"
@@ -272,7 +272,7 @@
               >
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
                   aria-label="Download CSV"
@@ -294,7 +294,7 @@
             <template #actions>
               <Button
                 label="Retry"
-                kind="secondary"
+                variant="secondary"
                 size="small"
                 @click="retryLoad"
               />
@@ -319,7 +319,7 @@
                     <Avatar
                       :label="row.name"
                       size="small"
-                      kind="square"
+                      variant="square"
                     />
                     <div class="flex min-w-0 flex-col">
                       <span class="truncate text-body-sm text-(--text-default)">{{
@@ -383,7 +383,7 @@
                     <template #actions>
                       <Button
                         label="Clear filters"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         @click="clearFilters"
                       />
@@ -399,7 +399,7 @@
 
     <ConfirmDialog
       v-model:open="requireOpen"
-      kind="primary"
+      variant="primary"
       title="Require MFA"
       :description="
         withoutMfa.length

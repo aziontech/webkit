@@ -27,7 +27,7 @@
   const ids = computed<readonly string[]>((previous) => keepIds(previous, props.ids))
 
   onScopeDispose(
-    ctx.registerMark(() => ({ kind: 'line', stacked: false, labeled: false, ids: ids.value }))
+    ctx.registerMark(() => ({ type: 'line', stacked: false, labeled: false, ids: ids.value }))
   )
 
   const testId = computed(

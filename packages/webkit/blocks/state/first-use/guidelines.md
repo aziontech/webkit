@@ -26,7 +26,7 @@ A flush `Card` (`:padded="false"`) holds the explanation and the method list as 
 
 ### B. Agent marks — `Logo` (optional)
 
-The coding-agent promo stacks the agent marks, each a decorative `Logo` at `size="small"` in a bordered tile. A mono mark takes `kind="current"` and the tile's text colour, a coloured one `kind="color"`.
+The coding-agent promo stacks the agent marks, each a decorative `Logo` at `size="small"` in a bordered tile. A mono mark takes `variant="current"` and the tile's text colour, a coloured one `variant="color"`.
 
 ### C. Explanation — `EmptyState` (required)
 
@@ -38,11 +38,11 @@ The resource glyph, a headline that names the first action, and one sentence on 
 
 ### E. Methods — `Item` (required)
 
-An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: the method glyph in `Item.Media kind="icon"` (the component draws the frame), `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
+An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: the method glyph in `Item.Media type="icon"` (the component draws the frame), `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
 
 ### F. Method action — `Button` (required)
 
-One per method. The recommended method takes `kind="primary"` (`Import`); the others take `kind="outlined"` (`Create`). Only one primary on the block.
+One per method. The recommended method takes `variant="primary"` (`Import`); the others take `variant="outline"` (`Create`). Only one primary on the block.
 
 ### G. Command row — `InputGroupRoot` (CLI method)
 

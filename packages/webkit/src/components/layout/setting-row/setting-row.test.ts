@@ -67,12 +67,12 @@ describe('SettingRow', () => {
   })
 
   it.each(['field', 'compact', 'stacked'] as const)(
-    'mirrors kind=%s onto data-row-kind',
-    (kind) => {
-      const { getByTestId } = within(render(inList({ title: 'Name', kind })).container)
+    'mirrors variant=%s onto data-row-variant',
+    (variant) => {
+      const { getByTestId } = within(render(inList({ title: 'Name', variant })).container)
 
-      expect(getByTestId('layout-setting-row').getAttribute('data-row-kind')).toBe(kind)
-      expect(getByTestId('layout-setting-row__control').getAttribute('data-kind')).toBe(kind)
+      expect(getByTestId('layout-setting-row').getAttribute('data-row-variant')).toBe(variant)
+      expect(getByTestId('layout-setting-row__control').getAttribute('data-variant')).toBe(variant)
     }
   )
 

@@ -331,7 +331,7 @@
       >
         <SectionTitle
           v-if="hasHeader"
-          kind="start"
+          variant="start"
           :framed="false"
           :title="title"
           class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-2xl)"
@@ -348,7 +348,7 @@
               v-if="facets.length > 0 || sorts.length > 0"
               :data-testid="`${testId}__filter-button`"
               :label="filterButtonLabel"
-              kind="outlined"
+              variant="outline"
               size="large"
               icon="ai ai-filter"
               :aria-expanded="filtersOpen ? 'true' : 'false'"
@@ -661,7 +661,7 @@
           >
             <Button
               :label="emptyActionLabel"
-              kind="secondary"
+              variant="secondary"
               size="large"
               @click="clearFilters"
             />

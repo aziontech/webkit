@@ -86,11 +86,14 @@ describe('NetworkSection', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['outcomes', 'benefits', 'stats'] as const)('mirrors kind=%s on data-kind', (kind) => {
-    const { getByTestId } = band({ kind })
+  it.each(['outcomes', 'benefits', 'stats'] as const)(
+    'mirrors variant=%s on data-variant',
+    (variant) => {
+      const { getByTestId } = band({ variant })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
-  })
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+    }
+  )
 
   it('names the section after its title', () => {
     const { getByTestId } = band()
@@ -128,7 +131,7 @@ describe('NetworkSection', () => {
   })
 
   it('renders one mark per outcome with its alt and treatment on the outcomes floor', () => {
-    const { container, getAllByRole } = band({ kind: 'outcomes' })
+    const { container, getAllByRole } = band({ variant: 'outcomes' })
 
     const marks = getAllByRole('img')
     expect(marks.map((mark) => mark.getAttribute('alt'))).toEqual(
@@ -145,7 +148,7 @@ describe('NetworkSection', () => {
   })
 
   it('renders one h3 per benefit, in order, and no mark on the benefits floor', () => {
-    const { getAllByRole, queryAllByRole } = band({ kind: 'benefits' })
+    const { getAllByRole, queryAllByRole } = band({ variant: 'benefits' })
 
     expect(
       getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent?.trim())
@@ -161,7 +164,7 @@ describe('NetworkSection', () => {
     [5, '4']
   ])('sets the outcomes floor columns from %i outcomes to %s', (count, columns) => {
     const { container } = band({
-      kind: 'outcomes',
+      variant: 'outcomes',
       outcomes: Array.from({ length: count }, (_, index) => ({
         ...outcomes[0],
         logoAlt: `Client ${index}`
@@ -177,7 +180,7 @@ describe('NetworkSection', () => {
     [6, '3']
   ])('balances %i benefits on up to three columns, %s per row', (count, perRow) => {
     const { container } = band({
-      kind: 'benefits',
+      variant: 'benefits',
       benefits: Array.from({ length: count }, (_, index) => ({
         ...benefits[0],
         title: `Benefit ${index}`
@@ -191,7 +194,7 @@ describe('NetworkSection', () => {
 
   it('renders a benefit without an icon as a topic with its h3', () => {
     const plain = benefits.map(({ title, description }) => ({ title, description }))
-    const { getAllByRole, getByText } = band({ kind: 'benefits', benefits: plain })
+    const { getAllByRole, getByText } = band({ variant: 'benefits', benefits: plain })
 
     expect(
       getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent?.trim())
@@ -206,7 +209,7 @@ describe('NetworkSection', () => {
       { value: '100', suffix: '+ Tbps', label: 'Network capacity' },
       { value: '100', suffix: '%', label: 'Availability' }
     ]
-    const { container, getByTestId } = band({ kind: 'stats', stats })
+    const { container, getByTestId } = band({ variant: 'stats', stats })
 
     expect(getByTestId('marketing-big-numbers')).toBeInTheDocument()
     const figures = Array.from(container.querySelectorAll('figure'))
@@ -216,7 +219,7 @@ describe('NetworkSection', () => {
   })
 
   it('renders no stats floor without stats', () => {
-    const { queryByTestId } = band({ kind: 'stats', stats: [] })
+    const { queryByTestId } = band({ variant: 'stats', stats: [] })
 
     expect(queryByTestId('marketing-big-numbers')).toBeNull()
   })
@@ -246,7 +249,7 @@ describe('NetworkSection', () => {
 
   it('renders an outcome without a logo as its quote alone', () => {
     const { container, queryAllByRole } = band({
-      kind: 'outcomes',
+      variant: 'outcomes',
       outcomes: [
         { text: '7x faster pages', highlights: ['7x'] },
         { text: '90% lower cloud costs', highlights: ['90%'] }
@@ -258,7 +261,7 @@ describe('NetworkSection', () => {
   })
 
   it('renders the band without a floor when outcomes is empty', () => {
-    const { container, getByRole, queryAllByRole } = band({ kind: 'outcomes', outcomes: [] })
+    const { container, getByRole, queryAllByRole } = band({ variant: 'outcomes', outcomes: [] })
 
     expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
     expect(queryAllByRole('img')).toHaveLength(0)
@@ -266,20 +269,20 @@ describe('NetworkSection', () => {
   })
 
   it('has no a11y violations on the outcomes floor', async () => {
-    const { container } = band({ kind: 'outcomes' })
+    const { container } = band({ variant: 'outcomes' })
 
     await expectNoA11yViolations(container)
   })
 
   it('has no a11y violations on the benefits floor', async () => {
-    const { container } = band({ kind: 'benefits' })
+    const { container } = band({ variant: 'benefits' })
 
     await expectNoA11yViolations(container)
   })
 
   it('has no a11y violations on the stats floor', async () => {
     const { container } = band({
-      kind: 'stats',
+      variant: 'stats',
       stats: [
         { value: '100', suffix: '+', label: 'Data centers' },
         { value: '30', suffix: 'ms', label: 'Median latency' }

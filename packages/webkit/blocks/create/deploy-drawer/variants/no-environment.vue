@@ -24,7 +24,7 @@
     <DrawerTrigger>
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />
@@ -69,7 +69,7 @@
               <template #actions>
                 <Button
                   label="Add environment"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   icon="ai ai-plus"
                 />
@@ -88,7 +88,7 @@
             </p>
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               type="submit"
               disabled

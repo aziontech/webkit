@@ -230,7 +230,7 @@ jobs:
                 <Card
                   v-for="step in nextSteps"
                   :key="step.title"
-                  kind="integration"
+                  variant="integration"
                   :title="step.title"
                   :logo="step.icon"
                   :description="step.description"
@@ -313,7 +313,7 @@ jobs:
             <Button
               class="w-full"
               label="Manage service"
-              kind="secondary"
+              variant="secondary"
               size="large"
             />
           </div>

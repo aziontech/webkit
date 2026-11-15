@@ -26,7 +26,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/templates"
             target="_blank"
@@ -57,7 +57,7 @@
             <Button
               label="Import from Git"
               icon="ai ai-github"
-              kind="secondary"
+              variant="secondary"
               size="small"
               href="/create/import"
             />

@@ -113,7 +113,7 @@
     <IconButton
       :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
       :aria-label="pauseLabel"
-      kind="outlined"
+      variant="outline"
       size="small"
       class="absolute end-0 top-1/2 z-10 -translate-y-1/2 motion-reduce:hidden"
       @click="paused = !paused"

@@ -124,7 +124,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:80%]"
     :chrome="false"
@@ -141,7 +141,7 @@
           <span class="relative shrink-0">
             <Button
               label="Filter"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-filter"
             />
@@ -228,7 +228,7 @@
             >
               <IconButton
                 icon="ai ai-chevron-left"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 ariaLabel="Back to all filters"
               />

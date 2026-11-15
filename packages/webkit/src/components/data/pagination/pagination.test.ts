@@ -122,13 +122,13 @@ describe('Pagination', () => {
         const { container, getAllByRole, getByRole } = render(Pagination, {
           props: { total: 200, pageSize: 10, page: 1, siblingCount: 1 }
         })
-        const ellipses = container.querySelectorAll('[data-kind="more"]')
+        const ellipses = container.querySelectorAll('[data-type="more"]')
         expect(ellipses.length).toBeGreaterThanOrEqual(1)
         ellipses.forEach((el) => {
           expect(el.tagName).toBe('SPAN')
           expect(el.getAttribute('aria-hidden')).toBe('true')
         })
-        expect(getAllByRole('button').some((b) => b.getAttribute('data-kind') === 'more')).toBe(
+        expect(getAllByRole('button').some((b) => b.getAttribute('data-type') === 'more')).toBe(
           false
         )
         expect(getByRole('button', { name: 'Page 20' })).toBeTruthy()
@@ -244,7 +244,7 @@ describe('Pagination', () => {
     describe('PaginationButton sub-component (standalone contract)', () => {
       it('renders a <button type="button"> and emits click with the MouseEvent', async () => {
         const { getByRole, emitted } = render(PaginationButton, {
-          props: { kind: 'number' },
+          props: { type: 'number' },
           slots: { default: '7' }
         })
         const btn = getByRole('button')
@@ -256,7 +256,7 @@ describe('Pagination', () => {
 
       it('active -> aria-current="page" and data-active', () => {
         const { getByRole } = render(PaginationButton, {
-          props: { kind: 'number', active: true },
+          props: { type: 'number', active: true },
           slots: { default: '4' }
         })
         const btn = getByRole('button')
@@ -266,7 +266,7 @@ describe('Pagination', () => {
 
       it('disabled -> guards the click (no emit) and sets aria-disabled', async () => {
         const { getByRole, emitted } = render(PaginationButton, {
-          props: { kind: 'number', disabled: true },
+          props: { type: 'number', disabled: true },
           slots: { default: '9' }
         })
         const btn = getByRole('button')
@@ -276,17 +276,17 @@ describe('Pagination', () => {
         expect(emitted().click).toBeUndefined()
       })
 
-      it('kind="more" hides the default slot content', () => {
+      it('type="more" hides the default slot content', () => {
         const { getByTestId } = render(PaginationButton, {
-          props: { kind: 'more' },
+          props: { type: 'more' },
           slots: { default: 'SHOULD-NOT-SHOW' }
         })
         expect(getByTestId('data-pagination__button').textContent).not.toContain('SHOULD-NOT-SHOW')
       })
 
-      it('kind="more" is an inert decorative span: hidden, unfocusable, never emits click', async () => {
+      it('type="more" is an inert decorative span: hidden, unfocusable, never emits click', async () => {
         const { getByTestId, queryByRole, emitted } = render(PaginationButton, {
-          props: { kind: 'more' }
+          props: { type: 'more' }
         })
         const ellipsis = getByTestId('data-pagination__button')
         expect(ellipsis.tagName).toBe('SPAN')
@@ -300,9 +300,9 @@ describe('Pagination', () => {
 
       it.each(['previous', 'next', 'number'] as const)(
         'carries one hidden touch-target hit area inside the button (%s)',
-        (kind) => {
+        (type) => {
           const { getByRole } = render(PaginationButton, {
-            props: { kind },
+            props: { type: type },
             slots: { default: 'x' }
           })
           const targets = getByRole('button').querySelectorAll('[data-slot="touch-target"]')
@@ -322,20 +322,20 @@ describe('Pagination', () => {
       })
 
       it('the inert overflow ellipsis has no touch-target hit area', () => {
-        const { getByTestId } = render(PaginationButton, { props: { kind: 'more' } })
+        const { getByTestId } = render(PaginationButton, { props: { type: 'more' } })
         expect(
           getByTestId('data-pagination__button').querySelector('[data-slot="touch-target"]')
         ).toBeNull()
       })
 
       it.each(['previous', 'next', 'number'] as const)(
-        'renders each kind and reflects it on data-kind (%s)',
-        (kind) => {
+        'renders each type and reflects it on data-type (%s)',
+        (type) => {
           const { getByRole } = render(PaginationButton, {
-            props: { kind },
+            props: { type: type },
             slots: { default: 'x' }
           })
-          expect(getByRole('button').getAttribute('data-kind')).toBe(kind)
+          expect(getByRole('button').getAttribute('data-type')).toBe(type)
         }
       )
     })
@@ -414,7 +414,7 @@ describe('Pagination', () => {
     })
 
     describe('composed compound tree (dot-notation sub-components inside the root)', () => {
-      // Prev/Next render slot content only for kind=number, so their accessible
+      // Prev/Next render slot content only for type=number, so their accessible
       // name must come from aria-label (the data-driven root does the same).
       const Composed = {
         components: { Pagination, PaginationButton, PaginationInfo, PaginationPageSize },
@@ -423,10 +423,10 @@ describe('Pagination', () => {
           <template #info>
             <PaginationInfo>Showing 1 to 10 of 20 entries</PaginationInfo>
           </template>
-          <PaginationButton kind="previous" aria-label="Previous page" disabled />
-          <PaginationButton kind="number" active>1</PaginationButton>
-          <PaginationButton kind="number">2</PaginationButton>
-          <PaginationButton kind="next" aria-label="Next page" />
+          <PaginationButton type="previous" aria-label="Previous page" disabled />
+          <PaginationButton type="number" active>1</PaginationButton>
+          <PaginationButton type="number">2</PaginationButton>
+          <PaginationButton type="next" aria-label="Next page" />
           <template #controls>
             <PaginationPageSize :model-value="10" :options="[10, 25, 50, 100]" />
           </template>
@@ -474,7 +474,7 @@ describe('Pagination', () => {
         const { container } = render(Pagination, {
           props: { total: 200, pageSize: 10, page: 10, ariaLabel: 'Results pages' }
         })
-        expect(container.querySelectorAll('[data-kind="more"]')).toHaveLength(2)
+        expect(container.querySelectorAll('[data-type="more"]')).toHaveLength(2)
         await expectNoA11yViolations(container)
       })
 
@@ -487,10 +487,10 @@ describe('Pagination', () => {
             <template #info>
               <PaginationInfo>Showing 1 to 10 of 20 entries</PaginationInfo>
             </template>
-            <PaginationButton kind="previous" aria-label="Previous page" />
-            <PaginationButton kind="number" active>1</PaginationButton>
-            <PaginationButton kind="number">2</PaginationButton>
-            <PaginationButton kind="next" aria-label="Next page" />
+            <PaginationButton type="previous" aria-label="Previous page" />
+            <PaginationButton type="number" active>1</PaginationButton>
+            <PaginationButton type="number">2</PaginationButton>
+            <PaginationButton type="next" aria-label="Next page" />
             <template #controls>
               <PaginationPageSize :model-value="10" :options="[10, 25, 50, 100]" />
             </template>
@@ -519,7 +519,7 @@ describe('Pagination', () => {
         .getAllByTestId('data-pagination__button')
         .filter(
           (button) =>
-            button.dataset['kind'] === 'number' && getComputedStyle(button).display !== 'none'
+            button.dataset['type'] === 'number' && getComputedStyle(button).display !== 'none'
         )
 
     it('keeps the whole windowed page list between previous and next on a phone', () => {

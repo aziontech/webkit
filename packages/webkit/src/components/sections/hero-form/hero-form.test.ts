@@ -22,11 +22,11 @@ const items = [
 ]
 
 const fields = [
-  { name: 'firstname', kind: 'text', label: 'First name', half: true, required: true },
-  { name: 'lastname', kind: 'text', label: 'Last name', half: true },
-  { name: 'email', kind: 'email', label: 'Work email', required: true },
-  { name: 'domain', kind: 'text', label: 'Website' },
-  { name: 'message', kind: 'textarea', label: 'How can we help?' }
+  { name: 'firstname', type: 'text', label: 'First name', half: true, required: true },
+  { name: 'lastname', type: 'text', label: 'Last name', half: true },
+  { name: 'email', type: 'email', label: 'Work email', required: true },
+  { name: 'domain', type: 'text', label: 'Website' },
+  { name: 'message', type: 'textarea', label: 'How can we help?' }
 ]
 
 const band = (props: Record<string, unknown> = {}) =>
@@ -192,7 +192,7 @@ describe('HeroForm', () => {
 
   it('prefixes a phone value with the dial code of its country', async () => {
     const { getByLabelText, getByRole, emitted } = band({
-      fields: [{ name: 'mobilephone', kind: 'phone', label: 'Phone', country: 'US' }]
+      fields: [{ name: 'mobilephone', type: 'phone', label: 'Phone', country: 'US' }]
     })
 
     await userEvent.type(getByLabelText(/Phone/, { selector: 'input' }), '2025550123')
@@ -208,12 +208,12 @@ describe('HeroForm', () => {
       fields: [
         {
           name: 'mobilephone',
-          kind: 'phone',
+          type: 'phone',
           label: 'Phone',
           placeholder: '(999) 999-9999',
           visuallyHiddenLabel: true
         },
-        { name: 'email', kind: 'email', label: 'Work email' }
+        { name: 'email', type: 'email', label: 'Work email' }
       ]
     })
 

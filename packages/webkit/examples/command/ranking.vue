@@ -14,7 +14,7 @@
 <template>
   <Button
     label="Open ranked palette"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 

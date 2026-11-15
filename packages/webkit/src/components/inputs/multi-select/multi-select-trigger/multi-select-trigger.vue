@@ -36,7 +36,7 @@
 
   const { t } = useTranslate({ multiSelect: en.multiSelect })
 
-  const field = computed(() => ctx.kind.value === 'chips' || ctx.searchable.value)
+  const field = computed(() => ctx.variant.value === 'chips' || ctx.searchable.value)
   const locked = computed(() => ctx.disabled.value || ctx.readonly.value)
 
   const selection = computed(() => ctx.modelValue.value ?? [])
@@ -47,7 +47,7 @@
   const hiddenChips = computed(() => selection.value.length - shownChips.value.length)
 
   const inputPlaceholder = computed(() => {
-    if (ctx.kind.value === 'summary' && ctx.filled.value) return ctx.displayValue.value
+    if (ctx.variant.value === 'summary' && ctx.filled.value) return ctx.displayValue.value
     return ctx.filled.value ? '' : ctx.placeholder.value
   })
 
@@ -197,7 +197,7 @@
     :data-testid="testId"
     :data-state="ctx.open.value ? 'open' : 'closed'"
     :data-size="ctx.size.value"
-    :data-kind="ctx.kind.value"
+    :data-variant="ctx.variant.value"
     :data-searchable="ctx.searchable.value || null"
     :data-disabled="ctx.disabled.value || null"
     :data-readonly="ctx.readonly.value || null"
@@ -210,7 +210,7 @@
     @keydown="onFieldKeydown"
   >
     <slot name="leading" />
-    <template v-if="ctx.kind.value === 'chips'">
+    <template v-if="ctx.variant.value === 'chips'">
       <Chip
         v-for="value in shownChips"
         :key="String(value)"
@@ -218,7 +218,7 @@
         :removable="!locked"
         :disabled="ctx.disabled.value"
         :data-testid="`${testId}__chip`"
-        kind="filled"
+        variant="filled"
         size="small"
         class="max-w-full"
         @remove="removeChip(value)"
@@ -227,7 +227,7 @@
         v-if="hiddenChips > 0"
         :label="t('multiSelect.more', { count: hiddenChips })"
         :data-testid="`${testId}__more`"
-        kind="outlined"
+        variant="outline"
         size="small"
       />
     </template>
@@ -253,7 +253,7 @@
       :aria-required="ctx.required.value || undefined"
       :disabled="ctx.disabled.value"
       :readonly="ctx.readonly.value"
-      :data-filled="(ctx.kind.value === 'summary' && ctx.filled.value) || null"
+      :data-filled="(ctx.variant.value === 'summary' && ctx.filled.value) || null"
       :data-testid="`${testId}__input`"
       autocomplete="off"
       :spellcheck="false"

@@ -23,7 +23,7 @@
     <DrawerTrigger>
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />
@@ -89,7 +89,7 @@
             <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               type="submit"
               disabled

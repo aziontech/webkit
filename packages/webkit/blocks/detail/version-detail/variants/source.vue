@@ -363,7 +363,7 @@
       ]"
     >
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="versionId"
         :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
@@ -439,7 +439,7 @@
       <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           href="/resources/1784552864?tab=versions"
           aria-label="Back to web-app versions"
@@ -546,7 +546,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       aria-label="Version actions"
                     />
@@ -599,7 +599,7 @@
                       <template #actions>
                         <Button
                           label="Upload Files"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-upload"
                           @click="upload"
@@ -634,7 +634,7 @@
                           >
                             <IconButton
                               icon="ai ai-refresh"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               :loading="loading"
                               aria-label="Refresh"
@@ -647,7 +647,7 @@
                           >
                             <IconButton
                               icon="ai ai-download"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               :disabled="!tableEl"
                               aria-label="Download CSV"
@@ -660,7 +660,7 @@
                           >
                             <IconButton
                               icon="ai ai-column"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               aria-label="Columns"
                             />
@@ -671,7 +671,7 @@
                           >
                             <IconButton
                               icon="ai ai-external-link"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               :href="`/object-storage/${bucket}`"
                               aria-label="Open in Object Storage"
@@ -745,7 +745,7 @@
                                 <template #actions>
                                   <Button
                                     label="Clear search"
-                                    kind="outlined"
+                                    variant="outline"
                                     size="small"
                                     @click="search = ''"
                                   />
@@ -762,14 +762,14 @@
                                 <template #actions>
                                   <Button
                                     label="Upload Files"
-                                    kind="outlined"
+                                    variant="outline"
                                     size="medium"
                                     icon="ai ai-upload"
                                     @click="upload"
                                   />
                                   <Button
                                     label="Open Bucket"
-                                    kind="transparent"
+                                    variant="ghost"
                                     size="medium"
                                     :href="`/object-storage/${bucket}`"
                                   />
@@ -799,7 +799,7 @@
                     <template #actions>
                       <Button
                         :label="`Open ${tabLabel}`"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`/resources/web-app/${activeTab}`"
                       />
@@ -853,7 +853,7 @@
                     <SplitButton
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
                       :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       :items="saveOptions"
                       @item-click="(_event, item) => (saveAction = item.value)"
@@ -894,7 +894,7 @@
               </h2>
               <IconButton
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Close version history"
                 @click="historyExpanded = false"
@@ -932,7 +932,7 @@
                       >
                         <IconButton
                           icon="ai ai-pencil"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           aria-label="Edit version info"
                           @click="
@@ -963,13 +963,13 @@
                       <div class="flex justify-end gap-(--spacing-xs)">
                         <Button
                           label="Cancel"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="editing = false"
                         />
                         <Button
                           label="Save"
-                          kind="primary"
+                          variant="primary"
                           size="small"
                           @click="
                             () => {
@@ -995,7 +995,7 @@
                             :alt="version.author"
                             :label="version.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate"
@@ -1073,7 +1073,7 @@
                             :alt="entry.author"
                             :label="entry.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
@@ -1089,7 +1089,7 @@
               >
                 <Button
                   label="Show older"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="shown += 5"
                 />

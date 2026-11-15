@@ -18,11 +18,11 @@
   defineOptions({ name: 'DocPrompt', inheritAttrs: false })
 
   /** How the prompt occupies its row: a wrapping paragraph, or one unbroken line. */
-  export type DocPromptKind = 'block' | 'line'
+  export type DocPromptVariant = 'block' | 'line'
 
   interface Props {
     /** Wrapping paragraph capped at four lines, or one line that scrolls sideways. */
-    kind?: DocPromptKind
+    variant?: DocPromptVariant
     /** What the block is, in a word or two. Renders as a titled row above the prompt. */
     title?: string
     /** Azion icon class for the glyph beside the title. */
@@ -32,7 +32,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'block',
+    variant: 'block',
     title: '',
     icon: 'ai ai-sparkles',
     label: ''
@@ -60,7 +60,7 @@
   const blockFitsOneLine = ref(false)
   const capOverride = ref('')
 
-  const singleLine = computed(() => props.kind === 'line' || blockFitsOneLine.value)
+  const singleLine = computed(() => props.variant === 'line' || blockFitsOneLine.value)
 
   let capPx = 0
 
@@ -68,7 +68,7 @@
     const el = promptEl.value
     if (!el) return
 
-    if (props.kind === 'line') {
+    if (props.variant === 'line') {
       const start = el.scrollLeft > 1
       const end = Math.ceil(el.scrollLeft + el.clientWidth) < el.scrollWidth - 1
       overflow.value = start && end ? 'both' : start ? 'start' : end ? 'end' : ''
@@ -177,8 +177,8 @@
     data-doc-block
     data-doc-chrome
     :data-testid="testId"
-    :data-kind="kind"
-    :data-capped="kind === 'block' && capped ? '' : undefined"
+    :data-variant="variant"
+    :data-capped="variant === 'block' && capped ? '' : undefined"
     class="w-full overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <div
@@ -204,43 +204,43 @@
         <div class="relative">
           <p
             ref="promptEl"
-            :data-kind="kind"
-            :data-state="kind === 'block' ? (expanded ? 'open' : 'closed') : undefined"
-            :data-overflow="kind === 'line' && overflow ? overflow : undefined"
-            :tabindex="kind === 'line' ? 0 : undefined"
+            :data-variant="variant"
+            :data-state="variant === 'block' ? (expanded ? 'open' : 'closed') : undefined"
+            :data-overflow="variant === 'line' && overflow ? overflow : undefined"
+            :tabindex="variant === 'line' ? 0 : undefined"
             :style="{ maxHeight: capOverride || undefined }"
-            class="m-0 text-body-code-sm text-(--text-default) motion-reduce:transition-none data-[kind=block]:max-h-[3.5lh] data-[kind=block]:overflow-hidden data-[kind=block]:whitespace-pre-wrap data-[kind=block]:transition-[max-height] data-[kind=block]:duration-moderate-02 data-[kind=block]:ease-productive-exit data-[kind=line]:overflow-x-auto data-[kind=line]:whitespace-nowrap data-[kind=line]:rounded-(--shape-control) data-[kind=line]:[scrollbar-width:none] data-[kind=block]:data-[state=open]:max-h-none data-[kind=block]:data-[state=open]:ease-productive-entrance data-[kind=line]:focus-visible:outline-2 data-[kind=line]:focus-visible:outline-offset-2 data-[kind=line]:focus-visible:outline-(--ring-color) data-[kind=line]:[&::-webkit-scrollbar]:hidden"
+            class="m-0 text-body-code-sm text-(--text-default) motion-reduce:transition-none data-[variant=block]:max-h-[3.5lh] data-[variant=block]:overflow-hidden data-[variant=block]:whitespace-pre-wrap data-[variant=block]:transition-[max-height] data-[variant=block]:duration-moderate-02 data-[variant=block]:ease-productive-exit data-[variant=line]:overflow-x-auto data-[variant=line]:whitespace-nowrap data-[variant=line]:rounded-(--shape-control) data-[variant=line]:[scrollbar-width:none] data-[variant=block]:data-[state=open]:max-h-none data-[variant=block]:data-[state=open]:ease-productive-entrance data-[variant=line]:focus-visible:outline-2 data-[variant=line]:focus-visible:outline-offset-2 data-[variant=line]:focus-visible:outline-(--ring-color) data-[variant=line]:[&::-webkit-scrollbar]:hidden"
             @scroll="measure"
           >
             <slot>{{ label }}</slot>
           </p>
 
           <div
-            v-if="kind === 'block' && capped"
+            v-if="variant === 'block' && capped"
             :data-hidden="expanded ? '' : undefined"
             class="pointer-events-none absolute inset-x-0 bottom-0 h-(--spacing-lg) bg-gradient-to-b from-transparent to-(--doc-prompt-background) transition-opacity duration-moderate-01 ease-productive-exit data-[hidden]:opacity-0 motion-reduce:transition-none"
             aria-hidden="true"
           />
           <div
-            v-if="kind === 'line' && (overflow === 'start' || overflow === 'both')"
+            v-if="variant === 'line' && (overflow === 'start' || overflow === 'both')"
             class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg) bg-gradient-to-r from-(--doc-prompt-background) to-transparent rtl:bg-gradient-to-l"
             aria-hidden="true"
           />
           <div
-            v-if="kind === 'line' && (overflow === 'end' || overflow === 'both')"
+            v-if="variant === 'line' && (overflow === 'end' || overflow === 'both')"
             class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg) bg-gradient-to-l from-(--doc-prompt-background) to-transparent rtl:bg-gradient-to-r"
             aria-hidden="true"
           />
         </div>
 
         <div
-          v-if="kind === 'block' && capped"
+          v-if="variant === 'block' && capped"
           class="flex justify-center pt-(--spacing-sm)"
         >
           <Button
             :label="expanded ? t('docPrompt.showLess') : t('docPrompt.showMore')"
             :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
-            kind="outlined"
+            variant="outline"
             size="small"
             @click="toggle"
           />
@@ -255,7 +255,7 @@
           :value="promptText"
           :aria-label="t('docPrompt.copy')"
           :copied-label="t('docPrompt.copied')"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
       </div>

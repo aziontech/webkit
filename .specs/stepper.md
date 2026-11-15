@@ -3,8 +3,8 @@ name: stepper
 category: navigation
 structure: composition
 status: implemented
-spec_version: 6
-checksum: 543b4bf6f2ed008a0a8cc7fd5f8f313bb442d4cd82c160bbcef88d9be1ee8a17
+spec_version: 7
+checksum: 8dcbbb919e82af5c1e92a4a781167aa41b9febc0a6d54519fe6ca727baf5b664
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -225,7 +225,7 @@ even when the row carries nothing but its title.
 ## Examples
 
 - Default — a four-step rail with one complete step, one current, two upcoming.
-- States — composite story rendering every `state` value plus `current` side-by-side in one frame. `state` is this component's multi-option axis, so it takes the composite slot that `Types` takes on a component with a `kind`.
+- States — composite story rendering every `state` value plus `current` side-by-side in one frame. `state` is this component's multi-option axis, so it takes the composite slot that `Types` takes on a component with a `variant`.
 - Disabled — the rail with the steps after the current one closed, which is how a wizard actually renders.
 
 ## Constraints — DO NOT

@@ -4,8 +4,8 @@
 
 <template>
   <div class="flex flex-wrap items-center gap-8">
-    <Brand kind="default" />
-    <Brand kind="reduced" />
-    <Brand kind="extended" />
+    <Brand variant="default" />
+    <Brand variant="reduced" />
+    <Brand variant="extended" />
   </div>
 </template>

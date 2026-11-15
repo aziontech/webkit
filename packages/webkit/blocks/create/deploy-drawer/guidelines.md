@@ -45,7 +45,7 @@ A full-width `ToggleGroup` in the card header switches between Use existing and 
 
 ### G. Environment — `RadioGroup`, `Tag` (required)
 
-Choice cards, a `RadioGroup` with `kind="card"` and one item per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
+Choice cards, a `RadioGroup` with `variant="card"` and one item per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 

@@ -5,7 +5,7 @@
 <template>
   <div class="relative h-80 w-full overflow-hidden bg-(--bg-canvas)">
     <TextureMaterial
-      kind="dots"
+      variant="dots"
       size="medium"
       fade="none"
     />

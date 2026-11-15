@@ -224,7 +224,7 @@ describe('FeatureScroll', () => {
     expect(queryByTestId('content-illustration')).toBeNull()
   })
 
-  it('draws an item action secondary unless it sets its kind, and carries its target', () => {
+  it('draws an item action secondary unless it sets its variant, and carries its target', () => {
     const { getAllByRole } = band({
       items: [
         items[0],
@@ -233,16 +233,19 @@ describe('FeatureScroll', () => {
           action: {
             label: 'Terraform registry',
             href: 'https://registry.terraform.io/',
-            kind: 'outlined',
+            variant: 'outline',
             target: '_blank'
           }
         }
       ]
     })
 
-    expect(getAllByRole('link', { name: 'List docs' })[0]).toHaveAttribute('data-kind', 'secondary')
+    expect(getAllByRole('link', { name: 'List docs' })[0]).toHaveAttribute(
+      'data-variant',
+      'secondary'
+    )
     const external = getAllByRole('link', { name: 'Terraform registry' })[0]
-    expect(external).toHaveAttribute('data-kind', 'outlined')
+    expect(external).toHaveAttribute('data-variant', 'outline')
     expect(external).toHaveAttribute('target', '_blank')
   })
 

@@ -5,9 +5,9 @@
   import {
     ItemContainerInjectionKey,
     ItemInjectionKey,
-    type ItemKind,
     ItemListMemberInjectionKey,
-    type ItemSize
+    type ItemSize,
+    type ItemVariant
   } from './injection-key'
 
   defineOptions({
@@ -15,11 +15,11 @@
     inheritAttrs: false
   })
 
-  export type { ItemKind, ItemSize }
+  export type { ItemSize, ItemVariant }
 
   interface Props {
     /** Item root surface variant. `inline` removes the outer padding for inline placement and divided in-card lists; `option` is a compact chooser row that fills when pressed or selected. */
-    kind?: ItemKind
+    variant?: ItemVariant
     /** Item root density (padding and gap). */
     size?: ItemSize
     /** When set, the whole row renders as an anchor link to this URL. */
@@ -29,7 +29,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'default',
+    variant: 'default',
     size: 'medium',
     href: '',
     clickable: false
@@ -45,7 +45,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-item')
 
-  const kind = computed<ItemKind>(() => container?.forceKind ?? props.kind)
+  const variant = computed<ItemVariant>(() => container?.forceVariant ?? props.variant)
 
   const isLink = computed(() => props.href.length > 0)
   const interactive = computed(() => isLink.value || props.clickable)
@@ -66,16 +66,16 @@
       href: isLink.value ? props.href : undefined,
       'data-slot': 'item',
       'data-testid': testId.value,
-      'data-kind': kind.value,
+      'data-variant': variant.value,
       'data-size': props.size,
       class: cn(
         'group/item relative flex w-full flex-wrap items-center',
         'rounded-(--shape-button) border border-transparent text-body-sm text-(--text-default)',
-        'data-[kind=outlined]:border-(--border-muted) data-[kind=outlined]:bg-(--bg-surface)',
-        'data-[kind=muted]:bg-(--bg-hover)',
-        '[&:not([data-kind=option])]:data-[size=medium]:gap-(--spacing-md) [&:not([data-kind=inline],[data-kind=option])]:data-[size=medium]:p-(--spacing-md)',
-        '[&:not([data-kind=option])]:data-[size=small]:gap-(--spacing-xs) [&:not([data-kind=inline],[data-kind=option])]:data-[size=small]:px-(--spacing-md) [&:not([data-kind=inline],[data-kind=option])]:data-[size=small]:py-(--spacing-sm)',
-        'data-[kind=option]:gap-(--spacing-sm) data-[kind=option]:px-(--spacing-sm) data-[kind=option]:py-(--spacing-xs) data-[kind=option]:aria-pressed:bg-(--bg-selected) data-[kind=option]:aria-selected:bg-(--bg-selected)',
+        'data-[variant=outline]:border-(--border-muted) data-[variant=outline]:bg-(--bg-surface)',
+        'data-[variant=muted]:bg-(--bg-hover)',
+        '[&:not([data-variant=option])]:data-[size=medium]:gap-(--spacing-md) [&:not([data-variant=inline],[data-variant=option])]:data-[size=medium]:p-(--spacing-md)',
+        '[&:not([data-variant=option])]:data-[size=small]:gap-(--spacing-xs) [&:not([data-variant=inline],[data-variant=option])]:data-[size=small]:px-(--spacing-md) [&:not([data-variant=inline],[data-variant=option])]:data-[size=small]:py-(--spacing-sm)',
+        'data-[variant=option]:gap-(--spacing-sm) data-[variant=option]:px-(--spacing-sm) data-[variant=option]:py-(--spacing-xs) data-[variant=option]:aria-pressed:bg-(--bg-selected) data-[variant=option]:aria-selected:bg-(--bg-selected)',
         interactive.value && [
           'cursor-pointer text-start no-underline',
           'aria-pressed:bg-(--bg-selected) aria-selected:bg-(--bg-selected)',
@@ -98,7 +98,7 @@
 
   provide(ItemInjectionKey, {
     testId: testId.value,
-    kind: kind.value,
+    variant: variant.value,
     size: props.size
   })
   provide(ItemListMemberInjectionKey, false)

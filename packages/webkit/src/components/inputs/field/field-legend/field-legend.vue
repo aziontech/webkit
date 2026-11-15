@@ -6,16 +6,16 @@
     inheritAttrs: false
   })
 
-  export type FieldLegendKind = 'legend' | 'label'
+  export type FieldLegendType = 'legend' | 'label'
 
   export interface Props {
     /** Visual weight: `legend` titles a section, `label` matches a FieldLabel for a group of choices. */
-    kind?: FieldLegendKind
+    type?: FieldLegendType
   }
   export type FieldLegendProps = Props
 
   withDefaults(defineProps<Props>(), {
-    kind: 'legend'
+    type: 'legend'
   })
 
   defineSlots<{
@@ -33,9 +33,9 @@
   <legend
     v-bind="$attrs"
     data-slot="field-legend"
-    :data-kind="kind"
+    :data-type="type"
     :data-testid="testId"
-    class="mb-(--spacing-2xs) p-0 text-(--text-default) data-[kind=legend]:text-label-md data-[kind=label]:text-label-sm"
+    class="mb-(--spacing-2xs) p-0 text-(--text-default) data-[type=legend]:text-label-md data-[type=label]:text-label-sm"
   >
     <slot />
   </legend>

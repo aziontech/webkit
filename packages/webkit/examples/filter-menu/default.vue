@@ -15,13 +15,13 @@
     {
       id: 'status',
       label: 'Status',
-      kind: 'single',
+      type: 'single',
       options: [
         { value: 'live', label: 'Live' },
         { value: 'inactive', label: 'Inactive' }
       ]
     },
-    { id: 'modified', label: 'Last modified', kind: 'date' }
+    { id: 'modified', label: 'Last modified', type: 'date' }
   ]
 
   const filters = ref({ owner: ['jane', 'priya'] })

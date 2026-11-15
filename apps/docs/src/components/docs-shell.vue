@@ -70,7 +70,7 @@
             <div class="shrink-0 lg:hidden">
               <IconButton
                 icon="ai ai-menu"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :aria-label="t.openNavigation"
                 @click="navOpen = true"
@@ -83,7 +83,7 @@
                 class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               >
                 <Brand
-                  kind="default"
+                  variant="default"
                   size="small"
                 />
                 <span
@@ -146,7 +146,7 @@
           <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
             <IconButton
               :icon="settings.dir === 'rtl' ? 'ai ai-align-left' : 'ai ai-align-right'"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :aria-label="t.rightToLeft"
               :aria-pressed="settings.dir === 'rtl'"
@@ -162,7 +162,7 @@
           </div>
           <IconButton
             icon="ai ai-github"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :aria-label="t.github"
             href="https://github.com/aziontech/webkit"

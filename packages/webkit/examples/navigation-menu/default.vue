@@ -160,7 +160,7 @@
         <Button label="Primary action" />
         <Button
           label="Secondary"
-          kind="secondary"
+          variant="secondary"
         />
       </div>
     </div>

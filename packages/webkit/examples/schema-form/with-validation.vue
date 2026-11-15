@@ -61,7 +61,7 @@
       <Button
         type="submit"
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
         :loading="saving"
       />

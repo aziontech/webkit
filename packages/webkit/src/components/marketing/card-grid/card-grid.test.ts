@@ -14,7 +14,7 @@ const framed = (gridProps: Record<string, unknown> = {}, cellProps: Record<strin
     components: { CardGrid, CardGridCell },
     setup: () => ({ gridProps, cellProps }),
     template: `
-      <CardGrid kind="frame" v-bind="gridProps">
+      <CardGrid variant="frame" v-bind="gridProps">
         <CardGridCell v-bind="cellProps"><h2>One</h2></CardGridCell>
         <CardGridCell><h2>Two</h2></CardGridCell>
       </CardGrid>
@@ -28,7 +28,7 @@ describe('CardGrid', () => {
       const root = getByTestId(TESTID)
 
       expect(root).toBeInTheDocument()
-      expect(root).toHaveAttribute('data-kind', 'gap')
+      expect(root).toHaveAttribute('data-variant', 'gap')
       expect(root).toHaveAttribute('data-columns', '3')
       expect(root).toHaveAttribute('data-mobile-columns', '1')
       expect(root).toHaveAttribute('data-divider-color', 'default')
@@ -41,10 +41,10 @@ describe('CardGrid', () => {
     })
 
     it.each(['gap', 'divider', 'frame'] as const)(
-      'carries the %s register on data-kind',
-      (kind) => {
-        const { getByTestId } = render(CardGrid, { props: { kind } })
-        expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+      'carries the %s register on data-variant',
+      (variant) => {
+        const { getByTestId } = render(CardGrid, { props: { variant: variant } })
+        expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
       }
     )
 
@@ -63,7 +63,7 @@ describe('CardGrid', () => {
 
     it('carries the muted hairline weight on data-divider-color', () => {
       const { getByTestId } = render(CardGrid, {
-        props: { kind: 'divider', dividerColor: 'muted' }
+        props: { variant: 'divider', dividerColor: 'muted' }
       })
       expect(getByTestId(TESTID)).toHaveAttribute('data-divider-color', 'muted')
     })
@@ -76,7 +76,7 @@ describe('CardGrid', () => {
     })
 
     it('draws no rules while it holds no cell', () => {
-      const { getByTestId } = render(CardGrid, { props: { kind: 'frame' } })
+      const { getByTestId } = render(CardGrid, { props: { variant: 'frame' } })
       expect(getByTestId(TESTID)).not.toHaveAttribute('data-filled')
     })
 
@@ -87,7 +87,7 @@ describe('CardGrid', () => {
 
     it('ignores a comment-only slot when deciding it is filled', () => {
       const { getByTestId } = render(CardGrid, {
-        props: { kind: 'frame' },
+        props: { variant: 'frame' },
         slots: { default: '<!-- nothing here -->' }
       })
       expect(getByTestId(TESTID)).not.toHaveAttribute('data-filled')
@@ -133,7 +133,7 @@ describe('CardGrid', () => {
 
     it('fills the trailing tracks of a short last row in a balanced divider grid', () => {
       const { getByTestId } = render(CardGrid, {
-        props: { kind: 'divider', columns: 3 },
+        props: { variant: 'divider', columns: 3 },
         slots: { default: cells(5) }
       })
       const root = getByTestId(TESTID)
@@ -147,14 +147,14 @@ describe('CardGrid', () => {
 
     it('draws no trailing fill when the rows are full or the grid is not divided', () => {
       const full = render(CardGrid, {
-        props: { kind: 'divider', columns: 3 },
+        props: { variant: 'divider', columns: 3 },
         slots: { default: cells(6) }
       })
       expect(full.getByTestId(TESTID).style.getPropertyValue('--card-grid-fill-lg')).toBe('none')
       full.unmount()
 
       const framed = render(CardGrid, {
-        props: { kind: 'frame', columns: 3 },
+        props: { variant: 'frame', columns: 3 },
         slots: { default: cells(5) }
       })
       expect(framed.getByTestId(TESTID)).not.toHaveAttribute('data-fill-trailing')
@@ -222,23 +222,26 @@ describe('CardGrid', () => {
 
     it('fills with the surface token and pads its content by default', () => {
       const { getAllByTestId } = render(framed())
-      const content = getAllByTestId(CELL_TESTID)[0].querySelector('[data-kind]')
+      const content = getAllByTestId(CELL_TESTID)[0].querySelector('[data-variant]')
 
-      expect(content).toHaveAttribute('data-kind', 'surface')
+      expect(content).toHaveAttribute('data-variant', 'surface')
       expect(content).toHaveAttribute('data-padded', 'true')
     })
 
-    it.each(['surface', 'canvas', 'none'] as const)('carries the %s fill on data-kind', (kind) => {
-      const { getAllByTestId } = render(framed({}, { kind }))
-      expect(getAllByTestId(CELL_TESTID)[0].querySelector('[data-kind]')).toHaveAttribute(
-        'data-kind',
-        kind
-      )
-    })
+    it.each(['surface', 'canvas', 'none'] as const)(
+      'carries the %s fill on data-variant',
+      (variant) => {
+        const { getAllByTestId } = render(framed({}, { variant }))
+        expect(getAllByTestId(CELL_TESTID)[0].querySelector('[data-variant]')).toHaveAttribute(
+          'data-variant',
+          variant
+        )
+      }
+    )
 
     it('drops its padding when padded is false', () => {
       const { getAllByTestId } = render(framed({}, { padded: false }))
-      expect(getAllByTestId(CELL_TESTID)[0].querySelector('[data-kind]')).not.toHaveAttribute(
+      expect(getAllByTestId(CELL_TESTID)[0].querySelector('[data-variant]')).not.toHaveAttribute(
         'data-padded'
       )
     })

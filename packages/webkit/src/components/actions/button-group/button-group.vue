@@ -58,7 +58,7 @@
   export type ButtonGroupItem = ButtonGroupActionItem | ButtonGroupToggleItem | ButtonGroupMenuItem
 
   /** Visual variant of every button in the group. */
-  export type ButtonGroupKind = 'transparent' | 'outlined'
+  export type ButtonGroupVariant = 'ghost' | 'outline'
   /** Size token of every button in the group. */
   export type ButtonGroupSize = 'small' | 'medium' | 'large'
 
@@ -73,7 +73,7 @@
     /** Accessible name of the toolbar; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the toolbar. */
     ariaLabel?: string
     /** Visual variant of every button. */
-    kind?: ButtonGroupKind
+    variant?: ButtonGroupVariant
     /** Size token of every button. */
     size?: ButtonGroupSize
     /** Items shown as buttons; the rest go into the More actions menu. Unset shows every item. */
@@ -85,7 +85,7 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     ariaLabel: '',
-    kind: 'transparent',
+    variant: 'ghost',
     size: 'large',
     visibleCount: undefined,
     overflowLabel: ''
@@ -213,7 +213,7 @@
     aria-orientation="horizontal"
     :aria-label="ariaLabel || undefined"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-2xs)"
     @focusin="onFocusin"
@@ -235,7 +235,7 @@
             <IconButton
               :icon="item.icon"
               :ariaLabel="item.label"
-              :kind="kind"
+              :variant="variant"
               :size="size"
               :disabled="item.disabled"
               :tabindex="tabStopId === item.id ? 0 : -1"
@@ -263,7 +263,7 @@
           :icon="iconOf(item)"
           :ariaLabel="item.label"
           :aria-pressed="isToggle(item) ? Boolean(item.pressed) : undefined"
-          :kind="kind"
+          :variant="variant"
           :size="size"
           :disabled="item.disabled"
           :loading="!isToggle(item) && Boolean(item.loading)"
@@ -289,7 +289,7 @@
           <IconButton
             icon="ai ai-ellipsis"
             :ariaLabel="overflowName"
-            :kind="kind"
+            :variant="variant"
             :size="size"
             :tabindex="tabStopId === OVERFLOW_ID ? 0 : -1"
             data-slot="button-group-item"

@@ -180,7 +180,7 @@
         </span>
         <Button
           :label="t('chatMessage.retry')"
-          kind="outlined"
+          variant="outline"
           size="small"
           icon="ai ai-refresh"
           :data-testid="`${testId}__retry`"

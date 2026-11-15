@@ -11,7 +11,7 @@
     <template #default>
       <Item.List>
         <Item href="#">
-          <Item.Media kind="icon">
+          <Item.Media type="icon">
             <i
               class="ai ai-edge-application text-[length:inherit] leading-none"
               aria-hidden="true"
@@ -27,7 +27,7 @@
           />
         </Item>
         <Item href="#">
-          <Item.Media kind="icon">
+          <Item.Media type="icon">
             <i
               class="ai ai-edge-application text-[length:inherit] leading-none"
               aria-hidden="true"
@@ -43,7 +43,7 @@
           />
         </Item>
         <Item href="#">
-          <Item.Media kind="icon">
+          <Item.Media type="icon">
             <i
               class="ai ai-edge-application text-[length:inherit] leading-none"
               aria-hidden="true"

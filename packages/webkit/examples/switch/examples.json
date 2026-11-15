@@ -4,13 +4,13 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Default switch. Use the Controls panel to flip modelValue, kind, and focused.",
+      "summary": "Default switch. Use the Controls panel to flip modelValue, variant, and focused.",
       "file": "default.vue"
     },
     {
-      "name": "Types",
-      "summary": "Both kind variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.",
-      "file": "types.vue"
+      "name": "Variants",
+      "summary": "Both variant variants in off and on states. Privacy adds a lock (off) / lock-open (on) icon inside the handle.",
+      "file": "variants.vue"
     },
     {
       "name": "Disabled",

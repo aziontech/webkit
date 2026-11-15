@@ -13,9 +13,9 @@
       "file": "with-eyebrow.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "The three registers. `panel` keeps the copy and both controls on one surface and reads as a row from `md` up. `split` divides the band at 7fr/3fr: the raised lead cell carries the two-tone headline and the primary action, the aside carries the supporting line and the secondary one, and each cell pushes its control to the band floor so the two share a baseline whatever the copy does. `lead` is that lead cell with no aside — the supporting line moves under the headline and every control sits in one row on the floor, which is the register for a close whose actions are peers.",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Announcement",

@@ -147,7 +147,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
     class="[--mockup-fade-edge:18%] [--mockup-fade-start:78%]"

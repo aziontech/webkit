@@ -11,13 +11,13 @@
         {
           label: 'Start for free',
           href: '/signup',
-          kind: 'secondary',
+          variant: 'secondary',
           trailing: true
         },
         {
           label: 'Talk to a specialist',
           href: '/site/contact',
-          kind: 'outlined',
+          variant: 'outline',
           trailing: true
         }
       ]
@@ -33,7 +33,7 @@
         {
           label: 'Read the agent docs',
           href: '/site/docs/agent-setup',
-          kind: 'outlined',
+          variant: 'outline',
           trailing: true
         }
       ]
@@ -43,7 +43,7 @@
 
 <template>
   <ClosingCallToAction
-    kind="primary"
+    variant="primary"
     anchor="contact"
     title="Built by you, or your agents."
     typed-lead="Drive one platform from the"

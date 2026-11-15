@@ -92,7 +92,7 @@ A fork looks faster today and costs the whole team every upgrade after. The gap 
 
 A legacy component's API and look are not the target — webkit's are. As you migrate:
 
-- **Rename props to the webkit vocabulary** — `variant`→`kind`, `sm/md/lg`→`small/medium/large`,
+- **Rename props to the webkit vocabulary** — `kind`/`appearance`→`variant`, `sm/md/lg`→`small/medium/large`,
   `onValueChange`→`@update`. Don't preserve the old names "to reduce churn"; map them once, here.
 - **Replace hex/rgb with theme tokens** — `#1e40af` → `var(--primary)`, custom spacing → `var(--spacing-*)`.
   See webkit-usage for the import/token mechanics.
@@ -106,7 +106,7 @@ A legacy component's API and look are not the target — webkit's are. As you mi
 bare `<button>`s — scorecard **~40% webkit**. Broken into shippable stories:
 
 1. **Story A — deps + tokens** (if not already done app-wide): dependency wired, theme/icons imported.
-2. **Story B — buttons**: the two `<button>`s → `@aziontech/webkit/button` with `kind`/`size`. Ships alone.
+2. **Story B — buttons**: the two `<button>`s → `@aziontech/webkit/button` with `variant`/`size`. Ships alone.
 3. **Story C — loading + empty**: `MySpinner` → `Skeleton`; add the missing `EmptyState` (see webkit-ui-states).
 4. **Story D — delete modal**: custom `<Modal>` → `@aziontech/webkit/dialog`, focus-trap for free.
 5. **Story E — the table**: hand-styled `<table>` → `@aziontech/webkit/table` (compound or data-driven).

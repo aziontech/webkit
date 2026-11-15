@@ -17,7 +17,7 @@
       <template #actions>
         <Button
           label="Read the guide"
-          kind="secondary"
+          variant="secondary"
           size="small"
           icon="ai ai-chevron-right"
           icon-position="trailing"
@@ -27,7 +27,7 @@
       </template>
     </MediaSplit>
     <MediaSplit
-      kind="media-start"
+      variant="media-start"
       eyebrow="Deployment"
       title="Two actions keep the same weight order."
       description="When a band offers a second route, it goes beside the first as an outlined button — same size, lower fill, so the band still has one obvious next step."
@@ -38,13 +38,13 @@
       <template #actions>
         <Button
           label="Read the guide"
-          kind="secondary"
+          variant="secondary"
           size="small"
           href="/site/docs"
         />
         <Button
           label="See GitHub"
-          kind="outlined"
+          variant="outline"
           size="small"
           icon="ai ai-github"
           href="https://github.com/aziontech"

@@ -12,7 +12,7 @@
       <IconButton
         icon="ai ai-arrow-up"
         aria-label="top placement"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </Tooltip>
@@ -23,7 +23,7 @@
       <IconButton
         icon="ai ai-arrow-right"
         aria-label="right placement"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </Tooltip>
@@ -34,7 +34,7 @@
       <IconButton
         icon="ai ai-arrow-down"
         aria-label="bottom placement"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </Tooltip>
@@ -45,7 +45,7 @@
       <IconButton
         icon="ai ai-arrow-left"
         aria-label="left placement"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </Tooltip>

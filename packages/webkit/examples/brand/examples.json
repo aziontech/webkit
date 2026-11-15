@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "All brand lockups side by side: default (AZION wordmark), reduced (the \"A\" glyph), and extended (wordmark with the \"move to the edge technologies®\" tagline).",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Sizes",

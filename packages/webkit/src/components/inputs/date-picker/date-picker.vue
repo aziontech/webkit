@@ -415,7 +415,7 @@
               <Button
                 v-if="showApply"
                 :label="t('datePicker.apply')"
-                kind="outlined"
+                variant="outline"
                 :size="size"
                 :disabled="isDisabled"
                 icon="ai ai-arrow-down-left"

@@ -47,7 +47,7 @@
 
   export type { CodeBlockLineChange }
 
-  export type CodeBlockKind = 'code' | 'output'
+  export type CodeBlockType = 'code' | 'output'
 
   /** How a tab with an `original` draws its diff: one column of removed and added lines, or the two versions side by side. */
   export type CodeBlockDiffView = 'unified' | 'split'
@@ -85,7 +85,7 @@
     /** Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. */
     copyable?: boolean
     /** What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control. */
-    kind?: CodeBlockKind
+    type?: CodeBlockType
     /** Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it. */
     showLabel?: boolean
     /** Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block. */
@@ -106,7 +106,7 @@
     showLineNumbers: true,
     copyAriaLabel: '',
     copyable: undefined,
-    kind: 'code',
+    type: 'code',
     showLabel: false,
     title: '',
     animateLines: false,
@@ -197,7 +197,7 @@
 
   const showFileNameBar = computed(() => Boolean(activeTab.value?.fileName))
 
-  const isOutput = computed(() => props.kind === 'output')
+  const isOutput = computed(() => props.type === 'output')
 
   const canCopy = computed(() => props.copyable ?? !isOutput.value)
 
@@ -692,13 +692,13 @@
   <div
     :class="
       cn(
-        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[bordered]:border data-[bordered]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[bordered]:border data-[bordered]:border-(--border-default) data-[type=output]:bg-(--bg-canvas)',
         attrs.class as string | undefined
       )
     "
     :data-bordered="bordered || null"
     :data-copyable="canCopy || null"
-    :data-kind="kind"
+    :data-type="type"
     :data-testid="testId"
   >
     <div
@@ -809,7 +809,7 @@
         <CopyButton
           :value="copyValue"
           :ariaLabel="copyAriaLabel || t('codeBlock.copy')"
-          kind="outlined"
+          variant="outline"
           size="small"
           :data-testid="`${testId}__copy`"
           @copy="onCopy"

@@ -232,7 +232,7 @@
         class="flex items-center justify-between gap-(--spacing-xs) border-t border-(--border-default) pt-(--spacing-md)"
       >
         <Button
-          kind="transparent"
+          variant="ghost"
           :label="t('wizard.cancel')"
           :disabled="loading"
           @click="onCancel"
@@ -240,13 +240,13 @@
         <div class="flex items-center gap-(--spacing-xs)">
           <Button
             v-if="shown > 0"
-            kind="secondary"
+            variant="secondary"
             :label="t('wizard.previous')"
             :disabled="loading"
             @click="onPrevious"
           />
           <Button
-            kind="primary"
+            variant="primary"
             :label="isLast ? submitLabel || t('wizard.submit') : t('wizard.next')"
             :loading="loading"
             @click="onPrimary"

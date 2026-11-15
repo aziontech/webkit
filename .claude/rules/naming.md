@@ -144,7 +144,10 @@ they show, usually the prop: `variants.vue`, `sizes.vue`, `severities.vue`, `sta
 Banned file names: `types`, `kinds`, `basic`, `overview`, `playground`, `demo`, `sample`,
 `example`, `usage`, `simple`, `read-only` (→ `readonly`), `grouped` (→ `groups`), `levels`
 (→ `severities`), and any file word that is a retired vocabulary word: `kind`, `outlined`,
-`transparent`, `prefix`, `suffix`, `left`, `right`, `current`, `expanded`, `failed`.
+`transparent`, `prefix`, `suffix`, `left`, `right`, `current`, `expanded`, `failed`. The one
+exception is a prop the component really has: `types.vue` shows a `type` prop (the sort of part:
+`donut-chart`, `spark-chart`, `sidebar-menu`), `levels.vue` a `level` prop (`doc-heading`,
+`log-view`).
 
 | ✅                     | ❌                                        |
 | ---------------------- | ----------------------------------------- |

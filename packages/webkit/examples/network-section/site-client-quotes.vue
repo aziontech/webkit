@@ -51,7 +51,7 @@
     <SectionGap hatch />
 
     <NetworkSection
-      kind="outcomes"
+      variant="outcomes"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
       claims-eyebrow="Built around your users. Distributed around your data."

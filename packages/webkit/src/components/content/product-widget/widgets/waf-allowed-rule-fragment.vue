@@ -159,7 +159,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="frame.lifted ? 'y' : 'bottom'"
     class="[--mockup-fade-edge:16%] [--mockup-fade-start:72%]"
@@ -230,7 +230,7 @@
                 </span>
                 <IconButton
                   icon="ai ai-trash"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   ariaLabel="Remove condition"
                 />
@@ -264,7 +264,7 @@
                       </span>
                       <IconButton
                         icon="ai ai-trash"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         ariaLabel="Remove condition"
                       />
@@ -301,7 +301,7 @@
             >
               <Button
                 label="Condition"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 icon="ai ai-plus"
               />

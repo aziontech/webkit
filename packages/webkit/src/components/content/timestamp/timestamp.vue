@@ -181,7 +181,7 @@
               :value="row.value"
               :aria-label="t('timestamp.copy', { label: row.label })"
               size="small"
-              kind="transparent"
+              variant="ghost"
             />
           </dd>
         </div>

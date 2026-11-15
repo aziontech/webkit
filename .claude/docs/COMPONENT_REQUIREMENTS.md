@@ -33,7 +33,7 @@ v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code
 | `input-text` / `InputText`                              | `input` / `Input`                                                        |
 | `input-number` / `InputNumber`                          | `number-input` / `NumberInput`                                           |
 | `input-password` / `InputPassword`                      | `password-input` / `PasswordInput`                                       |
-| `box-grid-selection` / `BoxGridSelection`               | `radio-group` / `RadioGroup` with `kind="card"`                          |
+| `box-grid-selection` / `BoxGridSelection`               | `radio-group` / `RadioGroup` with `variant="card"`                       |
 | `resizable-panel` / `ResizablePanel`                    | `resizable` / `Resizable`                                                |
 | `segmented-button` / `SegmentedButton`                  | `toggle-group` / `ToggleGroup`                                           |
 | every `field-*` wrapper (`FieldText`, `FieldSelect`, …) | one `Field` around the plain control (see [Form fields](#4-form-fields)) |
@@ -45,7 +45,7 @@ Prop vocabulary ([`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)):
 - the primary value is `modelValue`, bound with `v-model` — never `v-model:value`;
 - a frame is `bordered`, never `border`; a copy affordance is `copyable`, never `showCopy`;
 - self-advancing media is `autoplay` / `autoplayInterval`; a column count below `md` is `mobileColumns`;
-- `Button` kinds are `primary`, `secondary`, `outlined`, `transparent` and `danger` (`kind="transparent"`, never `kind="text"`); `Item` uses `kind="outlined"`;
+- `Button` variants are `primary`, `secondary`, `outline`, `ghost` and `danger` (`variant="ghost"`, never `variant="ghost"`); `Item` uses `variant="outline"`;
 - severities are `info`, `success`, `warning` and `danger` (`severity="danger"`, never `error`); `SeverityTag` takes `severity`, not `level`.
 
 Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
@@ -245,7 +245,7 @@ Organize the template logically and compose existing components instead of re-dr
     </Field>
     <Separator />
     <Button
-      kind="transparent"
+      variant="ghost"
       label="Cancel"
     />
   </section>
@@ -392,7 +392,7 @@ Some components may require Vue Router for navigation or routing features.
 ### 2. Props and Events
 
 - ✅ **DO:** Type every prop and give optional props a default
-- ✅ **DO:** Use the shared vocabulary (`modelValue`, `bordered`, `copyable`, `autoplay`, `kind`, `severity`, `size`)
+- ✅ **DO:** Use the shared vocabulary (`modelValue`, `bordered`, `copyable`, `autoplay`, `variant`, `severity`, `size`)
 - ✅ **DO:** Use descriptive event names
 - ❌ **DON'T:** Use overly generic prop names
 - ❌ **DON'T:** Mutate props directly
@@ -521,7 +521,7 @@ Some components may require Vue Router for navigation or routing features.
 
 <template>
   <Button
-    kind="outlined"
+    variant="outline"
     :label="label"
     @click="navigate"
   />
@@ -620,7 +620,7 @@ interface Props {
   /** Visible label rendered inside the component. */
   label?: string
   /** Visual variant. Use `primary` for primary actions, `text` for tertiary. */
-  kind?: Kind
+  variant?: Kind
   /** Controlled open state. Use with `v-model:open` or `@update:open`. */
   open?: boolean
 }
@@ -628,7 +628,7 @@ interface Props {
 
 ### 2.2. Naming conventions
 
-- **Visual variants** are always exposed as `kind` (`'primary' | 'secondary' | 'outlined' | 'text' | 'transparent'`). Never `variant`, `color`, or `appearance`.
+- **Visual variants** are always exposed as `variant` (`'primary' | 'secondary' | 'outline' | 'ghost' | 'transparent'`). Never `variant`, `color`, or `appearance`.
 - **Sizes** are always exposed as `size` with values `'small' | 'medium' | 'large'`.
 - **Boolean states** are exposed without `is`/`has` prefix on the prop (`disabled`, `loading`, `open`, `selected`, `expanded`, `readonly`). Internal computeds may use `isInactive` etc.
 - **Events** are emitted in kebab-case (`update:open`, `before-close`) and typed via `defineEmits<{ 'update:open': [value: boolean] }>()`.
@@ -708,7 +708,7 @@ Usage:
 import { cn } from '@aziontech/webkit/utils/cn'
 
 const rootClasses = computed(() =>
-  cn(sharedClasses, kindClasses[props.kind], sizeClasses[props.size], attrs.class)
+  cn(sharedClasses, variantClasses[props.variant], sizeClasses[props.size], attrs.class)
 )
 ```
 
@@ -720,21 +720,21 @@ Export the variant unions so consumers can type their own wrappers without re-de
 
 ```ts
 // button.vue
-export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
 export type ButtonSize = 'small' | 'medium' | 'large'
 ```
 
 Consumer usage:
 
 ```ts
-import type { ButtonKind } from '@aziontech/webkit/button'
+import type { ButtonVariant } from '@aziontech/webkit/button'
 
 interface MyCardActionProps {
-  kind: ButtonKind
+  variant: ButtonVariant
 }
 ```
 
-Naming pattern: `<ComponentName><PropName>` — `ButtonKind`, `ButtonSize`, `DialogSize`, `TabsOrientation`. Each public type is re-exported through the component's entry in `package.json#exports` (Vue SFC default export covers the runtime; named exports cover the types).
+Naming pattern: `<ComponentName><PropName>` — `ButtonVariant`, `ButtonSize`, `DialogSize`, `TabsOrientation`. Each public type is re-exported through the component's entry in `package.json#exports` (Vue SFC default export covers the runtime; named exports cover the types).
 
 ### 2.9. Anatomy completa em Composition Pattern
 
@@ -797,12 +797,12 @@ Convention established by [card-pricing.vue](../../packages/webkit/src/component
 - The consumer can override the root via `data-testid="custom-id"`; all children inherit the new prefix automatically.
 - Composition Pattern sub-components inject the parent's `testId` through the context.
 
-### 4. Class structure (sharedClasses/kindClasses/sizeClasses/disabledClasses/rootClasses)
+### 4. Class structure (sharedClasses/variantClasses/sizeClasses/disabledClasses/rootClasses)
 
 For interactive components with variants (button-like), follow [button.vue](../../packages/webkit/src/components/actions/button/button.vue) with typed maps:
 
 - `sharedClasses` (array) with base layout, transitions, focus-visible, pseudo-element setup.
-- `kindClasses: Record<Kind, string>` mapping each variant to its token combination.
+- `variantClasses: Record<Kind, string>` mapping each variant to its token combination.
 - `sizeClasses: Record<Size, string>` mapping each size to spacing + typography class.
 - `disabledClasses` (string) overriding interactive state.
 - `rootClasses` computed merges all of the above with `attrs.class`.
@@ -819,7 +819,7 @@ before:opacity-0 before:transition-opacity before:content-['']
 hover:before:opacity-100 active:before:opacity-100
 ```
 
-And `kindClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../../packages/webkit/src/components/actions/button/button.vue#L65-L69).
+And `variantClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../../packages/webkit/src/components/actions/button/button.vue#L65-L69).
 
 ### 6. Polimorfismo `<a>` / `<button>`
 
@@ -869,7 +869,7 @@ Every token used must work in both modes of `@aziontech/theme`. The styled visua
 
 > **Status: available today.** `@figma/code-connect` is installed in [`packages/webkit/package.json`](../../packages/webkit/package.json) and the project config lives at [`packages/webkit/figma.config.json`](../../packages/webkit/figma.config.json) (`parser: "html"`, `include: ["src/**/*.figma.ts"]`).
 
-For every new component, generate `<name>.figma.ts` next to the `.vue` mapping Figma variants (`kind`, `size`, `state`) → Vue props, Figma slots → Vue children, and the code snippet shown in the Dev Mode inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
+For every new component, generate `<name>.figma.ts` next to the `.vue` mapping Figma variants (`variant`, `size`, `state`) → Vue props, Figma slots → Vue children, and the code snippet shown in the Dev Mode inspection panel. Use the `/figma-code-connect` skill as a prerequisite to call `add_code_connect_map`.
 
 CLI scripts (in `packages/webkit/package.json`):
 
@@ -891,16 +891,16 @@ Every component documents itself through copyable SFCs in `packages/webkit/examp
 
 - `examples.json`: `{ "component": "<name>", "title": "Components/<Category>/<PascalName>", "examples": [{ "name", "summary", "file" }] }`. The first example is the default view and is the one the styled visual suite screenshots.
 - One `.vue` per example: `<script setup>` with the real `@aziontech/webkit/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
-- Set: `default.vue` + one composite example per multi-option axis (`types.vue` for `kind`, `sizes.vue` for `size`) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
+- Set: `default.vue` + one composite example per multi-option axis (`types.vue` for `variant`, `sizes.vue` for `size`) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
 - The docs site renders each example on `/components/<name>` beside its source and alone at `/frame/example/<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
 
 ### 13.w Styling discipline (mandatory for new components)
 
-The webkit layer applies styles **inline on the template root element's `class` attribute**, switches variants via `data-*` attributes, and reads them with Tailwind's `data-[attr=value]:` prefix. This supersedes any older example in this document that still shows the `kindClasses` / `sizeClasses` / `sharedClasses` Record-of-strings pattern. Legacy components on the whitelist still use the old pattern; **every new component starts here**.
+The webkit layer applies styles **inline on the template root element's `class` attribute**, switches variants via `data-*` attributes, and reads them with Tailwind's `data-[attr=value]:` prefix. This supersedes any older example in this document that still shows the `variantClasses` / `sizeClasses` / `sharedClasses` Record-of-strings pattern. Legacy components on the whitelist still use the old pattern; **every new component starts here**.
 
 #### Forbidden
 
-- `const sharedClasses = [...]`, `const kindClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` whose only job is to compose classes.
+- `const sharedClasses = [...]`, `const variantClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` whose only job is to compose classes.
 - `<style>` blocks (scoped or unscoped).
 - `.css` / `.scss` files inside a component directory.
 - CSS-in-JS, `styled()` helpers, `css\`\`` tagged templates.
@@ -911,7 +911,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
 
 - `defineOptions({ name, inheritAttrs: false })` + `useAttrs()` on the script.
 - Root element binds `v-bind="$attrs"` so consumer-passed `class` merges into the root's `class` automatically.
-- Variants are mirrored as `data-*` attributes on the root (`data-kind`, `data-size`, `data-disabled`, `data-state`, `data-orientation`).
+- Variants are mirrored as `data-*` attributes on the root (`data-variant`, `data-size`, `data-disabled`, `data-state`, `data-orientation`).
 - Static utility classes are listed inline on the root's `class` attribute, with Tailwind `data-[attr=value]:utility` prefixes switching styles by variant.
 - When the consumer must override an internal token choice, wrap the static class string with `cn` from `@aziontech/webkit/utils/cn`:
 
@@ -927,12 +927,12 @@ The webkit layer applies styles **inline on the template root element's `class` 
 
   defineOptions({ name: 'Button', inheritAttrs: false })
 
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
   export type ButtonSize = 'small' | 'medium' | 'large'
 
   interface Props {
     /** Visual variant. */
-    kind?: ButtonKind
+    variant?: ButtonVariant
     /** Size token. */
     size?: ButtonSize
     /** Disables interaction. */
@@ -940,7 +940,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'primary',
+    variant: 'primary',
     size: 'large',
     disabled: false
   })
@@ -953,7 +953,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
   <button
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-disabled="disabled || null"
     :disabled="disabled"
@@ -962,10 +962,10 @@ The webkit layer applies styles **inline on the template root element's `class` 
       transition-colors duration-150 ease-out motion-reduce:transition-none
       rounded-(--shape-button)
       focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
-      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
-      data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-foreground)
-      data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
-      data-[kind=text]:bg-transparent
+      data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+      data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground)
+      data-[variant=outline]:border data-[variant=outline]:border-(--border-default) data-[variant=outline]:bg-transparent
+      data-[variant=text]:bg-transparent
       data-[size=small]:h-7 data-[size=small]:px-(--spacing-2) data-[size=small]:text-button-md
       data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-3) data-[size=medium]:text-button-md
       data-[size=large]:h-10 data-[size=large]:px-(--spacing-4) data-[size=large]:text-button-lg
@@ -1013,7 +1013,7 @@ For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popov
 
 - The `default.vue` example renders the component in its **closed** state — the trigger is visible; the overlay is not.
 - The viewer activates the overlay by interacting with the trigger (click, hover, keyboard) on the docs page — exactly as a real consumer would.
-- Per-variant examples (one per `kind`, one per `size`) also default to closed unless the variant cannot exist closed.
+- Per-variant examples (one per `variant`, one per `size`) also default to closed unless the variant cannot exist closed.
 
 ```vue
 <!-- examples/dialog/default.vue: the trigger renders, the dialog opens on click -->
@@ -1027,7 +1027,7 @@ For any component that exposes an open/close state (Dialog, Drawer, Sheet, Popov
 
 #### Variants: only basic ones
 
-The spec lists which `kind` / `size` examples exist. Do **not** add visual permutations the spec did not list. A "WithIcon", "WithLongLabel", "WithBadge" example belongs in the spec or it doesn't belong in the folder.
+The spec lists which `variant` / `size` examples exist. Do **not** add visual permutations the spec did not list. A "WithIcon", "WithLongLabel", "WithBadge" example belongs in the spec or it doesn't belong in the folder.
 
 ### 14. Checklist atualizado (apêndice à checklist existente)
 
@@ -1043,13 +1043,13 @@ The spec lists which `kind` / `size` examples exist. Do **not** add visual permu
 - [ ] `testId = computed<string>(() => ...)`.
 - [ ] Types for variants (`type Kind = ...`) and typed maps (`Record<Kind, string>`).
 - [ ] Zero `any`, zero `// @ts-ignore`.
-- [ ] **Naming conventions** applied (`kind`/`size`/booleans without prefix, events kebab-case).
+- [ ] **Naming conventions** applied (`variant`/`size`/booleans without prefix, events kebab-case).
 - [ ] **Controlled / uncontrolled** states implemented when applicable.
 - [ ] Composition Pattern only when justified (sibling sub-components + typed `provide`/`inject`).
 - [ ] When Composition Pattern: complete anatomy shipped (Trigger/Portal/Overlay/Content/Title/Description/Close as applicable — see § 2.9), with the canonical folder-per-sub-component layout (`<root>/<root>-<part>/<root>-<part>.vue`; shared `injection-key.ts` at the root level).
 - [ ] **`asChild`** exposed on trigger-like sub-components (Trigger/Close/etc.) — § 2.5.
 - [ ] **`data-state`/`data-disabled`/`data-orientation`** exposed on the root and on stateful sub-components — § 2.6.
-- [ ] **`VariantProps`** (e.g. `ButtonKind`, `ButtonSize`) exported as named exports — § 2.8.
+- [ ] **`VariantProps`** (e.g. `ButtonVariant`, `ButtonSize`) exported as named exports — § 2.8.
 - [ ] **`cn` helper** used for class merging when consumer classes may override defaults (once `clsx` + `tailwind-merge` are installed — § 2.7).
 - [ ] `<a>`/`<button>` polymorphism when applicable, with `rel="noopener noreferrer"` on `_blank`.
 
@@ -1085,7 +1085,7 @@ The spec lists which `kind` / `size` examples exist. Do **not** add visual permu
 #### Examples
 
 - [ ] `examples/<name>/examples.json` with `component`, `title` and one entry per example (`name`, `summary`, `file`).
-- [ ] `default.vue` + `types.vue` (composite, when more than one `kind`) + `sizes.vue` (composite, when more than one `size`) + `loading.vue` / `disabled.vue` only when the component has those props. Nothing else by default.
+- [ ] `default.vue` + `types.vue` (composite, when more than one `variant`) + `sizes.vue` (composite, when more than one `size`) + `loading.vue` / `disabled.vue` only when the component has those props. Nothing else by default.
 - [ ] Each example stands alone, imports only real subpaths, and renders closed when the component opens and closes.
 
 #### Validação

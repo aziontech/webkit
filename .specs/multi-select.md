@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 0a4ded112c18221c3fb01eaf07ad55902338b8edf61632e9e1c62914bcff0215
+checksum: b2deba668de1d931e2c6226120006fcc07f0a7944ffbe274500d02935a2be119
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`kind="chips"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add "…"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox.
+Select control specialised for choosing many options from a list. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a MultiSelect sits next to other form fields without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. Every option row carries a checkbox indicator (the `Checkbox` webkit component), optionally a leading slot/icon and a trailing tag. Search and "Create new" footer are exposed as slots on `<MultiSelectContent>`. Since spec v4 the trigger can also show the selection as removable chips (`variant="chips"`, capped by `chipLimit` with a `+N more` chip), take typed text to filter the options in place (`searchable`), offer an `Add "…"` row for a typed value that matches no option (`allowCustom`, emits `create`), and render its own loading, error and empty list states (`loading`, `error`, `emptyTitle`) — the same vocabulary as `combobox`. MultiSelect is the one multi-pick field (`Select` picks exactly one): `modelValue` is always an array and the indicator is always a checkbox.
 
 Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `Input`/`Select` trigger visuals.
 
@@ -27,7 +27,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 - Choosing several values from a long list (regions, tags, permissions) in a compact field.
 - A filter whose selected values stay editable from the same dropdown.
 - Grouped options with icons or trailing tags, optionally with search.
-- Tagging a record with labels people pick or type (`kind="chips"` + `searchable` + `allowCustom`).
+- Tagging a record with labels people pick or type (`variant="chips"` + `searchable` + `allowCustom`).
 - Options fetched from a server as the person types (`searchable`, `:filter="false"`, `@search`, `loading`, `error`).
 
 ## When NOT to use
@@ -45,7 +45,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 - `transfer-list` — dual-list transfer for building larger subsets.
 - `checkbox` — the indicator every option row renders.
 - `combobox` — single-value field with typed text; `searchable`, `allowCustom`, `filter`, `loading` and `emptyTitle` share its meaning.
-- `chip` — each selected value in `kind="chips"`.
+- `chip` — each selected value in `variant="chips"`.
 
 ## Best practices
 
@@ -53,7 +53,7 @@ Aligned with Figma frame `3899:29362` (options panel). The trigger reuses the `I
 - Pass `displayValue` to summarise long selections (e.g. "3 regions") instead of a list that overflows the trigger.
 - Keep each option's `value` stable and unique; selection is matched by value.
 - Put a search input in the `search` slot and a create action in the `footer` slot of `MultiSelect.Content` — or set `searchable` (and `allowCustom`) to type in the trigger itself; do not combine the two.
-- With `kind="chips"`, set `chipLimit` when the field sits in a dense row; leave it `0` in a form so every chip wraps and stays removable.
+- With `variant="chips"`, set `chipLimit` when the field sits in a dense row; leave it `0` in a form so every chip wraps and stays removable.
 - `create` only reports the typed value: add the new option to your list and its value to the model in the handler.
 - For a server-side search, set `:filter="false"`, fetch on `search`, and drive `loading` and `error` from the request.
 
@@ -112,7 +112,7 @@ Chips, typed filter and a create row:
 <template>
   <MultiSelect
     v-model="value"
-    kind="chips"
+    variant="chips"
     :chip-limit="3"
     searchable
     allow-custom
@@ -135,7 +135,7 @@ Chips, typed filter and a create row:
 
 ## Sub-components
 
-- `multi-select-trigger/multi-select-trigger.vue` — With the default `kind="summary"` and no `searchable`, a bordered trigger button; otherwise a bordered field (`min-h` of the size, wrapping) that holds the chips (`kind="chips"`: one removable `Chip` of size `small` per selected value, the first `chipLimit` of them followed by a non-removable `+N more` chip when `chipLimit` > 0), then the combobox control — an `input` when `searchable` (its placeholder is the selection summary when `kind="summary"`), else a button — then the chevron. A click anywhere on the field but a chip's remove button opens the panel and focuses the control. The default trigger: bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders only the selected options (and any group without a `value`) once inside a `hidden` container so their labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
+- `multi-select-trigger/multi-select-trigger.vue` — With the default `variant="summary"` and no `searchable`, a bordered trigger button; otherwise a bordered field (`min-h` of the size, wrapping) that holds the chips (`variant="chips"`: one removable `Chip` of size `small` per selected value, the first `chipLimit` of them followed by a non-removable `+N more` chip when `chipLimit` > 0), then the combobox control — an `input` when `searchable` (its placeholder is the selection summary when `variant="summary"`), else a button — then the chevron. A click anywhere on the field but a chip's remove button opens the panel and focuses the control. The default trigger: bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders only the selected options (and any group without a `value`) once inside a `hidden` container so their labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`. It owns the list states: `loading` replaces the options with a spinner row (`Loading options`), a non-empty `error` replaces them with the message, and when no option is visible it shows `emptyTitle` (or `No matches`). With `allowCustom` and typed text that equals no option label, it appends an `Add "…"` option row after the options. A visually hidden polite status region next to the panel announces the loading, error, empty and match-count states.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; hidden while the typed filter hides every one of its options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
 - `multi-select-option/multi-select-option.vue` — Selectable option row; hidden (`v-show`) while `searchable` + `filter` and its label text does not contain the typed text (case and accent insensitive, in the active locale); with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (an Azion icon class), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
@@ -153,8 +153,8 @@ Chips, typed filter and a create row:
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                                                                     |
 | `displayValue` | `(value: TValue[]) => string`    | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                                                                                                                                         |
 | `name`         | `string`                         | `''`        | false    | Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out. |
-| `kind`         | `'summary' \| 'chips'`           | `'summary'` | false    | How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value.                                                                                                                                   |
-| `chipLimit`    | `number`                         | `0`         | false    | With `kind="chips"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps.                                                                                                                                                                   |
+| `variant`      | `'summary' \| 'chips'`           | `'summary'` | false    | How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value.                                                                                                                                   |
+| `chipLimit`    | `number`                         | `0`         | false    | With `variant="chips"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps.                                                                                                                                                                |
 | `searchable`   | `boolean`                        | `false`     | false    | Types in the trigger: the text filters the options, `Backspace` in an empty field removes the last value.                                                                                                                                                            |
 | `filter`       | `boolean`                        | `true`      | false    | With `searchable`, hides the options whose label does not contain the typed text. Turn off when the server filters on `search`.                                                                                                                                      |
 | `allowCustom`  | `boolean`                        | `false`     | false    | With `searchable`, offers typed text that matches no option as an `Add "…"` row that emits `create`.                                                                                                                                                                 |
@@ -162,7 +162,7 @@ Chips, typed filter and a create row:
 | `error`        | `string`                         | `''`        | false    | Message shown in place of the options when they failed to load; empty shows the options.                                                                                                                                                                             |
 | `emptyTitle`   | `string`                         | `''`        | false    | Text of the list when no option is visible. Empty uses the locale catalog.                                                                                                                                                                                           |
 
-**Generic.** The root is generic over `TValue` (default `unknown`), the item type of the bound `modelValue`: with a `string[]` model, `displayValue` takes `(value: string[]) => string` and `update:modelValue` sends a `string[]`, so a handler needs no cast. `@aziontech/webkit/multi-select` exports the types `MultiSelectSize` and `MultiSelectKind`.
+**Generic.** The root is generic over `TValue` (default `unknown`), the item type of the bound `modelValue`: with a `string[]` model, `displayValue` takes `(value: string[]) => string` and `update:modelValue` sends a `string[]`, so a handler needs no cast. `@aziontech/webkit/multi-select` exports the types `MultiSelectSize` and `MultiSelectVariant`.
 
 ## v-model
 
@@ -191,9 +191,9 @@ Chips, typed filter and a create row:
 - `data-size` on the trigger mirrors the `size` prop
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<MultiSelectOption>` when the option's value is part of the current selection
-- `data-kind` on the root and trigger mirrors `kind`; `data-searchable` on the trigger mirrors `searchable`
+- `data-variant` on the root and trigger mirrors `variant`; `data-searchable` on the trigger mirrors `searchable`
 - `loading`: `aria-busy` on the listbox and the loading row; `error`: the message row; `empty`: the empty row — each in place of the options, in the panel
-- `data-kind="create"` on the `Add "…"` row
+- `data-variant="create"` on the `Add "…"` row
 - Typed filter: while the typed text is not empty, every chunk is mounted so the filter sees every option.
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
 
@@ -234,7 +234,7 @@ Chips, typed filter and a create row:
 | spacing (option gap)                 | `var(--spacing-xs)`                                                                                                             |
 | shape                                | `var(--shape-control)`                                                                                                          |
 | shadow (panel)                       | `var(--shadow-xs)`                                                                                                              |
-| chips (`kind="chips"`)               | `Chip` `kind="filled"` `size="small"` (24px); the `+N more` chip `kind="outlined"`                                              |
+| chips (`variant="chips"`)            | `Chip` `variant="filled"` `size="small"` (24px); the `+N more` chip `variant="outline"`                                         |
 | spacing (between chips, wrap rows)   | `var(--spacing-2xs)`                                                                                                            |
 | typed text / placeholder             | `.text-label-sm`, `var(--text-default)` / `var(--text-muted)`                                                                   |
 | list state rows (loading, empty)     | `.text-body-sm` + `var(--text-muted)`                                                                                           |
@@ -257,7 +257,7 @@ Chips, typed filter and a create row:
 - ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` with `aria-multiselectable="true"`. Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`ai ai-chevron-down`, `ai-heart`, etc.) are `aria-hidden="true"`. The checkbox indicator is decorative for screen readers (the `role="option"` + `aria-selected` carries the semantic); the inner `Checkbox` sits in an `inert`, `aria-hidden="true"` wrapper, so the option has no focusable descendant.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` an option click or `Escape` in the list closes only the list; the host overlay stays open.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
-- With `kind="chips"` or `searchable`, the `combobox` role, `id`, name and `aria-*` move from the field to its control (the `input` gets `aria-autocomplete="list"`); the field itself is a plain container.
+- With `variant="chips"` or `searchable`, the `combobox` role, `id`, name and `aria-*` move from the field to its control (the `input` gets `aria-autocomplete="list"`); the field itself is a plain container.
 - List states sit in `role="presentation"` rows; a visually hidden `role="status"` region announces `Loading options`, the error message, the empty text, or `{count} options` after typing.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.
 - `motion-reduce:transition-none motion-reduce:animate-none` on every transition/animation-bearing class.
@@ -288,7 +288,7 @@ Chips, typed filter and a create row:
 
 ## Responsive
 
-- The trigger fills its container; with `kind="chips"` and `chipLimit` `0` the chips wrap onto several lines and the field grows (`min-h` of the size, never a fixed height).
+- The trigger fills its container; with `variant="chips"` and `chipLimit` `0` the chips wrap onto several lines and the field grows (`min-h` of the size, never a fixed height).
 - Touch: chip remove buttons follow `Chip`'s target; options are 32 px rows.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; a long chip label truncates inside the chip.
 
@@ -309,7 +309,7 @@ Chips, typed filter and a create row:
 - Filled — justification: pre-populated `modelValue` array shows the filled visual state (checkbox indicators in their checked state for the selected rows), which is implicit (no prop).
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - Disabled
-- Chips — justification: documents `kind="chips"` with `chipLimit` (removable chips and the `+N more` chip), a trigger anatomy no other example shows.
+- Chips — justification: documents `variant="chips"` with `chipLimit` (removable chips and the `+N more` chip), a trigger anatomy no other example shows.
 - Searchable — justification: documents `searchable` + `allowCustom` (typing in the trigger, `Backspace`, the `Add "…"` row and `create`).
 - ListStates — justification: documents the `loading`, `error` and empty list states the panel owns, which no other example reaches.
 
@@ -327,7 +327,7 @@ Chips, typed filter and a create row:
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

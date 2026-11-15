@@ -3,9 +3,9 @@ name: capability-grid
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 2299a3754af018384fd5c912e561ef1960630e61424f6284a2d87047bb5989d9
+checksum: 3fbbdc31c08a5b750e4b309555e1704e9fc0e6106086fc2a83f2a001e7f56887
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -40,7 +40,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleKind: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Usage
 
@@ -79,9 +79,9 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 | `items`           | `CapabilityGridItem[]`  | `[]`         | false    | The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty. |
 | `columns`         | `CapabilityGridColumns` | `3`          | false    | Capabilities per row from the large breakpoint up.                                                                                                                               |
 | `primaryAction`   | `CapabilityGridAction`  | `undefined`  | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                    |
-| `secondaryAction` | `CapabilityGridAction`  | `undefined`  | false    | Second button under the section title, `outlined`; same shape. Shown only with a label and a link.                                                                               |
+| `secondaryAction` | `CapabilityGridAction`  | `undefined`  | false    | Second button under the section title, `outline`; same shape. Shown only with a label and a link.                                                                               |
 | `anchor`          | `string`                | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                         |
-| `titleKind`       | `SectionTitleKind`      | `'center'` | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.            |
+| `titleVariant`       | `SectionTitleVariant`      | `'center'` | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.            |
 
 ## Events
 
@@ -96,7 +96,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
 - An item with `href` renders its heading as a link that covers the cell.
-- `titleKind` is passed to the section title as its `kind`; it has no effect on a bare grid.
+- `titleVariant` is passed to the section title as its `variant`; it has no effect on a bare grid.
 
 ## Motion & Animations
 
@@ -107,7 +107,7 @@ _none_
 | Region  | Token (DESIGN.md)                                             |
 | ------- | ------------------------------------------------------------- |
 | frame   | From `FrameBox` and `CardGrid` (`var(--border-default)`)      |
-| cell    | `var(--bg-canvas)` (`CardGridCell kind="canvas"`)             |
+| cell    | `var(--bg-canvas)` (`CardGridCell variant="canvas"`)             |
 | points  | `.text-body-md`, `var(--text-muted)`                          |
 | spacing | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-md)` |
 
@@ -148,7 +148,7 @@ _none_
 
 - Default — three capabilities with a title and an action.
 - Points — six capabilities with bullet points at four columns.
-- Left title — `titleKind: 'start'` sets the header at the start edge over the grid.
+- Left title — `titleVariant: 'start'` sets the header at the start edge over the grid.
 - Links — use cases without points, each cell linking to its page.
 
 ## Constraints — DO NOT

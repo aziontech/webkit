@@ -20,7 +20,7 @@
 <template>
   <RadioGroup
     v-model="plan"
-    kind="card"
+    variant="card"
     :options="plans"
     aria-label="Plan"
   >

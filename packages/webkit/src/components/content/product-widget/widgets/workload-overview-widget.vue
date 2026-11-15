@@ -7,7 +7,7 @@
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
   import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
-  import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
+  import type { TextureMaterialVariant } from '../../../marketing/texture-material/texture-material.vue'
   import Tabs from '../../../navigation/tabs'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
@@ -25,7 +25,7 @@
     /** Edge the mockup fades out along. */
     fade?: ShellMockupFade
     /** Texture the frame is grounded with. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Whether this widget is the one showing. */
     active?: boolean
   }
@@ -191,7 +191,7 @@
           </Tabs>
           <Button
             label="Deploy"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-cloud-upload"
           />
@@ -227,7 +227,7 @@
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <Button
                       label="Visit"
-                      kind="secondary"
+                      variant="secondary"
                       size="medium"
                       icon="ai ai-external-link"
                     />
@@ -246,7 +246,7 @@
                     </span>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       ariaLabel="Workload actions"
                     />
@@ -286,7 +286,7 @@
                         FACTS.id
                       }}</span>
                       <CopyButton
-                        kind="outlined"
+                        variant="outline"
                         :value="FACTS.id"
                         aria-label="Copy workload ID"
                         size="small"
@@ -302,7 +302,7 @@
                       <Avatar
                         :label="FACTS.owner"
                         size="small"
-                        kind="square"
+                        variant="square"
                       />
                     </div>
                   </div>
@@ -442,7 +442,7 @@
                             v-if="node.status !== 'Live' && node.status !== 'Active'"
                             class="ms-auto shrink-0"
                             icon="ai ai-plus"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             ariaLabel="Bind"
                           />
@@ -479,7 +479,7 @@
           <IconButton
             class="ms-auto shrink-0"
             icon="ai ai-x"
-            kind="outlined"
+            variant="outline"
             size="small"
             ariaLabel="Close"
           />
@@ -574,7 +574,7 @@
             </h3>
             <RadioGroup
               :model-value="SELECTED_ENVIRONMENT"
-              kind="card"
+              variant="card"
               :aria-labelledby="environmentHeadingId"
             >
               <RadioGroupItem
@@ -604,7 +604,7 @@
         >
           <Button
             label="Deploy"
-            kind="primary"
+            variant="primary"
             size="medium"
           />
         </div>

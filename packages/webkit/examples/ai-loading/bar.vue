@@ -5,7 +5,7 @@
 <template>
   <div class="w-full max-w-(--container-md)">
     <AiLoading
-      kind="bar"
+      variant="bar"
       label="Generating a table of cache hits by country"
     />
   </div>

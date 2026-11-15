@@ -23,7 +23,7 @@
         <p class="text-body-sm text-(--text-muted)">{{ message }}</p>
         <Button
           label="Try again"
-          kind="secondary"
+          variant="secondary"
           size="small"
           icon="ai ai-refresh"
         />

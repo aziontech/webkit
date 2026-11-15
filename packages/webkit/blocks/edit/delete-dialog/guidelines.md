@@ -20,7 +20,7 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 ### A. Dialog and trigger — `ConfirmDialog`, `Button` (required)
 
-`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button kind="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:disabled` and `:loading`.
+`ConfirmDialog` at `size="medium"`, bound with `v-model:open`, closed by default. Its `#trigger` slot holds the visible `Button variant="danger"` that opens it; in a list the trigger is the row menu's Delete option instead. The title reads Delete plus the resource kind, the same string as the trigger. The body goes in the default slot; the dialog's own Cancel and Delete buttons take `confirm-label`, `cancel-label`, `:disabled` and `:loading`.
 
 ### B. Consequence — `Alert` (required)
 
@@ -36,7 +36,7 @@ A full-width `Input` with `autocomplete="off"`, labelled by the prompt paragraph
 
 ### E. Trigger — `Button` (required)
 
-The visible `kind="danger"` trigger in `#trigger`. The dialog's own footer carries Cancel and `kind="danger"` Delete resource (the title repeated), `:disabled` until the typed name matches and `:loading` while the request runs; while it loads Cancel and the input are disabled and the dialog cannot be dismissed. On success the dialog closes and a toast says `resource-01 was deleted.`
+The visible `variant="danger"` trigger in `#trigger`. The dialog's own footer carries Cancel and `variant="danger"` Delete resource (the title repeated), `:disabled` until the typed name matches and `:loading` while the request runs; while it loads Cancel and the input are disabled and the dialog cannot be dismissed. On success the dialog closes and a toast says `resource-01 was deleted.`
 
 ## Do
 
@@ -52,7 +52,7 @@ The visible `kind="danger"` trigger in `#trigger`. The dialog's own footer carri
 - Don't delete on the first click, from a row menu or anywhere else.
 - Don't enable Delete on a partial or case-insensitive match.
 - Don't put the warning in the input's label or placeholder.
-- Don't make Delete the only button, or use primary for it; it is `kind="danger"` beside Cancel.
+- Don't make Delete the only button, or use primary for it; it is `variant="danger"` beside Cancel.
 - Don't close the dialog on a refused delete or clear the typed name; show why in the danger `Alert` and let Delete run again.
 - Don't clear the input as the dialog closes; the field would flash empty during the exit.
 

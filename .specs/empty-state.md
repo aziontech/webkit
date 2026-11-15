@@ -3,11 +3,11 @@ name: empty-state
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 6b38b4f4866f39a127fecadf6f2223af9ec968c83189b4e80e34f8997d370962
+checksum: 19041afe24132a44b6bb01f6631eafbe15c0955179041d341b830572beae77ae
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -62,11 +62,11 @@ Centered placeholder shown when a resource list or section has no content yet. S
     <template #actions>
       <div class="flex gap-(--spacing-3)">
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Secondary Item"
         />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Create Item"
         />
       </div>
@@ -179,7 +179,7 @@ _none_ — the title now uses `heading` tokens at every size (`.text-heading-2xs
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

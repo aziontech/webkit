@@ -11,7 +11,7 @@
   <DropdownMenuRoot :open="true">
     <DropdownMenuTrigger>
       <IconButton
-        kind="outlined"
+        variant="outline"
         icon="ai ai-plus"
         aria-label="Open menu"
       />

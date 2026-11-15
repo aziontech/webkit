@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "The three floors stacked: `outcomes` closes the band with four client quotes on one column each, `benefits` with three benefit topics in one row, and `stats` with four headline figures; the stats band also keeps one claim to wider screens (`mobile: false`) and carries an anchor. The map, title, lead and claims above are the same in all three.",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Columns",

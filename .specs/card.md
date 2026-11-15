@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 49887518dcc87d577eddf0a0da460a4440b1fac19c9ad5883b1ad1228e30e0ae
+checksum: 43dd7f2ac565ed3ba91d5910a752754eb75ccde05d94ac2670bb0d554a7b397d
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -19,14 +19,14 @@ last_updated: 2026-11-15
 
 Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard.
 
-A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
+A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default variant holds a settings block, a summary or a form section; `variant="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
 
 ## When to use
 
 - Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.
 - Host a divided list edge to edge: set `:padded="false"` and put an `Item` list in the body.
 - A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.
-- A catalog tile for an integration, an extension or a plugin: set `kind="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
+- A catalog tile for an integration, an extension or a plugin: set `variant="integration"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.
 - A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner.
 
 ## When NOT to use
@@ -36,7 +36,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
-- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with the default slot (see `view/template-browser`).
+- It is a template tile in a gallery with no vendor, badge or install state → keep `variant="default"` with the default slot (see `view/template-browser`).
 
 ## Related
 
@@ -53,7 +53,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
-- `kind="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
+- `variant="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
 - Keep the description to one or two sentences; the card clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Integration cards sit under a section heading, so their title is an `h3`.
@@ -72,7 +72,7 @@ A bordered surface that groups related content under a title, with a header, a b
     <template #header-actions>
       <Button
         label="Edit"
-        kind="transparent"
+        variant="ghost"
         size="small"
       />
     </template>
@@ -80,7 +80,7 @@ A bordered surface that groups related content under a title, with a header, a b
     <template #footer>
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>
@@ -88,7 +88,7 @@ A bordered surface that groups related content under a title, with a header, a b
 </template>
 ```
 
-### Integration kind
+### Integration variant
 
 ```vue
 <script setup>
@@ -98,7 +98,7 @@ A bordered surface that groups related content under a title, with a header, a b
 
 <template>
   <Card
-    kind="integration"
+    variant="integration"
     title="Request Signer"
     vendor="Acme Inc."
     logo="ai ai-key"
@@ -109,7 +109,7 @@ A bordered surface that groups related content under a title, with a header, a b
     <template #actions>
       <Button
         label="Install"
-        kind="outlined"
+        variant="outline"
         size="small"
       />
     </template>
@@ -121,22 +121,22 @@ A bordered surface that groups related content under a title, with a header, a b
 
 | Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                                                           |
 | ------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name.                                                                       |
+| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name.                                                                       |
 | `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                                                            |
-| `kind`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot.                                  |
-| `logo`        | `string`                     | `''`        | false    | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                         |
-| `vendor`      | `string`                     | `''`        | false    | Integration kind: who publishes the item, shown as "by {vendor}".                                                                                                               |
-| `description` | `string`                     | `''`        | false    | Integration kind: one or two sentences on what the item does.                                                                                                                   |
-| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
-| `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                                                      |
-| `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                                                   |
-| `featured`    | `boolean`                    | `false`     | false    | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                         |
+| `variant`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot.                                  |
+| `logo`        | `string`                     | `''`        | false    | Integration variant: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                         |
+| `vendor`      | `string`                     | `''`        | false    | Integration variant: who publishes the item, shown as "by {vendor}".                                                                                                               |
+| `description` | `string`                     | `''`        | false    | Integration variant: one or two sentences on what the item does.                                                                                                                   |
+| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
+| `installed`   | `boolean`                    | `false`     | false    | Integration variant: shows the Installed tag.                                                                                                                                      |
+| `href`        | `string`                     | `''`        | false    | Integration variant: the title links here; without it the title is a button that emits `select`.                                                                                   |
+| `featured`    | `boolean`                    | `false`     | false    | Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                         |
 
 ## Events
 
 | Event    | Payload             | Notes                                                                      |
 | -------- | ------------------- | -------------------------------------------------------------------------- |
-| `select` | `event: MouseEvent` | Integration kind without `href`: the title (the whole tile) was activated. |
+| `select` | `event: MouseEvent` | Integration variant without `href`: the title (the whole tile) was activated. |
 
 ## Slots
 
@@ -144,10 +144,10 @@ A bordered surface that groups related content under a title, with a header, a b
 | ---------------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
 | `header`         | —     | Replaces the default header layout (title + header-actions).                                                     |
 | `header-actions` | —     | Actions aligned to the end of the default header; visible on header hover.                                       |
-| `default`        | —     | Main card body: children passed without a slot name. With `kind="integration"` it renders under the description. |
+| `default`        | —     | Main card body: children passed without a slot name. With `variant="integration"` it renders under the description. |
 | `footer`         | —     | Footer actions or metadata; omitted when empty.                                                                  |
-| `logo`           | —     | Integration kind: replaces the logo mark, for an `img` with an empty `alt`.                                      |
-| `actions`        | —     | Integration kind: one action at the end of the tile, above the stretched title target.                           |
+| `logo`           | —     | Integration variant: replaces the logo mark, for an `img` with an empty `alt`.                                      |
+| `actions`        | —     | Integration variant: one action at the end of the tile, above the stretched title target.                           |
 
 > The body is the `default` slot (shadcn, Radix).
 
@@ -156,8 +156,8 @@ A bordered surface that groups related content under a title, with a header, a b
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
-- Integration kind: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
-- Featured (`featured`, integration kind only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
+- Integration variant: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
+- Featured (`featured`, integration variant only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
 
 ## Motion & Animations
 
@@ -219,7 +219,7 @@ A bordered surface that groups related content under a title, with a header, a b
 
 ## Performance
 
-- Bundle budget: 13.5 KB gzip for `./card` in `.size-limit.json`: 11.1 KB before the integration kind (`cn` carries `tailwind-merge`), plus `tag` and the translate helper. The featured layout is template and classes only.
+- Bundle budget: 13.5 KB gzip for `./card` in `.size-limit.json`: 11.1 KB before the integration variant (`cn` carries `tailwind-merge`), plus `tag` and the translate helper. The featured layout is template and classes only.
 - Runtime budget: none: static.
 - Heavy parts: none.
 
@@ -229,9 +229,9 @@ A bordered surface that groups related content under a title, with a header, a b
 - Header — an action rendered in the `header` slot, aligned to the end (justified: demonstrates the full-control header path)
 - Footer — `footer` region with actions (justified: the footer bar only renders when the slot is filled)
 - Flush — `padded=false` edge-to-edge content (mutually-exclusive boolean state of the `padded` prop)
-- Integration — `kind="integration"` with a vendor, a badge and an Install action (per `kind`)
-- Installed — `kind="integration"` with `installed` and a Configure action (justified: the installed state is the tile's second state)
-- Featured — a row of three `featured` integration tiles (justified: `featured` is a boolean layout of the integration kind)
+- Integration — `variant="integration"` with a vendor, a badge and an Install action (per `variant`)
+- Installed — `variant="integration"` with `installed` and a Configure action (justified: the installed state is the tile's second state)
+- Featured — a row of three `featured` integration tiles (justified: `featured` is a boolean layout of the integration variant)
 
 ## Constraints — DO NOT
 
@@ -247,7 +247,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

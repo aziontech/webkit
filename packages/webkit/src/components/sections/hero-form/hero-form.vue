@@ -21,14 +21,14 @@
   })
 
   /** Control a form field renders as. */
-  export type HeroFormFieldKind = 'text' | 'email' | 'select' | 'phone' | 'textarea'
+  export type HeroFormFieldType = 'text' | 'email' | 'select' | 'phone' | 'textarea'
 
   /** One field of the form. */
   export type HeroFormField = {
     /** Key of the value in the submitted values, and the HTML name of the control. */
     name: string
     /** Control the field renders as. */
-    kind: HeroFormFieldKind
+    type: HeroFormFieldType
     /** Visible label of the field. */
     label: string
     /** Placeholder of the control. */
@@ -112,7 +112,7 @@
     items?: HeroFormItem[]
     /** Accessible name of the field group, read as its legend. */
     formAriaLabel?: string
-    /** The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. */
+    /** The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. */
     fields?: HeroFormField[]
     /** Label of the submit button. */
     submitLabel?: string
@@ -193,7 +193,7 @@
 
   const valueOf = (field: HeroFormField) => {
     const raw = (values.value[field.name] ?? '').trim()
-    if (field.kind !== 'phone' || !raw) return raw
+    if (field.type !== 'phone' || !raw) return raw
     const dialCode = defaultCountries.find((item) => item.code === countryOf(field))?.dialCode
     return dialCode ? `${dialCode}${raw}` : raw
   }
@@ -207,7 +207,7 @@
 
   const messageOf = (field: HeroFormField, value: string) => {
     if (field.required && !value) return props.messages.missing
-    if (field.kind === 'email' && value && !EMAIL_PATTERN.test(value))
+    if (field.type === 'email' && value && !EMAIL_PATTERN.test(value))
       return props.messages.invalidEmail
     return ''
   }
@@ -254,7 +254,7 @@
   >
     <Hero
       v-if="title"
-      kind="screen"
+      variant="screen"
       max-width="5xl"
       align="center"
       :padded="false"
@@ -296,7 +296,7 @@
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="index === 0 && primary ? 'secondary' : 'outlined'"
+              :variant="index === 0 && primary ? 'secondary' : 'outline'"
               size="large"
               :icon="action.trailing ? 'ai ai-chevron-right' : ''"
               :icon-position="action.trailing ? 'trailing' : 'leading'"
@@ -368,7 +368,7 @@
                   >{{ field.label }}</FieldLabel
                 >
                 <HeroFormSelect
-                  v-if="field.kind === 'select'"
+                  v-if="field.type === 'select'"
                   :model-value="values[field.name] ?? ''"
                   :trigger-id="fieldId(field)"
                   :placeholder="field.placeholder"
@@ -376,7 +376,7 @@
                   @update:model-value="setValue(field, $event)"
                 />
                 <PhoneInput
-                  v-else-if="field.kind === 'phone'"
+                  v-else-if="field.type === 'phone'"
                   :id="fieldId(field)"
                   size="large"
                   :model-value="values[field.name] ?? ''"
@@ -387,7 +387,7 @@
                   @update:country="setCountry(field, $event)"
                 />
                 <Textarea
-                  v-else-if="field.kind === 'textarea'"
+                  v-else-if="field.type === 'textarea'"
                   :id="fieldId(field)"
                   :model-value="values[field.name] ?? ''"
                   :name="field.name"
@@ -400,9 +400,9 @@
                   :model-value="values[field.name] ?? ''"
                   :name="field.name"
                   :placeholder="field.placeholder"
-                  :type="field.kind === 'email' ? 'email' : 'text'"
-                  :autocomplete="field.kind === 'email' ? 'email' : undefined"
-                  :spellcheck="field.kind === 'email' ? false : undefined"
+                  :type="field.type === 'email' ? 'email' : 'text'"
+                  :autocomplete="field.type === 'email' ? 'email' : undefined"
+                  :spellcheck="field.type === 'email' ? false : undefined"
                   size="large"
                   @update:model-value="setValue(field, $event)"
                 />
@@ -416,7 +416,7 @@
               <Button
                 type="submit"
                 :label="submitLabel"
-                kind="primary"
+                variant="primary"
                 size="large"
                 :loading="loading"
               />

@@ -254,7 +254,7 @@
                 <Button
                   label="Documentation"
                   icon="ai ai-book"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   href="https://example.com/docs/private-access"
                   target="_blank"
@@ -262,7 +262,7 @@
                 <Button
                   :label="`Add ${current.noun}`"
                   icon="ai ai-plus"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                 />
               </template>
@@ -282,7 +282,7 @@
                 >
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh"
@@ -336,7 +336,7 @@
                           <Button
                             :label="`Add ${current.noun}`"
                             icon="ai ai-plus"
-                            kind="secondary"
+                            variant="secondary"
                             size="small"
                           />
                         </template>
@@ -352,7 +352,7 @@
                         <template #actions>
                           <Button
                             label="Clear filters"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearFilters"
                           />
@@ -382,7 +382,7 @@
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`${policyBase}/${activeTab}`"
               />

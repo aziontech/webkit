@@ -29,7 +29,7 @@
     />
     <CodeBlock
       :tabs="output"
-      kind="output"
+      type="output"
       :show-line-numbers="false"
     />
   </div>

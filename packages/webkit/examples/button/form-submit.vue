@@ -21,13 +21,13 @@
       <Button
         type="reset"
         label="Clear"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
       <Button
         type="submit"
         label="Create"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </div>

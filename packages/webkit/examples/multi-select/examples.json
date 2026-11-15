@@ -49,7 +49,7 @@
     },
     {
       "name": "Chips",
-      "summary": "kind=\"chips\" shows each selected value as a removable chip; chipLimit caps them with a +N more chip.",
+      "summary": "variant=\"chips\" shows each selected value as a removable chip; chipLimit caps them with a +N more chip.",
       "file": "chips.vue"
     },
     {

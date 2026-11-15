@@ -9,13 +9,13 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
 ```vue
 <script setup lang="ts">
   /** Visual variant. */
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
   /** Size token. */
   export type ButtonSize = 'small' | 'medium' | 'large'
 
   interface Props {
     /** Visual variant. */
-    kind?: ButtonKind
+    variant?: ButtonVariant
     /** Size token. */
     size?: ButtonSize
     /** Disables interaction. */
@@ -25,7 +25,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'primary',
+    variant: 'primary',
     size: 'large',
     disabled: false,
     icon: ''
@@ -35,7 +35,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
 
 ### Typing
 
-- **Named `interface Props`** + `defineProps<Props>()`. Not the runtime object form (`defineProps({ kind: { type: String } })`), not an inline literal — a named interface is what `vue-tsc` and the consumer's tooling read.
+- **Named `interface Props`** + `defineProps<Props>()`. Not the runtime object form (`defineProps({ variant: { type: String } })`), not an inline literal — a named interface is what `vue-tsc` and the consumer's tooling read.
 - **No `any`** and no `@ts-ignore` (blocked by [`validate-tokens.mjs`](../hooks/validate-tokens.mjs)). Use generics or precise unions.
 - **Never declare `class` in `defineProps`** — consumer classes flow through `useAttrs()` (see [`root-element.md`](./root-element.md) and [`styling.md`](./styling.md)).
 
@@ -49,7 +49,7 @@ Props are the **data + scalar configuration** surface of a component (anatomy is
 
 ### Exported variant unions
 
-Every variant axis (`kind`, `size`, `severity`) is a **named type exported** from the component, so a consumer can type a variable that holds it and the story `argTypes` can reference it. Derive the union from one place; do not repeat the literal set in JSDoc and in the type.
+Every variant axis (`variant`, `size`, `severity`) is a **named type exported** from the component, so a consumer can type a variable that holds it and the story `argTypes` can reference it. Derive the union from one place; do not repeat the literal set in JSDoc and in the type.
 
 ## JSDoc
 

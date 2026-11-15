@@ -33,7 +33,7 @@
           :label="organization"
           pattern="marble"
           size="small"
-          kind="square"
+          variant="square"
         />
         <span class="min-w-0 flex-1 truncate text-start text-label-sm text-(--text-default)">{{
           organization
@@ -57,7 +57,7 @@
           :label="organization"
           pattern="marble"
           size="small"
-          kind="square"
+          variant="square"
         />
         <i
           class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted)"

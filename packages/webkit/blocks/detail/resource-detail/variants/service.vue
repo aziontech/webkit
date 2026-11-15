@@ -115,7 +115,7 @@
             label="Visit"
             href="https://service-01.example.com"
             target="_blank"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             icon="ai ai-external-link"
           />
@@ -180,7 +180,7 @@
               <Tooltip content="Service actions">
                 <IconButton
                   icon="ai ai-ellipsis"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Service actions"
                 />
@@ -238,7 +238,7 @@
             <Tooltip content="Add a custom domain">
               <IconButton
                 icon="ai ai-circle-plus"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Add a custom domain"
               />
@@ -264,7 +264,7 @@
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <span class="truncate text-body-sm tabular-nums text-(--text-default)"> 1020655 </span>
             <CopyButton
-              kind="outlined"
+              variant="outline"
               value="1020655"
               aria-label="Copy service ID"
               class="shrink-0"
@@ -283,7 +283,7 @@
               alt="Ethan Brooks"
               label="Ethan Brooks"
               size="small"
-              kind="square"
+              variant="square"
               class="shrink-0"
             />
           </div>

@@ -27,7 +27,7 @@
   <IconButton
     v-bind="$attrs"
     icon="ai ai-x"
-    kind="transparent"
+    variant="ghost"
     size="small"
     :ariaLabel="t('toast.close')"
     :data-testid="testId"

@@ -17,7 +17,7 @@
   <div style="width: 320px">
     <MultiSelect
       v-model="value"
-      kind="chips"
+      variant="chips"
       :chip-limit="3"
       placeholder="Select regions"
       aria-label="Regions"

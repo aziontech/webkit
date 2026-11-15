@@ -72,7 +72,7 @@
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'policy', header: 'Policy' },
     { accessorKey: 'certificate', header: 'Certificate' },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const linkedEnvironments = [
@@ -270,7 +270,7 @@
       <Select
         :model-value="environment"
         :display-value="(value) => String(value ?? '')"
-        kind="transparent"
+        variant="ghost"
         size="small"
         @update:model-value="
           (value) => {
@@ -351,7 +351,7 @@
         <template #actions>
           <Button
             label="Deploy"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-cloud-upload"
           />
@@ -408,7 +408,7 @@
                           <HelperText
                             v-if="nameError"
                             id="resource-name-message"
-                            kind="required"
+                            type="required"
                             label="This field is required."
                           />
                         </div>
@@ -416,7 +416,7 @@
                       <SettingRow
                         title="Active"
                         description="When disabled, the resource stops answering and traffic to its domains is refused. Its deployments are kept."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -474,7 +474,7 @@
                               <Tooltip content="Row actions">
                                 <IconButton
                                   icon="ai ai-ellipsis"
-                                  kind="outlined"
+                                  variant="outline"
                                   size="small"
                                   :disabled="saving"
                                   :aria-label="`Actions for ${row.domain}`"
@@ -519,7 +519,7 @@
                         <Button
                           type="button"
                           label="Add Domain"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-plus"
                           :disabled="saving"
@@ -652,14 +652,14 @@
                             <HelperText
                               v-if="!form.protocols.httpPorts.length"
                               id="http-ports-message"
-                              :kind="'required'"
+                              :type="'required'"
                               :label="'Select at least one HTTP port.'"
                             />
                           </SettingRow>
                           <SettingRow
                             title="HTTPS support"
                             description="Answer on both HTTP and HTTPS. Required by HTTP/3 and by mutual authentication."
-                            kind="compact"
+                            variant="compact"
                           >
                             <Switch
                               :model-value="form.protocols.useHttps"
@@ -696,14 +696,14 @@
                             <HelperText
                               v-if="!form.protocols.httpsPorts.length"
                               id="https-ports-message"
-                              :kind="'required'"
+                              :type="'required'"
                               :label="'Select at least one HTTPS port.'"
                             />
                           </SettingRow>
                           <SettingRow
                             title="HTTP/3 support"
                             description="Serve over HTTP/3 (QUIC) where the client supports it. Turns HTTPS support on with it."
-                            kind="compact"
+                            variant="compact"
                           >
                             <Switch
                               :model-value="form.protocols.useHttp3"
@@ -740,7 +740,7 @@
                             <HelperText
                               v-if="!form.protocols.http3Ports.length"
                               id="http3-ports-message"
-                              :kind="'required'"
+                              :type="'required'"
                               :label="'Select at least one HTTP/3 port.'"
                             />
                           </SettingRow>
@@ -816,7 +816,7 @@
                           <SettingRow
                             title="Mutual authentication"
                             description="Require the client to present a certificate the resource can verify, as well as presenting its own."
-                            kind="compact"
+                            variant="compact"
                           >
                             <Switch
                               v-model="form.mtls.enabled"
@@ -829,11 +829,11 @@
                             key="mtls-mode"
                             title="Mode"
                             description="What happens when the client certificate cannot be validated against the Trusted CA."
-                            kind="stacked"
+                            variant="stacked"
                           >
                             <RadioGroup
                               v-model="form.mtls.mode"
-                              kind="card"
+                              variant="card"
                               name="mtls-mode"
                               aria-label="Mutual authentication mode"
                               :disabled="saving"
@@ -878,7 +878,7 @@
                             <HelperText
                               v-if="!form.mtls.certificate"
                               id="mtls-certificate-message"
-                              :kind="'required'"
+                              :type="'required'"
                               :label="'Mutual authentication requires a Trusted CA certificate.'"
                             />
                           </SettingRow>
@@ -926,7 +926,7 @@
                       <SettingRow
                         title="Delete this resource"
                         description="Once deleted, the resource and its deployments cannot be recovered."
-                        kind="compact"
+                        variant="compact"
                       >
                         <ConfirmDialog
                           v-model:open="deleteOpen"
@@ -937,7 +937,7 @@
                             <Button
                               type="button"
                               label="Delete resource"
-                              kind="danger"
+                              variant="danger"
                               size="medium"
                               icon="ai ai-trash"
                             />
@@ -967,13 +967,13 @@
                           <template #actions="{ close }">
                             <Button
                               label="Cancel"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               @click="close"
                             />
                             <Button
                               label="Delete resource"
-                              kind="danger"
+                              variant="danger"
                               size="medium"
                               :disabled="!canDelete"
                               @click="confirmDelete"
@@ -1004,14 +1004,14 @@
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
             size="medium"
             :loading="saving"
             @click="save"

@@ -113,7 +113,7 @@
             <SidebarMenuSub default-open>
               <SidebarMenuSubTrigger
                 label="Edge Functions"
-                kind="inline"
+                type="inline"
               />
               <SidebarMenuSubContent>
                 <SidebarMenuItem
@@ -151,7 +151,7 @@
               <SidebarMenuSubTrigger
                 label="Settings"
                 icon="ai ai-settings"
-                kind="drill"
+                type="drill"
               />
               <SidebarMenuSubContent>
                 <SidebarMenuGroup label="Organization">
@@ -176,7 +176,7 @@
           <SidebarFooter>
             <div class="flex items-center gap-(--spacing-xs)">
               <Avatar
-                kind="square"
+                variant="square"
                 size="small"
                 label="AM"
                 alt="Alex Morgan"
@@ -192,7 +192,7 @@
                   <IconButton
                     icon="ai ai-ellipsis-vertical"
                     aria-label="Account menu"
-                    kind="outlined"
+                    variant="outline"
                     size="small"
                   />
                 </DropdownMenuTrigger>

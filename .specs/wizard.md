@@ -3,8 +3,8 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 130234269a0333cd63a09c9c3009f8aecff2ad3071b573fa755a0a2f8881858d
-spec_version: 6
+checksum: 9e8d5c6cf8b929531cb24d5d8282bc6b302738debed46fb9186f545fa0b1e595
+spec_version: 7
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -175,9 +175,9 @@ The root composes, and does not re-implement:
 
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
-  - Cancel is `kind="transparent"`, at the start of the footer.
-  - Previous is `kind="secondary"`, at the end. It is not rendered (`v-if`, not hidden) on step 1.
-  - Next is `kind="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
+  - Cancel is `variant="ghost"`, at the start of the footer.
+  - Previous is `variant="secondary"`, at the end. It is not rendered (`v-if`, not hidden) on step 1.
+  - Next is `variant="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
     `submit` instead of `next`, and it carries `loading`.
 
 - `wizard-step/wizard-step.vue` — one step: its header and its content. It registers itself with the

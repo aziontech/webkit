@@ -153,7 +153,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:76%]"
     :chrome="false"
@@ -174,7 +174,7 @@
             <span class="relative flex shrink-0">
               <Button
                 label="Filter"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-filter"
               />
@@ -190,7 +190,7 @@
           <span class="inline-flex w-fit max-w-full">
             <Chip
               label="Use Case"
-              kind="filled"
+              variant="filled"
               size="medium"
               removable
             >

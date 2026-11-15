@@ -4,7 +4,7 @@
   import { directionalIconClass } from '../../../utils/directional-icons'
   import Spinner from '../../utils/spinner/spinner.vue'
 
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger' | 'link'
+  export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'
   export type ButtonSize = 'small' | 'medium' | 'large'
   export type ButtonTarget = '_blank' | '_self'
   export type ButtonIconPosition = 'leading' | 'trailing'
@@ -19,7 +19,7 @@
     /** Visible label text, the fallback of the default slot. Use IconButton for icon-only controls. */
     label?: string
     /** Visual variant. `link` draws an inline text action in the link colour, with no box; `size` does not apply to it. */
-    kind?: ButtonKind
+    variant?: ButtonVariant
     /** Size token; affects height, padding, and typography. */
     size?: ButtonSize
     /** Disables interaction and applies disabled tokens. */
@@ -43,7 +43,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
-    kind: 'primary',
+    variant: 'primary',
     size: 'large',
     disabled: false,
     loading: false,
@@ -75,7 +75,7 @@
   const isAnchor = computed(() => Boolean(props.href))
 
   const ROOT_CLASS =
-    "group/button relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inert]:data-[kind=primary]:bg-(--primary) not-data-[inert]:data-[kind=primary]:text-(--primary-foreground) not-data-[inert]:data-[kind=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[kind=primary]:after:bg-(--bg-active) not-data-[inert]:data-[kind=secondary]:bg-(--secondary) not-data-[inert]:data-[kind=secondary]:text-(--secondary-foreground) not-data-[inert]:data-[kind=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[kind=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[kind=outlined]:border not-data-[inert]:data-[kind=outlined]:border-(--border-default) not-data-[inert]:data-[kind=outlined]:bg-(--bg-surface) not-data-[inert]:data-[kind=outlined]:text-(--text-default) not-data-[inert]:data-[kind=outlined]:before:bg-(--bg-mask) not-data-[inert]:data-[kind=outlined]:after:bg-(--bg-active) not-data-[inert]:data-[kind=transparent]:bg-transparent not-data-[inert]:data-[kind=transparent]:text-(--text-default) not-data-[inert]:data-[kind=transparent]:before:bg-(--bg-mask) not-data-[inert]:data-[kind=transparent]:after:bg-(--bg-active) not-data-[inert]:data-[kind=danger]:border not-data-[inert]:data-[kind=danger]:border-(--danger-border) not-data-[inert]:data-[kind=danger]:bg-(--danger) not-data-[inert]:data-[kind=danger]:text-(--danger-foreground) not-data-[inert]:data-[kind=danger]:before:bg-(--bg-hover) not-data-[inert]:data-[kind=danger]:after:bg-(--bg-active) not-data-[inert]:data-[kind=link]:bg-transparent not-data-[inert]:data-[kind=link]:text-(--text-link) not-data-[inert]:data-[kind=link]:underline-offset-2 not-data-[inert]:data-[kind=link]:transition-colors not-data-[inert]:data-[kind=link]:duration-fast-02 not-data-[inert]:data-[kind=link]:ease-productive-entrance not-data-[inert]:data-[kind=link]:hover:text-(--text-link-hover) not-data-[inert]:data-[kind=link]:hover:underline not-data-[inert]:data-[kind=link]:motion-reduce:transition-none not-data-[inert]:data-[kind=link]:before:hidden not-data-[inert]:data-[kind=link]:after:hidden not-data-[inert]:data-[kind=link]:forced-colors:border-0 not-data-[inert]:data-[kind=link]:forced-colors:text-[LinkText] data-[inert]:not-data-[kind=link]:border-transparent data-[inert]:not-data-[kind=link]:bg-(--bg-disabled) data-[inert]:not-data-[kind=link]:text-(--text-disabled) data-[inert]:not-data-[kind=link]:before:hidden data-[inert]:not-data-[kind=link]:after:hidden data-[inert]:data-[kind=link]:border-transparent data-[inert]:data-[kind=link]:text-(--text-disabled) data-[inert]:data-[kind=link]:before:hidden data-[inert]:data-[kind=link]:after:hidden data-[inert]:data-[kind=link]:forced-colors:border-0 data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed not-data-[kind=link]:data-[size=large]:min-w-20 not-data-[kind=link]:data-[size=large]:h-10 not-data-[kind=link]:data-[size=large]:px-(--spacing-md) not-data-[kind=link]:data-[size=large]:text-button-lg not-data-[kind=link]:data-[size=medium]:min-w-16 not-data-[kind=link]:data-[size=medium]:h-8 not-data-[kind=link]:data-[size=medium]:px-(--spacing-sm) not-data-[kind=link]:data-[size=medium]:text-button-md not-data-[kind=link]:data-[size=small]:min-w-14 not-data-[kind=link]:data-[size=small]:h-7 not-data-[kind=link]:data-[size=small]:px-(--spacing-xs) not-data-[kind=link]:data-[size=small]:text-button-md data-[kind=link]:text-body-sm"
+    "group/button relative inline-flex items-center justify-center whitespace-nowrap rounded-(--shape-button) forced-colors:border forced-colors:border-[ButtonBorder] forced-colors:disabled:border-[GrayText] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance hover:before:opacity-100 active:after:opacity-100 motion-reduce:before:transition-none motion-reduce:after:transition-none disabled:before:hidden disabled:after:hidden not-data-[inert]:data-[variant=primary]:bg-(--primary) not-data-[inert]:data-[variant=primary]:text-(--primary-foreground) not-data-[inert]:data-[variant=primary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=primary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=secondary]:bg-(--secondary) not-data-[inert]:data-[variant=secondary]:text-(--secondary-foreground) not-data-[inert]:data-[variant=secondary]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=secondary]:after:bg-(--bg-active) not-data-[inert]:data-[variant=outline]:border not-data-[inert]:data-[variant=outline]:border-(--border-default) not-data-[inert]:data-[variant=outline]:bg-(--bg-surface) not-data-[inert]:data-[variant=outline]:text-(--text-default) not-data-[inert]:data-[variant=outline]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=outline]:after:bg-(--bg-active) not-data-[inert]:data-[variant=ghost]:bg-transparent not-data-[inert]:data-[variant=ghost]:text-(--text-default) not-data-[inert]:data-[variant=ghost]:before:bg-(--bg-mask) not-data-[inert]:data-[variant=ghost]:after:bg-(--bg-active) not-data-[inert]:data-[variant=danger]:border not-data-[inert]:data-[variant=danger]:border-(--danger-border) not-data-[inert]:data-[variant=danger]:bg-(--danger) not-data-[inert]:data-[variant=danger]:text-(--danger-foreground) not-data-[inert]:data-[variant=danger]:before:bg-(--bg-hover) not-data-[inert]:data-[variant=danger]:after:bg-(--bg-active) not-data-[inert]:data-[variant=link]:bg-transparent not-data-[inert]:data-[variant=link]:text-(--text-link) not-data-[inert]:data-[variant=link]:underline-offset-2 not-data-[inert]:data-[variant=link]:transition-colors not-data-[inert]:data-[variant=link]:duration-fast-02 not-data-[inert]:data-[variant=link]:ease-productive-entrance not-data-[inert]:data-[variant=link]:hover:text-(--text-link-hover) not-data-[inert]:data-[variant=link]:hover:underline not-data-[inert]:data-[variant=link]:motion-reduce:transition-none not-data-[inert]:data-[variant=link]:before:hidden not-data-[inert]:data-[variant=link]:after:hidden not-data-[inert]:data-[variant=link]:forced-colors:border-0 not-data-[inert]:data-[variant=link]:forced-colors:text-[LinkText] data-[inert]:not-data-[variant=link]:border-transparent data-[inert]:not-data-[variant=link]:bg-(--bg-disabled) data-[inert]:not-data-[variant=link]:text-(--text-disabled) data-[inert]:not-data-[variant=link]:before:hidden data-[inert]:not-data-[variant=link]:after:hidden data-[inert]:data-[variant=link]:border-transparent data-[inert]:data-[variant=link]:text-(--text-disabled) data-[inert]:data-[variant=link]:before:hidden data-[inert]:data-[variant=link]:after:hidden data-[inert]:data-[variant=link]:forced-colors:border-0 data-[loading]:cursor-wait data-[disabled]:cursor-not-allowed not-data-[variant=link]:data-[size=large]:min-w-20 not-data-[variant=link]:data-[size=large]:h-10 not-data-[variant=link]:data-[size=large]:px-(--spacing-md) not-data-[variant=link]:data-[size=large]:text-button-lg not-data-[variant=link]:data-[size=medium]:min-w-16 not-data-[variant=link]:data-[size=medium]:h-8 not-data-[variant=link]:data-[size=medium]:px-(--spacing-sm) not-data-[variant=link]:data-[size=medium]:text-button-md not-data-[variant=link]:data-[size=small]:min-w-14 not-data-[variant=link]:data-[size=small]:h-7 not-data-[variant=link]:data-[size=small]:px-(--spacing-xs) not-data-[variant=link]:data-[size=small]:text-button-md data-[variant=link]:text-body-sm"
 
   const loadingTestId = computed(() => `${testId.value}__loading`)
 
@@ -103,7 +103,7 @@
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :data-inert="isInert ? '' : undefined"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-icon-position="icon ? iconPosition : undefined"
     :data-testid="testId"
@@ -143,7 +143,7 @@
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
     :data-inert="isInert ? '' : undefined"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-icon-position="icon ? iconPosition : undefined"
     :class="ROOT_CLASS"

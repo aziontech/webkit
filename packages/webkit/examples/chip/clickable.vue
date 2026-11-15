@@ -5,7 +5,7 @@
 <template>
   <Chip
     label="Label"
-    kind="filled"
+    variant="filled"
     size="medium"
     clickable
   />

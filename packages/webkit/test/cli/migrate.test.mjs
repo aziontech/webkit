@@ -79,6 +79,36 @@ test('migrateSource rewrites imports, bindings, kebab tags and props', () => {
   assert.ok(changes.length >= 4)
 })
 
+test('migrateSource turns kind into variant (the look) or type (the sort of part), parts included', () => {
+  const sfc = [
+    '<script setup>',
+    "import Button from '@aziontech/webkit/button'",
+    "import Table from '@aziontech/webkit/table'",
+    "import Pagination from '@aziontech/webkit/pagination'",
+    "import ConsolePanel from '@aziontech/webkit/console-panel'",
+    "import Skeleton from '@aziontech/webkit/skeleton'",
+    '</script>',
+    '<template>',
+    '  <Button kind="outlined" label="Cancel" />',
+    '  <Button :kind="primary ? \'primary\' : \'transparent\'" label="Back" />',
+    '  <Table.Cell kind="checkbox" />',
+    '  <Table.Root kind="x" />',
+    '  <Pagination.Button kind="next" />',
+    '  <ConsolePanel title-kind="left" />',
+    '  <Skeleton aria-label="one kind of row" kind="circle" />',
+    '</template>'
+  ].join('\n')
+  const v6 = loadMigration(6)
+  const { source } = migrateSource(sfc, v6)
+  assert.match(source, /<Button variant="outline" label="Cancel" \/>/)
+  assert.match(source, /<Button :variant="primary \? 'primary' : 'ghost'" label="Back" \/>/)
+  assert.match(source, /<Table\.Cell type="checkbox" \/>/)
+  assert.match(source, /<Pagination\.Button type="next" \/>/)
+  assert.match(source, /<ConsolePanel title-variant="left" \/>/)
+  assert.match(source, /<Skeleton aria-label="one kind of row" variant="circle" \/>/)
+  assert.equal(migrateSource(source, v6).source, source)
+})
+
 test('migrateSource is idempotent and handles the cases found migrating this repository', () => {
   const v6 = [
     '<script setup>',
@@ -393,7 +423,7 @@ test('a v3 project keeps PrimeVue-era imports as MANUAL and rewrites the native 
     assert.match(screen, /import ToggleGroup from '@aziontech\/webkit\/toggle-group'/)
     assert.match(screen, /<ToggleGroup :options="modes" \/>/)
     assert.match(screen, /import ActionButton from '@aziontech\/webkit\/button'/)
-    assert.match(screen, /<ActionButton kind="transparent" label="Back" \/>/)
+    assert.match(screen, /<ActionButton variant="ghost" label="Back" \/>/)
     assert.match(screen, /<!-- Dropdown of regions -->/)
     const mocks = readFileSync(join(dir, 'src/screen.test.js'), 'utf8')
     assert.match(mocks, /vi\.mock\('@aziontech\/webkit\/button'/)

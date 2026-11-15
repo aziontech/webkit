@@ -31,7 +31,7 @@
     <template #field:mode="{ value, setValue, disabled }">
       <RadioGroup
         :model-value="value"
-        kind="card"
+        variant="card"
         orientation="horizontal"
         aria-label="Cache mode"
         :options="[

@@ -10,13 +10,13 @@ const disabled = instance.getEnum('state', {
   hover: false,
   disabled: true
 })
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   default: 'default',
   privacy: 'privacy'
 })
 
 export default {
-  example: figma.code`<Switch v-model="enabled"${kind === 'default' ? '' : figma.code` kind="${kind}"`}${disabled ? figma.code` disabled` : ''} />`,
+  example: figma.code`<Switch v-model="enabled"${variant === 'default' ? '' : figma.code` variant="${variant}"`}${disabled ? figma.code` disabled` : ''} />`,
   imports: ["import Switch from '@aziontech/webkit/switch'"],
   id: 'switch',
   metadata: { nestable: true }

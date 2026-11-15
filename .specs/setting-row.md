@@ -3,8 +3,8 @@ name: setting-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: 3df5a80e7db5211ae448bf430fe42087c8fe05649487949ef8343860ec86057d
-spec_version: 4
+checksum: b8ec19ef74b74d3209eb4f9015ef30866a5e4ebdae085db775b7e38e3e8de656
+spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -35,13 +35,13 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 ## Best practices
 
 - The title is the label: give the control the same text as `aria-label`.
-- Pick `kind` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
+- Pick `variant` by the control: `field` for Input and Select, `compact` for Switch and Button, `stacked` for Textarea, radio groups and editors.
 - Show a validation message only after Save was pressed.
 - Use `depth` only for a setting that applies when the row above it is on, and render it with `v-if` on that state.
 - Keep the default two columns on a phone: the title and the clamped description sit on the start side, the control on the end side, both aligned to the top. This is the console layout at every width.
 - Set `stackable` only when the field needs the full measure to be usable in a narrow box (a long URL or a code value in a side drawer); never to fix a centred or cramped look.
 - Let a tall control (an input group of three nameservers, a textarea) sit beside the copy: the title stays at the top of the row.
-- Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `kind` and `stackable`.
+- Do not wrap the row or its copy in your own flex box to change the alignment or to stack it; use `variant` and `stackable`.
 - Do not set `stackable` on a `compact` row: a switch or a button always stays at the end side.
 - Keep the description to the one sentence that says what the setting does, and put the rest of a longer explanation in `hint`: the description clamps to two lines, and the Hint glyph beside the title reveals the full text on hover or focus.
 
@@ -77,7 +77,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
         <SettingRow
           title="Active"
           description="When disabled, the resource stops serving traffic."
-          kind="compact"
+          variant="compact"
         >
           <Switch
             v-model="form.active"
@@ -96,7 +96,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 | ------------- | ----------------------------------- | --------- | -------- | ------------------------------------------------------------------------------------- |
 | `title`       | `string`                            | `—`       | true     | The setting name; the control takes the same text as its aria-label.                  |
 | `description` | `string`                            | `''`      | false    | One sentence under the title that says what the setting does.                         |
-| `kind`        | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                          |
+| `variant`     | `'field' \| 'compact' \| 'stacked'` | `'field'` | false    | Where the control sits relative to the copy.                                          |
 | `depth`       | `0 \| 1 \| 2`                       | `0`       | false    | Indent depth under a rule, for a setting that only applies when its parent is on.     |
 | `stackable`   | `boolean`                           | `false`   | false    | Below the md container of the row, move a field control under the copy at full width. |
 | `hint`        | `string`                            | `''`      | false    | Extra guidance in a Hint glyph beside the title; empty renders no glyph.              |
@@ -116,7 +116,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 ## States
 
 - Visual states: `default`, `hinted` (a `Hint` glyph after the title when `hint` is set)
-- `data-row-kind` mirrors `kind` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
+- `data-row-variant` mirrors `variant` and `data-depth` mirrors `depth` on the root; `data-stackable` is set when `stackable` is on
 - Alignment: the copy and the control align to the top of the row, so a title stays level with the first line of a tall control.
 - Responsive: the row is the `@container/setting-row`. By default the row keeps its two columns at every width: the copy shrinks (the description clamps to two lines with an ellipsis) and a `field` control keeps the end cell, capped at the 3xs container. With `stackable`, below `@md` of the row a `field` control moves under the copy at full width.
 
@@ -169,7 +169,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

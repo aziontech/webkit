@@ -3,18 +3,18 @@ import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/brand/default.vue'
 import Sizes from '../../../../examples/brand/sizes.vue'
-import Types from '../../../../examples/brand/types.vue'
+import Types from '../../../../examples/brand/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Brand from './brand.vue'
 
-// Each kind maps to a distinct SVG lockup, identifiable by its viewBox.
+// Each variant maps to a distinct SVG lockup, identifiable by its viewBox.
 const KIND_VIEWBOX = {
   default: '0 0 90 18',
   reduced: '0 0 21 18',
   extended: '0 0 90 34'
 } as const
 
-const KINDS = ['default', 'reduced', 'extended'] as const
+const VARIANTS = ['default', 'reduced', 'extended'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 describe('Brand', () => {
@@ -43,23 +43,23 @@ describe('Brand', () => {
     expect(getByTestId('my-brand')).toBeInTheDocument()
   })
 
-  // --- kind -> rendered lockup + data-kind --------------------------------
-  it.each(KINDS)('kind=%s sets data-kind and renders the matching lockup', (kind) => {
-    const { getByTestId } = render(Brand, { props: { kind } })
+  // --- variant -> rendered lockup + data-variant --------------------------------
+  it.each(VARIANTS)('variant=%s sets data-variant and renders the matching lockup', (variant) => {
+    const { getByTestId } = render(Brand, { props: { variant: variant } })
 
     const root = getByTestId('content-brand')
-    expect(root).toHaveAttribute('data-kind', kind)
+    expect(root).toHaveAttribute('data-variant', variant)
 
     const svg = root.querySelector('svg')
     expect(svg).not.toBeNull()
-    expect(svg).toHaveAttribute('viewBox', KIND_VIEWBOX[kind])
+    expect(svg).toHaveAttribute('viewBox', KIND_VIEWBOX[variant])
   })
 
-  it('defaults to the default lockup when kind is omitted', () => {
+  it('defaults to the default lockup when variant is omitted', () => {
     const { getByTestId } = render(Brand)
 
     const root = getByTestId('content-brand')
-    expect(root).toHaveAttribute('data-kind', 'default')
+    expect(root).toHaveAttribute('data-variant', 'default')
     expect(root.querySelector('svg')).toHaveAttribute('viewBox', KIND_VIEWBOX.default)
   })
 
@@ -75,10 +75,10 @@ describe('Brand', () => {
 
   // Sizing is applied via width:auto on the SVG, so each lockup keeps its own viewBox
   // aspect ratio at any size (the height utility only scales it; width follows the viewBox).
-  it.each(KINDS)('keeps the %s lockup viewBox (aspect ratio) intact across sizes', (kind) => {
+  it.each(VARIANTS)('keeps the %s lockup viewBox (aspect ratio) intact across sizes', (variant) => {
     for (const size of SIZES) {
-      const { container } = render(Brand, { props: { kind, size } })
-      expect(container.querySelector('svg')).toHaveAttribute('viewBox', KIND_VIEWBOX[kind])
+      const { container } = render(Brand, { props: { variant: variant, size } })
+      expect(container.querySelector('svg')).toHaveAttribute('viewBox', KIND_VIEWBOX[variant])
     }
   })
 
@@ -99,8 +99,8 @@ describe('Brand', () => {
     expect(getByTestId('content-brand')).toHaveAttribute('aria-label', 'Azion home')
   })
 
-  it.each(KINDS)('has no accessibility violations for kind=%s', async (kind) => {
-    const { container } = render(Brand, { props: { kind } })
+  it.each(VARIANTS)('has no accessibility violations for variant=%s', async (variant) => {
+    const { container } = render(Brand, { props: { variant: variant } })
     await expectNoA11yViolations(container)
   })
 
@@ -109,7 +109,7 @@ describe('Brand', () => {
     const { getByTestId } = render(Default)
 
     const root = getByTestId('content-brand')
-    expect(root).toHaveAttribute('data-kind', 'default')
+    expect(root).toHaveAttribute('data-variant', 'default')
     expect(root.querySelector('svg')).toHaveAttribute('viewBox', KIND_VIEWBOX.default)
   })
 
@@ -118,7 +118,7 @@ describe('Brand', () => {
 
     const roots = getAllByTestId('content-brand')
     expect(roots).toHaveLength(3)
-    expect(roots.map((r) => r.getAttribute('data-kind'))).toEqual([
+    expect(roots.map((r) => r.getAttribute('data-variant'))).toEqual([
       'default',
       'reduced',
       'extended'

@@ -9,7 +9,7 @@
     },
     {
       "name": "Closings",
-      "summary": "Two closing bands in a row: the renderer turns the upper band's `hatch` off, so the page closes once, on the lower band's frame. Below, a page whose last band carries its own content closes on `{ _id: 'closing-call-to-action', props: { kind: 'frame' } }`, the frame alone with no gap before it.",
+      "summary": "Two closing bands in a row: the renderer turns the upper band's `hatch` off, so the page closes once, on the lower band's frame. Below, a page whose last band carries its own content closes on `{ _id: 'closing-call-to-action', props: { variant: 'frame' } }`, the frame alone with no gap before it.",
       "file": "closings.vue"
     }
   ]

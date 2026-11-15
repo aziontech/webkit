@@ -108,7 +108,7 @@ await client.incr('api:calls:today', 1);`
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     fade="bottom"
     :chrome="false"

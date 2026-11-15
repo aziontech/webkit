@@ -97,7 +97,7 @@
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -106,7 +106,7 @@
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="https://example.com/docs"
@@ -128,7 +128,7 @@
                 :value="1"
                 :max="3"
                 size="small"
-                kind="flat"
+                variant="flat"
                 class="shrink-0"
                 aria-label="Step 1 of 3"
               />
@@ -196,10 +196,10 @@
                         </Field>
 
                         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                          <Field.Legend kind="label">Organization mark</Field.Legend>
+                          <Field.Legend type="label">Organization mark</Field.Legend>
                           <RadioGroup
                             v-model="accent"
-                            kind="card"
+                            variant="card"
                             orientation="horizontal"
                             :options="accents"
                             aria-label="Organization mark"
@@ -213,7 +213,7 @@
                                   :colors="option.colors"
                                   pattern="marble"
                                   size="medium"
-                                  kind="square"
+                                  variant="square"
                                 />
                                 <span class="text-body-xs text-(--text-muted)">{{
                                   option.label
@@ -233,7 +233,7 @@
                     <div class="flex flex-1">
                       <Button
                         label="Continue"
-                        kind="primary"
+                        variant="primary"
                         size="large"
                         class="w-full"
                         type="submit"
@@ -269,7 +269,7 @@
                     :colors="accentColors"
                     pattern="marble"
                     size="small"
-                    kind="square"
+                    variant="square"
                     class="shrink-0"
                   />
                   <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
@@ -283,7 +283,7 @@
                   <Avatar
                     label="MW"
                     size="small"
-                    kind="square"
+                    variant="square"
                     class="shrink-0"
                   />
                   <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
@@ -368,7 +368,7 @@
                     <Avatar
                       :label="accountInitials(ownerName)"
                       size="medium"
-                      kind="square"
+                      variant="square"
                     />
                     <span class="flex min-w-0 flex-col">
                       <span class="truncate text-label-sm text-(--text-default)">{{

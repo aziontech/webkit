@@ -18,10 +18,10 @@
     <div class="max-w-(--container-lg)">
       <MediaSplit
         orientation="vertical"
-        kind="media-start"
+        variant="media-start"
         eyebrow="Deployment"
         title="Vertical: stacked at every width."
-        description="The shape a band takes in a column too narrow to carry two halves. kind picks which cell is on top — media-start leads with the picture."
+        description="The shape a band takes in a column too narrow to carry two halves. variant picks which cell is on top — media-start leads with the picture."
       >
         <template #media>
           <Illustration name="quick-start-with-templates" />

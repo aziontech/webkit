@@ -111,13 +111,13 @@
           v-if="lanes.length > 0"
           key="lanes"
           flush
-          kind="frame"
+          variant="frame"
           :columns="2"
         >
           <CardGridCell
             v-for="lane in lanes"
             :key="lane.title"
-            kind="canvas"
+            variant="canvas"
           >
             <div class="flex h-full flex-col gap-(--spacing-xl)">
               <div class="flex flex-col gap-(--spacing-sm)">
@@ -146,7 +146,7 @@
                   key="action"
                   :label="lane.action.label"
                   :href="lane.action.href"
-                  kind="secondary"
+                  variant="secondary"
                   size="large"
                   :icon="lane.action.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
@@ -157,7 +157,7 @@
                   key="secondary-action"
                   :label="lane.secondaryAction.label"
                   :href="lane.secondaryAction.href"
-                  kind="outlined"
+                  variant="outline"
                   size="large"
                   :icon="lane.secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
@@ -184,13 +184,13 @@
           v-if="channels.length > 0"
           key="channels"
           flush
-          kind="frame"
+          variant="frame"
           :columns="3"
         >
           <CardGridCell
             v-for="channel in channels"
             :key="channel.title"
-            kind="canvas"
+            variant="canvas"
           >
             <Topic
               :heading-level="2"

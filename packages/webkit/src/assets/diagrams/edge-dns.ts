@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Resolver',
       icon: 'ai ai-globe',
       active: true
     },
     {
       key: 'dns',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'DNS',
       title: 'shop.example.com zone',
       icon: 'ai ai-edge-dns',
@@ -26,7 +26,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'apex',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'A record',
       title: 'Points at the workload',
       icon: 'ai ai-workloads',
@@ -34,14 +34,14 @@ const spec: DiagramSpec = {
     },
     {
       key: 'mail',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'MX record',
       title: 'Mail provider',
       icon: 'ai ai-mail'
     },
     {
       key: 'txt',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'TXT record',
       title: 'Domain verification',
       icon: 'ai ai-key'

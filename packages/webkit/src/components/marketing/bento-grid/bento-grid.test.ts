@@ -130,8 +130,8 @@ describe('BentoGrid', () => {
         })
       )
 
-      const content = getByTestId(CELL_TESTID).querySelector('[data-kind]')
-      expect(content?.getAttribute('data-kind')).toBe('surface')
+      const content = getByTestId(CELL_TESTID).querySelector('[data-variant]')
+      expect(content?.getAttribute('data-variant')).toBe('surface')
       expect(content?.getAttribute('data-padded')).toBe('true')
     })
 
@@ -141,7 +141,7 @@ describe('BentoGrid', () => {
           components: { BentoGrid, BentoGridCell },
           template: `
           <BentoGrid>
-            <BentoGridCell kind="none" :padded="false">
+            <BentoGridCell variant="none" :padded="false">
               <a href="#platform">A tile that paints itself</a>
             </BentoGridCell>
           </BentoGrid>
@@ -149,8 +149,8 @@ describe('BentoGrid', () => {
         })
       )
 
-      const content = getByTestId(CELL_TESTID).querySelector('[data-kind]')
-      expect(content?.getAttribute('data-kind')).toBe('none')
+      const content = getByTestId(CELL_TESTID).querySelector('[data-variant]')
+      expect(content?.getAttribute('data-variant')).toBe('none')
       expect(content?.hasAttribute('data-padded')).toBe(false)
     })
 

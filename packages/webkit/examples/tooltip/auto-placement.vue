@@ -21,7 +21,7 @@
         <IconButton
           icon="ai ai-arrow-up"
           aria-label="top-edge trigger"
-          kind="outlined"
+          variant="outline"
           size="medium"
         />
       </Tooltip>
@@ -36,7 +36,7 @@
         <IconButton
           icon="ai ai-arrow-down"
           aria-label="bottom-edge trigger"
-          kind="outlined"
+          variant="outline"
           size="medium"
         />
       </Tooltip>
@@ -51,7 +51,7 @@
         <IconButton
           icon="ai ai-arrow-left"
           aria-label="left-edge trigger"
-          kind="outlined"
+          variant="outline"
           size="medium"
         />
       </Tooltip>
@@ -66,7 +66,7 @@
         <IconButton
           icon="ai ai-arrow-right"
           aria-label="right-edge trigger"
-          kind="outlined"
+          variant="outline"
           size="medium"
         />
       </Tooltip>

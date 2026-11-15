@@ -237,6 +237,20 @@ function renameEvent(attrs, from, to) {
   )
 }
 
+function outsideQuotes(text, fn) {
+  return text
+    .split(/("[^"]*"|'[^']*')/)
+    .map((part, i) => (i % 2 ? part : fn(part)))
+    .join('')
+}
+
+function mapLiterals(expr, values) {
+  if (!values) return expr
+  return expr.replace(/(['`])([a-z][a-z0-9-]*)\1/g, (all, q, v) =>
+    Object.hasOwn(values, v) && !/^(true|false)$/.test(values[v]) ? `${q}${values[v]}${q}` : all
+  )
+}
+
 function renameAttributes(attrs, rules) {
   let out = attrs
   for (const [oldProp, ruleSpec] of Object.entries(rules)) {
@@ -268,7 +282,7 @@ function renameAttributes(attrs, rules) {
           const expr = dq ? dv : sv
           return inverts
             ? `${sp}${bind}${toKebab}${eq}${q}!(${expr})${q}`
-            : `${sp}${bind}${toKebab}${eq}${q}${expr}${q}`
+            : `${sp}${bind}${toKebab}${eq}${q}${mapLiterals(expr, rule.values)}${q}`
         }
       )
       out = out.replace(
@@ -285,10 +299,12 @@ function renameAttributes(attrs, rules) {
           return `${sp}${toKebab}${eq}${q}${mapped}${q}`
         }
       )
-      out = out.replace(new RegExp(`(\\s)${name}(?=[\\s/>]|$)`, 'g'), (all, sp) => {
-        if (rule.values && 'true' in rule.values) return `${sp}:${toKebab}="${rule.values.true}"`
-        return `${sp}${toKebab}`
-      })
+      out = outsideQuotes(out, (part) =>
+        part.replace(new RegExp(`(\\s)${name}(?=[\\s/>]|$)`, 'g'), (all, sp) => {
+          if (rule.values && 'true' in rule.values) return `${sp}:${toKebab}="${rule.values.true}"`
+          return `${sp}${toKebab}`
+        })
+      )
     }
   }
   return out

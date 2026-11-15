@@ -5,7 +5,7 @@
 
 <template>
   <HeroBand
-    kind="center-band"
+    variant="center-band"
     eyebrow="Functions"
     title="Run JavaScript on every request"
     description="The Web APIs you already know, in scope inside every Function."

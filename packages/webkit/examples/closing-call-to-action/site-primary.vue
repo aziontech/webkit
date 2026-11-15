@@ -20,7 +20,7 @@
     <SectionGap hatch />
 
     <ClosingCallToAction
-      kind="primary"
+      variant="primary"
       anchor="contact"
       title="Build, run, and protect applications everywhere."
       description="Get faster launches, lower latency, and less infrastructure overhead from day one."

@@ -5,10 +5,10 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   inline: 'inline',
   default: 'default',
-  outline: 'outlined',
+  outline: 'outline',
   muted: 'muted'
 })
 const size = instance.getEnum('size', {
@@ -31,10 +31,10 @@ const hasDescription = descriptionNode.type === 'TEXT'
 const description = hasDescription ? descriptionNode.textContent : ''
 
 export default {
-  example: figma.code`<Item${kind === 'default' ? '' : figma.code` kind="${kind}"`}${size === 'medium' ? '' : figma.code` size="${size}"`}${clickable ? figma.code` clickable` : ''}>${
+  example: figma.code`<Item${variant === 'default' ? '' : figma.code` variant="${variant}"`}${size === 'medium' ? '' : figma.code` size="${size}"`}${clickable ? figma.code` clickable` : ''}>${
     showLeft
       ? figma.code`
-  <Item.Media kind="icon">
+  <Item.Media type="icon">
     ${media}
   </Item.Media>`
       : ''

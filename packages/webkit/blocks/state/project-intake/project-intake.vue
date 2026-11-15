@@ -28,7 +28,7 @@
     >
       <Button
         label="Choose a folder"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-folder-open"
         @click="chooseFolder"

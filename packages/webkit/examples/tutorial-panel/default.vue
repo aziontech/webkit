@@ -122,7 +122,7 @@
             >
               <Button
                 label="Deploy"
-                kind="primary"
+                variant="primary"
                 size="medium"
               />
             </Hotspot>

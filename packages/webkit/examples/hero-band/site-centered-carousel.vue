@@ -29,7 +29,7 @@
 
 <template>
   <HeroBand
-    kind="center"
+    variant="center"
     title-highlight="Build and run applications"
     title="globally, with no ops"
     description="Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic."

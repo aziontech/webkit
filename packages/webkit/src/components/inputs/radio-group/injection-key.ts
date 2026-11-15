@@ -4,7 +4,7 @@ import type { ComputedRef, InjectionKey } from 'vue'
 export type RadioGroupOrientation = 'vertical' | 'horizontal'
 
 /** Look of every option: a circle beside its label, or a bordered card. */
-export type RadioGroupKind = 'default' | 'card'
+export type RadioGroupVariant = 'default' | 'card'
 
 /** One option of a data-driven RadioGroup. */
 export interface RadioGroupOption {
@@ -29,7 +29,7 @@ export interface RadioGroupProps<TOption extends RadioGroupOption = RadioGroupOp
   /** Layout axis: options stacked, or in a wrapping row. */
   orientation?: RadioGroupOrientation
   /** Look of every option: a circle beside its label, or a bordered card. */
-  kind?: RadioGroupKind
+  variant?: RadioGroupVariant
   /** Options rendered as RadioGroup.Item rows, in place of composed items. */
   options?: TOption[]
   /** Disables every option. */
@@ -47,7 +47,7 @@ export interface RadioGroupContext {
   /** The selected value. */
   value: ComputedRef<string | undefined>
   /** Look of every option. */
-  kind: ComputedRef<RadioGroupKind>
+  variant: ComputedRef<RadioGroupVariant>
   /** Whether the whole group is disabled. */
   disabled: ComputedRef<boolean>
   /** Root test id; items derive theirs from it. */

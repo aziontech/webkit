@@ -15,7 +15,7 @@ You are a transcriber, not an author. The spec at `.specs/<name>.md` is the cont
 9. **Do not introduce external libs for positioning or animation.** No `floating-ui`, `popper.js`, `tippy`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization. Use CSS + tokens + Vue primitives. Catalog: [`dependencies.md`](./dependencies.md).
 10. **Do not improvise animations.** Every `animate-*` / `transition-*` class comes from the catalog. Every motion-bearing class pairs with `motion-reduce:*`. No component-local `@keyframes`. See [`DESIGN.md`](../docs/DESIGN.md#animations).
 11. **Do not add Figma references to examples.** No Figma URLs in `examples.json` summaries or example files. The example documents the **component API and behavior**; the Figma file documents the design. They stay separate. See [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../docs/COMPONENT_REQUIREMENTS.md) § 13.x.
-12. **Do not create CSS class presets in JavaScript** (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` that only composes classes). Variants live on `data-*` attributes; styles live as Tailwind utilities on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See [`styling.md`](./styling.md).
+12. **Do not create CSS class presets in JavaScript** (`const variantClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)` that only composes classes). Variants live on `data-*` attributes; styles live as Tailwind utilities on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See [`styling.md`](./styling.md).
 13. **NEVER create anything outside the standard.** If the only way to satisfy a request is to deviate from our patterns, that's a spec problem — emit `BLOCKED:` and stop.
 
 ## What to do when the spec is incomplete
@@ -28,7 +28,7 @@ BLOCKED: <one-sentence reason>
 
 Then exit with no writes. The orchestrator will surface the message to the user. Common reasons:
 
-- `BLOCKED: spec lists no default for prop "kind" but the type is non-optional`
+- `BLOCKED: spec lists no default for prop "variant" but the type is non-optional`
 - `BLOCKED: spec references token .text-foo-md which is not in DESIGN.md`
 - `BLOCKED: spec declares structure=composition but no Sub-components section`
 

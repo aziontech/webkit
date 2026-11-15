@@ -151,7 +151,7 @@
                 <Button
                   label="Documentation"
                   icon="ai ai-book"
-                  kind="outlined"
+                  variant="outline"
                   href="https://example.com/docs/security-policies"
                   target="_blank"
                   size="medium"
@@ -184,7 +184,7 @@
                           <HelperText
                             v-if="nameError"
                             id="resource-name-message"
-                            kind="required"
+                            type="required"
                             label="This field is required."
                           />
                         </div>
@@ -192,7 +192,7 @@
                       <SettingRow
                         title="Project"
                         description="The project this policy runs in front of."
-                        kind="compact"
+                        variant="compact"
                       >
                         <span class="text-body-md text-(--text-default)">web-app</span>
                       </SettingRow>
@@ -213,7 +213,7 @@
                         :key="field.key"
                         :title="field.title"
                         :description="field.description"
-                        kind="compact"
+                        variant="compact"
                       >
                         <Tooltip
                           v-if="field.locked"
@@ -248,7 +248,7 @@
                       <SettingRow
                         title="Active"
                         description="Logs which rules ran for a request, under the trace field of each logged event."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.debugRules"
@@ -267,7 +267,7 @@
                       <SettingRow
                         title="Active"
                         description="An inactive policy stops evaluating rules."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -294,14 +294,14 @@
                 <Button
                   type="button"
                   label="Discard"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="saving"
                   @click="discard"
                 />
                 <Button
                   label="Save"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   :loading="saving"
                   @click="save"
@@ -317,21 +317,21 @@
             <template #actions>
               <Button
                 :label="leaveLabels.keepEditing"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 :disabled="leaveDialog.loading"
                 @click="guard.keepEditing"
               />
               <Button
                 :label="leaveLabels.discard"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="leaveDialog.loading"
                 @click="guard.discardAndLeave"
               />
               <Button
                 :label="leaveLabels.save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="leaveDialog.loading"
                 @click="guard.saveAndLeave"

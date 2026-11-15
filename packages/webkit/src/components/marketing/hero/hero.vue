@@ -3,8 +3,8 @@
 
   import TextureMaterial, {
     type TextureMaterialFade,
-    type TextureMaterialKind,
-    type TextureMaterialSize
+    type TextureMaterialSize,
+    type TextureMaterialVariant
   } from '../texture-material/texture-material.vue'
 
   const Ticker = defineAsyncComponent(() => import('../ticker/ticker.vue'))
@@ -15,7 +15,7 @@
   })
 
   /** Height of the band. */
-  export type HeroKind = 'band' | 'screen'
+  export type HeroVariant = 'band' | 'screen'
 
   /** Width the inner column is capped at. */
   export type HeroWidth = '3xl' | '4xl' | '5xl' | '6xl' | '7xl' | 'site' | 'full'
@@ -31,7 +31,7 @@
 
   interface Props {
     /** Height of the band; `screen` fills one viewport minus `--hero-banner-offset`. */
-    kind?: HeroKind
+    variant?: HeroVariant
     /** Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset. */
     maxWidth?: HeroWidth
     /** Draw the band's bottom rule, which is the top edge of whatever follows it. */
@@ -41,20 +41,20 @@
     /** Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with. */
     size?: HeroSize
     /** Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Pitch of the tiling the `texture` prop paints — how far apart its cells sit. */
     textureSize?: TextureMaterialSize
     /** Fade applied to the layer the `texture` prop paints. */
     textureFade?: TextureMaterialFade
     /** Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip. */
-    floorTexture?: TextureMaterialKind
+    floorTexture?: TextureMaterialVariant
     /** Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit. */
     floorTextureSize?: TextureMaterialSize
     /** Where the content column sits vertically when the band fills a screen. */
     align?: HeroAlign
     /** Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. */
     mediaAlign?: HeroMediaAlign
-    /** Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length. */
+    /** Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length. */
     offset?: string
     /** Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. */
     bottomHeight?: string
@@ -67,7 +67,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'band',
+    variant: 'band',
     maxWidth: '7xl',
     bordered: true,
     padded: true,
@@ -111,7 +111,7 @@
   <section
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-width="maxWidth"
     :data-bordered="props.bordered || null"
     :data-padded="props.padded || null"
@@ -123,7 +123,7 @@
       '--hero-banner-offset': offset || undefined,
       '--banner-bottom-height': bottomHeight || undefined
     }"
-    class="relative isolate w-full overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[kind=screen]:flex data-[kind=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))] data-[kind=screen]:flex-col"
+    class="relative isolate w-full overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[variant=screen]:flex data-[variant=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))] data-[variant=screen]:flex-col"
   >
     <div
       v-if="hasBackdrop()"
@@ -135,7 +135,7 @@
       >
         <TextureMaterial
           v-if="texture !== 'none'"
-          :kind="texture"
+          :variant="texture"
           :size="textureSize"
           :fade="textureFade"
         />
@@ -155,12 +155,12 @@
     </div>
 
     <div
-      :data-kind="kind"
+      :data-variant="variant"
       :data-width="maxWidth"
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[kind=screen]:flex data-[kind=screen]:flex-1 data-[kind=screen]:flex-col data-[kind=screen]:data-[align=start]:justify-start data-[kind=screen]:data-[align=center]:justify-center data-[kind=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
+      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
     >
       <div
         v-if="hasMedia()"
@@ -192,7 +192,7 @@
       >
         <TextureMaterial
           v-if="hasFloorTexture"
-          :kind="floorTexture"
+          :variant="floorTexture"
           :size="floorTextureSize"
           class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--banner-floor-ink,0.6)]"
         />

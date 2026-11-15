@@ -6,7 +6,7 @@
   <div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
     <CardPricing
       actions-position="bottom"
-      kind="contained"
+      variant="contained"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
@@ -16,7 +16,7 @@
     />
     <CardPricing
       actions-position="bottom"
-      kind="transparent"
+      variant="ghost"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
@@ -26,7 +26,7 @@
     />
     <CardPricing
       actions-position="middle"
-      kind="contained"
+      variant="contained"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"
@@ -36,7 +36,7 @@
     />
     <CardPricing
       actions-position="middle"
-      kind="transparent"
+      variant="ghost"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
       value="20"

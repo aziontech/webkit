@@ -444,7 +444,7 @@
       ]"
     >
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="versionId"
         :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
@@ -520,7 +520,7 @@
       <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           href="/resources/1784552864?tab=versions"
           aria-label="Back to web-app versions"
@@ -627,7 +627,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       aria-label="Version actions"
                     />
@@ -680,7 +680,7 @@
                       <template #actions>
                         <Button
                           label="Add Cache Settings"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-plus"
                           @click="openSetting()"
@@ -715,7 +715,7 @@
                           >
                             <IconButton
                               icon="ai ai-refresh"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               :loading="loading"
                               aria-label="Refresh"
@@ -728,7 +728,7 @@
                           >
                             <IconButton
                               icon="ai ai-download"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               :disabled="!tableEl"
                               aria-label="Download CSV"
@@ -743,7 +743,7 @@
                           >
                             <IconButton
                               icon="ai ai-column"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               aria-label="Columns"
                             />
@@ -788,7 +788,7 @@
                                     :alt="row.author"
                                     :label="row.author"
                                     size="small"
-                                    kind="square"
+                                    variant="square"
                                   />
                                 </Tooltip>
                                 <span class="truncate text-body-sm text-(--text-muted)">{{
@@ -808,7 +808,7 @@
                                 <template #actions>
                                   <Button
                                     label="Clear search"
-                                    kind="outlined"
+                                    variant="outline"
                                     size="small"
                                     @click="search = ''"
                                   />
@@ -826,7 +826,7 @@
                                   <Button
                                     label="Add Cache Settings"
                                     icon="ai ai-plus"
-                                    kind="secondary"
+                                    variant="secondary"
                                     size="small"
                                     @click="openSetting()"
                                   />
@@ -892,7 +892,7 @@
                                       <HelperText
                                         v-if="errors.name"
                                         id="cache-setting-name-message"
-                                        kind="required"
+                                        type="required"
                                         :label="errors.name"
                                       />
                                     </SettingRow>
@@ -1000,7 +1000,7 @@
                                       key="staleCache"
                                       title="Stale cache"
                                       description="Keep serving the expired object while the origin is unreachable, instead of answering with an error."
-                                      kind="compact"
+                                      variant="compact"
                                     >
                                       <Switch
                                         v-model="form.staleCache"
@@ -1011,7 +1011,7 @@
                                       key="largeFileCache"
                                       title="Large file optimization"
                                       description="Fetch and cache large objects in fragments, so a partial request does not wait for the whole file."
-                                      kind="compact"
+                                      variant="compact"
                                     >
                                       <Switch
                                         v-model="form.largeFileCache"
@@ -1037,7 +1037,7 @@
                                       key="tieredCache"
                                       title="Tiered cache"
                                       description="Add a second cache layer between the edge and your origin, so an edge miss can still be answered without reaching it."
-                                      kind="compact"
+                                      variant="compact"
                                     >
                                       <Switch
                                         v-model="form.tieredCache"
@@ -1243,7 +1243,7 @@
                             <Button
                               type="button"
                               label="Cancel"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               :disabled="submitting"
                               @click="drawerOpen = false"
@@ -1251,7 +1251,7 @@
                             <Button
                               type="submit"
                               :label="editingId ? 'Save' : 'Add Cache Settings'"
-                              kind="primary"
+                              variant="primary"
                               size="medium"
                               :loading="submitting"
                             />
@@ -1278,7 +1278,7 @@
                     <template #actions>
                       <Button
                         :label="`Open ${tabLabel}`"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`/resources/web-app/${activeTab}`"
                       />
@@ -1332,7 +1332,7 @@
                     <SplitButton
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
                       :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       :items="saveOptions"
                       @item-click="(_event, item) => (saveAction = item.value)"
@@ -1373,7 +1373,7 @@
               </h2>
               <IconButton
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Close version history"
                 @click="historyExpanded = false"
@@ -1411,7 +1411,7 @@
                       >
                         <IconButton
                           icon="ai ai-pencil"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           aria-label="Edit version info"
                           @click="
@@ -1442,13 +1442,13 @@
                       <div class="flex justify-end gap-(--spacing-xs)">
                         <Button
                           label="Cancel"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="editing = false"
                         />
                         <Button
                           label="Save"
-                          kind="primary"
+                          variant="primary"
                           size="small"
                           @click="
                             () => {
@@ -1474,7 +1474,7 @@
                             :alt="version.author"
                             :label="version.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate"
@@ -1552,7 +1552,7 @@
                             :alt="entry.author"
                             :label="entry.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
@@ -1568,7 +1568,7 @@
               >
                 <Button
                   label="Show older"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="shown += 5"
                 />

@@ -112,7 +112,7 @@
                 class="w-full bg-(--bg-surface)"
               >
                 <Quote
-                  kind="signed"
+                  variant="signed"
                   :text="item.text"
                   :name="item.reportName"
                   :job-title="item.date"

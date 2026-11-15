@@ -11,17 +11,17 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <SplitButton
-      kind="primary"
+      variant="primary"
       label="Primary"
       :items="items"
     />
     <SplitButton
-      kind="secondary"
+      variant="secondary"
       label="Secondary"
       :items="items"
     />
     <SplitButton
-      kind="outlined"
+      variant="outline"
       label="Outlined"
       :items="items"
     />

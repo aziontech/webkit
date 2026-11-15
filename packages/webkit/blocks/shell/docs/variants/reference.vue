@@ -137,7 +137,7 @@
         :meta-actions="metaActions"
       />
       <DocProse>
-        <DocCallout kind="info">
+        <DocCallout variant="info">
           Rolling out: this page describes API v4. Accounts still on v3 keep the previous reference.
         </DocCallout>
         <p>
@@ -151,13 +151,13 @@
         >
           <Button
             label="Quickstart"
-            kind="primary"
+            variant="primary"
             size="medium"
             href="/docs/applications/quickstart"
           />
           <Button
             label="Applications reference"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             href="/docs/reference/applications"
           />
@@ -226,7 +226,7 @@
     <template #actions>
       <IconButton
         icon="ai ai-github"
-        kind="outlined"
+        variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
@@ -235,7 +235,7 @@
       />
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         class="shrink-0"
         href="https://console.azion.com"
@@ -262,7 +262,7 @@
     <template #footer>
       <div class="w-full border-t border-(--border-default)">
         <Footer
-          kind="content"
+          variant="content"
           aria-label="Footer"
         >
           <Footer.Column

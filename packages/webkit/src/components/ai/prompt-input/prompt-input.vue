@@ -385,7 +385,7 @@
             v-if="busy"
             key="stop"
             icon="ai ai-stop"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             :ariaLabel="t('promptInput.stop')"
             :disabled="disabled"
@@ -396,7 +396,7 @@
             v-else
             key="submit"
             icon="ai ai-arrow-up"
-            kind="primary"
+            variant="primary"
             size="medium"
             :ariaLabel="t('promptInput.submit')"
             :disabled="!canSubmit"

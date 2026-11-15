@@ -70,7 +70,7 @@ packages/webkit/src/components/actions/button/
 ## Workflow
 
 1. **Read the spec.** Extract Props / Events / Slots / Sub-components / States / Tokens / Accessibility tables.
-2. **Write the root `.vue`.** Follow this skeleton verbatim and substitute spec values. Classes live inline on the root `class` attribute; variants are switched via `data-*` attributes consumed by Tailwind's `data-[attr=value]:` prefix. **No `kindClasses` / `sizeClasses` / `sharedClasses` JS presets, no `<style>` block, no `.css` file inside the component.** Full rationale: [styling.md](../../rules/styling.md).
+2. **Write the root `.vue`.** Follow this skeleton verbatim and substitute spec values. Classes live inline on the root `class` attribute; variants are switched via `data-*` attributes consumed by Tailwind's `data-[attr=value]:` prefix. **No `variantClasses` / `sizeClasses` / `sharedClasses` JS presets, no `<style>` block, no `.css` file inside the component.** Full rationale: [styling.md](../../rules/styling.md).
 
    ```vue
    <script setup lang="ts">
@@ -79,12 +79,12 @@ packages/webkit/src/components/actions/button/
      defineOptions({ name: 'PascalName', inheritAttrs: false })
 
      // Variant types — exported for VariantProps
-     export type PascalNameKind = 'primary' | 'secondary'
+     export type PascalNameVariant = 'primary' | 'secondary'
      export type PascalNameSize = 'small' | 'medium' | 'large'
 
      interface Props {
        /** From spec */
-       kind?: PascalNameKind
+       variant?: PascalNameVariant
        /** From spec */
        size?: PascalNameSize
        /** From spec */
@@ -92,7 +92,7 @@ packages/webkit/src/components/actions/button/
      }
 
      const props = withDefaults(defineProps<Props>(), {
-       kind: 'primary',
+       variant: 'primary',
        size: 'large',
        disabled: false
      })
@@ -115,7 +115,7 @@ packages/webkit/src/components/actions/button/
      <button
        v-bind="$attrs"
        :data-testid="testId"
-       :data-kind="kind"
+       :data-variant="variant"
        :data-size="size"
        :data-disabled="disabled || null"
        :disabled="disabled"
@@ -124,8 +124,8 @@ packages/webkit/src/components/actions/button/
          transition-colors duration-150 ease-out motion-reduce:transition-none
          rounded-(--shape-button)
          focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
-         data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
-         data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-foreground)
+         data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+         data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground)
          data-[size=small]:h-7 data-[size=small]:px-(--spacing-2) data-[size=small]:text-button-md
          data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-3) data-[size=medium]:text-button-md
          data-[size=large]:h-10 data-[size=large]:px-(--spacing-4) data-[size=large]:text-button-lg
@@ -150,7 +150,7 @@ packages/webkit/src/components/actions/button/
    </template>
    ```
 
-   Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const kindClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
+   Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const variantClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
 
    **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag` and Vite fails to load the component. Put the flat class string in `<script setup>` as `const ROOT_CLASS = '...'` and bind `:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
 

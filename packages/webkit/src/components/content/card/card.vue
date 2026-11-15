@@ -12,7 +12,7 @@
   })
 
   /** Layout of the card. */
-  export type CardKind = 'default' | 'integration'
+  export type CardVariant = 'default' | 'integration'
 
   /** Status colour of an integration badge; the `Tag` severity it renders. */
   export type CardBadgeSeverity = TagSeverity
@@ -27,32 +27,32 @@
   }
 
   interface Props {
-    /** Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name. */
+    /** Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name. */
     title?: string
     /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
     padded?: boolean
     /** `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot. */
-    kind?: CardKind
-    /** Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. */
+    variant?: CardVariant
+    /** Integration variant: icon class for the logo mark. The `logo` slot takes an image instead. */
     logo?: string
-    /** Integration kind: who publishes the item, shown as "by {vendor}". */
+    /** Integration variant: who publishes the item, shown as "by {vendor}". */
     vendor?: string
-    /** Integration kind: one or two sentences on what the item does. */
+    /** Integration variant: one or two sentences on what the item does. */
     description?: string
-    /** Integration kind: small tags such as the category or the context. */
+    /** Integration variant: small tags such as the category or the context. */
     badges?: CardBadge[]
-    /** Integration kind: shows the Installed tag. */
+    /** Integration variant: shows the Installed tag. */
     installed?: boolean
-    /** Integration kind: the title links here; without it the title is a button that emits `select`. */
+    /** Integration variant: the title links here; without it the title is a button that emits `select`. */
     href?: string
-    /** Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. */
+    /** Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner. */
     featured?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     title: '',
     padded: true,
-    kind: 'default',
+    variant: 'default',
     logo: '',
     vendor: '',
     description: '',
@@ -63,7 +63,7 @@
   })
 
   const emit = defineEmits<{
-    /** Integration kind without `href`: the title (the whole tile) was activated. */
+    /** Integration variant without `href`: the title (the whole tile) was activated. */
     select: [event: MouseEvent]
   }>()
 
@@ -72,13 +72,13 @@
     header(): unknown
     /** Actions aligned to the end of the default header; visible on header hover. */
     'header-actions'(): unknown
-    /** Main card body; with `kind="integration"` it renders under the description. */
+    /** Main card body; with `variant="integration"` it renders under the description. */
     default(): unknown
     /** Footer actions or metadata; omitted when empty. */
     footer(): unknown
-    /** Integration kind: replaces the logo mark, for an `img` with an empty `alt`. */
+    /** Integration variant: replaces the logo mark, for an `img` with an empty `alt`. */
     logo(): unknown
-    /** Integration kind: one action at the end of the tile, above the stretched title target. */
+    /** Integration variant: one action at the end of the tile, above the stretched title target. */
     actions(): unknown
   }>()
 
@@ -88,7 +88,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-card')
 
-  const isIntegration = computed(() => props.kind === 'integration')
+  const isIntegration = computed(() => props.variant === 'integration')
   const isFeatured = computed(() => isIntegration.value && props.featured)
   const hasHeaderSlot = () => Boolean(slots['header'])
   const hasHeaderActionsSlot = () => Boolean(slots['header-actions'])
@@ -111,11 +111,11 @@
     v-bind="$attrs"
     :class="
       cn(
-        'group/card flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card) data-[kind=integration]:transition-colors data-[kind=integration]:not-data-[featured]:hover:bg-(--bg-hover) motion-reduce:transition-none data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)',
+        'group/card flex flex-col overflow-clip bg-(--bg-surface) border border-(length:--border-width-default) border-(--border-default) rounded-(--shape-card) data-[variant=integration]:transition-colors data-[variant=integration]:not-data-[featured]:hover:bg-(--bg-hover) motion-reduce:transition-none data-[featured]:isolate data-[featured]:bg-(--bg-surface-raised) data-[featured]:hover:border-(--border-strong)',
         attrs.class as string | undefined
       )
     "
-    :data-kind="kind"
+    :data-variant="variant"
     :data-featured="isFeatured || null"
     :data-testid="testId"
   >

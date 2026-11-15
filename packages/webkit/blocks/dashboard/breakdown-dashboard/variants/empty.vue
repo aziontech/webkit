@@ -224,7 +224,7 @@
           <Button
             label="Export CSV"
             icon="ai ai-download"
-            kind="outlined"
+            variant="outline"
             size="medium"
             disabled
           />
@@ -276,7 +276,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Spend by category"
                   />
@@ -301,8 +301,8 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="trendForm === 'bar'"
                 stacked
@@ -329,7 +329,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Current split"
                   />
@@ -370,7 +370,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top contributors"
                   />

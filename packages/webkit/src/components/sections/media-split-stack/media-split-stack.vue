@@ -17,7 +17,7 @@
   })
 
   /** Layout of the run. */
-  export type MediaSplitStackKind = 'media-end' | 'alternating'
+  export type MediaSplitStackVariant = 'media-end' | 'alternating'
 
   /** The outlined button of a band, and the link the whole band follows. */
   export type MediaSplitStackAction = {
@@ -62,7 +62,7 @@
 
   interface Props {
     /** Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. */
-    kind?: MediaSplitStackKind
+    variant?: MediaSplitStackVariant
     /** In-page id set on the run so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the section title. */
@@ -76,7 +76,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'media-end',
+    variant: 'media-end',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -112,7 +112,7 @@
     Boolean(band.widget || band.diagram || (band.imageFramed && band.image && !band.illustration))
 
   const mediaSide = (index: number) =>
-    props.kind === 'alternating' && index % 2 === 0 ? 'media-start' : 'media-end'
+    props.variant === 'alternating' && index % 2 === 0 ? 'media-start' : 'media-end'
 </script>
 
 <template>
@@ -120,14 +120,14 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
     <template v-if="hasBands">
       <SectionTitle
         v-if="hasHeader"
-        kind="center"
+        variant="center"
         size="large"
         :eyebrow="eyebrow"
         :title="title"
@@ -145,7 +145,7 @@
           <MediaSplit
             v-for="(band, index) in bands"
             :key="band.title"
-            :kind="mediaSide(index)"
+            :variant="mediaSide(index)"
             divided
             :heading-level="hasHeader ? 3 : 2"
             align="center"
@@ -233,7 +233,7 @@
               <Button
                 :label="band.action.label"
                 :href="band.action.href"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-chevron-right"
                 icon-position="trailing"

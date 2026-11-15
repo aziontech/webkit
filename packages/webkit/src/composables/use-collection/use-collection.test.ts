@@ -223,7 +223,7 @@ describe('useCollection — client mode', () => {
     const columns = [
       { accessorKey: 'name', header: 'Name' },
       { accessorKey: 'status', header: 'Status' },
-      { id: 'actions', kind: 'action' as const }
+      { id: 'actions', type: 'action' as const }
     ]
     const c = setup({ items: rows, columns, pagination: { pageSize: 10 }, selection: {} })
     const props = c.tableProps.value

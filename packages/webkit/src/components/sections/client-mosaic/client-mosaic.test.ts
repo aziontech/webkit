@@ -191,8 +191,8 @@ describe('ClientMosaic', () => {
     expect(getByText(stories[1].text)).not.toHaveAttribute('data-lead')
     expect(getByText(stories[1].text).closest('[data-fill]')).toHaveAttribute('data-fill', 'canvas')
     expect(getByRole('img', { name: 'GPA' })).toHaveAttribute('data-stacked')
-    expect(getByRole('img', { name: 'Agibank' })).toHaveAttribute('data-kind', 'color')
-    expect(getByRole('img', { name: 'Dafiti' })).toHaveAttribute('data-kind', 'monochrome')
+    expect(getByRole('img', { name: 'Agibank' })).toHaveAttribute('data-variant', 'color')
+    expect(getByRole('img', { name: 'Dafiti' })).toHaveAttribute('data-variant', 'monochrome')
     expect(container.querySelector('img[src="/photos/netshoes.jpg"]')).not.toBeNull()
   })
 

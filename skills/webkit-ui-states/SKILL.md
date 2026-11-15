@@ -143,17 +143,17 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
     class="flex flex-col gap-(--spacing-sm)"
   >
     <Skeleton
-      kind="rectangle"
+      variant="rectangle"
       width="100%"
       height="44px"
     />
     <Skeleton
-      kind="rectangle"
+      variant="rectangle"
       width="100%"
       height="44px"
     />
     <Skeleton
-      kind="rectangle"
+      variant="rectangle"
       width="100%"
       height="44px"
     />
@@ -167,7 +167,7 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
   >
     <Button
       label="Retry"
-      kind="outlined"
+      variant="outline"
       size="small"
       @click="load"
     />
@@ -182,7 +182,7 @@ The state-matrix render — Skeleton (data in), then Alert / EmptyState / data:
     <template #actions>
       <Button
         label="Create workload"
-        kind="primary"
+        variant="primary"
         @click="onCreate"
       />
     </template>
@@ -259,7 +259,7 @@ Why both, off one flag:
   />
   <Button
     label="Deploy"
-    kind="primary"
+    variant="primary"
     :loading="submitting"
     @click="runDeploy"
   />

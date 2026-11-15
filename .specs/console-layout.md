@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
-checksum: c9c2bdf191d8c9f2d5e40d08d9334795c2154d6e4bf325d66346250513079d42
+checksum: a2f91b5fdab1ba6849bd2190f976e5a5936de9f8a102e1e3d49125b90189a147
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -41,7 +41,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
 - Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
-- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
+- A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `variant="ghost"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
 - Put the account menu groups (`DropdownMenu.Group`) in the `account-menu` slot; the layout renders the avatar and the trigger.
 - Put an account switcher in `sidebar-header` (full width under the wordmark, the design sample's rail) and, below the compact breakpoint, in `header-leading` while `compact`; page-level flash messages go in `notifications`, and help or the notifications list in `tools` (toggled from a bell in `actions` with `toggleTools`).
@@ -80,7 +80,7 @@ A page body sets its own trail, ending on a control crumb, and fills the main re
     >
       <Select
         v-model="environment"
-        kind="transparent"
+        variant="ghost"
         size="small"
       >
         <Select.Trigger aria-label="Switch environment" />
@@ -140,7 +140,7 @@ packages/webkit/src/components/layout/console-layout/
 - `console-layout-breadcrumbs/console-layout-breadcrumbs.vue` — a page's own trail. Renders nothing in place; registers with the layout on mount and `KeepAlive` activation, unregisters on unmount and deactivation; the latest wins and replaces the layout's `breadcrumbs` prop and slot. Does nothing outside a `ConsoleLayout`. Crumbs are followed with the app's router.
   - Props: `items: ConsoleLayoutCrumb[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
   - Events: _none_ (crumb clicks are followed by the layout).
-  - Slots: `default` — one or more controls that end the trail (a `Select` with `kind="transparent"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
+  - Slots: `default` — one or more controls that end the trail (a `Select` with `variant="ghost"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
 
 ## Props
 
@@ -281,7 +281,7 @@ packages/webkit/src/components/layout/console-layout/
 - Default — the layout with console navigation (a drill level and a preview badge), breadcrumbs, header actions, the account menu with an `account-select` handler and a list page body.
 - Page opens search — a page body that opens the shared palette with `useConsoleLayout().openSearch()` from its own button.
 - Navigation open — `v-model:navigation-open` driven by a `Collapse sidebar` / `Expand sidebar` command in the palette's `search` slot.
-- Page breadcrumbs — a detail page body that sets its own trail with `ConsoleLayout.Breadcrumbs`, ending on an environment `Select` (`kind="transparent"`, `size="small"`).
+- Page breadcrumbs — a detail page body that sets its own trail with `ConsoleLayout.Breadcrumbs`, ending on an environment `Select` (`variant="ghost"`, `size="small"`).
 - Fill page — a workspace page body whose root carries `data-layout-fill`: the main stops scrolling and the body's own panes scroll.
 - Sidebar header — an account switcher in `sidebar-header` under the wordmark, moved to `header-leading` while compact.
 

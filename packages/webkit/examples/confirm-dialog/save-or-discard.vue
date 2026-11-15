@@ -15,26 +15,26 @@
     <template #trigger>
       <Button
         label="Switch tab"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>
     <template #actions="{ close }">
       <Button
         label="Keep editing"
-        kind="transparent"
+        variant="ghost"
         size="medium"
         @click="close"
       />
       <Button
         label="Discard changes"
-        kind="outlined"
+        variant="outline"
         size="medium"
         @click="close"
       />
       <Button
         label="Save changes"
-        kind="primary"
+        variant="primary"
         size="medium"
         @click="close"
       />

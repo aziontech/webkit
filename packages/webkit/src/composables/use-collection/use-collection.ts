@@ -47,7 +47,7 @@ export interface CollectionColumn {
   header?: string
   label?: string
   hideable?: boolean
-  kind?: 'default' | 'action'
+  type?: 'default' | 'action'
 }
 
 /** What a server-mode `fetch` receives. */
@@ -293,7 +293,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   const page = ref<number>(1)
 
   const prefColumnsSource = computed<CollectionColumn[]>(() =>
-    columns.value.filter((column) => column.kind !== 'action')
+    columns.value.filter((column) => column.type !== 'action')
   )
   const basePreferences = (): Required<CollectionPreferencesValue> => ({
     pageSize: options.pagination?.pageSize ?? DEFAULT_PAGE_SIZE,

@@ -3,11 +3,11 @@ name: pagination
 category: data
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 26682ab667b20bd897c308769886879ada9d97597006087834db5173ea5d5212
+checksum: 9772602e563ee4e93bc522ab33eb710075e612fd8477e91ea067110829bfcc80
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -60,18 +60,18 @@ Composition mode — one import of the root; every part is reached via dot-notat
     </template>
 
     <Pagination.Button
-      kind="previous"
+      type="previous"
       disabled
     />
     <Pagination.Button
-      kind="number"
+      type="number"
       active
       >1</Pagination.Button
     >
-    <Pagination.Button kind="number">2</Pagination.Button>
-    <Pagination.Button kind="number">3</Pagination.Button>
-    <Pagination.Button kind="more" />
-    <Pagination.Button kind="next" />
+    <Pagination.Button type="number">2</Pagination.Button>
+    <Pagination.Button type="number">3</Pagination.Button>
+    <Pagination.Button type="more" />
+    <Pagination.Button type="next" />
 
     <template #controls>
       <Pagination.PageSize
@@ -117,7 +117,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
      (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
      map points each public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
-- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
+- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `type?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the type's own surface and mutes the foreground to `var(--text-disabled)`.
 - `pagination-info/pagination-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
 - `pagination-page-size/pagination-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-control)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `ai ai-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Pagination `controls` slot.
 
@@ -169,7 +169,7 @@ _None of its own._ The two-way values above are the root's only emits.
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`
 - The page buttons render as one **segmented strip**: a single container carrying the `var(--border-default)` border and the `var(--shape-control)` radius, with the buttons butted against each other at zero gap. Only the two end buttons round their outer corners.
-- `data-kind` on PaginationButton: `previous` | `next` | `number` | `more`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-type` on PaginationButton: `previous` | `next` | `number` | `more`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are mutually exclusive: pressing a button drops the hover layer and shows the `var(--bg-active)` layer alone, so the pressed surface reads one step below hover.
 - `data-active` on PaginationButton mirrors the current-page `active` prop; `aria-current="page"` set when active.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
@@ -230,7 +230,7 @@ _None of its own._ The two-way values above are the root's only emits.
 ## Examples
 
 - Default — full pagination with page-info text, Previous/numbers/overflow/Next, and a rows-per-page selector.
-- Buttons — PaginationButton in every `kind` (`previous` / `next` / `number` / `more`) and state (`default` / `active` / `disabled`); justified because the button kinds and the current-page (`active`) and `disabled` treatments are the core sub-component API and are not all visible in the Default story.
+- Buttons — PaginationButton in every `type` (`previous` / `next` / `number` / `more`) and state (`default` / `active` / `disabled`); justified because the button types and the current-page (`active`) and `disabled` treatments are the core sub-component API and are not all visible in the Default story.
 - DataDriven — `total`-driven pagination with `v-model:page` / `v-model:page-size`; justified because the data-driven mode (internal rendering of info text, windowed page numbers, overflow ellipsis, page-size selector) and its emitted events are a distinct API surface from the slot-composition Default story and cannot be exercised there.
 
 ## Constraints — DO NOT
@@ -247,7 +247,7 @@ _None of its own._ The two-way values above are the root's only emits.
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `type` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export and the root `package.json` main/module point at `index.ts`, `types` at `index.d.ts`. Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.

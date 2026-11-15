@@ -7,11 +7,11 @@ const instance = figma.selectedInstance
 
 const label = instance.getString('label')
 const showIcon = instance.getBoolean('showIcon')
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   primary: 'primary',
   secondary: 'secondary',
-  outlined: 'outlined',
-  text: 'transparent',
+  outlined: 'outline',
+  text: 'ghost',
   danger: 'danger'
 })
 const size = instance.getEnum('size', {
@@ -25,10 +25,10 @@ const loading = instance.getEnum('loading', { true: true, false: false })
 export default {
   example: figma.code`<Button
   label="${label}"${
-    kind === 'primary'
+    variant === 'primary'
       ? ''
       : figma.code`
-  kind="${kind}"`
+  variant="${variant}"`
   }${
     size === 'large'
       ? ''

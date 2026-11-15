@@ -32,7 +32,7 @@
             <Tooltip content="Available once the deployment is live">
               <Button
                 label="Visit"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
                 icon="ai ai-external-link"
                 disabled
@@ -44,7 +44,7 @@
                 <Tooltip content="Deployment actions">
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     aria-label="Deployment actions"
                   />
@@ -103,7 +103,7 @@
                     alt="Taylor Reed"
                     label="Taylor Reed"
                     size="small"
-                    kind="square"
+                    variant="square"
                   />
                 </Tooltip>
                 <span class="truncate text-body-sm text-(--text-default)"> Taylor Reed </span>
@@ -241,7 +241,7 @@
                   </a>
                 </Tooltip>
                 <CopyButton
-                  kind="outlined"
+                  variant="outline"
                   value="web-app-mh2saq.example.com"
                   aria-label="Copy domain name"
                   class="shrink-0"

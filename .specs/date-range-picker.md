@@ -3,9 +3,9 @@ name: date-range-picker
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 4721f74d142fced011c843e28442675045eae11b13035e793fb85ba3a3df047f
+checksum: a8e3dcc4b323f57d1106e48e06de7ebc32dbcda9cad9a01e6f16c7d0812b8ef4
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -203,7 +203,7 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 ## Examples
 
 - Default — a relative range.
-- Absolute, RelativeOnly, WithStep, TimeZone — justified: each documents one of the range modes or the time zone contract, which have no `kind`/`size` axis.
+- Absolute, RelativeOnly, WithStep, TimeZone — justified: each documents one of the range modes or the time zone contract, which have no `variant`/`size` axis.
 - Disabled — a disabled picker with a committed range (state example for the `disabled` prop).
 
 ## Constraints — DO NOT

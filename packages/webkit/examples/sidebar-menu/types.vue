@@ -16,7 +16,7 @@
           <SidebarMenuSub default-open>
             <SidebarMenuSubTrigger
               label="Getting started"
-              kind="inline"
+              type="inline"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem
@@ -41,7 +41,7 @@
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              kind="drill"
+              type="drill"
               icon="ai ai-settings"
             />
             <SidebarMenuSubContent>

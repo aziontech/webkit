@@ -39,7 +39,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-sub-content'
   )
 
-  const isDrill = computed(() => sub.kind.value === 'drill')
+  const isDrill = computed(() => sub.type.value === 'drill')
   const isCurrent = computed(() => ctx.isCurrentLevel(sub.id))
   const isMounted = computed(() => ctx.isLevelMounted(sub.id))
 
@@ -142,7 +142,7 @@
         :id="sub.contentId"
         role="group"
         :data-testid="testId"
-        :data-kind="sub.kind.value"
+        :data-type="sub.type.value"
         :data-state="isCurrent ? 'open' : 'closed'"
         :data-motion="motion"
         :data-level="sub.level"
@@ -172,7 +172,7 @@
       v-bind="$attrs"
       :id="sub.contentId"
       :data-testid="testId"
-      :data-kind="sub.kind.value"
+      :data-type="sub.type.value"
       :data-state="sub.open.value ? 'open' : 'closed'"
       :data-level="sub.level"
       :aria-labelledby="sub.triggerId"

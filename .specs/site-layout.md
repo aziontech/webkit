@@ -3,9 +3,9 @@ name: site-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 597f2de08677978ed8a3e05d84b10ca75db316d6dfb8afc81ba0a5f68fdc9620
+checksum: 193b08c791b3857ad1a2db6d7ba28a278f9a8a8b5753d6c96b24a59a0bf01e3e
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 ## Related
 
 - `SiteNav` — the bar and its mega-menus; `navigation` is bound onto it.
-- `SiteFooter` — the footer; `footer` is bound onto it (`kind="site"` closes a framed page).
+- `SiteFooter` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
 - `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/site` — the block that shows this layout with the azion.com navigation and footer.
@@ -64,12 +64,12 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 
 ## Props
 
-| Prop                | Type                   | Default     | Required | JSDoc                                                                                                                                                    |
-| ------------------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`.                         |
-| `footer`            | `SiteLayoutFooter`     | `undefined` | false    | The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent. |
-| `searchPlaceholder` | `string`               | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`).                                                                   |
-| `navOverlay`        | `boolean`              | `false`     | false    | Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page.                                        |
+| Prop                | Type                   | Default     | Required | JSDoc                                                                                                                                                          |
+| ------------------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`.                               |
+| `footer`            | `SiteLayoutFooter`     | `undefined` | false    | The footer, bound onto `SiteFooter`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent. |
+| `searchPlaceholder` | `string`               | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`).                                                                         |
+| `navOverlay`        | `boolean`              | `false`     | false    | Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page.                                              |
 
 ## v-model
 

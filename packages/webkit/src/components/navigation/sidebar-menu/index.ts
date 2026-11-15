@@ -37,7 +37,7 @@ export type {
   SidebarMenuGroupNode,
   SidebarMenuLevel,
   SidebarMenuNode,
-  SidebarMenuSubKind
+  SidebarMenuSubType
 } from './injection-key'
 export type {
   SidebarMenuItemTagSeverity,

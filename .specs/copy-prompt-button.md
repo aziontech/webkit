@@ -3,9 +3,9 @@ name: copy-prompt-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: d135ef0749e08e051db7f02aa12cab8dff8ee834119723cca45482ec5bc71402
+checksum: 6ab980aab1bf4a679246e508088cc8b088c977005fca538ddae652ed0af4c181
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -26,7 +26,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 - To show the prompt text itself on the page → use `DocPrompt` (it renders the text with its own copy control).
 - To copy a value, a token or a code snippet → use `CopyButton`.
-- As a generic dark button → use `Button kind="secondary"`.
+- As a generic dark button → use `Button variant="secondary"`.
 
 ## Related
 
@@ -119,7 +119,7 @@ _none_
 | scrim    | `var(--bg-backdrop)`                                                                                                                                                                                          |
 | rim      | `var(--secondary-mask)` border, `var(--border-width-default)`                                                                                                                                                 |
 | label    | `.text-button-lg`, `var(--color-base-white)`                                                                                                                                                                  |
-| marks    | `currentColor` of the label (`Logo kind="current"` or the icon glyph at `.text-label-lg`)                                                                                                                     |
+| marks    | `currentColor` of the label (`Logo variant="current"` or the icon glyph at `.text-label-lg`)                                                                                                                  |
 | shape    | `var(--shape-button)`                                                                                                                                                                                         |
 | spacing  | `var(--spacing-md)` start, `var(--spacing-sm)` end, `var(--spacing-xs)` gap (`var(--spacing-sm)` from `sm`), `var(--spacing-2xs)` between marks (`var(--spacing-xs)` from `sm`) and before the dismiss button |
 | focus    | `var(--ring-color)` ring, offset on `var(--bg-canvas)`                                                                                                                                                        |

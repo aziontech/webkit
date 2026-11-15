@@ -48,7 +48,7 @@ Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring t
 | #   | Surface          | Assertion                                                                                                                                                        |
 | --- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Render           | mounts without throwing; the `data-testid` fallback is present; consumer `data-testid` override wins                                                             |
-| 2   | Props / variants | each variant prop (`kind`, `size`, …) maps to its `data-*` / attribute / rendered state                                                                          |
+| 2   | Props / variants | each variant prop (`variant`, `size`, …) maps to its `data-*` / attribute / rendered state                                                                       |
 | 3   | Events           | every event in the spec's Events table fires with the right payload on the real user action                                                                      |
 | 4   | Suppression      | when `disabled` / `loading` / `readonly`, the action is **not** emitted                                                                                          |
 | 5   | v-model          | drive the input, assert `update:modelValue` (and `update:open` / `update:*`) with the exact value                                                                |

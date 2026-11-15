@@ -1065,7 +1065,7 @@
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                 <StatTile
                   label="Overall score"
-                  kind="sans"
+                  variant="sans"
                   unit="/ 100"
                   :value="overall.score"
                   :format-value="formatScore"
@@ -1091,9 +1091,9 @@
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
+                <Chart.Axis type="y" />
                 <Chart.Axis
-                  kind="x"
+                  type="x"
                   :ticks="6"
                 />
                 <Chart.Line curve="monotone" />
@@ -1229,7 +1229,7 @@
             >
               <Item.Media>
                 <Skeleton
-                  kind="rectangle"
+                  variant="rectangle"
                   width="2rem"
                   height="2rem"
                 />
@@ -1258,7 +1258,7 @@
               :href="`/incidents/${incident.id}`"
               size="small"
             >
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   :class="incident.icon"
                   aria-hidden="true"

@@ -18,7 +18,7 @@
     { accessorKey: 'name', header: 'Name' },
     { accessorKey: 'hits', header: 'Hits' },
     { accessorKey: 'tags', header: 'Tags' },
-    { id: 'actions', kind: 'action' }
+    { id: 'actions', type: 'action' }
   ]
   const literalRows = [
     { id: 'r1', status: 'active', size: 12 },

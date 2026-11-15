@@ -99,7 +99,7 @@
             class="pointer-events-none absolute inset-y-0 end-0 -z-10 w-3/5"
           >
             <TextureMaterial
-              kind="dither"
+              variant="dither"
               size="small"
               fade="top"
               :data-testid="`${testId}__art`"
@@ -111,7 +111,7 @@
           </p>
           <Button
             :label="actionLabel || t('docAgentCard.action')"
-            kind="primary"
+            variant="primary"
             size="large"
             :href="actionHref || undefined"
             :data-testid="`${testId}__action`"

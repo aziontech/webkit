@@ -4,13 +4,13 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Five solution areas under a section title and description, every picture at the closing end. Each band carries its own overline; the AI band draws a live `ProductWidget` scene, and the performance band links as a whole to its own `href` while its button keeps its own. Under the section title each band headline is an `h3`. Edit the props in the Controls panel — switch `kind` to `alternating`, or clear the `title` to drop the header.",
+      "summary": "Five solution areas under a section title and description, every picture at the closing end. Each band carries its own overline; the AI band draws a live `ProductWidget` scene, and the performance band links as a whole to its own `href` while its button keeps its own. Under the section title each band headline is an `h3`. Edit the props in the Controls panel — switch `variant` to `alternating`, or clear the `title` to drop the header.",
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "Both layouts stacked: the `media-end` run of solution areas with no header, then the `alternating` run of network claims under its centered header, the pictures swapping sides band by band.",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Product media",

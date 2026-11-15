@@ -11,7 +11,7 @@
     />
     <Button
       label="Search"
-      kind="primary"
+      variant="primary"
     />
   </InputGroupRoot>
 </template>

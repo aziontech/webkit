@@ -43,7 +43,7 @@ A large `Select` in a required `Field` with its `Field.Label` and a `Field.Descr
 
 ### F. Domain source — `Field`, `RadioGroup` (required)
 
-Choice cards: a `RadioGroup` with `kind="card"`, one item per option with a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
+Choice cards: a `RadioGroup` with `variant="card"`, one item per option with a title and a description, grouped in a `fieldset` under a `type="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 

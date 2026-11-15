@@ -106,7 +106,7 @@
               v-if="primaryAction"
               :label="primaryAction.label"
               :href="primaryAction.href"
-              kind="secondary"
+              variant="secondary"
               size="large"
               :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"

@@ -12,22 +12,22 @@
   <div class="flex flex-wrap items-center gap-(--spacing-4)">
     <Switch
       v-model="defaultOff"
-      kind="default"
+      variant="default"
       aria-label="Default off"
     />
     <Switch
       v-model="defaultOn"
-      kind="default"
+      variant="default"
       aria-label="Default on"
     />
     <Switch
       v-model="privacyOff"
-      kind="privacy"
+      variant="privacy"
       aria-label="Privacy off"
     />
     <Switch
       v-model="privacyOn"
-      kind="privacy"
+      variant="privacy"
       aria-label="Privacy on"
     />
   </div>

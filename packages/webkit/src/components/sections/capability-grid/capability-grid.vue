@@ -6,7 +6,7 @@
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { SectionTitleKind } from '../../marketing/section-title/section-title.vue'
+  import type { SectionTitleVariant } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
 
@@ -29,8 +29,8 @@
     href?: string
   }
 
-  /** Button kind of an action. */
-  export type CapabilityGridActionKind = 'secondary' | 'outlined'
+  /** Button variant of an action. */
+  export type CapabilityGridActionVariant = 'secondary' | 'outline'
 
   /** A button under the section title. */
   export type CapabilityGridAction = {
@@ -42,8 +42,8 @@
     trailing?: boolean
     /** Link target of the action. */
     target?: '_blank' | '_self'
-    /** Button kind; the grid draws the primary action `secondary` and the secondary `outlined`. */
-    kind?: CapabilityGridActionKind
+    /** Button variant; the grid draws the primary action `secondary` and the secondary `outline`. */
+    variant?: CapabilityGridActionVariant
   }
 
   interface Props {
@@ -64,7 +64,7 @@
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
     /** Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. */
-    titleKind?: SectionTitleKind
+    titleVariant?: SectionTitleVariant
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -76,7 +76,7 @@
     primaryAction: undefined,
     secondaryAction: undefined,
     anchor: '',
-    titleKind: 'center'
+    titleVariant: 'center'
   })
 
   const attrs = useAttrs()
@@ -92,8 +92,8 @@
 
   const buttons = computed<CapabilityGridAction[]>(() => {
     const named: CapabilityGridAction[] = []
-    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
-    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
+    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, variant: 'secondary' })
+    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, variant: 'outline' })
     return named
   })
 </script>
@@ -116,7 +116,7 @@
         #header
       >
         <SectionTitle
-          :kind="titleKind"
+          :variant="titleVariant"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
@@ -131,7 +131,7 @@
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="action.kind"
+              :variant="action.variant"
               size="large"
               :icon="action.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
@@ -148,13 +148,13 @@
       >
         <CardGrid
           flush
-          kind="frame"
+          variant="frame"
           :columns="columns"
         >
           <CardGridCell
             v-for="item in items"
             :key="(item.href ?? '') + item.title"
-            kind="canvas"
+            variant="canvas"
             class="relative"
           >
             <Topic

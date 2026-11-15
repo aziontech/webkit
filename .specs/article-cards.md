@@ -3,17 +3,17 @@ name: article-cards
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 4ef7051ea08dcf414505c8a0d0663605ee51aab02fbf8ae58e2d16d9488b2267
+checksum: c503bc092498b6cf1bd2d84de4178ea0126e709891d4cccd8989408b2a379e09
 ---
 # ArticleCards — Component Spec
 
 ## Purpose
 
-A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
+A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
 ## When to use
 
@@ -45,7 +45,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 <template>
   <ArticleCards
-    kind="start"
+    variant="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[
@@ -66,7 +66,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `ArticleCardsKind` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
+| `variant` | `ArticleCardsVariant` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
 | `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the heading. |
 | `title` | `string` | `''` | false | Headline of the band; the band renders no header when empty. |
@@ -84,7 +84,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 ## States
 
 - Visual states: `default`, `hover` (the card lifts to the raised surface and its media scales up), `focus-visible` (inset ring)
-- `data-kind` mirrors the `kind` prop and places the heading
+- `data-variant` mirrors the `variant` prop and places the heading
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
@@ -152,7 +152,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 ## Examples
 
 - Default
-- Types — composite story rendering both `kind` values stacked.
+- Types — composite story rendering both `variant` values stacked.
 
 ## Constraints — DO NOT
 

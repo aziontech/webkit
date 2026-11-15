@@ -529,7 +529,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Data transferred, this period vs previous"
                   :disabled="loading"
@@ -543,7 +543,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Data transferred, this period vs previous"
                   />
@@ -573,8 +573,8 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="form === 'bar'"
                 stacked
@@ -607,7 +607,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Data transferred by project"
                   :disabled="loading"
@@ -621,7 +621,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Data transferred by project"
                   />
@@ -652,8 +652,8 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>
@@ -680,7 +680,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Usage by project"
                   :disabled="loading"
@@ -694,7 +694,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Usage by project"
                   />
@@ -806,8 +806,8 @@
                 :aria-label="expandedReport.label"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="form === 'bar'"
                   stacked
@@ -830,8 +830,8 @@
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>

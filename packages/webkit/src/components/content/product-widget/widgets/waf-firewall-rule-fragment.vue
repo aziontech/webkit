@@ -132,7 +132,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="frame.lifted ? 'y' : 'bottom'"
     class="[--mockup-fade-edge:16%] [--mockup-fade-start:76%]"
@@ -182,13 +182,13 @@
           <span class="flex gap-(--spacing-xs)">
             <Button
               label="And"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-circle-plus"
             />
             <Button
               label="Or"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-circle-plus"
             />
@@ -258,7 +258,7 @@
         <ShellMockupPart :order="3">
           <Button
             label="Add Behavior"
-            kind="outlined"
+            variant="outline"
             size="small"
             icon="ai ai-circle-plus"
           />

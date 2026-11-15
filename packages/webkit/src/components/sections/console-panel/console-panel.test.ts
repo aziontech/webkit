@@ -42,8 +42,8 @@ describe('ConsolePanel', () => {
     const second = getByRole('link', { name: 'Talk to sales' })
     expect(first).toHaveAttribute('href', '/signup')
     expect(second).toHaveAttribute('href', '/contact')
-    expect(first).toHaveAttribute('data-kind', 'secondary')
-    expect(second).toHaveAttribute('data-kind', 'outlined')
+    expect(first).toHaveAttribute('data-variant', 'secondary')
+    expect(second).toHaveAttribute('data-variant', 'outline')
   })
 
   it('drops an action with no link', () => {
@@ -95,10 +95,10 @@ describe('ConsolePanel', () => {
     expect(getByRole('radiogroup', { name: 'Visões do console' })).toBeInTheDocument()
   })
 
-  it('mirrors kind and sets the crop custom properties', () => {
+  it('mirrors variant and sets the crop custom properties', () => {
     const { getByTestId } = panel({ crop: 0.2 })
     const root = getByTestId('sections-console-panel')
-    expect(root).toHaveAttribute('data-kind', 'console')
+    expect(root).toHaveAttribute('data-variant', 'console')
     const frame = root.querySelector('[style*="--console-panel-crop"]') as HTMLElement
     expect(frame.style.getPropertyValue('--console-panel-crop')).toBe('10.53%')
   })

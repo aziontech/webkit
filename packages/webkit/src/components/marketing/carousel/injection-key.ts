@@ -5,7 +5,7 @@ export type CarouselLayout = 'strip' | 'cards'
 
 export interface CarouselContext {
   /** Layout of the row the items render in. */
-  kind: ComputedRef<CarouselLayout>
+  variant: ComputedRef<CarouselLayout>
   /** The scrollable track element, or null before the root mounts. */
   trackEl: Readonly<Ref<globalThis.HTMLUListElement | null>>
   /** Whether the track has room left to step back toward its start. */

@@ -40,7 +40,7 @@
   /** A paragraph of a description section. */
   export type JobPostingTextBlock = {
     /** Marks the block as a paragraph. */
-    kind: 'text'
+    type: 'text'
     /** The paragraph. */
     text: string
   }
@@ -48,7 +48,7 @@
   /** A bullet list of a description section. */
   export type JobPostingListBlock = {
     /** Marks the block as a bullet list. */
-    kind: 'list'
+    type: 'list'
     /** The bullets, in order. */
     items: string[]
   }
@@ -65,14 +65,14 @@
   }
 
   /** Control a form field renders as. */
-  export type JobPostingFieldKind = 'text' | 'email' | 'phone' | 'url' | 'file'
+  export type JobPostingFieldType = 'text' | 'email' | 'phone' | 'url' | 'file'
 
   /** One field of the application form. */
   export type JobPostingField = {
     /** Key of the value in the submitted values, and the HTML name of the control. */
     name: string
     /** Control the field renders as. */
-    kind: JobPostingFieldKind
+    type: JobPostingFieldType
     /** Visible label of the field. */
     label: string
     /** The field must be filled before the form is submitted. */
@@ -134,7 +134,7 @@
   }
 
   interface Props {
-    /** The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, kind, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. */
+    /** The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. */
     form: JobPostingForm
     /** Copy of the form and its outcomes: `{ missing, invalidEmail, invalidUrl, error, successTitle, successDescription, done, browse }`. */
     messages: JobPostingMessages
@@ -148,7 +148,7 @@
     facets?: JobPostingFacet[]
     /** Label of the rail button that links to the application form; the button is left out when empty. */
     applyLabel?: string
-    /** The description, one row per section in order; each is `{ title, blocks }` where a block is `{ kind: 'text', text }` or `{ kind: 'list', items }`. */
+    /** The description, one row per section in order; each is `{ title, blocks }` where a block is `{ type: 'text', text }` or `{ type: 'list', items }`. */
     sections?: JobPostingSection[]
     /** Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. */
     secondaryAction?: JobPostingAction
@@ -251,7 +251,7 @@
 
   const valueOf = (field: JobPostingField) => {
     const raw = (values.value[field.name] ?? '').trim()
-    if (field.kind !== 'phone' || !raw) return raw
+    if (field.type !== 'phone' || !raw) return raw
     const dialCode = defaultCountries.find((item) => item.code === countryOf(field))?.dialCode
     return dialCode ? `${dialCode}${raw}` : raw
   }
@@ -265,20 +265,20 @@
 
   const messageOf = (field: JobPostingField, value: string) => {
     if (field.required && !value) return props.messages.missing
-    if (field.kind === 'email' && value && !EMAIL_PATTERN.test(value))
+    if (field.type === 'email' && value && !EMAIL_PATTERN.test(value))
       return props.messages.invalidEmail
-    if (field.kind === 'url' && value && !URL_PATTERN.test(value)) return props.messages.invalidUrl
+    if (field.type === 'url' && value && !URL_PATTERN.test(value)) return props.messages.invalidUrl
     return ''
   }
 
   const focusTarget = (field: JobPostingField) =>
-    field.kind === 'file' ? `${fieldId(field)}-browse` : fieldId(field)
+    field.type === 'file' ? `${fieldId(field)}-browse` : fieldId(field)
 
   const reset = () => {
     values.value = {}
     errors.value = {}
     for (const field of props.form.fields) {
-      if (field.kind === 'file') syncInput(field, null)
+      if (field.type === 'file') syncInput(field, null)
     }
     files.value = {}
   }
@@ -369,7 +369,7 @@
                 <Button
                   v-if="applyLabel"
                   :label="applyLabel"
-                  kind="secondary"
+                  variant="secondary"
                   size="large"
                   :href="`#${applyId}`"
                   icon="ai ai-chevron-right"
@@ -393,7 +393,7 @@
                 >
                   <SectionTitle
                     :framed="false"
-                    kind="start"
+                    variant="start"
                     size="small"
                     :title="section.title"
                   />
@@ -403,7 +403,7 @@
                     :key="blockIndex"
                   >
                     <p
-                      v-if="block.kind === 'text'"
+                      v-if="block.type === 'text'"
                       class="m-0 text-pretty text-body-md text-(--text-muted)"
                     >
                       {{ block.text }}
@@ -444,7 +444,7 @@
             <div class="max-w-(--layout-measure-content) px-(--spacing-xl) py-(--spacing-2xl)">
               <SectionTitle
                 :framed="false"
-                kind="start"
+                variant="start"
                 :title="form.title"
                 :description="form.description ?? ''"
               />
@@ -481,7 +481,7 @@
                   :required="emptyRequired(field)"
                   :invalid="malformed(field)"
                   :disabled="loading"
-                  :data-wide="field.kind === 'file' || null"
+                  :data-wide="field.type === 'file' || null"
                   class="min-w-0 sm:data-[wide]:col-span-2"
                 >
                   <FieldLabel
@@ -489,7 +489,7 @@
                     :required="field.required"
                     >{{ field.label }}</FieldLabel
                   >
-                  <template v-if="field.kind === 'file'">
+                  <template v-if="field.type === 'file'">
                     <FileDropzone
                       v-if="!files[field.name]"
                       :accept="field.accept ?? ''"
@@ -502,7 +502,7 @@
                         type="button"
                         :label="messages.browse"
                         :aria-label="`${messages.browse}, ${field.label}`"
-                        kind="secondary"
+                        variant="secondary"
                         size="medium"
                         :disabled="loading"
                         @click="browse(field)"
@@ -526,7 +526,7 @@
                     />
                   </template>
                   <PhoneInput
-                    v-else-if="field.kind === 'phone'"
+                    v-else-if="field.type === 'phone'"
                     :id="fieldId(field)"
                     size="large"
                     :model-value="values[field.name] ?? ''"
@@ -542,10 +542,10 @@
                     :model-value="values[field.name] ?? ''"
                     :name="field.name"
                     :placeholder="field.placeholder"
-                    :type="field.kind === 'email' ? 'email' : 'text'"
-                    :inputmode="field.kind === 'url' ? 'url' : undefined"
-                    :autocomplete="field.kind === 'email' ? 'email' : field.autocomplete"
-                    :spellcheck="field.kind === 'email' || field.kind === 'url' ? false : undefined"
+                    :type="field.type === 'email' ? 'email' : 'text'"
+                    :inputmode="field.type === 'url' ? 'url' : undefined"
+                    :autocomplete="field.type === 'email' ? 'email' : field.autocomplete"
+                    :spellcheck="field.type === 'email' || field.type === 'url' ? false : undefined"
                     size="large"
                     @update:model-value="setValue(field, $event)"
                   />
@@ -559,7 +559,7 @@
                 <Button
                   type="submit"
                   :label="form.submitLabel"
-                  kind="primary"
+                  variant="primary"
                   size="large"
                   :loading="loading"
                 />
@@ -595,14 +595,14 @@
               class="w-full md:w-auto"
               :label="secondaryAction.label"
               :href="secondaryAction.href"
-              kind="outlined"
+              variant="outline"
               size="medium"
             />
             <Button
               class="w-full md:w-auto"
               type="button"
               :label="messages.done"
-              kind="primary"
+              variant="primary"
               size="medium"
               @click="confirming = false"
             />

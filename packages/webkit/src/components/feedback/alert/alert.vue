@@ -208,7 +208,7 @@
       >
         <slot name="actions">
           <Button
-            kind="secondary"
+            variant="secondary"
             :size="size"
             :label="actionLabel"
             :data-testid="`${testId}__action`"
@@ -219,7 +219,7 @@
       <IconButton
         v-if="closable"
         icon="ai ai-x"
-        kind="transparent"
+        variant="ghost"
         :size="size"
         :ariaLabel="t('alert.close')"
         :data-testid="`${testId}__close`"

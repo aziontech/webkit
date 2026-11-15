@@ -5,12 +5,12 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Skeleton
-      kind="rectangle"
+      variant="rectangle"
       width="240px"
       height="100px"
     />
     <Skeleton
-      kind="circle"
+      variant="circle"
       width="100px"
       height="100px"
     />

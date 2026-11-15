@@ -4,17 +4,17 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: c2f073f92dfea4989678a53f6c3c00950a9c9c47eda96569ec4dd50e911022bd
+checksum: d53ee8ccac84a4985d83f6b92120b591324606bf2e3f0237f4d841d067d35aad
 ---
 
 # NetworkSection — Component Spec
 
 ## Purpose
 
-The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
+The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
 
 ## When to use
 
@@ -84,7 +84,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 
 | Prop       | Type                                | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                         |
 | ---------- | ----------------------------------- | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`     | `NetworkSectionKind`                | `'outcomes'` | false    | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures.                                                                                                                                                                                                        |
+| `variant`     | `NetworkSectionVariant`                | `'outcomes'` | false    | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures.                                                                                                                                                                                                        |
 | `anchor`   | `string`                            | `''`         | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                |
 | `eyebrow`  | `string`                            | `''`         | false    | Overline above the headline.                                                                                                                                                                                                                                                                                                                                  |
 | `title`    | `string`                            | `''`         | false    | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty.                                                                                                                                                                                                                                                   |
@@ -105,7 +105,7 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop and selects the floor (`outcomes`, `benefits` or `stats`)
+- `data-variant` mirrors the `variant` prop and selects the floor (`outcomes`, `benefits` or `stats`)
 - Empty: when `title` is empty the band renders nothing; when the selected floor's array is empty the band renders without a floor
 - An outcome without `logo` renders its quote with no mark row
 - The `benefits` floor is `card-grid`'s `balanced` layout with `columns: 3`, so three benefits fill one row and four split 2 × 2; every benefit is a `topic` with an `h3`, led by its glyph when it has an `icon`
@@ -177,7 +177,7 @@ _none_
 ## Examples
 
 - Default
-- Types — composite story rendering the three `kind` values stacked.
+- Types — composite story rendering the three `variant` values stacked.
 - Columns — two, three and four entries on each floor; one column per entry.
 
 ## Constraints — DO NOT

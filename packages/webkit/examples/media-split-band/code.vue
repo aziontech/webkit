@@ -16,7 +16,7 @@
     label: 'Learn more',
     href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',
     trailing: true,
-    kind: 'transparent'
+    variant: 'ghost'
   }
 </script>
 

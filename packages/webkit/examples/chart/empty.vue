@@ -35,8 +35,8 @@
       empty-description="Nothing reached this workload in the last hour."
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
-      <Chart.Axis kind="x" />
+      <Chart.Axis type="y" />
+      <Chart.Axis type="x" />
       <Chart.Line />
     </Chart>
     <Chart
@@ -47,13 +47,13 @@
       empty-description="Choose another host or widen the time range."
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
-      <Chart.Axis kind="x" />
+      <Chart.Axis type="y" />
+      <Chart.Axis type="x" />
       <Chart.Line />
       <template #empty-actions>
         <Button
           label="Clear filters"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
       </template>
@@ -66,13 +66,13 @@
       empty-description="Threat metrics appear once a firewall protects the workload."
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
-      <Chart.Axis kind="x" />
+      <Chart.Axis type="y" />
+      <Chart.Axis type="x" />
       <Chart.Line />
       <template #empty-actions>
         <Button
           label="Add firewall"
-          kind="secondary"
+          variant="secondary"
           size="small"
           icon="ai ai-plus"
         />

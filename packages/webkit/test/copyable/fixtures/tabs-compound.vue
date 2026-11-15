@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Breadcrumb, { type BreadcrumbItemData } from '@aziontech/webkit/breadcrumb'
-  import GlobalHeader, { type GlobalHeaderKind } from '@aziontech/webkit/global-header'
+  import GlobalHeader, { type GlobalHeaderVariant } from '@aziontech/webkit/global-header'
   import NavigationMenu, { type NavigationMenuValue } from '@aziontech/webkit/navigation-menu'
   import Tabs, { type TabsListAlign, type TabsValue } from '@aziontech/webkit/tabs'
   import { ref } from 'vue'
@@ -12,7 +12,7 @@
     { value: 2, label: 'Logs' }
   ]
   const crumbs: BreadcrumbItemData[] = []
-  const headerKind: GlobalHeaderKind = 'content'
+  const headerKind: GlobalHeaderVariant = 'content'
   const menu = ref<NavigationMenuValue>(null)
   const closeTab = (value: TabsValue | string): void => {
     active.value = value
@@ -43,6 +43,6 @@
   <Tabs.List align="end" />
 
   <Breadcrumb :items="crumbs" />
-  <GlobalHeader :kind="headerKind" />
+  <GlobalHeader :variant="headerKind" />
   <NavigationMenu.Root v-model="menu" />
 </template>

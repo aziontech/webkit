@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
       icon: 'ai ai-domains',
@@ -26,7 +26,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'firewall',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Firewall',
       title: 'WAF, rate limits, network lists',
       icon: 'ai ai-edge-firewall',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'application',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Application',
       title: 'storefront',
       icon: 'ai ai-edge-application',

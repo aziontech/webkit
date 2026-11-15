@@ -11,7 +11,7 @@
         <IconButton
           icon="ai ai-chevron-right"
           aria-label="Expand"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
       </div>

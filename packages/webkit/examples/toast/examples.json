@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Severities",
       "summary": "Each type (default, success, info, warning, error, loading) with its own icon, as a two-line toast (title + timestamp) matching the Figma. Loading spins.",
-      "file": "types.vue"
+      "file": "severities.vue"
     },
     {
       "name": "WithDescription",

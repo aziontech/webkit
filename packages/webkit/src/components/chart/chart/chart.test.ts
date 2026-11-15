@@ -25,8 +25,8 @@ const threats: ChartSeries[] = [
 
 const parts = () => [
   h(ChartGrid),
-  h(ChartAxis, { kind: 'y' }),
-  h(ChartAxis, { kind: 'x' }),
+  h(ChartAxis, { type: 'y' }),
+  h(ChartAxis, { type: 'x' }),
   h(ChartArea, { ids: ['allowed'] }),
   h(ChartBar, { ids: ['threat'] }),
   h(ChartLine, { ids: ['blocked'] }),
@@ -357,7 +357,7 @@ describe('Chart', () => {
             h(
               Chart,
               { series: traffic, labels: hours, ariaLabel: 'Requests', ...props },
-              { default: () => [h(ChartAxis, { kind: 'x', ticks: 24 }), h(ChartBar)] }
+              { default: () => [h(ChartAxis, { type: 'x', ticks: 24 }), h(ChartBar)] }
             )
           ])
       }).container.querySelector(`[data-testid="chart-chart__axis-${axis}"]`) as globalThis.Element
@@ -455,7 +455,7 @@ describe('Chart', () => {
 
   it('lays bars down the side when horizontal', async () => {
     const view = mount({ orientation: 'horizontal' }, () => [
-      h(ChartAxis, { kind: 'y' }),
+      h(ChartAxis, { type: 'y' }),
       h(ChartBar, { ids: ['allowed'], showLabels: true })
     ])
     await measured(view)
@@ -470,7 +470,7 @@ describe('Chart', () => {
       { id: 'error', name: 'Error', values: [3, 5] },
       { id: 'info', name: 'Info', values: [2, 2] }
     ]
-    const at = (kind: 'default' | 'histogram') =>
+    const at = (type: 'default' | 'histogram') =>
       render({
         render: () =>
           h('div', { style: 'width: 640px' }, [
@@ -478,7 +478,10 @@ describe('Chart', () => {
               Chart,
               { series: volume, labels: ['08:00', '08:05'], ariaLabel: 'Event volume' },
               {
-                default: () => [h(ChartAxis, { kind: 'y' }), h(ChartBar, { kind, stacked: true })]
+                default: () => [
+                  h(ChartAxis, { type: 'y' }),
+                  h(ChartBar, { type: type, stacked: true })
+                ]
               }
             )
           ])
@@ -497,7 +500,7 @@ describe('Chart', () => {
 
     const solid = at('histogram')
     const histogram = await segments(solid)
-    expect(histogram.bar.getAttribute('data-kind')).toBe('histogram')
+    expect(histogram.bar.getAttribute('data-type')).toBe('histogram')
     const [lowerFirst, upperFirst] = [histogram.boxes[0], histogram.boxes[1]]
     expect(Math.abs(lowerFirst!.y - (upperFirst!.y + upperFirst!.height))).toBeLessThan(0.5)
     expect(ticks(solid)).not.toContain('8')

@@ -4,7 +4,7 @@
 
 <template>
   <IconButton
-    kind="primary"
+    variant="primary"
     size="large"
     icon="ai ai-plus"
     aria-label="Add"

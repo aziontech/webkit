@@ -51,7 +51,7 @@ The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue
 `SiteNav`, the `<main>` and `SiteFooter`, so the page is only the hero and the framed column.
 
 ```vue
-<Hero kind="screen" max-width="7xl">     <!-- 1. fluid hero band, full-bleed, owns border-b -->
+<Hero variant="screen" max-width="7xl">     <!-- 1. fluid hero band, full-bleed, owns border-b -->
   <template #background> … </template>
   <PageHeader size="hero" eyebrow="…" title="…" description="…" />
 </Hero>
@@ -92,7 +92,7 @@ frame read as _drawn on_ the page rather than as a card sitting on it.
 </section>
 ```
 
-**`kind="screen"` fills exactly one screen.** It subtracts `--banner-offset` from `100dvh`, so a banner
+**`variant="screen"` fills exactly one screen.** It subtracts `--banner-offset` from `100dvh`, so a banner
 mounted under fixed chrome still measures one viewport. The page passes the chrome height in:
 
 ```html
@@ -102,12 +102,12 @@ class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem
 
 Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
 ([`hero.vue:123-126`](../../packages/webkit/src/components/marketing/hero/hero.vue#L123-L126): the `offset` prop sets
-`--banner-offset`, and `kind="screen"` subtracts it.)
+`--banner-offset`, and `variant="screen"` subtracts it.)
 
 **`#background` is z-0, copy is z-10.** A backdrop is named on the container
 with the `texture` prop (a `TextureMaterial` kind) or filled through the `#background` slot
 ([`hero.vue:143`](../../packages/webkit/src/components/marketing/hero/hero.vue#L143)); the slot is where an artwork backdrop goes —
-[`BannerArt`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue) `kind="globe" | "map" | "network"`,
+[`BannerArt`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue) `variant="globe" | "map" | "network"`,
 the design sample's banner registry — and it wins over the prop when both are given.
 
 **Every Site hero carries `banner="dot-grid"`.** It is azion.com's own hero texture — a crisp 2px
@@ -129,7 +129,7 @@ A flat texture skips all three: `dot-grid` covers ~0.17% of the band, so there i
 headline to compete with, and the ink is a 22% mix of `--text-default` so the field carries the
 same step from the ground on either theme instead of being tuned for the dark one.
 
-([`hero-band.vue`](../../packages/webkit/src/components/sections/hero-band/hero-band.vue) — `kind="centered"` paints the dots
+([`hero-band.vue`](../../packages/webkit/src/components/sections/hero-band/hero-band.vue) — `variant="centered"` paints the dots
 texture with its top fade; [`banner-art.vue`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue)
 carries the mask and scrim recipe for the heavier backdrops.)
 

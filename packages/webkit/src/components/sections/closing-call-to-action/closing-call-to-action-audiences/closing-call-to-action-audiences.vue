@@ -154,7 +154,7 @@
           :key="action.label"
           :label="action.label"
           :href="action.href"
-          :kind="action.kind ?? 'outlined'"
+          :variant="action.variant ?? 'outline'"
           size="large"
           class="shrink-0"
           :icon="action.trailing ? 'ai ai-chevron-right' : ''"

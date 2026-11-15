@@ -121,7 +121,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
     class="[--mockup-fade-edge:20%] [--mockup-fade-start:74%]"
@@ -143,7 +143,7 @@
           <span class="text-label-sm text-(--text-default)">Option</span>
           <RadioGroup
             model-value="all"
-            kind="card"
+            variant="card"
             name="data-stream-workloads"
             aria-label="Option"
           >

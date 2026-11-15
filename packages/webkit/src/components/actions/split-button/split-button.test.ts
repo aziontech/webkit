@@ -49,7 +49,7 @@ describe('SplitButton', () => {
       const { getByTestId } = render(host())
 
       const root = getByTestId('actions-split-button')
-      expect(root.getAttribute('data-kind')).toBe('primary')
+      expect(root.getAttribute('data-variant')).toBe('primary')
       expect(root.getAttribute('data-size')).toBe('large')
       expect(root.hasAttribute('data-disabled')).toBe(false)
       expect(root.hasAttribute('data-loading')).toBe(false)
@@ -68,11 +68,11 @@ describe('SplitButton', () => {
       )
     })
 
-    it.each(['primary', 'secondary', 'outlined'] as const)(
-      'mirrors kind=%s onto the root data-kind',
-      (kind) => {
-        const { getByTestId } = render(host({ kind }))
-        expect(getByTestId('actions-split-button').getAttribute('data-kind')).toBe(kind)
+    it.each(['primary', 'secondary', 'outline'] as const)(
+      'mirrors variant=%s onto the root data-variant',
+      (variant) => {
+        const { getByTestId } = render(host({ variant }))
+        expect(getByTestId('actions-split-button').getAttribute('data-variant')).toBe(variant)
       }
     )
 

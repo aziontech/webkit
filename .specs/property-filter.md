@@ -3,9 +3,9 @@ name: property-filter
 category: data
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 3df8f23b1eb76728ac755a72c613401284096889c493eb48c887725521fe521a
+checksum: 8f5355b4d75caa4101597e3208df2ef3d1529ab9742635ac46fb447acfa9d4ee
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -28,7 +28,7 @@ One field that filters a collection by properties and free text, after Cloudscap
 
 - A single text search over a short list → use `input` bound to `filterProps`.
 - A few fixed choices always on screen → use `toggle-group` or `chip` filters.
-- Inside a DataTable toolbar, `Table.Filter kind="property"` renders this field wired to the table's filters; bind PropertyFilter to `useCollection` yourself only for OR queries or free text.
+- Inside a DataTable toolbar, `Table.Filter type="property"` renders this field wired to the table's filters; bind PropertyFilter to `useCollection` yourself only for OR queries or free text.
 - Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text.
 
 ## Related

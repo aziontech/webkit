@@ -45,9 +45,9 @@
       aria-label="Threats as lines"
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
+      <Chart.Axis type="y" />
       <Chart.Axis
-        kind="x"
+        type="x"
         :ticks="4"
       />
       <Chart.Line />
@@ -60,9 +60,9 @@
       aria-label="Threats as areas"
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
+      <Chart.Axis type="y" />
       <Chart.Axis
-        kind="x"
+        type="x"
         :ticks="4"
       />
       <Chart.Area />
@@ -75,9 +75,9 @@
       aria-label="Threats as bars"
     >
       <Chart.Grid />
-      <Chart.Axis kind="y" />
+      <Chart.Axis type="y" />
       <Chart.Axis
-        kind="x"
+        type="x"
         :ticks="4"
       />
       <Chart.Bar />

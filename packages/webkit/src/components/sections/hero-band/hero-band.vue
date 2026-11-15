@@ -17,7 +17,7 @@
   })
 
   /** Layout of the opening band. */
-  export type HeroBandKind =
+  export type HeroBandVariant =
     | 'center'
     | 'title-band'
     | 'center-band'
@@ -101,7 +101,7 @@
 
   interface Props {
     /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
-    kind?: HeroBandKind
+    variant?: HeroBandVariant
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroBandSize
     /** Short overline above the headline. */
@@ -143,7 +143,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'title-band',
+    variant: 'title-band',
     size: 'medium',
     eyebrow: '',
     titleHighlight: '',
@@ -236,51 +236,52 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-hero-band'
   )
 
-  const BANDS: HeroBandKind[] = ['title-band', 'center-band', 'compact-band']
+  const BANDS: HeroBandVariant[] = ['title-band', 'center-band', 'compact-band']
 
-  const isScreen = computed(() => !BANDS.includes(props.kind))
+  const isScreen = computed(() => !BANDS.includes(props.variant))
 
   const isCentered = computed(
     () =>
-      props.kind !== 'pixel-floor' &&
-      props.kind !== 'copy-beside-art' &&
-      props.kind !== 'compact-band'
+      props.variant !== 'pixel-floor' &&
+      props.variant !== 'copy-beside-art' &&
+      props.variant !== 'compact-band'
   )
 
   const heroWidth = computed(() => {
-    if (props.kind === 'pixel-floor') return 'full'
+    if (props.variant === 'pixel-floor') return 'full'
     if (
-      props.kind === 'center' ||
-      props.kind === 'copy-on-top-art' ||
-      props.kind === 'center-band' ||
-      props.kind === 'compact-band'
+      props.variant === 'center' ||
+      props.variant === 'copy-on-top-art' ||
+      props.variant === 'center-band' ||
+      props.variant === 'compact-band'
     )
       return 'site'
     return '5xl'
   })
 
   const heroSize = computed(() => {
-    if (props.kind === 'center-band') return 'large'
-    if (props.kind === 'compact-band') return 'medium'
+    if (props.variant === 'center-band') return 'large'
+    if (props.variant === 'compact-band') return 'medium'
     return props.size
   })
 
   const titleWidth = computed(() => {
     const long = props.titleLength === 'long'
-    if (props.kind === 'center') return long ? '3xl' : 'xl'
-    if (props.kind === 'copy-beside-art' || props.kind === 'copy-on-top-art') return 'xl'
-    if (props.kind === 'center-band' || props.kind === 'compact-band') return long ? '3xl' : '2xl'
+    if (props.variant === 'center') return long ? '3xl' : 'xl'
+    if (props.variant === 'copy-beside-art' || props.variant === 'copy-on-top-art') return 'xl'
+    if (props.variant === 'center-band' || props.variant === 'compact-band')
+      return long ? '3xl' : '2xl'
     return '4xl'
   })
 
   const narrowTitle = computed(
-    () => isCentered.value && props.kind !== 'copy-on-top-art' && props.titleLength === 'short'
+    () => isCentered.value && props.variant !== 'copy-on-top-art' && props.titleLength === 'short'
   )
 
-  const dots = computed(() => props.kind === 'center' && !props.plain)
+  const dots = computed(() => props.variant === 'center' && !props.plain)
 
   const hasArt = computed(
-    () => props.kind === 'copy-beside-art' && Boolean(props.illustration || props.image?.src)
+    () => props.variant === 'copy-beside-art' && Boolean(props.illustration || props.image?.src)
   )
 
   const artStyle = computed(() => {
@@ -333,7 +334,7 @@
   )
 
   const scene = () =>
-    props.kind === 'copy-on-top-art' && !slots.top && !slots.bottom ? levelColumns.value : []
+    props.variant === 'copy-on-top-art' && !slots.top && !slots.bottom ? levelColumns.value : []
 </script>
 
 <template>
@@ -341,22 +342,22 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-title-measure="narrowTitle ? 'narrow' : null"
-    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[kind=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[kind=pixel-floor]:[--texture-pool-a:95%_64%] data-[kind=pixel-floor]:[--texture-pool-b:-2%_38%]"
+    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[variant=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[variant=pixel-floor]:[--texture-pool-a:95%_64%] data-[variant=pixel-floor]:[--texture-pool-b:-2%_38%]"
   >
     <Hero
       v-if="title"
-      :kind="isScreen ? 'screen' : 'band'"
+      :variant="isScreen ? 'screen' : 'band'"
       :size="heroSize"
       :max-width="heroWidth"
       :texture="dots ? 'dots' : 'none'"
       :texture-fade="dots ? 'top' : 'none'"
-      :floor-texture="kind === 'pixel-floor' ? 'pixelate' : 'none'"
-      :floor-texture-size="kind === 'pixel-floor' ? 'small' : 'medium'"
-      :bordered="kind !== 'pixel-floor'"
-      :padded="kind !== 'copy-on-top-art'"
-      :media-align="kind === 'copy-beside-art' ? 'end' : 'center'"
+      :floor-texture="variant === 'pixel-floor' ? 'pixelate' : 'none'"
+      :floor-texture-size="variant === 'pixel-floor' ? 'small' : 'medium'"
+      :bordered="variant !== 'pixel-floor'"
+      :padded="variant !== 'copy-on-top-art'"
+      :media-align="variant === 'copy-beside-art' ? 'end' : 'center'"
       :offset="isScreen ? headerOffset : ''"
       :ticker="tickerMarks.length > 0"
       :ticker-marks="tickerMarks"
@@ -365,7 +366,7 @@
     >
       <HeroTitle
         :align="isCentered ? 'center' : 'start'"
-        :mobile-align="kind === 'copy-beside-art' ? 'center' : undefined"
+        :mobile-align="variant === 'copy-beside-art' ? 'center' : undefined"
         :max-width="titleWidth"
         :eyebrow="eyebrow"
         :eyebrow-prefix="eyebrow ? eyebrowPrefix : ''"
@@ -383,7 +384,7 @@
             :label="primary.label"
             :href="primary.href"
             :target="primary.target"
-            kind="secondary"
+            variant="secondary"
             size="large"
             :icon="primary.trailing ? 'ai ai-chevron-right' : ''"
             :icon-position="primary.trailing ? 'trailing' : 'leading'"
@@ -395,7 +396,7 @@
             :label="secondary.label"
             :href="secondary.href"
             :target="secondary.target"
-            kind="outlined"
+            variant="outline"
             size="large"
             :icon="secondary.trailing ? 'ai ai-chevron-right' : ''"
             :icon-position="secondary.trailing ? 'trailing' : 'leading'"

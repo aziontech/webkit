@@ -44,7 +44,7 @@
     >
       <Select
         v-model="environment"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :display-value="(value) => environments.find((entry) => entry.value === value)?.label ?? ''"
       >

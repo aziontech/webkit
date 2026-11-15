@@ -4,8 +4,8 @@
 </script>
 
 <template>
-  <Item kind="outlined">
-    <Item.Media kind="image">
+  <Item variant="outline">
+    <Item.Media type="image">
       <img
         :src="placeholderImage"
         alt="Midnight City Lights"

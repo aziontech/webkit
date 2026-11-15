@@ -51,7 +51,7 @@
             label="Visit"
             href="https://web-app-y6u7i8.example.com"
             target="_blank"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             icon="ai ai-external-link"
           />
@@ -61,7 +61,7 @@
               <Tooltip content="Resource actions">
                 <IconButton
                   icon="ai ai-ellipsis"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Resource actions"
                 />
@@ -175,7 +175,7 @@
               alt="Riley Carter"
               label="Riley Carter"
               size="small"
-              kind="square"
+              variant="square"
               class="shrink-0"
             />
           </div>
@@ -257,7 +257,7 @@
           <Button
             class="w-full"
             label="Documentation"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-book"
             href="https://example.com/docs/cli"

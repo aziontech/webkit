@@ -166,7 +166,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Teams and permissions"
-          kind="outlined"
+          variant="outline"
           size="small"
           href="/account/teams"
         />
@@ -177,7 +177,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -273,14 +273,14 @@
                         <Button
                           type="button"
                           label="Select all"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           @click="selectAll"
                         />
                         <Button
                           type="button"
                           label="Clear"
-                          kind="transparent"
+                          variant="ghost"
                           size="medium"
                           @click="clearAll"
                         />
@@ -304,7 +304,7 @@
                           <Button
                             type="button"
                             label="Clear filter"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearQuery"
                           />
@@ -400,18 +400,18 @@
             </fieldset>
           </div>
 
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template #actions>
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 href="/account/teams"
               />
               <Button
                 label="Create"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"

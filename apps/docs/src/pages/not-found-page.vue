@@ -20,7 +20,7 @@
       <template #actions>
         <Button
           :label="t.backHome"
-          kind="primary"
+          variant="primary"
           href="/"
         />
       </template>

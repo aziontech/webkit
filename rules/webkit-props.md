@@ -16,7 +16,7 @@ checked in review.
 - Give every public prop a **one-line JSDoc** (`/** ... */`) — it feeds the editor hover
   and generated prop tables. Keep it a plain sentence with **no angle brackets** in
   script comments (they break downstream SFC parsing).
-- **Export every variant union** as a named type (`ButtonKind`, `ButtonSize`) so a
+- **Export every variant union** as a named type (`ButtonVariant`, `ButtonSize`) so a
   consumer can type a variable that holds it.
 - Default optional **text props to `''`** (never `undefined`) so the template never
   renders the string "undefined".
@@ -27,7 +27,7 @@ checked in review.
 
 ## Do not
 
-- Never use the runtime object form `defineProps({ kind: { type: String } })` — blocked
+- Never use the runtime object form `defineProps({ variant: { type: String } })` — blocked
   by `webkit/authoring-standards`. Same for runtime `defineEmits([...])`.
 - Never use `any` or `@ts-ignore` in a prop type — use precise unions or generics.
 - Never declare `class` or `style` in `defineProps` — consumer classes flow through
@@ -44,13 +44,13 @@ checked in review.
 ```vue
 <script setup lang="ts">
   /** Visual variant. */
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
   /** Size token. */
   export type ButtonSize = 'small' | 'medium' | 'large'
 
   interface Props {
     /** Visual variant. */
-    kind?: ButtonKind
+    variant?: ButtonVariant
     /** Size token. */
     size?: ButtonSize
     /** Disables interaction. */
@@ -60,7 +60,7 @@ checked in review.
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'primary',
+    variant: 'primary',
     size: 'large',
     disabled: false,
     icon: ''
@@ -75,7 +75,7 @@ checked in review.
 <script setup lang="ts">
   // Runtime object form — blocked by webkit/authoring-standards.
   const props = defineProps({
-    kind: { type: String, default: 'primary' }, // inline, untyped, no exported union
+    variant: { type: String, default: 'primary' }, // inline, untyped, no exported union
     isDisabled: Boolean, // "is" prefix — should be `disabled`
     icon: { type: String, default: undefined }, // text default must be ''
     label: { type: null as any }, // `any` in a prop type

@@ -7,7 +7,7 @@
 <template>
   <div class="flex w-full flex-col bg-(--bg-canvas)">
     <GlobalHeader
-      kind="site"
+      variant="site"
       aria-label="Azion"
     >
       <GlobalHeader.Brand>
@@ -15,7 +15,7 @@
           href="/"
           aria-label="Azion home"
           ><Brand
-            kind="default"
+            variant="default"
             size="small"
         /></a>
       </GlobalHeader.Brand>
@@ -31,7 +31,7 @@
       <GlobalHeader.End>
         <Button
           label="Start for Free"
-          kind="primary"
+          variant="primary"
           size="medium"
         />
       </GlobalHeader.End>

@@ -72,7 +72,7 @@
         <template #actions>
           <Button
             :label="t.gettingStarted"
-            kind="primary"
+            variant="primary"
             size="large"
             href="/foundations/getting-started"
           />
@@ -94,7 +94,7 @@
       >
         <CardGrid
           :columns="4"
-          kind="divider"
+          variant="divider"
         >
           <a
             v-for="section in explore"
@@ -120,7 +120,7 @@
       >
         <CardGrid
           :columns="3"
-          kind="divider"
+          variant="divider"
           divider-color="muted"
         >
           <div

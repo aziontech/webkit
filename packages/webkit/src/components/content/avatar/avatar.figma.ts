@@ -5,7 +5,7 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   circle: 'circle',
   square: 'square'
 })
@@ -36,10 +36,10 @@ export default {
   alt="User avatar"`
       : ''
   }${
-    kind === 'circle'
+    variant === 'circle'
       ? ''
       : figma.code`
-  kind="${kind}"`
+  variant="${variant}"`
   }${
     size === 'medium'
       ? ''

@@ -87,7 +87,7 @@ the band is one `useCollection` call:
         <template #actions>
           <Button
             label="Create application"
-            kind="primary"
+            variant="primary"
             size="large"
             icon="ai ai-plus"
           />

@@ -3,8 +3,8 @@ name: field
 category: inputs
 structure: composition
 status: implemented
-spec_version: 5
-checksum: a717055e6d39ed37db5e2b9291151e684dc647b7950a62e49b1bb9e7add6aa3f
+spec_version: 6
+checksum: e7e3bcefcf0251c5fb09d0e89204d5e5abbbfc45d6fd173f800357bfd97d2ab0
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -20,13 +20,13 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 - Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.
 - Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
 - A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
-- A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup kind="card"`, never a radio inside a `Field.Label`.
+- A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant="card"`, never a radio inside a `Field.Label`.
 - A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`).
 
 ## When NOT to use
 
 - A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.
-- A group of mutually exclusive cards with icons → use `radio-group` with `kind="card"`.
+- A group of mutually exclusive cards with icons → use `radio-group` with `type="card"`.
 - A static key/value read-out → use `key-value-pairs`.
 
 ## Related
@@ -115,14 +115,14 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
 - `field-description/field-description.vue` — guidance line rendered through `HelperText`; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-error/field-error.vue` — validation message rendered through `HelperText kind="invalid"` with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
+- `field-error/field-error.vue` — validation message rendered through `HelperText type="invalid"` with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-set/field-set.vue` — native `<fieldset>` without browser chrome, for a group of related fields or choices.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-legend/field-legend.vue` — native `<legend>` captioning a `Field.Set`.
-  - Props: `kind` (`'legend' \| 'label'`, default `'legend'`) — `legend` titles a section, `label` matches a `Field.Label` for a group of choices.
+  - Props: `type` (`'legend' \| 'label'`, default `'legend'`) — `legend` titles a section, `label` matches a `Field.Label` for a group of choices.
   - Events: _none_. Slots: `default`.
 - `field-content/field-content.vue` — column that holds the label/title and descriptions beside a control in a horizontal Field.
   - Props: _none_. Events: _none_. Slots: `default`.

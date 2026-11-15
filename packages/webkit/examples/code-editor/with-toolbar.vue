@@ -53,7 +53,7 @@
       </span>
       <Button
         label="Run"
-        kind="secondary"
+        variant="secondary"
         size="small"
         icon="ai ai-play"
       />
