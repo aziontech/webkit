@@ -323,6 +323,29 @@ describe('Tree', () => {
         }
       })
 
+    it('switches to a treegrid when the actions slot appears after mount', async () => {
+      const shown = ref(false)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(
+            Tree,
+            { ariaLabel: 'Bucket objects', items: ITEMS },
+            shown.value
+              ? {
+                  actions: (scope: { item: TreeItem }) =>
+                    h('button', { type: 'button', 'aria-label': `Delete ${scope.item.label}` })
+                }
+              : {}
+          )
+      })
+      const view = render(Host)
+      expect(view.getByRole('tree', { name: 'Bucket objects' })).toBeTruthy()
+      shown.value = true
+      await nextTick()
+      expect(view.getByRole('treegrid', { name: 'Bucket objects' })).toBeTruthy()
+      expect(view.queryAllByRole('treeitem')).toHaveLength(0)
+    })
+
     it('renders a treegrid of rows and gridcells, and a plain tree without actions', () => {
       const view = withActions({ expanded: ['assets'] })
       const grid = view.getByRole('treegrid', { name: 'Bucket objects' })
@@ -473,13 +496,13 @@ describe('Tree lazy children, rename, double-click and multi-select', () => {
     expect(logs.getAttribute('aria-expanded')).toBe('true')
     const group = logs.querySelector('[role="group"]') as HTMLElement
     expect(group.getAttribute('aria-busy')).toBe('true')
-    expect(view.getByTestId('data-tree-loading')).toBeTruthy()
+    expect(view.getByTestId('data-tree__loading')).toBeTruthy()
     expect(view.getByRole('status').textContent).toBe('Loading')
     await expectNoA11yViolations(view.container)
     await view.rerender({
       items: [{ ...lazy, loading: false, children: [{ id: 'logs/a.log', label: 'a.log' }] }, CONFIG]
     })
-    expect(view.queryByTestId('data-tree-loading')).toBeNull()
+    expect(view.queryByTestId('data-tree__loading')).toBeNull()
     expect(node(view.container, 'logs/a.log')).toBeTruthy()
   })
 
@@ -499,6 +522,7 @@ describe('Tree lazy children, rename, double-click and multi-select', () => {
     await userEvent.keyboard('{F2}')
     const field = view.getByRole('textbox', { name: 'Rename azion.config.js' })
     expect(document.activeElement).toBe(field)
+    expect(view.getByTestId('data-tree__rename')).toBe(field)
     await userEvent.clear(field)
     await userEvent.type(field, '  app.config.js  {Enter}')
     expect(onRename).toHaveBeenCalledTimes(1)

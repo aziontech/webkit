@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, provide, ref, useAttrs } from 'vue'
+  import { computed, nextTick, onBeforeUpdate, provide, ref, useAttrs } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -128,7 +128,10 @@
 
   const editable = computed(() => props.editable)
 
-  const grid = computed(() => Boolean(slots.actions))
+  const grid = ref<boolean>(Boolean(slots.actions))
+  onBeforeUpdate(() => {
+    grid.value = Boolean(slots.actions)
+  })
 
   const renamingId = ref('')
 

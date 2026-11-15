@@ -10,7 +10,8 @@ enforced_by:
     webkit-tokens,
     webkit-style-override,
     webkit-prefer-over-custom,
-    webkit-performance
+    webkit-performance,
+    webkit-page-layout
   ]
 ---
 

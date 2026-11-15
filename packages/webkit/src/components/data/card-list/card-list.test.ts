@@ -55,6 +55,18 @@ describe('CardList', () => {
     expect(view.emitted()['update:selectedKeys']?.at(-1)).toEqual([['c']])
   })
 
+  it('puts the single-selection radio at the end of the card header, named by the header', () => {
+    const view = render(CardList, {
+      props: { items, selectionMode: 'single' },
+      slots
+    })
+    const radio = view.getByRole('radio', { name: 'Charlie' })
+    const card = radio.closest('[data-testid="data-card-list__card"]') as HTMLElement
+    const header = within(card).getByText('Charlie')
+    expect(header.closest('label')).toBeNull()
+    expect(header.compareDocumentPosition(radio) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
   it('shows placeholders while loading and the empty state without items', () => {
     const loading = render(CardList, { props: { items, loading: true } })
     expect(loading.getAllByTestId('data-card-list__skeleton')).toHaveLength(6)

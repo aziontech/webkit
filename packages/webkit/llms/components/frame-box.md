@@ -31,7 +31,7 @@
 - [section-gap](section-gap.md) — an empty `frame-box` that holds the air between two sections.
 - [section-title](section-title.md) — a `frame-box` around a centered section header.
 - [card](card.md) — a padded surface with header/content/footer regions; a card, not a frame.
-- divider` — one hairline with optional centered label; no corners, no content.
+- [separator](separator.md) — one hairline with optional centered label; no corners, no content.
 
 ## Props
 

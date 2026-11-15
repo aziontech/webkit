@@ -3,11 +3,11 @@ name: frame-box
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: a528a716b7f93dede67648885ac63b26a6757068095cfaec5e20ff71c591e0e5
+spec_version: 3
+checksum: e3cb0d3a0aefe9461110b4273a57971b6b663bf970db4c67efd7264b9d6df3b2
 style_seam: true
 created: 2026-08-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Frame Box — Component Spec
@@ -33,7 +33,7 @@ The registration frame: a hairline box with a small square set inside each corne
 - `section-gap` — an empty `frame-box` that holds the air between two sections.
 - `section-title` — a `frame-box` around a centered section header.
 - `card` — a padded surface with header/content/footer regions; a card, not a frame.
-- `divider` — one hairline with optional centered label; no corners, no content.
+- `separator` — one hairline with optional centered label; no corners, no content.
 
 ## Best practices
 

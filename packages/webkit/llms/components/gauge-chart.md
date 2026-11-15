@@ -31,7 +31,7 @@
 
 - [stat-tile](stat-tile.md) — one figure with a delta and a sparkline, for a KPI row.
 - [chart-card](chart-card.md) — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.
-- progress-bar` — completion of a task, not a reading.
+- [progress](progress.md) — completion of a task, not a reading.
 
 ## Props
 

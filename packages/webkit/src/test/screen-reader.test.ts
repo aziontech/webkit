@@ -137,6 +137,7 @@ describe('screen-reader smoke · overlays', () => {
     const snapshot = await openAndRead(MultiSelectDefault, () => byRole('combobox'), 'body')
     expect(snapshot).toMatchInlineSnapshot(`
       "- combobox "Options" [expanded]: Option 1
+      - status
       - listbox "Options":
         - option "Option 1" [selected]
         - option "Option 2"
@@ -207,24 +208,18 @@ describe('screen-reader smoke · form blocks', () => {
           - list:
             - listitem:
               - text: Protocol usage
-              - group "Protocol Usage":
-                - text: Protocol Usage
-                - group:
-                  - radio "HTTP support"
-                  - text: HTTP support
-                  - paragraph: Use only the HTTP protocol. Select from the available HTTP ports.
-                - group:
-                  - radio "HTTP and HTTPS support" [checked]
-                  - text: HTTP and HTTPS support
-                  - paragraph: Use both HTTP and HTTPS protocols. Select from the available HTTP and HTTPS ports.
-                - group:
-                  - radio "HTTP/3 support"
-                  - text: HTTP/3 support
-                  - paragraph: Use both HTTP and HTTPS protocols and enable HTTP/3 support. Only available for HTTP port 80 and HTTPS port 443.
+              - radiogroup "Protocol Usage":
+                - radio "HTTP support"
+                - text: HTTP support Use only the HTTP protocol. Select from the available HTTP ports.
+                - radio "HTTP and HTTPS support" [checked]
+                - text: HTTP and HTTPS support Use both HTTP and HTTPS protocols. Select from the available HTTP and HTTPS ports.
+                - radio "HTTP/3 support"
+                - text: HTTP/3 support Use both HTTP and HTTPS protocols and enable HTTP/3 support. Only available for HTTP port 80 and HTTPS port 443.
             - listitem:
               - text: HTTP ports
               - paragraph: The ports the service listens on for HTTP traffic.
               - combobox "HTTP ports": 80 (default)
+              - status
           - heading "Features" [level=2]
           - list:
             - listitem:

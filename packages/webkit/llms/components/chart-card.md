@@ -32,7 +32,7 @@
 
 - [chart](chart.md), `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.
 - [card](card.md) — the general-purpose card; ChartCard shares its surface tokens.
-- dropdown` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
+- [dropdown-menu](dropdown-menu.md) — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
 
 ## Props
 

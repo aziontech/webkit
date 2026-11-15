@@ -41,6 +41,26 @@ const Host = defineComponent({
     ])
 })
 
+const LinkHost = defineComponent({
+  setup: () => () =>
+    h('div', [
+      h(HoverCard, { openDelay: 0, closeDelay: 0 }, () => [
+        h(HoverCard.Trigger, null, () => h('a', { href: '#jane' }, 'Jane Doe')),
+        h(HoverCard.Content, null, () => [
+          h('p', 'Owner of production'),
+          h('a', { href: '#profile', 'data-testid': 'profile' }, 'Profile'),
+          h('a', { href: '#activity', 'data-testid': 'activity' }, 'Activity')
+        ])
+      ]),
+      h('button', { type: 'button', 'data-testid': 'after' }, 'After')
+    ])
+})
+
+const inCard = (id: string) =>
+  document.body.querySelector<HTMLElement>(
+    `[data-testid="overlay-hover-card__content"] [data-testid="${id}"]`
+  ) as HTMLElement
+
 describe('HoverCard', () => {
   it('renders derived test ids, closed by default, and a consumer test id wins', () => {
     const { container } = render(Default)
@@ -112,6 +132,44 @@ describe('HoverCard', () => {
     render(Host)
     link().focus()
     await waitFor(() => expect(card()).not.toBeNull())
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(card()).toBeNull())
+    expect(document.activeElement).toBe(link())
+  })
+
+  it('Tab from the open trigger reaches the links in the card, then the page after the trigger', async () => {
+    render(LinkHost)
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(link())
+    await waitFor(() => expect(card()).not.toBeNull())
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(inCard('profile'))
+    expect(card()).not.toBeNull()
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(inCard('activity'))
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement?.getAttribute('data-testid')).toBe('after')
+    await waitFor(() => expect(card()).toBeNull())
+  })
+
+  it('Shift+Tab from the first card link returns to the trigger and keeps the card open', async () => {
+    render(LinkHost)
+    link().focus()
+    await waitFor(() => expect(card()).not.toBeNull())
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(inCard('profile'))
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    expect(document.activeElement).toBe(link())
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    expect(card()).not.toBeNull()
+  })
+
+  it('Escape inside the card closes it and returns focus to the trigger', async () => {
+    render(LinkHost)
+    link().focus()
+    await waitFor(() => expect(card()).not.toBeNull())
+    await userEvent.keyboard('{Tab}')
+    expect(document.activeElement).toBe(inCard('profile'))
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(card()).toBeNull())
     expect(document.activeElement).toBe(link())

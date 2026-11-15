@@ -37,7 +37,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 ## Related
 
-- message` — inline severity banner placed in the page flow; it stays until it is closed.
+- [alert](alert.md) — inline severity banner placed in the page flow; it stays until it is closed.
 - [dialog](dialog.md) — blocking modal for decisions and confirmations.
 - [spinner](spinner.md) — rendered by the `loading` toast type.
 - [progress](progress.md) — rendered under the copy of a `toast.progress` toast.

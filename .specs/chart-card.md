@@ -3,8 +3,8 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: d1288c42a3e10c6181ee67d89aa7fc94c97f818500e79c395868cbbc0bcb7f98
-spec_version: 4
+checksum: caa52d11bd470f321a8314194eb9cd8b671ce30893f1f2e4e0c5ec94b60e968d
+spec_version: 5
 created: 2026-10-20
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ The box a dashboard chart lives in: a header with the title, the description and
 
 - `chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.
 - `card` — the general-purpose card; ChartCard shares its surface tokens.
-- `dropdown` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
+- `dropdown-menu` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
 
 ## Best practices
 

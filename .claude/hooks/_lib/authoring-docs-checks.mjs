@@ -72,7 +72,7 @@ function splitFrontmatter(content) {
 // invariant test resolves each entry against the skill's rule population without re-parsing.
 export function parseEnforcedBy(fmText) {
   if (!fmText) return []
-  const m = fmText.match(/^enforced_by:[ \t]*\[([^\]]*)\][ \t]*$/m)
+  const m = fmText.match(/^enforced_by:\s*\[([^\]]*)\][ \t]*$/m)
   if (!m) return []
   return m[1]
     .split(',')

@@ -35,7 +35,7 @@
 - [site-nav](site-nav.md) — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
 - [navigation-menu](navigation-menu.md) — the dropdown navigation that usually goes in `GlobalHeader.Center`.
 - [brand](brand.md) — the Azion lockup to place inside `GlobalHeader.Brand`.
-- platform-shell` — the console layout template that composes the header with the sidebar and the page.
+- [console-layout](console-layout.md) — the console layout template that composes the header with the sidebar and the page.
 
 ## Props
 

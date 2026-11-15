@@ -3,8 +3,8 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 089d96f3e028b272e6c15f3f4a1c25e1db915aa90052e73fa6e4a85a7c86cbda
-spec_version: 6
+checksum: 849dd0d107cc4cbde6384a09edfb33bca0d76bf4ad406e71071001c744301155
+spec_version: 7
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -140,8 +140,8 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 - Precedence: `loading` → Skeleton rows, else `items` empty → `empty` slot, else the tree.
 - `data-loading` on the root mirrors `loading`; `data-empty` on the root when `items` is empty and not loading.
 - `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`.
-- Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>-loading`).
-- Renaming: the label region of the node being renamed is a text field (`<testId>-rename`, `data-tree-rename`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
+- Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>__loading`).
+- Renaming: the label region of the node being renamed is a text field (`<testId>__rename`, `data-tree-rename`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
 - `data-state="open|closed"` on each parent row and its chevron (drives the rotation); absent on leaves. The tree is not an overlay, so this is disclosure state only.
 - `data-selected` on the selected row (only while `selectable`); `data-disabled` on a disabled row.
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.

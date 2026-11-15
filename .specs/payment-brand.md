@@ -3,9 +3,9 @@ name: payment-brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 1ffd986cafd936c1a2657c199b3c54d7ef99fc72f34bda0da94573afdf9ff117
+checksum: 2e25178465f916e29da58b039d124e8ab985292a606dc4a57bf3103b718f5640
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's card flag block (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 ## When to use
 

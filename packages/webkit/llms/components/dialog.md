@@ -22,13 +22,13 @@
 ## Don’t
 
 - The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
-- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`.
+- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [drawer](drawer.md) — edge-anchored panel for secondary tasks / long content.
-- dropdown` — trigger-anchored menu for actions/options.
+- [dropdown-menu](dropdown-menu.md) — trigger-anchored menu for actions/options.
 
 ## Props
 

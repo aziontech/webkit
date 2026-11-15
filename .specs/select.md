@@ -3,11 +3,11 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 802818579d87755ded7f1f51a917426421db05ac33e0e9d1e5f012181feaad26
+checksum: 057f252ab09609b4bc287472cf3fc13a1d4cfdcc8f4afca535d80e0c938feed6
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -38,7 +38,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 - `field` — label, this select, and description/error, with the wiring done.
 - `multi-select` — multi-only variant with checkbox rows and an array model.
-- `dropdown` — action menu that reports the chosen option as an event and holds no form value.
+- `dropdown-menu` — action menu that reports the chosen option as an event and holds no form value.
 - `input-group` — joins a select to an input, such as currency plus amount.
 
 ## Best practices

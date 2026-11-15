@@ -14,7 +14,7 @@
  "related": [
   "stat-tile` — one figure with a delta and a sparkline, for a KPI row.",
   "chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.",
-  "progress-bar` — completion of a task, not a reading."
+  "progress` — completion of a task, not a reading."
  ],
  "bestPractices": [
   "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",

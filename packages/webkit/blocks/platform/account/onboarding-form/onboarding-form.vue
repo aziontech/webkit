@@ -8,7 +8,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Progress from '@aziontech/webkit/progress'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
   import { computed, ref } from 'vue'
 
   interface Accent {

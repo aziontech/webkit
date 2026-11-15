@@ -3,12 +3,12 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: b9c05a803221bb4f17466e628615f316f3b89e7969d0518cc8c385d4dc192200
+checksum: 0a08f97946369b59f3f6e3b5ee2700ff8bf5275ce5784d3a1b0e3de6f71db628
 created: 2026-05-26
 last_updated: 2026-11-15
 ---
@@ -201,7 +201,7 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | Trigger                         | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
 | log line hover (LogViewContent) | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| running step description (LogView.Steps) | `animate-(--animate-shimmer)` | `--animate-shimmer`                          | `motion-reduce:animate-none` (and `motion-safe:` on the shimmer) |
+| running step description (LogView.Steps) | `animate-shimmer` | `--animate-shimmer`                          | `motion-reduce:animate-none` (and `motion-safe:` on the shimmer) |
 
 ## Tokens
 

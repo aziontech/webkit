@@ -15,7 +15,7 @@
  "related": [
   "site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.",
   "global-header` — the bar layout this menu usually sits in.",
-  "dropdown` — a single-trigger option menu, not a site-wide navigation bar.",
+  "dropdown-menu` — a single-trigger option menu, not a site-wide navigation bar.",
   "sidebar-menu` — vertical, hierarchical navigation rows for a sidebar."
  ],
  "bestPractices": [

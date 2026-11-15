@@ -3,18 +3,18 @@ name: banner-art
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 57b8cfcd26c712d14e4c71d46765bcee5d388a019054e00680210cf3a359f4a6
+checksum: c2d5bbf6dacc13d5a76e0fd35976a36891e039cf416f8b23dc96b1eb553b18fb
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # BannerArt — Component Spec
 
 ## Purpose
 
-The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `marketing/banner-art`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `banner-art`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 ## When to use
 

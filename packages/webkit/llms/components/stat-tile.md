@@ -37,7 +37,7 @@
 - [big-numbers](big-numbers.md) — the marketing figure band, with no delta and no live data.
 - [spark-chart](spark-chart.md) — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - [tag](tag.md) — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
-- divider` — carries the "No data" `Tag` across the empty band.
+- [separator](separator.md) — carries the "No data" `Tag` across the empty band.
 - [stat-tile-group](stat-tile-group.md) — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Props

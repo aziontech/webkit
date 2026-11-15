@@ -1,5 +1,5 @@
 <script setup>
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
   import SchemaForm from '@aziontech/webkit/schema-form'
   import { ref } from 'vue'
 

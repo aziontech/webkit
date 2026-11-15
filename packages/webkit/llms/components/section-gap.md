@@ -35,7 +35,7 @@
 - [frame-box](frame-box.md) — the frame this component configures; reach for it directly when the gap needs content or different rules.
 - [texture-material](texture-material.md) — the layer that paints the ruling, composed here at its `lines` kind.
 - [section-title](section-title.md) — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.
-- divider` — a hairline with no vertical air.
+- [separator](separator.md) — a hairline with no vertical air.
 
 ## Props
 

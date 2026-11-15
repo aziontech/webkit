@@ -3,11 +3,11 @@ name: global-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 7449db6a8e702c1eb727963be7fde076fe234990e4445b7606c1158d08e43c05
+checksum: c856b9946cb878c99cddbe2b120921084e26666bdc8bfa0533131975f3f7c05c
 created: 2026-05-23
 last_updated: 2026-11-15
 ---
@@ -44,7 +44,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 - `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
 - `navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Center`.
 - `brand` — the Azion lockup to place inside `GlobalHeader.Brand`.
-- `platform-shell` — the console layout template that composes the header with the sidebar and the page.
+- `console-layout` — the console layout template that composes the header with the sidebar and the page.
 
 ## Best practices
 

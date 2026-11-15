@@ -678,20 +678,23 @@ test('applyPlan merges into an existing .mcp.json without dropping other servers
   }
 })
 
-const caretSatisfies = (range, version) => {
-  const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(range)
-  const v = version.split('.').map(Number)
-  if (!m) return false
-  const r = m.slice(1).map(Number)
-  if (v[0] !== r[0]) return false
-  return v[1] > r[1] || (v[1] === r[1] && v[2] >= r[2])
-}
+const CARET_RANGE = /^\^\d+\.\d+\.\d+( \|\| \^\d+\.\d+\.\d+)*$/
 
-test('planInit pins every dependency it adds to a caret range, never "latest"', () => {
+const caretSatisfies = (range, version) =>
+  range.split(' || ').some((alternative) => {
+    const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(alternative)
+    const v = version.split('.').map(Number)
+    if (!m) return false
+    const r = m.slice(1).map(Number)
+    if (v[0] !== r[0]) return false
+    return v[1] > r[1] || (v[1] === r[1] && v[2] >= r[2])
+  })
+
+test('planInit pins every dependency it adds to caret ranges, never "latest"', () => {
   const dir = makeProject()
   try {
     for (const a of planInit(dir, {}).filter((x) => x.type === 'add-dep')) {
-      assert.match(a.version ?? '', /^\^\d+\.\d+\.\d+$/, `${a.dep} is pinned as ${a.version}`)
+      assert.match(a.version ?? '', CARET_RANGE, `${a.dep} is pinned as ${a.version}`)
     }
   } finally {
     rmSync(dir, { recursive: true, force: true })

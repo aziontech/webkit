@@ -580,20 +580,21 @@ Test ids follow the component name: `feedback-message` → `feedback-alert`, `la
 
 A child test id joins its root with two underscores, never a hyphen. These moved:
 
-| Component                     | v5                                    | v6                                      |
-| ----------------------------- | ------------------------------------- | --------------------------------------- |
-| `Button`                      | `actions-button-loading`              | `actions-button__loading`               |
-| `IconButton`                  | `actions-icon-button-loading`         | `actions-icon-button__loading`          |
-| `ButtonHighlight`             | `actions-button-highlight-loading`    | `actions-button-highlight__loading`     |
-| `RadioGroup.Item` (the radio) | `input-radio-group__item-control`     | `input-radio-group__item__control`      |
-| `Flow.Parallel` (branch list) | `data-flow__parallel-branches`        | `data-flow__parallel__branches`         |
-| `KeyValuePairs.Item`          | `content-key-value-pairs-item`        | `content-key-value-pairs__item`         |
-| `KeyValuePairs.Group`         | `content-key-value-pairs-group`       | `content-key-value-pairs__group`        |
-| `Tree` row / chevron          | `data-tree-item` / `data-tree-toggle` | `data-tree__item` / `data-tree__toggle` |
-| `Toaster` region              | `feedback-toast-<position>`           | `feedback-toast__<position>`            |
-| `Chart` legend entry          | `chart-chart__legend-item`            | `chart-chart__legend__item`             |
-| `Board.Item`                  | `layout-board-item`                   | `layout-board__item`                    |
-| `DocProse` copy tip           | `documentation-doc-prose-copy-tip`    | `documentation-doc-prose__copy-tip`     |
+| Component                     | v5                                       | v6                                         |
+| ----------------------------- | ---------------------------------------- | ------------------------------------------ |
+| `Button`                      | `actions-button-loading`                 | `actions-button__loading`                  |
+| `IconButton`                  | `actions-icon-button-loading`            | `actions-icon-button__loading`             |
+| `ButtonHighlight`             | `actions-button-highlight-loading`       | `actions-button-highlight__loading`        |
+| `RadioGroup.Item` (the radio) | `input-radio-group__item-control`        | `input-radio-group__item__control`         |
+| `Flow.Parallel` (branch list) | `data-flow__parallel-branches`           | `data-flow__parallel__branches`            |
+| `KeyValuePairs.Item`          | `content-key-value-pairs-item`           | `content-key-value-pairs__item`            |
+| `KeyValuePairs.Group`         | `content-key-value-pairs-group`          | `content-key-value-pairs__group`           |
+| `Tree` row / chevron          | `data-tree-item` / `data-tree-toggle`    | `data-tree__item` / `data-tree__toggle`    |
+| `Tree` rename / loading       | `data-tree-rename` / `data-tree-loading` | `data-tree__rename` / `data-tree__loading` |
+| `Toaster` region              | `feedback-toast-<position>`              | `feedback-toast__<position>`               |
+| `Chart` legend entry          | `chart-chart__legend-item`               | `chart-chart__legend__item`                |
+| `Board.Item`                  | `layout-board-item`                      | `layout-board__item`                       |
+| `DocProse` copy tip           | `documentation-doc-prose-copy-tip`       | `documentation-doc-prose__copy-tip`        |
 
 The same applies under a root id you pass yourself (`my-tree-item` → `my-tree__item`).
 

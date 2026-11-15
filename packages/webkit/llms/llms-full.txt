@@ -4862,7 +4862,7 @@ What each part takes: [blocks/platform/create/resource-picker.md](blocks/platfor
 - Surface: product
 - Source: `blocks/platform/create/single-page-create/single-page-create.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/single-page-create")`
-- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, Field, GlobalHeader, HelperText, IconButton, Input, InputGroup, Item, MultiSelect, NumberInput, PageHeader, PasswordInput, PhoneInput, RadioGroup, SaveBar, Select, SettingRow, SettingsSection, Switch, Tag, Textarea, Toast
+- Components: Alert, Avatar, Brand, Breadcrumb, Button, Card, Checkbox, Field, GlobalHeader, HelperText, IconButton, Input, InputGroup, Item, MultiSelect, NumberInput, PageHeader, PasswordInput, PhoneInput, RadioGroup, RadioGroup, SaveBar, Select, SettingRow, SettingsSection, Switch, Tag, Textarea, Toast
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -14477,7 +14477,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 
 - `chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.
 - `card` — the general-purpose card; ChartCard shares its surface tokens.
-- dropdown` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
+- `dropdown-menu` — the "More options" menu (Copy query, Export CSV) composed into the controls zone.
 
 ## Props
 
@@ -14852,7 +14852,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 
 - `stat-tile` — one figure with a delta and a sparkline, for a KPI row.
 - `chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.
-- progress-bar` — completion of a task, not a reading.
+- `progress` — completion of a task, not a reading.
 
 ## Props
 
@@ -15218,7 +15218,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - `big-numbers` — the marketing figure band, with no delta and no live data.
 - `spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - `tag` — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
-- divider` — carries the "No data" `Tag` across the empty band.
+- `separator` — carries the "No data" `Tag` across the empty band.
 - `stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Props
@@ -18806,7 +18806,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 
 # Payment Brand
 
-> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's `card-flag-block` (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
+> The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's card flag block (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 - Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
 - Category: content · Surface: product · Structure: monolithic
@@ -19940,13 +19940,13 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 - Visible focus: owned by the checkbox, the radio and the links in the header slot.
 - Keyboard map: `Tab` moves through the select-all, each card's control and its content; `Space` toggles a control.
-- ARIA: the cards are a named `list` of `listitem`s; each checkbox is labelled by its card's header (`aria-labelledby`), and in single mode each card's header sits inside its `RadioGroup.Item` label, so the radio is named by it; the select-all has a visible label; the root sets `aria-busy` while loading.
+- ARIA: the cards are a named `list` of `listitem`s; each checkbox is labelled by its card's header (`aria-labelledby`), and in single mode each card's `RadioGroup.Item` has no label text and forwards `aria-labelledby` (the header id) to its radio; the select-all has a visible label; the root sets `aria-busy` while loading.
 - Selection is never conveyed by color alone: the control is checked.
 - Contrast ≥4.5:1 (text) and ≥3:1 for the selected border.
 
 ## Right-to-left
 
-- Layout: logical utilities only; the checkbox sits at the end of the header row, the single-mode radio at its start.
+- Layout: logical utilities only; the checkbox and the single-mode radio both sit at the end of the header row.
 - Icons: none of its own.
 - Keyboard: no arrow-key navigation of its own.
 - User data: the slots isolate user data (`<bdi>` around domains in the examples).
@@ -20208,7 +20208,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 - People read, sort, filter, select and act on records but do not edit cells → use `data-table` (or a hand-composed `table`).
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
 - One record edited field by field → use a form with `field` controls.
-- Key and value pairs shown for reading → use `key-value-list`.
+- Key and value pairs shown for reading → use `key-value-pairs`.
 
 ## Related
 
@@ -22229,8 +22229,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Precedence: `loading` → Skeleton rows, else `items` empty → `empty` slot, else the tree.
 - `data-loading` on the root mirrors `loading`; `data-empty` on the root when `items` is empty and not loading.
 - `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`.
-- Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>-loading`).
-- Renaming: the label region of the node being renamed is a text field (`<testId>-rename`, `data-tree-rename`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
+- Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>__loading`).
+- Renaming: the label region of the node being renamed is a text field (`<testId>__rename`, `data-tree-rename`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
 - `data-state="open|closed"` on each parent row and its chevron (drives the rotation); absent on leaves. The tree is not an overlay, so this is disclosure state only.
 - `data-selected` on the selected row (only while `selectable`); `data-disabled` on a disabled row.
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
@@ -25074,7 +25074,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Related
 
 - `skeleton` — the loading placeholder shown before the empty state is known.
-- message` — inline severity banner, not a zero-data block.
+- `alert` — inline severity banner, not a zero-data block.
 - `table` — renders an empty-state block in its `empty` slot.
 - `button` — the usual content of the `actions` slot.
 
@@ -25715,7 +25715,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 ## Related
 
-- message` — inline severity banner placed in the page flow; it stays until it is closed.
+- `alert` — inline severity banner placed in the page flow; it stays until it is closed.
 - `dialog` — blocking modal for decisions and confirmations.
 - `spinner` — rendered by the `loading` toast type.
 - `progress` — rendered under the copy of a `toast.progress` toast.
@@ -27406,7 +27406,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
 - Field.Label` — sits above the input; HelperText sits below it.
 - `field` — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
-- message` — banner-level feedback with severity and an optional action.
+- `alert` — banner-level feedback with severity and an optional action.
 
 ## Props
 
@@ -28964,7 +28964,7 @@ No built-in strings: every visible text comes from the item slots, the `options`
 
 - `field` — label, this select, and description/error, with the wiring done.
 - `multi-select` — multi-only variant with checkbox rows and an array model.
-- dropdown` — action menu that reports the chosen option as an event and holds no form value.
+- `dropdown-menu` — action menu that reports the chosen option as an event and holds no form value.
 - `input-group` — joins a select to an input, such as currency plus amount.
 
 ## Props
@@ -30818,7 +30818,7 @@ packages/webkit/src/components/layout/console-layout/
 - `section-gap` — an empty `frame-box` that holds the air between two sections.
 - `section-title` — a `frame-box` around a centered section header.
 - `card` — a padded surface with header/content/footer regions; a card, not a frame.
-- divider` — one hairline with optional centered label; no corners, no content.
+- `separator` — one hairline with optional centered label; no corners, no content.
 
 ## Props
 
@@ -30909,7 +30909,7 @@ packages/webkit/src/components/layout/console-layout/
 - `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
 - `navigation-menu` — the dropdown navigation that usually goes in `GlobalHeader.Center`.
 - `brand` — the Azion lockup to place inside `GlobalHeader.Brand`.
-- platform-shell` — the console layout template that composes the header with the sidebar and the page.
+- `console-layout` — the console layout template that composes the header with the sidebar and the page.
 
 ## Props
 
@@ -32033,7 +32033,7 @@ No built-in strings: the status sentence and the action labels come from the con
 - `sidebar-menu` — the navigation rows, groups and drill levels that go in the sidebar's default slot.
 - `resizable` — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
 - `global-header` — the top bar that usually sits above the sidebar in an app shell.
-- platform-shell` — the console layout template that composes the header, the sidebar and the page.
+- `console-layout` — the console layout template that composes the header, the sidebar and the page.
 
 ## Props
 
@@ -32775,7 +32775,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 
 # Banner Art
 
-> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `marketing/banner-art`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
+> The decorative backdrop a site, hub or docs band stands on, for a `Hero` `background` slot or any band with `relative overflow-hidden`: `globe` hangs half a globe past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, the sample's `MapMesh` traffic crossing between them (`NetworkMap` `traffic`: links and packets, the links alone as the still frame under reduced motion) and a scrim over the copy column. From the design sample's `shared/ui/banners` (GlobeBanner, MapBanner, NetworkBanner), drawn with WebKit's own `SpinningGlobe` and `NetworkMap` so there is one map and one globe in the system. The inventory's "`Banner` `art` variants" became this sibling component, `banner-art`: `Banner` is an announcement band with its own surfaces, and a backdrop layer is a different thing.
 
 - Import: `import BannerArt from '@aziontech/webkit/banner-art'`
 - Category: marketing · Surface: marketing · Structure: monolithic
@@ -35141,7 +35141,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `frame-box` — the frame this component configures; reach for it directly when the gap needs content or different rules.
 - `texture-material` — the layer that paints the ruling, composed here at its `lines` kind.
 - `section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.
-- divider` — a hairline with no vertical air.
+- `separator` — a hairline with no vertical air.
 
 ## Props
 
@@ -36816,7 +36816,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 
 - `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
 - `global-header` — the bar layout this menu usually sits in.
-- dropdown` — a single-trigger option menu, not a site-wide navigation bar.
+- `dropdown-menu` — a single-trigger option menu, not a site-wide navigation bar.
 - `sidebar-menu` — vertical, hierarchical navigation rows for a sidebar.
 
 ## Props
@@ -37857,7 +37857,7 @@ even when the row carries nothing but its title.
 
 - Keep step state in the consumer (refs or a form store). Only the active step renders its content, so a
 - Validate in the `next` handler and call `event.preventDefault()` synchronously to block the move. For
-- Show why Next was blocked inside the step (an inline `message` or the field's `invalid` +
+- Show why Next was blocked inside the step (an inline `alert` or the field's `invalid` +
 - Give every step a title that names the decision (`Settings`, `Review`) and keep it short. The same
 - Make the last step a review of the answers when the resource is costly to change after creation, and
 - Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no
@@ -37879,7 +37879,7 @@ even when the row carries nothing but its title.
 - `tabs` — unordered peer views with no completion state.
 - `dialog` — a single, short decision on an overlay.
 - `drawer` — a single-step create or edit form beside the page.
-- message` — the inline error to show inside a step when Next is blocked.
+- `alert` — the inline error to show inside a step when Next is blocked.
 
 ## Props
 
@@ -38257,7 +38257,7 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
 
 - `dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.
 - `kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.
-- dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger.
+- `dropdown-menu` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger.
 
 ## Props
 
@@ -38602,12 +38602,12 @@ packages/webkit/src/components/overlay/command/
 ## Don’t
 
 - The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
-- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`.
+- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`.
 
 ## Related
 
 - `drawer` — edge-anchored panel for secondary tasks / long content.
-- dropdown` — trigger-anchored menu for actions/options.
+- `dropdown-menu` — trigger-anchored menu for actions/options.
 
 ## Props
 
@@ -38967,8 +38967,8 @@ packages/webkit/src/components/overlay/command/
 
 ## Accessibility
 
-- Content on hover or focus (WCAG 1.4.13): dismissible (`Esc` closes it without moving focus), hoverable (the pointer can move onto the card; `closeDelay` and the card's own pointer handlers keep it open), persistent (it stays until pointer and focus leave or `Esc`).
-- Keyboard map: `Tab` onto the trigger's link opens the card after `openDelay`; `Tab` away closes it after `closeDelay`; `Esc` closes it. The card takes no focus. Tests: `hover-card.test.ts` › keyboard.
+- Content on hover or focus (WCAG 1.4.13): dismissible (`Esc` closes it without moving focus from the trigger, and returns focus to the trigger from inside the card), hoverable (the pointer can move onto the card; `closeDelay` and the card's own pointer handlers keep it open), persistent (it stays until pointer and focus leave or `Esc`).
+- Keyboard map: `Tab` onto the trigger's link opens the card after `openDelay`; while it is open, `Tab` moves into the card when the card holds a link (or any focusable element), walks its links, and the `Tab` after the last one continues to the element after the trigger; `Shift+Tab` from the first returns to the trigger. A card with nothing focusable is skipped and `Tab` away closes it after `closeDelay`. `Esc` closes it; from inside the card focus returns to the trigger. Tests: `hover-card.test.ts` › keyboard.
 - ARIA: while open, the trigger's focusable element carries `aria-describedby` pointing at the card; the card has no role and no `aria-modal`. The trigger wrapper adds no role or tab stop.
 - Visible focus: the focus ring belongs to the consumer's link or button.
 - Contrast ≥4.5:1 for card text on `--bg-surface-raised`.
@@ -39161,7 +39161,7 @@ No built-in strings: the card shows only consumer content.
 
 # Popover
 
-> Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+> Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `dropdown-menu`, which renders a menu of selectable options rather than free-form content.
 
 - Import: `import PopoverRoot from '@aziontech/webkit/popover-root'`
 - Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/webkit/popover'`
@@ -39195,7 +39195,7 @@ No built-in strings: the card shows only consumer content.
 ## Related
 
 - `tooltip` — plain text only and non-interactive; opens on hover and focus, not on click.
-- dropdown` — same trigger and anchoring model, but renders option rows and emits `select`.
+- `dropdown-menu` — same trigger and anchoring model, but renders option rows and emits `select`.
 - `dialog` — modal and centered, traps focus and locks scroll; the popover does neither.
 - `drawer` — edge-anchored modal panel for longer content.
 

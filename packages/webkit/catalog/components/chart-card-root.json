@@ -13,7 +13,7 @@
  "related": [
   "chart`, `donut-chart` — what goes inside the content area; a chart inside a card takes its accessible name from the card title.",
   "card` — the general-purpose card; ChartCard shares its surface tokens.",
-  "dropdown` — the \"More options\" menu (Copy query, Export CSV) composed into the controls zone."
+  "dropdown-menu` — the \"More options\" menu (Copy query, Export CSV) composed into the controls zone."
  ],
  "bestPractices": [
   "Put the aggregation tag (Sum, Average) and the variation tag in `ChartCard.Action`, before the menu.",

@@ -3,11 +3,11 @@ name: dialog
 category: overlay
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 480d0d6f794bb5d1fc973f565261e496f1d3a27d089565ced7de94fee1745fea
+checksum: bd92fc8e2d7a0be70baebd82bcbc0d57b236bb1306f0eee3985d215b24819aac
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -26,12 +26,12 @@ Modal surface above the page, built on the shared Panel shell. `Dialog.Content` 
 ## When NOT to use
 
 - The content is a side panel, long form, or navigation that should slide from an edge → use `drawer`.
-- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown`.
+- It is small contextual content anchored to a trigger (a menu, info bubble, picker) → use a popover / `dropdown-menu`.
 
 ## Related
 
 - `drawer` — edge-anchored panel for secondary tasks / long content.
-- `dropdown` — trigger-anchored menu for actions/options.
+- `dropdown-menu` — trigger-anchored menu for actions/options.
 
 ## Best practices
 

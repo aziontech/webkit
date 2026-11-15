@@ -19,7 +19,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Progress from '@aziontech/webkit/progress'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'

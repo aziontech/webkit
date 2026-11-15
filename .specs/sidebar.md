@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: a59673d3a036d2e239e28e3ba6283847fa5b013eec572601443336eda66f42b9
+checksum: f621f4d212a88a905b4da074b16e6a83387c2fff063890cbe288c4e804c87a57
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -51,7 +51,7 @@ always has, with the host owning the width — every existing consumer is unaffe
 - `sidebar-menu` — the navigation rows, groups and drill levels that go in the sidebar's default slot.
 - `resizable` — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
 - `global-header` — the top bar that usually sits above the sidebar in an app shell.
-- `platform-shell` — the console layout template that composes the header, the sidebar and the page.
+- `console-layout` — the console layout template that composes the header, the sidebar and the page.
 
 ## Best practices
 

@@ -62,10 +62,14 @@
   const isCard = computed(() => ctx.kind.value === 'card')
   const descriptionId = computed(() => (props.description ? `${uid}-description` : undefined))
   const labelId = `${uid}-label`
+  const labelledBy = computed(() =>
+    props.ariaLabel ? undefined : (attrs['aria-labelledby'] as string | undefined) || labelId
+  )
 
   const rootAttrs = computed(() => {
     const rest = { ...attrs }
     delete rest['data-testid']
+    delete rest['aria-labelledby']
     return rest
   })
 
@@ -95,7 +99,7 @@
       :required="isRequired || undefined"
       :aria-invalid="isInvalid || undefined"
       :aria-label="ariaLabel || undefined"
-      :aria-labelledby="ariaLabel ? undefined : labelId"
+      :aria-labelledby="labelledBy"
       :aria-describedby="descriptionId"
       :data-testid="`${testId}__control`"
       class="absolute inset-0 size-full cursor-pointer appearance-none rounded-[inherit] opacity-0 disabled:cursor-not-allowed"
@@ -117,7 +121,7 @@
         :required="isRequired || undefined"
         :aria-invalid="isInvalid || undefined"
         :aria-label="ariaLabel || undefined"
-        :aria-labelledby="ariaLabel ? undefined : labelId"
+        :aria-labelledby="labelledBy"
         :aria-describedby="descriptionId"
         :data-testid="`${testId}__control`"
         class="absolute inset-[min(0rem,calc(50%-12px))] cursor-pointer opacity-0 pointer-coarse:inset-[min(0rem,calc(50%-22px))] disabled:cursor-not-allowed"

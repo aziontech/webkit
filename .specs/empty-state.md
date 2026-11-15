@@ -3,11 +3,11 @@ name: empty-state
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 9f9d74693b875fc0446e13209b16e07b030eaacdc854f3414ba24c2cb229fa14
+checksum: 3bbeccf9c75fa8be19b81fd09b73ee3aec68b4c7cc128097ad2018235b5aae40
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 ## Related
 
 - `skeleton` — the loading placeholder shown before the empty state is known.
-- `message` — inline severity banner, not a zero-data block.
+- `alert` — inline severity banner, not a zero-data block.
 - `table` — renders an empty-state block in its `empty` slot.
 - `button` — the usual content of the `actions` slot.
 

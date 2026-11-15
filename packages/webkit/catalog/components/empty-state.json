@@ -11,7 +11,7 @@
  ],
  "related": [
   "skeleton` — the loading placeholder shown before the empty state is known.",
-  "message` — inline severity banner, not a zero-data block.",
+  "alert` — inline severity banner, not a zero-data block.",
   "table` — renders an empty-state block in its `empty` slot.",
   "button` — the usual content of the `actions` slot."
  ],

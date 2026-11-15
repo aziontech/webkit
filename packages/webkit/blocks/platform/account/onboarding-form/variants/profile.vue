@@ -8,7 +8,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Progress from '@aziontech/webkit/progress'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
 
