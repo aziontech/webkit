@@ -7,7 +7,7 @@ import Default from '../../../../examples/input/default.vue'
 import Disabled from '../../../../examples/input/disabled.vue'
 import Filled from '../../../../examples/input/filled.vue'
 import Invalid from '../../../../examples/input/invalid.vue'
-import ReadOnly from '../../../../examples/input/read-only.vue'
+import ReadonlyExample from '../../../../examples/input/readonly.vue'
 import Sizes from '../../../../examples/input/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Input from './input.vue'
@@ -404,8 +404,8 @@ describe('Input', () => {
   })
 
   describe('monospace', () => {
-    it('renders the ReadOnly example: read-only monospace fields with a copy action', async () => {
-      const { container, getByRole } = render(ReadOnly)
+    it('renders the Readonly example: read-only monospace fields with a copy action', async () => {
+      const { container, getByRole } = render(ReadonlyExample)
       const roots = container.querySelectorAll('[data-readonly][data-monospace]')
       expect(roots.length).toBe(2)
       expect(getByRole('button', { name: 'Copy the create function command' })).toBeTruthy()

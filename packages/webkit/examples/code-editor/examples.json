@@ -23,9 +23,9 @@
       "file": "diff.vue"
     },
     {
-      "name": "ReadOnly",
+      "name": "Readonly",
       "summary": "`readonly` code that can be read, selected and copied but not changed.",
-      "file": "read-only.vue"
+      "file": "readonly.vue"
     },
     {
       "name": "Schema",

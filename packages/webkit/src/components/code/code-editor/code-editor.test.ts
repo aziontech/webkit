@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Borderless from '../../../../examples/code-editor/borderless.vue'
 import Default from '../../../../examples/code-editor/default.vue'
 import Diff from '../../../../examples/code-editor/diff.vue'
-import ReadOnly from '../../../../examples/code-editor/read-only.vue'
+import ReadonlyExample from '../../../../examples/code-editor/readonly.vue'
 import WithToolbar from '../../../../examples/code-editor/with-toolbar.vue'
 import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -632,7 +632,7 @@ describe('CodeEditor', () => {
     ['Borderless', Borderless],
     ['Default', Default],
     ['Diff', Diff],
-    ['ReadOnly', ReadOnly],
+    ['Readonly', ReadonlyExample],
     ['WithToolbar', WithToolbar]
   ])('renders the %s example without a11y violations', async (_name, Example) => {
     const { container } = render(Example)

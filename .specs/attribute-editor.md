@@ -3,9 +3,9 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: 2724f911595842bf580e087d41f9471e532b12836307d2bbd79196cd0680cd1b
+checksum: 383aced23d36193e06c9570072a97c3481143bbc9c8d67205a640786b2557575
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -222,7 +222,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 ## Examples
 
 - Default — key and value rows with an error and a limit.
-- Grouped — rule criteria as AND groups joined by OR; justified because the grouped mode is a distinct anatomy.
+- Groups — rule criteria as AND groups joined by OR; justified because the grouped mode is a distinct anatomy.
 - CustomCells — a `Select` and a `Switch` in place of the default inputs through `cell-<key>`; justified because replacing a control is the main extension point.
 - Reorderable — request headers whose order matters, moved with the grip, the buttons or Alt+Arrow keys; justified because `reorderable` adds controls and keyboard behavior the other examples do not show.
 - EmptyAndDisabled — the `empty` state and the `disabled` state side by side (the state examples for those props).

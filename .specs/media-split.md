@@ -3,8 +3,8 @@ name: media-split
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: e5e70f415d1be63b4178eab65b16c98d36d148346bc241ce62180e6414243663
+spec_version: 7
+checksum: 9afadfd3c8b992b277a034fef887737392591833cd33cfe4c4297ac843fe7976
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -217,7 +217,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 ## Examples
 
 - Default — the band with an official `illustration` scene in the `media` slot, which is what the ground is drawn for; filling `src` in the Controls swaps the scene for a plain image
-- Kinds — composite story rendering both `kind` values one under the other, as a page would alternate them
+- Variants — composite story rendering both `kind` values one under the other, as a page would alternate them
 - Textures — composite story over the `texture` axis, every material one under the other with the same scene on it, so the step between them is the only difference; the band that reads `none` is the bare cell, and the `dots` band takes `texture-size="small"` so the pitch axis is shown where it reads
 - Orientations — composite story over the `orientation` axis: the horizontal band, then the vertical one in a narrow column with `kind="media-start"`, so the axis and what `kind` means on it are shown together
 - Undivided — state story pairing a band with its seam and the same band with `divided` off on a `surface` fill, which is the form that reads as one plate

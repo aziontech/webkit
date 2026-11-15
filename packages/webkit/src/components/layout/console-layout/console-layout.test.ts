@@ -6,7 +6,7 @@ import { createSSRApp, defineComponent, h, KeepAlive, nextTick, onMounted, ref }
 import { renderToString, type SSRContext } from 'vue/server-renderer'
 
 import FillPageExample from '../../../../examples/console-layout/fill-page.vue'
-import NavigationExpandedExample from '../../../../examples/console-layout/navigation-expanded.vue'
+import NavigationOpenExample from '../../../../examples/console-layout/navigation-open.vue'
 import PageBreadcrumbsExample from '../../../../examples/console-layout/page-breadcrumbs.vue'
 import SidebarHeaderExample from '../../../../examples/console-layout/sidebar-header.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -713,7 +713,7 @@ describe('ConsoleLayout', () => {
     it('folds and restores the rail from the palette in the NavigationExpanded example', async () => {
       const view = render(
         defineComponent({
-          render: () => h('div', { style: { width: '1200px' } }, [h(NavigationExpandedExample)])
+          render: () => h('div', { style: { width: '1200px' } }, [h(NavigationOpenExample)])
         })
       )
       await waitFor(() => rail(view))

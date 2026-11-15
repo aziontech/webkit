@@ -3,8 +3,8 @@ name: card-grid
 category: marketing
 structure: composition
 status: implemented
-spec_version: 3
-checksum: 46529203de79dd80134d93431d71d3ae8dd8823c4f6b6c92d422537939378a2f
+spec_version: 4
+checksum: 9e5eb97980799b038526fa96886164b88c1cf58eb15c4e8ad112447dbd81e0f4
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -177,7 +177,7 @@ _none_
 ## Examples
 
 - Default
-- Kinds — composite story rendering all three registers side-by-side (justified: gutters, hairline rules and framed cells are the same layout drawn three ways, legible only in comparison)
+- Variants — composite story rendering all three registers side-by-side (justified: gutters, hairline rules and framed cells are the same layout drawn three ways, legible only in comparison)
 - Columns — composite story rendering the column counts side-by-side (justified: a column count is only legible against another)
 - Balanced — composite rendering two, four, five and seven framed cells under `columns: 3` (justified: the default row rule only reads across item counts, and it is the behaviour an author most needs to see)
 - DividerColor — the muted hairline weight (mutually-exclusive state of the `dividerColor` prop)

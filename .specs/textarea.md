@@ -3,12 +3,12 @@ name: textarea
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 53795464aebc98c6e5a28bd6a3be759aa9b2acd8ccaec7b28ad5d960f0ccac64
+checksum: 0b7b5eaacd08d12590b00f5e123a02ea99ff5a61e078acf332e87f1e15ded9a7
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -205,7 +205,7 @@ No built-in strings: the placeholder comes from the `placeholder` prop.
 - Disabled
 - Invalid — justified: `invalid` is a distinct visual state coming from the Figma spec that consumers need to verify in isolation.
 - Required — justified: `required` swaps the border to the warning (yellow) token and must be verifiable in isolation.
-- ReadOnly — justified: the `readonly` look (filled, non-editable, no hover border) is a top-level prop and not visible from the other examples; shown as a generated certificate (`monospace`) inside a `Field` whose description says why it cannot change.
+- Readonly — justified: the `readonly` look (filled, non-editable, no hover border) is a top-level prop and not visible from the other examples; shown as a generated certificate (`monospace`) inside a `Field` whose description says why it cannot change.
 - Monospace — justification: the code face is a top-level prop not visible in the other examples; shows a zone-file paste box.
 - AutoResize — justified: `autoResize` with `minRows` and `maxRows` is a distinct sizing mode none of the other examples shows; a prompt box that starts at one line and grows to six before it scrolls.
 - Resizable — justified: `resizable` exposes four discrete axis modes (`vertical`, `horizontal`, `both`, `none`); the composite story renders each side by side so the drag-handle affordance and the resulting `resize-*` CSS behavior are verifiable in a single frame.

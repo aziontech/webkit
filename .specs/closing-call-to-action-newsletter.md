@@ -3,10 +3,10 @@ name: closing-call-to-action-newsletter
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c1af7e1d059135bb47c848a87b4764fedf9165e6fccfae6567d383c4372f29b8
+checksum: c6e275d6717337fb86075aa79366b87b618702954e114a5be309e67840d32f29
 template: 2
 ---
 
@@ -183,7 +183,7 @@ The ask, the button label and every message are props from the page JSON (`title
 - Default
 - Loading
 - Submitted
-- Failed
+- Error
 - Stacked — justification: `hatch` off is a layout no other example shows (the band without its closing frame, as when another closing band follows).
 
 ## Constraints — DO NOT

@@ -3,9 +3,9 @@
   "title": "Components/Primitives/Data/Table",
   "examples": [
     {
-      "name": "Composition",
+      "name": "Default",
       "summary": "The compound API: build the table by hand from `<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Cell>`. The result is an ordinary table — the same as the data-driven API — but you control every cell. Reach for it when a cell needs custom content; otherwise prefer `:data` + `:columns`.",
-      "file": "composition.vue"
+      "file": "default.vue"
     },
     {
       "name": "CellPresets",

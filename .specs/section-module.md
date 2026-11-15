@@ -3,8 +3,8 @@ name: section-module
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 8f2f520ba9ea1807c9706440277b13eed82d5b79d19c4d51b3e8983c41f74446
+spec_version: 4
+checksum: 5681520e7d3dc6aa45d1767b6477038f14020e004ea4d35ae9598c3b2250f6ac
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -120,7 +120,7 @@ _none_
 ## Examples
 
 - Default
-- Kinds — composite story rendering the header layouts side-by-side (justified: the layouts differ only in where the copy sits, which is legible only in comparison)
+- Variants — composite story rendering the header layouts side-by-side (justified: the layouts differ only in where the copy sits, which is legible only in comparison)
 - Divided — a stack of two modules with the first undivided (justified: a shared edge is invisible on a single module, and the story is what proves the rule is drawn once)
 - Padded — the module with an edge-to-edge body (mutually-exclusive boolean state of the `padded` prop)
 

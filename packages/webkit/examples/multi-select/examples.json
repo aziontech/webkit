@@ -13,9 +13,9 @@
       "file": "sizes.vue"
     },
     {
-      "name": "WithGroups",
+      "name": "Groups",
       "summary": "Options organised into labelled sections via MultiSelectGroup.",
-      "file": "with-groups.vue"
+      "file": "groups.vue"
     },
     {
       "name": "WithSearchAndFooter",
@@ -53,9 +53,9 @@
       "file": "chips.vue"
     },
     {
-      "name": "TypeToFilter",
+      "name": "Searchable",
       "summary": "searchable types in the trigger to filter the options, Backspace removes the last chip, and allowCustom offers an Add row that emits create.",
-      "file": "type-to-filter.vue"
+      "file": "searchable.vue"
     },
     {
       "name": "ListStates",

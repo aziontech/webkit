@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Kinds",
+      "name": "Variants",
       "summary": "The three header layouts, stacked — they differ only in where the copy sits.",
-      "file": "kinds.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Divided",

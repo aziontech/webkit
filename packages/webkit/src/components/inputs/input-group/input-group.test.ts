@@ -2,12 +2,12 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import BothAddons from '../../../../examples/input-group/both-addons.vue'
 import Default from '../../../../examples/input-group/default.vue'
 import Disabled from '../../../../examples/input-group/disabled.vue'
 import Invalid from '../../../../examples/input-group/invalid.vue'
 import Required from '../../../../examples/input-group/required.vue'
 import Sizes from '../../../../examples/input-group/sizes.vue'
+import WithAddons from '../../../../examples/input-group/with-addons.vue'
 import WithButton from '../../../../examples/input-group/with-button.vue'
 import WithSelect from '../../../../examples/input-group/with-select.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -290,8 +290,8 @@ describe('InputGroup', () => {
       expect(getByPlaceholderText('domain')).toBeTruthy()
     })
 
-    it('renders the BothAddons story with two addons around the input', () => {
-      const { getAllByTestId } = render(BothAddons)
+    it('renders the WithAddons story with two addons around the input', () => {
+      const { getAllByTestId } = render(WithAddons)
 
       const addons = getAllByTestId('input-input-group-addon')
       expect(addons).toHaveLength(2)

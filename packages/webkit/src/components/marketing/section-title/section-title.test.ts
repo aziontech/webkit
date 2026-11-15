@@ -4,8 +4,8 @@ import { nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/section-title/default.vue'
 import DescriptionWidths from '../../../../examples/section-title/description-widths.vue'
-import Kinds from '../../../../examples/section-title/kinds.vue'
 import Sizes from '../../../../examples/section-title/sizes.vue'
+import Variants from '../../../../examples/section-title/variants.vue'
 import WithActions from '../../../../examples/section-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
@@ -183,8 +183,8 @@ describe('SectionTitle', () => {
       expect(getByRole('heading', { level: 2 })).toHaveTextContent('Everything runs at the edge')
     })
 
-    it('renders the Kinds story with one header per layout', () => {
-      const { getAllByTestId } = render(Kinds)
+    it('renders the Variants story with one header per layout', () => {
+      const { getAllByTestId } = render(Variants)
 
       expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-kind'))).toEqual([
         'center',

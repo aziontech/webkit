@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { h } from 'vue'
 
 import Default from '../../../../examples/capability-grid/default.vue'
-import LeftTitle from '../../../../examples/capability-grid/left-title.vue'
 import Links from '../../../../examples/capability-grid/links.vue'
 import Points from '../../../../examples/capability-grid/points.vue'
+import TitleStart from '../../../../examples/capability-grid/title-start.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CapabilityGrid from './capability-grid.vue'
 
@@ -54,7 +54,7 @@ describe('CapabilityGrid', () => {
     expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'center')
     unmount()
 
-    const left = render(LeftTitle)
+    const left = render(TitleStart)
     expect(left.getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'start')
     expect(left.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(
       'Why you should be a partner'

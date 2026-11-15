@@ -3,9 +3,9 @@
   "title": "Components/Primitives/AI/ArtifactPreview",
   "examples": [
     {
-      "name": "Code",
+      "name": "Default",
       "summary": "A generated configuration file: file icon, name, size and format, a short code preview, Copy and Open; Open is where the owner shows the full file in a side panel.",
-      "file": "code.vue"
+      "file": "default.vue"
     },
     {
       "name": "Table",

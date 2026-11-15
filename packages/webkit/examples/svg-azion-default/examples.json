@@ -3,9 +3,9 @@
   "title": "Components/Primitives/Content/AzionLogo",
   "examples": [
     {
-      "name": "DefaultLogo",
+      "name": "Default",
       "summary": "The default horizontal Azion logo.",
-      "file": "default-logo.vue"
+      "file": "default.vue"
     },
     {
       "name": "Variants",

@@ -3,10 +3,10 @@ name: item
 category: content
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-05-24
 last_updated: 2026-11-15
-checksum: ef16d004b2ba7caef96b04c8b6a49555f8846a487b5dedc1861c32de1dc44cbe
+checksum: 87331185107a46327dfefdd00ba42883f33bfa98e87e8a5e1829a2f276e6901b
 ---
 
 # Item — Component Spec
@@ -200,7 +200,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 - WithIconMedia — `ItemMedia` with `kind="icon"` and a leading icon (security-style row).
 - WithAvatar — `ItemMedia` wrapping `Avatar` for profile list rows.
 - WithImageMedia — `ItemMedia` with `kind="image"` and a thumbnail image.
-- WithGroup — `ItemGroup` with multiple items, avatars, and actions; gapped off-card list.
+- Groups — `ItemGroup` with multiple items, avatars, and actions; gapped off-card list.
 - WithList — `ItemList` inside a `Card` (`padded=false`); rows separated by full-width dividers.
 - WithListLinks — `ItemList` of `href` rows inside a `Card`; whole-row links with dividers, row-level hover, and focus-visible ring.
 - Inline — `kind="inline"` items in an `ItemGroup`, placed directly on the page (no card, no outer padding).

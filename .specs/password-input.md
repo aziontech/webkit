@@ -3,11 +3,11 @@ name: password-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 85a438e26d58d1e4d32df19164f6862e8040dd7d5f1ddfac5568d3dc4cf587e2
+checksum: 0602d6e3d81de03c90f7adb22b560813c500879caa6c12266f4409be087b5d5c
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -173,7 +173,7 @@ _none_
 
 - Default
 - Toggle — justification: composite story rendering `toggleable=true` (default) and `toggleable=false` side by side; documents the built-in toggle behavior, which is the defining feature of this component vs `Input`.
-- IconLeft — justification: documents the `leading` slot, which is the only icon slot honored when `toggleable=true`.
+- IconLeading — justification: documents the `leading` slot, which is the only icon slot honored when `toggleable=true`.
 - Filled — justification: pre-populated `modelValue` shows the filled visual state and the masked rendering; not visible from the Default story.
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.

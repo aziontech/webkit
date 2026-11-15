@@ -13,9 +13,9 @@
       "file": "toggle.vue"
     },
     {
-      "name": "IconLeft",
+      "name": "IconLeading",
       "summary": "Leading `prefix` slot \u2014 the only icon slot honored when `toggleable=true`.",
-      "file": "icon-left.vue"
+      "file": "icon-leading.vue"
     },
     {
       "name": "Filled",

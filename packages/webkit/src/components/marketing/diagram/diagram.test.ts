@@ -5,7 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 import Default from '../../../../examples/diagram/default.vue'
 import Flow from '../../../../examples/diagram/flow.vue'
 import Groups from '../../../../examples/diagram/groups.vue'
-import NodeKinds from '../../../../examples/diagram/node-kinds.vue'
+import Nodes from '../../../../examples/diagram/nodes.vue'
 import Spec from '../../../../examples/diagram/spec.vue'
 import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -258,7 +258,7 @@ describe('Diagram', () => {
     it.each([
       ['Default', Default],
       ['Spec', Spec],
-      ['NodeKinds', NodeKinds],
+      ['Nodes', Nodes],
       ['Groups', Groups],
       ['Flow', Flow]
     ])('renders the %s story as a named image', async (_name, Story) => {

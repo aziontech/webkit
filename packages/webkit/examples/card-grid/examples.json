@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Kinds",
+      "name": "Variants",
       "summary": "The same layout drawn three ways. In `divider` the seams are the grid’s own 1px gaps, so every cell must fill its own background; in `frame` each cell is a real frame box that draws its own rules and corner marks.",
-      "file": "kinds.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Columns",

@@ -3,9 +3,9 @@
   "title": "Components/Primitives/AI/SuggestionGroup",
   "examples": [
     {
-      "name": "FollowUpQuestions",
+      "name": "Default",
       "summary": "Three follow-up questions under a response, as wrapping chips ordered by likelihood; choosing one sends it as the next prompt.",
-      "file": "follow-up-questions.vue"
+      "file": "default.vue"
     },
     {
       "name": "SupportPrompts",

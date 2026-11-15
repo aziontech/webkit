@@ -13,9 +13,9 @@
       "file": "custom-messages.vue"
     },
     {
-      "name": "RightToLeft",
+      "name": "Rtl",
       "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
-      "file": "right-to-left.vue"
+      "file": "rtl.vue"
     },
     {
       "name": "DeviceLocale",

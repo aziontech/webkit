@@ -18,9 +18,9 @@
       "file": "submitted.vue"
     },
     {
-      "name": "Failed",
+      "name": "Error",
       "summary": "The site could not send the address: `form.errorMessage` shows under the form, which stays editable.",
-      "file": "failed.vue"
+      "file": "error.vue"
     },
     {
       "name": "Stacked",

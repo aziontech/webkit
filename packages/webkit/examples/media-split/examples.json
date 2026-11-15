@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Kinds",
+      "name": "Variants",
       "summary": "Both `kind` values, one band under the other, with the copy and the scene held identical so the only thing that moves is the side the media sits on: `media-end` first, then `media-start`. Down a real product page these alternate band after band, each carrying its own claim — the mirroring is what keeps consecutive bands from reading as one long column. The flip is an `md`-and-up affair: narrow the canvas and both collapse to the same single column with the copy first, so reading order follows the argument rather than the layout.",
-      "file": "kinds.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Orientations",

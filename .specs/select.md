@@ -3,11 +3,11 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: b3d6ff838ddffffbf310cd45ed45b53ee8c1b405e2abe32311a50eb851cabca9
+checksum: 6fadb0070459a14cf991f43f3d4d26c538ac9373ba450a55d6fed42ae1332328
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -206,9 +206,9 @@ _none_
 
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
-- Transparent — justification: the `kind="transparent"` trigger only reads right in its place, the environment switcher at the end of a breadcrumb (`Workloads › workload_01 › Production`).
+- Ghost — justification: the `kind="transparent"` trigger only reads right in its place, the environment switcher at the end of a breadcrumb (`Workloads › workload_01 › Production`).
 - Single — justification: documents the trailing check and the scalar `modelValue` shape.
-- WithGroups — justification: documents the `<SelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
+- Groups — justification: documents the `<SelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
 - WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<SelectContent>` (Top/Bottom regions in Figma `3899:29361`), which are slot-only and invisible from Default.
 - WithOptionExtras — justification: documents the `icon`, `#leading`, and `#tag` slots on `<SelectOption>` in one composite frame.
 - LongList — justification: documents the panel's internal scroll behaviour (options list wrapped in `ScrollArea`) when the option count exceeds the `max-h-60` viewport; not reachable from any other story.

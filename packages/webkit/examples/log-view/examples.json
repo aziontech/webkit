@@ -48,9 +48,9 @@
       "file": "steps-running.vue"
     },
     {
-      "name": "StepsFailed",
+      "name": "StepsError",
       "summary": "`LogView.Steps` after a failure: the failed step opens on its own with the reason in danger text, the step after it is skipped, `#step-meta` adds a Skipped `Tag` and `#step-empty` says why it never ran.",
-      "file": "steps-failed.vue"
+      "file": "steps-error.vue"
     }
   ]
 }

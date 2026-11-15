@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/combobox/default.vue'
-import Grouped from '../../../../examples/combobox/grouped.vue'
+import Groups from '../../../../examples/combobox/groups.vue'
 import Server from '../../../../examples/combobox/server.vue'
 import States from '../../../../examples/combobox/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -302,7 +302,7 @@ describe('Combobox', () => {
 
   it.each([
     ['Default', Default],
-    ['Grouped', Grouped],
+    ['Groups', Groups],
     ['Server', Server]
   ])('renders the %s example without axe violations, open and closed', async (_, Example) => {
     const view = render(Example)

@@ -4,7 +4,7 @@ import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
 import Default from '../../../../examples/doc-callout/default.vue'
-import Kinds from '../../../../examples/doc-callout/kinds.vue'
+import Variants from '../../../../examples/doc-callout/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCallout from './doc-callout.vue'
 
@@ -117,7 +117,7 @@ describe('DocCallout', () => {
     })
 
     it('has no violations across all six kinds', async () => {
-      const { container } = render(Kinds)
+      const { container } = render(Variants)
       await expectNoA11yViolations(container)
     })
   })

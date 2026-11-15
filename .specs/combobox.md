@@ -3,9 +3,9 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: d10ba9a727cc150607b7af687222ac5b6adc961c0dc80078f63f17774b15e8bb
+checksum: c5b9cb0b7063afa837a32dc51fe898a53c1486f6501d86b2f0604bd46dd4364f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -209,7 +209,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 ## Examples
 
 - Default — a Field-wrapped Combobox of variable names with descriptions and free entry.
-- Grouped — options with `group` (Recent / Suggested).
+- Groups — options with `group` (Recent / Suggested).
 - Server — `filter: false`, `search` and `loading` driving a fake request.
 - States — `disabled`, `invalid` and `loading` side by side (the state examples for those props).
 

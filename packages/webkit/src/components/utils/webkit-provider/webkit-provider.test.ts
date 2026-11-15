@@ -6,7 +6,7 @@ import { renderToString } from 'vue/server-renderer'
 import CustomMessages from '../../../../examples/webkit-provider/custom-messages.vue'
 import Default from '../../../../examples/webkit-provider/default.vue'
 import DeviceLocale from '../../../../examples/webkit-provider/device-locale.vue'
-import RightToLeft from '../../../../examples/webkit-provider/right-to-left.vue'
+import Rtl from '../../../../examples/webkit-provider/rtl.vue'
 import { useLocale } from '../../../composables/use-locale'
 import { ptBR } from '../../../locales/pt-BR'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -312,8 +312,8 @@ describe('WebkitProvider', () => {
       expect(getByTestId('data-pagination__info').textContent?.trim()).toBe('1–10 de 48 domínios')
     })
 
-    it('RightToLeft turns the subtree right to left', () => {
-      const { getByTestId } = render(RightToLeft)
+    it('Rtl turns the subtree right to left', () => {
+      const { getByTestId } = render(Rtl)
       expect(getByTestId('utils-webkit-provider').getAttribute('dir')).toBe('rtl')
     })
 

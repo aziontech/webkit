@@ -23,9 +23,9 @@
       "file": "submitted.vue"
     },
     {
-      "name": "Failed",
+      "name": "Error",
       "summary": "The site could not send the values: `messages.error` shows under the button and the form stays editable.",
-      "file": "failed.vue"
+      "file": "error.vue"
     },
     {
       "name": "Contact line",

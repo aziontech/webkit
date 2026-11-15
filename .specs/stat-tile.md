@@ -3,8 +3,8 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 74e0353b77c94e2ba720f9d7772902859845950ed7b56e3913067eb12422e446
-spec_version: 5
+checksum: d21750bdfd61e69c1db83d3eee7d9859db6e49d7015c24203a91090de9f07a5f
+spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
 ---
@@ -147,7 +147,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 - CountUp — a value that changes on a button press; excluded from visual regression because the count-up is timer driven, Default is its static sibling.
 - Loading — `loading`.
 - Empty — `value` null with no delta and no trend: a dash, announced as No value, over the no-data band.
-- Kinds — composite: the same figures with `kind="mono"` and `kind="sans"`; justified because the figure face is the prop and only a side-by-side row shows both.
+- Variants — composite: the same figures with `kind="mono"` and `kind="sans"`; justified because the figure face is the prop and only a side-by-side row shows both.
 
 ## Constraints — DO NOT
 

@@ -3,9 +3,9 @@
   "title": "Components/Primitives/AI/AiLoading",
   "examples": [
     {
-      "name": "Inline",
+      "name": "Default",
       "summary": "Processing: three pulsing dots beside `Generating a response`, shown only after the default one-second delay so a fast response never flickers.",
-      "file": "inline.vue"
+      "file": "default.vue"
     },
     {
       "name": "Bar",

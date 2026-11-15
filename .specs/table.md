@@ -3,11 +3,11 @@ name: table
 category: data
 structure: composition
 status: implemented
-spec_version: 17
+spec_version: 18
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 99a4da1fec7163cbfd467de66ada94cff5b96bff3410f51f506167401f192fd5
+checksum: 25624ca5887e5e60431ce76fb3ef8697efa82f64d4207b53cf9d16ae06fdc574
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -266,7 +266,7 @@ The root itself is static. `Table.Filter` animates through the `FilterMenu` or `
 
 This component has no `kind`/`size` on its root, so the canonical Types/Sizes examples do not apply. The data-driven scenarios live under [`data-table`](./data-table.md).
 
-- Composition — the compound dot-notation form built by hand (`<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Body>` / `<Table.Cell>`); justified as the baseline of the hand-composed API.
+- Default — the compound dot-notation form built by hand (`<Table.Header>` / `<Table.Row>` / `<Table.HeadCell>` / `<Table.Body>` / `<Table.Cell>`); justified as the baseline of the hand-composed API.
 - Cell Presets — every preset in one table (link with destination, domain with `+N` and copy, ID, status, tags, last modified, actions), inside a `WebkitProvider` whose fixed `now` the sample dates count back from, so the relative times read the same on every render; justified because the presets are the shared cell vocabulary every list uses.
 
 ## Constraints — DO NOT

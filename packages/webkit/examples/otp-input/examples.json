@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Grouped",
+      "name": "Groups",
       "summary": "`group` draws a separator every 3 or 4 boxes without changing the value; `mode=\"alphanumeric\"` keeps letters and digits in upper case for an 8-character recovery code.",
-      "file": "grouped.vue"
+      "file": "groups.vue"
     },
     {
       "name": "States",

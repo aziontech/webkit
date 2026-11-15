@@ -43,9 +43,9 @@
       "file": "disabled.vue"
     },
     {
-      "name": "ReadOnly",
+      "name": "Readonly",
       "summary": "Read-only fields keep the filled look and drop the hover border. `monospace` sets code-like values (an ID, a CLI command beside a `CopyButton`) in the code face.",
-      "file": "read-only.vue"
+      "file": "readonly.vue"
     }
   ]
 }

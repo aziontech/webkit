@@ -98,11 +98,11 @@ for (const theme of THEMES) {
 
   for (const width of [320, 1280]) {
     const mode: Mode = { theme, width }
-    test(`geometry otp input grouped ${label(mode)}`, async ({ page }) => {
+    test(`geometry otp input groups ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
-      const preview = await openExample(page, 'otp-input/grouped', mode)
+      const preview = await openExample(page, 'otp-input/groups', mode)
       await preview.locator('input').first().focus()
-      await expect(preview).toHaveScreenshot(shot(`geometry/otp-input-grouped--${label(mode)}.png`))
+      await expect(preview).toHaveScreenshot(shot(`geometry/otp-input-groups--${label(mode)}.png`))
     })
   }
 

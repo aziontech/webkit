@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Grouped",
+      "name": "Groups",
       "summary": "Options with `group` sit under their titles (Recent, Standard); a `disabled` option stays visible with its reason but cannot be picked.",
-      "file": "grouped.vue"
+      "file": "groups.vue"
     },
     {
       "name": "Server",

@@ -2,7 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import ContentZone from '../../../../examples/global-header/content-zone.vue'
-import DefaultHeader from '../../../../examples/global-header/default-header.vue'
+import DefaultHeader from '../../../../examples/global-header/default.vue'
 import SitePlacement from '../../../../examples/global-header/site-placement.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import GlobalHeader from './index.js'

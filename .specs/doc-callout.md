@@ -3,8 +3,8 @@ name: doc-callout
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 0d26e89b62a63144fa7273fa729e01510659495ee4383230b27e89a113263093
+spec_version: 4
+checksum: 33d34adc5bf9ce69a1a38b0bbeb16052c1a78948e691b2fac1eb69d78a89c979
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ _none_
 ## Examples
 
 - Default — a single callout with the default `kind`.
-- Kinds — composite story rendering all six kinds side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
+- Variants — composite story rendering all six kinds side by side, which is the only way to read the severity ladder and the neutral `tip` against each other.
 
 ## Constraints — DO NOT
 

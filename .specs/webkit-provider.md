@@ -3,8 +3,8 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: 7fee3f2874349a95eb177c01a2f55b072d67576e144b591894188dd39328117d
-spec_version: 3
+checksum: eeff1722a5da0af226fa1f4e25fd53e4323eab1992bf5f6b0183830dfe6e4088
+spec_version: 4
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -115,7 +115,7 @@ _none_
 
 - Default — Pagination and a ConfirmDialog in Portuguese, with the pt-BR catalog registered.
 - CustomMessages — `messages` overrides one built-in string; justified because the override is the provider's second job.
-- RightToLeft — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
+- Rtl — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
 - DeviceLocale — no `locale`: a DateRangePicker prints dates in the device's language and format while its `v-model` keeps ISO 8601 instants; justified because following the device is the provider's default.
 - `now` is shown by `table/cell-presets` (a fixed reference around a table whose `Table.CellTime` cells count back from it), not by a provider example of its own.
 - `timeZone` is shown by `timestamp/time-zone` (a time zone picker bound to the provider around a few timestamps), not by a provider example of its own.

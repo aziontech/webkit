@@ -5,8 +5,8 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/select/default.vue'
 import Disabled from '../../../../examples/select/disabled.vue'
-import Transparent from '../../../../examples/select/transparent.vue'
-import WithGroups from '../../../../examples/select/with-groups.vue'
+import Ghost from '../../../../examples/select/ghost.vue'
+import Groups from '../../../../examples/select/groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
 
@@ -194,7 +194,7 @@ describe('Select', () => {
       )
       outlined.unmount()
 
-      const view = render(Transparent)
+      const view = render(Ghost)
       const trigger = view.getByRole('combobox', { name: 'Switch environment' })
       expect(view.getByTestId('input-select').getAttribute('data-kind')).toBe('transparent')
       expect(trigger.getAttribute('data-kind')).toBe('transparent')
@@ -208,7 +208,7 @@ describe('Select', () => {
     })
 
     it('has no a11y violations on the transparent switcher in a breadcrumb', async () => {
-      const view = render(Transparent)
+      const view = render(Ghost)
       await expectNoA11yViolations(view.container)
     })
 
@@ -494,7 +494,7 @@ describe('Select', () => {
     // therefore assert a clean mount + the compound anatomy instead.
     it.each([
       ['Default', Default],
-      ['WithGroups', WithGroups],
+      ['Groups', Groups],
       ['Disabled', Disabled]
     ] as const)(
       'mounts the %s story fixture and renders a role=combobox trigger',
