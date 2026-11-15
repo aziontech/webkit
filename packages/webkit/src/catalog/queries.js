@@ -413,7 +413,6 @@ function scoreMatch(name, entry, query) {
   for (const w of words) {
     if (n === w) score += 25
     else if (hasPhrase(n, w)) score += 15
-    else if (n.includes(w)) score += 8
     else if (w.includes(n) && n.length >= 3) score += 12
     if (c.includes(w)) score += 4
     if (hasPhrase(prose, w)) score += 6
@@ -513,7 +512,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
       return { sub, score: base + productBonus }
     })
     .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
+    .sort((a, b) => b.score - a.score || tieBreak(catalog, a.sub, b.sub))
     .slice(0, 10)
     .map((r) => {
       const card = { ...componentCard(catalog, r.sub), score: r.score }
@@ -540,6 +539,28 @@ export function searchComponents(catalog, query, { surface } = {}) {
 }
 
 const PRODUCT_BONUS = 15
+const popularityCache = new WeakMap()
+
+function popularity(catalog) {
+  if (popularityCache.has(catalog)) return popularityCache.get(catalog)
+  const counts = new Map()
+  for (const p of Object.values(catalog.patterns || {})) {
+    for (const imp of p.imports || []) {
+      const sub = subpathOf(catalog, imp)
+      counts.set(sub, (counts.get(sub) ?? 0) + 1)
+    }
+  }
+  popularityCache.set(catalog, counts)
+  return counts
+}
+
+function tieBreak(catalog, a, b) {
+  const product =
+    Number(isProductEntry(catalog.getEntry(b))) - Number(isProductEntry(catalog.getEntry(a)))
+  if (product) return product
+  const uses = popularity(catalog)
+  return (uses.get(b) ?? 0) - (uses.get(a) ?? 0) || a.localeCompare(b)
+}
 
 function isProductEntry(entry) {
   return (entry?.surface ?? 'product') === 'product'
