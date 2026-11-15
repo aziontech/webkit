@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import MultiSelect from '@aziontech/webkit/multi-select'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import { ref } from 'vue'
 
@@ -34,9 +35,8 @@
       </Select.Option>
     </Select.Content>
   </Select>
-  <Select
+  <MultiSelect
     v-model="regions"
-    multiple
     :display-value="(value) => value.join(' / ')"
   />
   <!-- @vue-expect-error the formatter receives the bound string, not a number -->
