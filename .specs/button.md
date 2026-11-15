@@ -3,11 +3,11 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 1b9ab28e7560695f2181c08baf6fd97da84add9f8102a2df7d5a7bca1ee8204b
+checksum: 498e50f7744ce0047ee47c44f5acc15974ce6dc6e6b013c7ff23b403edaaaaee
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Button — Component Spec
@@ -18,6 +18,7 @@ The labelled control that triggers an action. `kind` ranks the action in its vie
 
 ## When to use
 
+- Use Button `kind="link"` when the text runs an action (no navigation) but should read like a link.
 - Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.
 - Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
@@ -38,7 +39,7 @@ The labelled control that triggers an action. `kind` ranks the action in its vie
 - `icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.
 - `split-button` — joins a Button to a chevron menu of related actions.
 - `button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
-- `mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.
+- `link` — a text link that navigates to a page, resource or URL.
 - `toggle-group` — a group of mutually exclusive options, not a single action.
 
 ## Best practices

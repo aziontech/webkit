@@ -3,13 +3,13 @@
 
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
-  import MiniButton from '../../actions/mini-button/mini-button.vue'
   import CodeBlock, { type CodeBlockTab } from '../../code/code-block/code-block.vue'
   import Illustration from '../../content/illustration/illustration.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
+  import Link from '../../navigation/link/link.vue'
 
   defineOptions({
     name: 'FeatureTabs',
@@ -202,7 +202,7 @@
           v-if="primaryAction && !hasHeader"
           class="p-(--spacing-xl)"
         >
-          <MiniButton
+          <Link
             :label="primaryAction.label"
             :href="primaryAction.href"
             :target="primaryAction.target"

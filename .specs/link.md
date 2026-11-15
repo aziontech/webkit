@@ -3,10 +3,10 @@ name: link
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 3ff2c5fb99df5b2ff4534fabcf334e7fef0cafa6ead55d828f071664a6afc64d
+spec_version: 4
+checksum: 3f89c9ab06c523b1f1f71b9eb8643d99122adf8ded16cd30f7b70a6cd4a3cf22
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -20,6 +20,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## When to use
 
+- Use Link when the text takes the person to another page, resource or URL.
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
 - An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
 
@@ -27,11 +28,10 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - A link inside a sentence → use a plain anchor with the text-link class.
 - An action that changes something instead of navigating → use `button`.
-- A compact marketing CTA with a brand-colored icon inside a card → use `mini-button`.
+- A text action that runs something instead of navigating → use `button` with `kind="link"`.
 
 ## Related
 
-- `mini-button` — same anatomy in default text color with a brand-colored icon; `large` and `medium` only.
 - `button` — set `href` when a link must look like a button.
 - `breadcrumb` — a trail of links for hierarchical location.
 

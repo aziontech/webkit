@@ -15,7 +15,7 @@ The **kebab-case name** is canonical. Everything else is derived from it:
 | `data-testid` fallback | `input-<name>` (inputs) / `<category>-<name>` | `'input-chip'` |
 | import binding + tag in an example or block | **PascalCase** of the export subpath | `import Chip from '@aziontech/webkit/chip'` → `<Chip>` |
 
-PascalCase is the kebab name with each `-`-segment capitalized: `chip` → `Chip`, `empty-state` → `EmptyState`, `mini-button` → `MiniButton`. Plurality is part of the name — pick one (`chip`, singular, for a single token) and use it on every surface. A container for many is a *different* component (`chip-group`), not a plural spelling of the same one.
+PascalCase is the kebab name with each `-`-segment capitalized: `chip` → `Chip`, `empty-state` → `EmptyState`, `icon-button` → `IconButton`. Plurality is part of the name — pick one (`chip`, singular, for a single token) and use it on every surface. A container for many is a *different* component (`chip-group`), not a plural spelling of the same one.
 
 ## What enforces it
 

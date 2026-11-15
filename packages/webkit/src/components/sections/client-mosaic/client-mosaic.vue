@@ -1,12 +1,12 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import MiniButton from '../../actions/mini-button/mini-button.vue'
   import Logo, { type LogoKind } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
+  import Link from '../../navigation/link/link.vue'
 
   defineOptions({
     name: 'ClientMosaic',
@@ -200,7 +200,7 @@
                 >
                   {{ cell.text }}
                 </p>
-                <MiniButton
+                <Link
                   :label="linkLabel"
                   icon="pi pi-angle-right"
                   :href="cell.href"
