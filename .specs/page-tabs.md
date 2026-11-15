@@ -3,11 +3,11 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 856fa0a0b88ee1ba0622b2d797db7478a07a4c3ac78f092693180d82d9512983
-spec_version: 3
+checksum: 6a49f22126a977279b16d78d7d581a58e4a30d6c2daf60faf2aa28a9e4ee2ede
+spec_version: 4
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # PageTabs — Component Spec
@@ -18,6 +18,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 ## When to use
 
+- Use PageTabs for the second-level navigation strip of a resource detail page; to switch peer views inside a page or panel use Tabs.
 - The top of every resource detail page, under the global header.
 - An account page split into tabs, such as Billing.
 

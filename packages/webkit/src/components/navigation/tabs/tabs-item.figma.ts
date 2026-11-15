@@ -16,7 +16,7 @@ const showLeftIcon = instance.getBoolean('showLeftIcon')
 const showRightIcon = instance.getBoolean('showRightIcon')
 const closable = instance.getBoolean('closable')
 
-const attrs = figma.code`${label === 'Tab Item' ? '' : figma.code` label="${label}"`}${state === 'selected' ? ' selected' : ''}${state === 'disabled' ? ' disabled' : ''}${closable ? ' closable' : ''}`
+const attrs = figma.code`${label === 'Tab Item' ? '' : figma.code` label="${label}"`}${state === 'disabled' ? ' disabled' : ''}${closable ? ' closable' : ''}`
 
 export default {
   example:

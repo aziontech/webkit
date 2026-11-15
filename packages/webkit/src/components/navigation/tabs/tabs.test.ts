@@ -194,6 +194,19 @@ describe('Tabs (composition)', () => {
     })
   })
 
+  describe('a standalone Item', () => {
+    it('has no selection of its own: a removed selected attribute does not press it', () => {
+      const { getByRole } = render(TabsItem, {
+        props: { value: 'a', label: 'Alpha' },
+        attrs: { selected: true }
+      })
+
+      const button = getByRole('button')
+      expect(button.getAttribute('aria-pressed')).toBeNull()
+      expect(button.getAttribute('data-state')).toBe('inactive')
+    })
+  })
+
   describe('events on the Item', () => {
     it('emits click with the native MouseEvent when an enabled tab is activated', async () => {
       // Render a single standalone Item (no context) to observe its own emits.

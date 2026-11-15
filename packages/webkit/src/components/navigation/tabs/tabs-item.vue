@@ -16,11 +16,6 @@
     value?: TabsValue
     /** Visible label when the default slot is empty. */
     label?: string
-    /**
-     * Selected state of a standalone item outside a root, rendered as a toggle button.
-     * @deprecated since 6.0 — use ToggleGroup. Removed in 7.0.
-     */
-    selected?: boolean
     /** Disables interaction. */
     disabled?: boolean
     /** Shows a pointer close affordance and lets Delete on the focused tab emit close (Figma variant set). */
@@ -32,7 +27,6 @@
   const props = withDefaults(defineProps<Props>(), {
     value: undefined,
     label: '',
-    selected: false,
     disabled: false,
     closable: false,
     dirty: false
@@ -56,13 +50,7 @@
 
   const context = inject(TabsInjectionKey, null) as TabsContext | null
 
-  const isSelected = computed(() => {
-    if (context) {
-      return context.value.value === resolvedValue.value
-    }
-
-    return Boolean(props.selected)
-  })
+  const isSelected = computed(() => context?.value.value === resolvedValue.value)
 
   const isDisabled = computed(() => props.disabled ?? false)
 
@@ -156,7 +144,6 @@
     :data-disabled="isDisabled ? '' : undefined"
     :data-dirty="dirty ? '' : undefined"
     :aria-selected="context ? isSelected : undefined"
-    :aria-pressed="context ? undefined : isSelected"
     :aria-controls="panelId"
     :tabindex="context ? tabIndex : undefined"
     :disabled="isDisabled"
