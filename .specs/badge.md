@@ -3,11 +3,11 @@ name: badge
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: f4c863e1ac5d300af6132745d302e7a4b0e490f3606693b6692349f295145d89
+checksum: aa7b868ef11debe787d12c07bdc7bd5acde29dc57e5cf347f4503bbfa4cfa045
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ Badge is a compact, non-interactive count with severity-based color coding, comm
 ## When to use
 
 - A number attached to another element: a bell with its unread count, a section heading with how many items it holds.
-- Color the count through `severity` (neutral / success / danger / …) with a fully filled surface.
+- Color the count through `variant` (the brand look: `primary`, `secondary`) or `severity` (neutral / info / success / warning / danger) with a fully filled surface; `severity` wins when both are set.
 
 ## When NOT to use
 
@@ -40,7 +40,7 @@ Badge is a compact, non-interactive count with severity-based color coding, comm
 ## Best practices
 
 - Keep the content to a number (`12`, `99+`); words belong in `tag` or `status-indicator`.
-- Drive color from `severity`, never a hardcoded color or a raw palette class.
+- Drive color from `variant` or `severity`, never a hardcoded color or a raw palette class.
 
 ## Usage
 
@@ -52,7 +52,7 @@ Badge is a compact, non-interactive count with severity-based color coding, comm
 <template>
   <Badge
     label="99"
-    severity="primary"
+    variant="primary"
     size="medium"
   />
 </template>
@@ -63,7 +63,8 @@ Badge is a compact, non-interactive count with severity-based color coding, comm
 | Prop       | Type                                                                                       | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                             |
 | ---------- | ------------------------------------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `label`    | `string`                                                                                   | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                                                                                                     |
-| `severity` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'neutral'` | `'primary'` | false    | Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). |
+| `variant`  | `'primary' \| 'secondary'` | `'primary'` | false | Brand look of the badge surface and label, used when `severity` is not set. |
+| `severity` | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'danger'` | — | false | Status colour of the badge surface and label; wins over `variant` when set. `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The values are the shared `Severity` scale (exported from this component). |
 | `size`     | `'small' \| 'medium' \| 'large'`                                                           | `'medium'`  | false    | Size token; `small` is 20px tall, `medium` is 24px, `large` is 30px.                                                                                                                                                                                                                                              |
 
 ## Events
@@ -80,7 +81,8 @@ Badge is a compact, non-interactive count with severity-based color coding, comm
 
 Badge is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed verbatim as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
-- `data-severity` mirrors the `severity` prop (`primary` | `secondary` | `success` | `warning` | `danger` | `neutral`).
+- `data-severity` mirrors the `severity` prop when it is set (`neutral` | `info` | `success` | `warning` | `danger`).
+- `data-variant` mirrors the `variant` prop when `severity` is not set (`primary` | `secondary`).
 - `data-size` mirrors the `size` prop (`small` | `medium` | `large`).
 
 ## Motion & Animations
@@ -99,6 +101,7 @@ _none_
 | surface (primary)          | `var(--primary)` / `var(--primary-foreground)`                        |
 | surface (secondary)        | `var(--secondary)` / `var(--secondary-foreground)`                    |
 | surface (success)          | `var(--success)` / `var(--success-foreground)`                        |
+| surface (info)             | `var(--info)` / `var(--info-foreground)`                              |
 | surface (warning)          | `var(--warning)` / `var(--warning-foreground)`                        |
 | surface (danger)           | `var(--danger)` / `var(--danger-foreground)`                          |
 | surface (default)          | `var(--bg-surface)` / `var(--text-default)`                         |
@@ -112,7 +115,7 @@ _none_
 - Visible focus: not applicable — Badge is non-interactive (no focus, no keyboard, no tab stop).
 - Keyboard map: none — Badge is not focusable and exposes no interactive affordance.
 - ARIA: the root is a presentational `<span>`; consumers that use the badge as a live count should label the host control (e.g. `aria-label="3 unread"`) since the visual label alone is not announced as status.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): every severity pairs a surface token with its matching `-contrast` (or `--text-default` for `default`), which the theme guarantees in both light and dark.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): every severity pairs a surface token with its matching `-foreground` (or `--text-default` for `neutral`), which the theme guarantees in both light and dark.
 - `motion-reduce:*`: not applicable — Badge is static (no motion).
 - Touch target: not applicable — Badge is non-interactive.
 
@@ -126,7 +129,7 @@ _none_
 ## Examples
 
 - Default
-- Types — composite story rendering every `severity` label side-by-side.
+- Types — composite story rendering every `variant` and `severity` side-by-side.
 - Sizes — composite story rendering every `size` label side-by-side.
 
 <!-- Loading/Disabled stories are omitted: Badge declares neither prop and is non-interactive, so there are no such states to demonstrate (consistent with the canonical layout, which gates those stories on the props existing). -->

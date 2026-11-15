@@ -5,7 +5,7 @@
 <template>
   <Badge
     label="99"
-    severity="primary"
+    variant="primary"
     size="medium"
   />
 </template>

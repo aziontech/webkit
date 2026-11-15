@@ -9,7 +9,7 @@
     },
     {
       "name": "Types",
-      "summary": "All severities side by side.",
+      "summary": "Both variants and every severity side by side.",
       "file": "types.vue"
     },
     {
