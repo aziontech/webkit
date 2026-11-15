@@ -1,5 +1,5 @@
 <script setup>
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
