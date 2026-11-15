@@ -27,7 +27,9 @@
     "rule that decided each request",
     "painel de atividades",
     "decisões das regras",
-    "permitidos e bloqueados"
+    "permitidos e bloqueados",
+    "waf traffic",
+    "firewall traffic"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {

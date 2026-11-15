@@ -11,6 +11,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use home-dashboard for the account's landing overview.
 - The landing page after sign-in in the Console.
 - The reader needs to resume work (open a recent resource) more than to analyse data.
 - The same page must serve both a populated and a brand-new account.

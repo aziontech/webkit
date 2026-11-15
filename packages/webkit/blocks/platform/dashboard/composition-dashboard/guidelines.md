@@ -9,6 +9,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use composition-dashboard when a total breaks into categories over time.
 - One total splits into a small number of exclusive categories (up to six, plus Other).
 - The reader needs both the current split and how it changed over time.
 - The reader has to find the individual items that drive the largest share.
@@ -18,7 +19,6 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - The parts are not exclusive or do not sum to the total: use a multi-series line in
   `platform/dashboard/analytics-dashboard` instead of a stack or a donut.
 - The reader tracks progress against targets: use `platform/dashboard/executive-summary-dashboard`.
-- Steps that people drop out of: use `platform/dashboard/funnel-cohort-dashboard`.
 - Changing the plan that drives the spend: use `platform/account/change-plan-drawer`.
 
 ## Building blocks

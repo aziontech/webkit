@@ -11,13 +11,11 @@ import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/va
 import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
 import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
 import Executive from '../../blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
-import Funnel from '../../blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue'
 import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
 import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
 import HealthRealUser from '../../blocks/platform/dashboard/health-score-dashboard/variants/real-user.vue'
 import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
-import ProjectStatus from '../../blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue'
 import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
 import SecurityByActor from '../../blocks/platform/dashboard/security-dashboard/variants/by-actor.vue'
 import ServiceMonitoring from '../../blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue'
@@ -34,6 +32,22 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find(
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
+
+describe('platform/dashboard blocks', () => {
+  it('ships one block per data shape, with no merged or off-domain dashboard left', () => {
+    const ids = Object.keys(import.meta.glob('../../blocks/platform/dashboard/*/block.json')).map(
+      (path) => path.split('/').at(-2)
+    )
+    for (const removed of [
+      'data-dashboard',
+      'activity-outcomes-dashboard',
+      'project-status-dashboard',
+      'funnel-cohort-dashboard'
+    ])
+      expect(ids).not.toContain(removed)
+    expect(ids).toContain('analytics-dashboard')
+  })
+})
 
 describe('platform/dashboard/dashboard-switcher', () => {
   it('sets the shared period with FilterMenu and shows it as a removable chip', async () => {
@@ -167,26 +181,14 @@ const pickMenuOption = async (trigger: HTMLElement, label: string) => {
 }
 
 describe('platform/dashboard exports', () => {
-  it.each([
-    ['composition-dashboard', Composition, 'More options for Current split'],
-    ['funnel-cohort-dashboard', Funnel, 'More options for Weekly cohorts'],
-    ['project-status-dashboard', ProjectStatus, 'More options for Owners']
-  ])('%s exports a card as CSV from its menu', async (_name, Block, trigger) => {
-    const view = render(Block)
-    await pickMenuOption(view.getByRole('button', { name: trigger }), 'Export CSV')
-    await waitFor(() => expect(document.body.textContent).toContain('CSV exported.'))
-  })
-
-  it('copies a link to a project status card', async () => {
-    const view = render(ProjectStatus)
-    await pickMenuOption(view.getByRole('button', { name: 'More options for Owners' }), 'Copy link')
-    await waitFor(() =>
-      expect(
-        document.body.textContent?.includes('Link copied.') ||
-          document.body.textContent?.includes('The link could not be copied.')
-      ).toBe(true)
-    )
-  })
+  it.each([['composition-dashboard', Composition, 'More options for Current split']])(
+    '%s exports a card as CSV from its menu',
+    async (_name, Block, trigger) => {
+      const view = render(Block)
+      await pickMenuOption(view.getByRole('button', { name: trigger }), 'Export CSV')
+      await waitFor(() => expect(document.body.textContent).toContain('CSV exported.'))
+    }
+  )
 
   it('exports from the page header buttons', async () => {
     const composition = render(Composition)

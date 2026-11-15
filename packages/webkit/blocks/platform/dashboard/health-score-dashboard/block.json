@@ -22,7 +22,8 @@
     "rum",
     "core web vitals",
     "page load time",
-    "monitoramento de usuário real"
+    "monitoramento de usuário real",
+    "banded score"
   ],
   "skills": ["webkit-data-viz", "webkit-ui-states"],
   "primary": {

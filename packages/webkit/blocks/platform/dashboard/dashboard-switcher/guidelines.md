@@ -16,6 +16,25 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - A dashboard the reader arranges by hand: use `platform/dashboard/configurable-dashboard` (it is the body of the Custom entry).
 - An overview of the whole account with resources and recent activity: use `platform/dashboard/home-dashboard`.
 
+## Pick the dashboard by the shape of the data
+
+| Data shape                                                                 | Block                                                  |
+| -------------------------------------------------------------------------- | ------------------------------------------------------ |
+| Traffic volume and quality over one period (requests, status codes, hosts) | `platform/dashboard/analytics-dashboard`               |
+| Consumption per product or project against the previous period             | `platform/dashboard/analytics-dashboard` (Usage)       |
+| Blocked vs allowed requests, attack categories, source IPs                 | `platform/dashboard/security-dashboard`                |
+| Each request of known actors with the rule that decided it                 | `platform/dashboard/security-dashboard` (ByActor)      |
+| Open alerts to triage by severity                                          | `platform/dashboard/alerts-dashboard`                  |
+| Items waiting for a verdict from an asynchronous analysis                  | `platform/dashboard/scan-results-dashboard`            |
+| One total split into categories over time                                  | `platform/dashboard/composition-dashboard`             |
+| Many signals rolled up into one banded score                               | `platform/dashboard/health-score-dashboard`            |
+| Real-user web vitals                                                       | `platform/dashboard/health-score-dashboard` (RealUser) |
+| Latency percentiles, error rates and live state per service                | `platform/dashboard/service-monitoring-dashboard`      |
+| Cards each reader rearranges and resizes                                   | `platform/dashboard/configurable-dashboard`            |
+| The account's landing overview                                             | `platform/dashboard/home-dashboard`                    |
+| A one-page roll-up of business KPIs for leadership                         | `platform/dashboard/executive-summary-dashboard`       |
+| Several of these behind one picker and one shared period                   | `platform/dashboard/dashboard-switcher`                |
+
 ## Building blocks
 
 ### A. Page heading — `PageHeader` (required)

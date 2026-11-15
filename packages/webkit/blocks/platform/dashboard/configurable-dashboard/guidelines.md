@@ -10,6 +10,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use configurable-dashboard only when each reader rearranges and resizes the cards.
 - The same dashboard serves readers with different priorities, and each comes back often.
 - The cards are independent: none depends on its position to make sense.
 - The product has somewhere to store per-user preferences.
