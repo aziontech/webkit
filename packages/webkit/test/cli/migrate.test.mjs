@@ -130,6 +130,49 @@ test('migrateSource flags a removed prop as manual work and leaves the tag alone
   )
 })
 
+test('migrateSource renames slots, events and sub-component props from # and @ keys', () => {
+  const rules = {
+    props: {
+      button: { '#prefix': 'leading' },
+      input: { '#prefix': 'leading', '#suffix': 'trailing' },
+      tree: { '@item-dblclick': 'item-double-click', selectedIds: 'selectedKeys' },
+      'select-option': { '#left': 'leading' },
+      stepper: { state: { to: 'status', values: { complete: 'success' } } }
+    }
+  }
+  const sfc = [
+    '<script setup>',
+    "import Button from '@aziontech/webkit/button'",
+    "import Input from '@aziontech/webkit/input'",
+    "import Tree from '@aziontech/webkit/tree'",
+    "import Select from '@aziontech/webkit/select'",
+    '</script>',
+    '<template>',
+    '  <Button label="Save">',
+    '    <template #prefix><Input><template #prefix>$</template></Input></template>',
+    '  </Button>',
+    '  <Input>',
+    '    <div><template #prefix>nested</template></div>',
+    '    <template v-slot:suffix="{ value }">{{ value }}</template>',
+    '  </Input>',
+    '  <Tree v-model:selected-ids="ids" @item-dblclick.stop="open" @item-dblclick-x="x" />',
+    '  <Select><Select.Option value="a"><template #left>A</template></Select.Option></Select>',
+    '  <div><template #prefix>untouched</template></div>',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, { ...migration, ...rules })
+  assert.match(source, /<Button label="Save">\n {4}<template #leading><Input><template #leading>\$/)
+  assert.match(source, /<div><template #prefix>nested<\/template><\/div>/)
+  assert.match(source, /<template v-slot:trailing="\{ value \}">/)
+  assert.match(
+    source,
+    /<Tree v-model:selected-keys="ids" @item-double-click\.stop="open" @item-dblclick-x="x" \/>/
+  )
+  assert.match(source, /<Select\.Option value="a"><template #leading>A<\/template>/)
+  assert.match(source, /<div><template #prefix>untouched<\/template><\/div>\n<\/template>$/)
+  assert.equal(migrateSource(source, { ...migration, ...rules }).source, source)
+})
+
 test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it cannot', () => {
   const { icons } = loadMigration(6)
   const sfc = [
