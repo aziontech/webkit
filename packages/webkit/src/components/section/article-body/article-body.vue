@@ -442,7 +442,7 @@
             <Separator class="lg:col-start-2" />
 
             <article
-              ref="prose"
+              ref="proseEl"
               class="min-w-0 lg:col-start-2 [&_h2]:scroll-mt-(--spacing-2xl) [&_h3]:scroll-mt-(--spacing-2xl)"
             >
               <DocProse>

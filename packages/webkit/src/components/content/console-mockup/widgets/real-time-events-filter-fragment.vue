@@ -133,7 +133,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative flex flex-col gap-(--spacing-2xs) py-(--spacing-xs)"
     >
       <ConsoleMockupShellItem :order="0">
