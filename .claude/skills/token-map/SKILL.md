@@ -33,7 +33,7 @@ Transform the structured JSON from `figma-discover` into a deterministic mapping
    - `spacing/N` → match `var(--spacing-N)`.
    - `radius/...` → match `var(--shape-*)`.
    - `shadow/...` → match `var(--shadow-*)`.
-   - `container/...` → match `var(--container-*)` or `var(--container-max-width)`.
+   - `container/...` → match `var(--container-*)` or a `--layout-measure*` token.
 3. **No fuzzy matching.** If the Figma name does not point at an exact DESIGN.md token, emit a row with `Theme gap: yes` and the closest primitive (`shadow-lg`, `gap-2`, …).
 4. **Emit two artifacts** to stdout:
    ```markdown

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 3ea65eb2dba18781d3e175996913b61c202fe6dd064b1b08b1531fda17150f63
+checksum: 0cd089bba544c2c4c7f7c9ec2e4dc1434ba22bf5aeceb63ab5e36b75e7c74f9f
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -123,7 +123,7 @@ _none_
 | spacing (copy stack) | `var(--spacing-lg)` |
 | spacing (copy → actions) | `var(--spacing-xl)` |
 | spacing (actions gap) | `var(--spacing-md)` |
-| spacing (padding) | `var(--spacing-xl)` / `var(--spacing-xxl)` |
+| spacing (padding) | `var(--spacing-xl)` / `var(--spacing-2xl)` |
 | spacing (padding, `padding="small"`) | `var(--spacing-xl)` |
 | copy max width | `var(--container-2xl)` |
 

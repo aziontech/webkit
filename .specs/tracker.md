@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
-checksum: dbaa92a1fa5fd9cc483f2e4facab6a067314c58a09d939d965fefa942c590979
+checksum: a25df00c6ea90076181d202527e024e6b31384db1950bda96179a83f62dcf6de
 ---
 
 # Tracker — Component Spec
@@ -105,13 +105,13 @@ _No slots._
 
 ## Tokens
 
-| Region          | Token (DESIGN.md)                                                                                                                                                            |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| blocks          | `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`, `var(--chart-series-other)` (no data)                |
-| readout         | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-border)`, `.text-label-md`, `var(--shape-elements)`, `var(--shadow-sm)`, `var(--container-3xs)` |
-| readout spacing | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                                                                     |
-| strip           | 32px tall, 2px gap, `var(--shape-elements)` on the outer corners                                                                                                             |
-| ring            | `var(--ring-color)`                                                                                                                                                          |
+| Region          | Token (DESIGN.md)                                                                                                                                                           |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| blocks          | `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`, `var(--chart-series-other)` (no data)               |
+| readout         | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-border)`, `.text-label-md`, `var(--shape-control)`, `var(--shadow-sm)`, `var(--container-3xs)` |
+| readout spacing | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                                                                    |
+| strip           | 32px tall, 2px gap, `var(--shape-control)` on the outer corners                                                                                                             |
+| ring            | `var(--ring-color)`                                                                                                                                                         |
 
 ## Theme gaps
 

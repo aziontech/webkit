@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 381e2b95758cd5b8ddc5990f2f23929368a51e1f2c24b4e8938b1006a850daba
+checksum: 3dbba496980806bf87dc57c4148ec1617fa9fe91eff2ff5a415baaa2248cfd2c
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -99,12 +99,12 @@ _none_
 
 | Region                       | Token (DESIGN.md)                          |
 | ---------------------------- | ------------------------------------------ |
-| check glyph                  | `ai ai-check`, `var(--success-contrast)`   |
+| check glyph                  | `ai ai-check`, `var(--success-foreground)`   |
 | label                        | `.text-label-sm`, `var(--text-default)`    |
 | description                  | `.text-body-xs`, `var(--text-muted)`       |
 | row gap / column gap         | `var(--spacing-sm)` / `var(--spacing-lg)`  |
 | check → text gap             | `var(--spacing-xs)`                        |
-| label → description gap      | `var(--spacing-xxs)`                       |
+| label → description gap      | `var(--spacing-2xs)`                       |
 
 ## Theme gaps
 

@@ -3,7 +3,7 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: 7f32b5eac17e27de781ffbe850a053023b2bf8049cdd9bbe31686326f60934ca
+checksum: d4da02b0ab67a096c8f712f6e954c8e238ddc765ce3908ef1cf94adf8e110d83
 spec_version: 8
 template: 2
 created: 2026-11-10
@@ -170,9 +170,9 @@ The chevron transition names `rotate`, not `transform`: Tailwind v4 compiles `ro
 | row hover (ghost layer)                            | `var(--bg-hover)`                        |
 | row active (ghost layer)                           | `var(--bg-active)`                       |
 | row selected                                       | `var(--bg-selected)`                     |
-| row shape                                          | `var(--shape-elements)`                  |
+| row shape                                          | `var(--shape-control)`                   |
 | row padding-x, gap between chevron / glyph / label | `var(--spacing-xs)`                      |
-| gap between label and description                  | `var(--spacing-xxs)`                     |
+| gap between label and description                  | `var(--spacing-2xs)`                     |
 | indentation per level (nested group margin-start)  | `var(--spacing-md)`                      |
 | indent guide line (nested group border-start)      | `var(--border-muted)`                    |
 | focus ring / ring offset                           | `var(--ring-color)` / `var(--bg-canvas)` |

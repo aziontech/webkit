@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 1cebb1c72f8f25cf20039cdc6614b1b7d95888ed8dc28f5e6ea0079bcfad88a9
+checksum: b8f471c76e206af30477ced0bf6362760fe75d5c1741a5adb8cb0caf3c01e90a
 ---
 
 # FeatureTabs — Component Spec
@@ -108,9 +108,9 @@ _none_
 | --------------------- | ----------------------- |
 | link inset            | `var(--spacing-xl)`     |
 | code inset            | `var(--spacing-xl)`     |
-| code shape            | `var(--shape-elements)` |
+| code shape            | `var(--shape-control)`  |
 | code shadow           | `var(--shadow-sm)`      |
-| anchor scroll offset  | `var(--spacing-xxl)`    |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps

@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 2
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: b954da24f34121d7772d7637c2791e18082647ec575a3f9dc85443353982245b
+last_updated: 2026-11-15
+checksum: c2d1e45e71a328fda0f0256a3fb0d531f775f58863a5b76a93cffadb8a0d753e
 template: 2
 ---
 
@@ -88,22 +88,22 @@ The compliance band: a framed media split whose copy states the certifications a
 
 ## Tokens
 
-| Region                | Token (DESIGN.md)          |
-| --------------------- | -------------------------- |
-| typography (pill)     | `.text-overline-sm`        |
-| typography (see more) | `.text-overline-md`        |
-| pill text             | `var(--text-default)`      |
-| see-more text         | `var(--text-muted)`        |
-| pill border           | `var(--border-muted)`      |
-| pill fill             | `var(--bg-surface-raised)` |
-| check bubble fill     | `var(--success-contrast)`  |
-| check glyph           | `var(--success)`           |
-| see-more hover fill   | `var(--bg-hover)`          |
-| focus ring            | `var(--ring-color)`        |
-| cell rhythm           | `var(--spacing-lg)`        |
-| cell inset            | `var(--spacing-xl)`        |
-| pill gap              | `var(--spacing-xs)`        |
-| anchor scroll offset  | `var(--spacing-xxl)`       |
+| Region                | Token (DESIGN.md)           |
+| --------------------- | --------------------------- |
+| typography (pill)     | `.text-overline-sm`         |
+| typography (see more) | `.text-overline-md`         |
+| pill text             | `var(--text-default)`       |
+| see-more text         | `var(--text-muted)`         |
+| pill border           | `var(--border-muted)`       |
+| pill fill             | `var(--bg-surface-raised)`  |
+| check bubble fill     | `var(--success-foreground)` |
+| check glyph           | `var(--success)`            |
+| see-more hover fill   | `var(--bg-hover)`           |
+| focus ring            | `var(--ring-color)`         |
+| cell rhythm           | `var(--spacing-lg)`         |
+| cell inset            | `var(--spacing-xl)`         |
+| pill gap              | `var(--spacing-xs)`         |
+| anchor scroll offset  | `var(--spacing-2xl)`        |
 
 ## Theme gaps
 

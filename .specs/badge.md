@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-909
   node_id: 476:909
-checksum: 32c36afb6c40ce5275652cb0a53d58fb10071d2f9b642bd0310dd57d37aaa830
+checksum: f4c863e1ac5d300af6132745d302e7a4b0e490f3606693b6692349f295145d89
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -94,13 +94,13 @@ _none_
 | typography (medium, large) | `.text-label-md` + `leading-none` (Figma Typography/Label/md, 14px) |
 | typography (small)         | `.text-label-sm` + `leading-none` (Figma Typography/Label/sm, 12px) |
 | spacing (medium, large)    | `var(--spacing-xs)` horizontal padding                              |
-| spacing (small)            | `var(--spacing-xxs)` horizontal padding                             |
-| shape (all severities)     | `var(--shape-elements)`                                             |
-| surface (primary)          | `var(--primary)` / `var(--primary-contrast)`                        |
-| surface (secondary)        | `var(--secondary)` / `var(--secondary-contrast)`                    |
-| surface (success)          | `var(--success)` / `var(--success-contrast)`                        |
-| surface (warning)          | `var(--warning)` / `var(--warning-contrast)`                        |
-| surface (danger)           | `var(--danger)` / `var(--danger-contrast)`                          |
+| spacing (small)            | `var(--spacing-2xs)` horizontal padding                             |
+| shape (all severities)     | `var(--shape-control)`                                             |
+| surface (primary)          | `var(--primary)` / `var(--primary-foreground)`                        |
+| surface (secondary)        | `var(--secondary)` / `var(--secondary-foreground)`                    |
+| surface (success)          | `var(--success)` / `var(--success-foreground)`                        |
+| surface (warning)          | `var(--warning)` / `var(--warning-foreground)`                        |
+| surface (danger)           | `var(--danger)` / `var(--danger-foreground)`                          |
 | surface (default)          | `var(--bg-surface)` / `var(--text-default)`                         |
 
 ## Theme gaps

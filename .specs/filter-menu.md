@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: b6ec40450336637e0aabd2de2fcf995c0346639b507924414917602558d3212d
+checksum: 35a33df1ab8a8a4a8a7a4a655d7632b4f9d600b384aa42242794c4b860c88a95
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -225,10 +225,10 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | summary, field label in chip | `var(--text-muted)`     |
 | row hover                    | `var(--bg-hover)`       |
 | level dividers               | `var(--border-default)` |
-| row shape                    | `var(--shape-elements)` |
+| row shape                    | `var(--shape-control)`  |
 | row padding                  | `var(--spacing-sm)`     |
 | gaps, search padding         | `var(--spacing-xs)`     |
-| list padding, avatar gap     | `var(--spacing-xxs)`    |
+| list padding, avatar gap     | `var(--spacing-2xs)`    |
 | custom range padding         | `var(--spacing-md)`     |
 | focus ring                   | `var(--ring-color)`     |
 | avatar ring in the chip      | `var(--bg-surface)`     |

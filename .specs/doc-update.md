@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: db580c841f60ac225c2116f159dd25e00fa47f1f3fcef58dddd12017ec88d638
+checksum: 77efcf025e6679b6b30118c10193870fe6f181d9c2df5e735ddd2ea1b0c2060a
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -100,7 +100,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 | Region                          | Token (DESIGN.md)                                                                                                                  |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | typography (label)              | `.text-heading-xs`                                                                                                                 |
-| typography (date, titled)       | `.text-heading-xxs`                                                                                                                |
+| typography (date, titled)       | `.text-heading-2xs`                                                                                                                |
 | typography (title)              | `.text-heading-xl` below `sm`, `.text-heading-md` from `sm`                                                                        |
 | typography (description)        | `.text-label-code-sm`                                                                                                              |
 | typography (chain glyph)        | `.text-label-md`                                                                                                                   |
@@ -111,14 +111,14 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 | underline (label hover)         | `var(--border-strong)`                                                                                                             |
 | ring (anchor focus)             | `var(--ring-color)`                                                                                                                |
 | shape (anchor focus outline)    | `var(--shape-flat)`                                                                                                                |
-| spacing                         | `var(--spacing-xl)` / `var(--spacing-lg)` / `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
+| spacing                         | `var(--spacing-xl)` / `var(--spacing-lg)` / `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-2xs)` |
 | tags row                        | `Tag`'s own `severity="neutral"` tokens                                                                                            |
 
 ## Theme gaps
 
-| Figma variable     | Temporary primitive | Follow-up                                                                                                              |
-| ------------------ | ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| node corner radius | `var(--radius-sm)`  | No `--shape-*` step fits a 12px marker: `--shape-elements` (6px) turns it into a circle. Propose a marker shape token. |
+| Figma variable     | Temporary primitive | Follow-up                                                                                                             |
+| ------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| node corner radius | `var(--radius-sm)`  | No `--shape-*` step fits a 12px marker: `--shape-control` (6px) turns it into a circle. Propose a marker shape token. |
 
 ## Accessibility (WCAG 2.1 AA)
 

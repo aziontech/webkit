@@ -6,8 +6,8 @@ template: 2
 status: implemented
 spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 6d7aeaeba965919a16b51b11bf11db397cc773ad4b6158fe17516a07889dd69d
+last_updated: 2026-11-15
+checksum: 44370d4740eb62d418a7443fe70552d671edeae10b488958c9bcd894f029f19c
 ---
 
 # NetworkSection — Component Spec
@@ -128,12 +128,12 @@ _none_
 | claim text                        | `var(--text-default)`                                    |
 | claim chip border                 | `var(--primary)`                                         |
 | band and cell fill                | `var(--bg-canvas)`                                       |
-| claim chip shape                  | `var(--shape-elements)`                                  |
+| claim chip shape                  | `var(--shape-control)`                                   |
 | claim chip inset and gap          | `var(--spacing-xs)`, inset `var(--spacing-sm)` from `sm` |
-| anchor scroll offset              | `var(--spacing-xxl)`                                     |
+| anchor scroll offset              | `var(--spacing-2xl)`                                     |
 | copy rhythm                       | `var(--spacing-md)`                                      |
 | band rhythm                       | `var(--spacing-xl)`                                      |
-| band inset                        | `var(--spacing-xxl)`                                     |
+| band inset                        | `var(--spacing-2xl)`                                     |
 | claims width                      | `var(--container-sm)`                                    |
 | headline width                    | `var(--container-lg)`                                    |
 | frame rules, marks and floor rule | `var(--border-default)`                                  |

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 06c28848e0b837788f134beef6771b0861716dcd6890b967de0639fdff0031b8
+checksum: 67dd9d025028a6a58cc0bbdb05b9d6281a063bfa2f2a691d4ad6b5c2fe199d0f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -114,7 +114,7 @@ _none_ — the open and close motion is owned by `dialog` and `drawer`.
 | row gap       | `var(--spacing-xs)`     |
 | column border | `var(--border-default)` |
 | muted text    | `var(--text-muted)`     |
-| shape         | `var(--shape-elements)` |
+| shape         | `var(--shape-control)`  |
 
 ## Theme gaps
 

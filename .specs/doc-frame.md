@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: a8eed2bb5889710dd1628f2aee0052dfe6eaeb9317a6e8310d371eadf902cd38
+checksum: f1935562ee1217da41d0e48f848244e228f1987da28e7cb5e7fe69982fdbf33a
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -113,9 +113,9 @@ The FLIP transform itself is an inline style because it is a measurement (the re
 | surface.hover (close control)       | `var(--bg-hover)`                                                                      |
 | backdrop                            | `var(--bg-backdrop)`                                                                   |
 | shape (frame)                       | `var(--shape-card)`                                                                    |
-| shape (media, badge, close control) | `var(--shape-elements)`                                                                |
+| shape (media, badge, close control) | `var(--shape-control)`                                                                 |
 | ring                                | `var(--ring-color)`                                                                    |
-| spacing                             | `var(--spacing-xxs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
+| spacing                             | `var(--spacing-2xs)` / `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-lg)` |
 
 ## Theme gaps
 

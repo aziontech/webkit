@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 2bdd7965cc4a9f3c765b27667062a25294c749306101c61bd972ff4fbeacc2ee
+checksum: 54e12439fb356676a99b4cd1e726037692f71c082d1c9f16aa2cd98f9df07be0
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -122,7 +122,7 @@ _none_
 | text (last updated)       | `var(--text-muted)`                          |
 | border (the closing rule) | `var(--border-default)`                      |
 | border (entry separator)  | `Separator` `orientation="vertical"`         |
-| spacing                   | `var(--spacing-lg)` / `var(--spacing-xxs)`   |
+| spacing                   | `var(--spacing-lg)` / `var(--spacing-2xs)`   |
 
 ## Theme gaps
 

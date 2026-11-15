@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 9ba197c689221abc7493cf4c4664951e1d2a9f1f6a8b680c5ecef10507a272e9
+checksum: d10ba9a727cc150607b7af687222ac5b6adc961c0dc80078f63f17774b15e8bb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -147,13 +147,13 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 | --------------------------- | ----------------------------------------------------------------------- |
 | field                       | the `Input` tokens (surface, border, ring, sizes)                       |
 | list surface                | `var(--bg-surface-raised)`, `var(--border-default)`, `var(--shadow-xs)` |
-| list shape                  | `var(--shape-elements)`                                                 |
-| list padding / row gap      | `var(--spacing-xxs)`                                                    |
+| list shape                  | `var(--shape-control)`                                                  |
+| list padding / row gap      | `var(--spacing-2xs)`                                                    |
 | option text                 | `.text-label-sm`, `var(--text-default)`                                 |
 | option description          | `.text-body-sm`, `var(--text-muted)`                                    |
 | option active / selected    | `var(--bg-hover)` / `var(--bg-selected)`                                |
 | group title, empty, loading | `.text-label-sm` / `.text-body-sm`, `var(--text-muted)`                 |
-| layer                       | `var(--z-input-overlay)`                                                |
+| layer                       | `var(--z-control-overlay)`                                              |
 
 ## Theme gaps
 

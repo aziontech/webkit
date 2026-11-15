@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 9416a9c35fd56ebf3641febcfcdcb02f147961c84d97bafb04ed4cc37ce61b43
+checksum: 15ec4002fc88b2e3d342eb9b0b8aaddb7c01c1c0a469b1b970f4584fb79e983f
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Hotspot — Component Spec
@@ -106,7 +106,7 @@ _No events — moves go through the `TutorialPanel.Provider`, which emits `updat
 | step content typography  | `.text-body-sm`                          |
 | step content ink         | `var(--text-default)`                    |
 | padding (step content)   | `var(--spacing-md)`, `var(--spacing-sm)` |
-| gap (control to marker)  | `var(--spacing-xxs)`                     |
+| gap (control to marker)  | `var(--spacing-2xs)`                     |
 
 ## Theme gaps
 

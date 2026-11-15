@@ -4,7 +4,7 @@ category: data
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: ae67fe4f8295ae82777d2a0bd0173049c42d06403e913926927b80804fd4a259
+checksum: 862cdab539e9cca85a9e60783f98d30b0fbb3f381ee61adc3d9b1500ec1286e6
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -125,7 +125,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 | text                                      | `var(--text-default)`                                   |
 | text (disabled)                           | `var(--text-disabled)`                                  |
 | gap (content)                             | `var(--spacing-xs)`                                     |
-| shape (first / last button outer corners) | `var(--shape-elements)`                                 |
+| shape (first / last button outer corners) | `var(--shape-control)`                                  |
 | ring                                      | `var(--ring-color)` · offset `var(--bg-canvas)`         |
 
 ## Theme gaps

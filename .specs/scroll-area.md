@@ -6,9 +6,9 @@ status: implemented
 spec_version: 1
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
-checksum: 4001d7c2663a7c2a2f200ad6fba6c127e7a3cf4e493c631e8b02bddb37131198
+checksum: cf1f510139b78a0b732b1c644da14d6d56ace42c92473e53dff380c83b0f470e
 created: 2026-05-22
-last_updated: 2026-11-09
+last_updated: 2026-11-15
 ---
 
 # Scroll Area — Component Spec
@@ -93,14 +93,14 @@ _none_
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
-| shape      | `var(--shape-elements)` |
-| ring       | `var(--ring-color)`     |
+| Region     | Token (DESIGN.md)      |
+| ---------- | ---------------------- |
+| typography | .text-body-sm          |
+| surface    | `var(--bg-surface)`    |
+| text       | `var(--text-default)`  |
+| spacing    | `var(--spacing-3)`     |
+| shape      | `var(--shape-control)` |
+| ring       | `var(--ring-color)`    |
 
 ## Theme gaps
 

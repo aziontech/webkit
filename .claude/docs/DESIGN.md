@@ -5,7 +5,7 @@ How to style components under `packages/webkit/src/components/` using tokens fro
 ## Prerequisites
 
 - Import the theme stylesheet in the app (the docs site and the demos already do: `apps/docs/src/main.ts`, `apps/demos/src/main.ts`).
-- Rebuild theme tokens when `texts.data.js` or other token sources change: `pnpm` from the repo root, following `packages/theme` docs.
+- Rebuild theme tokens when `typography.js` or other token sources change: `pnpm` from the repo root, following `packages/theme` docs.
 
 ---
 
@@ -13,7 +13,7 @@ How to style components under `packages/webkit/src/components/` using tokens fro
 
 ### Tailwind v4 (CSS-first)
 
-`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/src/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/v4/globals.{css,scss}` — and consumers import it directly:
+`@aziontech/webkit` targets **Tailwind v4 only**. `packages/theme/scripts/build-tokens.mjs` emits a single output — `packages/theme/dist/globals.{css,scss}` — and consumers import it directly:
 
 ```css
 @import '@aziontech/theme/globals.css';
@@ -37,7 +37,7 @@ Do not add a `tailwind.config.*` file to any package under `packages/`. All them
 
 Use **only** the text styles declared in:
 
-`packages/theme/src/tokens/semantic/texts.data.js`
+`packages/theme/src/tokens/semantic/typography.js`
 
 Each key (for example `text-button-lg`) becomes:
 
@@ -64,8 +64,8 @@ Reference: `packages/webkit/src/components/actions/button/button.vue`.
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | `text-big-number-lg` / `text-big-number-md` / `text-big-number-sm` | Large numeric displays                                                                                                   |
 | `text-heading-3xl` … `text-heading-sm`                             | Headings                                                                                                                 |
-| `text-heading-xs` / `text-heading-xxs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type)                   |
-| `text-body-lg` … `text-body-xxs`                                   | Body copy                                                                                                                |
+| `text-heading-xs` / `text-heading-2xs`                             | Small headings — a flat 16px / 14px, no responsive ladder (a card's title, a wordmark written in type)                   |
+| `text-body-lg` … `text-body-2xs`                                   | Body copy                                                                                                                |
 | `text-body-prose-md`                                               | Long-form prose — body copy at `--leading-relaxed` (1.625); the `text-body-*` set is `snug` (1.375)                      |
 | `text-label-sm` / `text-label-md` / `text-label-lg`                | Labels, compact UI text                                                                                                  |
 | `text-label-code-sm` / `text-label-code-md` / `text-label-code-lg` | Monospace code labels (filename bar, code lines, line numbers)                                                           |
@@ -86,7 +86,7 @@ Inside `packages/webkit/src/components/`, **never** set:
 - Raw `text-xs`, `text-sm`, `text-base`, `text-lg`, etc.
 - `text-(length:--text-*-font-size)` when a `text-*` class already exists for that role
 
-Font family, line height, letter spacing, and responsive font size live in `texts.data.js` and the generated `.text-*` classes. Pick the semantic class that matches the design; if none fits, add a new entry in `texts.data.js` and rebuild the theme — do not hardcode typography in the component.
+Font family, line height, letter spacing, and responsive font size live in `typography.js` and the generated `.text-*` classes. Pick the semantic class that matches the design; if none fits, add a new entry in `typography.js` and rebuild the theme — do not hardcode typography in the component.
 
 **Allowed:** weight or color when not part of the text bundle and required for state (prefer semantic text colors like `text-(--text-muted)`).
 
@@ -123,7 +123,7 @@ For **standalone** navigation links (icon, ghost hover surface, fixed height), u
 
 Use **only** the spacing tokens declared in:
 
-`packages/theme/src/tokens/semantic/spacings.data.js`
+`packages/theme/src/tokens/semantic/spacing.js`
 
 Each key (for example `spacing-md`) becomes a CSS variable: `--spacing-md` (mobile-first; values can change at `sm`, `xl`, etc.).
 
@@ -144,21 +144,21 @@ Breakpoint growth is baked into the CSS variables; you do not duplicate responsi
 
 | Token         | CSS variable    | Base (`_`) | Also at breakpoints |
 | ------------- | --------------- | ---------- | ------------------- |
-| `spacing-xxl` | `--spacing-xxl` | `2rem`     | `sm`, `xl`          |
+| `spacing-2xl` | `--spacing-2xl` | `2rem`     | `sm`, `xl`          |
 | `spacing-xl`  | `--spacing-xl`  | `1.5rem`   | `sm`, `xl`          |
 | `spacing-lg`  | `--spacing-lg`  | `1rem`     | `sm`                |
 | `spacing-md`  | `--spacing-md`  | `1rem`     | —                   |
 | `spacing-sm`  | `--spacing-sm`  | `0.75rem`  | —                   |
 | `spacing-xs`  | `--spacing-xs`  | `0.5rem`   | —                   |
-| `spacing-xxs` | `--spacing-xxs` | `0.25rem`  | —                   |
+| `spacing-2xs` | `--spacing-2xs` | `0.25rem`  | —                   |
 
-If none of these fit the design, add a new entry in `spacings.data.js` and rebuild the theme — do not hardcode spacing in the component.
+If none of these fit the design, add a new entry in `spacing.js` and rebuild the theme — do not hardcode spacing in the component.
 
 ### Do not
 
 - Use primitive `--spacing-1` … `--spacing-96` from `spacing.js`.
 - Use arbitrary pixel/rem values or Tailwind’s default scale (`p-4`, `gap-3`, `m-6`) in webkit components.
-- Use legacy `spacing-elements-*` names; map to `spacing-*` keys from `spacings.data.js`.
+- Use legacy `spacing-elements-*` names; map to `spacing-*` keys from `spacing.js`.
 
 Example from Button — horizontal padding and inner gap:
 
@@ -234,7 +234,7 @@ Use **semantic shape** tokens only:
 ```html
 rounded-(--shape-button)
 <!-- buttons -->
-rounded-(--shape-elements)
+rounded-(--shape-control)
 <!-- inputs, chips, small surfaces -->
 rounded-(--shape-card)
 <!-- cards -->
@@ -252,7 +252,7 @@ Do not use `rounded-md`, `rounded-lg`, or numeric radius in webkit components.
 
 ## Shadows (elevation)
 
-Use **primitive shadow** variables from `packages/theme/src/tokens/primitives/effects/shadow.js`. They compile to `--shadow-*` on `:root` via `compile-primitives.js`. Dark mode redefines every step (`shadowDark` in the same file, emitted with the dark theme): a black shadow on a near-black canvas is invisible, so the dark steps are deeper (60–80 % black) and `--shadow-sm` and up add a 1 px white hairline at 6 % that traces the raised edge. Read the shadow through the variable (`shadow-(--shadow-md)`), never through Tailwind's `shadow-md`, which bakes in the light value.
+Use **primitive shadow** variables from `packages/theme/src/tokens/primitives/effects/shadow.js`. They compile to `--shadow-*` on `:root` via `scripts/lib/primitives.mjs`. Dark mode redefines every step (`shadowDark` in the same file, emitted with the dark theme): a black shadow on a near-black canvas is invisible, so the dark steps are deeper (60–80 % black) and `--shadow-sm` and up add a 1 px white hairline at 6 % that traces the raised edge. Read the shadow through the variable (`shadow-(--shadow-md)`), never through Tailwind's `shadow-md`, which bakes in the light value.
 
 ### Pattern
 
@@ -295,23 +295,25 @@ Use **theme semantic** CSS variables so light/dark and brand stay consistent.
 ### Pattern
 
 ```html
-bg-(--primary) text-(--primary-contrast) border-(--border-default) bg-(--bg-surface)
+bg-(--primary) text-(--primary-foreground) border-(--border-default) bg-(--bg-surface)
 text-(--text-default) text-(--text-muted) ring-(--ring-color)
 ```
 
 ### Common semantic groups
 
-| Role          | Examples                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Brand actions | `--primary`, `--primary-contrast`, `--secondary`, `--secondary-contrast`                                                                                                                                                                                                                                                                                                                                                                                             |
-| Accent        | `--accent`, `--accent-contrast` — the blue for a live state or a connection, never an action: `Switch` on, `Slider` fill, `Tag severity="accent"`, the `Overline` cursor, resize handles, a dragged `Table` row, `Flow` edges and ports. There is no accent `Button`. `--accent-mask` and `--accent-selected` are defined but unused. Blue 600 with white text in light, blue 200 with black text in dark, so the Tag label and the marks pass APCA on both grounds. |
-| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                                                                                                                                                                                                                                                                             |
-| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                                                                                                                                                                                                                                                                        |
-| Text          | `--text-default`, `--text-muted`, `--text-disabled`, `--text-primary` (brand-coloured text: overlines, eyebrows, accents; primary-700 in light and primary-500 in dark so small text keeps 4.5:1)                                                                                                                                                                                                                                                                    |
-| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`, `--border-input` (the resting and disabled outline of a value-entry control: text fields, select and multi-select triggers, number, password and OTP boxes, date fields, checkbox, radio, switch track; same value as `--border-default` today, its own token so form fields can be tuned on their own)                                                                                |
-| Feedback      | `--success`, `--success-border`, `--success-contrast`, `--warning`, `--warning-border`, `--warning-contrast`, `--danger`, `--danger-border`, `--danger-contrast`, `--info`, `--info-border`, `--info-contrast`                                                                                                                                                                                                                                                       |
-| Code syntax   | `--code-sintax-identifier`, `--code-sintax-line-number`, `--code-sintax-keyword`, `--code-sintax-string`, `--code-sintax-function`, `--code-sintax-type`, `--code-sintax-punctuation`, `--code-sintax-comment`                                                                                                                                                                                                                                                       |
-| Code editor   | `--code-editor-line-height` (16 px line step of code in `CodeEditor`; Monaco reads it when the editor is created)                                                                                                                                                                                                                                                                                                                                                    |
+Every fill colour pairs with a `-foreground` text colour of the same role (`--primary` / `--primary-foreground`). The one exception is the inverted surface: `--bg-contrast` takes `--text-contrast`.
+
+| Role          | Examples                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brand actions | `--primary`, `--primary-foreground`, `--secondary`, `--secondary-foreground`                                                                                                                                                                                                                                                                                                                                                                                           |
+| Accent        | `--accent`, `--accent-foreground` — the blue for a live state or a connection, never an action: `Switch` on, `Slider` fill, `Tag severity="accent"`, the `Overline` cursor, resize handles, a dragged `Table` row, `Flow` edges and ports. There is no accent `Button`. `--accent-mask` and `--accent-selected` are defined but unused. Blue 600 with white text in light, blue 200 with black text in dark, so the Tag label and the marks pass APCA on both grounds. |
+| Surfaces      | `--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`, `--bg-hover`, `--bg-active`, `--bg-selected`, `--bg-disabled`, `--bg-mask`                                                                                                                                                                                                                                                                                                               |
+| Placeholders  | `--bg-placeholder`, `--bg-placeholder-highlight` (see § Loading placeholders)                                                                                                                                                                                                                                                                                                                                                                                          |
+| Text          | `--text-default`, `--text-muted`, `--text-disabled`, `--text-primary` (brand-coloured text: overlines, eyebrows, accents; primary-700 in light and primary-500 in dark so small text keeps 4.5:1)                                                                                                                                                                                                                                                                      |
+| Borders       | `--border-default`, `--border-muted`, `--border-strong`, `--border-selected`, `--border-input` (the resting and disabled outline of a value-entry control: text fields, select and multi-select triggers, number, password and OTP boxes, date fields, checkbox, radio, switch track; same value as `--border-default` today, its own token so form fields can be tuned on their own)                                                                                  |
+| Feedback      | `--success`, `--success-border`, `--success-foreground`, `--warning`, `--warning-border`, `--warning-foreground`, `--danger`, `--danger-border`, `--danger-foreground`, `--info`, `--info-border`, `--info-foreground`                                                                                                                                                                                                                                                 |
+| Code syntax   | `--code-syntax-identifier`, `--code-syntax-line-number`, `--code-syntax-keyword`, `--code-syntax-string`, `--code-syntax-function`, `--code-syntax-type`, `--code-syntax-punctuation`, `--code-syntax-comment`                                                                                                                                                                                                                                                         |
+| Code editor   | `--code-editor-line-height` (16 px line step of code in `CodeEditor`; Monaco reads it when the editor is created)                                                                                                                                                                                                                                                                                                                                                      |
 
 Which token does which job, and which components use each one, is in [`rules/webkit-tokens.md`](../../rules/webkit-tokens.md) § "Which color token does which job". Update that table when a component starts or stops using a color token. A mock-up, example or proposal draws only variants the component's `kind` / `severity` union lists.
 
@@ -355,14 +357,14 @@ Reference: `skeleton.vue`. The sweep pairs with `--animate-shimmer` (see § Moti
 - Use external/legacy color utilities (`text-color`, `surface-*`) in new webkit components — map to `var(--*)` tokens instead.
 - Build a loading placeholder from an opaque surface token (`--bg-surface-overlay`, `--bg-surface-raised`) — it only reads on the one surface it was picked against. Use `--bg-placeholder` / `--bg-placeholder-highlight`.
 
-Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-contrast)`, etc.).
+Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-foreground)`, etc.).
 
 ---
 
 ## Checklist for new or updated components
 
-1. **Typography** — Pick a class from `texts.data.js`; no local font/line-height/letter-spacing.
-2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacings.data.js`.
+1. **Typography** — Pick a class from `typography.js`; no local font/line-height/letter-spacing.
+2. **Spacing** — `padding` / `margin` / `gap` via `p-(--spacing-*)`, `gap-(--spacing-*)`, `m-(--spacing-*)`, etc. from `spacing.js`.
 3. **Sizing** — `size-*` for equal width+height; `h-*` for height (theme scale from `size.js` / `height.js`).
 4. **Container** — A page band carries one of the layout container classes (§ Layout containers), never its own `max-w-*`. `max-w-(--container-<size>)` (`3xs` … `7xl` from `primitives/shape/container.js`) is only for fixed content: cards, modals, columns.
 5. **Radius** — `rounded-(--shape-*)`.
@@ -376,7 +378,7 @@ Reference: `button.vue` kind variants (`bg-(--secondary)`, `text-(--secondary-co
 
 ## Animations
 
-Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/v4/globals.css`.
+Use **only** the named utilities below; they ship with `motion-safe` / `motion-reduce` variants enabled by the theme plugin. The `--animate-*` presets are defined in `packages/theme/src/tokens/primitives/animations/animate.js` (each with a one-line `useWhen` note) and their `@keyframes` in the sibling `keyframes.js`; `build-tokens.mjs` emits both into `dist/globals.css`.
 
 | Utility                                                              | Behavior                                                                | Duration · Easing                                                             |
 | -------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
@@ -385,10 +387,10 @@ Use **only** the named utilities below; they ship with `motion-safe` / `motion-r
 | `animate-slide-down`                                                 | height 0 → auto                                                         | 220ms · `ease-in-out`                                                         |
 | `animate-popup-scale-in`                                             | scale 0.9 → 1 + fade in                                                 | `moderate-01` · `productive-entrance` (origin: `var(--popup-origin, center)`) |
 | `animate-popup-scale-out`                                            | scale 1 → 0.9 + fade out                                                | `fast-02` · `productive-exit`                                                 |
-| `animate-slide-in-left`                                              | translateX -100% → 0                                                    | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-left`                                             | translateX 0 → -100%                                                    | `moderate-01` · `productive-exit`                                             |
-| `animate-slide-in-right`                                             | translateX 100% → 0                                                     | `moderate-02` · `productive-entrance`                                         |
-| `animate-slide-out-right`                                            | translateX 0 → 100%                                                     | `moderate-01` · `productive-exit`                                             |
+| `animate-slide-in-start`                                             | from the start side → 0                                                 | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-start`                                            | 0 → the start side                                                      | `moderate-01` · `productive-exit`                                             |
+| `animate-slide-in-end`                                               | from the end side → 0                                                   | `moderate-02` · `productive-entrance`                                         |
+| `animate-slide-out-end`                                              | 0 → the end side                                                        | `moderate-01` · `productive-exit`                                             |
 | `animate-shimmer`                                                    | `background-position` 200% → -200% sweep                                | 1.6s · `linear` infinite                                                      |
 | `animate-blink`                                                      | opacity 1/0 cycle                                                       | 1s · `step-end` infinite                                                      |
 | `animate-highlight-fade`                                             | row-flash highlight, holds then fades out                               | `slow-03` · `ease-in` forwards                                                |
@@ -561,9 +563,9 @@ The `validate-tokens.mjs` PreToolUse hook enforces these at write time. If a hoo
 
 - **Colors:** HEX (`#fff`), RGB (`rgb(0,102,255)`), HSL, Tailwind palette names (`bg-blue-500`, `text-gray-700`), external/legacy color utilities (`text-color`, `surface-50`).
 - **Typography:** `font-family`, `font-proto-mono`, `font-rubik`, `leading-*` (except `leading-none` on icons), `tracking-*`, `text-xs|sm|base|lg`, `text-(length:--text-*-font-size)` when a generated class exists.
-- **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacings.data.js` token applies.
-- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`), legacy helpers (`.px-container`, `.py-container`, `.max-container-width`), and semantic layout tokens (`--container-px`, `--container-py`, `--container-max-width`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
-- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layouts.data.js` — every layout token is a `var()` reference to the spacing or container scale.
+- **Spacing:** primitive `--spacing-1` … `--spacing-96`, legacy `spacing-elements-*`, arbitrary `p-4` / `gap-3` when a `spacing.js` token applies.
+- **Container:** Tailwind scale (`max-w-md`, `max-w-5xl`), arbitrary lengths (`max-w-[768px]`). Use `max-w-(--container-<size>)` only (`3xs` … `7xl` from `primitives/shape/container.js`).
+- **Page layout:** a hand-rolled page cap (`max-w-*` on a page root) instead of one of the five container types, a `w-full` standing in for full-bleed, a third rhythm step beside `--layout-section-gap` / `--layout-group-gap`, and a literal length in `semantic/layout.js` — every layout token is a `var()` reference to the spacing or container scale.
 - **Shape:** `rounded-md`, `rounded-lg`, any numeric radius.
 - **Shadow:** legacy `--card-shadow` (SCSS alias), bare Tailwind `shadow-md` without `var(--shadow-*)`, HEX/RGB in elevation.
 - **Animations:** see § Animations § Forbidden in animations.

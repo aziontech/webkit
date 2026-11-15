@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 2b39e94c2101179777bae850251fa52699717c804ab54e602bbe566735e61a74
+checksum: d807502f1562add7f18867b5351745052bd488da52f316ad60c1f6a38a2cd686
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -91,8 +91,8 @@ The previous / next pair that closes a documentation page. Each side is a link c
 | typography (title)    | `.text-label-md`                                                 |
 | text (title, chevron) | `var(--text-default)`                                            |
 | text (eyebrow)        | `var(--text-muted)`                                              |
-| shape                 | `var(--shape-elements)`                                          |
-| spacing               | `var(--spacing-md)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
+| shape                 | `var(--shape-control)`                                           |
+| spacing               | `var(--spacing-md)` / `var(--spacing-xs)` / `var(--spacing-2xs)` |
 | ring                  | `var(--ring-color)`                                              |
 
 ## Theme gaps

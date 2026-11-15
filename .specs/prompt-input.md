@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 3dfcfc2444a1b3d2db689cad4a345db17c335759889c9d69eecb90a7429bf81a
+checksum: febc1aa35fd5f8d4f69fb95417c1de50e8e122238d5e9a559d2f42c06e0506f3
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -142,8 +142,8 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 | invalid border   | `var(--danger-border)`                                                                                                |
 | disabled surface | `var(--bg-disabled)`                                                                                                  |
 | text             | `.text-body-md`, `var(--text-default)`; placeholder `var(--text-muted)`                                               |
-| counter, hint    | `.text-body-xs`, `var(--text-muted)`; over limit `var(--danger-contrast)`                                             |
-| padding / gaps   | `var(--spacing-xs)`, `var(--spacing-xxs)`, `var(--spacing-sm)`                                                        |
+| counter, hint    | `.text-body-xs`, `var(--text-muted)`; over limit `var(--danger-foreground)`                                             |
+| padding / gaps   | `var(--spacing-xs)`, `var(--spacing-2xs)`, `var(--spacing-sm)`                                                        |
 
 ## Theme gaps
 

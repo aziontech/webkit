@@ -1540,7 +1540,7 @@ Blocks hex/rgb/hsl colors, raw Tailwind palette, raw typography, `any`, `@ts-ign
 <button class="bg-[#f3652b] text-orange-500 text-sm font-['Inter']" />
 
 <!-- ✅ tokens + generated typography classes (list_tokens in the webkit MCP) -->
-<button class="bg-(--primary) text-(--primary-contrast) text-button-lg" />
+<button class="bg-(--primary) text-(--primary-foreground) text-button-lg" />
 ```
 
 ### `validate-references.mjs` — imports must exist

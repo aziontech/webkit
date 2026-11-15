@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 339ea26a2b969d8132772a75194fe89564ec979f30c1452f4bf4c3eb21f76485
+checksum: d135ef0749e08e051db7f02aa12cab8dff8ee834119723cca45482ec5bc71402
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -121,7 +121,7 @@ _none_
 | label    | `.text-button-lg`, `var(--color-base-white)`                                                                                                                                                                  |
 | marks    | `currentColor` of the label (`Logo kind="current"` or the icon glyph at `.text-label-lg`)                                                                                                                     |
 | shape    | `var(--shape-button)`                                                                                                                                                                                         |
-| spacing  | `var(--spacing-md)` start, `var(--spacing-sm)` end, `var(--spacing-xs)` gap (`var(--spacing-sm)` from `sm`), `var(--spacing-xxs)` between marks (`var(--spacing-xs)` from `sm`) and before the dismiss button |
+| spacing  | `var(--spacing-md)` start, `var(--spacing-sm)` end, `var(--spacing-xs)` gap (`var(--spacing-sm)` from `sm`), `var(--spacing-2xs)` between marks (`var(--spacing-xs)` from `sm`) and before the dismiss button |
 | focus    | `var(--ring-color)` ring, offset on `var(--bg-canvas)`                                                                                                                                                        |
 | disabled | `var(--bg-disabled)`, `var(--text-disabled)`                                                                                                                                                                  |
 

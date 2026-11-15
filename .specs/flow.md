@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: e3e3a6a54ce5324b2c84675abcd31fb9d61bdc10a7bc4a399af87f057ff7f9b7
+checksum: 377e04199f44ae118b9503d4cd9dff623af2280cfc79313020a618a6adc6a377
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -67,7 +67,7 @@ Composition mode — one import of the root; every part is reached via dot-notat
         </Flow.Anchor>
         <Flow.Anchor side="start">
           <div
-            class="m-(--spacing-xxs) mt-0 rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xxs) text-label-md text-(--text-default)"
+            class="m-(--spacing-2xs) mt-0 rounded-(--shape-button) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-2xs) text-label-md text-(--text-default)"
           >
             Bindings
           </div>

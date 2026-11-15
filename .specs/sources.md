@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 99baa28d12e55ca3ca2113cdd70cce7ff935edfc5076929ce1f01286a4376e76
+checksum: aec9d5ea59991b276334858685ba736ea225393da50e35fbb01818b0aa536d9a
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Sources — Component Spec
@@ -106,12 +106,12 @@ _No slots._
 
 ## Tokens
 
-| Region      | Token                                                                 |
-| ----------- | --------------------------------------------------------------------- |
-| trigger     | `.text-label-sm`, `var(--text-muted)`                                 |
-| number chip | `var(--bg-surface-raised)`, `var(--shape-elements)`, `.text-label-sm` |
-| title       | `.text-body-sm`, `var(--text-link)`                                   |
-| description | `.text-body-xs`, `var(--text-muted)`                                  |
+| Region      | Token                                                                |
+| ----------- | -------------------------------------------------------------------- |
+| trigger     | `.text-label-sm`, `var(--text-muted)`                                |
+| number chip | `var(--bg-surface-raised)`, `var(--shape-control)`, `.text-label-sm` |
+| title       | `.text-body-sm`, `var(--text-link)`                                  |
+| description | `.text-body-xs`, `var(--text-muted)`                                 |
 
 ## Theme gaps
 

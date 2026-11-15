@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: ce08db88b34c0593e5a8a488141bc9bffe496d7cc9599f63bc2b562622112dc2
+checksum: d1c0fa1e77d8e6671b883942adce225c33c4692d99b4d88f33ca3b915df97c88
 spec_version: 9
 template: 2
 created: 2026-10-20
@@ -276,7 +276,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | tooltip values                 | `.text-label-code-md`                                                                                                         |
 | tooltip total label and hint   | `.text-label-md`, `.text-body-sm`                                                                                             |
 | marker ring                    | `var(--bg-surface)`                                                                                                           |
-| tooltip and legend shape       | `var(--shape-elements)`                                                                                                       |
+| tooltip and legend shape       | `var(--shape-control)`                                                                                                       |
 | spacing                        | `var(--spacing-xs)`, `var(--spacing-sm)`                                                                                      |
 | focus                          | `var(--ring-color)`                                                                                                           |
 

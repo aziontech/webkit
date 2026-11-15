@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 62a377ba0e36bc01b2ba0b9eb1434e90c3da34c025d1ce83e746e9aca58085d7
+checksum: 20ccaf394e8cc2903f450e08338c83806047348aa9c26520840ed13f8034a84f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -115,7 +115,7 @@ _none_
 | disabled box       | `var(--bg-disabled)` · `var(--text-disabled)` |
 | character          | `.text-label-lg` · `var(--text-default)`      |
 | separator          | `var(--text-muted)`                           |
-| box radius         | `var(--shape-elements)`                       |
+| box radius         | `var(--shape-control)`                        |
 
 ## Theme gaps
 

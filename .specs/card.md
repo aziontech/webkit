@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 44fe2bcef2db5cf8fb6ecc9ccc12c9ebe12a26f0e5794027dd99caab714388a6
+checksum: 19ee1b174639ead289723824b673e495919e36c02c43b4e0d3e64ba189e9059b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -179,7 +179,7 @@ A bordered surface that groups related content under a title, with a header, a b
 | featured   | `var(--bg-surface-raised)`, `var(--border-strong)`, `var(--primary)` |
 | text       | `var(--text-default)`                                                |
 | spacing    | `var(--spacing-3)`                                                   |
-| shape      | `var(--shape-elements)`                                              |
+| shape      | `var(--shape-control)`                                               |
 | ring       | `var(--ring-color)`                                                  |
 
 ## Theme gaps

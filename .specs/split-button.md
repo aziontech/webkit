@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 2e71fb4cde6996dea7d62f5e4a2006b8d6ec8e23aeafdb9fae1de2da94f27b6e
+checksum: 9b459f9788cadbe12eb7fcfed887dd24d025848cc688e75b6d6c679d684f5352
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -125,9 +125,9 @@ A primary command button visually joined to a chevron toggle that opens an overl
 | typography (large)          | `.text-button-lg`                                        |
 | typography (small / medium) | `text-button-md` (semantic sibling of `.text-button-lg`) |
 | brand surface               | `var(--primary)`                                         |
-| brand text                  | `var(--primary-contrast)`                                |
+| brand text                  | `var(--primary-foreground)`                              |
 | secondary surface           | `var(--secondary)`                                       |
-| secondary text              | `var(--secondary-contrast)`                              |
+| secondary text              | `var(--secondary-foreground)`                            |
 | outlined surface            | `var(--bg-surface)`                                      |
 | neutral text                | `var(--text-default)`                                    |
 | segment divider / border    | `var(--border-default)`                                  |

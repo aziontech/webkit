@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 59bea076b187e14cdecbc58b20098f3cdb6b201dfdf7df7a41e88e7bea49ea40
+checksum: 43e99031840556f05a887a279508bf13883283586cbf9c1bb35f2225348756bf
 template: 2
 ---
 
@@ -121,7 +121,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 | Region               | Token (DESIGN.md)                                                                                                                                        |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | pixel floor fill     | `var(--bg-surface)`                                                                                                                                      |
-| anchor scroll offset | `var(--spacing-xxl)`                                                                                                                                     |
+| anchor scroll offset | `var(--spacing-2xl)`                                                                                                                                     |
 | topology card        | `var(--bg-surface)`, `var(--border-default)`, `var(--border-strong)` on hover, `var(--primary)` on the lit card, `var(--shadow-xs)`, `var(--shape-card)` |
 | topology card text   | `var(--text-muted)`, `var(--text-default)`                                                                                                               |
 

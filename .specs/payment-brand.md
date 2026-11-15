@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 2e25178465f916e29da58b039d124e8ab985292a606dc4a57bf3103b718f5640
+checksum: c2c7808e591dac668c4e1ea3df2ac8242fb7ebf5e4fba7c3c457b526697665c0
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -91,7 +91,7 @@ _none_
 | plate border  | `var(--border-default)` |
 | mark          | `var(--text-default)`   |
 | mark cut-outs | `var(--bg-surface)`     |
-| plate radius  | `var(--shape-elements)` |
+| plate radius  | `var(--shape-control)`  |
 
 ## Theme gaps
 

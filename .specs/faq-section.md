@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: aa5011bb01b337078c7984d290643c35f93d8f19d7767dccdedeb378390e158a
+checksum: a3c086dbda00f10f0a54300bc7320d74ae6f45eb28744b801d7b1cb1a4ea83ea
 ---
 # FaqSection — Component Spec
 
@@ -88,8 +88,8 @@ _none_
 | Region | Token (DESIGN.md) |
 |---|---|
 | answer links | `.text-link` |
-| answer block gap / list indent | `var(--spacing-sm)` / `var(--spacing-xxs)` / `var(--spacing-lg)` |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| answer block gap / list indent | `var(--spacing-sm)` / `var(--spacing-2xs)` / `var(--spacing-lg)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

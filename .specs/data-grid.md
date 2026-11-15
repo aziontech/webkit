@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 8c667d43e58967af2c8f090ec52ac232c98cb7eb1885b577d6d3d91eab1f9c05
+checksum: e13bf0f6810a79b5cf0fedaf5cba1e0e730c2db80ac9973b4cfb0f482a9a1edb
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -193,8 +193,8 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 | active cell and focus ring     | `var(--ring-color)`           |
 | cell padding x                 | `var(--spacing-sm)`           |
 | gap                            | `var(--spacing-xs)`           |
-| message padding / offset       | `var(--spacing-xxs)`          |
-| shape (frame, editor)          | `var(--shape-elements)`       |
+| message padding / offset       | `var(--spacing-2xs)`          |
+| shape (frame, editor)          | `var(--shape-control)`        |
 
 Fixed sizes (no token exists for them): cell and header height `min-h-10` (40 px), `pointer-coarse:min-h-11` (44 px) on touch screens; the selection column 40 px; column width 160 px by default, 64–960 px when resized, 16 px per resize key press; the resize hit area `w-6` (24 px), `pointer-coarse:w-11` (44 px), centred on the column edge (`-end-3`), its visible rule `after:w-px` inset `after:inset-y-2`; stacking `z-1` (frozen cells, resize handle), `z-2` (sticky header), `z-3` (invalid message).
 

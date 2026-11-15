@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: eae3dad5a396dc12d1fd5444c518f88b82fd1293ee3343fae324530516cfd48d
+checksum: 1130bb8dd75c9ea6210fc0ed3e996c1fa131d8eebcd25a55d2ef17b29a112607
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -164,7 +164,7 @@ _none_
 - Visual states: `default`, `hover`, `focus-visible`, `checked`, `disabled`, `invalid`
 - Root: `role="radiogroup"`; `data-orientation` (`vertical` | `horizontal`); `data-kind` (`default` | `card`); `data-disabled`, `data-required` and `data-invalid` mirror the group state (the `Field` state included).
 - Item: `data-kind` mirrors the group's; `data-checked` while selected, `data-disabled` while the item or the group is disabled, `data-invalid` while the group is invalid. A card shows `var(--border-selected)` and `var(--primary-selected)` while checked, `var(--bg-hover)` on hover and the focus ring on the card itself.
-- The circle: `var(--border-input)` ring on `var(--bg-surface)`, `var(--primary)` when checked with a `var(--primary-contrast)` dot, `var(--danger-border)` when invalid, disabled tokens at 50 % opacity.
+- The circle: `var(--border-input)` ring on `var(--bg-surface)`, `var(--primary)` when checked with a `var(--primary-foreground)` dot, `var(--danger-border)` when invalid, disabled tokens at 50 % opacity.
 - Not states of this component: `loading`, `empty`, `error` (the `Field.Error` carries the message) and `readonly` (a fixed choice is plain text, not a disabled group).
 
 ## Motion & Animations

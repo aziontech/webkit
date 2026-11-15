@@ -3,7 +3,7 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 122ecc8be1a6b6873c3af18499774269bbb5858233f34993d4c810458a5f267e
+checksum: 55a78399fab92892a4f5247a09238d5d17b130b342c05c384c993631b527cfa7
 spec_version: 4
 template: 2
 created: 2026-11-10
@@ -164,7 +164,7 @@ _none_
 | title text       | `var(--text-default)`                                                                 |
 | description      | `.text-body-sm` · `var(--text-muted)`                                                 |
 | row gap          | `var(--spacing-md)`                                                                   |
-| copy gap         | `var(--spacing-xxs)`                                                                  |
+| copy gap         | `var(--spacing-2xs)`                                                                  |
 | actions gap      | `var(--spacing-sm)`                                                                   |
 | icon             | `var(--text-muted)` · `.text-heading-sm` glyph size                                   |
 | title-row gap    | `var(--spacing-xs)` (icon, title, meta)                                               |

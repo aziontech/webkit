@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 304e15d9c9e2fbc0e7c53667f62f9f668c34e725ad0cedae24df88f37293d028
+checksum: 1ed8baa48a81629c0ea730a12fbefdcd00760f7cea56909780f8986cd1ddf73b
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -94,7 +94,7 @@ _none_
 | method and code text        | `.text-label-code-sm`                                                      |
 | method text                 | `var(--text-muted)` on the neutral surface; inherits on warning and danger |
 | invalid text                | `var(--text-muted)`                                                        |
-| gap between method and code | `var(--spacing-xxs)`                                                       |
+| gap between method and code | `var(--spacing-2xs)`                                                       |
 
 ## Theme gaps
 
@@ -107,7 +107,7 @@ _none_
 - Visible focus: not applicable — StatusCode is non-interactive.
 - Keyboard map: none.
 - ARIA: plain text inside a `span`; the status number carries the meaning, so the colour is never the only cue (WCAG 1.4.1). Screen readers read `POST 503`.
-- Contrast ≥4.5:1: the `Tag` severity pairs (`--warning` / `--warning-contrast`, `--danger` / `--danger-contrast`, `--text-default` on `--bg-canvas`) and `--text-muted` on `--bg-canvas` are theme-guaranteed in light and dark.
+- Contrast ≥4.5:1: the `Tag` severity pairs (`--warning` / `--warning-foreground`, `--danger` / `--danger-foreground`, `--text-default` on `--bg-canvas`) and `--text-muted` on `--bg-canvas` are theme-guaranteed in light and dark.
 - `motion-reduce:*`: not applicable — no motion.
 - Touch target: not applicable — non-interactive.
 

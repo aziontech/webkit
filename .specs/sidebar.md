@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: cd8fb0bf3cfe091a82aaffe73f9ed923fe526547c81deb84f451f8c2b6f33688
+checksum: f7b4c6777edcd2d468d84b18f9f42cb21adc3f8b6c446619cde0f6ee9aded276
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -240,7 +240,7 @@ Six things make it hold together:
 - **The zone grows with the sliver.** It is `--size-6` at rest and `--size-10` while previewing, so
   it always spans exactly what it opened. A fixed narrow zone would end where the sliver begins and
   flicker the preview on and off as the pointer crossed that seam. Both widths come from the
-  **fixed** `--size-*` scale, never `--spacing-lg`/`xl`/`xxl`, which are breakpoint-responsive — an
+  **fixed** `--size-*` scale, never `--spacing-lg`/`xl`/`2xl`, which are breakpoint-responsive — an
   `--spacing-xl` zone is 48 px on desktop, far more of the page's leading edge than a hit target
   should claim.
 - **The sliver shows the rail's surface, not its content.** The panel stays parked off the leading
@@ -250,7 +250,7 @@ Six things make it hold together:
 - **The button sits after the line, not on the sliver.** The line marks the edge; the button is
   what you reach for beyond it. It is placed at the zone's `left-full`, and because the zone's
   width _is_ the sliver's width, `100%` tracks that trailing edge frame for frame with no
-  transition of its own. Its leading `--spacing-xxs` is **padding inside the container, never a
+  transition of its own. Its leading `--spacing-2xs` is **padding inside the container, never a
   margin**: the container has to stay flush against the zone so the two boxes touch. A gap there
   belongs to neither, and a pointer crossing it fires `pointerleave` — retracting the sliver out
   from under the very button it was travelling to.
@@ -535,14 +535,14 @@ fallback for the brief pre-hydration window, not a replacement for the handle's 
 | surface                            | `var(--bg-surface)`                                                                    |
 | text                               | `var(--text-default)`                                                                  |
 | spacing                            | `var(--spacing-3)`                                                                     |
-| shape                              | `var(--shape-elements)`                                                                |
+| shape                              | `var(--shape-control)`                                                                 |
 | ring                               | `var(--ring-color)`                                                                    |
-| resize handle line                 | `var(--accent)`, `var(--border-2)` wide                                                |
+| resize handle line                 | `var(--accent)`, `var(--border-width-2)` wide                                          |
 | resize handle hit area             | `var(--spacing-xs)`                                                                    |
 | rail width bounds                  | `var(--container-3xs)` … `var(--container-sm)` (via `minWidthToken` / `maxWidthToken`) |
 | collapsed preview sliver           | `var(--size-10)`                                                                       |
 | collapsed edge zone                | `var(--size-6)` at rest, `var(--size-10)` while previewing; `cursor: col-resize`       |
-| expand button offset past the edge | `var(--spacing-xxs)` (container padding, so the boxes stay flush)                      |
+| expand button offset past the edge | `var(--spacing-2xs)` (container padding, so the boxes stay flush)                      |
 
 The `<nav>` region hands its own fill down to the rows inside it as
 `--menu-item-ring-offset` and `--menu-ring-offset`, both `var(--bg-surface)`. That is what makes a
@@ -562,7 +562,7 @@ canvas the tokens fall back to.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
   region needs one only when nothing inside it is focusable, and this one holds a `SidebarMenu` of rows —
   so `Tab` reaches the first row directly instead of the box around it.
-  The region also keeps `var(--spacing-xxs)` of padding — and the same as `scroll-padding` — inside
+  The region also keeps `var(--spacing-2xs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
   row and a viewport flush against it would cut the ring off.
   The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 2
 created: 2026-10-20
 last_updated: 2026-11-15
-checksum: fbb31979a49bbbbc43a3372e12850191931269d5211f591d49010fe408776b03
+checksum: 6fbdddf131ee87e057d595a13727dc4360e345e329f0a09d072ce8549403923a
 ---
 
 # BrowserFrame — Component Spec
@@ -152,7 +152,7 @@ Resizing itself is not animated — the size follows the pointer or key press im
 | address padding (leading)               | `var(--spacing-sm)`     |
 | handle grip (rest)                      | `var(--border-strong)`  |
 | handle grip (hover, focus, resizing)    | `var(--text-default)`   |
-| handle shape                            | `var(--shape-elements)` |
+| handle shape                            | `var(--shape-control)`  |
 | ring                                    | `var(--ring-color)`     |
 
 ## Theme gaps

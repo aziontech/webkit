@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: a01eb39217900742716d0b96b15d08f5aba1fa209938ddb7f1e4bcb0d148b2ae
+checksum: 3497fd0070670c9466a48b5d3120f2e3a4ddf063daa4b1508a55d232054a7a76
 ---
 # CliTerminal — Component Spec
 
@@ -93,7 +93,7 @@ import CliTerminal from '@aziontech/webkit/cli-terminal'
 
 | Region | Token (DESIGN.md) |
 |---|---|
-| session shape | `var(--shape-elements)` |
+| session shape | `var(--shape-control)` |
 | session shadow | `var(--shadow-2xl)` |
 | session width | `var(--container-4xl)` |
 | headline width | `var(--container-xl)` |
@@ -102,7 +102,7 @@ import CliTerminal from '@aziontech/webkit/cli-terminal'
 | session bleed | `var(--spacing-xs)` |
 | script stage height | `var(--size-72)`, `var(--size-96)` |
 | script stage rise | `var(--spacing-xl)` |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

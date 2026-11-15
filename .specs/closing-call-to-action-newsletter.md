@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c9ee76255e6d7ddc43800549d7e512638eadfb30d57b6550544308d8e48ffd6d
+checksum: bb15a67106eb29d4b876953b94d4a2049757e61ab0256029ff1a95174e92e10e
 template: 2
 ---
 
@@ -131,7 +131,7 @@ _none_
 | headline      | `.text-heading-lg`, `var(--text-default)`                                                                |
 | ask           | `.text-heading-sm`, `var(--text-default)`                                                                |
 | texture strip | `var(--bg-canvas)`, `var(--border-default)`                                                              |
-| rhythm        | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)`, `var(--spacing-sm)` |
+| rhythm        | `var(--spacing-2xl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)`, `var(--spacing-sm)` |
 
 ## Theme gaps
 

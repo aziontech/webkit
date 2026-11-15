@@ -25,12 +25,12 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 
 A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
 and hand the enter/leave phases to the catalogued utilities. For lateral panels the pair is
-`animate-slide-in-left` / `animate-slide-out-left` (right-anchored drawers use the `-right` pair):
+`animate-slide-in-start` / `animate-slide-out-start` (end-anchored drawers use the `-end` pair; both flip in right-to-left pages):
 
 ```vue
 <Transition
-  enter-active-class="animate-slide-in-left motion-reduce:animate-none"
-  leave-active-class="animate-slide-out-left motion-reduce:animate-none"
+  enter-active-class="animate-slide-in-start motion-reduce:animate-none"
+  leave-active-class="animate-slide-out-start motion-reduce:animate-none"
 >
   <aside v-if="sidebarOpen">...</aside>
 </Transition>

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 40d85205baf17e5bd854eeba0c3cab5d8daba58bdf9c6f9076729c9a2b265230
+checksum: a60ec097c10d41cc7cdd541e49a550665b3400a7d168a34ca3ea9ce6178f8fda
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -185,8 +185,8 @@ The only events are the `update:*` of the models above.
 | region borders, separator     | `var(--border-default)`                  |
 | separator hover               | `var(--border-strong)`                   |
 | separator focus / drag        | `var(--accent)`                          |
-| region header title           | `.text-heading-xxs`                      |
-| region header height          | `var(--spacing-xxl)`                     |
+| region header title           | `.text-heading-2xs`                      |
+| region header height          | `var(--spacing-2xl)`                     |
 | region header padding         | `var(--spacing-md)`                      |
 | notifications gap and padding | `var(--spacing-xs)`, `var(--spacing-md)` |
 | ring                          | `var(--ring-color)`                      |

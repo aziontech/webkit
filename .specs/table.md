@@ -7,7 +7,7 @@ spec_version: 15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 53f5894dec0ceef8b69dbc1aaf64c266a438c6a764b5a98a3b9bea5ed40a6a82
+checksum: ed6f8930f89952ad3adbc2c6f15c3689910530bf2c889fc4062bf8e2e9f92054
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -207,7 +207,7 @@ _none_ — sort comes from `Table.HeadCell` (`sort`) and row clicks fall through
 - `data-sortable` and `data-sort` (`none` | `ascending` | `descending`) on TableHeadCell; `aria-sort` mirrors `data-sort`.
 - `data-direction` (`none` | `ascending` | `descending`) and `data-visible` on TableSortButton.
 - `data-clickable` on TableCell mirrors the `clickable` prop.
-- Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-xxs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. A compact header is `Table.Header density="compact"`.
+- Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. A compact header is `Table.Header density="compact"`.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 
@@ -242,7 +242,7 @@ The root itself is static. `Table.Filter` animates through the `FilterMenu` or `
 | divider width                                                           | `var(--border-width-default)`                                   |
 | cell padding x                                                          | `var(--spacing-sm)`                                             |
 | gap                                                                     | `var(--spacing-xs)`                                             |
-| shape (cells / surface)                                                 | `var(--shape-elements)`                                         |
+| shape (cells / surface)                                                 | `var(--shape-control)`                                          |
 | shape (sort button)                                                     | `var(--shape-button)`                                           |
 | ring                                                                    | `var(--ring-color)`                                             |
 

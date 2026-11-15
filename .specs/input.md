@@ -4,7 +4,7 @@ category: inputs
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: ff4c77ea900cdc4478f8645c6e63586205746a6b5d30fd19a592d10af3de71c7
+checksum: 9a9d6fa511912ca502d6257b11e695f2283d1aacfdaa3bccb830c6b97ddc7f7b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -144,7 +144,7 @@ _none_
 | ring offset (focus)                  | `var(--input-ring-offset, var(--bg-canvas))` — host-tunable via the inherited `--input-ring-offset` custom property |
 | spacing (horizontal padding)         | `var(--spacing-sm)`                                                                                                 |
 | spacing (gap between icon and input) | `var(--spacing-xs)`                                                                                                 |
-| shape                                | `var(--shape-elements)`                                                                                             |
+| shape                                | `var(--shape-control)`                                                                                              |
 
 ## Theme gaps
 

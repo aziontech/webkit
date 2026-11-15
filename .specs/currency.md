@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 249dbd4e22726b61395a6b8e90edea1ecc2504efebe658c785ddfcea212b3359
+checksum: 2269eabc8da8201bc2d7da1182950e82490b769b58b72a05d1b58b7c105e6d5d
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -95,13 +95,13 @@ _none_
 | suffix typography — `medium` / `large` | `.text-label-code-md` |
 | amount text                            | `var(--text-default)` |
 | suffix text                            | `var(--text-muted)`   |
-| gap — `small`                          | `var(--spacing-xxs)`  |
+| gap — `small`                          | `var(--spacing-2xs)`  |
 | gap — `medium` / `large`               | `var(--spacing-xs)`   |
 | suffix baseline offset — `large`       | `var(--spacing-md)`   |
 
 ## Theme gaps
 
-_none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is now carried by the dedicated `text-amount-sm` / `-md` / `-lg` tokens (`packages/theme/src/tokens/semantic/texts.data.js`). Each mirrors the heading/label token the amount used to borrow — same size ramp, same leading, same weight — and adds the tracking. It is expressed in `em` because the design specifies one proportional ratio (−1.28px @16px, −1.92px @24px, −4.48px @56px), which the `rem`-based `tracking.js` scale cannot hold; dedicated tokens rather than tracking on the borrowed ones, because `text-heading-2xl` sets every hero headline in the system and a hero is prose, not a numeral.
+_none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is now carried by the dedicated `text-amount-sm` / `-md` / `-lg` tokens (`packages/theme/src/tokens/semantic/typography.js`). Each mirrors the heading/label token the amount used to borrow — same size ramp, same leading, same weight — and adds the tracking. It is expressed in `em` because the design specifies one proportional ratio (−1.28px @16px, −1.92px @24px, −4.48px @56px), which the `rem`-based `tracking.js` scale cannot hold; dedicated tokens rather than tracking on the borrowed ones, because `text-heading-2xl` sets every hero headline in the system and a hero is prose, not a numeral.
 
 > Follow-up outside this spec: the three new tokens are not yet listed in `.claude/docs/DESIGN.md` (this pipeline may not edit that file). Whoever owns the catalog should add them beside the `text-heading-*` / `text-label-*` families.
 

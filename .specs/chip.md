@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 3cc7e9fbbf5557b7d75c936e56ca124b032ae15d92ad5b61fc654873de5b6640
+checksum: 700e050d49c34715f94d7ca1eac12efa652478c8453e96cf4635724648b35ad3
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -200,8 +200,8 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 | text                                           | `var(--text-default)`                                |
 | remove glyph (rest / hover)                    | `var(--text-muted)` / `var(--text-default)`          |
 | spacing (medium padding)                       | `var(--spacing-sm)` / `var(--spacing-xs)`            |
-| spacing (small padding)                        | `var(--spacing-xs)` / `var(--spacing-xxs)`           |
-| spacing (label↔icon gap)                       | `var(--spacing-xxs)`                                 |
+| spacing (small padding)                        | `var(--spacing-xs)` / `var(--spacing-2xs)`           |
+| spacing (label↔icon gap)                       | `var(--spacing-2xs)`                                 |
 | ring                                           | `var(--ring-color)`                                  |
 | interactive overlay (clickable hover / active) | `var(--bg-hover)` (ghost layer)                      |
 | border (clickable active)                      | `var(--border-strong)`                               |
@@ -214,7 +214,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 | Figma variable                             | Temporary primitive                                                                                                                                                                                                                                                       | Follow-up                                                                                                                 |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | border width `var(--border-width-default)` | **1px, from the plain `border` utility.** `border-(length:--border-width-default)` emits no CSS at all in Tailwind v4 — verified against the built stylesheet — so the token cannot be applied through that syntax. It is used the same dead way in 10+ other components. | `TODO: repo-wide — replace the dead `border-(length:--border-width-default)` with a syntax that emits, or drop the token` |
-| label↔icon gap `6px`                       | `var(--spacing-xxs)` (4px)                                                                                                                                                                                                                                                | `TODO: tokenizar gap de 6px se virar recorrente`                                                                          |
+| label↔icon gap `6px`                       | `var(--spacing-2xs)` (4px)                                                                                                                                                                                                                                                | `TODO: tokenizar gap de 6px se virar recorrente`                                                                          |
 
 ## Accessibility (WCAG 2.1 AA)
 

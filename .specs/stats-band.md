@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: b4a20c4fd5312649c2ac57b922cd04287f797ed20d5b283388c8262b410518cc
+checksum: 8dd793f88ee68f46648fb46c06680596dd2bfd5498d92b745187c744a2c839bb
 template: 2
 ---
 
@@ -84,7 +84,7 @@ _none_
 | Region                | Token (DESIGN.md)       |
 | --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
-| anchor scroll offset  | `var(--spacing-xxl)`    |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 

@@ -7,7 +7,7 @@ spec_version: 15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 029ff070af31d4cc6bb4d84cdd157410e265f8ff0979959fc6c0ce501c6eb928
+checksum: 35d04b11395aa84f083dfa9124789660adcc1a513c2655d7c1975caf91484646
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -124,7 +124,7 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 | handle (disabled) — fill            | `var(--text-disabled)`                                                                               |
 | disabled — cursor                   | `cursor-not-allowed`                                                                                 |
 | focus-visible ring | `var(--ring-color)`                                                                                  |
-| shape — track                       | `rounded-(--shape-elements)` (6px)                                                                   |
+| shape — track                       | `rounded-(--shape-control)` (6px)                                                                   |
 | shape — handle                      | `rounded-(--radius)` (4px — concentric with the track: track 6px − `px-0.5` inset 2px)               |
 
 ## Theme gaps

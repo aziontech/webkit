@@ -4,7 +4,7 @@ category: layout
 structure: composition
 status: implemented
 spec_version: 3
-checksum: d00a3a9d8d10ffdce7888a5d11557191f1ea0a6ef024bfcf5cb0811ed11dab67
+checksum: f5cf7f8247bb80ee4eec9ca8f2ba15d9e6caa1549a59a79f193db12b848e217c
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
@@ -165,7 +165,7 @@ A drag itself is deliberately NOT animated. Direct manipulation has to track the
 | handle rail                    | `var(--border-default)` |
 | handle rail (hover)            | `var(--border-strong)`  |
 | handle rail (focus / resizing) | `var(--accent)`         |
-| handle thickness               | `var(--spacing-xxs)`    |
+| handle thickness               | `var(--spacing-2xs)`    |
 | focus ring                     | `var(--ring-color)`     |
 | pane surface                   | `var(--bg-surface)`     |
 
@@ -180,7 +180,7 @@ _none_
 - ARIA: the handle is `role="separator"` with `aria-orientation` (the PERPENDICULAR of the group's axis — a separator between two side-by-side panes is itself vertical), `aria-valuenow` / `aria-valuemin` / `aria-valuemax` published from the pane it moves, `aria-label` from `ariaLabel`, and `aria-disabled` when disabled. Each pane is `role="group"` with its `ariaLabel`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state
 - `motion-reduce:transition-none` on the handle's colour transition
-- Touch target: the handle draws a `--spacing-xxs` rail and extends its hit area to 16px across the axis with a pseudo-element, so the edge is grabbable without drawing a thick bar.
+- Touch target: the handle draws a `--spacing-2xs` rail and extends its hit area to 16px across the axis with a pseudo-element, so the edge is grabbable without drawing a thick bar.
 
 ## Right-to-left
 

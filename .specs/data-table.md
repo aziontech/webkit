@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 29726e9fe6152cfc96985d4d511bf683eb7bed28da03bb09b3b1a6f2336e86cf
+checksum: 428f761e2df20dec734bab010492237710b96d569192b62f38bb500338068d9c
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -287,7 +287,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 - Stacked rows (opt-in `stackable`): by default the grid scrolls sideways at every width, as the console does on a phone. With `stackable`, the table measures its own box; below `--container-lg` (552 px) it sets `data-stacked` and each body row becomes a bordered card. The checkbox, the principal column and the action column share the first line; every other column takes its own line as a label (the column `label` or `header`, `aria-hidden`) and its value. The header row stays in the DOM visually hidden, so screen readers keep the column headers; frozen offsets and fades are dropped. A hand-composed table never stacks.
 - Stacked select-all (`enableRowSelection`): in the stacked layout the header checkbox is not rendered; a visible, labelled **Select all rows** checkbox sits above the stacked rows (`__stacked-select-all`) and toggles the page, with the same indeterminate state.
 - Per-row selectability (`rowSelectable`): a row the function rejects renders an empty selection cell, ignores `selectOnRowClick` and is skipped by Select all; the header checkbox reads `all` when every selectable row is selected.
-- Density and wrapping: `data-density="compact"` on the root shrinks the header (through `Table.Header`'s `density`) and the body cells (`min-h-9`, `--spacing-xxs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
+- Density and wrapping: `data-density="compact"` on the root shrinks the header (through `Table.Header`'s `density`) and the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. `striped` shades odd body rows with `var(--bg-surface-raised)` (selected and hover still win).
 - Virtual rows (`virtual`): only the rows in view plus 8 above and below render; the slice starts on an even row so stripes stay put; rows of different heights (`wrapLines` with long text) are measured as they render and the rows in view do not shift while scrolling; the root sets `aria-rowcount` and each row `aria-rowindex`. Skeleton and stacked layouts render every row.
 - Long lists (more than 200 rows, not `virtual`): the first 50 rows render, a spacer (`__lazy-rows`, `aria-hidden`) stands in for the rest and more rows mount as it nears the viewport, until every row is in the DOM; while rows are still missing the root sets `aria-rowcount` and each row `aria-rowindex`. When `data`, the sort or a filter changes, the mounted rows drop back to the ones within reach of the viewport (at least 50), so a sort after scrolling to the end and back does not patch every row.
 - Infinite loading (`moreRows`): an `aria-hidden` sentinel (`__more-sentinel`) under the rows, observed with an `IntersectionObserver` 600 px ahead of the scroll container, emits `load-more` when it nears the viewport, in `virtual` mode too; the observer re-arms when the row count changes, so a page that does not fill the viewport asks again. A `role="status"` line under the rows (`__more`) shows a Load more button while `moreRows` (keyboard and screen-reader path), a spinner with `Loading more rows` while `loadingMore` (the table also sets `aria-busy`), and `No more rows` once more rows were requested and `moreRows` turns false. Hidden while `loading` or with no rows.
@@ -329,7 +329,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 | divider width                                                           | `var(--border-width-default)`                                   |
 | cell padding x                                                          | `var(--spacing-sm)`                                             |
 | gap                                                                     | `var(--spacing-xs)`                                             |
-| shape (cells / surface)                                                 | `var(--shape-elements)`                                         |
+| shape (cells / surface)                                                 | `var(--shape-control)`                                          |
 | shape (sort button)                                                     | `var(--shape-button)`                                           |
 | ring                                                                    | `var(--ring-color)`                                             |
 

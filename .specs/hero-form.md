@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: a64911c8622d3638eaaa81c6fe8423409ff91d48cc414452fe79c8275bffeca8
+checksum: 5f167bb73d5c57d47ea055d97c8db873a5b5d3359c7b37193067e4bf07db5a5e
 template: 2
 ---
 
@@ -153,10 +153,10 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 | Region                 | Token (DESIGN.md)                                                                   |
 | ---------------------- | ----------------------------------------------------------------------------------- |
-| rhythm                 | `var(--spacing-xxl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)` |
+| rhythm                 | `var(--spacing-2xl)`, `var(--spacing-xl)`, `var(--spacing-lg)`, `var(--spacing-md)` |
 | inline link hover      | `var(--text-default)`                                                               |
 | inline link focus ring | `var(--ring-color)`, shape `var(--shape-flat)`                                      |
-| anchor scroll offset   | `var(--spacing-xxl)`                                                                |
+| anchor scroll offset   | `var(--spacing-2xl)`                                                                |
 
 ## Theme gaps
 

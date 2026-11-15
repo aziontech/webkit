@@ -7,7 +7,7 @@ spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 7a87f31e0c1d9899d610d7344c52cd52bd17e40c30871160c6ea725e965ba493
+checksum: c8825b0cefd4dada0d81f39f094517ce647aaae9cf4b286f12363d432f5eb6de
 created: 2026-07-13
 last_updated: 2026-11-15
 ---
@@ -100,7 +100,7 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 | hover segment surface    | `var(--bg-hover)`       |
 | icon color               | `var(--text-default)`   |
 | disabled icon            | `var(--text-disabled)`  |
-| gap / padding            | `var(--spacing-xxs)`    |
+| gap / padding            | `var(--spacing-2xs)`    |
 | ring                     | `var(--ring-color)`     |
 | ring offset              | `var(--bg-canvas)`      |
 

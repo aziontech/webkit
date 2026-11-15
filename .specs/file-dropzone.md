@@ -3,7 +3,7 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 8f5d946f53e0b6e4dff3b1f07f45d8e642539cb0a0dada0f930e363bcb036d50
+checksum: 44eb94c8a0083aa85be52fe0fefd6038636a81ecdadc939f1ee894e02c4b1ab3
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -187,32 +187,32 @@ No `v-model`: the dropzone holds no value. The accumulated file list belongs to 
 
 ## Tokens
 
-| Region                           | Token (DESIGN.md)                                                                               |
-| -------------------------------- | ----------------------------------------------------------------------------------------------- |
-| shape (both kinds)               | `var(--shape-card)`                                                                             |
-| inline border (idle)             | `var(--border-strong)`                                                                          |
-| inline / overlay border (active) | `var(--border-selected)`                                                                        |
-| inline border (disabled)         | `var(--border-default)`                                                                         |
-| inline border (invalid)          | `var(--danger-border)`                                                                          |
-| inline surface (idle)            | `var(--bg-surface)`                                                                             |
-| inline surface (active)          | `var(--bg-selected)`                                                                            |
-| inline surface (disabled)        | `var(--bg-disabled)`                                                                            |
-| overlay surface                  | `var(--bg-canvas)`                                                                              |
-| padding                          | `var(--spacing-lg)`                                                                             |
-| gap (icon → text → slot)         | `var(--spacing-md)`                                                                             |
-| gap (title → description)        | `var(--spacing-xxs)`                                                                            |
-| text column max width            | `var(--container-md)`                                                                           |
-| icon frame                       | `var(--bg-surface-raised)` fill, `var(--border-default)` border, `var(--shape-elements)` radius |
-| icon glyph                       | `.text-body-lg`, `var(--text-default)`                                                          |
-| typography (title)               | `.text-heading-xs`, `var(--text-default)`                                                       |
-| typography (description)         | `.text-body-sm`, `var(--text-muted)`                                                            |
-| text / icon (disabled)           | `var(--text-disabled)`                                                                          |
+| Region                           | Token (DESIGN.md)                                                                              |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- |
+| shape (both kinds)               | `var(--shape-card)`                                                                            |
+| inline border (idle)             | `var(--border-strong)`                                                                         |
+| inline / overlay border (active) | `var(--border-selected)`                                                                       |
+| inline border (disabled)         | `var(--border-default)`                                                                        |
+| inline border (invalid)          | `var(--danger-border)`                                                                         |
+| inline surface (idle)            | `var(--bg-surface)`                                                                            |
+| inline surface (active)          | `var(--bg-selected)`                                                                           |
+| inline surface (disabled)        | `var(--bg-disabled)`                                                                           |
+| overlay surface                  | `var(--bg-canvas)`                                                                             |
+| padding                          | `var(--spacing-lg)`                                                                            |
+| gap (icon → text → slot)         | `var(--spacing-md)`                                                                            |
+| gap (title → description)        | `var(--spacing-2xs)`                                                                           |
+| text column max width            | `var(--container-md)`                                                                          |
+| icon frame                       | `var(--bg-surface-raised)` fill, `var(--border-default)` border, `var(--shape-control)` radius |
+| icon glyph                       | `.text-body-lg`, `var(--text-default)`                                                         |
+| typography (title)               | `.text-heading-xs`, `var(--text-default)`                                                      |
+| typography (description)         | `.text-body-sm`, `var(--text-muted)`                                                           |
+| text / icon (disabled)           | `var(--text-disabled)`                                                                         |
 
 ## Theme gaps
 
-| Figma variable                                               | Temporary primitive                                                                                                                                                          | Follow-up                                                                                                                                                                                           |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| (no Figma frame) overlay stacking layer inside its container | none: no z-index. The overlay relies on paint order (a positioned element placed as the container's last child). The sample's `z-40` is a raw value and is not carried over. | `TODO: tokenizar` a semantic in-container overlay layer in `z-indices.data.js` + DESIGN.md (the theme has only `z-input-field` / `z-input-popup` / `z-input-overlay`, none documented in DESIGN.md) |
+| Figma variable                                               | Temporary primitive                                                                                                                                                          | Follow-up                                                                                                                                                                |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| (no Figma frame) overlay stacking layer inside its container | none: no z-index. The overlay relies on paint order (a positioned element placed as the container's last child). The sample's `z-40` is a raw value and is not carried over. | `TODO: tokenizar` a semantic in-container overlay layer in `z-index.js` + DESIGN.md (the theme has only `z-control` / `z-control-overlay`, none documented in DESIGN.md) |
 
 ## Accessibility (WCAG 2.1 AA)
 

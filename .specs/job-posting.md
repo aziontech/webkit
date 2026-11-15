@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: e044a882bedaf4c46ef3360420d584b5023ac4ed3cb806b7b9210e39444e65fc
+checksum: 267ed73eb445c08c56d0ceb0a6ba647f17125fc31d7026de17f0509603ee8f53
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -159,9 +159,9 @@ _none_
 | reading measure      | `var(--layout-measure-content)`                                                       |
 | form measure         | `var(--layout-measure-form)`                                                          |
 | rail width           | `var(--container-xs)`                                                                 |
-| insets               | `var(--spacing-xl)` / `var(--spacing-xxl)`                                            |
+| insets               | `var(--spacing-xl)` / `var(--spacing-2xl)`                                            |
 | rhythm               | `var(--spacing-xs)` / `var(--spacing-sm)` / `var(--spacing-md)` / `var(--spacing-lg)` |
-| anchor scroll offset | `var(--spacing-xxl)`                                                                  |
+| anchor scroll offset | `var(--spacing-2xl)`                                                                  |
 
 ## Theme gaps
 

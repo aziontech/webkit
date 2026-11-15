@@ -3,7 +3,7 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: e9185a23e2df34429cf9f4e39844813b48399ad5aa94f524e945b3a805369a21
+checksum: 130234269a0333cd63a09c9c3009f8aecff2ad3071b573fa755a0a2f8881858d
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -311,8 +311,8 @@ separated from the content by a top border.
 | Optional ink                              | `var(--text-muted)`     |
 | footer divider                            | `var(--border-default)` |
 | rail column width (@2xl+)                 | `var(--container-3xs)`  |
-| spacing (rail ↔ content, @2xl+)           | `var(--spacing-xxl)`    |
-| spacing (counter ↔ heading ↔ description) | `var(--spacing-xxs)`    |
+| spacing (rail ↔ content, @2xl+)           | `var(--spacing-2xl)`    |
+| spacing (counter ↔ heading ↔ description) | `var(--spacing-2xs)`    |
 | spacing (header ↔ step content)           | `var(--spacing-lg)`     |
 | spacing (step content ↔ footer)           | `var(--spacing-xl)`     |
 | spacing (footer top padding)              | `var(--spacing-md)`     |

@@ -4,7 +4,7 @@ category: feedback
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 58e51a7173c1252f9acaf8ceb888f287503cd958f5a53acd328fdb5b034aff26
+checksum: 2593432045a410b278bc3f61600151d5a43eda0b06baf6f81e11d04af4b3a839
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
@@ -97,7 +97,7 @@ quantity.
 | Region          | Token (DESIGN.md)       |
 | --------------- | ----------------------- |
 | fill            | `var(--primary)`        |
-| shape (rounded) | `var(--shape-elements)` |
+| shape (rounded) | `var(--shape-control)` |
 | shape (flat)    | `var(--shape-flat)`     |
 
 <!-- Height is a sizing utility, not a DESIGN.md token: small/medium/large → `h-2`/`h-3`/`h-4`

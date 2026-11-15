@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 6d6c3537dad79f0c720f370fad6b63f4206af511c33bfe37d3951f3070980f56
+checksum: bac732f14470ea80a28420785cc5cb229ff290cfa48cb4c4785d2479b7faabb0
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -91,9 +91,9 @@ _none_
 | frame    | From `FrameBox` (`var(--border-default)`)                      |
 | padding  | `var(--spacing-lg)` inline, `var(--spacing-md)` block          |
 | wordmark | `Brand size="small"`                                           |
-| headline | `.text-heading-xxs`, `var(--text-default)`                     |
+| headline | `.text-heading-2xs`, `var(--text-default)`                     |
 | copy     | `.text-body-xs`, `var(--text-muted)`                           |
-| spacing  | `var(--spacing-md)`, `var(--spacing-xs)`, `var(--spacing-xxs)` |
+| spacing  | `var(--spacing-md)`, `var(--spacing-xs)`, `var(--spacing-2xs)` |
 
 ## Theme gaps
 

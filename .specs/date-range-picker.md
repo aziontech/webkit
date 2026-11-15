@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 2d244d483aed08bfea1cc3c9eb3e4d3a6e866d9dee7ee3ceee489fc740672af2
+checksum: 4721f74d142fced011c843e28442675045eae11b13035e793fb85ba3a3df047f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -137,8 +137,8 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 | panel surface   | `var(--bg-surface-raised)`, `var(--shadow-sm)`, `var(--shape-card)`        |
 | selected option | `var(--bg-selected)`; hover `var(--bg-hover)`                              |
 | muted text      | `var(--text-muted)`                                                        |
-| error message   | `var(--danger-contrast)`                                                   |
-| gaps            | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-sm)`             |
+| error message   | `var(--danger-foreground)`                                                 |
+| gaps            | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-sm)`             |
 
 ## Theme gaps
 

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: bb17e96b441837940d303ad1dfc61e9df612131b0e502c05fb5e47274d8b2be9
+checksum: 345d9fa01f4ae74e63410f120d32ed7e3a901d63a0d3b0cf93c31e06a89fb6a7
 created: 2026-10-23
 last_updated: 2026-11-15
 ---
@@ -128,13 +128,13 @@ No keyframe animation runs in the root or in any widget: every motion above is a
 | framed fragment window body padding | `var(--spacing-lg)` |
 | framed fragment fade color          | `var(--bg-canvas)`  |
 
-The root's own tokens are the padding and fade color of the window it draws around a framed fragment; the window itself is a `ShellMockup` and draws with its tokens. Each widget draws with the tokens of the webkit components it is composed of, plus `var(--bg-canvas)`, `var(--bg-surface)`, `var(--border-default)`, `var(--text-default)`, `var(--text-muted)`, `var(--shape-card)` and `var(--shape-elements)` on its own surfaces.
+The root's own tokens are the padding and fade color of the window it draws around a framed fragment; the window itself is a `ShellMockup` and draws with its tokens. Each widget draws with the tokens of the webkit components it is composed of, plus `var(--bg-canvas)`, `var(--bg-surface)`, `var(--border-default)`, `var(--text-default)`, `var(--text-muted)`, `var(--shape-card)` and `var(--shape-control)` on its own surfaces.
 
 ## Theme gaps
 
-| Figma variable                                                                                                                                                                                                                     | Temporary primitive                                                                                                                                | Follow-up                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| — (no Figma source; ported from the sample's mockups): the rim light on the three code panels (`function-code`, `application-function`, `kv-store-function`), the CLI terminal block and the `functions-start` transcript surfaces | the `--illustration-rim*` tokens with a fallback that draws the same ramp from `var(--border-default)` on `var(--bg-surface)` at `var(--border-2)` | `TODO: drop the fallbacks once the illustration theme foundation lands on main` |
+| Figma variable                                                                                                                                                                                                                     | Temporary primitive                                                                                                                                      | Follow-up                                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| — (no Figma source; ported from the sample's mockups): the rim light on the three code panels (`function-code`, `application-function`, `kv-store-function`), the CLI terminal block and the `functions-start` transcript surfaces | the `--illustration-rim*` tokens with a fallback that draws the same ramp from `var(--border-default)` on `var(--bg-surface)` at `var(--border-width-2)` | `TODO: drop the fallbacks once the illustration theme foundation lands on main` |
 
 ## Accessibility (WCAG 2.1 AA)
 

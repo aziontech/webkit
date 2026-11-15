@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 063d686a9a9310b6619073149aeb7122295f187b5fa55d929082d20e8a1fb22c
+checksum: f34e2e5a6dbf0138699f0b2c5cb5fb162f210029897f3f8da8131265246a3c5f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -93,9 +93,9 @@ _none_
 
 | Region                 | Token                                                     |
 | ---------------------- | --------------------------------------------------------- |
-| success disc / glyph   | `var(--success)` / `var(--success-contrast)`              |
-| danger disc / glyph    | `var(--danger)` / `var(--danger-contrast)`                |
-| warning disc / glyph   | `var(--warning)` / `var(--warning-contrast)`              |
+| success disc / glyph   | `var(--success)` / `var(--success-foreground)`              |
+| danger disc / glyph    | `var(--danger)` / `var(--danger-foreground)`                |
+| warning disc / glyph   | `var(--warning)` / `var(--warning-foreground)`              |
 | neutral disc / ring / glyph | `var(--bg-surface-raised)` / `var(--border-default)` / `var(--text-muted)` |
 
 ## Theme gaps

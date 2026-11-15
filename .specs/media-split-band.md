@@ -7,7 +7,7 @@ spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: a61fb38710175cd4866ef2b6cf193f2bcc3c43ce754143f5e1ae6a7ed3462074
+checksum: 282c62948e9bccb55ba71a0c212066efd7d1e70afafc0c8565a179896e37b0d9
 ---
 
 # MediaSplitBand — Component Spec
@@ -122,7 +122,7 @@ _none_
 | frame rules and marks | `var(--border-default)`                                          |
 | framed image plate    | `var(--bg-canvas)`, `var(--border-default)`, `var(--shape-card)` |
 | framed image inset    | `var(--spacing-md)`                                              |
-| anchor scroll offset | `var(--spacing-xxl)` |
+| anchor scroll offset | `var(--spacing-2xl)` |
 
 ## Theme gaps
 

@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: aa0056a3655bf4f07753a8d4b4b2ef6af9421cf8a19fe06008b0f26adde42ceb
+checksum: 2f211ba7666c8422e375fc13a213f87e870ad99fc95be901e39c116f01d536c3
 created: 2026-08-22
-last_updated: 2026-08-22
+last_updated: 2026-11-15
 ---
 
 # DocStep — Component Spec
@@ -88,7 +88,7 @@ _none_
 | surface (index circle)      | `var(--bg-surface)`                                                                    |
 | border (index circle, rail) | `var(--border-default)`                                                                |
 | shape (index circle)        | `var(--radius-full)`                                                                   |
-| spacing                     | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` / `var(--spacing-lg)` |
+| spacing                     | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-2xs)` / `var(--spacing-lg)` |
 
 ## Theme gaps
 

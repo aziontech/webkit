@@ -7,7 +7,7 @@ spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 6b8ea8c9d949e1df79c16a0114257749836aa8c16268777d2492469e4aa8a04a
+checksum: bf45ac9680748cfe3cdb4834cd7e00df7d7cd8cc4c0d54623a35a2e354515f19
 ---
 
 # ArticleHighlight — Component Spec
@@ -118,7 +118,7 @@ The band that opens a blog under its hero. One article is shown large — its co
 | ------------------------- | ------------------------------------------------------------------------------------------------------- |
 | panel and wall fill       | `var(--bg-canvas)`, hover `var(--bg-surface-raised)` / `var(--bg-hover)`, selected `var(--bg-selected)` |
 | rules                     | `var(--border-default)`                                                                                 |
-| headline                  | `text-heading-lg`, wall titles `text-heading-xxs`, `var(--text-default)`                                |
+| headline                  | `text-heading-lg`, wall titles `text-heading-2xs`, `var(--text-default)`                                |
 | overline, deck, read time | `text-overline-sm` / `text-body-md` / `text-body-sm`, `var(--text-muted)`                               |
 | focus ring                | `var(--ring-color)`                                                                                     |
 

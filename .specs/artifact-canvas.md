@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: a8fe5f1e5e498a70b4ab8ac0f31466f8220f5e130825a416e0d4ae81196ba8ad
+checksum: 65336fedded9de5ed89d24fcf1a7697b524bde40658b75962f770f44199ba6a3
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -145,12 +145,12 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 
 ## Tokens
 
-| Region  | Token                                                                    |
-| ------- | ------------------------------------------------------------------------ |
-| root    | `var(--bg-surface)`, `var(--border-default)`                             |
-| header  | `.text-label-md` title, `.text-body-xs` + `var(--text-muted)` meta       |
-| icon    | `var(--bg-surface-raised)`, `var(--text-muted)`, `var(--shape-elements)` |
-| spacing | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`            |
+| Region  | Token                                                                   |
+| ------- | ----------------------------------------------------------------------- |
+| root    | `var(--bg-surface)`, `var(--border-default)`                            |
+| header  | `.text-label-md` title, `.text-body-xs` + `var(--text-muted)` meta      |
+| icon    | `var(--bg-surface-raised)`, `var(--text-muted)`, `var(--shape-control)` |
+| spacing | `var(--spacing-xs)`, `var(--spacing-sm)`, `var(--spacing-md)`           |
 
 ## Theme gaps
 

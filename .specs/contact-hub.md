@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 39d759cdfc87e2a9e0e5a71ab76ce781e4ee73994a15801eee7fe7c9166c0227
+checksum: 769487e76220ea3e02086a5ebe114b28933be207c7f7b74160a064d34e2c8a5b
 ---
 
 # ContactHub — Component Spec
@@ -110,7 +110,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 | lane description      | `.text-heading-sm`, `var(--text-default)`                                                   |
 | lane glyph            | `var(--primary)`                                                                            |
 | status link           | `var(--bg-surface)`, `var(--bg-surface-raised)`, `var(--border-default)`, `.text-button-lg` |
-| anchor scroll offset  | `var(--spacing-xxl)`                                                                        |
+| anchor scroll offset  | `var(--spacing-2xl)`                                                                        |
 | frame rules and marks | `var(--border-default)`                                                                     |
 
 ## Theme gaps

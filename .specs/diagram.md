@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: d4e90a904466284b1e8becd4a3cc3a308a98d25ec06def0016d9f7a00c7cfd49
+checksum: 548204887630c7b4053df1b53056ac09f40d7531991c9bbde4e88999f012e439
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -145,7 +145,7 @@ _None — every node is drawn from `spec`._
 | Region                          | Token (DESIGN.md)                                                                                                                                            |
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | root padding                    | `var(--spacing-md)`, `var(--spacing-xl)` at the `3xl` container width                                                                                        |
-| layout gap                      | `var(--spacing-xl)`, `var(--spacing-xxl)` for a wide row                                                                                                     |
+| layout gap                      | `var(--spacing-xl)`, `var(--spacing-2xl)` for a wide row                                                                                                     |
 | branch indent (stacked)         | `var(--spacing-12)`                                                                                                                                          |
 | grid gap                        | `var(--spacing-xs)`                                                                                                                                          |
 | connector stroke                | `var(--border-default)` at `var(--border-width-default)`                                                                                                     |
@@ -155,7 +155,7 @@ _None — every node is drawn from `spec`._
 | node surface                    | `var(--bg-surface)`                                                                                                                                          |
 | node edge                       | `var(--border-default)`                                                                                                                                      |
 | node shadow                     | `var(--shadow-xs)`                                                                                                                                           |
-| node shape                      | `var(--shape-card)`; `var(--shape-flat)` for groups and tiles; `var(--shape-elements)` inside the app window                                                 |
+| node shape                      | `var(--shape-card)`; `var(--shape-flat)` for groups and tiles; `var(--shape-control)` inside the app window                                                  |
 | node typography                 | `.text-label-sm`; `.text-label-code-sm` for an item's eyebrow; `.text-heading-sm` for the app title and an item's icon                                       |
 | node text                       | `var(--text-default)`, `var(--text-muted)`                                                                                                                   |
 | lit edge and glow               | `var(--primary)`, `var(--accent)`                                                                                                                            |

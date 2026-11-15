@@ -4,9 +4,9 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 1
-checksum: c2720f0e9e0a7092e89f4881002b46da762436fff9a5fff9ca3de22f59fd655f
+checksum: 49cbf3d35a6320843ea3ffa428edf197d47b8dea5bbe451be5232def0e45fd74
 created: 2026-08-21
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # DocProse — Component Spec
@@ -105,7 +105,7 @@ The typography contract every documentation page inherits. A markdown or MDX pip
 | surface (inline code)          | `var(--bg-hover)`                                                |
 | border (inline code, hr)       | `var(--border-default)`                                          |
 | border (blockquote rule)       | `var(--border-strong)`                                           |
-| shape (inline code)            | `var(--shape-elements)`                                          |
+| shape (inline code)            | `var(--shape-control)`                                           |
 | surface (copy tooltip)         | `var(--bg-contrast)` / `var(--text-contrast)`                    |
 | spacing (section step)         | `var(--spacing-14)` (open, 56) / `var(--spacing-12)` (close, 48) |
 | spacing (block, indent)        | `var(--spacing-lg)`                                              |

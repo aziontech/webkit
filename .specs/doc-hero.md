@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 41b90a3dd5cfc9b8f367f5ede4a4f7ef15e6c7bfa2eb171b9f0673dffee8a4d8
+checksum: d646ece5de29d489794668c6fdeb09b61d26eda3f79c49c68e3d84b07bf0146f
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-xxl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
+The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-2xl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
 
 ## When to use
 
@@ -103,7 +103,7 @@ _none_
 | title    | `.text-heading-2xl`, `var(--text-default)`                                          |
 | deck     | `.text-body-lg`, `var(--text-muted)`, capped at `var(--container-xl)`               |
 | note     | `.text-body-sm`, `var(--text-muted)`                                                |
-| rhythm   | `var(--spacing-xxl)` above (from `sm`) and below, `var(--spacing-md)` title to deck, `var(--spacing-xl)` deck to actions, `var(--spacing-lg)` actions to note, `var(--spacing-sm)` between actions |
+| rhythm   | `var(--spacing-2xl)` above (from `sm`) and below, `var(--spacing-md)` title to deck, `var(--spacing-xl)` deck to actions, `var(--spacing-lg)` actions to note, `var(--spacing-sm)` between actions |
 
 ## Theme gaps
 
@@ -131,7 +131,7 @@ _none_
 
 ## Responsive
 
-- The title steps 30 → 36 → 48 px with `.text-heading-2xl`; the top space is `--spacing-xl` on a phone and `--spacing-xxl` from `sm`.
+- The title steps 30 → 36 → 48 px with `.text-heading-2xl`; the top space is `--spacing-xl` on a phone and `--spacing-2xl` from `sm`.
 - The action row wraps; at 390 px `CopyPromptButton` drops under `Get started`.
 - Reflow: no horizontal scroll at 320 px.
 

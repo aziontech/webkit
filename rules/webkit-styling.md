@@ -67,7 +67,7 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
     class="
       inline-flex items-center justify-center rounded-(--shape-button)
       transition-colors duration-150 ease-out motion-reduce:transition-none
-      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
+      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
       data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
       data-[size=small]:h-7 data-[size=small]:px-(--spacing-xs)
       data-[size=large]:h-10 data-[size=large]:px-(--spacing-md)
@@ -85,7 +85,7 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 ```vue
 <script setup>
   const kindClasses = {
-    primary: 'bg-(--primary) text-(--primary-contrast)',
+    primary: 'bg-(--primary) text-(--primary-foreground)',
     outlined: 'border border-(--border-default) bg-transparent'
   }
   const sizeClasses = { small: 'h-7 px-(--spacing-xs)', large: 'h-10 px-(--spacing-md)' }

@@ -145,7 +145,7 @@ if a form seems to need a different rhythm, it's in the wrong container.
 
 form title (`text-heading-*` — `PageHeader` on a page, a `Card` title / `text-heading-sm`
 in a contained card, `DialogTitle` in a modal) → form description (`text-body-sm text-(--text-muted)`)
-→ section title (`SettingsSection`, `text-heading-xxs`) or sub-heading (`text-heading-xs`) → **field label** (`Field.Label`,
+→ section title (`SettingsSection`, `text-heading-2xs`) or sub-heading (`text-heading-xs`) → **field label** (`Field.Label`,
 which carries the required tag) → control → **helper** (`HelperText` — guidance, or the required/invalid
 feedback). A label is never smaller than its helper; a section title is never smaller than a field label.
 
@@ -444,7 +444,7 @@ Three decisions make it safe:
   `Select.Option` in the `#footer` slot carrying a sentinel value; `@update:model-value` intercepts it,
   closes the dropdown, and opens the child instead of assigning `form.*`.
 - **Stacking is built in.** The child `Drawer` portals after the parent, so it sits over it at the same
-  layer, and a `Select.Content` teleports at `--z-input-overlay` (above every drawer). Add no `z-*`
+  layer, and a `Select.Content` teleports at `--z-control-overlay` (above every drawer). Add no `z-*`
   overrides to the overlay, the content or the popups.
 
 Canonical pattern:

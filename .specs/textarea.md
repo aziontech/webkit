@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: ed385afc4fb127c8f0fdff9323b1c48b91b96a46c4a316a44c1498ee4a3a4418
+checksum: 53795464aebc98c6e5a28bd6a3be759aa9b2acd8ccaec7b28ad5d960f0ccac64
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -154,7 +154,7 @@ _No slots._
 | border (invalid)         | `var(--danger-border)`        |
 | border width             | `var(--border-width-default)` |
 | spacing (padding)        | `var(--spacing-sm)`           |
-| shape                    | `var(--shape-elements)`       |
+| shape                    | `var(--shape-control)`       |
 
 ## Theme gaps
 

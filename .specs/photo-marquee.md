@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 5d495eedb854f751be9ac93a8191631856ce6e8bff2171772393fe802632d4e9
+checksum: aea3a588b8ad9d59ecf68f1d02e9385d9fa1439a895dd931d23e2cfb5bfaaac0
 template: 2
 ---
 
@@ -94,7 +94,7 @@ The office band of the careers page: a horizontal section title over a framed st
 | photo gap             | `var(--spacing-md)`     |
 | focus ring            | `var(--ring-color)`     |
 | frame rules and marks | `var(--border-default)` |
-| anchor scroll offset  | `var(--spacing-xxl)`    |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 

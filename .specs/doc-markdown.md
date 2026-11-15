@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 003099034fa9998ce7b10c55f6ebc9e3f833dd7d29610caaa6f09c529463a067
+checksum: 29d7d830c9a35c9caf4a68e9331edf3f862405ecb5e31cc5acecab96c3861ccd
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -110,7 +110,7 @@ You need an Acme account. Run \`acme login\` first.
 | Region                   | Token (DESIGN.md)                                       |
 | ------------------------ | ------------------------------------------------------- |
 | table frame              | `var(--border-default)`, `var(--bg-surface)`            |
-| table corner             | `var(--shape-elements)`                                 |
+| table corner             | `var(--shape-control)`                                  |
 | table header cell        | `.text-label-sm`, `var(--text-muted)`                   |
 | table body cell          | `.text-label-md`, `var(--text-default)`                 |
 | table cell padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                |

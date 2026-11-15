@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 537ab260fc228ef2d705da4580ab69e1a73f3c91101be42c5b79881ecba08bed
+checksum: d25288348665c132dc277e13219f364814f8b09f0a0172a5071401a7004d7bf4
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -169,13 +169,13 @@ _none_
 | ring (focus)                         | `var(--ring-color)`                                                                                                             |
 | ring (invalid focus)                 | `var(--danger)`                                                                                                                 |
 | spacing (trigger horizontal padding) | `var(--spacing-sm)`                                                                                                             |
-| spacing (panel list padding.x)       | `var(--spacing-xxs)`                                                                                                            |
+| spacing (panel list padding.x)       | `var(--spacing-2xs)`                                                                                                            |
 | spacing (panel list padding.y)       | `var(--spacing-xs)` — the vertical seam is one step up from the row inset so the first/last row does not crowd the panel border |
 | spacing (between groups)             | `var(--spacing-sm)`                                                                                                             |
 | option leading column                | `size-4` (16px), reserved for every option when any option has a glyph                                                          |
 | spacing (option padding)             | `var(--spacing-xs)`                                                                                                             |
 | spacing (option gap)                 | `var(--spacing-xs)`                                                                                                             |
-| shape                                | `var(--shape-elements)`                                                                                                         |
+| shape                                | `var(--shape-control)`                                                                                                         |
 | shadow (panel)                       | `var(--shadow-xs)`                                                                                                              |
 
 ## Decisions and open questions

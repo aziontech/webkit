@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 6d1729151b92c2c2178c81c07b3908c394748084d5a32efe5662afccfe4e87c8
+checksum: 19156d8953da3e895a9a4f0f6a581090737e278cd54ce0607175695675b5a85e
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -108,8 +108,8 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 | rail                             | `var(--border-default)`                                                                |
 | marker                           | `var(--primary)`                                                                       |
 | surface (hover highlight)        | `var(--bg-hover)`                                                                      |
-| shape                            | `var(--shape-elements)`                                                                |
-| spacing                          | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
+| shape                            | `var(--shape-control)`                                                                 |
+| spacing                          | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-2xs)` |
 | ring                             | `var(--ring-color)`                                                                    |
 
 ## Theme gaps

@@ -3,7 +3,7 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 13a76b11e148c44b5b824a908069e9cd1298f6b6a0b43a666e27856aabd92f57
+checksum: 20749c14e7d520b2c047f9cac9f576bbf1526f6d9fcb1ae95088fbef84c694ba
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -103,7 +103,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 | Region         | Token (DESIGN.md)                           |
 | -------------- | ------------------------------------------- |
 | title (medium) | `.text-heading-xs` · `var(--text-default)`  |
-| title (small)  | `.text-heading-xxs` · `var(--text-default)` |
+| title (small)  | `.text-heading-2xs` · `var(--text-default)` |
 | description    | `.text-body-sm` · `var(--text-muted)`       |
 | inline padding | `var(--spacing-xs)`                         |
 | row gap        | `var(--spacing-md)`                         |

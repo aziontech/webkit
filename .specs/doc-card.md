@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: e28e3e8beedd0ba75f8660ca44236f45f2ba7b2bda661a5e02d54e0533db53d9
+checksum: c13b6c5b41364a6c0ae1a6a1cb871d154ff5722292e418892820d2e38405b422
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -106,7 +106,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 | link (cta)           | `var(--text-link)`                                               |
 | surface              | `var(--bg-surface)`                                              |
 | surface.hover        | `var(--bg-hover)`                                                |
-| spacing              | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xxs)` |
+| spacing              | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-2xs)` |
 | ring                 | `var(--ring-color)`                                              |
 
 ## Theme gaps

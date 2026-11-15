@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 70079fd1e862e53d54e1cd818cac7b9ab3f0be8d16562e304b54991752d75b29
+checksum: cfdb51f3ae9f4c2c166eaa39aff46257ef8852d2c7debc301a32a08815a00f38
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
@@ -170,7 +170,7 @@ _No plain events — selection flows through `v-model`._
 | hovered card surface (ghost layer)           | `var(--bg-hover)`       |
 | one-ink mark                                 | `var(--text-default)`   |
 | progress hairline                            | `var(--primary)`        |
-| typography (mark fallback)                   | `.text-heading-xxs`     |
+| typography (mark fallback)                   | `.text-heading-2xs`     |
 | spacing (card inset, x)                      | `var(--spacing-md)`     |
 | spacing (panel inset, every side)            | `var(--spacing-xl)`     |
 | spacing (quotation travel)                   | `var(--spacing-xl)`     |

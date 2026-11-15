@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 0aa32ad11b4a8bf483f344168445d0cbeb27b7b0402647ab17b3adc9f39b3bbb
+checksum: 6b38b4f4866f39a127fecadf6f2223af9ec968c83189b4e80e34f8997d370962
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -126,7 +126,7 @@ _none_
 | adornment tile surface      | `var(--bg-surface)`                                             |
 | adornment tile border       | `var(--border-default)`                                         |
 | adornment decorative layers | `var(--bg-canvas)` · `var(--border-strong)`                     |
-| adornment shape             | `var(--shape-card)` · `var(--shape-elements)`                   |
+| adornment shape             | `var(--shape-card)` · `var(--shape-control)`                   |
 | adornment icon              | `var(--text-default)`                                           |
 | shape (bordered)            | `var(--shape-button)`                                           |
 | spacing (title gap)         | `var(--spacing-xs)`                                             |
@@ -138,7 +138,7 @@ Every axis steps up one rung per size on a single harmonic ramp. The title climb
 
 | Axis                   | `small`                                 | `medium`                                 |
 | ---------------------- | --------------------------------------- | ---------------------------------------- |
-| title typography       | `.text-heading-xxs` (14px)              | `.text-heading-sm` (14 → 18px)           |
+| title typography       | `.text-heading-2xs` (14px)              | `.text-heading-sm` (14 → 18px)           |
 | description typography | `.text-body-xs` (12px)                  | `.text-body-sm` (14px)                   |
 | adornment tile         | `size-8` (32px)                         | `size-10` (40px)                         |
 | padding (x · y)        | `var(--spacing-6)` · `var(--spacing-8)` | `var(--spacing-8)` · `var(--spacing-12)` |
@@ -146,7 +146,7 @@ Every axis steps up one rung per size on a single harmonic ramp. The title climb
 
 ## Theme gaps
 
-_none_ — the title now uses `heading` tokens at every size (`.text-heading-xxs` is 14px regular, matching the Figma `Typography/Heading/xss` title), so the previous body-token workaround is retired.
+_none_ — the title now uses `heading` tokens at every size (`.text-heading-2xs` is 14px regular, matching the Figma `Typography/Heading/xss` title), so the previous body-token workaround is retired.
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: b6642e93beff07c17c7d638b3e6ecd4689a44f544606204797686a8011f9af1c
+checksum: 87c40a57372988a368e3ed4b89be6e6f1782aacb4926f47cdebd36efad5a314a
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -101,7 +101,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 | ---------------------- | --------------------------------- |
 | fill                   | `var(--bg-placeholder)`           |
 | shimmer sweep          | `var(--bg-placeholder-highlight)` |
-| shape radius (`rectangle`) | `var(--shape-elements)`           |
+| shape radius (`rectangle`) | `var(--shape-control)`           |
 
 `--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 

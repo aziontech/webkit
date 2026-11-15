@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 383fa64882b879d53b08e4df6cfea3548c2d6480325c430c825b31fe76ec3ee9
+checksum: b1bba1c2a304f7b69af45be785487ff0071f325733c135a82ba161a61c00ed24
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -132,7 +132,7 @@ The labelled control that triggers an action. `kind` ranks the action in its vie
 | surface    | `var(--bg-surface)`                                           |
 | text       | `var(--text-default)`                                         |
 | spacing    | `var(--spacing-3)`                                            |
-| shape      | `var(--shape-elements)`                                       |
+| shape      | `var(--shape-control)`                                        |
 | ring       | `var(--ring-color)`                                           |
 
 ## Theme gaps

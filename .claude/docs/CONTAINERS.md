@@ -261,10 +261,10 @@ The token layer everything above resolves to.
 
 ### Weights
 
-| Token                                     | Value   | Role                                                           |
-| ----------------------------------------- | ------- | -------------------------------------------------------------- |
-| `--border-width-default` (= `--border-1`) | `0.8px` | Component-level hairline (opt-in, see [drift](#known-issues)). |
-| `--border-2`                              | `2px`   | Accent bar — painted as a **filled element**, never a border.  |
+| Token                                           | Value   | Role                                                           |
+| ----------------------------------------------- | ------- | -------------------------------------------------------------- |
+| `--border-width-default` (= `--border-width-1`) | `0.8px` | Component-level hairline (opt-in, see [drift](#known-issues)). |
+| `--border-width-2`                              | `2px`   | Accent bar — painted as a **filled element**, never a border.  |
 
 The page layer uses the bare `border` / `border-x` / `border-t` utilities throughout, which is
 Tailwind's **1px**.
@@ -283,7 +283,7 @@ Tailwind's **1px**.
 
 ### Radii
 
-`--shape-flat` `0` (grid cells, bands) · `--shape-elements` `6px` (inputs, chips) ·
+`--shape-flat` `0` (grid cells, bands) · `--shape-control` `6px` (inputs, chips) ·
 `--shape-button` `6px` · `--shape-card` `8px` — **the ceiling**. Nothing structural is pill-shaped.
 
 ### Column widths

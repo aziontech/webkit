@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: d341950cf34251c613b6e1ce91abe291211d74716d44365bb6a0f4fe41f81c79
+checksum: 28b6bd2fede4fa75485e0462ef106e814df971b9e18190f03217abcb5c829276
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -133,7 +133,7 @@ _none_
 | spacing (quotation to attribution)               | `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xl)` |
 | spacing (quotation to mark column, `highlight`)  | `var(--spacing-xl)`                                             |
 | spacing (attribution lines, `inline` / `signed`) | `var(--spacing-md)`                                             |
-| spacing (attribution inset)                      | `var(--spacing-xxs)`                                            |
+| spacing (attribution inset)                      | `var(--spacing-2xs)`                                            |
 
 ## Theme gaps
 

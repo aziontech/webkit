@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 1f6ffe20ecfff63bc98c9b4913a69538103fde60ac6268855b13d44de7ebb530
+checksum: 0f52f19ee3fefa446a517be668309e3d3351b2c32761af7f0ec9b99ba84b3202
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -109,7 +109,7 @@ _none_
 | surface                  | `var(--bg-surface)`                                         |
 | text                     | `var(--text-default)`                                       |
 | spacing                  | `var(--spacing-3)`                                          |
-| shape                    | `var(--shape-elements)`                                     |
+| shape                    | `var(--shape-control)`                                      |
 | ring                     | `var(--ring-color)`                                         |
 | pattern colors (default) | `var(--text-primary)` · `var(--primary)` · `var(--warning)` |
 

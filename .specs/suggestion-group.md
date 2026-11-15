@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: bc6a8a6800d4d448b5dae9a135357e936456b94e0fb2f50dd6888a4a47b468fb
+checksum: 1bea8b1852042a7ac7b49ef47bfa315cf5644c49115f242576217eb75964acc6
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -102,7 +102,7 @@ _No slots._
 | -------- | ------------------------------------------------------------------------ |
 | prompt   | `var(--bg-surface)`, `var(--border-default)` → hover `var(--border-strong)` / `var(--bg-hover)`, `var(--shape-button)` |
 | text     | `.text-label-sm`, `var(--text-default)`; icon `var(--text-muted)`; disabled `var(--text-disabled)` |
-| gaps     | `var(--spacing-xs)`, padding `var(--spacing-sm)` / `var(--spacing-xxs)`  |
+| gaps     | `var(--spacing-xs)`, padding `var(--spacing-sm)` / `var(--spacing-2xs)`  |
 
 ## Theme gaps
 

@@ -4,7 +4,7 @@ category: navigation
 structure: composition
 status: implemented
 spec_version: 4
-checksum: 56464892b4f53636971d08d5fe9a7378af03ca7ab736dcc8ab5dabda8f38e5ee
+checksum: 3e3f71cac7a6f26f2eb62eac6edc3ce4f6e26d4ddcd8e75638819d08f4849083
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -178,32 +178,32 @@ even when the row carries nothing but its title.
 
 ## Tokens
 
-| Region                                  | Token (DESIGN.md)           |
-| --------------------------------------- | --------------------------- |
-| typography (step title)                 | `.text-label-md`            |
-| typography (step description)           | `.text-body-sm`             |
-| typography (dot number)                 | `.text-label-sm`            |
-| dot surface (upcoming, current)         | `var(--bg-surface)`         |
-| dot surface (complete)                  | `var(--secondary)`          |
-| dot ink (complete)                      | `var(--secondary-contrast)` |
-| dot surface (error)                     | `var(--danger)`             |
-| dot ink (error)                         | `var(--danger-contrast)`    |
-| dot border (error)                      | `var(--danger-border)`      |
-| dot border (upcoming)                   | `var(--border-default)`     |
-| dot border (current, complete, loading) | `var(--secondary)`          |
-| connector track                         | `var(--border-default)`     |
-| connector fill                          | `var(--secondary)`          |
-| title ink (current, complete)           | `var(--text-default)`       |
-| title ink (upcoming)                    | `var(--text-muted)`         |
-| description ink                         | `var(--text-muted)`         |
-| disabled ink                            | `var(--text-disabled)`      |
-| hover surface                           | `var(--bg-hover)`           |
-| shape (dot)                             | `var(--radius-full)`        |
-| shape (row)                             | `var(--shape-elements)`     |
-| spacing.x                               | `var(--spacing-sm)`         |
-| spacing.y                               | `var(--spacing-xs)`         |
-| ring                                    | `var(--ring-color)`         |
-| ring offset                             | `var(--bg-canvas)`          |
+| Region                                  | Token (DESIGN.md)             |
+| --------------------------------------- | ----------------------------- |
+| typography (step title)                 | `.text-label-md`              |
+| typography (step description)           | `.text-body-sm`               |
+| typography (dot number)                 | `.text-label-sm`              |
+| dot surface (upcoming, current)         | `var(--bg-surface)`           |
+| dot surface (complete)                  | `var(--secondary)`            |
+| dot ink (complete)                      | `var(--secondary-foreground)` |
+| dot surface (error)                     | `var(--danger)`               |
+| dot ink (error)                         | `var(--danger-foreground)`    |
+| dot border (error)                      | `var(--danger-border)`        |
+| dot border (upcoming)                   | `var(--border-default)`       |
+| dot border (current, complete, loading) | `var(--secondary)`            |
+| connector track                         | `var(--border-default)`       |
+| connector fill                          | `var(--secondary)`            |
+| title ink (current, complete)           | `var(--text-default)`         |
+| title ink (upcoming)                    | `var(--text-muted)`           |
+| description ink                         | `var(--text-muted)`           |
+| disabled ink                            | `var(--text-disabled)`        |
+| hover surface                           | `var(--bg-hover)`             |
+| shape (dot)                             | `var(--radius-full)`          |
+| shape (row)                             | `var(--shape-control)`        |
+| spacing.x                               | `var(--spacing-sm)`           |
+| spacing.y                               | `var(--spacing-xs)`           |
+| ring                                    | `var(--ring-color)`           |
+| ring offset                             | `var(--bg-canvas)`            |
 
 ## Theme gaps
 

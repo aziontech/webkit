@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: b3077b491a58228b281c8d452f954be949e24cfd954a5c2062d1d9a4fd3e136e
+checksum: 552ca30f11a035c3554030569ab95f2a6f61881465b17124e85604da4087fedb
 created: 2026-11-09
 last_updated: 2026-11-15
 ---
@@ -135,7 +135,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 | height                            | `h-7` (small) · `h-8` (medium) · `h-10` (large)                                          |
 | group surface                     | `var(--bg-surface)`                                                                      |
 | group border                      | `var(--border-muted)`                                                                    |
-| group padding / gap               | `var(--spacing-xxs)`                                                                     |
+| group padding / gap               | `var(--spacing-2xs)`                                                                     |
 | segment padding.x                 | `var(--spacing-xs)` (small) · `var(--spacing-sm)` (medium) · `var(--spacing-md)` (large) |
 | segment gap (label to lock icon)  | `var(--spacing-xs)`                                                                      |
 | shape (group, segment, indicator) | `var(--shape-button)`                                                                    |

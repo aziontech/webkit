@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: cb13dfbbdb9c2d92df21a757ae429ef6dc0f74be740702517d1c490b82ad3f26
+checksum: 8a434b200cbb64157358f3f5596ab19b7491db9f59981ea9d8c0966e39dcdb8c
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -107,7 +107,7 @@ _none_
 
 | Region        | Token (DESIGN.md)     |
 | ------------- | --------------------- |
-| wordmark type | `.text-heading-xxs`   |
+| wordmark type | `.text-heading-2xs`   |
 | wordmark ink  | `var(--text-default)` |
 
 The inks need no colour token: `current` paints `currentColor` through a CSS mask, `monochrome` and `knockout` are filters (`brightness-0`, then `invert` on the dark theme for `monochrome`).
