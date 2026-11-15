@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: d5ad44082f53df0e2757792127777eb26f4b2b100c895bf212ea85d67c247d28
+checksum: 6865c3dc3fc1f30bc1a66cc83a2cceff31ce761eaac83eb7fd0e532fc0913a32
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 ## Best practices
 
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
-- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
+- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
 - A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.

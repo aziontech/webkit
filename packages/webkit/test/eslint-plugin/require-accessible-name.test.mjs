@@ -2,7 +2,9 @@ import test from 'node:test'
 import { RuleTester } from 'eslint'
 import * as vueParser from 'vue-eslint-parser'
 
-const accessibleName = (await import('../../src/eslint-plugin/rules/accessible-name.js')).default
+const requireAccessibleName = (
+  await import('../../src/eslint-plugin/rules/require-accessible-name.js')
+).default
 
 const vue = new RuleTester({
   languageOptions: { parser: vueParser, ecmaVersion: 2022, sourceType: 'module' }
@@ -14,8 +16,8 @@ const missing = (body, component = 'IconButton') => ({
   errors: [{ messageId: 'missing', data: { component } }]
 })
 
-test('accessible-name', () => {
-  vue.run('accessible-name', accessibleName, {
+test('require-accessible-name', () => {
+  vue.run('require-accessible-name', requireAccessibleName, {
     valid: [
       sfc('<IconButton icon="ai ai-trash" aria-label="Delete domain" />'),
       sfc('<IconButton icon="ai ai-eye" :aria-label="label" />'),

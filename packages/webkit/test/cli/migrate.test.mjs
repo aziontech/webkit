@@ -11,6 +11,7 @@ import {
   legacyMarkers,
   loadMigration,
   migrateIcons,
+  migrateLintRules,
   migrateSource,
   planMigrate,
   renameSubpath
@@ -392,4 +393,41 @@ test('a rename whose new name prefixes the old one still rewrites the sub-compon
   assert.match(source, /import ResizablePane from '@aziontech\/webkit\/resizable-pane'/)
   assert.match(source, /<CommandItem \/><ResizablePane \/>/)
   assert.equal(migrateSource(source, v6).source, source)
+})
+
+test('migrateLintRules renames WebKit lint rule ids in configs and disable comments', async () => {
+  const { lint } = loadMigration(6)
+  const config = [
+    "import webkit from '@aziontech/webkit/eslint-plugin'",
+    "import Menu from '@aziontech/webkit/menu-node-href'",
+    'export default [',
+    "  { rules: { 'webkit/accessible-name': 'off', 'webkit/container-needs-width': 'warn' } },",
+    "  { rules: { 'webkit/valid-import-path': 'error', 'webkit/no-barrel-import': 'error' } }",
+    ']',
+    '// eslint-disable-next-line webkit/menu-node-href, webkit/header-search-trigger',
+    "const id = 'webkit/accessible-name-extra'"
+  ].join('\n')
+  const { source, changes } = migrateLintRules(config, lint)
+  assert.match(source, /'webkit\/require-accessible-name': 'off'/)
+  assert.match(source, /'webkit\/require-container-width': 'warn'/)
+  assert.match(source, /'webkit\/no-unknown-import': 'error'/)
+  assert.match(source, /webkit\/prefer-href-in-menu-node, webkit\/require-header-search/)
+  assert.match(source, /'webkit\/no-barrel-import'/)
+  assert.match(source, /@aziontech\/webkit\/menu-node-href/)
+  assert.match(source, /'webkit\/accessible-name-extra'/)
+  assert.equal(changes.length, 5)
+  assert.equal(migrateLintRules(source, lint).changes.length, 0)
+
+  const { rules } = (await import('../../src/eslint-plugin/index.js')).default
+  for (const [from, to] of Object.entries(lint)) {
+    assert.ok(rules[to.slice('webkit/'.length)], `${to} is a shipped rule`)
+    assert.equal(rules[from.slice('webkit/'.length)], undefined, `${from} is gone`)
+  }
+})
+
+test('migrateSource rewrites lint rule ids in a file that imports no WebKit component', () => {
+  const sfc = '<!-- eslint-disable webkit/accessible-name -->\n<template><i /></template>\n'
+  const { source, changes } = migrateSource(sfc, loadMigration(6))
+  assert.match(source, /eslint-disable webkit\/require-accessible-name/)
+  assert.deepEqual(changes, ['webkit/accessible-name → webkit/require-accessible-name'])
 })

@@ -37,7 +37,7 @@ import Button from '@aziontech/webkit/src/components/actions/button/button.vue'
     },
     {
       file: 'unknown-export.vue',
-      rule: 'webkit/valid-import-path',
+      rule: 'webkit/no-unknown-import',
       optional: false,
       content: `<script setup>
 import Nope from '@aziontech/webkit/this-export-does-not-exist'

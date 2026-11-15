@@ -26,7 +26,7 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'menu-node-href' }
+      { surface: 'lint', by: 'prefer-href-in-menu-node' }
     ]
   },
   {
@@ -44,7 +44,7 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-references' },
-      { surface: 'lint', by: 'valid-import-path' },
+      { surface: 'lint', by: 'no-unknown-import' },
       { surface: 'lint', by: 'no-barrel-import' },
       { surface: 'lint', by: 'no-deep-internal-import' },
       { surface: 'lint', by: 'prefer-tree-shakeable-root' },
@@ -74,7 +74,7 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-hardcoded-motion' },
       { surface: 'lint', by: 'no-style-override' },
       { surface: 'lint', by: 'no-physical-direction' },
-      { surface: 'lint', by: 'container-needs-width' },
+      { surface: 'lint', by: 'require-container-width' },
       { surface: 'lint', by: 'no-wrapped-page-chrome' },
       { surface: 'lint', by: 'no-gap-after-closing-section' },
       { surface: 'lint', by: 'no-viewport-height-calc' },
@@ -240,7 +240,7 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'ci', by: 'vuejs-accessibility' },
-      { surface: 'lint', by: 'accessible-name' },
+      { surface: 'lint', by: 'require-accessible-name' },
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'Static a11y via eslint-plugin-vuejs-accessibility (error); behavioural via axe once the test layer lands; review in the meantime.'

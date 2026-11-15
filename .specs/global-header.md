@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: d4c7852067d5b3204aae5412d5f8635cec172e2d79d96e5654edd11c8fd086c4
+checksum: e7e5af5c1e44ff94fcebfa6efb1be0e52ada4fa3a2aaec71e640850e5e8e8695
 created: 2026-05-23
 last_updated: 2026-11-15
 ---
@@ -53,7 +53,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 - Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
-- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
+- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
 
 ## Usage
 

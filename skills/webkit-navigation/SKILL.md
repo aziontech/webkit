@@ -218,7 +218,7 @@ What each part of the layout takes:
   followed with the app's router, a named route becomes one through `router.resolve(...).href`, an
   external URL loads normally. `kind: 'drill'` with `groups` opens a level in place (Settings);
   `tagValue` adds a badge (`Preview`). Never `to`, `path` or `route` on a row (lint
-  `webkit/menu-node-href`). Leave `active-id` empty: the active row follows the route.
+  `webkit/prefer-href-in-menu-node`). Leave `active-id` empty: the active row follows the route.
 - **`breadcrumbs`** — the trail, `{ label, href? }[]`, derived from the route meta; empty on a
   first-level page (see "Breadcrumb" below). Hidden while compact. The `breadcrumbs` slot replaces it
   only when a crumb is a control (an environment `Select`).
@@ -255,7 +255,7 @@ Ctrl K `Command` palette that lists every navigation page; it shows the field on
 magnifier on a narrow one. Add what the palette should also offer through the `search` slot. Never add
 a second `SearchTrigger`, a second `Command` or a ⌘K binding of your own. `SiteLayout` and `DocLayout`
 carry the same search. The focused creation shell has no search: it stays on the task. Any header you
-do compose yourself follows rule `webkit-header-search` (lint `webkit/header-search-trigger`).
+do compose yourself follows rule `webkit-header-search` (lint `webkit/require-header-search`).
 
 #### The rail collapses; it never disappears
 
@@ -873,7 +873,7 @@ section is for a `SidebarMenu` or `Breadcrumb` you render yourself inside a page
 
 `SidebarMenu` (and its `SidebarMenuNode` data), `Breadcrumb` items and `SidebarMenu.Item` take their destination in
 **`href`**, and only there. There is no `to`, and a `path`, `to`, `url` or `route` key on a nav node
-is not read: the row renders as a button with nowhere to go (lint `webkit/menu-node-href`). Do not
+is not read: the row renders as a button with nowhere to go (lint `webkit/prefer-href-in-menu-node`). Do not
 confuse it with `v-model:path` on `SidebarMenu`, which is the drill stack (ancestor node ids), not a URL.
 
 With Vue Router, keep the rows real links and let the router do the navigation:

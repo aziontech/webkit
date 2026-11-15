@@ -525,7 +525,7 @@ import Chip from '@aziontech/webkit/chips'             // binding ≠ subpath
   dot-notation — the compound path retains every sub-component.
 - Icons: side-effect import only (`import '@aziontech/icons'`), never a whole-set binding.
 
-**Enforced by:** `webkit/valid-import-path` (autofixes typos) · `no-barrel-import` ·
+**Enforced by:** `webkit/no-unknown-import` (autofixes typos) · `no-barrel-import` ·
 `no-deep-internal-import` · `prefer-tree-shakeable-root` · `no-whole-icon-set-import` —
 all error · `validate-references` (write-time).
 

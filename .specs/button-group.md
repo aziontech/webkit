@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: c86b6d647ee9469b9b84f5a1639099dd7d8d6beee29a2d45ef2a662ca74e51b8
+checksum: a8969db0f27aea0e54d38ca921b228552fcd4dda97323d0db79ccd91b3bab370
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -44,7 +44,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 ## Best practices
 
 - Give the toolbar an `aria-label` that names the surface ("Editor actions"), and every item a `label` that says what it does ("Copy code", not "Copy"). Write the kebab attribute (`aria-label`, `:aria-label` when the name changes, `aria-labelledby` when a visible heading already names the surface), never the camelCase `ariaLabel` attribute.
-- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags a `ButtonGroup` with neither `aria-label` nor `aria-labelledby`.
 - Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.
 - Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.
 - Set `loading` on an action while its request runs instead of disabling the whole group.
@@ -147,7 +147,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 
 ## Accessibility (WCAG 2.1 AA)
 
-- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `webkit/accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
+- `role="toolbar"` with `aria-orientation="horizontal"` and a mandatory accessible name: `aria-label` (static or bound) or `aria-labelledby`. `webkit/require-accessible-name` flags a ButtonGroup with neither, and an empty name renders no `aria-label` attribute.
 - Keyboard map: one tab stop (the last focused item, else the first enabled); `ArrowRight` / `ArrowLeft` move and wrap (swapped under `dir="rtl"` through `logicalArrowKey`); `Home` / `End` jump to the ends; `Enter` / `Space` activate; on a menu item `Enter`, `Space` or `ArrowDown` open the menu, `Escape` closes it and returns focus to its button.
 - Each icon button's accessible name is its `label`; the tooltip shows the same text on hover and focus.
 - Toggles expose `aria-pressed`; the pressed fill is backed by an outline in forced colors.

@@ -97,7 +97,7 @@ by that exact rule.
 
 ```
 OK    webkit/no-deep-internal-import denied-import.vue
-OK    webkit/valid-import-path unknown-export.vue
+OK    webkit/no-unknown-import unknown-export.vue
 OK    webkit/no-hardcoded-color hardcoded-color.vue
 OK    webkit/no-hardcoded-color hardcoded-color.astro
 

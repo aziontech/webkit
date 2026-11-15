@@ -403,7 +403,7 @@ block off-pattern usage at commit; the same lint runs in the project's CI.
 <summary><b>▸ Details — rules, presets, autofix, and doctor</b></summary>
 
 **ESLint rules** ([`src/eslint-plugin/`](../../packages/webkit/src/eslint-plugin/)):
-`valid-import-path` (with typo suggestions), `no-deep-internal-import`,
+`no-unknown-import` (with typo suggestions), `no-deep-internal-import`,
 `no-barrel-import`, `no-whole-icon-set-import`, `no-hardcoded-color`,
 `prefer-tree-shakeable-root`, plus the shipped construction standards
 (`authoring-standards`) and `prefer-webkit-component` (adoption steering). Deterministic
@@ -530,7 +530,7 @@ practices**, adoptable by any project (with or without webkit components).
 
 **What stays in webkit**: the 11 `webkit`-scope standards, the spec pipeline
 (`.specs/`, `/spec-create`, `/component-create`), the catalog-backed usage rules
-(`valid-import-path`, `prefer-tree-shakeable-root`, …), the MCP server, and `catalog.json`
+(`no-unknown-import`, `prefer-tree-shakeable-root`, …), the MCP server, and `catalog.json`
 — these are about _this_ design system, not about construction in general.
 
 **Staged migration**

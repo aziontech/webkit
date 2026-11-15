@@ -89,7 +89,7 @@ keeping to the guidelines. Only when no pattern fits, compose from components (b
   (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.End`, opening a `Command` palette;
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
   binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
-  their palette (rule `webkit-header-search`, lint `webkit/header-search-trigger`).
+  their palette (rule `webkit-header-search`, lint `webkit/require-header-search`).
 - **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
   title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
   chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section

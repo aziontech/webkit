@@ -115,7 +115,7 @@ runs axe + screenshots), and taste is a review concern.
 
 - **Search in every app header.** A header that navigates (console, demo, docs, site) puts
   `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette (`⌘K` / `Ctrl K`);
-  never a hand-rolled field or a bare magnifier button. Lint: `webkit/header-search-trigger`
+  never a hand-rolled field or a bare magnifier button. Lint: `webkit/require-header-search`
   (rule `webkit-header-search`).
 - **Docs home.** Start from `shells/documentation` variant `Landing`: `DocHero` with `Get started`
   and `CopyPromptButton` (the "Copy prompt" chip with the AI-agent marks), then `DocAgentCard`

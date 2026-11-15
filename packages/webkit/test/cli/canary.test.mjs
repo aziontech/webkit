@@ -58,7 +58,7 @@ const FIXTURES = [
   },
   {
     file: 'b.vue',
-    rule: 'webkit/valid-import-path',
+    rule: 'webkit/no-unknown-import',
     optional: false,
     content: '<template></template>'
   },
@@ -76,13 +76,13 @@ test('runCanary reports OK when every fixture is flagged by its exact rule', () 
   try {
     installFakeEslint(dir, {
       'a.vue': { rule: 'webkit/no-deep-internal-import' },
-      'b.vue': { rule: 'webkit/valid-import-path' },
+      'b.vue': { rule: 'webkit/no-unknown-import' },
       'c.astro': { rule: 'webkit/no-hardcoded-color' }
     })
     const result = runCanary(dir, { fixtures: FIXTURES })
     assert.equal(result.exitCode, 0)
     assert.ok(result.lines.some((l) => l.startsWith('OK    webkit/no-deep-internal-import a.vue')))
-    assert.ok(result.lines.some((l) => l.startsWith('OK    webkit/valid-import-path b.vue')))
+    assert.ok(result.lines.some((l) => l.startsWith('OK    webkit/no-unknown-import b.vue')))
     assert.ok(result.lines.some((l) => l.startsWith('OK    webkit/no-hardcoded-color c.astro')))
   } finally {
     rmSync(dir, { recursive: true, force: true })
@@ -94,7 +94,7 @@ test('runCanary fails when a required fixture is not flagged', () => {
   try {
     installFakeEslint(dir, {
       'a.vue': {}, // not flagged at all
-      'b.vue': { rule: 'webkit/valid-import-path' }
+      'b.vue': { rule: 'webkit/no-unknown-import' }
     })
     const result = runCanary(dir, { fixtures: FIXTURES })
     assert.equal(result.exitCode, 1)
@@ -109,7 +109,7 @@ test('runCanary fails when a fixture flagged by the wrong rule', () => {
   try {
     installFakeEslint(dir, {
       'a.vue': { rule: 'webkit/some-other-rule' },
-      'b.vue': { rule: 'webkit/valid-import-path' }
+      'b.vue': { rule: 'webkit/no-unknown-import' }
     })
     const result = runCanary(dir, { fixtures: FIXTURES })
     assert.equal(result.exitCode, 1)
@@ -124,7 +124,7 @@ test('runCanary fails on a fatal parse error, never counts it as a pass', () => 
   try {
     installFakeEslint(dir, {
       'a.vue': { fatal: 'Unexpected token' },
-      'b.vue': { rule: 'webkit/valid-import-path' }
+      'b.vue': { rule: 'webkit/no-unknown-import' }
     })
     const result = runCanary(dir, { fixtures: FIXTURES })
     assert.equal(result.exitCode, 1)
@@ -139,7 +139,7 @@ test('runCanary skips the optional fixture without failing when it is not flagge
   try {
     installFakeEslint(dir, {
       'a.vue': { rule: 'webkit/no-deep-internal-import' },
-      'b.vue': { rule: 'webkit/valid-import-path' }
+      'b.vue': { rule: 'webkit/no-unknown-import' }
       // c.astro deliberately omitted — not linted at all.
     })
     const result = runCanary(dir, { fixtures: FIXTURES })
@@ -153,7 +153,7 @@ test('runCanary skips the optional fixture without failing when it is not flagge
 test('runCanary always removes .webkit-canary/, even on failure', () => {
   const dir = makeProject()
   try {
-    installFakeEslint(dir, { 'a.vue': {}, 'b.vue': { rule: 'webkit/valid-import-path' } })
+    installFakeEslint(dir, { 'a.vue': {}, 'b.vue': { rule: 'webkit/no-unknown-import' } })
     runCanary(dir, { fixtures: FIXTURES })
     assert.equal(existsSync(join(dir, CANARY_DIR)), false)
   } finally {
