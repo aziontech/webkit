@@ -271,6 +271,8 @@ function renameAttributes(attrs, rules) {
       out = out.replace(
         new RegExp(`(\\s)${name}(\\s*=\\s*)(["'])([^"']*)\\3`, 'g'),
         (all, sp, eq, q, value) => {
+          if (rule.moves && Object.hasOwn(rule.moves, value))
+            return `${sp}${kebab(rule.moves[value])}${eq}${q}${value}${q}`
           const mapped = rule.values && value in rule.values ? rule.values[value] : value
           if (rule.values && (mapped === 'true' || mapped === 'false')) {
             return `${sp}:${toKebab}${eq}${q}${mapped}${q}`
