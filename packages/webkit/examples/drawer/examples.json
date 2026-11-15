@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Right-side medium drawer with a trigger, overlay, and header/body/footer panel regions.",
+      "summary": "Right-side large drawer with a trigger, overlay, and header/body/footer panel regions.",
       "file": "default.vue"
     },
     {

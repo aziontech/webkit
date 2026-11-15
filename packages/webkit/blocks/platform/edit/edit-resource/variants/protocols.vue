@@ -680,7 +680,7 @@
     <Drawer
       v-model:open="uploadOpen"
       side="right"
-      size="small"
+      size="large"
     >
       <DrawerPortal>
         <DrawerOverlay />

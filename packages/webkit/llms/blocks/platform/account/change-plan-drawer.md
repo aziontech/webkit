@@ -6,7 +6,7 @@
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
 - Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), [Drawer](../../../components/drawer.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
-- Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
+- Skills: `webkit-navigation`, `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 

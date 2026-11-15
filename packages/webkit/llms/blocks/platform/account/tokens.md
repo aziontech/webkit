@@ -53,7 +53,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 ### G. Create drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 
-A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Footer: Cancel and Create. The fields lock while it submits.
+A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Footer: Cancel and Create. The fields lock while it submits.
 
 ### H. Fields — `Field`, `Textarea`, `Select`, `HelperText` (required)
 
@@ -600,7 +600,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
 
     <Drawer
       v-model:open="createOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>

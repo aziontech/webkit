@@ -21,7 +21,7 @@
     v-model:open="open"
     dismissible
     side="right"
-    size="medium"
+    size="large"
   >
     <DrawerTrigger>
       <Button

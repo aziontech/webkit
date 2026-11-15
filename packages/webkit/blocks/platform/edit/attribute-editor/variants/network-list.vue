@@ -256,7 +256,7 @@
 <template>
   <Drawer
     v-model:open="drawerOpen"
-    size="medium"
+    size="large"
     side="right"
   >
     <DrawerTrigger>

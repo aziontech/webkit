@@ -35,7 +35,7 @@ Two optional sections in the Create Table drawer. Import data from CSV: a `FileD
 
 ### E. Add column drawer — `Switch` (required)
 
-A medium drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
+A large drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
 
 ### F. Insert row drawer — `PanelFooter` (required)
 

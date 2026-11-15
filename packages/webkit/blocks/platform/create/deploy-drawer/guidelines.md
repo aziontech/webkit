@@ -19,7 +19,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 
 ### A. Trigger and frame — `Drawer`, `DrawerTrigger`, `Button`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
 
-An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the service or project page. The `Drawer` is `size="medium"`, portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title.
+An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the service or project page. The `Drawer` is `size="large"`, portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title.
 
 ### B. Panel header — `PanelHeader`, `DrawerTitle`, `DrawerClose` (required)
 

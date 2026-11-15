@@ -1605,7 +1605,7 @@
 
     <Drawer
       v-model:open="documentDrawerOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>

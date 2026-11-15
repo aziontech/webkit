@@ -69,7 +69,7 @@
     "importar certificado",
     "certificado tls"
   ],
-  "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
+  "skills": ["webkit-create-surface", "webkit-navigation", "webkit-form", "webkit-errors"],
   "primary": {
     "name": "Default",
     "file": "create-in-drawer.vue"

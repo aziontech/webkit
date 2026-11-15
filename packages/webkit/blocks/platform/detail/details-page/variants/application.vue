@@ -584,7 +584,7 @@
     <Drawer
       v-model:open="deployOpen"
       side="right"
-      size="medium"
+      size="large"
     >
       <DrawerPortal>
         <DrawerOverlay />

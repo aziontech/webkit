@@ -1222,7 +1222,7 @@
 
     <Drawer
       v-model:open="columnOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>
@@ -1384,7 +1384,7 @@
 
     <Drawer
       v-model:open="rowOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>

@@ -25,7 +25,7 @@ The band a create flow uses when the resource being created needs another resour
 - A single field that references an existing resource (a certificate, an environment, a function): use a select row inside the form, as `platform/create/provision-wizard` does for Environment.
 - Choosing where a resource runs as a step of its own, with module tags and an inline create row: use the chooser in `platform/create/multipage-create` or `platform/create/source-wizard`.
 - Browsing or managing the resources themselves: use `platform/view/table-view`.
-- Creating the bound resource needs its own full form: link to its create page (`platform/create/single-page-create`) instead of nesting it here.
+- Creating the bound resource needs its own full form: New opens that form in a drawer over the page (`platform/create/create-in-drawer`) instead of nesting it in the band. Only a create of several steps opens its page in a new tab.
 
 ## Building blocks
 

@@ -4,9 +4,9 @@ category: overlay
 structure: composition
 status: implemented
 spec_version: 1
-checksum: 71d69d8ea9dbd72db080b5d25aa04f63176dedec06f54beb99d71302303c215b
+checksum: 4b262d316e6ab68c75c615c92dafe5ff443bc1971d825e12523749cc275eae83
 created: 2026-05-22
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # Drawer — Component Spec
@@ -17,13 +17,17 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 
 ## When to use
 
-- A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.
+- A panel that slides in from a screen edge to add or edit one item of the screen behind it (a rule, an origin, a record inside a resource), while keeping that screen in view.
+- The reader already stands on the screen that owns the item: the drawer is the last step of the path (rail, list, resource page, tab), never the first.
+- A form needs a resource that does not exist yet (the certificate of a workload being created): the field offers to create it, and the drawer holds that resource's create form over the form, then selects it. Use it every time; never send the reader away to create it.
 - The content is too large or persistent for a centered modal.
 
 ## When NOT to use
 
 - It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.
 - It is a small overlay anchored to a trigger → use a popover / `dropdown`.
+- It opens, configures or edits a product or a resource (Configure, Settings, Edit) → navigate to the resource's page, on its settings tab.
+- It needs tabs, a breadcrumb or its own navigation, or a third drawer would stack → it is a page.
 
 ## Related
 
@@ -33,6 +37,7 @@ Layered surface above the page (modal, drawer, menu). Lives at `packages/webkit/
 ## Best practices
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
+- Set `size="large"` on the first drawer of a flow. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
 - Trap focus while open and provide an obvious close affordance.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 

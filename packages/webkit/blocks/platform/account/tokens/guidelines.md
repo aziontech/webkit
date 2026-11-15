@@ -41,7 +41,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 ### G. Create drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 
-A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Footer: Cancel and Create. The fields lock while it submits.
+A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Footer: Cancel and Create. The fields lock while it submits.
 
 ### H. Fields — `Field`, `Textarea`, `Select`, `HelperText` (required)
 

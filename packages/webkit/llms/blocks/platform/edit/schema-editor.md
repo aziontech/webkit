@@ -1,6 +1,6 @@
 # SchemaEditor (`platform/edit/schema-editor`)
 
-> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also reorders column rows by pointer drag, imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys (column, referenced table and column, On delete). A page body for ConsoleLayout.
+> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an ordered list of column rows (grip that reorders with the arrow keys, name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`, remove), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a large drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a large drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also reorders column rows by pointer drag, imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys (column, referenced table and column, On delete). A page body for ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
@@ -47,7 +47,7 @@ Two optional sections in the Create Table drawer. Import data from CSV: a `FileD
 
 ### E. Add column drawer — `Switch` (required)
 
-A medium drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
+A large drawer with the same header and footer recipe. Column has Name (invalid when empty or when the table already has it), Type (the same `Select`) and Default value (empty for NULL, or an expression such as `now()`). Constraints has Primary key and Not null as horizontal `Field`s with a `Switch`; Primary key turns Not null on and locks it.
 
 ### F. Insert row drawer — `PanelFooter` (required)
 
@@ -1353,7 +1353,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
 
     <Drawer
       v-model:open="columnOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>
@@ -1515,7 +1515,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
 
     <Drawer
       v-model:open="rowOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>

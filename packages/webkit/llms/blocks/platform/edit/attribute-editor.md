@@ -1018,7 +1018,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
 
     <Drawer
       v-model:open="drawerOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerPortal>
