@@ -61,7 +61,9 @@ npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical bloc
   guidelines and SFC (`--variant <name>`). Both take `--json`.
 - **`add <block-id>`** takes a full id, a short name (`create-hub`) or a pre-v6 id (it resolves and
   says so). It copies the block's primary SFC from the installed webkit's `blocks/` to
-  `<views>/<Name>.vue`, and with `--variant <state>` that state as `<Name><State>.vue`. `<views>` is
+  `<views>/<block>.vue` (kebab-case, `create-hub.vue`), and with `--variant <state>` that state as
+  `<block>-<state>.vue` (`create-hub-connected.vue`; a PascalCase `--dest` file keeps its casing,
+  `Hub.vue` and `HubConnected.vue`). `<views>` is
   the directory the router (`src/router/index.*`, `src/router.*`) imports its views from, else
   `src/views`, else `src/pages`; `--dest <dir|file.vue>` overrides it. Every
   `@aziontech/webkit/*` import of the copy is checked against the installed package's `exports`

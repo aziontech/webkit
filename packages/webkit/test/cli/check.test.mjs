@@ -200,7 +200,7 @@ test('check warns when a copied block drifted from the canonical one', () => {
     const r = cliJson(dir, 'check', '--no-lint')
     const drift = by(r.json, 'blocks')
     assert.ok(
-      drift.some((f) => f.file === 'src/views/AuthBar.vue' && /changed since/.test(f.message))
+      drift.some((f) => f.file === 'src/views/auth-bar.vue' && /changed since/.test(f.message))
     )
     assert.ok(drift.some((f) => f.file === 'src/views/Gone.vue' && /file is gone/.test(f.message)))
     assert.ok(drift.every((f) => f.severity === 'warn'))

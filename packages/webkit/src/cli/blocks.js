@@ -219,8 +219,13 @@ function stripHeading(markdown) {
   return markdown.replace(/^\s*#[^#\n][^\n]*\n+/, '')
 }
 
+function variantFile(stem, variant) {
+  if (/[A-Z]/.test(stem)) return `${stem}${variant.name}.vue`
+  return `${stem}-${basename(variant.file, '.vue')}.vue`
+}
+
 function targetPaths(projectDir, block, dest) {
-  const name = block.meta.name
+  const name = block.id.split('/').pop() || kebab(block.meta.name)
   let dir
   let primaryName = `${name}.vue`
   let viewsReason = null
@@ -241,7 +246,7 @@ function targetPaths(projectDir, block, dest) {
   return {
     viewsReason,
     primary: at(primaryName),
-    variant: block.variant ? at(`${stem}${block.variant.name}.vue`) : null,
+    variant: block.variant ? at(variantFile(stem, block.variant)) : null,
     guidelines: at(`${stem}.guidelines.md`)
   }
 }

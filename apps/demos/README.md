@@ -26,7 +26,7 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 | `/onboarding` → `/plan` → `/profile` | `account/onboarding-form` (Organization, Plan, Profile) | Three steps; creating the organization goes to the list                                          |
 | `/assistant`                         | `ai/ai-chat`                                            | AI assistant: prompt, streamed answer with reasoning and sources, suggestions                    |
 
-`src/App.vue` is the `shell/console` block: it composes `ConsoleLayout` once around `RouterView`
+`src/app.vue` is the `shell/console` block: it composes `ConsoleLayout` once around `RouterView`
 with the demo's navigation (`src/lib/navigation.ts`), the breadcrumbs from the route meta, the ⌘K
 palette (recent resources, Create Resource, Switch theme) and the account menu. Every browse route
 (list, detail, edit, deploy, settings, assistant) renders only its page body in the layout's default
@@ -43,12 +43,15 @@ the URL: `?theme=light&dir=rtl&lang=pt-BR`.
 
 ```bash
 cd apps/demos
-node ../../packages/webkit/src/cli/cli.js add shell/console --dest src/App.vue
-node ../../packages/webkit/src/cli/cli.js add view/table-view --dest src/views
-node ../../packages/webkit/src/cli/cli.js add account/onboarding-form --dest src/views
-node ../../packages/webkit/src/cli/cli.js add account/onboarding-form --variant Plan --dest src/views
+node ../../packages/webkit/src/cli/cli.js add shell/console --dest src/app.vue
+node ../../packages/webkit/src/cli/cli.js add view/table-view --dest src/pages
+node ../../packages/webkit/src/cli/cli.js add account/onboarding-form --dest src/pages
+node ../../packages/webkit/src/cli/cli.js add account/onboarding-form --variant plan --dest src/pages
 # … one `add` per screen in the table above
 ```
+
+`add` writes kebab-case files named after the block: `table-view.vue`, and `onboarding-form-plan.vue`
+for a variant (`<block>-<variant>.vue`). The demo then renamed each page to `<block>-page.vue`.
 
 Outside this repository the same commands are `npx @aziontech/webkit add <block>`. The shared
 pieces are small: `src/lib/navigation.ts` (the rail and palette data), `src/lib/store.ts` (the resources), `src/lib/deploy.ts` (the deploy run and its
