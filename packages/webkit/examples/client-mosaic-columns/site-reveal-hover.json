@@ -1,24 +1,25 @@
 {
-  "_id": "customer-spotlight",
+  "_id": "client-mosaic-columns",
   "props": {
-    "items": [
+    "reveal": "hover",
+    "cells": [
       {
         "name": "Agibank",
         "logo": "/marketing-components/logos/agibank-extended-reversed.svg",
         "href": "https://www.azion.com/en/success-case/agibank/",
-        "description": "Agibank moved its digital bank to a platform that scales with every campaign."
+        "story": "Agibank moved its digital bank to a platform that scales with every campaign."
       },
       {
         "name": "Dafiti",
         "logo": "/marketing-components/logos/dafiti-extended-reversed.svg",
         "href": "https://www.azion.com/en/success-case/dafiti/",
-        "description": "Dafiti serves its storefronts to millions of shoppers with no capacity planning."
+        "story": "Dafiti serves its storefronts to millions of shoppers with no capacity planning."
       },
       {
         "name": "MadeiraMadeira",
         "logo": "/marketing-components/logos/madeiramadeira-extended-reversed.svg",
         "href": "https://www.azion.com/en/success-case/madeiramadeira/",
-        "description": "MadeiraMadeira absorbs campaign peaks without touching its origin."
+        "story": "MadeiraMadeira absorbs campaign peaks without touching its origin."
       }
     ]
   }

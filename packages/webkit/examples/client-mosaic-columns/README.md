@@ -23,3 +23,19 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-default.json`](./site-default.json)
+
+### Reveal on hover
+
+Three client cards; each opens on hover or focus to reveal its story, and stays open on narrow screens.
+
+Example: [`site-reveal-hover.vue`](./site-reveal-hover.vue)
+
+##### Use it on the site
+
+- `reveal: "hover"` turns each column into one card that opens on hover or focus.
+- `cells[]` take a reversed `logo` and an optional `logoWidth` (default `35%`).
+- `linkLabel` and `ariaLabel` override the built-in "Read story" and "Customer stories".
+
+Example:
+
+Site JSON: [`site-reveal-hover.json`](./site-reveal-hover.json)

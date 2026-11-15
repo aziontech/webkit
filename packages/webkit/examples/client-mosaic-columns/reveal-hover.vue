@@ -2,30 +2,33 @@
   import agibankExtendedReversed from '@aziontech/webkit/assets/agibank-extended-reversed.svg'
   import americanasExtendedReversed from '@aziontech/webkit/assets/americanas-extended-reversed.svg'
   import arezzoExtendedReversed from '@aziontech/webkit/assets/arezzo-extended-reversed.svg'
-  import CustomerSpotlight from '@aziontech/webkit/customer-spotlight'
+  import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'
 
-  const items = [
+  const cells = [
     {
       name: 'Agibank',
       logo: agibankExtendedReversed,
       href: '/customers/agibank',
-      description: 'Agibank moved its digital bank to a platform that scales with every campaign.'
+      story: 'Agibank moved its digital bank to a platform that scales with every campaign.'
     },
     {
       name: 'Americanas',
       logo: americanasExtendedReversed,
       href: '/customers/americanas',
-      description: 'Americanas serves Black Friday traffic with no capacity planning.'
+      story: 'Americanas serves Black Friday traffic with no capacity planning.'
     },
     {
       name: 'Arezzo',
       logo: arezzoExtendedReversed,
       href: '/customers/arezzo',
-      description: 'Arezzo cut image weight by half across its storefronts.'
+      story: 'Arezzo cut image weight by half across its storefronts.'
     }
   ]
 </script>
 
 <template>
-  <CustomerSpotlight :items="items" />
+  <ClientMosaicColumns
+    reveal="hover"
+    :cells="cells"
+  />
 </template>
