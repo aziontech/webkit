@@ -206,7 +206,7 @@ pnpm --filter @aziontech/webkit run usage-check -- platform/auth "A sign-in scre
 ```
 
 It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
-`npx @aziontech/webkit init --yes`, points the app's `.mcp.json` at the packed MCP server, and runs
+`npx @aziontech/webkit init --yes`, points the app's `.mcp.json` at the packed MCP server (`@aziontech/webkit-mcp`), and runs
 `claude -p "<prompt>" --dangerously-skip-permissions --max-turns 40 --output-format json
 --mcp-config .mcp.json --strict-mcp-config` there. It passes when a generated `src/**/*.vue`
 imports the component (for a block: at least 80 % of the components its primary SFC imports) and
@@ -471,6 +471,7 @@ Releases are automated by [release-please](https://github.com/googleapis/release
 - [`package-icons.yml`](./.github/workflows/package-icons.yml) → `@aziontech/icons`
 - [`package-theme.yml`](./.github/workflows/package-theme.yml) → `@aziontech/theme`
 - [`package-webkit.yml`](./.github/workflows/package-webkit.yml) → `@aziontech/webkit`
+- [`package-webkit-mcp.yml`](./.github/workflows/package-webkit-mcp.yml) → `@aziontech/webkit-mcp`
 
 There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 

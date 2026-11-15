@@ -42,7 +42,16 @@ export function packWorkspace(root, packDir) {
   }
 }
 
-export function writeConsumerApp(app, { webkitTgz, themeTgz, iconsTgz, appVue = BLANK_APP_VUE }) {
+export function packWebkitMcp(root, packDir) {
+  mkdirSync(packDir, { recursive: true })
+  return pack(join(root, 'packages/webkit-mcp'), packDir)
+}
+
+export function writeConsumerApp(
+  app,
+  { webkitTgz, themeTgz, iconsTgz, webkitMcpTgz = null, appVue = BLANK_APP_VUE }
+) {
+  const mcpDependency = webkitMcpTgz ? { '@aziontech/webkit-mcp': `file:${webkitMcpTgz}` } : {}
   mkdirSync(join(app, 'src'), { recursive: true })
   writeFileSync(
     join(app, 'package.json'),
@@ -58,7 +67,7 @@ export function writeConsumerApp(app, { webkitTgz, themeTgz, iconsTgz, appVue = 
           '@aziontech/theme': `file:${themeTgz}`,
           '@aziontech/icons': `file:${iconsTgz}`
         },
-        devDependencies: { vite: '^6.0.0', '@vitejs/plugin-vue': '^5.0.0' }
+        devDependencies: { vite: '^6.0.0', '@vitejs/plugin-vue': '^5.0.0', ...mcpDependency }
       },
       null,
       2
@@ -72,6 +81,7 @@ export function writeConsumerApp(app, { webkitTgz, themeTgz, iconsTgz, appVue = 
       `  '@aziontech/webkit': file:${webkitTgz}`,
       `  '@aziontech/theme': file:${themeTgz}`,
       `  '@aziontech/icons': file:${iconsTgz}`,
+      ...(webkitMcpTgz ? [`  '@aziontech/webkit-mcp': file:${webkitMcpTgz}`] : []),
       'allowBuilds:',
       "  '@parcel/watcher': false",
       "  '@swc/core': false",

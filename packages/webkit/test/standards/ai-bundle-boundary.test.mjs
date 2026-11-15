@@ -52,3 +52,18 @@ test('development docs never ship in the npm package', () => {
     )
   }
 })
+
+test('the MCP server ships in @aziontech/webkit-mcp, never inside @aziontech/webkit', () => {
+  const webkit = JSON.parse(readFileSync(join(REPO, 'packages/webkit/package.json'), 'utf8'))
+  const mcp = JSON.parse(readFileSync(join(REPO, 'packages/webkit-mcp/package.json'), 'utf8'))
+  assert.deepEqual(Object.keys(webkit.bin), ['webkit'])
+  for (const dep of ['@modelcontextprotocol/sdk', 'zod']) {
+    assert.equal(webkit.dependencies?.[dep], undefined, `${dep} belongs to @aziontech/webkit-mcp`)
+    assert.ok(mcp.dependencies[dep], `@aziontech/webkit-mcp must depend on ${dep}`)
+  }
+  assert.equal(existsSync(join(REPO, 'packages/webkit/src/mcp')), false)
+  assert.equal(mcp.name, '@aziontech/webkit-mcp')
+  assert.equal(mcp.bin['webkit-mcp'], './src/server.js')
+  assert.ok(mcp.dependencies['@aziontech/webkit'])
+  assert.equal(webkit.exports['./catalog-queries'].default, './src/catalog/index.js')
+})

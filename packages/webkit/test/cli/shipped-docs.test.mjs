@@ -143,13 +143,3 @@ test('the docs that list the allowed layout classes list all of LAYOUT_CLASS_FAM
   ).map((file) => relative(REPO_ROOT, file))
   assert.deepEqual(fourOnly, [])
 })
-
-test('the MCP validate_usage description reads LAYOUT_CLASS_FAMILIES', () => {
-  const server = readFileSync(join(PKG_ROOT, 'src/mcp/server.js'), 'utf8')
-  assert.match(
-    server,
-    /import \{ LAYOUT_CLASS_FAMILIES \} from '\.\.\/eslint-plugin\/layout-classes\.js'/
-  )
-  assert.match(server, /\$\{LAYOUT_CLASS_FAMILIES\.join\(', '\)\}/)
-  assert.doesNotMatch(server, /w-full, max-w-\*, self-\*, shrink-0\)/)
-})

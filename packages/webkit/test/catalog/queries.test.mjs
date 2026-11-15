@@ -7,7 +7,7 @@ import test from 'node:test'
 // Set BEFORE importing the loader so the first resolve honors the override.
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 
-const { loadCatalog, _resetCatalogCache } = await import('../../src/mcp/catalog.js')
+const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/catalog.js')
 const {
   listAssets,
   listComponents,
@@ -23,7 +23,7 @@ const {
   pascalCase,
   searchPatterns,
   getPattern
-} = await import('../../src/mcp/queries.js')
+} = await import('../../src/catalog/queries.js')
 
 _resetCatalogCache()
 const catalog = loadCatalog()

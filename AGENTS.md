@@ -1,7 +1,7 @@
 # AGENTS.md
 
-You are developing **WebKit itself** (the `@aziontech/webkit`, `@aziontech/theme` and
-`@aziontech/icons` packages). If you are building an app _with_ WebKit, stop here: install it and
+You are developing **WebKit itself** (the `@aziontech/webkit`, `@aziontech/theme`,
+`@aziontech/icons` and `@aziontech/webkit-mcp` packages). If you are building an app _with_ WebKit, stop here: install it and
 follow the `webkit-usage` skill that `npx @aziontech/webkit init` writes into your project.
 
 ## Where things live

@@ -10,6 +10,7 @@ import { readBlocks } from './lib/blocks.mjs'
 import {
   buildWorkspace,
   installConsumerApp,
+  packWebkitMcp,
   packWorkspace,
   runLogged,
   writeConsumerApp
@@ -177,7 +178,7 @@ export function pinMcpToInstalledPackage(appDir) {
     ...config.mcpServers,
     webkit: {
       command: 'node',
-      args: [join(appDir, 'node_modules/@aziontech/webkit/src/mcp/server.js')]
+      args: [join(appDir, 'node_modules/@aziontech/webkit-mcp/src/server.js')]
     }
   }
   writeFileSync(file, JSON.stringify(config, null, 2) + '\n')
@@ -260,7 +261,11 @@ function main() {
   const work = mkdtempSync(join(tmpdir(), 'webkit-usage-'))
   try {
     if (!opts.skipBuild) buildWorkspace(ROOT)
-    const app = createUsageApp(work, packWorkspace(ROOT, join(work, 'tarballs')))
+    const tarballs = join(work, 'tarballs')
+    const app = createUsageApp(work, {
+      ...packWorkspace(ROOT, tarballs),
+      webkitMcpTgz: packWebkitMcp(ROOT, tarballs)
+    })
     const cli = join(app, 'node_modules/@aziontech/webkit/src/cli/cli.js')
     installConsumerApp(app)
     runLogged('node', [cli, 'init', '--yes'], app)

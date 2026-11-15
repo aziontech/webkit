@@ -413,14 +413,14 @@ describe the new flow.
 
 ## M2.6 — Search quality
 
-Done: search understands en, pt-BR and es through `packages/webkit/src/mcp/search-lexicon.js`
+Done: search understands en, pt-BR and es through `packages/webkit/src/catalog/search-lexicon.js`
 (synonym groups for patterns, translated names for components, stopwords; the longest phrase wins
 when two groups overlap). Ranking: an exact id or name first, then the whole query as an intent,
 then synonym groups (each counted once), then words in the name, components and summary; a verb
 alone ("criar") favours the block that has "<verb> page" as an intent. `search_patterns`,
-`search_components` and `suggest_component` take `surface`. `test/mcp/search-queries.json` holds
+`search_components` and `suggest_component` take `surface`. `test/catalog/search-queries.json` holds
 187 queries (89 en, 56 pt-BR, 42 es; expected top-1 and acceptable top-3) run by
-`test/mcp/search-quality.test.mjs` in the toolkit tests (fails under 95 % top-1 or on any top-3
+`test/catalog/search-quality.test.mjs` in the toolkit tests (fails under 95 % top-1 or on any top-3
 miss). Before: top-1 70.6 %, top-3 77.0 % (es patterns 11/29, pt-BR and es components 2/26).
 After: 100 % and 100 %. "onboarding" and "upgrade plan" already ranked right when the set was
 written (the M1 intents fixed them); both are in the set.

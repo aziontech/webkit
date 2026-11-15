@@ -50,6 +50,8 @@ jobs:
           THEME_TAG: ${{ steps.release.outputs['packages/theme--tag_name'] }}
           ICONS_RELEASED: ${{ steps.release.outputs['packages/icons--release_created'] }}
           ICONS_TAG: ${{ steps.release.outputs['packages/icons--tag_name'] }}
+          WEBKIT_MCP_RELEASED: ${{ steps.release.outputs['packages/webkit-mcp--release_created'] }}
+          WEBKIT_MCP_TAG: ${{ steps.release.outputs['packages/webkit-mcp--tag_name'] }}
         run: |
           failed=0
           dispatch() {
@@ -63,5 +65,6 @@ jobs:
           [ "$WEBKIT_RELEASED" = "true" ] && dispatch package-webkit.yml "$WEBKIT_TAG"
           [ "$THEME_RELEASED" = "true" ] && dispatch package-theme.yml "$THEME_TAG"
           [ "$ICONS_RELEASED" = "true" ] && dispatch package-icons.yml "$ICONS_TAG"
+          [ "$WEBKIT_MCP_RELEASED" = "true" ] && dispatch package-webkit-mcp.yml "$WEBKIT_MCP_TAG"
 
           exit "$failed"

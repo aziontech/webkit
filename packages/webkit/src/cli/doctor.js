@@ -10,6 +10,7 @@ import {
   firstExisting,
   gitState,
   LEGACY_HUSKY_HOOK_MARKER,
+  LEGACY_MCP_SERVER_ARGS,
   MCP_SERVER_NAME,
   POSTCSS_CONFIG_CANDIDATES,
   rawColourStylesheets,
@@ -160,11 +161,21 @@ export function planDoctor(projectDir) {
     try {
       const mcp = readJsonStrict(mcpPath)
       const server = mcp?.mcpServers?.[MCP_SERVER_NAME]
-      add(
-        'mcp server',
-        server ? 'ok' : 'fail',
-        server ? `"${MCP_SERVER_NAME}" registered` : `.mcp.json has no "${MCP_SERVER_NAME}" server.`
-      )
+      if (JSON.stringify(server?.args) === JSON.stringify(LEGACY_MCP_SERVER_ARGS)) {
+        add(
+          'mcp server',
+          'fail',
+          `"${MCP_SERVER_NAME}" runs the webkit-mcp bin of @aziontech/webkit, removed in v6 — re-run \`npx @aziontech/webkit init\` to point it at @aziontech/webkit-mcp.`
+        )
+      } else {
+        add(
+          'mcp server',
+          server ? 'ok' : 'fail',
+          server
+            ? `"${MCP_SERVER_NAME}" registered`
+            : `.mcp.json has no "${MCP_SERVER_NAME}" server.`
+        )
+      }
     } catch (err) {
       add('mcp server', 'fail', err.message)
     }

@@ -800,7 +800,7 @@ function header(catalog) {
     '',
     `> The Vue 3 design system of Azion (\`${catalog.package}\` ${catalog.webkitVersion}): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.`,
     '',
-    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
+    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
     '',
     `Installed copy: \`node_modules/${catalog.package}/llms/\`. Every component also has a JSON API next to its page (\`components/<name>.json\`).`,
     ''

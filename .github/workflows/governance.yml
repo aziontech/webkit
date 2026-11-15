@@ -33,6 +33,7 @@ jobs:
           filters: |
             webkit:
               - 'packages/webkit/**'
+              - 'packages/webkit-mcp/**'
               - 'pnpm-lock.yaml'
               - 'pnpm-workspace.yaml'
             tests:
@@ -313,8 +314,11 @@ jobs:
       - name: Hook tests (spec, authoring and reference hooks)
         run: pnpm --filter @aziontech/webkit run hooks:test
 
-      - name: Toolkit unit tests (ESLint rules, MCP, CLI, stylelint config)
+      - name: Toolkit unit tests (ESLint rules, catalog queries, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
+
+      - name: MCP server tests (@aziontech/webkit-mcp over stdio)
+        run: pnpm --filter @aziontech/webkit-mcp test
 
       - name: Theme tests (device contract, container scale in @theme, CSS types)
         run: pnpm --filter @aziontech/theme test

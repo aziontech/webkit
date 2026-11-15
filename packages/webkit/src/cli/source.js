@@ -3,7 +3,7 @@ import { createRequire } from 'node:module'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { loadCatalogFrom } from '../mcp/catalog.js'
+import { loadCatalogFrom } from '../catalog/catalog.js'
 
 export const PACKAGE_NAME = '@aziontech/webkit'
 export const OWN_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')

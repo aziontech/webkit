@@ -13,7 +13,7 @@ packages/webkit/src/
 ├── composables/         use-controllable, use-direction, use-focus-trap, use-placement
 ├── utils/               cn (clsx + tailwind-merge), csv
 ├── cli/                 `webkit` bin — init / doctor / plan / apply
-├── mcp/                 `webkit-mcp` bin — catalog-backed MCP server
+├── catalog/             catalog query engine (`@aziontech/webkit/catalog-queries`) — used by the CLI and `@aziontech/webkit-mcp`
 ├── eslint-plugin/       consumer lint rules + the shared authoring/token check engines
 ├── stylelint-config.js  consumer stylelint config
 ├── svg/, images/, styles/, vite/

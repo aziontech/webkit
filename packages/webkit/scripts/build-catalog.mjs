@@ -138,7 +138,7 @@ function categoryFromTarget(target) {
 
 function kindFromTarget(target) {
   if (target.startsWith('./src/eslint-plugin/')) return 'other'
-  if (target.startsWith('./src/mcp/')) return 'other'
+  if (target.startsWith('./src/catalog/')) return 'other'
   if (target.startsWith('./src/cli/')) return 'other'
   if (target.startsWith('./src/utils/')) return 'util'
   if (target.startsWith('./src/composables/')) return 'composable'

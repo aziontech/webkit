@@ -1,4 +1,4 @@
-import { getComponent, getPattern, searchComponents, searchPatterns } from '../mcp/queries.js'
+import { getComponent, getPattern, searchComponents, searchPatterns } from '../catalog/queries.js'
 import { PACKAGE_NAME } from './source.js'
 
 const words = (s) =>

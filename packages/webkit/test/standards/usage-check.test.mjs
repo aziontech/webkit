@@ -74,10 +74,12 @@ test('createUsageApp writes a clean Vite + Vue app on the packed tarballs', () =
     const app = createUsageApp(work, {
       webkitTgz: '/t/webkit.tgz',
       themeTgz: '/t/theme.tgz',
-      iconsTgz: '/t/icons.tgz'
+      iconsTgz: '/t/icons.tgz',
+      webkitMcpTgz: '/t/webkit-mcp.tgz'
     })
     const pkg = JSON.parse(readFileSync(join(app, 'package.json'), 'utf8'))
     assert.equal(pkg.dependencies['@aziontech/webkit'], 'file:/t/webkit.tgz')
+    assert.equal(pkg.devDependencies['@aziontech/webkit-mcp'], 'file:/t/webkit-mcp.tgz')
     assert.ok(pkg.devDependencies.vite)
     for (const f of ['vite.config.mjs', 'index.html', 'src/main.ts', 'pnpm-workspace.yaml']) {
       assert.ok(existsSync(join(app, f)), f)
@@ -94,7 +96,10 @@ test('pinMcpToInstalledPackage points the webkit server at the installed package
     )
     const config = pinMcpToInstalledPackage(app)
     assert.equal(config.mcpServers.webkit.command, 'node')
-    assert.match(config.mcpServers.webkit.args[0], /node_modules\/@aziontech\/webkit\/src\/mcp/)
+    assert.match(
+      config.mcpServers.webkit.args[0],
+      /node_modules\/@aziontech\/webkit-mcp\/src\/server\.js$/
+    )
     assert.deepEqual(config.mcpServers.other, { command: 'x' })
   })
 })

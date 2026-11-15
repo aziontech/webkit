@@ -33,7 +33,7 @@ packages/webkit/           # the parts of the system that live in the package
 ├── scripts/authoring-baseline.json  #   frozen debt; a new violation fails the PR
 ├── test/standards/invariant.test.mjs# the meta-check: rule ↔ enforcement can't drift
 ├── src/eslint-plugin/     # consumer lints (11 rules, all error)
-├── src/mcp/               # MCP server (guides the AI to the right usage)
+├── src/catalog/           # catalog queries behind the CLI and @aziontech/webkit-mcp (the MCP server package)
 ├── docs/GUIDELINES.md     # consumer-facing styleguide (build & use)
 └── catalog.json           # generated manifest read by the lints + MCP
 ```

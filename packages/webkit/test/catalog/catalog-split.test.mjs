@@ -7,7 +7,7 @@ import test from 'node:test'
 
 import { build, splitCatalog } from '../../scripts/build-catalog.mjs'
 
-const { loadCatalog, _resetCatalogCache } = await import('../../src/mcp/catalog.js')
+const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/catalog.js')
 const {
   getBestPractices,
   getComponent,
@@ -16,7 +16,7 @@ const {
   listAssets,
   searchComponents,
   searchPatterns
-} = await import('../../src/mcp/queries.js')
+} = await import('../../src/catalog/queries.js')
 
 const SPLIT_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 const full = await build()

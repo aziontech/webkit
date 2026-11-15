@@ -2,7 +2,7 @@
   "mcpServers": {
     "webkit": {
       "command": "npx",
-      "args": ["-y", "-p", "@aziontech/webkit", "webkit-mcp"]
+      "args": ["-y", "@aziontech/webkit-mcp"]
     }
   }
 }

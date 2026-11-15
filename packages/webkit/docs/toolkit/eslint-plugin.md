@@ -91,7 +91,7 @@ The package holds its own code to the same check: `scripts/check-authoring.mjs` 
 
 ## How it fits the adoption toolkit
 
-This is the **FORCE** layer: deterministic, blocks on commit and in CI. The companion **GUIDE** layer (the [webkit MCP server](./mcp.md)) helps an AI/dev generate correct code up front. Both read the same `catalog.json`. Wire everything in one step with `npx @aziontech/webkit init`.
+This is the **FORCE** layer: deterministic, blocks on commit and in CI. The companion **GUIDE** layer (the [webkit MCP server](https://github.com/aziontech/webkit/blob/main/packages/webkit-mcp/README.md), `@aziontech/webkit-mcp`) helps an AI/dev generate correct code up front. Both read the same `catalog.json`. Wire everything in one step with `npx @aziontech/webkit init`.
 
 ## License
 

@@ -3,31 +3,30 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 
-import { LAYOUT_CLASS_FAMILIES } from '../eslint-plugin/layout-classes.js'
-import { loadCatalog } from './catalog.js'
 import {
   getBestPractices,
   getComponent,
   getImport,
   getPattern,
   getUsageExample,
+  LAYOUT_CLASS_FAMILIES,
   listAssets,
   listCategories,
   listComponents,
   listTokens,
+  loadCatalog,
   searchComponents,
   searchPatterns,
   suggestComponent,
   validateUsage
-} from './queries.js'
-
-const SDK_MCP = '@modelcontextprotocol/sdk/server/mcp.js'
-const SDK_STDIO = '@modelcontextprotocol/sdk/server/stdio.js'
-const ZOD = 'zod'
+} from '@aziontech/webkit/catalog-queries'
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
+import { z } from 'zod'
 
 function serverVersion() {
   try {
-    const pkgUrl = new URL('../../package.json', import.meta.url)
+    const pkgUrl = new URL('../package.json', import.meta.url)
     return JSON.parse(readFileSync(fileURLToPath(pkgUrl), 'utf-8')).version || '0.0.0'
   } catch {
     return '0.0.0'
@@ -39,22 +38,6 @@ function json(result) {
 }
 
 async function main() {
-  let McpServer, StdioServerTransport, z
-  try {
-    ;({ McpServer } = await import(SDK_MCP))
-    ;({ StdioServerTransport } = await import(SDK_STDIO))
-    ;({ z } = await import(ZOD))
-  } catch (err) {
-    process.stderr.write(
-      `webkit-mcp: missing runtime dependencies ("@modelcontextprotocol/sdk", "zod"). ` +
-        `They ship in @aziontech/webkit's dependencies — reinstall the package ` +
-        `(e.g. \`npx -y -p @aziontech/webkit webkit-mcp\`) or install them explicitly.\n` +
-        `${err?.message ?? err}\n`
-    )
-    process.exit(1)
-    return
-  }
-
   const catalog = loadCatalog(process.cwd())
 
   const server = new McpServer(

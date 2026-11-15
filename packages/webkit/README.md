@@ -183,7 +183,7 @@ npx @aziontech/webkit add platform/delete/delete-with-confirmation   # copy a bl
 npx @aziontech/webkit diff delete-with-confirmation # your copy vs the canonical block
 npx @aziontech/webkit check    # CI gate: doctor + v5 names + imports + lint + block drift
 npx @aziontech/webkit doctor   # verify the wiring is healthy (lint, MCP, theme)
-npx webkit-mcp                 # the MCP server your AI tools connect to
+npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its own package)
 ```
 
 ## Changing WebKit (contribute)

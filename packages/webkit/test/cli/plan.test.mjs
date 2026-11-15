@@ -7,7 +7,12 @@ import { fileURLToPath } from 'node:url'
 
 import { ESLint } from 'eslint'
 
-import { planInit, CLAUDE_FRAGMENT_MARKER, MCP_SERVER_NAME, _internals } from '../../src/cli/plan.js'
+import {
+  planInit,
+  CLAUDE_FRAGMENT_MARKER,
+  MCP_SERVER_NAME,
+  _internals
+} from '../../src/cli/plan.js'
 import { applyPlan } from '../../src/cli/apply.js'
 import { FRAGMENT_START } from '../../src/cli/bundle.js'
 
@@ -335,12 +340,34 @@ test('planInit merges the webkit MCP server into .mcp.json', () => {
     assert.ok(mcp, 'expected .mcp.json merge action')
     assert.ok(mcp.merge.mcpServers[MCP_SERVER_NAME], 'expected webkit server in the merge')
     assert.equal(mcp.merge.mcpServers[MCP_SERVER_NAME].command, 'npx')
-    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, [
-      '-y',
-      '-p',
-      '@aziontech/webkit',
-      'webkit-mcp'
-    ])
+    assert.deepEqual(mcp.merge.mcpServers[MCP_SERVER_NAME].args, ['-y', '@aziontech/webkit-mcp'])
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test('planInit points a v5 webkit MCP entry at @aziontech/webkit-mcp and keeps other servers', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, '.mcp.json'),
+      JSON.stringify({
+        mcpServers: {
+          other: { command: 'node', args: ['x.js'] },
+          [MCP_SERVER_NAME]: {
+            command: 'npx',
+            args: ['-y', '-p', '@aziontech/webkit', 'webkit-mcp']
+          }
+        }
+      })
+    )
+    applyPlan(dir, planInit(dir, {}))
+    const mcp = JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))
+    assert.deepEqual(mcp.mcpServers[MCP_SERVER_NAME], {
+      command: 'npx',
+      args: ['-y', '@aziontech/webkit-mcp']
+    })
+    assert.deepEqual(mcp.mcpServers.other, { command: 'node', args: ['x.js'] })
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -679,9 +706,19 @@ test('the ranges init writes for webkit, theme and icons are satisfied by the wo
     const v = (dep) => plan.find((a) => a.type === 'add-dep' && a.dep === dep).version
     assert.equal(v('@aziontech/webkit'), `^${own.version}`)
     assert.equal(v('@aziontech/theme'), own.peerDependencies['@aziontech/theme'])
-    assert.ok(caretSatisfies(own.peerDependencies['@aziontech/theme'], theme.version), 'theme peer range must accept the workspace theme')
-    assert.ok(caretSatisfies(v('@aziontech/icons'), icons.version), 'icons range must accept the workspace icons')
-    assert.equal(own.dependencies['@aziontech/theme'], undefined, 'theme is a peer, never a nested dependency')
+    assert.ok(
+      caretSatisfies(own.peerDependencies['@aziontech/theme'], theme.version),
+      'theme peer range must accept the workspace theme'
+    )
+    assert.ok(
+      caretSatisfies(v('@aziontech/icons'), icons.version),
+      'icons range must accept the workspace icons'
+    )
+    assert.equal(
+      own.dependencies['@aziontech/theme'],
+      undefined,
+      'theme is a peer, never a nested dependency'
+    )
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
@@ -692,7 +729,11 @@ test('planInit leaves PostCSS out when the app runs Tailwind through @tailwindcs
   try {
     writeFileSync(
       join(dir, 'package.json'),
-      JSON.stringify({ name: 'demo', version: '1.0.0', devDependencies: { '@tailwindcss/vite': '^4.1.0' } })
+      JSON.stringify({
+        name: 'demo',
+        version: '1.0.0',
+        devDependencies: { '@tailwindcss/vite': '^4.1.0' }
+      })
     )
     const plan = planInit(dir, {})
     assert.ok(!findAddDeps(plan).includes('@tailwindcss/postcss'))
@@ -727,14 +768,19 @@ async function lintWithInitConfig(code) {
 }
 
 test('the init ESLint config accepts a label that points at its control with for, or wraps it', async () => {
-  const script = "<script setup>\nimport Input from '@aziontech/webkit/input'\nimport Label from '@aziontech/webkit/label'\n</script>\n"
+  const script =
+    "<script setup>\nimport Input from '@aziontech/webkit/input'\nimport Label from '@aziontech/webkit/label'\n</script>\n"
   assert.deepEqual(
-    await lintWithInitConfig(`${script}<template><Label for="name" label="Name" /><Input id="name" /></template>\n`),
+    await lintWithInitConfig(
+      `${script}<template><Label for="name" label="Name" /><Input id="name" /></template>\n`
+    ),
     [],
     'a standalone Label with for next to its Input must pass'
   )
   assert.deepEqual(
-    await lintWithInitConfig('<template><label for="email">Email</label><input id="email" /></template>\n'),
+    await lintWithInitConfig(
+      '<template><label for="email">Email</label><input id="email" /></template>\n'
+    ),
     [],
     'a native label with for must pass'
   )
@@ -751,7 +797,8 @@ test('the init ESLint config accepts a label that points at its control with for
     'a label wrapping a WebKit control must pass'
   )
   assert.equal(
-    (await lintWithInitConfig(`${script}<template><Label label="Name" /><Input /></template>\n`)).length,
+    (await lintWithInitConfig(`${script}<template><Label label="Name" /><Input /></template>\n`))
+      .length,
     1,
     'a label that neither wraps nor points at a control must fail'
   )

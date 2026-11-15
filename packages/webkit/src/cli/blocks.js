@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 
-import { getPattern } from '../mcp/queries.js'
+import { getPattern } from '../catalog/queries.js'
 import { PACKAGE_NAME } from './source.js'
 import { unifiedDiff } from './text-diff.js'
 

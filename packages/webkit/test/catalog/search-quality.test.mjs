@@ -5,9 +5,9 @@ import test from 'node:test'
 
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('../../catalog.json', import.meta.url))
 
-const { loadCatalog, _resetCatalogCache } = await import('../../src/mcp/catalog.js')
+const { loadCatalog, _resetCatalogCache } = await import('../../src/catalog/catalog.js')
 const { searchPatterns, searchComponents, suggestComponent } =
-  await import('../../src/mcp/queries.js')
+  await import('../../src/catalog/queries.js')
 
 _resetCatalogCache()
 const catalog = loadCatalog()

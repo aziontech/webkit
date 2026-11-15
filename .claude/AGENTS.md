@@ -18,6 +18,7 @@ Current main workspaces:
 - `packages/webkit`: reusable Vue component library (`@aziontech/webkit`)
 - `packages/theme`: tokens, theme, and styling foundations (`@aziontech/theme`)
 - `packages/icons`: icon font pipeline and package (`@aziontech/icons`)
+- `packages/webkit-mcp`: the MCP server AI tools connect to (`@aziontech/webkit-mcp`, bin `webkit-mcp`)
 
 ## 2) Core principles
 

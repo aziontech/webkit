@@ -31,6 +31,25 @@ test('doctor on a bare project fails the required checks', () => {
   }
 })
 
+test('doctor fails a v5 .mcp.json that still runs the webkit-mcp bin of @aziontech/webkit', () => {
+  const dir = makeProject()
+  try {
+    writeFileSync(
+      join(dir, '.mcp.json'),
+      JSON.stringify({
+        mcpServers: {
+          webkit: { command: 'npx', args: ['-y', '-p', '@aziontech/webkit', 'webkit-mcp'] }
+        }
+      })
+    )
+    const report = planDoctor(dir)
+    assert.equal(statusOf(report, 'mcp server'), 'fail')
+    assert.match(detailOf(report, 'mcp server').detail, /@aziontech\/webkit-mcp/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
 test('doctor after init passes the config/mcp/husky/style checks', () => {
   const dir = makeProject()
   try {
