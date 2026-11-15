@@ -29,7 +29,8 @@ export function loadMigration(version) {
     legacy: base.legacy || null,
     exports: exportList(),
     props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`)),
-    icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`))
+    icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`)),
+    blocks: readJson(join(MIGRATIONS_DIR, `v${version}-blocks.json`))
   }
 }
 
@@ -357,6 +358,68 @@ export function migrateSource(input, migration, { fromMajor = null } = {}) {
   return { source: out, changes: [...new Set(changes)], warnings: [...new Set(warnings)] }
 }
 
+const BLOCK_MANIFEST = 'webkit.blocks.json'
+
+const pascalCase = (s) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
+
+const variantKey = (s) =>
+  String(s || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, '')
+
+function blockAlias(blocks, id, variant) {
+  if (variant) {
+    const key = Object.keys(blocks).find((old) => {
+      const [base, state] = old.split('#')
+      return base === id && state && variantKey(state) === variantKey(variant)
+    })
+    if (key) return blocks[key]
+  }
+  return blocks[id] ?? null
+}
+
+export function migrateBlockManifest(manifest, blocks = {}) {
+  const changes = []
+  const warnings = []
+  const next = {}
+  for (const [id, entry] of Object.entries(manifest.blocks || {})) {
+    const moved = blocks[id]
+    if (!moved) {
+      next[id] = next[id] ? { ...entry, files: [...next[id].files, ...(entry.files || [])] } : entry
+      continue
+    }
+    const [to, merged] = moved.split('#')
+    if (merged) {
+      warnings.push(`block ${id} is now ${moved}; copy it again with \`add ${to}\``)
+      next[id] = entry
+      continue
+    }
+    const oldBase = id.split('/').pop()
+    const newBase = to.split('/').pop()
+    const files = (entry.files || []).map((file) => {
+      const rest = String(file.source || '').replace(`blocks/${id}/`, '')
+      const target = blockAlias(blocks, id, file.variant)
+      const state = target && target.startsWith(`${to}#`) ? target.split('#')[1] : null
+      let source = rest
+      let variant = file.variant
+      if (rest === `${oldBase}.vue`) source = `${newBase}.vue`
+      else if (state && rest.startsWith('variants/')) {
+        source = `variants/${state}.vue`
+        variant = pascalCase(state)
+      }
+      return { ...file, source: `blocks/${to}/${source}`, variant }
+    })
+    changes.push(`${BLOCK_MANIFEST}: ${id} → ${to}`)
+    next[to] = { ...entry, files: [...(next[to]?.files || []), ...files] }
+  }
+  const sorted = Object.fromEntries(
+    Object.keys(next)
+      .sort()
+      .map((key) => [key, next[key]])
+  )
+  return { manifest: { ...manifest, blocks: sorted }, changes, warnings }
+}
+
 function sourceFiles(dir, out = []) {
   for (const name of readdirSync(dir)) {
     if (SKIP_DIRS.has(name)) continue
@@ -426,6 +489,19 @@ export function planMigrate(projectDir, { version = 6, dryRun = false, fromMajor
     if (!changes.length && !warnings.length) continue
     if (source !== before && !dryRun) writeFileSync(file, source)
     results.push({ file: relative(projectDir, file), changes, warnings })
+  }
+  const manifestFile = join(projectDir, BLOCK_MANIFEST)
+  if (existsSync(manifestFile)) {
+    const before = readFileSync(manifestFile, 'utf8')
+    const { manifest, changes, warnings } = migrateBlockManifest(
+      JSON.parse(before),
+      migration.blocks
+    )
+    if (changes.length || warnings.length) {
+      if (changes.length && !dryRun)
+        writeFileSync(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`)
+      results.push({ file: BLOCK_MANIFEST, changes, warnings })
+    }
   }
   return results
 }

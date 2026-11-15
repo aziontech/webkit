@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
@@ -10,6 +18,7 @@ import {
   declaredMajor,
   legacyMarkers,
   loadMigration,
+  migrateBlockManifest,
   migrateIcons,
   migrateSource,
   planMigrate,
@@ -392,4 +401,58 @@ test('a rename whose new name prefixes the old one still rewrites the sub-compon
   assert.match(source, /import ResizablePane from '@aziontech\/webkit\/resizable-pane'/)
   assert.match(source, /<CommandItem \/><ResizablePane \/>/)
   assert.equal(migrateSource(source, v6).source, source)
+})
+
+test('migrateBlockManifest moves 5.x block ids, sources and renamed variants', () => {
+  const blocks = loadMigration(6).blocks
+  const { manifest, changes, warnings } = migrateBlockManifest(
+    {
+      package: '@aziontech/webkit',
+      blocks: {
+        'platform/view/rules-list': {
+          version: '5.12.0',
+          files: [
+            {
+              path: 'src/views/RulesList.vue',
+              source: 'blocks/platform/view/rules-list/rules-list.vue',
+              variant: 'Application'
+            },
+            {
+              path: 'src/views/RulesListSaveFailed.vue',
+              source: 'blocks/platform/view/rules-list/variants/save-failed.vue',
+              variant: 'SaveFailed'
+            }
+          ]
+        },
+        'platform/account/profile': { version: '5.0.0', files: [] },
+        'my/own': { version: '1.0.0', files: [] }
+      }
+    },
+    blocks
+  )
+  assert.deepEqual(Object.keys(manifest.blocks), [
+    'my/own',
+    'platform/account/profile',
+    'view/rule-list'
+  ])
+  assert.deepEqual(
+    manifest.blocks['view/rule-list'].files.map((f) => [f.source, f.variant]),
+    [
+      ['blocks/view/rule-list/rule-list.vue', 'Application'],
+      ['blocks/view/rule-list/variants/save-error.vue', 'SaveError']
+    ]
+  )
+  assert.deepEqual(changes, ['webkit.blocks.json: platform/view/rules-list → view/rule-list'])
+  assert.match(warnings[0], /platform\/account\/profile is now settings\/settings-form#profile/)
+})
+
+test('every 5.x block id in v6-blocks.json points at a block that ships', () => {
+  const blocks = loadMigration(6).blocks
+  for (const to of Object.values(blocks)) {
+    const id = to.split('#')[0]
+    assert.ok(
+      existsSync(join(PKG, 'blocks', id, 'block.json')),
+      `v6-blocks.json points at "${id}", which has no blocks/${id}/block.json`
+    )
+  }
 })
