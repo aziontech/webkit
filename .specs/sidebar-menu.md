@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 9c942a485ce631914b82b67252e2b87620e1d9d6a4e0b97577b45a99fed5be52
+checksum: f9eaca2907aca127c2a24e8737ff6977b9df02469cfe467dcd26ee19a4576b86
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -54,7 +54,6 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 
 - `sidebar` — the most common host. It supplies the landmark, the scroll region, and the header/footer; this menu is placed in its default slot. The two are independent — neither imports the other.
 - `sidebar-menu-item` — **is** `SidebarMenu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
-- `sidebar-group` — removed in 6.0; `SidebarMenu.Group` is the one way to group sidebar rows (it collapses and shares the root's context).
 - `navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
 - `accordion` — a **reference only**, for content disclosure rather than navigation. `SidebarMenu` borrows the _shape_ of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `SidebarMenu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the token rules § Forbidden in animations).
 - `tag` — renders the optional trailing badge on a row via `sidebar-menu-item`'s `tagValue`.
