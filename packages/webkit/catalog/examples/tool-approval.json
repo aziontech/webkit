@@ -8,7 +8,7 @@
   {
    "name": "Irreversible",
    "summary": "A destructive request: the frame and the Delete button turn danger, and Delete stays disabled until the reader types the domain name.",
-   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      kind=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ToolApproval from '@aziontech/webkit/tool-approval'\n  import { ref } from 'vue'\n\n  const status = ref('pending')\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-3xl)\">\n    <ToolApproval\n      title=\"Delete the domain `www.example.com`?\"\n      description=\"The domain stops answering at once and its certificate is revoked. This cannot be undone.\"\n      variant=\"danger\"\n      confirmation-phrase=\"www.example.com\"\n      approve-label=\"Delete\"\n      :status=\"status\"\n      @approve=\"status = 'approved'\"\n      @deny=\"status = 'denied'\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Resolved",

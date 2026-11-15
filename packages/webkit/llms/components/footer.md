@@ -1,6 +1,6 @@
 # Footer
 
-> Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). **Two placements, chosen with `kind` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`). The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - **Row two sizes its two bands by content** (`md:grid-cols-[auto_auto]`), not in half: each band takes what it holds and the two share the slack, so the status pair never wraps while the social band still has room, and the social band wraps only when the zone is narrower than both together. A 50/50 split gave the social band 427px of an 853px docs reading column, 13px short of the brand mark and seven large icons — a premature wrap in every zone narrower than the viewport. - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px. - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.
+> Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`). **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks). **Two placements, chosen with `variant` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`). The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges. **The two Figma variants are one component switching by CSS**, and the switch is not one breakpoint: - The **column grid** folds from four columns to the 2×2 mobile grid below `md` (768px). - The **bands recombine at `md`**: stacked, their order is links → status/language → signature → social icons (the Mobile variant's order); from `md` the social icons and the status pair share one row above the signature. All four bands are cells of **one** grid, so each is a single element in a single place in the DOM at every width — the order is `order-*` when stacked and explicit row/column placement from `md`. A wrapper row that existed only on desktop would mean two copies of the markup, so two copies of the consumer's slot content. - **Row two sizes its two bands by content** (`md:grid-cols-[auto_auto]`), not in half: each band takes what it holds and the two share the slack, so the status pair never wraps while the social band still has room, and the social band wraps only when the zone is narrower than both together. A 50/50 split gave the social band 427px of an 853px docs reading column, 13px short of the brand mark and seven large icons — a premature wrap in every zone narrower than the viewport. - The **gutters appear at `2xl`** (1536px) in the `site` placement, not with the rest of the desktop presentation, because that is the first breakpoint past the measure itself (1388px). Gated any earlier they resolve to zero width and still paint their borders and corner marks on the measure's own edges — the gate moves with the measure, and was `xl` while the measure was 1192px. - Between the measure and that breakpoint the row therefore holds **one** child, so it carries `justify-center`: a capped item in an unjustified flex row is left-aligned, which would put the footer's frame up to 148px left of the centred frame it closes. With it the footer's column lands on the page column's own vertical wherever the cap is active — measured equal at 1440, 1536, 1920 and 2560. - Within the status pair, **`language` and `status` swap order** between the two variants (the phone leads with the select, the row ends with it), which is why they are two slots the row reverses rather than one cluster the consumer orders. Content (links, labels, languages, status, brand, tagline) always comes from the consumer; the component owns anatomy, tokens, and responsiveness.
 
 - Import: `import FooterRoot from '@aziontech/webkit/footer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Footer from '@aziontech/webkit/footer'`
@@ -16,7 +16,7 @@
 
 ## Do
 
-- Compose every band from existing DS components (`Brand`, `IconButton kind="transparent" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
+- Compose every band from existing DS components (`Brand`, `IconButton variant="ghost" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
 - Keep column titles short (one or two words) — they are group labels, not headings for prose.
 - Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.
 - Keep the social `IconButton`s at `size="small"`: a 28px box holds the brand mark and seven icons in 356px, which fits beside the status pair in the narrowest zone a shell gives the footer (the docs reading column at `lg`, 724px wide). At `large` the same row is 440px and wraps there.
@@ -45,7 +45,7 @@
 | --- | --- | --- | --- | --- |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). |
 | `signature` | `'always' \| 'compact'` | `'always'` | false | Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same. |
-| `kind` | `'content' \| 'site'` | `'content'` | false | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
+| `variant` | `'content' \| 'site'` | `'content'` | false | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
 
 ## Slots
 
@@ -73,7 +73,7 @@
 ## States
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
-- Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
+- Placement: `data-variant="content" | "site"` on the root (from `variant`); the bands read it through `group-data-[variant=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
 - Signature placement: `data-signature="always" | "compact"` on the root (from `signature`); in `compact` the signature band carries `group-data-[signature=compact]:lg:hidden`.
 - Each band renders exactly when its slot renders, read at render time rather than cached: a slot behind a `v-if` that turns off — or a slot the server rendered and the client does not — takes its band with it, so no empty bordered band is ever left under the bottom bar.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
@@ -134,7 +134,7 @@
     </Footer.Column>
     <template #social>
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-github"
         aria-label="Azion on GitHub"
@@ -142,7 +142,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-linkedin"
         aria-label="Azion on LinkedIn"
@@ -150,7 +150,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-youtube"
         aria-label="Azion on YouTube"
@@ -158,7 +158,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-x-brand"
         aria-label="Azion on X"
@@ -166,7 +166,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-instagram"
         aria-label="Azion on Instagram"
@@ -174,7 +174,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-discord"
         aria-label="Azion on Discord"
@@ -182,7 +182,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-reddit"
         aria-label="Azion on Reddit"
@@ -248,7 +248,7 @@
 
 <template>
   <Footer
-    kind="site"
+    variant="site"
     aria-label="Footer"
   >
     <Footer.Column title="Products">
@@ -273,7 +273,7 @@
     </Footer.Column>
     <template #social>
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-github"
         aria-label="Azion on GitHub"
@@ -281,7 +281,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-linkedin"
         aria-label="Azion on LinkedIn"
@@ -289,7 +289,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-youtube"
         aria-label="Azion on YouTube"
@@ -297,7 +297,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-x-brand"
         aria-label="Azion on X"
@@ -305,7 +305,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-instagram"
         aria-label="Azion on Instagram"
@@ -313,7 +313,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-discord"
         aria-label="Azion on Discord"
@@ -321,7 +321,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-reddit"
         aria-label="Azion on Reddit"

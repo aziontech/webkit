@@ -7,7 +7,7 @@
  ],
  "avoidWhen": [
   "To draw the rules between real content cells → use `frame-box`, whose rules are structural.",
-  "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` kind and owns that treatment.",
+  "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` variant and owns that treatment.",
   "For a meaningful image or diagram → use `illustration`.",
   "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor."
  ],

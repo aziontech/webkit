@@ -47,7 +47,7 @@
 | `autoplay` | `boolean` | `true` | false | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each tab is held before the band advances. |
 | `showProgress` | `boolean` | `true` | false | Advances a hairline along the active row's bottom edge while the timer runs. |
-| `texture` | `TextureMaterialKind` | `'none'` | false | Texture the media column is grounded with; `none` leaves it bare. |
+| `texture` | `TextureMaterialVariant` | `'none'` | false | Texture the media column is grounded with; `none` leaves it bare. |
 | `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the ground's tiling — how far apart its cells sit. |
 | `textureFade` | `TextureMaterialFade` | `'vignette'` | false | How the ground fades out before the column's edges. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |

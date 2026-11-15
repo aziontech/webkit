@@ -20,7 +20,7 @@
   "Render the floating bar with `v-if=\"dirty || saving\"` inside a `Transition`, so it slides in when the first change is made.",
   "Say what changed and when it takes effect in the status sentence; keep it to one line.",
   "Disable Discard and set `loading` on Save while saving.",
-  "Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `kind=\"centered\"`.",
+  "Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant=\"centered\"`.",
   "floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen."
  ]
 }

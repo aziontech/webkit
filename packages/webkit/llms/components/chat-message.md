@@ -207,7 +207,7 @@ packages/webkit/src/components/ai/chat-message/
           <IconButton
             icon="ai ai-refresh"
             aria-label="Regenerate response"
-            kind="transparent"
+            variant="ghost"
             size="small"
           />
           <ChatMessage.Feedback
@@ -282,7 +282,7 @@ packages/webkit/src/components/ai/chat-message/
     </ChatMessage>
     <Button
       label="Replay"
-      kind="outlined"
+      variant="outline"
       size="small"
       icon="ai ai-refresh"
       :disabled="status !== 'success'"

@@ -250,7 +250,7 @@ packages/webkit/src/components/overlay/command/
 <template>
   <Button
     label="Open grouped palette"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 
@@ -317,7 +317,7 @@ packages/webkit/src/components/overlay/command/
 <template>
   <Button
     label="Open palette with shortcuts"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 

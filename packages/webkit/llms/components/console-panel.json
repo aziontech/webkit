@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.",
+ "purpose": "A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` variant the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.",
  "setup": null,
  "useWhen": [
   "Use ConsolePanel for a marketing band that plays a product scene under a section title.",
@@ -30,15 +30,15 @@
  ],
  "props": [
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'console' | 'diagram'",
    "default": "'console'",
    "required": "false",
    "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
   },
   {
-   "name": "titleKind",
-   "type": "SectionTitleKind",
+   "name": "titleVariant",
+   "type": "SectionTitleVariant",
    "default": "'center'",
    "required": "false",
    "doc": "Layout of the headline block."
@@ -87,7 +87,7 @@
   },
   {
    "name": "texture",
-   "type": "TextureMaterialKind",
+   "type": "TextureMaterialVariant",
    "default": "'pixelate'",
    "required": "false",
    "doc": "Texture the panel is grounded with."
@@ -132,7 +132,7 @@
    "type": "ConsolePanelAction",
    "default": "undefined",
    "required": "false",
-   "doc": "Second button under the headline, `outlined`; same shape. Shown only with a label and a link."
+   "doc": "Second button under the headline, `outline`; same shape. Shown only with a label and a link."
   }
  ],
  "events": [],
@@ -152,7 +152,7 @@
   },
   {
    "name": "Diagram",
-   "sfc": "<script setup>\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n  import Illustration from '@aziontech/webkit/illustration'\n</script>\n\n<template>\n  <ConsolePanel\n    kind=\"diagram\"\n    title=\"Requests take the shortest path\"\n    :primary-action=\"{ label: 'See the network', href: '/network', trailing: true }\"\n  >\n    <template #scene>\n      <Illustration\n        name=\"global-network\"\n        aria-label=\"Requests routed to the nearest location\"\n        class=\"max-w-(--container-lg)\"\n      />\n    </template>\n  </ConsolePanel>\n</template>"
+   "sfc": "<script setup>\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n  import Illustration from '@aziontech/webkit/illustration'\n</script>\n\n<template>\n  <ConsolePanel\n    variant=\"diagram\"\n    title=\"Requests take the shortest path\"\n    :primary-action=\"{ label: 'See the network', href: '/network', trailing: true }\"\n  >\n    <template #scene>\n      <Illustration\n        name=\"global-network\"\n        aria-label=\"Requests routed to the nearest location\"\n        class=\"max-w-(--container-lg)\"\n      />\n    </template>\n  </ConsolePanel>\n</template>"
   }
  ],
  "docs": "components/console-panel.md"

@@ -4,12 +4,12 @@
   "Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.",
   "Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.",
   "A checkbox, radio or switch with its label beside it (`orientation=\"horizontal\"`).",
-  "A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup kind=\"card\"`, never a radio inside a `Field.Label`.",
+  "A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant=\"card\"`, never a radio inside a `Field.Label`.",
   "A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`)."
  ],
  "avoidWhen": [
   "A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.",
-  "A group of mutually exclusive cards with icons → use `radio-group` with `kind=\"card\"`.",
+  "A group of mutually exclusive cards with icons → use `radio-group` with `type=\"card\"`.",
   "A static key/value read-out → use `key-value-pairs`."
  ],
  "related": [

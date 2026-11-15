@@ -86,7 +86,7 @@ Badge is non-interactive: it has no hover, focus, active, or disabled states and
 </template>
 ```
 
-### Types
+### Severities
 
 ```vue
 <script setup>

@@ -175,7 +175,7 @@
       <Button
         label="Table settings"
         icon="ai ai-settings"
-        kind="outlined"
+        variant="outline"
         size="medium"
         @click="open"
       />

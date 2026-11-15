@@ -53,7 +53,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### E. Resource table — `Card`, `DataTable` (required)
 
-`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `sortable` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `type: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
@@ -216,7 +216,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
@@ -328,7 +328,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/resources"
             target="_blank"
@@ -336,7 +336,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
           <Button
             label="Create Resource"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
           />
         </template>
@@ -358,7 +358,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
               >
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :loading="loading"
                   aria-label="Refresh"
@@ -371,7 +371,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
               >
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
                   aria-label="Download CSV"
@@ -402,13 +402,13 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                       <Button
                         label="Create Resource"
                         icon="ai ai-plus"
-                        kind="secondary"
+                        variant="secondary"
                         size="small"
                       />
                       <Button
                         label="Documentation"
                         icon="ai ai-book"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         href="https://example.com/docs/resources"
                         target="_blank"
@@ -535,7 +535,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />
@@ -579,13 +579,13 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="close"
         />
         <Button
           label="Delete resource"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           @click="confirmDelete"

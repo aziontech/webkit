@@ -117,7 +117,7 @@ inside the package): `skeleton` (root, `loading`), `divider` (`Links`).
 - No `data-disabled` — nothing in the panel is interactive on its own; interactive content (`Link`, `Button`) is composed by the consumer and carries its own states
 
 The root, while `loading`: the default slot is not rendered; in its place the root renders a title
-line and three body lines with `Skeleton` (`kind="rectangle"`; title `width="60%"` `height="1.25rem"`, body
+line and three body lines with `Skeleton` (`variant="rectangle"`; title `width="60%"` `height="1.25rem"`, body
 lines `width="100%"`, `width="100%"`, `width="75%"`, each `height="0.875rem"`), and sets
 `aria-busy="true"`. The loading lines carry `aria-hidden="true"`; the landmark keeps its accessible
 name.

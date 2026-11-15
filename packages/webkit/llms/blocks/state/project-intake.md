@@ -125,7 +125,7 @@ Each variant is the same screen in another state: `get_block("state/project-inta
     >
       <Button
         label="Choose a folder"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-folder-open"
         @click="chooseFolder"

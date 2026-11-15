@@ -976,7 +976,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
     {
       id: 'period',
       label: 'Period',
-      kind: 'single',
+      type: 'single',
       options: periods.map((entry) => ({ value: entry.value, label: entry.label }))
     }
   ]
@@ -1176,7 +1176,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
             <Tooltip content="Refresh">
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 aria-label="Refresh"
                 :loading="refetching"
@@ -1256,8 +1256,8 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
                 empty-description="Widen the period to see more."
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="active.chart.form === 'bar'"
                   stacked

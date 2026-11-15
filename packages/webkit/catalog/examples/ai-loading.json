@@ -8,7 +8,7 @@
   {
    "name": "Bar",
    "summary": "Generating mixed content: an indeterminate bar under the loading text where a table is about to appear, with the text naming what is coming.",
-   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading\n      kind=\"bar\"\n      label=\"Generating a table of cache hits by country\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading\n      variant=\"bar\"\n      label=\"Generating a table of cache hits by country\"\n    />\n  </div>\n</template>"
   }
  ]
 }

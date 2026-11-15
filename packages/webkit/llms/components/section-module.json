@@ -56,8 +56,8 @@
    "doc": "Short uppercase overline rendered above the headline."
   },
   {
-   "name": "kind",
-   "type": "SectionModuleKind",
+   "name": "variant",
+   "type": "SectionModuleVariant",
    "default": "'start'",
    "required": "false",
    "doc": "Layout of the default header row."
@@ -104,7 +104,7 @@
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <div>\n    <SectionModule\n      :divided=\"false\"\n      kind=\"start\"\n      eyebrow=\"Platform\"\n      title=\"Left\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header sits at the start edge.</p>\n    </SectionModule>\n    <SectionModule\n      kind=\"center\"\n      eyebrow=\"Platform\"\n      title=\"Centered\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header is centered.</p>\n    </SectionModule>\n    <SectionModule\n      kind=\"split\"\n      eyebrow=\"Platform\"\n      title=\"Horizontal\"\n      description=\"The description takes its own column.\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        The headline and its description share a row.\n      </p>\n    </SectionModule>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SectionModule from '@aziontech/webkit/section-module'\n</script>\n\n<template>\n  <div>\n    <SectionModule\n      :divided=\"false\"\n      variant=\"start\"\n      eyebrow=\"Platform\"\n      title=\"Left\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header sits at the start edge.</p>\n    </SectionModule>\n    <SectionModule\n      variant=\"center\"\n      eyebrow=\"Platform\"\n      title=\"Centered\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">The header is centered.</p>\n    </SectionModule>\n    <SectionModule\n      variant=\"split\"\n      eyebrow=\"Platform\"\n      title=\"Horizontal\"\n      description=\"The description takes its own column.\"\n    >\n      <p class=\"m-0 text-body-md text-(--text-muted)\">\n        The headline and its description share a row.\n      </p>\n    </SectionModule>\n  </div>\n</template>"
   },
   {
    "name": "Divided",

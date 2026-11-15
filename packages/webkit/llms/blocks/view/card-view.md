@@ -316,7 +316,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/applications"
             target="_blank"
@@ -324,7 +324,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
           <Button
             label="Create Application"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
           />
         </template>
@@ -349,7 +349,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                   <Button
                     :label="selectedCount ? `Delete (${selectedCount})` : 'Delete'"
                     icon="ai ai-trash"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="!selectedCount"
                   />
@@ -383,13 +383,13 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                 <template #actions="{ close }">
                   <Button
                     label="Cancel"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     @click="close"
                   />
                   <Button
                     :label="selectedCount === 1 ? 'Delete application' : 'Delete applications'"
-                    kind="danger"
+                    variant="danger"
                     size="medium"
                     :disabled="!canDelete"
                     @click="confirmDelete"
@@ -419,7 +419,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                   <Button
                     label="Create Application"
                     icon="ai ai-plus"
-                    kind="secondary"
+                    variant="secondary"
                     size="small"
                   />
                 </template>
@@ -483,7 +483,7 @@ Each variant is the same screen in another state: `get_block("view/card-view", {
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />

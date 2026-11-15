@@ -33,7 +33,7 @@ The bar in its default `content` placement, labelled `aria-label="Console"`. Fil
 
 ### B. Brand — `Brand` (required)
 
-`kind="default"`, `size="small"`, wrapped in a link to the home route with `aria-label="Azion home"`. The link carries the focus ring and a hover opacity that respects `motion-reduce`.
+`variant="default"`, `size="small"`, wrapped in a link to the home route with `aria-label="Azion home"`. The link carries the focus ring and a hover opacity that respects `motion-reduce`.
 
 ### C. Documentation — `Button` (required)
 
@@ -99,7 +99,7 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -108,7 +108,7 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="/docs"

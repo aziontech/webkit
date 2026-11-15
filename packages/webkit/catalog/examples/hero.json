@@ -12,8 +12,8 @@
   },
   {
    "name": "Screen",
-   "summary": "With `kind=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
-   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero\n    kind=\"screen\"\n    max-width=\"site\"\n  >\n    <Hero.Title\n      align=\"center\"\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n    />\n  </Hero>\n</template>"
+   "summary": "With `variant=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
+   "sfc": "<script setup>\n  import Hero from '@aziontech/webkit/hero'\n</script>\n\n<template>\n  <Hero\n    variant=\"screen\"\n    max-width=\"site\"\n  >\n    <Hero.Title\n      align=\"center\"\n      eyebrow=\"Infrastructure\"\n      eyebrow-prefix=\"//\"\n      title=\"A global network built for fast applications\"\n    />\n  </Hero>\n</template>"
   }
  ]
 }

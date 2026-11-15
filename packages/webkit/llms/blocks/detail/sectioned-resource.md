@@ -368,7 +368,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                 <Button
                   label="Documentation"
                   icon="ai ai-book"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   href="https://example.com/docs/private-access"
                   target="_blank"
@@ -376,7 +376,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                 <Button
                   :label="`Add ${current.noun}`"
                   icon="ai ai-plus"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                 />
               </template>
@@ -396,7 +396,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                 >
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh"
@@ -450,7 +450,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                           <Button
                             :label="`Add ${current.noun}`"
                             icon="ai ai-plus"
-                            kind="secondary"
+                            variant="secondary"
                             size="small"
                           />
                         </template>
@@ -466,7 +466,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                         <template #actions>
                           <Button
                             label="Clear filters"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearFilters"
                           />
@@ -496,7 +496,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`${policyBase}/${activeTab}`"
               />

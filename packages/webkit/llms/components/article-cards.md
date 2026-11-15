@@ -1,6 +1,6 @@
 # Article Cards
 
-> A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
+> A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
 - Import: `import ArticleCards from '@aziontech/webkit/article-cards'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -32,7 +32,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `ArticleCardsKind` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
+| `variant` | `ArticleCardsVariant` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
 | `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the heading. |
 | `title` | `string` | `''` | false | Headline of the band; the band renders no header when empty. |
@@ -42,7 +42,7 @@
 ## States
 
 - Visual states: `default`, `hover` (the card lifts to the raised surface and its media scales up), `focus-visible` (inset ring)
-- `data-kind` mirrors the `kind` prop and places the heading
+- `data-variant` mirrors the `variant` prop and places the heading
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
@@ -90,7 +90,7 @@
 
 <template>
   <ArticleCards
-    kind="start"
+    variant="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[
@@ -126,7 +126,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -140,7 +140,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <ArticleCards
-      kind="start"
+      variant="start"
       title="Related Articles"
       aria-label="Related Articles"
       :items="[
@@ -173,7 +173,7 @@
       ]"
     />
     <ArticleCards
-      kind="center"
+      variant="center"
       eyebrow="Success cases"
       title="When our customers succeed, we succeed"
       aria-label="When our customers succeed, we succeed"

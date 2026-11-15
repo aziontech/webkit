@@ -261,7 +261,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
     { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 160 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const statusOptions = [...new Set(rows.value.map((row) => row.status))]
@@ -430,7 +430,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/personal-tokens"
             target="_blank"
@@ -438,7 +438,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           <Button
             label="Create Personal Token"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             @click="openCreate"
           />
@@ -464,7 +464,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
@@ -477,7 +477,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -499,7 +499,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="retryLoad"
             />
@@ -522,7 +522,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 <Button
                   label="Create Personal Token"
                   icon="ai ai-plus"
-                  kind="secondary"
+                  variant="secondary"
                   size="small"
                   @click="openCreate"
                 />
@@ -621,7 +621,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />
@@ -720,7 +720,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                   </Select>
                   <HelperText
                     id="token-expiry-hint"
-                    kind="helper"
+                    type="helper"
                     >{{ expiryHint }}</HelperText
                   >
                 </Field>
@@ -732,7 +732,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
               <Button
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 type="button"
                 :disabled="submitting"
@@ -740,7 +740,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
               />
               <Button
                 label="Create Personal Token"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"
@@ -784,7 +784,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 </div>
                 <CopyButton
                   :value="revealed.secret"
-                  kind="outlined"
+                  variant="outline"
                   size="large"
                   aria-label="Copy token"
                   copied-label="Token copied"
@@ -805,7 +805,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
           <div class="flex w-full justify-end">
             <Button
               :label="copied ? 'Done' : 'I copied the token'"
-              kind="primary"
+              variant="primary"
               size="medium"
               @click="closeReveal"
             />

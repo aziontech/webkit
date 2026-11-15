@@ -1,6 +1,6 @@
 # Site (`shell/site`)
 
-> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`kind: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.
+> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.
 
 - Surface: site
 - Source: `blocks/shell/site/site.vue` in `@aziontech/webkit`
@@ -27,11 +27,11 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 
 ### A. Site chrome — `SiteLayout` (required)
 
-Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `kind: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
+Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 
 ### B. Opening band — `Hero` (required)
 
-`kind="band"`, `size="large"`, `max-width="site"`; `Hero.Title` carries the eyebrow, title, description and the two actions, centred.
+`variant="band"`, `size="large"`, `max-width="site"`; `Hero.Title` carries the eyebrow, title, description and the two actions, centred.
 
 ### C. Actions — `Button` (required)
 
@@ -59,7 +59,7 @@ A row of headline figures inside a `FrameBox`.
 
 ### I. Texture — `TextureMaterial` (optional)
 
-`kind="lines"`, the decorative fill of the closing frame.
+`variant="lines"`, the decorative fill of the closing frame.
 
 ## Do
 
@@ -476,7 +476,7 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
   }
 
   const footer: SiteLayoutFooter = {
-    kind: 'site',
+    variant: 'site',
     home: '/en/',
     homeAriaLabel: 'Azion home',
     columns: [
@@ -566,7 +566,7 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
     search-placeholder="Search azion.com"
   >
     <Hero
-      kind="band"
+      variant="band"
       size="large"
       max-width="site"
     >
@@ -580,13 +580,13 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
         <template #actions>
           <Button
             label="Start for free"
-            kind="primary"
+            variant="primary"
             size="large"
             href="https://console.azion.com/signup"
           />
           <Button
             label="Talk to a specialist"
-            kind="outlined"
+            variant="outline"
             size="large"
             href="/en/contact-sales/"
           />
@@ -618,7 +618,7 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
         data-hatch="true"
         class="h-[calc(var(--spacing-2xl)*2)]"
       >
-        <TextureMaterial kind="lines" />
+        <TextureMaterial variant="lines" />
       </FrameBox>
     </SectionContainer>
   </SiteLayout>

@@ -87,7 +87,7 @@
   },
   {
    "name": "texture",
-   "type": "TextureMaterialKind",
+   "type": "TextureMaterialVariant",
    "default": "'none'",
    "required": "false",
    "doc": "Texture the media column is grounded with; `none` leaves it bare."

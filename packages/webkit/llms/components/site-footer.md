@@ -16,7 +16,7 @@
 
 - **Do** render it as the last child of the page shell, as is: it draws its own top rule, its frame and its closing bottom rule.
 - **Don't** wrap it in a bordered or padded `div` (`border-t`, `py-*`): the rules double and the frame drifts off the page column.
-- Use `kind: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
+- Use `variant: 'site'` under a framed marketing page, so the footer draws the page frame and closes on its bottom rule; the page above must not draw a bottom rule of its own.
 - Keep four link columns so the grid fills at `md`.
 - Set `target: '_blank'` on a link that leaves azion.com (Community, Status): it opens in a new tab, draws the external-link glyph after the label and tells assistive tech it opens a new tab. Never add the glyph yourself.
 - Give every social link a `label` that names the network, since the button shows only the glyph.
@@ -36,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `SiteFooterKind` | `'site'` | false | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. |
+| `variant` | `SiteFooterVariant` | `'site'` | false | Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the footer landmark. Empty uses the locale catalog (`Footer`). |
 | `home` | `string` | `''` | false | Destination of the Azion mark; the mark is not rendered when empty. |
 | `homeAriaLabel` | `string` | `''` | false | Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). |
@@ -56,7 +56,7 @@
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop on the footer
+- `data-variant` mirrors the `variant` prop on the footer
 - The footer's signature band is `compact`: below `lg` it carries the Azion mark, centred; from `lg` the band is hidden and the mark leads the social row instead
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
@@ -273,7 +273,7 @@
 
 <template>
   <SiteFooter
-    kind="site"
+    variant="site"
     aria-label="Footer"
     home="#"
     home-aria-label="Azion home"
@@ -317,7 +317,7 @@
   <div class="flex w-full flex-col gap-(--spacing-md)">
     <SiteFooter
       v-model:language="language"
-      kind="content"
+      variant="content"
       home="#"
       :columns="columns"
       :languages="['EN', 'PT-BR', 'ES']"

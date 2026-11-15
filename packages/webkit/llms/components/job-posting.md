@@ -8,7 +8,7 @@
 
 ## When to use
 
-- On the page of one open position, under a `hero-band` (`kind: 'title-band'`) that carries the posting's title and its apply link.
+- On the page of one open position, under a `hero-band` (`variant: 'title-band'`) that carries the posting's title and its apply link.
 
 ## Do
 
@@ -35,14 +35,14 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `form` | `JobPostingForm` | `—` | true | The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, kind, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. |
+| `form` | `JobPostingForm` | `—` | true | The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`. |
 | `messages` | `JobPostingMessages` | `—` | true | Copy of the form and its outcomes: `{ missing, invalidEmail, invalidUrl, error, successTitle, successDescription, done, browse }`. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `area` | `string` | `''` | false | Area the posting is filed under, the overline of the rail. |
 | `title` | `string` | `''` | false | Title of the posting, restated at the top of the rail; the band renders nothing when empty. |
 | `facets` | `JobPostingFacet[]` | `[]` | false | Facts about the posting listed in the rail, in order; each is `{ label, icon? }`. |
 | `applyLabel` | `string` | `''` | false | Label of the rail button that links to the application form; the button is left out when empty. |
-| `sections` | `JobPostingSection[]` | `[]` | false | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ kind: 'text', text }` or `{ kind: 'list', items }`. |
+| `sections` | `JobPostingSection[]` | `[]` | false | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ variant: 'text', text }` or `{ type: 'list', items }`. |
 | `secondaryAction` | `JobPostingAction` | `undefined` | false | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. |
 | `loading` | `boolean` | `false` | false | The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the application: the confirmation dialog opens. |
@@ -133,7 +133,7 @@ No built-in strings: every visible string and accessible name comes from the pro
       title: 'About Acme',
       blocks: [
         {
-          kind: 'text',
+          type: 'text',
           text: 'Acme builds the platform teams use to ship and run their applications worldwide. We are a small team with a big footprint, and we care about tools that get out of the way.'
         }
       ]
@@ -142,11 +142,11 @@ No built-in strings: every visible string and accessible name comes from the pro
       title: 'About the role',
       blocks: [
         {
-          kind: 'text',
+          type: 'text',
           text: 'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: automation, internal tools and standards that remove manual steps from the delivery cycle.'
         },
         {
-          kind: 'text',
+          type: 'text',
           text: 'You will work with the development, platform and infrastructure teams on self-service tools, standard pipelines and automated release checks.'
         }
       ]
@@ -155,7 +155,7 @@ No built-in strings: every visible string and accessible name comes from the pro
       title: 'What you will do',
       blocks: [
         {
-          kind: 'list',
+          type: 'list',
           items: [
             'Build and evolve standard CI/CD pipelines for tests, checks and releases.',
             'Write internal frameworks and tools for test automation.',
@@ -169,7 +169,7 @@ No built-in strings: every visible string and accessible name comes from the pro
       title: 'What you bring',
       blocks: [
         {
-          kind: 'list',
+          type: 'list',
           items: [
             'Experience with test automation and quality engineering.',
             'Solid experience with CI/CD and pipeline automation.',
@@ -189,33 +189,33 @@ No built-in strings: every visible string and accessible name comes from the pro
     fields: [
       {
         name: 'name',
-        kind: 'text',
+        type: 'text',
         label: 'Name',
         required: true,
         autocomplete: 'name'
       },
       {
         name: 'email',
-        kind: 'email',
+        type: 'email',
         label: 'Email address',
         required: true,
         helper: 'We answer every application at this address.'
       },
       {
         name: 'phone',
-        kind: 'phone',
+        type: 'phone',
         label: 'Contact number',
         required: true
       },
       {
         name: 'linkedin',
-        kind: 'url',
+        type: 'url',
         label: 'LinkedIn profile URL',
         helper: 'Optional.'
       },
       {
         name: 'resume',
-        kind: 'file',
+        type: 'file',
         label: 'Resume',
         required: true,
         accept: 'application/pdf,.docx,.doc',
@@ -277,14 +277,14 @@ No built-in strings: every visible string and accessible name comes from the pro
     fields: [
       {
         name: 'name',
-        kind: 'text',
+        type: 'text',
         label: 'Name',
         required: true,
         autocomplete: 'name'
       },
       {
         name: 'email',
-        kind: 'email',
+        type: 'email',
         label: 'Email address',
         required: true,
         helper: 'We answer every application at this address.'
@@ -318,7 +318,7 @@ No built-in strings: every visible string and accessible name comes from the pro
     <div class="flex">
       <Button
         label="Show the confirmation"
-        kind="outlined"
+        variant="outline"
         size="medium"
         @click="confirm"
       />
@@ -331,7 +331,7 @@ No built-in strings: every visible string and accessible name comes from the pro
       :sections="[
         {
           title: 'About the role',
-          blocks: [{ kind: 'text', text: 'You will build the tools our engineers ship with.' }]
+          blocks: [{ type: 'text', text: 'You will build the tools our engineers ship with.' }]
         }
       ]"
       :form="form"

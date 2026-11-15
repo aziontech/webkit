@@ -18,6 +18,6 @@
   "Three or six items at three columns, four or eight at four, so rows stay full.",
   "Keep points to three short lines.",
   "Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).",
-  "Set `titleKind: 'start'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
+  "Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
  ]
 }

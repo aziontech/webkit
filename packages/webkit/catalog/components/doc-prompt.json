@@ -20,7 +20,7 @@
  "bestPractices": [
   "Write the prompt once, in the default slot. It is both the visible text and the copied string, so the two cannot drift.",
   "Give `title` only when the surrounding page has not already said what the block is. Three one-line prompts under a \"Prompts to try\" heading want the bare shape.",
-  "Use `kind=\"line\"` for a single instruction and `kind=\"block\"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.",
+  "Use `variant=\"line\"` for a single instruction and `variant=\"block\"` for a priming paragraph. A one-sentence prompt broken across three lines reads as three instructions.",
   "Keep the prompt in the imperative and free of placeholders the reader must fill silently — if a value must be substituted, name it in the prose above."
  ]
 }

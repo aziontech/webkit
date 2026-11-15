@@ -178,7 +178,7 @@
   <div class="flex w-full max-w-(--container-xs) flex-col items-start gap-(--spacing-sm)">
     <Button
       label="Start upload"
-      kind="secondary"
+      variant="secondary"
       size="medium"
       icon="ai ai-upload"
       @click="start"
@@ -216,7 +216,7 @@
       <template #actions>
         <Button
           label="Open folder"
-          kind="secondary"
+          variant="secondary"
           size="small"
         />
       </template>

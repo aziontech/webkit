@@ -25,7 +25,7 @@
 
 - A link inside a sentence → use a plain anchor with the text-link class.
 - An action that changes something instead of navigating → use `button`.
-- A text action that runs something instead of navigating → use `button` with `kind="link"`.
+- A text action that runs something instead of navigating → use `button` with `variant="link"`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

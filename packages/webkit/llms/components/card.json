@@ -8,13 +8,13 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind=\"integration\"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.",
+ "purpose": "Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default variant holds a settings block, a summary or a form section; `variant=\"integration\"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.",
  "setup": null,
  "useWhen": [
   "Group related console content into one bordered surface with a title header, a body and an optional footer, such as a settings block, a summary or a form section.",
   "Host a divided list edge to edge: set `:padded=\"false\"` and put an `Item` list in the body.",
   "A centered single-card screen (sign-up, onboarding, a success page) that needs header, body and footer regions.",
-  "A catalog tile for an integration, an extension or a plugin: set `kind=\"integration\"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.",
+  "A catalog tile for an integration, an extension or a plugin: set `variant=\"integration\"` for the logo, the name, the vendor, a short description, badges, the installed state and one action.",
   "A short row of highlighted integrations above the full catalog (Featured): add `featured` to the integration tile for the centred, raised layout with the badge in the corner."
  ],
  "avoidWhen": [
@@ -23,7 +23,7 @@
   "It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.",
   "It is a single row of title, description, media and actions → use `item`.",
   "It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).",
-  "It is a template tile in a gallery with no vendor, badge or install state → keep `kind=\"default\"` with the default slot (see `view/template-browser`)."
+  "It is a template tile in a gallery with no vendor, badge or install state → keep `variant=\"default\"` with the default slot (see `view/template-browser`)."
  ],
  "related": [
   "item` — rows inside the card; with `padded` set to false, an `Item` list runs its dividers to the card edges.",
@@ -38,7 +38,7 @@
   "header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.",
   "Set `:padded=\"false\"` only when the content draws its own inset or needs flush dividers.",
   "The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.",
-  "kind=\"integration\"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.",
+  "variant=\"integration\"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.",
   "Keep the description to one or two sentences; the card clamps it to three lines.",
   "Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.",
   "Integration cards sit under a section heading, so their title is an `h3`.",
@@ -50,7 +50,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Heading rendered in the header when the `header` slot is empty; with `kind=\"integration\"`, the item name."
+   "doc": "Heading rendered in the header when the `header` slot is empty; with `variant=\"integration\"`, the item name."
   },
   {
    "name": "padded",
@@ -60,7 +60,7 @@
    "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
   },
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'default' | 'integration'",
    "default": "'default'",
    "required": "false",
@@ -71,56 +71,56 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Integration kind: icon class for the logo mark. The `logo` slot takes an image instead."
+   "doc": "Integration variant: icon class for the logo mark. The `logo` slot takes an image instead."
   },
   {
    "name": "vendor",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Integration kind: who publishes the item, shown as \"by {vendor}\"."
+   "doc": "Integration variant: who publishes the item, shown as \"by {vendor}\"."
   },
   {
    "name": "description",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Integration kind: one or two sentences on what the item does."
+   "doc": "Integration variant: one or two sentences on what the item does."
   },
   {
    "name": "badges",
    "type": "CardBadge[]",
    "default": "[]",
    "required": "false",
-   "doc": "Integration kind: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
+   "doc": "Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
   },
   {
    "name": "installed",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Integration kind: shows the Installed tag."
+   "doc": "Integration variant: shows the Installed tag."
   },
   {
    "name": "href",
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Integration kind: the title links here; without it the title is a button that emits `select`."
+   "doc": "Integration variant: the title links here; without it the title is a button that emits `select`."
   },
   {
    "name": "featured",
    "type": "boolean",
    "default": "false",
    "required": "false",
-   "doc": "Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner."
+   "doc": "Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner."
   }
  ],
  "events": [
   {
    "name": "select",
    "payload": "event: MouseEvent",
-   "notes": "Integration kind without `href`: the title (the whole tile) was activated."
+   "notes": "Integration variant without `href`: the title (the whole tile) was activated."
   }
  ],
  "slots": [
@@ -137,7 +137,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "Main card body: children passed without a slot name. With `kind=\"integration\"` it renders under the description."
+   "notes": "Main card body: children passed without a slot name. With `variant=\"integration\"` it renders under the description."
   },
   {
    "name": "footer",
@@ -147,12 +147,12 @@
   {
    "name": "logo",
    "scope": "—",
-   "notes": "Integration kind: replaces the logo mark, for an `img` with an empty `alt`."
+   "notes": "Integration variant: replaces the logo mark, for an `img` with an empty `alt`."
   },
   {
    "name": "actions",
    "scope": "—",
-   "notes": "Integration kind: one action at the end of the tile, above the stretched title target."
+   "notes": "Integration variant: one action at the end of the tile, above the stretched title target."
   }
  ],
  "styleSeam": false,
@@ -164,11 +164,11 @@
   },
   {
    "name": "Header",
-   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <Card class=\"w-full max-w-[512px]\">\n    <template #header>\n      <div class=\"flex items-center justify-between w-full\">\n        <h2 class=\"text-label-md text-(--text-default)\">Card Title</h2>\n        <IconButton\n          icon=\"ai ai-chevron-right\"\n          aria-label=\"Expand\"\n          kind=\"outlined\"\n          size=\"small\"\n        />\n      </div>\n    </template>\n    <template #default>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        An action rendered in the header slot stays visible, aligned to the end of the header.\n      </p>\n    </template>\n  </Card>\n</template>"
+   "sfc": "<script setup>\n  import Card from '@aziontech/webkit/card'\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <Card class=\"w-full max-w-[512px]\">\n    <template #header>\n      <div class=\"flex items-center justify-between w-full\">\n        <h2 class=\"text-label-md text-(--text-default)\">Card Title</h2>\n        <IconButton\n          icon=\"ai ai-chevron-right\"\n          aria-label=\"Expand\"\n          variant=\"outline\"\n          size=\"small\"\n        />\n      </div>\n    </template>\n    <template #default>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        An action rendered in the header slot stays visible, aligned to the end of the header.\n      </p>\n    </template>\n  </Card>\n</template>"
   },
   {
    "name": "Footer",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Card from '@aziontech/webkit/card'\n</script>\n\n<template>\n  <Card\n    title=\"Card Title\"\n    class=\"w-full max-w-[512px]\"\n  >\n    <template #default>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        The footer bar renders only when the footer slot is filled.\n      </p>\n    </template>\n    <template #footer>\n      <div class=\"flex w-full items-center justify-between gap-(--spacing-sm)\">\n        <span class=\"text-body-xs text-(--text-muted)\">\n          <a\n            href=\"/docs\"\n            class=\"text-link\"\n            >Check documentation:</a\n          >\n        </span>\n        <div class=\"flex gap-(--spacing-sm)\">\n          <Button\n            label=\"Cancel\"\n            kind=\"outlined\"\n            size=\"small\"\n          />\n          <Button\n            label=\"Save\"\n            kind=\"outlined\"\n            size=\"small\"\n          />\n        </div>\n      </div>\n    </template>\n  </Card>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Card from '@aziontech/webkit/card'\n</script>\n\n<template>\n  <Card\n    title=\"Card Title\"\n    class=\"w-full max-w-[512px]\"\n  >\n    <template #default>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        The footer bar renders only when the footer slot is filled.\n      </p>\n    </template>\n    <template #footer>\n      <div class=\"flex w-full items-center justify-between gap-(--spacing-sm)\">\n        <span class=\"text-body-xs text-(--text-muted)\">\n          <a\n            href=\"/docs\"\n            class=\"text-link\"\n            >Check documentation:</a\n          >\n        </span>\n        <div class=\"flex gap-(--spacing-sm)\">\n          <Button\n            label=\"Cancel\"\n            variant=\"outline\"\n            size=\"small\"\n          />\n          <Button\n            label=\"Save\"\n            variant=\"outline\"\n            size=\"small\"\n          />\n        </div>\n      </div>\n    </template>\n  </Card>\n</template>"
   }
  ],
  "docs": "components/card.md"

@@ -33,12 +33,12 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `BannerArtKind` | `'map'` | false | Which backdrop to draw: `globe`, `map` or `network`. |
+| `variant` | `BannerArtVariant` | `'map'` | false | Which backdrop to draw: `globe`, `map` or `network`. |
 | `animated` | `boolean` | `true` | false | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
 
 ## States
 
-- `data-kind` mirrors the backdrop drawn.
+- `data-variant` mirrors the backdrop drawn.
 
 ## Accessibility
 
@@ -72,12 +72,12 @@
 
 <template>
   <Hero
-    kind="band"
+    variant="band"
     size="large"
     max-width="site"
   >
     <template #background>
-      <BannerArt kind="map" />
+      <BannerArt variant="map" />
     </template>
     <HeroTitle
       eyebrow="Network"
@@ -97,9 +97,9 @@
   import BannerArt from '@aziontech/webkit/banner-art'
 
   const arts = [
-    { kind: 'globe', label: 'Globe' },
-    { kind: 'map', label: 'Map' },
-    { kind: 'network', label: 'Network' }
+    { variant: 'globe', label: 'Globe' },
+    { variant: 'map', label: 'Map' },
+    { variant: 'network', label: 'Network' }
   ]
 </script>
 
@@ -107,10 +107,10 @@
   <div class="flex flex-col gap-(--spacing-md)">
     <div
       v-for="item in arts"
-      :key="item.kind"
+      :key="item.variant"
       class="relative h-80 overflow-hidden border border-(--border-default) bg-(--bg-canvas)"
     >
-      <BannerArt :kind="item.kind" />
+      <BannerArt :variant="item.variant" />
       <p class="relative z-10 m-0 p-(--spacing-lg) text-heading-md text-(--text-default)">
         {{ item.label }}
       </p>

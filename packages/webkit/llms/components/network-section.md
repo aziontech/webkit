@@ -1,6 +1,6 @@
 # Network Section
 
-> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `kind` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
+> The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
 
 - Import: `import NetworkSection from '@aziontech/webkit/network-section'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -36,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `NetworkSectionKind` | `'outcomes'` | false | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures. |
+| `variant` | `NetworkSectionVariant` | `'outcomes'` | false | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
@@ -49,7 +49,7 @@
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop and selects the floor (`outcomes`, `benefits` or `stats`)
+- `data-variant` mirrors the `variant` prop and selects the floor (`outcomes`, `benefits` or `stats`)
 - Empty: when `title` is empty the band renders nothing; when the selected floor's array is empty the band renders without a floor
 - An outcome without `logo` renders its quote with no mark row
 - The `benefits` floor is `card-grid`'s `balanced` layout with `columns: 3`, so three benefits fill one row and four split 2 × 2; every benefit is a `topic` with an `h3`, led by its glyph when it has an `icon`
@@ -98,7 +98,7 @@
 
 <template>
   <NetworkSection
-    kind="outcomes"
+    variant="outcomes"
     eyebrow="Region: Earth."
     title="One distributed infrastructure without the complexity of managing, securing and scaling it"
     claims-eyebrow="Built around your users. Distributed around your data."
@@ -142,7 +142,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -156,7 +156,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <NetworkSection
-      kind="outcomes"
+      variant="outcomes"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
       claims-eyebrow="Built around your users. Distributed around your data."
@@ -198,7 +198,7 @@
       ]"
     />
     <NetworkSection
-      kind="benefits"
+      variant="benefits"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
       claims-eyebrow="Built around your users. Distributed around your data."
@@ -227,7 +227,7 @@
       ]"
     />
     <NetworkSection
-      kind="stats"
+      variant="stats"
       anchor="network-figures"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
@@ -330,7 +330,7 @@
     <NetworkSection
       v-for="count in counts"
       :key="`outcomes-${count}`"
-      kind="outcomes"
+      variant="outcomes"
       eyebrow="Region: Earth."
       :title="`${count} outcomes set the floor in ${count} columns`"
       claims-eyebrow="Built around your users. Distributed around your data."
@@ -340,7 +340,7 @@
     <NetworkSection
       v-for="count in benefitCounts"
       :key="`benefits-${count}`"
-      kind="benefits"
+      variant="benefits"
       eyebrow="Region: Earth."
       :title="`${count} benefits balanced on up to three columns`"
       claims-eyebrow="Built around your users. Distributed around your data."

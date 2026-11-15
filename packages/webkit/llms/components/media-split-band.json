@@ -27,7 +27,7 @@
  ],
  "bestPractices": [
   "Give the band exactly one media: `scene`, `codeTabs`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.",
-  "A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `kind: 'transparent'` action for a quiet \"Learn more\".",
+  "A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `variant: 'ghost'` action for a quiet \"Learn more\".",
   "On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.",
   "Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.",
   "Use `size=\"large\"` for a band that carries only its headline and description.",
@@ -81,7 +81,7 @@
   },
   {
    "name": "texture",
-   "type": "TextureMaterialKind",
+   "type": "TextureMaterialVariant",
    "default": "'pixelate'",
    "required": "false",
    "doc": "Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`."
@@ -161,14 +161,14 @@
    "type": "MediaSplitBandAction",
    "default": "undefined",
    "required": "false",
-   "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind."
+   "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `variant` overrides the drawn variant."
   },
   {
    "name": "secondaryAction",
    "type": "MediaSplitBandAction",
    "default": "undefined",
    "required": "false",
-   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked."
+   "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked."
   }
  ],
  "events": [],
@@ -195,7 +195,7 @@
   },
   {
    "name": "Code",
-   "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true,\n    kind: 'transparent'\n  }\n</script>\n\n<template>\n  <MediaSplitBand\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import MediaSplitBand from '@aziontech/webkit/media-split-band'\n\n  const codeTabs = [\n    {\n      label: 'cache-settings.json',\n      value: 'cache-settings',\n      language: 'json',\n      code: '{\\n  \"cache_settings\": {\\n    \"name\": \"api-cache\",\\n    \"browser_cache_settings\": {\\n      \"ttl\": 60\\n    },\\n    \"cdn_cache_settings\": {\\n      \"ttl\": 30\\n    },\\n    \"cache_key\": {\\n      \"query_string\": \"whitelist\",\\n      \"query_string_fields\": [\"user_id\", \"category\"],\\n      \"cookie\": \"whitelist\",\\n      \"cookie_names\": [\"session_id\", \"region\"]\\n    },\\n    \"methods\": [\"GET\", \"POST\", \"OPTIONS\"],\\n    \"stale_cache\": true\\n  }\\n}',\n      fileName: 'cache-settings.json',\n      fileIcon: 'ai ai-json'\n    }\n  ]\n\n  const primaryAction = {\n    label: 'Learn more',\n    href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',\n    trailing: true,\n    variant: 'ghost'\n  }\n</script>\n\n<template>\n  <MediaSplitBand\n    title=\"From basic caching to advanced acceleration\"\n    description=\"Application Accelerator extends Cache with protocol optimizations and advanced cache rules for dynamic content.\"\n    :code-tabs=\"codeTabs\"\n    copy-aria-label=\"Copy the cache settings sample\"\n    :primary-action=\"primaryAction\"\n  />\n</template>"
   }
  ],
  "docs": "components/media-split-band.md"

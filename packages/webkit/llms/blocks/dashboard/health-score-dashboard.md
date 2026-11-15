@@ -58,7 +58,7 @@ The overall score's `Hint` states the bands:
 
 ### E. Overall figure — `StatTile` (required)
 
-The overall score as a `StatTile` with `kind="sans"`, labelled `Overall score`, the unit `/ 100` and
+The overall score as a `StatTile` with `variant="sans"`, labelled `Overall score`, the unit `/ 100` and
 no delta, with the top cause of poor samples under it. The tile owns its loading Skeleton and prints
 a dash when the period has no score; never hand-build the figure.
 
@@ -105,7 +105,7 @@ and its band.
 Variant RealUser only: the timings measured in the reader's browsers that such a score is built
 from. Title `Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`,
 `Last 7 days`, `Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals
-`StatTile`s (`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`StatTile`s (`variant="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
 `Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
 aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
 each with the latest value, its unit, a sparkline of the period and the period name in the aside.
@@ -1236,7 +1236,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                 <StatTile
                   label="Overall score"
-                  kind="sans"
+                  variant="sans"
                   unit="/ 100"
                   :value="overall.score"
                   :format-value="formatScore"
@@ -1262,9 +1262,9 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
+                <Chart.Axis type="y" />
                 <Chart.Axis
-                  kind="x"
+                  type="x"
                   :ticks="6"
                 />
                 <Chart.Line curve="monotone" />
@@ -1400,7 +1400,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
             >
               <Item.Media>
                 <Skeleton
-                  kind="rectangle"
+                  variant="rectangle"
                   width="2rem"
                   height="2rem"
                 />
@@ -1429,7 +1429,7 @@ Each variant is the same screen in another state: `get_block("dashboard/health-s
               :href="`/incidents/${incident.id}`"
               size="small"
             >
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   :class="incident.icon"
                   aria-hidden="true"

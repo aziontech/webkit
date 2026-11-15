@@ -77,7 +77,7 @@
 </template>
 ```
 
-### Levels
+### Severities
 
 ```vue
 <script setup>

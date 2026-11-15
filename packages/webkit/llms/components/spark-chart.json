@@ -40,7 +40,7 @@
    "doc": "The series, oldest first; null leaves a gap."
   },
   {
-   "name": "kind",
+   "name": "type",
    "type": "'area' | 'line' | 'bar'",
    "default": "'area'",
    "required": "false",
@@ -86,7 +86,7 @@
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import SparkChart from '@aziontech/webkit/spark-chart'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-(--spacing-lg)\">\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        kind=\"area\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        kind=\"line\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        kind=\"bar\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SparkChart from '@aziontech/webkit/spark-chart'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap gap-(--spacing-lg)\">\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        type=\"area\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        type=\"line\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n    <div class=\"w-full max-w-(--container-3xs)\">\n      <SparkChart\n        type=\"bar\"\n        :values=\"[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

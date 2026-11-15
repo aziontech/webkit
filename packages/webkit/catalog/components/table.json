@@ -13,7 +13,7 @@
   "A short titled preview of a longer listing on a marketing page → use `listing-table`.",
   "A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.",
   "Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.",
-  "A grid of selectable cards or options → use `radio-group` with `kind=\"card\"`.",
+  "A grid of selectable cards or options → use `radio-group` with `type=\"card\"`.",
   "The same records as a grid of cards → use `card-list` (same collection, card layout)."
  ],
  "related": [
@@ -26,7 +26,7 @@
  ],
  "bestPractices": [
   "Compose `Table` by hand only for small, static tables; for repeated data use `data-table`, which renders through these parts.",
-  "Mark the row-actions cell `kind=\"action\"` with `frozen=\"end\"` so it pins to the trailing edge, and give the principal cell `principal` (or `grow=\"2\"`).",
+  "Mark the row-actions cell `type=\"action\"` with `frozen=\"end\"` so it pins to the trailing edge, and give the principal cell `principal` (or `grow=\"2\"`).",
   "Name the table: a `Table.Caption` labels it (`aria-labelledby`), or pass `aria-label` on the root.",
   "Give `Table.CellTime` dates from your data. Where the text must not depend on when it renders (an example, a test, a server render the browser hydrates), set `now` on the app's `WebkitProvider` and count sample dates back from that constant; never build them from `Date.now()` / `new Date()` in setup.",
   "Import the root alone from `table-root`, or each part from its own entry (`table-row`), when only a few parts are used."

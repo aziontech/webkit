@@ -1,6 +1,6 @@
 # FirstUse (`state/first-use`)
 
-> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media kind="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media type="icon"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/state/first-use/first-use.vue` in `@aziontech/webkit`
@@ -38,7 +38,7 @@ A flush `Card` (`:padded="false"`) holds the explanation and the method list as 
 
 ### B. Agent marks — `Logo` (optional)
 
-The coding-agent promo stacks the agent marks, each a decorative `Logo` at `size="small"` in a bordered tile. A mono mark takes `kind="current"` and the tile's text colour, a coloured one `kind="color"`.
+The coding-agent promo stacks the agent marks, each a decorative `Logo` at `size="small"` in a bordered tile. A mono mark takes `variant="current"` and the tile's text colour, a coloured one `variant="color"`.
 
 ### C. Explanation — `EmptyState` (required)
 
@@ -50,11 +50,11 @@ The resource glyph, a headline that names the first action, and one sentence on 
 
 ### E. Methods — `Item` (required)
 
-An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: the method glyph in `Item.Media kind="icon"` (the component draws the frame), `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
+An `Item.List` under the `EmptyState`, one `Item` per way to create the first resource: the method glyph in `Item.Media type="icon"` (the component draws the frame), `Item.Title` and `Item.Description`, and one action in `Item.Actions`. List the methods in order of how most users start (repository import, CLI, from scratch).
 
 ### F. Method action — `Button` (required)
 
-One per method. The recommended method takes `kind="primary"` (`Import`); the others take `kind="outlined"` (`Create`). Only one primary on the block.
+One per method. The recommended method takes `variant="primary"` (`Import`); the others take `variant="outline"` (`Create`). Only one primary on the block.
 
 ### G. Command row — `InputGroupRoot` (CLI method)
 
@@ -174,7 +174,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
         <div class="border-t border-(--border-muted)">
           <Item.List>
             <Item>
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   class="ai ai-github text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -189,13 +189,13 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
               <Item.Actions>
                 <Button
                   label="Import"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                 />
               </Item.Actions>
             </Item>
             <Item>
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   class="ai ai-code text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -234,7 +234,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
               </div>
             </Item>
             <Item>
-              <Item.Media kind="icon">
+              <Item.Media type="icon">
                 <i
                   class="ai ai-globe text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
@@ -247,7 +247,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
               <Item.Actions>
                 <Button
                   label="Create"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                 />
               </Item.Actions>
@@ -346,7 +346,7 @@ Each variant is the same screen in another state: `get_block("state/first-use", 
                 <Logo
                   :name="agent.name"
                   :src="agent.src"
-                  :kind="agent.mono ? 'current' : 'color'"
+                  :variant="agent.mono ? 'current' : 'color'"
                   decorative
                   size="small"
                 />

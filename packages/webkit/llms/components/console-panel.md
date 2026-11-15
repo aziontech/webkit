@@ -1,6 +1,6 @@
 # Console Panel
 
-> A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
+> A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` variant the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
 
 - Import: `import ConsolePanel from '@aziontech/webkit/console-panel'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -33,21 +33,21 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'console' \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
-| `titleKind` | `SectionTitleKind` | `'center'` | false | Layout of the headline block. |
+| `variant` | `'console' \| 'diagram'` | `'console'` | false | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. |
+| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Layout of the headline block. |
 | `titlePadding` | `SectionTitlePadding` | `'medium'` | false | Vertical padding of the headline block. |
 | `size` | `SectionTitleSize` | `'medium'` | false | Step of the headline on the heading scale. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`. |
 | `description` | `string` | `''` | false | One or two sentences under the headline. |
-| `texture` | `TextureMaterialKind` | `'pixelate'` | false | Texture the panel is grounded with. |
+| `texture` | `TextureMaterialVariant` | `'pixelate'` | false | Texture the panel is grounded with. |
 | `textureFade` | `TextureMaterialFade` | `'top'` | false | Axis the texture fades out along. |
 | `tabs` | `ConsolePanelTab[]` | `[]` | false | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene. |
 | `tabsAriaLabel` | `string` | `''` | false | Accessible name of the tab control; empty uses the built-in "Console views". |
 | `crop` | `number` | `0` | false | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up. |
 | `primaryAction` | `ConsolePanelAction` | `undefined` | false | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `ConsolePanelAction` | `undefined` | false | Second button under the headline, `outlined`; same shape. Shown only with a label and a link. |
+| `secondaryAction` | `ConsolePanelAction` | `undefined` | false | Second button under the headline, `outline`; same shape. Shown only with a label and a link. |
 
 ## Slots
 
@@ -57,7 +57,7 @@
 
 ## States
 
-- `data-kind` mirrors `kind`.
+- `data-variant` mirrors `variant`.
 - The first tab is selected on render.
 - `--mockup-fade-start` / `--mockup-fade-end` are set for a `ProductWidget` scene when cropped.
 
@@ -127,7 +127,7 @@
 
 <template>
   <ConsolePanel
-    kind="diagram"
+    variant="diagram"
     title="Requests take the shortest path"
     :primary-action="{ label: 'See the network', href: '/network', trailing: true }"
   >

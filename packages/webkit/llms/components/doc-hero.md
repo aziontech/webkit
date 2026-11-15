@@ -14,7 +14,7 @@
 ## Do
 
 - Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.
-- Put `Button kind="primary" size="large"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.
+- Put `Button variant="primary" size="large"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.
 - Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`).
 
 ## Don’t
@@ -96,7 +96,7 @@
     <template #actions>
       <Button
         label="Get started"
-        kind="primary"
+        variant="primary"
         size="large"
         href="#"
       />

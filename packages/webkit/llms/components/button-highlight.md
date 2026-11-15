@@ -1,6 +1,6 @@
 # Button Highlight
 
-> Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `kind` axis.
+> Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `variant` axis.
 
 - Import: `import ButtonHighlight from '@aziontech/webkit/button-highlight'`
 - Category: actions · Surface: app · Structure: monolithic
@@ -29,7 +29,7 @@
 
 ## Related
 
-- [button](button.md) — the default action control; adds `kind`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.
+- [button](button.md) — the default action control; adds `variant`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.
 - [icon-button](icon-button.md) — icon-only action when there is no room for a label.
 
 ## Props

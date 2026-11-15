@@ -166,13 +166,13 @@
     <div class="flex flex-wrap gap-(--spacing-xs)">
       <Button
         label="Finish with success"
-        kind="outlined"
+        variant="outline"
         size="small"
         @click="severity = 'success'"
       />
       <Button
         label="Finish with a failure"
-        kind="outlined"
+        variant="outline"
         size="small"
         @click="severity = 'danger'"
       />

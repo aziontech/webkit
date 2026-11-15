@@ -1,6 +1,6 @@
 # EditResource (`edit/edit-resource`)
 
-> The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `RadioGroup` choice cards (`kind="card"`), `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.
+> The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `RadioGroup` choice cards (`variant="card"`), `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.
 
 - Surface: app
 - Source: `blocks/edit/edit-resource/edit-resource.vue` in `@aziontech/webkit`
@@ -53,7 +53,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 
 ### F. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
 
-When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`kind="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`kind="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
+When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
 ### G. Template editor — `SettingRow`, `HelperText` (optional)
 
@@ -161,7 +161,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 ## Related
 
-- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `kind="transparent"` and `size="small"` in its slot).
+- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `variant="ghost"` and `size="small"` in its slot).
 - `create/create-page` — the create page that shares this field list.
 - `detail/attached-resources` — the Domains section body in DeployableSettings.
 - `edit/delete-dialog` — the dialog behind the Danger zone action.
@@ -371,7 +371,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                             <HelperText
                               v-if="nameError"
                               id="resource-name-message"
-                              kind="required"
+                              type="required"
                               label="This field is required."
                             />
                           </div>
@@ -379,7 +379,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                         <SettingRow
                           title="Active"
                           description="When disabled, the project stops serving traffic."
-                          kind="compact"
+                          variant="compact"
                         >
                           <Switch
                             v-model="form.active"
@@ -405,7 +405,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
-                          kind="compact"
+                          variant="compact"
                         >
                           <Switch
                             v-model="form.modules[mod.key]"
@@ -430,7 +430,7 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                           v-for="mod in subscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
-                          kind="compact"
+                          variant="compact"
                         >
                           <template #description>
                             {{ mod.description }}
@@ -472,14 +472,14 @@ Each variant is the same screen in another state: `get_block("edit/edit-resource
                   <Button
                     type="button"
                     label="Discard"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="saving"
                     @click="discard"
                   />
                   <Button
                     label="Save"
-                    kind="primary"
+                    variant="primary"
                     size="medium"
                     :loading="saving"
                     @click="save"

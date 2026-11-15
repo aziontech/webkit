@@ -223,7 +223,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [FilterMenu](components/filter-menu.md): The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu.
 - [Flow](components/flow.md): Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node`) joined by decorative connectors, with optional parallel branches (`flow-parallel`) and custom connector-attachment points (`flow-ancho…
 - [Pagination](components/pagination.md): Pagination controls for tables and lists, pixel-perfect to Figma, in two modes.
-- [PaginationButton](components/pagination-button.md): PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (…
+- [PaginationButton](components/pagination-button.md): PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `type="more"` — an inert, decorative overflow ellipsis (…
 - [PropertyFilter](components/property-filter.md): One field that filters a collection by properties and free text, after Cloudscape's property filter.
 - [Table](components/table.md): The table's parts and its markup-only root.
 - [TopologyDiagram](components/topology-diagram.md): The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its…
@@ -365,7 +365,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 ## Components: Overlay
 
 - [Command](components/command.md): Command Menu is a ⌘K command palette: a modal overlay with a search input and a filtered, keyboard-navigable list of actions.
-- [ConfirmDialog](components/confirm-dialog.md): A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit).
+- [ConfirmDialog](components/confirm-dialog.md): A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit).
 - [Dialog](components/dialog.md): Modal surface above the page, built on the shared Panel shell.
 - [Drawer](components/drawer.md): A panel that slides in from an edge of the screen and keeps the page behind it in view.
 - [HoverCard](components/hover-card.md): Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave.

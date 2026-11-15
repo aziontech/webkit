@@ -1,6 +1,6 @@
 # Section Title
 
-> The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `kind` picks the layout — `center` for a symmetric opener, `start` for a reading-order one, and `split` for a wide row that sets the headline against its description.
+> The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `variant` picks the layout — `center` for a symmetric opener, `start` for a reading-order one, and `split` for a wide row that sets the headline against its description.
 
 - Import: `import SectionTitle from '@aziontech/webkit/section-title'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -11,7 +11,7 @@
 - Use SectionTitle as the header row of a marketing band; console pages use SectionHeader.
 - Opening a marketing or landing page section that needs a framed header.
 - Whenever the header itself should carry the rule that separates it from the content below, with no extra margin.
-- For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `kind="split"`.
+- For a wide band whose headline and supporting sentence should sit side by side rather than stacked — `variant="split"`.
 
 ## Do
 
@@ -23,7 +23,7 @@
 - Reach for `split` when the description is long enough to earn its own column — on a narrow viewport it stacks back under the headline.
 - In `split`, set `--section-title-headline-span` to `2` from the consumer's class to run the headline across the middle column too, when it would otherwise wrap to three lines; the description keeps the third column, and the default `1` leaves that column as air. `--section-title-headline-max` caps the headline's width inside its span (`none` by default), so a headline that would fit on one line across two columns still breaks into two.
 - In `split`, set `descriptionWidth="wide"` when the description runs to a paragraph and would stack six or more lines in the third column alone; it then spans the middle and third columns, capped at `--container-xl` and aligned to the right edge so it ends where the narrow description ends. It takes the column a `--section-title-headline-span` of `2` would claim, so use one or the other. Outside `split` the prop has no effect.
-- Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `kind` above it.
+- Put the section's CTAs in the `actions` slot rather than in the body; the slot already stacks them fluid below `sm` and aligns them with the chosen `variant` above it.
 - The vertical rhythm around the header belongs to the `section-gap` frames on either side, not to this component.
 
 ## Don’t
@@ -47,7 +47,7 @@
 | `title` | `string` | `—` | true | Headline of the section, rendered as the section's `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `'center' \| 'start' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
+| `variant` | `'center' \| 'start' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. |
 | `framed` | `boolean` | `true` | false | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. |
 | `padding` | `'small' \| 'medium'` | `'medium'` | false | Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. |
@@ -58,12 +58,12 @@
 | Slot | Scope | Notes |
 | --- | --- | --- |
 | `default` | — | Description body; replaces the `description` prop when provided. |
-| `actions` | — | Call-to-action row under the copy, aligned with the chosen `kind`. |
+| `actions` | — | Call-to-action row under the copy, aligned with the chosen `variant`. |
 
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop: `center` | `start` | `split`
+- `data-variant` mirrors the `variant` prop: `center` | `start` | `split`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-framed` present when the header draws its own frame and padding
 - `data-padding` mirrors the `padding` prop: `small` | `medium`
@@ -106,19 +106,19 @@
 <template>
   <div>
     <SectionTitle
-      kind="center"
+      variant="center"
       eyebrow="Centered"
       title="A symmetric section opener"
       description="Copy capped at the reading width and centered in the frame — the default."
     />
     <SectionTitle
-      kind="start"
+      variant="start"
       eyebrow="Left"
       title="The same stack, at the start edge"
       description="Same anatomy, aligned to the start — for a section that reads rather than announces."
     />
     <SectionTitle
-      kind="split"
+      variant="split"
       eyebrow="Horizontal"
       title="Headline in the first column"
       description="The description takes the third column, with the middle one left as air. Below the md breakpoint the grid collapses and this falls back under the headline."
@@ -138,21 +138,21 @@
   <div>
     <SectionTitle
       size="small"
-      kind="start"
+      variant="start"
       eyebrow="Small"
       title="A subsection inside a band"
       description="The headline drops a step so it opens a part of a section without competing with the section's own header."
     />
     <SectionTitle
       size="medium"
-      kind="start"
+      variant="start"
       eyebrow="Medium"
       title="An ordinary section opener"
       description="The default step, and the one nearly every section header wants."
     />
     <SectionTitle
       size="large"
-      kind="start"
+      variant="start"
       eyebrow="Large"
       title="The headline is the statement"
       description="For a band that carries one claim and little else — the copy under it stays at reading size."

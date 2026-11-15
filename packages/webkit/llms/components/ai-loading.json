@@ -38,7 +38,7 @@
    "doc": "Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`)."
   },
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'inline' | 'bar'",
    "default": "'inline'",
    "required": "false",
@@ -63,7 +63,7 @@
   },
   {
    "name": "Bar",
-   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading\n      kind=\"bar\"\n      label=\"Generating a table of cache hits by country\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import AiLoading from '@aziontech/webkit/ai-loading'\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-md)\">\n    <AiLoading\n      variant=\"bar\"\n      label=\"Generating a table of cache hits by country\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/ai-loading.md"

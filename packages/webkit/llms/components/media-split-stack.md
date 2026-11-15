@@ -1,6 +1,6 @@
 # Media Split Stack
 
-> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration`, `product-widget`, `diagram` and `button`. A band's picture is one of four things: a `ProductWidget` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
+> A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration`, `product-widget`, `diagram` and `button`. A band's picture is one of four things: a `ProductWidget` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `variant` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
 
 - Import: `import MediaSplitStack from '@aziontech/webkit/media-split-stack'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -33,7 +33,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `MediaSplitStackKind` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
+| `variant` | `MediaSplitStackVariant` | `'media-end'` | false | Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band. |
 | `anchor` | `string` | `''` | false | In-page id set on the run so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the run, rendered by the large centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`. |
@@ -48,7 +48,7 @@
 ## States
 
 - Visual states: `default`; hovering a linked band reveals its link affordance (owned by `media-split`)
-- `data-kind` mirrors the `kind` prop
+- `data-variant` mirrors the `variant` prop
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button only when it has an `action`, links as a whole to its `href` (or its action's when it has none), and renders its media cell only when it has a picture; a band's `eyebrow` sits above its headline
 - Band headlines are `h2` when the run has no header and `h3` under the section title, so the outline never repeats a level
@@ -153,7 +153,7 @@
 
 <template>
   <MediaSplitStack
-    kind="media-end"
+    variant="media-end"
     eyebrow="Solutions"
     title="One platform for every workload you run"
     description="Pick the outcome you need; the same distributed platform serves it."
@@ -162,7 +162,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -272,11 +272,11 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <MediaSplitStack
-      kind="media-end"
+      variant="media-end"
       :bands="solutionBands"
     />
     <MediaSplitStack
-      kind="alternating"
+      variant="alternating"
       eyebrow="Managed Infrastructure"
       title="Stop managing regions and capacity by hand"
       :bands="networkBands"
@@ -320,7 +320,7 @@
 
 <template>
   <MediaSplitStack
-    kind="alternating"
+    variant="alternating"
     :bands="bands"
   />
 </template>

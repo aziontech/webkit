@@ -24,7 +24,7 @@
 
 ## Don’t
 
-- For one quotation on its own → use `quote` with `kind="highlight"`.
+- For one quotation on its own → use `quote` with `variant="highlight"`.
 - For a band of customer quotes the reader browses by client → use `client-quotes`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
 - For a moving strip of marks with no links → use `ticker`.
@@ -74,7 +74,7 @@
 - The wall is a `card-grid` of framed cells at 3:2, three columns below `lg` and six from `lg`, drawn from `--border-default`; each cell is one card
 - `data-active` marks the selected card; it sits on `--bg-selected` while the others rest on the plain surface
 - Hover paints `--bg-hover` as a `::before` ghost layer over a resting card; the selected card shows no ghost. A card reveals no link label — clicking it selects, it never navigates
-- The panel renders every item's `quote` with `kind="highlight"` in one shared grid cell; only the selected one is visible, and the others are transparent (`opacity-0`), `inert` and `aria-hidden`. The panel is therefore always as tall as the tallest quotation, so its height never changes between clients or during a change. They are hidden by opacity, never by `visibility: hidden`: a registry mark's SVG clip path is resolved by id from its first copy in the document, and a clip path inside a `visibility: hidden` subtree clips every copy of that mark to nothing
+- The panel renders every item's `quote` with `variant="highlight"` in one shared grid cell; only the selected one is visible, and the others are transparent (`opacity-0`), `inert` and `aria-hidden`. The panel is therefore always as tall as the tallest quotation, so its height never changes between clients or during a change. They are hidden by opacity, never by `visibility: hidden`: a registry mark's SVG clip path is resolved by id from its first copy in the document, and a clip path inside a `visibility: hidden` subtree clips every copy of that mark to nothing
 - The visible quotation fills that held height, and `quote` gives the slack to the quotation itself, so the attribution and the `actions` control sit on the same line for every client and a change of client never moves them
 - `data-direction` on the panel is `forward` when the new card sits after the previous one in the wall and `back` when it sits before it; an arrow key that wraps keeps its own direction (`ArrowRight` from the last card to the first is `forward`, `ArrowLeft` from the first to the last is `back`). It decides which side the quotations travel to and from
 - `data-autoplay` marks the root while the timer runs. It runs when `autoplay` is on, the band has more than one client and the reader has not asked for reduced motion; it pauses while the pointer rests on the band or keyboard focus (`:focus-visible`) is inside it, and resumes on leave
@@ -184,7 +184,7 @@
       <template #actions>
         <Button
           label="See success stories"
-          kind="secondary"
+          variant="secondary"
           size="large"
           href="https://www.azion.com/en/success-case/"
           target="_blank"

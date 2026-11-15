@@ -391,7 +391,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
       </div>
       <Button
         label="New chat"
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-plus"
         :disabled="!turns.length"
@@ -465,7 +465,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
               <IconButton
                 icon="ai ai-refresh"
                 aria-label="Regenerate response"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :disabled="state !== 'ready'"
                 @click="retry(turn)"

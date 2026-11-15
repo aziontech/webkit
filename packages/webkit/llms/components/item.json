@@ -25,12 +25,12 @@
   "A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.",
   "A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.",
   "A whole row that is one link or button — set `href` and the row renders as an anchor, or set `clickable` and bind `@click` and it renders as a native button.",
-  "A compact option in a chooser list (a workload, a host, an application picked under a search field): `kind=\"option\"` with `clickable`, so the row is a native button. The row is 38 px — `--spacing-xs` block padding, `--spacing-sm` inline padding and gap, the title at `text-body-md` — and paints `var(--bg-selected)` when the row is `aria-pressed=\"true\"` or `aria-selected=\"true\"`."
+  "A compact option in a chooser list (a workload, a host, an application picked under a search field): `variant=\"option\"` with `clickable`, so the row is a native button. The row is 38 px — `--spacing-xs` block padding, `--spacing-sm` inline padding and gap, the title at `text-body-md` — and paints `var(--bg-selected)` when the row is `aria-pressed=\"true\"` or `aria-selected=\"true\"`."
  ],
  "avoidWhen": [
   "Records that share columns and need sorting, selection or paging → use `table`.",
   "Hierarchical navigation rows in a sidebar → use `sidebar-menu`.",
-  "A grid of selectable option cards → use `radio-group` with `kind=\"card\"`.",
+  "A grid of selectable option cards → use `radio-group` with `variant=\"card\"`.",
   "A single surface that frames arbitrary content → use `card`."
  ],
  "related": [
@@ -40,17 +40,17 @@
   "avatar` — the usual leading media for people rows inside `Item.Media`."
  ],
  "bestPractices": [
-  "Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded=\"false\"`; both force their child items' `kind` (`inline` in a group, `default` in a list), so do not set `kind` on rows inside them.",
+  "Use `Item.Group` off-card and `Item.List` inside a `card` with `:padded=\"false\"`; both force their child items' `variant` (`inline` in a group, `default` in a list), so do not set `variant` on rows inside them.",
   "Item.List` draws its own dividers — do not add `Item.Separator` inside it.",
   "With `href` or `clickable` the whole row is one focusable control with the row's hover, active and focus ring, so do not also put buttons or links inside that row.",
-  "Set `Item.Media` `kind=\"icon\"` for a glyph and `kind=\"image\"` for a picture; the frame sizes and clips the content.",
+  "Set `Item.Media` `type=\"icon\"` for a glyph and `type=\"image\"` for a picture; the frame sizes and clips the content.",
   "Use `size=\"small\"` for dense lists; `medium` is the default.",
-  "For the rows of a picker under a search field use `kind=\"option\"` (not `size=\"small\"` plus your own padding): it sets its own density and the selected fill from `aria-pressed` / `aria-selected`, so `size` does not change it. Keep option rows in a plain column, not in `Item.List` or `Item.Group`, which force their own kind."
+  "For the rows of a picker under a search field use `variant=\"option\"` (not `size=\"small\"` plus your own padding): it sets its own density and the selected fill from `aria-pressed` / `aria-selected`, so `size` does not change it. Keep option rows in a plain column, not in `Item.List` or `Item.Group`, which force their own variant."
  ],
  "props": [
   {
-   "name": "kind",
-   "type": "'default' | 'outlined' | 'muted' | 'inline' | 'option'",
+   "name": "variant",
+   "type": "'default' | 'outline' | 'muted' | 'inline' | 'option'",
    "default": "'default'",
    "required": "false",
    "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected."
@@ -90,15 +90,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item>\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item>\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        variant=\"outline\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
   },
   {
    "name": "Outline",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item kind=\"outlined\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item variant=\"outline\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        variant=\"outline\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
   },
   {
    "name": "Muted",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item kind=\"muted\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        kind=\"outlined\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import Item from '@aziontech/webkit/item'\n</script>\n\n<template>\n  <Item variant=\"muted\">\n    <Item.Content>\n      <Item.Title>Basic Item</Item.Title>\n      <Item.Description>A simple item with title and description.</Item.Description>\n    </Item.Content>\n    <Item.Actions>\n      <Button\n        label=\"Action\"\n        variant=\"outline\"\n        size=\"small\"\n      />\n    </Item.Actions>\n  </Item>\n</template>"
   }
  ],
  "docs": "components/item.md"

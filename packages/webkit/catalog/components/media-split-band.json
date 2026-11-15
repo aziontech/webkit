@@ -17,7 +17,7 @@
  ],
  "bestPractices": [
   "Give the band exactly one media: `scene`, `codeTabs`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.",
-  "A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `kind: 'transparent'` action for a quiet \"Learn more\".",
+  "A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `variant: 'ghost'` action for a quiet \"Learn more\".",
   "On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.",
   "Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.",
   "Use `size=\"large\"` for a band that carries only its headline and description.",

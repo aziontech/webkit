@@ -272,7 +272,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
     { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type', minWidth: 120 },
     { accessorKey: 'constraints', header: 'Constraints', grow: 2 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
   const definitionRows = computed(() =>
     (table.value?.columns ?? []).map((column) => ({
@@ -789,14 +789,14 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <div class="ms-auto flex flex-wrap items-center gap-(--spacing-xs)">
                 <Button
                   label="Add column"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-plus"
                   @click="openColumn"
                 />
                 <Button
                   label="Insert row"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   icon="ai ai-plus"
                   @click="openRow"
@@ -809,7 +809,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                     <Tooltip content="Table actions">
                       <IconButton
                         icon="ai ai-ellipsis"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         aria-label="Table actions"
                       />
@@ -950,7 +950,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                     <Button
                       type="button"
                       label="Browse files"
-                      kind="secondary"
+                      variant="secondary"
                       size="medium"
                       @click="csvInputEl?.click()"
                     />
@@ -995,7 +995,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                     <Button
                       type="button"
                       label="About data types"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       icon="ai ai-external-link"
                       href="https://www.azion.com/en/documentation/"
@@ -1081,7 +1081,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                   </AttributeEditor>
                   <HelperText
                     v-if="columnsError"
-                    kind="invalid"
+                    type="invalid"
                     :label="columnsError"
                   />
                 </div>
@@ -1191,7 +1191,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="createSubmitting"
                 @click="createOpen = false"
@@ -1199,7 +1199,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <Button
                 type="submit"
                 label="Create Table"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="createSubmitting"
               />
@@ -1349,7 +1349,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="columnSubmitting"
                 @click="columnOpen = false"
@@ -1357,7 +1357,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <Button
                 type="submit"
                 label="Add column"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="columnSubmitting"
               />
@@ -1426,7 +1426,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="rowSubmitting"
                 @click="rowOpen = false"
@@ -1434,7 +1434,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               <Button
                 type="submit"
                 label="Insert row"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="rowSubmitting"
               />
@@ -1503,14 +1503,14 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="alterSubmitting"
           @click="close"
         />
         <Button
           label="Change type"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="alterSubmitting"
           :disabled="alterType === alterCurrent?.type"
@@ -1557,14 +1557,14 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="truncateSubmitting"
           @click="close"
         />
         <Button
           label="Truncate table"
-          kind="danger"
+          variant="danger"
           size="medium"
           :loading="truncateSubmitting"
           :disabled="!canTruncate"

@@ -83,7 +83,7 @@ The frame is static apart from its resize handles.
 - **Size readout.** While any handle is dragged or focused, the chrome shows the viewport size (`768 × 1024`) at its trailing end; it is hidden otherwise.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
-- **Copy.** The address bar's trailing end composes the package's `CopyButton` (`kind="transparent"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
+- **Copy.** The address bar's trailing end composes the package's `CopyButton` (`variant="ghost"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
 - **Test ids.** Root fallback `content-browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
 - **Composable.** The document mirroring and teleport target live in a co-located lifecycle composable, `composables/use-frame-document.ts`, that disconnects every observer on scope dispose.
 
@@ -147,14 +147,14 @@ The frame is static apart from its resize handles.
       >
         <template #header>
           <SectionTitle
-            kind="split"
+            variant="split"
             eyebrow="Platform"
             title="Build, secure and deliver from one platform"
             description="Run your applications, protect them and cache their responses on the same distributed network."
           >
             <template #actions>
               <Button
-                kind="outlined"
+                variant="outline"
                 label="See all products"
               />
             </template>
@@ -167,11 +167,11 @@ The frame is static apart from its resize handles.
         >
           <CardGrid
             flush
-            kind="frame"
+            variant="frame"
             :columns="3"
             :mobile-columns="1"
           >
-            <CardGrid.Cell kind="canvas">
+            <CardGrid.Cell variant="canvas">
               <Topic
                 :heading-level="3"
                 icon="ai ai-edge-application"
@@ -179,7 +179,7 @@ The frame is static apart from its resize handles.
                 description="Deploy web apps and APIs close to every user, with no servers to provision."
               />
             </CardGrid.Cell>
-            <CardGrid.Cell kind="canvas">
+            <CardGrid.Cell variant="canvas">
               <Topic
                 :heading-level="3"
                 icon="ai ai-edge-firewall"
@@ -187,7 +187,7 @@ The frame is static apart from its resize handles.
                 description="Stop DDoS, bots and injection attacks before a request reaches your origin."
               />
             </CardGrid.Cell>
-            <CardGrid.Cell kind="canvas">
+            <CardGrid.Cell variant="canvas">
               <Topic
                 :heading-level="3"
                 icon="ai ai-tiered-cache"
@@ -208,7 +208,7 @@ The frame is static apart from its resize handles.
       >
         <CallToAction
           framed
-          kind="split"
+          variant="split"
           eyebrow="Get started"
           title="Deploy your first application."
           title-muted="Run it everywhere."
@@ -216,13 +216,13 @@ The frame is static apart from its resize handles.
         >
           <template #actions>
             <Button
-              kind="secondary"
+              variant="secondary"
               label="Start for free"
             />
           </template>
           <template #aside>
             <Button
-              kind="outlined"
+              variant="outline"
               label="Talk to a specialist"
             />
           </template>
@@ -270,14 +270,14 @@ The frame is static apart from its resize handles.
         >
           <template #header>
             <SectionTitle
-              kind="split"
+              variant="split"
               eyebrow="Platform"
               title="Build, secure and deliver from one platform"
               description="Run your applications, protect them and cache their responses on the same distributed network."
             >
               <template #actions>
                 <Button
-                  kind="outlined"
+                  variant="outline"
                   label="See all products"
                 />
               </template>
@@ -290,11 +290,11 @@ The frame is static apart from its resize handles.
           >
             <CardGrid
               flush
-              kind="frame"
+              variant="frame"
               :columns="3"
               :mobile-columns="1"
             >
-              <CardGrid.Cell kind="canvas">
+              <CardGrid.Cell variant="canvas">
                 <Topic
                   :heading-level="3"
                   icon="ai ai-edge-application"
@@ -302,7 +302,7 @@ The frame is static apart from its resize handles.
                   description="Deploy web apps and APIs close to every user, with no servers to provision."
                 />
               </CardGrid.Cell>
-              <CardGrid.Cell kind="canvas">
+              <CardGrid.Cell variant="canvas">
                 <Topic
                   :heading-level="3"
                   icon="ai ai-edge-firewall"
@@ -310,7 +310,7 @@ The frame is static apart from its resize handles.
                   description="Stop DDoS, bots and injection attacks before a request reaches your origin."
                 />
               </CardGrid.Cell>
-              <CardGrid.Cell kind="canvas">
+              <CardGrid.Cell variant="canvas">
                 <Topic
                   :heading-level="3"
                   icon="ai ai-tiered-cache"
@@ -331,7 +331,7 @@ The frame is static apart from its resize handles.
         >
           <CallToAction
             framed
-            kind="split"
+            variant="split"
             eyebrow="Get started"
             title="Deploy your first application."
             title-muted="Run it everywhere."
@@ -339,13 +339,13 @@ The frame is static apart from its resize handles.
           >
             <template #actions>
               <Button
-                kind="secondary"
+                variant="secondary"
                 label="Start for free"
               />
             </template>
             <template #aside>
               <Button
-                kind="outlined"
+                variant="outline"
                 label="Talk to a specialist"
               />
             </template>

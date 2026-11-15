@@ -29,7 +29,7 @@
 
 ## Related
 
-- [icon-button](icon-button.md) — the control it composes; `kind` and `size` are forwarded to it.
+- [icon-button](icon-button.md) — the control it composes; `variant` and `size` are forwarded to it.
 - [tooltip](tooltip.md) — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.
 - [code-block](code-block.md) — already embeds a copy-button for its content.
 
@@ -40,7 +40,7 @@
 | `value` | `string` | `—` | true | Text copied to the clipboard on activation. |
 | `ariaLabel` | `string` | `''` | false | Accessible name while idle. Empty uses the locale catalog (`Copy`). |
 | `copiedLabel` | `string` | `''` | false | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false | Visual variant forwarded to `IconButton`. |
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'ghost'` | false | Visual variant forwarded to `IconButton`. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token forwarded to `IconButton`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 

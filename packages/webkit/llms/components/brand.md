@@ -1,6 +1,6 @@
 # Brand
 
-> The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
+> The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
 
 - Import: `import Brand from '@aziontech/webkit/brand'`
 - Category: content · Surface: app · Structure: monolithic
@@ -10,12 +10,12 @@
 
 - Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
-- kind="reduced"` where space is tight (collapsed sidebar, mobile header).
-- kind="extended"` in marketing layouts that carry the tagline.
+- variant="reduced"` where space is tight (collapsed sidebar, mobile header).
+- variant="extended"` in marketing layouts that carry the tagline.
 
 ## Do
 
-- Choose the lockup with `kind` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
+- Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
 - Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 
@@ -36,14 +36,14 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio. |
+| `variant` | `'default' \| 'reduced' \| 'extended'` | `'default'` | false | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio. |
 | `decorative` | `boolean` | `false` | false | Hides the mark from assistive tech when visible text beside it already says Azion. |
 
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop
+- `data-variant` mirrors the `variant` prop
 - `data-size` mirrors the `size` prop
 
 ## Accessibility
@@ -63,11 +63,11 @@
 </script>
 
 <template>
-  <Brand kind="default" />
+  <Brand variant="default" />
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -76,9 +76,9 @@
 
 <template>
   <div class="flex flex-wrap items-center gap-8">
-    <Brand kind="default" />
-    <Brand kind="reduced" />
-    <Brand kind="extended" />
+    <Brand variant="default" />
+    <Brand variant="reduced" />
+    <Brand variant="extended" />
   </div>
 </template>
 ```
@@ -93,15 +93,15 @@
 <template>
   <div class="flex flex-wrap items-center gap-8">
     <Brand
-      kind="default"
+      variant="default"
       size="small"
     />
     <Brand
-      kind="default"
+      variant="default"
       size="medium"
     />
     <Brand
-      kind="default"
+      variant="default"
       size="large"
     />
   </div>

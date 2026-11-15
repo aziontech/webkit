@@ -46,11 +46,11 @@ A medium search `Input` across events, hosts, paths and addresses, then outlined
 
 ### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
 
-A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `kind="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
+A resizable, collapsible start `Sidebar` named Fields with its own Search fields `Input`. Core fields sit on top; the rest are grouped by category in an `Accordion`, each category trigger carrying a small `Tag` with its applied count. Each field has a `Checkbox` that shows or hides its column in the log, and a `Popover` of its top values, each an option `Item` (`clickable`, `variant="option"`, `aria-pressed` while applied) with its count, that applies the value as a filter. The panel hides when the explorer is narrower than the panel plus the log.
 
 ### E. Log — `Chart`, `Skeleton`, `DataTable`, `Tag`, `EmptyState` (required)
 
-Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar kind="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
+Above the table, a summary `dl` of Events, Errors and Avg request time, and the stacked volume `Chart` by level (`Chart.Bar type="histogram" stacked`: solid columns that touch, one per time bucket, with `Chart.Brush`, bound to `v-model:range`). Each level wears its step of the severity ramp (Error `severity-critical`, Warning `severity-medium`, Info `severity-low`, Debug `severity-info`), and `Chart.Tooltip total` lists every level in the bucket with a Total row under them and a footer hint: Click to filter to this bucket, or drag to select a span. Dragging across the chart selects a span and filters the period to it; from the keyboard the arrow keys step through buckets, Shift with the arrows extends a span and Enter applies it. The primary and every variant (Query, Sessions, EventDocument included) use this same `Chart`; no variant draws its own bars. Below it the event `DataTable`, `paginated` at 25 rows, with a detail column first, Level as a small `Tag` in the level's severity, and the columns chosen in the fields panel. Its empty slot picks one small `EmptyState`: no traffic yet, no match for the search, or nothing in the window.
 
 ### F. Event document — `Resizable`, `Tooltip`, `IconButton`, `Tag`, `CodeBlock` (required)
 
@@ -758,7 +758,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
     filterFields.value.map((field) => ({
       id: field.id,
       label: field.label,
-      kind: field.kind === 'range' ? 'date' : 'multiple',
+      type: field.kind === 'range' ? 'date' : 'multiple',
       options: (field.options ?? [])
         .filter((option) => !option.custom)
         .map((option) => ({ value: option.value as string | number, label: option.label }))
@@ -1169,7 +1169,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
           >
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :loading="loading"
               aria-label="Refresh"
@@ -1183,7 +1183,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
           >
             <IconButton
               icon="ai ai-download"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="!tableEl"
               aria-label="Download CSV"
@@ -1303,7 +1303,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
                             v-for="entry in topFieldValues(field.id)"
                             :key="String(entry.value)"
                             clickable
-                            kind="option"
+                            variant="option"
                             :aria-pressed="isValueApplied(field.id, entry.value)"
                             @click="toggleFieldValue(field.id, entry.value)"
                           >
@@ -1422,7 +1422,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
                                     v-for="entry in topFieldValues(field.id)"
                                     :key="String(entry.value)"
                                     clickable
-                                    kind="option"
+                                    variant="option"
                                     :aria-pressed="isValueApplied(field.id, entry.value)"
                                     @click="toggleFieldValue(field.id, entry.value)"
                                   >
@@ -1544,12 +1544,12 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
                   @update:range="selectVolume"
                 >
                   <Chart.Axis
-                    kind="x"
+                    type="x"
                     :ticks="3"
                   />
                   <Chart.Brush />
                   <Chart.Bar
-                    kind="histogram"
+                    type="histogram"
                     stacked
                   />
                   <Chart.Crosshair />
@@ -1586,7 +1586,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
                     <template #cell-detail="{ row }">
                       <IconButton
                         :icon="row.id === selectedId ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
                         :aria-expanded="row.id === selectedId"
@@ -1698,7 +1698,7 @@ Each variant is the same screen in another state: `get_block("view/split-view", 
               <Tooltip content="Close">
                 <IconButton
                   icon="ai ai-x"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Close the event document"
                   @click="closeDocument"

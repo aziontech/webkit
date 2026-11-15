@@ -72,8 +72,8 @@ One-time app-level wiring before the first toast() call — service (recommended
 - `toast-item/toast-item.vue` — a single notification card (outer flex row, `items-center` so the content and its `trailing` action/close share one centered line; the leading icon and the content column sit in an inner `items-start` group so the typed icon aligns to the title's line — its single line on a one-line toast, the first line on a multi-line one — instead of to the outer row, which the 28px action/close control would otherwise stretch; the `loading` `Spinner` keeps `self-center`. The `trailing` region carries a negative block margin (`-my-(--spacing-2xs)`) so that 28px control does not inflate a one-line card, and a negative inline-end margin (`-mr-(--spacing-xs)`) so the text action's label ends optically flush with the card's padding instead of inset by the button's own padding; height adapts to content). All typography and spacing come from tokens (`text-label-md` / `text-body-xs`, `var(--spacing-*)`) — no raw sizes or line-heights. An optional leading severity icon — an Azion glyph by `severity` sized with the `text-label-md` token to match the title (`ai ai-check` / `ai ai-circle-info` / `ai ai-triangle-alert` / `ai ai-circle-alert`); the `neutral` severity has **no** icon, and a `loading` toast renders a `Spinner` in its place. Followed by a content column (`Title` + optional `Description`) in the `default` slot, and a right-aligned `trailing` slot for the optional `Action` and the `Close` control. `role="status"` (or `role="alert"` for `danger`). Props `severity?: ToastSeverity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`, default `'neutral'`) and `loading?: boolean` (default `false`; a spinner replaces the leading icon, `aria-busy`). Slots: `default` (title/description) and `trailing` (action/close); the `Toaster` fills both, standalone it renders just the shell. Reflects `data-severity` and `data-loading`.
 - `toast-title/toast-title.vue` — the primary line of a toast (`text-body-xs` `var(--text-default)`). Renders its default slot as the title text; standalone markup + testId justify the part.
 - `toast-description/toast-description.vue` — the supporting line below the title (`text-body-xs` `var(--text-muted)`). Renders its default slot; standalone markup + testId justify the part.
-- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`kind="transparent"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
-- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`ai ai-x`, `kind="transparent"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
+- `toast-action/toast-action.vue` — the inline action control, rendered as the webkit `Button` (`variant="ghost"`, `size="small"`). Prop `label: string`. Emits `click: [event: MouseEvent]`. Justified because it owns the button wiring + a11y for the action affordance.
+- `toast-close/toast-close.vue` — the dismiss control, rendered as the webkit `IconButton` (`ai ai-x`, `variant="ghost"`, `size="small"`, `aria-label="Close notification"`). Emits `click: [event: MouseEvent]`. Justified because it owns its glyph, touch target, focus ring, and a11y label.
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
@@ -151,7 +151,7 @@ The imperative API is backed by a small reactive store composable, declared here
 </template>
 ```
 
-### Types
+### Severities
 
 ```vue
 <script setup>
@@ -164,7 +164,7 @@ The imperative API is backed by a small reactive store composable, declared here
   <div class="flex flex-wrap justify-center gap-2">
     <Button
       label="Default"
-      kind="secondary"
+      variant="secondary"
       @click="
         () =>
           toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
@@ -172,7 +172,7 @@ The imperative API is backed by a small reactive store composable, declared here
     />
     <Button
       label="Success"
-      kind="primary"
+      variant="primary"
       @click="
         () =>
           toast.success('Event has been created', {
@@ -182,7 +182,7 @@ The imperative API is backed by a small reactive store composable, declared here
     />
     <Button
       label="Info"
-      kind="outlined"
+      variant="outline"
       @click="
         () =>
           toast.info('Event has been created', {
@@ -192,7 +192,7 @@ The imperative API is backed by a small reactive store composable, declared here
     />
     <Button
       label="Warning"
-      kind="outlined"
+      variant="outline"
       @click="
         () =>
           toast.warning('Event has been created', {
@@ -202,7 +202,7 @@ The imperative API is backed by a small reactive store composable, declared here
     />
     <Button
       label="Error"
-      kind="danger"
+      variant="danger"
       @click="
         () =>
           toast.error('Event has been created', {
@@ -212,7 +212,7 @@ The imperative API is backed by a small reactive store composable, declared here
     />
     <Button
       label="Loading"
-      kind="transparent"
+      variant="ghost"
       @click="
         () => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
       "

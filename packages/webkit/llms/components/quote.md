@@ -50,7 +50,7 @@
 | `logo` | `string` | `''` | false | URL of the company mark; ignored when the `mark` slot is filled. |
 | `logoAlt` | `string` | `''` | false | Alternative text for the mark; falls back to `jobTitle` when empty. |
 | `highlights` | `string[]` | `[]` | false | Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. |
-| `kind` | `QuoteKind` | `'inline'` | false | Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one. |
+| `variant` | `QuoteVariant` | `'inline'` | false | Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one. |
 
 ## Slots
 
@@ -63,7 +63,7 @@
 ## States
 
 - Visual states: `default`
-- Register: `data-kind="inline" | "signed" | "highlight"` on the root
+- Register: `data-variant="inline" | "signed" | "highlight"` on the root
 - No mark is rendered when neither `logo` nor the `mark` slot is given, and the quotation moves up to lead the block
 - No `figcaption` is rendered when neither `name` nor `jobTitle` is given
 - Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-slot="highlight"` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted
@@ -101,7 +101,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -113,21 +113,21 @@
 <template>
   <div class="flex flex-col gap-(--spacing-2xl)">
     <Quote
-      kind="inline"
+      variant="inline"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
       name="Allan Monteiro"
       job-title="CISO & Head of Technology at Magalu"
       :logo="magaluLogo"
     />
     <Quote
-      kind="signed"
+      variant="signed"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
       name="Allan Monteiro"
       job-title="CISO & Head of Technology at Magalu"
       :logo="magaluLogo"
     />
     <Quote
-      kind="highlight"
+      variant="highlight"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
       name="Allan Monteiro"
       job-title="CISO & Head of Technology at Magalu"

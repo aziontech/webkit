@@ -47,7 +47,7 @@ New swaps the list for the fields that create the resource, usually one Name `Fi
 
 ### D. Search and required message — `Input`, `HelperText` (optional)
 
-A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `HelperText kind="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
+A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `HelperText type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
@@ -355,7 +355,7 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
 
             <HelperText
               v-if="projectPicker.message"
-              kind="required"
+              type="required"
               >{{ projectPicker.message }}</HelperText
             >
           </div>
@@ -402,7 +402,7 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
                 >
                   <Item.Media>
                     <Skeleton
-                      kind="rectangle"
+                      variant="rectangle"
                       width="2rem"
                       height="2rem"
                     />
@@ -430,7 +430,7 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
               <Button
                 type="button"
                 :label="'Load ' + projectPicker.nextBatch + ' more'"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 class="w-full"
                 :loading="projectPicker.loading"

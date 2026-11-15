@@ -23,7 +23,7 @@
   "Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.",
   "Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.",
   "Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.",
-  "Give a cell `kind=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+  "Give a cell `variant=\"none\"` + `padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
   "Inside a framed page column, set `flush` so the column's rules stay one hairline each."
  ]
 }

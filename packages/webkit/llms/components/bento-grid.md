@@ -20,7 +20,7 @@
 - Keep cells in reading order — the grid auto-places in DOM order, so that order is what a screen reader and a keyboard follow, and it is what puts a cell in the track you meant.
 - Compose real elements inside a cell rather than passing a config array; the cell is a slot, and that is the point of it.
 - Let the grid draw the rules. Do not add borders inside a cell, or the shared edges double.
-- Give a cell `kind="none"` + `padded="false"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.
+- Give a cell `variant="none"` + `padded="false"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.
 - Inside a framed page column, set `flush` so the column's rules stay one hairline each.
 
 ## Don’t
@@ -59,9 +59,9 @@
 
 ## Sub-components
 
-- `bento-grid-cell/bento-grid-cell.vue` — one cell of the mosaic; owns its own frame, and takes the tracks it claims (`span`, `rows`), the fill it carries (`kind`) and whether it pads its content (`padded`).
+- `bento-grid-cell/bento-grid-cell.vue` — one cell of the mosaic; owns its own frame, and takes the tracks it claims (`span`, `rows`), the fill it carries (`variant`) and whether it pads its content (`padded`).
 
-Cell props: `span` (`'1' | '2' | '3' | '4' | 'full'`, default `'1'`) — columns claimed from the medium breakpoint up; `rows` (`'1' | '2'`, default `'1'`) — rows claimed from the medium breakpoint up; `kind` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges.
+Cell props: `span` (`'1' | '2' | '3' | '4' | 'full'`, default `'1'`) — columns claimed from the medium breakpoint up; `rows` (`'1' | '2'`, default `'1'`) — rows claimed from the medium breakpoint up; `variant` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges.
 
 The compound `index.ts` annotates the `Object.assign` result with an explicit `typeof BentoGrid & { Cell: typeof BentoGridCell }` type. Without it, declaration emit expands the root's private `Props` interface and `vue-tsc` fails with TS4082 ("default export of the module has or is using private name"). Do not simplify it back to a bare `Object.assign`.
 
@@ -71,7 +71,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-columns` and `data-mobile-columns` on the grid mirror the track counts it lays out at each breakpoint
 - `data-flush` on the grid mirrors `flush`, and is what withholds its own outer rules
 - `data-span` and `data-rows` on each cell mirror its props and drive the tracks it claims from `md` up
-- `data-kind` and `data-padded` on the cell's content box mirror its fill and its padding
+- `data-variant` and `data-padded` on the cell's content box mirror its fill and its padding
 - Below `md` every cell claims one of the mobile columns — only `span="full"` still takes the whole row — and no cell claims a second row
 - Empty: a grid with no cells renders no rules, so an unfilled grid leaves no empty frame on the page
 
@@ -80,7 +80,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - Visible focus: the grid and its cells are containers and are not focusable; controls composed inside a cell keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` follows DOM order through whatever the cells contain. The grid is not a composite widget, so it declares no arrow-key model.
 - ARIA: the grid is a plain container named by `ariaLabel` when set; cells add no role, so headings composed inside them keep the document outline the page intends.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the cells provide `var(--bg-surface)` or `var(--bg-canvas)`; a `kind="none"` cell hands both the fill and its contrast to the composed content.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the cells provide `var(--bg-surface)` or `var(--bg-canvas)`; a `variant="none"` cell hands both the fill and its contrast to the composed content.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the grid is static.
 - Touch target ≥40×40 px — not applicable; the grid holds no interactive target of its own.
 
@@ -200,18 +200,18 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         </p>
       </div>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Deploy in seconds</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">No capacity planning</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Observe every request</h3>
     </BentoGridCell>
     <BentoGridCell
       rows="2"
-      kind="none"
+      variant="none"
       :padded="false"
     >
       <a
@@ -225,13 +225,13 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
         >
       </a>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">One console</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Logs in real time</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Rollback in one click</h3>
     </BentoGridCell>
   </BentoGridRoot>

@@ -47,7 +47,7 @@ Small, named "Filter deploys by status": All, Deploying n (running and queued), 
 
 ### E. Rows — `Item`, `OutcomeMark`, `Spinner`, `Tag`, `EmptyState` (required)
 
-An `Item.List` with one small `Item kind="outlined"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
+An `Item.List` with one small `Item variant="outline"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 
@@ -365,7 +365,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
       <Button
         label="Show progress"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-list"
         @click="open = true"
@@ -427,7 +427,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
               <Item
                 v-for="item in visibleItems"
                 :key="item.id"
-                kind="outlined"
+                variant="outline"
                 size="small"
               >
                 <Item.Media>
@@ -493,7 +493,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
               <Button
                 class="w-full"
                 label="Retry failed"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="retryFailed"
@@ -503,7 +503,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
               <Button
                 class="w-full"
                 :label="running ? 'Hide' : 'Close'"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 @click="open = false"
               />

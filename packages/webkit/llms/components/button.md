@@ -1,6 +1,6 @@
 # Button
 
-> The labelled control that triggers an action. `kind` ranks the action in its view (one `primary`, the rest `secondary`, `outlined`, `transparent`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
+> The labelled control that triggers an action. `variant` ranks the action in its view (one `primary`, the rest `secondary`, `outline`, `ghost`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
 
 - Import: `import Button from '@aziontech/webkit/button'`
 - Category: actions · Surface: app · Structure: monolithic
@@ -8,17 +8,17 @@
 
 ## When to use
 
-- Use Button `kind="link"` when the text runs an action (no navigation) but should read like a link.
+- Use Button `variant="link"` when the text runs an action (no navigation) but should read like a link.
 - Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.
-- Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
+- Mark the main action of a view with `variant="primary"` and the lesser ones with `secondary`, `outline` or `ghost`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
 - A call to action that navigates: set `href` (and `target`) and it renders as an anchor with the same look.
-- An action that reads as a link — inline in a table cell or a summary (`Connect Git Repository`, `3 rules`, `Resources pending deletion`) — and opens a drawer, a picker or a flow instead of a URL: `kind="link"`. It is still a `<button>`, so keyboard and screen readers get an action.
+- An action that reads as a link — inline in a table cell or a summary (`Connect Git Repository`, `3 rules`, `Resources pending deletion`) — and opens a drawer, a picker or a flow instead of a URL: `variant="link"`. It is still a `<button>`, so keyboard and screen readers get an action.
 
 ## Do
 
-- Keep one `kind="primary"` per view or region; use `danger` only for destructive actions.
-- kind="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
+- Keep one `variant="primary"` per view or region; use `danger` only for destructive actions.
+- variant="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
 - Put brand or product marks in the `leading` slot; `icon` takes an Azion icon class.
@@ -29,16 +29,16 @@
 - The control is icon-only → use `icon-button`.
 - One default action with related alternatives in an attached menu → use `split-button`.
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
-- Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `kind="link"` Button is for an action with no destination.
-- A hand-written `<button class="text-(--text-link) …">` → use `kind="link"`.
+- Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `variant="link"` Button is for an action with no destination.
+- A hand-written `<button class="text-(--text-link) …">` → use `variant="link"`.
 - The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [icon-button](icon-button.md) — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.
+- [icon-button](icon-button.md) — icon-only counterpart with the same sizes and a required `ariaLabel`; its `ghost` variant matches this one.
 - [split-button](split-button.md) — joins a Button to a chevron menu of related actions.
-- [button-highlight](button-highlight.md) — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
+- [button-highlight](button-highlight.md) — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.
 - [link](link.md) — a text link that navigates to a page, resource or URL.
 - [toggle-group](toggle-group.md) — a group of mutually exclusive options, not a single action.
 
@@ -47,7 +47,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger' \| 'link'` | `'primary'` | false | Visual variant. `link` draws an inline text action in the link colour, with no box. |
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger' \| 'link'` | `'primary'` | false | Visual variant. `link` draws an inline text action in the link colour, with no box. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
@@ -79,8 +79,8 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
-- `data-size` mirrors `size`; every kind, size and inert utility switches on these `data-*` attributes in one flat class (no class presets in script)
-- `data-kind` mirrors `kind`; with `kind="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
+- `data-size` mirrors `size`; every variant, size and inert utility switches on these `data-*` attributes in one flat class (no class presets in script)
+- `data-variant` mirrors `variant`; with `variant="link"` the button has no box (no height, padding, surface or state layer), the label is `text-body-sm` in `var(--text-link)` turning `var(--text-link-hover)` and underlined on hover, and `size` is ignored; disabled and loading drop it to `var(--text-disabled)`; under forced colors it reads as `LinkText` with no border.
 - With `type="submit"`, `disabled` (native) and `loading` (the click is cancelled) both stop the form from submitting, including implicit submission on `Enter`
 - Touch: the drawn size is unchanged (28/32/40 px, all above the 24 px minimum); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px around the button.
 
@@ -92,7 +92,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target ≥40×40 px where the control is interactive.
-- Forced colors: the filled kinds (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
+- Forced colors: the filled variants (primary, secondary, danger) have no border of their own, so under `forced-colors: active` every button draws a 1px `ButtonBorder` edge (`GrayText` when disabled); outside forced colors nothing changes.
 
 ## Right-to-left
 
@@ -123,14 +123,14 @@
 
 <template>
   <Button
-    kind="primary"
+    variant="primary"
     size="large"
     label="Button"
   />
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -140,27 +140,27 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Button
-      kind="primary"
+      variant="primary"
       label="Button"
     />
     <Button
-      kind="secondary"
+      variant="secondary"
       label="Button"
     />
     <Button
-      kind="outlined"
+      variant="outline"
       label="Button"
     />
     <Button
-      kind="transparent"
+      variant="ghost"
       label="Button"
     />
     <Button
-      kind="danger"
+      variant="danger"
       label="Button"
     />
     <Button
-      kind="link"
+      variant="link"
       label="Link button"
     />
   </div>

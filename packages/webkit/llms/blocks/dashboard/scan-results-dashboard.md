@@ -652,7 +652,7 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
         <template #actions>
           <IconButton
             icon="ai ai-refresh"
-            kind="outlined"
+            variant="outline"
             size="medium"
             aria-label="Refresh"
           />

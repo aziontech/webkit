@@ -1,6 +1,6 @@
 # RuleBuilder (`edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`kind="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
 - Source: `blocks/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
@@ -39,7 +39,7 @@ A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name,
 
 ### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `HelperText` (optional)
 
-Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `kind="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
+Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `variant="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
 
 ### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
@@ -645,7 +645,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
         <Button
           label="Add Rule"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           class="w-full"
         />
@@ -729,7 +729,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                     <div class="flex flex-col gap-(--spacing-xs)">
                       <RadioGroup
                         v-model="form.phase"
-                        kind="card"
+                        variant="card"
                         name="rule-phase"
                         aria-label="Phase"
                         :disabled="submitting || editing"
@@ -744,7 +744,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                       </RadioGroup>
                       <HelperText
                         v-if="editing"
-                        kind="disabled"
+                        type="disabled"
                         label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
                       />
                     </div>
@@ -1003,7 +1003,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                     <SettingRow
                       title="Active"
                       description="Turn the rule on right after it is created."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.active"
@@ -1022,7 +1022,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

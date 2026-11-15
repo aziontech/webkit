@@ -538,7 +538,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                 >
                 <span class="truncate text-label-code-sm text-(--text-muted)">{{ run.id }}</span>
                 <CopyButton
-                  kind="outlined"
+                  variant="outline"
                   :value="run.id"
                   aria-label="Copy invocation ID"
                   class="shrink-0"
@@ -555,7 +555,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
               <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                 <Button
                   label="Replay"
-                  kind="secondary"
+                  variant="secondary"
                   size="medium"
                   icon="ai ai-replay"
                   :disabled="running"
@@ -570,7 +570,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                     <Tooltip content="Pick another invocation of this function">
                       <Button
                         label="Recent"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-history"
                       />
@@ -599,7 +599,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                     <Tooltip content="Invocation actions">
                       <IconButton
                         icon="ai ai-ellipsis"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         aria-label="Invocation actions"
                       />
@@ -666,7 +666,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                   run.trigger
                 }}</span>
                 <CopyButton
-                  kind="outlined"
+                  variant="outline"
                   :value="run.trigger"
                   aria-label="Copy the request that triggered this invocation"
                   class="shrink-0"
@@ -743,7 +743,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                       <Tooltip :content="`Show ${node.title} in the trace`">
                         <IconButton
                           icon="ai ai-align-left"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           :aria-label="`Show ${node.title} in the trace`"
                           @click="showSpan(node.spanId)"

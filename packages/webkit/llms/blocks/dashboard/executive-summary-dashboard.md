@@ -625,7 +625,7 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
           </div>
           <Button
             label="Export"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-download"
             :disabled="loading"
@@ -698,9 +698,9 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
+                <Chart.Axis type="y" />
                 <Chart.Axis
-                  kind="x"
+                  type="x"
                   :ticks="4"
                 />
                 <Chart.Area v-if="trend.mark === 'area'" />
@@ -807,7 +807,7 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
                 >
                   <Item.Media>
                     <Skeleton
-                      kind="circle"
+                      variant="circle"
                       width="2rem"
                       height="2rem"
                     />

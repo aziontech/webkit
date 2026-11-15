@@ -106,7 +106,7 @@
  "examples": [
   {
    "name": "ListPage",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Resources\"\n    description=\"View and manage your resources.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Documentation\"\n        icon=\"ai ai-book\"\n        kind=\"outlined\"\n        size=\"medium\"\n        href=\"https://example.com/docs/resources\"\n        target=\"_blank\"\n      />\n      <Button\n        label=\"Create Resource\"\n        icon=\"ai ai-plus\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </PageHeader>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageHeader from '@aziontech/webkit/page-header'\n</script>\n\n<template>\n  <PageHeader\n    title=\"Resources\"\n    description=\"View and manage your resources.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Documentation\"\n        icon=\"ai ai-book\"\n        variant=\"outline\"\n        size=\"medium\"\n        href=\"https://example.com/docs/resources\"\n        target=\"_blank\"\n      />\n      <Button\n        label=\"Create Resource\"\n        icon=\"ai ai-plus\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </PageHeader>\n</template>"
   },
   {
    "name": "SettingsPage",

@@ -1,7 +1,7 @@
 {
  "purpose": "The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `section-title`, `overline`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `failed`.",
  "useWhen": [
-  "On the page of one open position, under a `hero-band` (`kind: 'title-band'`) that carries the posting's title and its apply link."
+  "On the page of one open position, under a `hero-band` (`variant: 'title-band'`) that carries the posting's title and its apply link."
  ],
  "avoidWhen": [
   "For the list of open positions → use `listing-browser`.",

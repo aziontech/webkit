@@ -38,7 +38,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
-A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `kind="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
+A resizable, collapsible start `Sidebar` named Tables, 288px at rest. Below `md` it starts collapsed (set on mount, so the server render matches), so the pane keeps the width of the phone; the same holds for the Editor tab's query history. Its header carries Refresh tables and Create Table `IconButton`s, each named by a `Tooltip`, over a Search tables `Input`. Each table row is an `Item` (`clickable`, `variant="option"`, `aria-pressed` on the open table) that opens it in the pane, beside an `Actions for <table>` `DropdownMenu` with Delete table. While the tables load, `Skeleton` lines hold the list; a search that matches nothing shows a small `EmptyState` with Clear search.
 
 ### C. Empty database — `EmptyState`, `Button` (required)
 
@@ -78,7 +78,7 @@ With rows selected, a danger `Delete 2 rows` `Button` joins the Data toolbar (`:
 
 Variant CreateDatabase only; it is its own focused page outside `ConsoleLayout`, with the creation header (`GlobalHeader` with `Breadcrumb`), and adds `PageHeader`, `SettingsSection`, `SettingRow`, `Item`, `HelperText`, `Switch` and `SaveBar`, and raises its toasts with `toast`. Being outside `ConsoleLayout` does not make it an app root: it is still a route of the same app, so its toasts ride the app's one region like every other page's.
 
-The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `kind="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-validation rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
+The page the Databases list's Create opens, taken from the design sample's create database page: a back `IconButton` and the `Databases / Create Database` crumb, a small `PageHeader` (`Create Database`, `A SQL database that applications, functions and APIs can query at the edge.`), a General section with one Name row (6 to 50 letters, numbers and hyphens; it cannot be changed later) and a collapsible Advanced section with the Active `Switch`. The `SaveBar` is `variant="centered"`, the create-page footer: a raised card centred over the bottom of the scroll region, always shown, that says `Unsaved changes` while the form differs from its last saved state and holds Cancel and the primary `Create Database` (`:loading` while it runs; the fieldset is disabled meanwhile). Validation runs on submit: an empty or malformed name turns the field invalid with its reason and focus returns to it. The server's answer follows the form-validation rule: a name that already exists comes back on the field (`A database named acme-store already exists. Pick another name.`); a request that never arrived is a danger toast with Retry that keeps the entries. Success is a toast `Database orders-eu created.` with the actions that fit a new, empty database: Open database and Create Table. Provisioning a database is not a deploy, so Edit and Redeploy do not apply.
 
 ### L. Import data from CSV — `Drawer`, `Alert`, `DataTable`, `Button` (optional)
 
@@ -388,7 +388,7 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
       sortable: true,
       minWidth: 160
     })),
-    { id: '__actions', kind: 'action', hideable: false }
+    { id: '__actions', type: 'action', hideable: false }
   ])
   watch(selectedTableId, () => {
     rowSelection.value = {}
@@ -709,7 +709,7 @@ LIMIT 3;`
                   <Tooltip content="Refresh tables">
                     <IconButton
                       icon="ai ai-refresh"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Refresh tables"
                     />
@@ -717,7 +717,7 @@ LIMIT 3;`
                   <Tooltip content="Create Table">
                     <IconButton
                       icon="ai ai-plus"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Create Table"
                     />
@@ -756,7 +756,7 @@ LIMIT 3;`
               <template #actions>
                 <Button
                   label="Clear search"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="tableSearch = ''"
                 />
@@ -773,7 +773,7 @@ LIMIT 3;`
               >
                 <Item
                   clickable
-                  kind="option"
+                  variant="option"
                   :aria-pressed="selectedTable?.id === table.id"
                   class="min-w-0 flex-1"
                   @click="selectTable(table.id)"
@@ -791,7 +791,7 @@ LIMIT 3;`
                     <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
                         icon="ai ai-ellipsis"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="`Actions for ${table.name}`"
                       />
@@ -834,7 +834,7 @@ LIMIT 3;`
                 <Button
                   label="Create Table"
                   icon="ai ai-plus"
-                  kind="secondary"
+                  variant="secondary"
                   size="medium"
                   class="w-full"
                 />
@@ -892,21 +892,21 @@ LIMIT 3;`
               <div class="ms-auto flex items-center gap-(--spacing-xs)">
                 <Button
                   label="Sort"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-sort"
                 />
                 <Tooltip content="Refresh">
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     aria-label="Refresh"
                   />
                 </Tooltip>
                 <Button
                   label="Insert"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   icon="ai ai-plus"
                 />
@@ -959,7 +959,7 @@ LIMIT 3;`
                   <Tooltip :content="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="ai ai-trash"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       :aria-label="`Delete row ${row['id'] ?? row.__k}`"
                       @click="deleteRow(row)"
@@ -979,13 +979,13 @@ LIMIT 3;`
                       <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                         <Button
                           label="Insert row"
-                          kind="secondary"
+                          variant="secondary"
                           size="medium"
                           icon="ai ai-plus"
                         />
                         <Button
                           label="Import data from CSV"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-upload"
                         />
@@ -1003,7 +1003,7 @@ LIMIT 3;`
                     <template #actions>
                       <Button
                         label="Clear filter"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         @click="rowFilter = ''"
                       />
@@ -1022,7 +1022,7 @@ LIMIT 3;`
               <p class="text-heading-2xs text-(--text-default)">Columns</p>
               <Button
                 label="Add column"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-plus"
               />
@@ -1108,7 +1108,7 @@ LIMIT 3;`
               >
                 <Item
                   clickable
-                  kind="option"
+                  variant="option"
                   class="min-w-0 flex-1"
                   :title="oneLine(item.sql)"
                   @click="loadFromHistory(item)"
@@ -1132,7 +1132,7 @@ LIMIT 3;`
                     <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
                         icon="ai ai-ellipsis"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="`Actions for ${oneLine(item.sql)}`"
                       />
@@ -1173,7 +1173,7 @@ LIMIT 3;`
         >
           <Button
             label="Run query"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-play"
             :loading="running"
@@ -1182,14 +1182,14 @@ LIMIT 3;`
           <div class="ms-auto flex items-center gap-(--spacing-xs)">
             <Button
               label="Prettify"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-align-left"
               :disabled="running"
             />
             <Button
               label="Templates"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-bolt"
               :disabled="running"
@@ -1241,7 +1241,7 @@ LIMIT 3;`
               <Tooltip content="Refresh results">
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Refresh results"
                   :loading="running"
@@ -1251,7 +1251,7 @@ LIMIT 3;`
               <Tooltip content="Download results">
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Download results"
                   :disabled="!resultRows.length"
@@ -1260,7 +1260,7 @@ LIMIT 3;`
               <Tooltip content="Toggle columns">
                 <IconButton
                   icon="ai ai-table"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Toggle columns"
                   :disabled="!resultRows.length"
@@ -1366,7 +1366,7 @@ LIMIT 3;`
               <Item
                 v-for="template in filteredTemplates"
                 :key="template.id"
-                kind="outlined"
+                variant="outline"
                 clickable
                 @click="chooseTemplate(template)"
               >
@@ -1394,7 +1394,7 @@ LIMIT 3;`
               <template #actions>
                 <Button
                   label="Clear search"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="templateQuery = ''"
                 />

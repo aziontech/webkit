@@ -227,7 +227,7 @@ Each variant is the same screen in another state: `get_block("account/payment-me
           <Button
             id="card-change"
             label="Change"
-            kind="outlined"
+            variant="outline"
             size="small"
             @click="startEditingCard"
           />
@@ -344,7 +344,7 @@ Each variant is the same screen in another state: `get_block("account/payment-me
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 @click="cancelEditingCard"
               />
@@ -354,7 +354,7 @@ Each variant is the same screen in another state: `get_block("account/payment-me
                 class="w-full"
                 type="submit"
                 label="Update"
-                kind="primary"
+                variant="primary"
                 size="medium"
               />
             </div>

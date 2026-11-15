@@ -37,7 +37,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `values` | `(number \| null)[]` | `[]` | false | The series, oldest first; null leaves a gap. |
-| `kind` | `'area' \| 'line' \| 'bar'` | `'area'` | false | Mark drawn for the series. |
+| `type` | `'area' \| 'line' \| 'bar'` | `'area'` | false | Mark drawn for the series. |
 | `color` | `ChartColor` | `1` | false | Hue of the mark: a categorical slot (1–6), `other`, or a status. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height: 32, 48 or 64 pixels. Width follows the container. |
 | `fromZero` | `boolean` | `false` | false | Starts the value range at zero instead of the lowest value; bars always start at zero. |
@@ -46,7 +46,7 @@
 ## States
 
 - Visual states: `default`, `empty` (no finite value — renders nothing at its reserved height)
-- `data-kind`: `area` | `line` | `bar`
+- `data-type`: `area` | `line` | `bar`
 - `data-size`: `small` | `medium` | `large`
 - Lines and area edges are linear segments with round joins and caps; 2px stroke; the area fill fades from the hue to transparent. Bars have a 1px rounded data end and a 1px gap between them.
 
@@ -83,19 +83,19 @@
   <div class="flex flex-wrap gap-(--spacing-lg)">
     <div class="w-full max-w-(--container-3xs)">
       <SparkChart
-        kind="area"
+        type="area"
         :values="[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]"
       />
     </div>
     <div class="w-full max-w-(--container-3xs)">
       <SparkChart
-        kind="line"
+        type="line"
         :values="[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]"
       />
     </div>
     <div class="w-full max-w-(--container-3xs)">
       <SparkChart
-        kind="bar"
+        type="bar"
         :values="[310, 290, 340, 380, 360, 420, 410, 470, 450, 520, 500, 560]"
       />
     </div>

@@ -154,7 +154,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   <PopoverRoot>
     <PopoverTrigger>
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Open popover"
       />
     </PopoverTrigger>
@@ -193,7 +193,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="bottom-start"
         />
       </PopoverTrigger>
@@ -209,7 +209,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <PopoverRoot placement="bottom-end">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="bottom-end"
         />
       </PopoverTrigger>
@@ -225,7 +225,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <PopoverRoot placement="top-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="top-start"
         />
       </PopoverTrigger>
@@ -241,7 +241,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <PopoverRoot placement="top-end">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="top-end"
         />
       </PopoverTrigger>
@@ -257,7 +257,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <PopoverRoot placement="right-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="right-start"
         />
       </PopoverTrigger>
@@ -273,7 +273,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
     <PopoverRoot placement="left-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="left-start"
         />
       </PopoverTrigger>
@@ -318,7 +318,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="top-left"
           />
         </PopoverTrigger>
@@ -339,7 +339,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="top-right"
           />
         </PopoverTrigger>
@@ -360,7 +360,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="bottom-left"
           />
         </PopoverTrigger>
@@ -381,7 +381,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="bottom-right"
           />
         </PopoverTrigger>

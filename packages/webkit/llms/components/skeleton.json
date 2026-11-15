@@ -12,7 +12,7 @@
  "setup": null,
  "useWhen": [
   "Content is loading and its final layout is known: text lines, cards, media blocks.",
-  "Avatar and icon placeholders, with `kind=\"circle\"`."
+  "Avatar and icon placeholders, with `variant=\"circle\"`."
  ],
  "avoidWhen": [
   "The duration is unknown and no layout is reserved → use `progress` with `indeterminate`, or `spinner`.",
@@ -28,13 +28,13 @@
  ],
  "bestPractices": [
   "Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.",
-  "For `kind=\"circle\"`, set `width` and `height` to the same value.",
+  "For `variant=\"circle\"`, set `width` and `height` to the same value.",
   "The skeleton is `aria-hidden`. Mark the container you own with `aria-busy=\"true\"` while it loads.",
   "Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated=\"false\"` only for static captures."
  ],
  "props": [
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'rectangle' | 'circle'",
    "default": "'rectangle'",
    "required": "false",
@@ -69,15 +69,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <Skeleton\n    kind=\"rectangle\"\n    width=\"240px\"\n    height=\"100px\"\n    animated\n  />\n</template>"
+   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <Skeleton\n    variant=\"rectangle\"\n    width=\"240px\"\n    height=\"100px\"\n    animated\n  />\n</template>"
   },
   {
-   "name": "Types",
-   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Skeleton\n      kind=\"rectangle\"\n      width=\"240px\"\n      height=\"100px\"\n    />\n    <Skeleton\n      kind=\"circle\"\n      width=\"100px\"\n      height=\"100px\"\n    />\n  </div>\n</template>"
+   "name": "Variants",
+   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Skeleton\n      variant=\"rectangle\"\n      width=\"240px\"\n      height=\"100px\"\n    />\n    <Skeleton\n      variant=\"circle\"\n      width=\"100px\"\n      height=\"100px\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "OnSurfaces",
-   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-(--spacing-md)\">\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-canvas) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-canvas</span>\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-surface</span>\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-raised) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-surface-raised</span>\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-overlay) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-default)\">--bg-surface-overlay</span>\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        kind=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Skeleton from '@aziontech/webkit/skeleton'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-2 gap-(--spacing-md)\">\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-canvas) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-canvas</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-surface</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-raised) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-muted)\">--bg-surface-raised</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n    <div\n      class=\"flex flex-col gap-(--spacing-sm) rounded-(--shape-card) bg-(--bg-surface-overlay) p-(--spacing-md)\"\n    >\n      <span class=\"text-label-sm text-(--text-default)\">--bg-surface-overlay</span>\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"100%\"\n        height=\"16px\"\n      />\n      <Skeleton\n        variant=\"rectangle\"\n        width=\"60%\"\n        height=\"16px\"\n      />\n    </div>\n  </div>\n</template>"
   }
  ],
  "docs": "components/skeleton.md"

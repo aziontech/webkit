@@ -1,6 +1,6 @@
 # File Dropzone
 
-> A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages). `kind` covers the two places a drop target lives: - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the "Browse files" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages "Upload assets" shape. - **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel "drag and drop a folder to deploy" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the project intake block (`Blocks/State/ProjectIntake`). The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).
+> A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages). `variant` covers the two places a drop target lives: - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the "Browse files" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages "Upload assets" shape. - **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel "drag and drop a folder to deploy" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the project intake block (`Blocks/State/ProjectIntake`). The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).
 
 - Import: `import FileDropzone from '@aziontech/webkit/file-dropzone'`
 - Category: inputs · Surface: app · Structure: monolithic
@@ -8,8 +8,8 @@
 
 ## When to use
 
-- A form or settings surface accepts one or more files and should also accept them by drag (`kind="inline"` with a Browse button in the slot).
-- A whole page or card should accept a project, folder contents or assets dropped anywhere on it, with no permanent drop region taking up space (`kind="overlay"` inside a `relative` container).
+- A form or settings surface accepts one or more files and should also accept them by drag (`variant="inline"` with a Browse button in the slot).
+- A whole page or card should accept a project, folder contents or assets dropped anywhere on it, with no permanent drop region taking up space (`variant="overlay"` inside a `relative` container).
 - The consumer needs the accepted and rejected files separated by an `accept` filter before it uploads anything.
 
 ## Do
@@ -43,7 +43,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
+| `variant` | `'inline' \| 'overlay'` | `'inline'` | false | Placement. Inline is an always-visible dashed region; overlay stays hidden until files are dragged over the window, then covers its nearest positioned ancestor. |
 | `title` | `string` | `''` | false | Instruction shown under the icon. Empty uses the locale catalog (`Drop files to upload`). |
 | `description` | `string` | `''` | false | Secondary line under the title, typically the accepted types and limits. Not rendered when empty. |
 | `accept` | `string` | `''` | false | Comma-separated file filter using the native input accept syntax (extensions, MIME types, type wildcards). Files that do not match are rejected. Empty accepts every file. |
@@ -58,13 +58,13 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `drop` | `(event: DragEvent, files: File[])` | Activation event. Fires when files are dropped on the target (the inline root, or the visible overlay) and at least one passes `accept` / `multiple`. `files` holds only the accepted files, in `dataTransfer.files` order, and is never empty. Not emitted when `disabled`. Declaring `drop` means a consumer `@drop` listener binds to this event, never to the native DOM `drop` on the root. |
-| `reject` | `(event: DragEvent, files: File[])` | Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple="false"`. `files` holds only the rejected files and is never empty. When a drop has both kinds of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`. |
+| `reject` | `(event: DragEvent, files: File[])` | Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple="false"`. `files` holds only the rejected files and is never empty. When a drop has both variants of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`. |
 
 ## Slots
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | Actions or extra content under the description, typically a "Browse files" `Button`. Rendered only in `kind="inline"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered. |
+| `default` | — | Actions or extra content under the description, typically a "Browse files" `Button`. Rendered only in `variant="inline"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered. |
 
 ## Assets
 
@@ -74,7 +74,7 @@
 
 - Visual states: `idle`, `active` (files dragged over the target), `disabled`
 - `data-state` values: `idle` | `active`
-- `data-kind` mirrors the `kind` prop (`inline` | `overlay`)
+- `data-variant` mirrors the `variant` prop (`inline` | `overlay`)
 - `data-disabled` is present when the `disabled` prop is true. A disabled dropzone is always `data-state="idle"`.
 - `data-invalid` is present when the `invalid` prop is true.
 - **Inline / invalid**: the dashed border turns `--danger-border` while idle; the active state still wins while files are dragged over it. Overlay ignores `invalid`.
@@ -119,7 +119,7 @@
     <FileDropzone description="Or browse for files on your computer.">
       <Button
         label="Browse files"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         @click="browse"
       />
@@ -170,13 +170,13 @@
       <div class="flex flex-wrap justify-center gap-(--spacing-xs)">
         <Button
           label="Browse files"
-          kind="secondary"
+          variant="secondary"
           size="medium"
           @click="filesInputEl?.click()"
         />
         <Button
           label="Browse folder"
-          kind="secondary"
+          variant="secondary"
           size="medium"
           icon="ai ai-folder-open"
           @click="folderInputEl?.click()"
@@ -232,7 +232,7 @@
         </div>
       </template>
     </Card>
-    <FileDropzone kind="overlay" />
+    <FileDropzone variant="overlay" />
   </div>
 </template>
 ```

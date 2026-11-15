@@ -29,7 +29,7 @@
 ## Related
 
 - SiteNav` — the bar and its mega-menus; `navigation` is bound onto it.
-- SiteFooter` — the footer; `footer` is bound onto it (`kind="site"` closes a framed page).
+- SiteFooter` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
 - SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - Command` — the search palette the bar's search button opens.
 - shell/site` — the block that shows this layout with the azion.com navigation and footer.
@@ -39,7 +39,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `navigation` | `SiteLayoutNavigation` | `—` | true | The bar, bound onto `SiteNav`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`. |
-| `footer` | `SiteLayoutFooter` | `undefined` | false | The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent. |
+| `footer` | `SiteLayoutFooter` | `undefined` | false | The footer, bound onto `SiteFooter`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent. |
 | `searchPlaceholder` | `string` | `''` | false | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`). |
 | `navOverlay` | `boolean` | `false` | false | Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page. |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
@@ -191,7 +191,7 @@
     :footer="footer"
   >
     <HeroBand
-      kind="center"
+      variant="center"
       eyebrow="Functions"
       title="Run code where your users are"
       description="Deploy serverless functions to the edge network in seconds."
@@ -295,7 +295,7 @@
     :footer="footer"
   >
     <HeroBand
-      kind="center"
+      variant="center"
       eyebrow="Functions"
       title="Run code where your users are"
       description="Deploy serverless functions to the edge network in seconds."

@@ -158,7 +158,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -168,7 +168,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -185,7 +185,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -286,12 +286,12 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
               <Button
                 label="Continue with GitHub"
                 icon="ai ai-github"
-                kind="secondary"
+                variant="secondary"
                 size="large"
               />
               <Button
                 label="Continue without Git"
-                kind="transparent"
+                variant="ghost"
                 size="large"
               />
               <Link
@@ -304,7 +304,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-temp
 
           <Button
             label="Browse templates"
-            kind="outlined"
+            variant="outline"
             size="medium"
           />
         </div>

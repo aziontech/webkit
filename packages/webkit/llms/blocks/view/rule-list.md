@@ -58,7 +58,7 @@ Any move or status change raises a `SaveBar` counting the changes, with Discard 
 
 Loading: triggers read Loading, the search and Add Rule are disabled and each `DataTable` shows its skeleton rows (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
 
-A rule's name is a `Button kind="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/rule-builder` from it, as EditRule shows.
+A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/rule-builder` from it, as EditRule shows.
 
 Each phase renders every rule, unpaged: paging an ordered list would hide the neighbours a move lands between. A phase is sized for the tens of rules people manage by hand; past about 200 rules, split them across phases or rule sets rather than paging one phase.
 
@@ -534,7 +534,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
             target="_blank"
@@ -542,7 +542,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
           <Button
             label="Add Rule"
             icon="ai ai-plus"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="loading"
           />
@@ -663,7 +663,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                           <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="ai ai-chevron-up"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               data-control="up"
                               :aria-label="
@@ -678,7 +678,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                           <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="ai ai-chevron-down"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               data-control="down"
                               :aria-label="
@@ -695,7 +695,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                       <template #cell-name="{ row }">
                         <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <Button
-                            kind="link"
+                            variant="link"
                             :label="row.name"
                             data-rule-name
                             :aria-label="`Edit ${row.name}`"
@@ -748,7 +748,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                           <template #actions>
                             <Button
                               label="Clear search"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               @click="search = ''"
                             />
@@ -766,7 +766,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                         <Button
                           label="Add Rule"
                           icon="ai ai-plus"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                         />
                       </template>
@@ -795,7 +795,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
@@ -803,7 +803,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
           <Button
             type="button"
             label="Review changes"
-            kind="primary"
+            variant="primary"
             size="medium"
             :disabled="saving"
             @click="openReview"
@@ -866,7 +866,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 :disabled="saving"
                 @click="reviewOpen = false"
               />
@@ -876,7 +876,7 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
                 class="w-full"
                 type="button"
                 :label="saveFailed ? 'Save again' : 'Save'"
-                kind="primary"
+                variant="primary"
                 :loading="saving"
                 @click="save"
               />

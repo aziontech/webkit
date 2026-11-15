@@ -8,11 +8,11 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleKind: 'center'`. From the design sample's site `ProcessScroll`.",
+ "purpose": "The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleVariant: 'center'`. From the design sample's site `ProcessScroll`.",
  "setup": null,
  "useWhen": [
   "Use ProcessScroll for numbered stage cards; set `pinned` to pin them under the header while they slide.",
-  "How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-kind=\"center\"`)."
+  "How something works in three to five ordered stages (build, deploy, observe), or five to eight short numbered points pinned on scroll (`pinned`, `title-variant=\"center\"`)."
  ],
  "avoidWhen": [
   "For more than five stages or stages with art — use `FeatureScroll`."
@@ -41,8 +41,8 @@
    "doc": "Overline above the title."
   },
   {
-   "name": "titleKind",
-   "type": "SectionTitleKind",
+   "name": "titleVariant",
+   "type": "SectionTitleVariant",
    "default": "'split'",
    "required": "false",
    "doc": "Alignment of the section title over the card row."
@@ -108,7 +108,7 @@
   },
   {
    "name": "Pinned",
-   "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Role request', description: 'A hiring manager requests a new role.' },\n    {\n      title: 'Scope and posting',\n      description: 'People and the hiring manager scope the role and publish the opening.'\n    },\n    {\n      title: 'Recruiting and interviews',\n      description: 'Candidates meet the team in technical and culture interviews.'\n    },\n    { title: 'Calibration', description: 'The panel compares notes and decides together.' },\n    { title: 'Offer letter', description: 'The chosen candidate receives the offer.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    pinned\n    title-kind=\"center\"\n    title=\"Hiring process\"\n    description=\"Every role goes through the same five stages, from the first request to the offer.\"\n    :steps=\"steps\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import ProcessScroll from '@aziontech/webkit/process-scroll'\n\n  const steps = [\n    { title: 'Role request', description: 'A hiring manager requests a new role.' },\n    {\n      title: 'Scope and posting',\n      description: 'People and the hiring manager scope the role and publish the opening.'\n    },\n    {\n      title: 'Recruiting and interviews',\n      description: 'Candidates meet the team in technical and culture interviews.'\n    },\n    { title: 'Calibration', description: 'The panel compares notes and decides together.' },\n    { title: 'Offer letter', description: 'The chosen candidate receives the offer.' }\n  ]\n</script>\n\n<template>\n  <ProcessScroll\n    pinned\n    title-variant=\"center\"\n    title=\"Hiring process\"\n    description=\"Every role goes through the same five stages, from the first request to the offer.\"\n    :steps=\"steps\"\n  />\n</template>"
   }
  ],
  "docs": "components/process-scroll.md"

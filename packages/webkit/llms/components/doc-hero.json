@@ -25,7 +25,7 @@
  ],
  "bestPractices": [
   "Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.",
-  "Put `Button kind=\"primary\" size=\"large\"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.",
+  "Put `Button variant=\"primary\" size=\"large\"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.",
   "Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`)."
  ],
  "props": [
@@ -72,7 +72,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n  import DocHero from '@aziontech/webkit/doc-hero'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <DocHero\n    title=\"Welcome to Azion Docs\"\n    description=\"We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Get started\"\n        kind=\"primary\"\n        size=\"large\"\n        href=\"#\"\n      />\n      <CopyPromptButton :value=\"prompt\" />\n    </template>\n    <template #note>\n      The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.\n    </template>\n  </DocHero>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n  import DocHero from '@aziontech/webkit/doc-hero'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <DocHero\n    title=\"Welcome to Azion Docs\"\n    description=\"We make every application fast and reliable. Deploy on a global network with enterprise-grade security and no cold starts.\"\n  >\n    <template #actions>\n      <Button\n        label=\"Get started\"\n        variant=\"primary\"\n        size=\"large\"\n        href=\"#\"\n      />\n      <CopyPromptButton :value=\"prompt\" />\n    </template>\n    <template #note>\n      The prompt hands your coding agent the CLI, live docs over MCP, and this project linked.\n    </template>\n  </DocHero>\n</template>"
   },
   {
    "name": "Title only",

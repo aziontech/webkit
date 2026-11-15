@@ -72,8 +72,8 @@
    "doc": "Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
   },
   {
-   "name": "titleKind",
-   "type": "SectionTitleKind",
+   "name": "titleVariant",
+   "type": "SectionTitleVariant",
    "default": "'center'",
    "required": "false",
    "doc": "Alignment of the section title over the grid: `center`, `start` or `split`."

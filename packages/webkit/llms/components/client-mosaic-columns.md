@@ -20,7 +20,7 @@
 ## Don’t
 
 - For a bento of client stories with photos and logos → use `client-mosaic`.
-- For a quotation → use `client-quotes` or `logo-wall-quote` `kind="quote"`.
+- For a quotation → use `client-quotes` or `logo-wall-quote` `variant="quote"`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

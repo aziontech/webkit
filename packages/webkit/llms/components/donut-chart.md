@@ -36,7 +36,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `series` | `ChartSeries[]` | `[]` | false | One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. |
-| `kind` | `'donut' \| 'pie'` | `'donut'` | false | Ring or solid disc. |
+| `type` | `'donut' \| 'pie'` | `'donut'` | false | Ring or solid disc. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Diameter of the ring: 128, 176 or 240 pixels. |
 | `cap` | `number` | `6` | false | Slices kept before the rest fold into Other. |
 | `otherLabel` | `string` | `''` | false | Name of the folded slice. Empty uses the locale catalog (`Other`). |
@@ -78,7 +78,7 @@
 ## States
 
 - Visual states: `default`, `loading` (circular Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, holding the ring's footprint), `refetching`, `table-view`, `active` (a slice hovered or focused)
-- `data-kind`: `donut` | `pie`; `data-size`: `small` | `medium` | `large`
+- `data-type`: `donut` | `pie`; `data-size`: `small` | `medium` | `large`
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view` mirror the state
 - `data-entered` on each slice flips after two animation frames to run the sweep
 - `data-active` on the active slice, `data-dimmed` on the others
@@ -190,13 +190,13 @@
   <div class="flex flex-wrap gap-(--spacing-xl)">
     <DonutChart
       :series="series"
-      kind="donut"
+      type="donut"
       total-label="Blocked threats"
       aria-label="Donut"
     />
     <DonutChart
       :series="series"
-      kind="pie"
+      type="pie"
       aria-label="Pie"
     />
   </div>

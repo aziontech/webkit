@@ -601,7 +601,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
           <Button
             label="Export CSV"
             icon="ai ai-download"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="loading"
             @click="exportCsv('spend-by-category')"
@@ -657,7 +657,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Spend by category"
                   />
@@ -682,8 +682,8 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="trendForm === 'bar'"
                 stacked
@@ -713,7 +713,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Current split"
                   />
@@ -757,7 +757,7 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top contributors"
                   />

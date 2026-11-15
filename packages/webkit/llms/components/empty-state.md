@@ -90,11 +90,11 @@
     <template #actions>
       <div class="flex gap-(--spacing-3)">
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Secondary Item"
         />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Create Item"
         />
       </div>
@@ -131,11 +131,11 @@
       <template #actions>
         <div class="flex gap-(--spacing-3)">
           <Button
-            kind="secondary"
+            variant="secondary"
             label="Secondary Item"
           />
           <Button
-            kind="outlined"
+            variant="outline"
             label="Create Item"
           />
         </div>
@@ -169,11 +169,11 @@
     <template #actions>
       <div class="flex gap-(--spacing-3)">
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Secondary Item"
         />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Create Item"
         />
       </div>

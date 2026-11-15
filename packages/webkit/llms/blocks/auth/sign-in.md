@@ -1,6 +1,6 @@
 # SignIn (`auth/sign-in`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind="link"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant="link"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/auth/sign-in/sign-in.vue` in `@aziontech/webkit`
@@ -38,15 +38,15 @@ The bar above the card, labelled `aria-label="Console"`. Brand on the start side
 
 ### B. Product mark — `Brand` (required)
 
-`kind="default"`, `size="small"`, inside a link to the home route with `aria-label="Azion home"`. The link owns the focus ring.
+`variant="default"`, `size="small"`, inside a link to the home route with `aria-label="Azion home"`. The link owns the focus ring.
 
 ### C. Actions — `Button` (required)
 
 Three roles, never more on one step:
 
-- **Documentation** in the bar: `kind="outlined"`, `size="medium"`, the only way out that needs no account.
-- **Continue with Google / GitHub** on the email step: `kind="outlined"`, `size="large"`, full width, `type="button"` so they never submit the form.
-- **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `kind="secondary"` with `Return to sign in`, because nothing is left to submit.
+- **Documentation** in the bar: `variant="outline"`, `size="medium"`, the only way out that needs no account.
+- **Continue with Google / GitHub** on the email step: `variant="outline"`, `size="large"`, full width, `type="button"` so they never submit the form.
+- **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `variant="secondary"` with `Return to sign in`, because nothing is left to submit.
 
 ### D. The card — `Card` (required)
 
@@ -79,7 +79,7 @@ A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`
 
 ### I. Field message — `HelperText` (conditional)
 
-Shows only after the primary action, under the email input, with `kind="required"` when the value is empty and `kind="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
+Shows only after the primary action, under the email input, with `type="required"` when the value is empty and `type="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 
 ### J. Step hint — `Tooltip` (password and reset steps)
 
@@ -87,7 +87,7 @@ Names the icon-only back control: `Change email` on the password step, `Back to 
 
 ### K. Back control — `IconButton` (password and reset steps)
 
-`ai ai-chevron-left`, `kind="outlined"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
+`ai ai-chevron-left`, `variant="outline"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
 
 ### L. Password field — `Field` (password and new-password steps)
 
@@ -95,7 +95,7 @@ Wraps each `PasswordInput` with its `required` / `invalid` state and a `Field.Er
 
 ### M. Password — `PasswordInput` (password and new-password steps)
 
-`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a `Button` with `kind="link"` under the sign-in password (an in-page action, so never an anchor to `#`); it carries the email into the reset step. `Resend email` and `Set a new password` on the sent step are link buttons too.
+`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a `Button` with `variant="link"` under the sign-in password (an in-page action, so never an anchor to `#`); it carries the email into the reset step. `Resend email` and `Set a new password` on the sent step are link buttons too.
 
 ### N. Password rules — `PasswordRequirements` (new-password step, sign up)
 
@@ -243,7 +243,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
 <script setup lang="ts">
   import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
   import Brand from '@aziontech/webkit/brand'
-  import Button, { type ButtonKind } from '@aziontech/webkit/button'
+  import Button, { type ButtonVariant } from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -362,12 +362,12 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
     return { title: 'Welcome back', description: 'Sign in to your account.' }
   })
 
-  const primaryAction = computed<{ label: string; kind: ButtonKind }>(() => {
-    if (step.value === 'password') return { label: 'Sign in', kind: 'primary' }
-    if (step.value === 'reset') return { label: 'Send reset link', kind: 'primary' }
-    if (step.value === 'new-password') return { label: 'Reset password', kind: 'primary' }
-    if (step.value === 'sent') return { label: 'Return to sign in', kind: 'secondary' }
-    return { label: 'Continue with email', kind: 'primary' }
+  const primaryAction = computed<{ label: string; variant: ButtonVariant }>(() => {
+    if (step.value === 'password') return { label: 'Sign in', variant: 'primary' }
+    if (step.value === 'reset') return { label: 'Send reset link', variant: 'primary' }
+    if (step.value === 'new-password') return { label: 'Reset password', variant: 'primary' }
+    if (step.value === 'sent') return { label: 'Return to sign in', variant: 'secondary' }
+    return { label: 'Continue with email', variant: 'primary' }
   })
 
   const focusField = (id: string) => nextTick(() => document.getElementById(id)?.focus())
@@ -479,7 +479,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="/docs"
@@ -541,7 +541,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                         >
                           <Button
                             label="Retry"
-                            kind="secondary"
+                            variant="secondary"
                             size="small"
                             :loading="verifying"
                             @click="signIn"
@@ -562,7 +562,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <Button
                               type="button"
                               label="Continue with Google"
-                              kind="outlined"
+                              variant="outline"
                               size="large"
                               icon="ai-color ai-google"
                               class="w-full"
@@ -570,7 +570,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <Button
                               type="button"
                               label="Continue with GitHub"
-                              kind="outlined"
+                              variant="outline"
                               size="large"
                               icon="ai ai-github"
                               class="w-full"
@@ -600,7 +600,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <HelperText
                               v-if="errors.email"
                               id="login-email-error"
-                              :kind="email.trim() ? 'invalid' : 'required'"
+                              :type="email.trim() ? 'invalid' : 'required'"
                               :label="errors.email"
                             />
                           </Field>
@@ -615,7 +615,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               <IconButton
                                 icon="ai ai-chevron-left"
                                 aria-label="Change email"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="backToEmail"
                               />
@@ -648,7 +648,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <Button
                               type="button"
                               label="Forgot your password?"
-                              kind="link"
+                              variant="link"
                               @click="forgotPassword"
                             />
                           </div>
@@ -663,7 +663,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                               <IconButton
                                 icon="ai ai-chevron-left"
                                 aria-label="Back to sign in"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="backToSignIn"
                               />
@@ -694,7 +694,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <HelperText
                               v-if="errors.resetEmail"
                               id="reset-email-error"
-                              :kind="resetEmail.trim() ? 'invalid' : 'required'"
+                              :type="resetEmail.trim() ? 'invalid' : 'required'"
                               :label="errors.resetEmail"
                             />
                           </Field>
@@ -753,7 +753,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <Button
                               type="button"
                               label="Resend email"
-                              kind="link"
+                              variant="link"
                               @click="resendEmail"
                             />
                           </div>
@@ -762,7 +762,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                             <Button
                               type="button"
                               label="Set a new password"
-                              kind="link"
+                              variant="link"
                               @click="openResetLink"
                             />
                           </div>
@@ -772,7 +772,7 @@ Each variant is the same screen in another state: `get_block("auth/sign-in", { v
                       <div class="relative">
                         <Button
                           :label="primaryAction.label"
-                          :kind="primaryAction.kind"
+                          :variant="primaryAction.variant"
                           size="large"
                           class="w-full"
                           type="submit"

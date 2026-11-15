@@ -361,7 +361,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/activity-history"
             target="_blank"
@@ -391,7 +391,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="loading"
                 aria-label="Refresh"
@@ -404,7 +404,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -426,7 +426,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="load"
             />
@@ -455,7 +455,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
               >
                 <Button
                   :label="widenLabel"
-                  kind="secondary"
+                  variant="secondary"
                   size="small"
                   @click="widenRange"
                 />
@@ -501,7 +501,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
                     >{{ value }}</span
                   >
                   <CopyButton
-                    kind="outlined"
+                    variant="outline"
                     :value="value"
                     aria-label="Copy IP address"
                     size="small"
@@ -521,7 +521,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />

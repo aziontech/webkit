@@ -60,8 +60,8 @@
 - **Ready.** The canvas sets `data-ready` once the first measure lands and fades in from transparent, so a diagram never shows unconnected nodes.
 - **Active.** An `active` edge, its ports and its label chip are drawn in the accent colour and painted above the rest; an `active` node is part of the highlighted path.
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
-- **Groups.** A `group` draws its content inside a registration frame with a small label above it; `kind: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
-- **Node kinds.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
+- **Groups.** A `group` draws its content inside a registration frame with a small label above it; `variant: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
+- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
 - **Test ids.** Root fallback `marketing-diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
 
 ## Accessibility
@@ -97,14 +97,14 @@
     nodes: [
       {
         key: 'user',
-        kind: 'pill',
+        type: 'pill',
         title: 'User',
         icon: 'ai ai-user',
         active: true
       },
       {
         key: 'routing',
-        kind: 'card',
+        type: 'card',
         eyebrow: 'Routing',
         title: 'Nearest data center',
         icon: 'ai ai-directions',
@@ -112,7 +112,7 @@
       },
       {
         key: 'workload',
-        kind: 'card',
+        type: 'card',
         eyebrow: 'Workload',
         title: 'shop.example.com',
         icon: 'ai ai-workloads',
@@ -125,7 +125,7 @@
       },
       {
         key: 'cache',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'Cache',
         title: 'Served from cache',
         icon: 'ai ai-tiered-cache',
@@ -133,7 +133,7 @@
       },
       {
         key: 'origin',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
         icon: 'ai ai-database'
@@ -207,19 +207,19 @@
     nodes: [
       {
         key: 'app',
-        kind: 'app',
+        type: 'app',
         title: 'App'
       },
       {
         key: 'user',
-        kind: 'pill',
+        type: 'pill',
         title: 'User',
         icon: 'ai ai-user',
         active: true
       },
       {
         key: 'gateway',
-        kind: 'card',
+        type: 'card',
         eyebrow: 'AI Gateway',
         title: 'Route by cost',
         icon: 'ai ai-gateway',
@@ -232,7 +232,7 @@
       },
       {
         key: 'model',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'provider · general',
         title: 'General model',
         icon: 'ai ai-sparkles',
@@ -244,7 +244,7 @@
       },
       {
         key: 'cache',
-        kind: 'tile',
+        type: 'tile',
         title: 'Response cache',
         icon: 'ai ai-tiered-cache'
       }

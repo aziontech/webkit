@@ -782,7 +782,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
                   :disabled="loading"
@@ -796,7 +796,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Requests over time"
                   />
@@ -826,8 +826,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar v-if="requestsForm === 'bar'" />
               <Chart.Area v-else />
               <Chart.Crosshair />
@@ -872,7 +872,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
                   :disabled="loading"
@@ -886,7 +886,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Status codes"
                   />
@@ -916,8 +916,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="statusForm === 'bar'"
                 stacked
@@ -950,7 +950,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
                   :disabled="loading"
@@ -964,7 +964,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Requests by country"
                   />
@@ -995,8 +995,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>
@@ -1026,7 +1026,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"
                   :disabled="loading"
@@ -1040,7 +1040,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top hosts"
                   />
@@ -1153,8 +1153,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar v-if="requestsForm === 'bar'" />
               <Chart.Area v-else />
               <Chart.Crosshair />
@@ -1173,8 +1173,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="statusForm === 'bar'"
                 stacked
@@ -1197,8 +1197,8 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>

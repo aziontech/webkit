@@ -2,8 +2,8 @@
  "purpose": "The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `frame-box` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.",
  "useWhen": [
   "For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.",
-  "With `kind` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.",
-  "For the hairline cell grid a `section-module` body holds, with `kind` set to `divider`.",
+  "With `variant` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.",
+  "For the hairline cell grid a `section-module` body holds, with `variant` set to `divider`.",
   "For a row of self-contained cards with gutters between them, with the default `gap`."
  ],
  "avoidWhen": [
@@ -29,7 +29,7 @@
   "Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.",
   "Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.",
   "Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.",
-  "Give a cell `kind=\"none\"` and `:padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
+  "Give a cell `variant=\"none\"` and `:padded=\"false\"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.",
   "Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone."
  ]
 }

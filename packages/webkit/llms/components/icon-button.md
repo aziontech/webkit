@@ -17,7 +17,7 @@
 - Always name it with the kebab attribute `aria-label="Delete domain"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action ("Delete domain"), not the glyph ("Trash"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.
 - The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
 - Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
-- Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
+- Use `variant="ghost"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
 - Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
 - Use `iconClass` for glyph-level tweaks instead of styling the root.
 
@@ -30,7 +30,7 @@
 
 ## Related
 
-- [button](button.md) — labelled counterpart; sizes line up and its `text` kind matches `transparent` here.
+- [button](button.md) — labelled counterpart; sizes line up and its `text` variant matches `ghost` here.
 - [copy-button](copy-button.md) — IconButton plus Tooltip with the clipboard write built in.
 - [tooltip](tooltip.md) — wrap an IconButton to show its name on hover and focus.
 - [split-button](split-button.md) — uses an IconButton as its chevron menu toggle.
@@ -41,7 +41,7 @@
 | --- | --- | --- | --- | --- |
 | `icon` | `string` | `—` | true | Azion icon class for the leading/trailing icon. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
+| `variant` | `'primary' \| 'secondary' \| 'outline' \| 'ghost' \| 'danger'` | `'primary'` | false | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
@@ -65,8 +65,8 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-disabled` mirrors the `disabled` prop; `data-loading` the `loading` prop; `data-inert` is set while disabled or loading
-- `data-kind` mirrors `kind` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
-- `IconButtonType` is exported beside `IconButtonKind`, `IconButtonSize` and `IconButtonTarget`
+- `data-variant` mirrors `variant` and `data-size` mirrors `size` on the root; the variant utilities switch on them (no class presets)
+- `IconButtonType` is exported beside `IconButtonVariant`, `IconButtonSize` and `IconButtonTarget`
 - Touch: the drawn size is unchanged (28/32/40 px); on a coarse pointer an invisible `[data-slot=touch-target]` span extends the hit area to at least 44 × 44 px.
 
 ## Accessibility
@@ -106,7 +106,7 @@
 
 <template>
   <IconButton
-    kind="primary"
+    variant="primary"
     size="large"
     icon="ai ai-plus"
     aria-label="Add"
@@ -114,7 +114,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -124,27 +124,27 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <IconButton
-      kind="primary"
+      variant="primary"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="secondary"
+      variant="secondary"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="outlined"
+      variant="outline"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="transparent"
+      variant="ghost"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="danger"
+      variant="danger"
       icon="ai ai-trash"
       aria-label="Delete"
     />

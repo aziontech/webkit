@@ -105,9 +105,9 @@ The root composes, and does not re-implement:
 
 - `Button` (`@aziontech/webkit/button`) for the three footer actions, all at the house default size
   (`large`, 40px):
-  - Cancel is `kind="transparent"`, at the start of the footer.
-  - Previous is `kind="secondary"`, at the end. It is not rendered (`v-if`, not hidden) on step 1.
-  - Next is `kind="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
+  - Cancel is `variant="ghost"`, at the start of the footer.
+  - Previous is `variant="secondary"`, at the end. It is not rendered (`v-if`, not hidden) on step 1.
+  - Next is `variant="primary"`, at the end. On the last step its label becomes `submitLabel`, it emits
     `submit` instead of `next`, and it carries `loading`.
 
 - `wizard-step/wizard-step.vue` — one step: its header and its content. It registers itself with the

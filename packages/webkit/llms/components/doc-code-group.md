@@ -18,7 +18,7 @@
 - Do: set `language` on every sample, so the header reads "Shell" or "JavaScript" and the code is highlighted.
 - Do: keep `code` to what the reader runs or pastes; the copy control copies exactly that. A leading `$ ` prompt is drawn but never copied.
 - Do: put what the command prints in the sample's `output` (`{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`), or say it in prose.
-- Do: show a standalone printout (a deploy log) with `kind="output"`.
+- Do: show a standalone printout (a deploy log) with `type="output"`.
 - Don't: write output into `code` — never `curl -I https://example.com\n# HTTP/2 200`, never `$ azion version\nAzion CLI 4.23.0`. The lint `webkit/no-output-in-command` warns on it.
 - Don't: turn the label header off on a docs page.
 
@@ -40,12 +40,12 @@
 | `samples` | `DocCodeSample[]` | `[]` | false | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
 | `showLineNumbers` | `boolean` | `false` | false | Shows the line-number gutter. |
 | `showLabel` | `boolean` | `true` | false | Shows the label header (the sample label or the language name) on a single sample. |
-| `kind` | `'code' \| 'output'` | `'code'` | false | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control. |
+| `type` | `'code' \| 'output'` | `'code'` | false | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control. |
 
 ## States
 
-- Visual states: from `CodeBlock` (tab selection, copied, label header, output kind).
-- Output: the active sample's `output` renders a second `CodeBlock` (`kind="output"`, test id `${testId}__output`) under the code block (`${testId}__code`), `--spacing-xs` apart; switching tabs swaps it.
+- Visual states: from `CodeBlock` (tab selection, copied, label header, output type).
+- Output: the active sample's `output` renders a second `CodeBlock` (`type="output"`, test id `${testId}__output`) under the code block (`${testId}__code`), `--spacing-xs` apart; switching tabs swaps it.
 - `data-doc-block` and `data-doc-chrome` put it on the block rung and stop prose rules at its edge.
 
 ## Accessibility

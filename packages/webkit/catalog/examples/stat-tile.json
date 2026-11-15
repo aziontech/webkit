@@ -12,8 +12,8 @@
   },
   {
    "name": "Variants",
-   "summary": "kind=\"mono\" (default) draws the big-number mono figure of a usage strip; kind=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
-   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"12.4\"\n    />\n    <StatTile\n      kind=\"sans\"\n      label=\"Requests\"\n      :value=\"48.2\"\n      unit=\"M\"\n    />\n  </div>\n</template>"
+   "summary": "variant=\"mono\" (default) draws the big-number mono figure of a usage strip; variant=\"sans\" draws the large heading figure of a traffic summary. The unit is always smaller, muted and sans.",
+   "sfc": "<script setup>\n  import StatTile from '@aziontech/webkit/stat-tile'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <StatTile\n      label=\"Data transferred\"\n      :value=\"842\"\n      unit=\"GB\"\n      :delta=\"12.4\"\n    />\n    <StatTile\n      variant=\"sans\"\n      label=\"Requests\"\n      :value=\"48.2\"\n      unit=\"M\"\n    />\n  </div>\n</template>"
   }
  ]
 }

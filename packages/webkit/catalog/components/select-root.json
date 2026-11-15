@@ -9,7 +9,7 @@
  "avoidWhen": [
   "A select with a visible label and helper/error text in a form → put it inside a `field`; the trigger picks up the field's id, description and state.",
   "The field is always multi-pick → use `multi-select`.",
-  "Two to seven options that fit on screen → use `radio-group` (`kind=\"card\"` for cards).",
+  "Two to seven options that fit on screen → use `radio-group` (`variant=\"card\"` for cards).",
   "The list triggers actions or navigation instead of holding a value → use `dropdown-menu`."
  ],
  "related": [
@@ -23,7 +23,7 @@
   "Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.",
   "Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Option` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.",
   "Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.",
-  "A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind=\"transparent\"` with `size=\"small\"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.",
-  "Keep `kind=\"transparent\"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`."
+  "A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `variant=\"ghost\"` with `size=\"small\"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.",
+  "Keep `variant=\"ghost\"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outline` inside a `Field`."
  ]
 }

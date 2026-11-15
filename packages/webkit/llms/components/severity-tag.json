@@ -68,7 +68,7 @@
    "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <SeverityTag\n    severity=\"info\"\n    size=\"medium\"\n  />\n</template>"
   },
   {
-   "name": "Levels",
+   "name": "Severities",
    "sfc": "<script setup>\n  import SeverityTag from '@aziontech/webkit/severity-tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SeverityTag severity=\"critical\" />\n    <SeverityTag severity=\"high\" />\n    <SeverityTag severity=\"medium\" />\n    <SeverityTag severity=\"low\" />\n    <SeverityTag severity=\"info\" />\n  </div>\n</template>"
   },
   {

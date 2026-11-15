@@ -90,7 +90,7 @@
 </template>
 ```
 
-### Types
+### Severities
 
 ```vue
 <script setup>

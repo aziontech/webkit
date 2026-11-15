@@ -285,7 +285,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
             >
               <Button
                 label="Deploy"
-                kind="primary"
+                variant="primary"
                 size="medium"
               />
             </Hotspot>

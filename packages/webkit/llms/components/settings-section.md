@@ -230,7 +230,7 @@
             <SettingRow
               title="Active"
               description="When disabled, the resource stops serving traffic."
-              kind="compact"
+              variant="compact"
             >
               <Switch
                 v-model="active"
@@ -254,7 +254,7 @@
               :key="feature.key"
               :title="feature.title"
               :description="feature.description"
-              kind="compact"
+              variant="compact"
             >
               <Switch
                 v-model="features[feature.key]"
@@ -298,7 +298,7 @@
             <SettingRow
               title="Active"
               description="Inactive teams keep their permissions but can't be assigned."
-              kind="compact"
+              variant="compact"
             >
               <Switch
                 v-model="active"

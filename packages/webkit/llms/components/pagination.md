@@ -61,7 +61,7 @@
 
 ## Sub-components
 
-- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
+- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `type?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the type's own surface and mutes the foreground to `var(--text-disabled)`.
 - `pagination-info/pagination-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
 - `pagination-page-size/pagination-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-control)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `ai ai-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Pagination `controls` slot.
 
@@ -76,7 +76,7 @@
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`
 - The page buttons render as one **segmented strip**: a single container carrying the `var(--border-default)` border and the `var(--shape-control)` radius, with the buttons butted against each other at zero gap. Only the two end buttons round their outer corners.
-- `data-kind` on PaginationButton: `previous` | `next` | `number` | `more`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-type` on PaginationButton: `previous` | `next` | `number` | `more`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are mutually exclusive: pressing a button drops the hover layer and shows the `var(--bg-active)` layer alone, so the pressed surface reads one step below hover.
 - `data-active` on PaginationButton mirrors the current-page `active` prop; `aria-current="page"` set when active.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
@@ -116,20 +116,20 @@
     </template>
 
     <Pagination.Button
-      kind="previous"
+      type="previous"
       aria-label="Previous page"
       disabled
     />
     <Pagination.Button
-      kind="number"
+      type="number"
       active
       >1</Pagination.Button
     >
-    <Pagination.Button kind="number">2</Pagination.Button>
-    <Pagination.Button kind="number">3</Pagination.Button>
-    <Pagination.Button kind="more" />
+    <Pagination.Button type="number">2</Pagination.Button>
+    <Pagination.Button type="number">3</Pagination.Button>
+    <Pagination.Button type="more" />
     <Pagination.Button
-      kind="next"
+      type="next"
       aria-label="Next page"
     />
 
@@ -154,34 +154,34 @@
   <div class="flex flex-col gap-(--spacing-md)">
     <Pagination aria-label="Pagination kinds">
       <Pagination.Button
-        kind="previous"
+        type="previous"
         aria-label="Previous page"
       />
-      <Pagination.Button kind="number">1</Pagination.Button>
+      <Pagination.Button type="number">1</Pagination.Button>
       <Pagination.Button
-        kind="number"
+        type="number"
         active
         >2</Pagination.Button
       >
-      <Pagination.Button kind="more" />
+      <Pagination.Button type="more" />
       <Pagination.Button
-        kind="next"
+        type="next"
         aria-label="Next page"
       />
     </Pagination>
     <Pagination aria-label="Pagination disabled states">
       <Pagination.Button
-        kind="previous"
+        type="previous"
         aria-label="Previous page"
         disabled
       />
       <Pagination.Button
-        kind="number"
+        type="number"
         disabled
         >1</Pagination.Button
       >
       <Pagination.Button
-        kind="next"
+        type="next"
         aria-label="Next page"
         disabled
       />

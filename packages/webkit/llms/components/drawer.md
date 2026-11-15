@@ -121,7 +121,7 @@
     <Drawer.Trigger>
       <Button
         label="Open drawer"
-        kind="primary"
+        variant="primary"
       />
     </Drawer.Trigger>
     <Drawer.Content>
@@ -137,12 +137,12 @@
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             @click="open = false"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
           />
         </div>
       </Drawer.Footer>
@@ -200,7 +200,7 @@
       <DrawerTrigger>
         <Button
           :label="sizeLabels[size]"
-          kind="primary"
+          variant="primary"
         />
       </DrawerTrigger>
       <DrawerContent>
@@ -216,12 +216,12 @@
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               @click="openBySize[size] = false"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
             />
           </div>
         </PanelFooter>
@@ -263,7 +263,7 @@
     <DrawerTrigger>
       <Button
         label="Open scrollable drawer"
-        kind="primary"
+        variant="primary"
       />
     </DrawerTrigger>
     <DrawerContent>
@@ -290,12 +290,12 @@
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             @click="open = false"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
           />
         </div>
       </PanelFooter>

@@ -3,12 +3,12 @@
   {
    "name": "Default",
    "summary": "Primary split button at large size with a three-action menu.",
-   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },\n    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <SplitButton\n    kind=\"primary\"\n    size=\"large\"\n    label=\"Save\"\n    icon=\"ai ai-check\"\n    :items=\"items\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },\n    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <SplitButton\n    variant=\"primary\"\n    size=\"large\"\n    label=\"Save\"\n    icon=\"ai ai-check\"\n    :items=\"items\"\n  />\n</template>"
   },
   {
-   "name": "Types",
-   "summary": "All kind variants side by side.",
-   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },\n    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SplitButton\n      kind=\"primary\"\n      label=\"Primary\"\n      :items=\"items\"\n    />\n    <SplitButton\n      kind=\"secondary\"\n      label=\"Secondary\"\n      :items=\"items\"\n    />\n    <SplitButton\n      kind=\"outlined\"\n      label=\"Outlined\"\n      :items=\"items\"\n    />\n  </div>\n</template>"
+   "name": "Variants",
+   "summary": "All variants side by side.",
+   "sfc": "<script setup>\n  import SplitButton from '@aziontech/webkit/split-button'\n\n  const items = [\n    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },\n    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },\n    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <SplitButton\n      variant=\"primary\"\n      label=\"Primary\"\n      :items=\"items\"\n    />\n    <SplitButton\n      variant=\"secondary\"\n      label=\"Secondary\"\n      :items=\"items\"\n    />\n    <SplitButton\n      variant=\"outline\"\n      label=\"Outlined\"\n      :items=\"items\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

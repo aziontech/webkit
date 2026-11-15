@@ -17,7 +17,7 @@
 - Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `Logo`.
 - Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
-- Keep to one or two actions under the quote: the primary (`secondary` kind) and an optional outlined `secondaryAction`.
+- Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
 
 ## Don’t
 
@@ -34,8 +34,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `LogoWallQuoteKind` | `'wall'` | false | Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos. |
-| `quoteKind` | `LogoWallQuoteQuoteKind` | `'signed'` | false | Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence. |
+| `variant` | `LogoWallQuoteVariant` | `'wall'` | false | Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos. |
+| `quoteVariant` | `LogoWallQuoteQuoteVariant` | `'signed'` | false | Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
@@ -49,7 +49,7 @@
 
 - Visual states: `default`
 - Empty: when `logos` is empty the band renders nothing
-- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `as-is`), `data-kind`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
+- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `as-is`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
 ## Accessibility
@@ -185,7 +185,7 @@ No built-in strings: the title, the quote, the client names and the action label
 <template>
   <div class="flex flex-col">
     <LogoWallQuote
-      kind="quote"
+      variant="quote"
       :quote="{
         text: 'We stopped planning capacity for campaigns. Traffic peaks just work now.',
         name: 'Jane Doe',
@@ -196,8 +196,8 @@ No built-in strings: the title, the quote, the client names and the action label
       :primary-action="{ label: 'Read the story', href: '/customers/agibank', trailing: true }"
     />
     <LogoWallQuote
-      kind="quote"
-      quote-kind="highlight"
+      variant="quote"
+      quote-variant="highlight"
       :quote="{
         text: 'Our checkout got faster in every country on the first deploy.',
         name: 'John Smith',

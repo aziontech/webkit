@@ -32,9 +32,9 @@
  "bestPractices": [
   "Pass a registry entry as it stands: `name`, `src` from `logo`, `src-light` from `logoLight`, `artwork` from `artwork`. The registry knows which theme each file is drawn for.",
   "Set the height with `size`: `small` (16 px) beside a label or in a table cell, `medium` (24 px, the default) in a card or a list, `large` (32 px) in a logo wall or a quote attribution. The width follows each file's own aspect ratio. Cap wide wordmarks with `max-w-*`.",
-  "In a list of many clients, use `kind=\"monochrome\"`: per-brand colour reads as noise next to twenty others.",
-  "On a coloured fill (white, `--primary`), use `kind=\"knockout\"`: a fill does not follow the theme, so the ink must not either.",
-  "On a surface that is dark in both themes, or among drawn diagram parts, use `kind=\"current\"` so the mark takes the surface's own ink.",
+  "In a list of many clients, use `variant=\"monochrome\"`: per-brand colour reads as noise next to twenty others.",
+  "On a coloured fill (white, `--primary`), use `variant=\"knockout\"`: a fill does not follow the theme, so the ink must not either.",
+  "On a surface that is dark in both themes, or among drawn diagram parts, use `variant=\"current\"` so the mark takes the surface's own ink.",
   "When the text beside the mark already names the company, set `decorative`."
  ],
  "props": [
@@ -64,10 +64,10 @@
    "type": "'color' | 'light' | 'dark'",
    "default": "'color'",
    "required": "false",
-   "doc": "The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`."
+   "doc": "The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`."
   },
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'color' | 'monochrome' | 'current' | 'knockout'",
    "default": "'color'",
    "required": "false",
@@ -109,8 +109,8 @@
    "sfc": "<script setup>\n  import { CLIENTS } from '@aziontech/webkit/assets/client-registry'\n  import Logo from '@aziontech/webkit/logo'\n\n  const client = CLIENTS.find((entry) => entry.name === 'Agibank')\n  const sizes = ['small', 'medium', 'large']\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"size in sizes\"\n      :key=\"size\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl)\"\n    >\n      <span class=\"w-20 text-label-md text-(--text-muted)\">{{ size }}</span>\n      <Logo\n        :name=\"client.name\"\n        :src=\"client.logo\"\n        :src-light=\"client.logoLight\"\n        :artwork=\"client.artwork\"\n        :size=\"size\"\n        class=\"max-w-40\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :size=\"size\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
-   "name": "Types",
-   "sfc": "<script setup>\n  import claudeSymbol from '@aziontech/webkit/assets/claude-symbol-color.svg'\n  import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'\n  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'\n  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'\n  import Logo from '@aziontech/webkit/logo'\n\n  const kinds = [\n    { kind: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },\n    {\n      kind: 'monochrome',\n      label: 'Monochrome',\n      fill: 'bg-(--bg-canvas)',\n      ink: 'text-(--text-muted)'\n    },\n    {\n      kind: 'current',\n      label: 'Current',\n      fill: 'bg-(--bg-canvas) text-(--text-muted)',\n      ink: 'text-(--text-muted)'\n    },\n    {\n      kind: 'knockout',\n      label: 'Knockout',\n      fill: 'bg-(--color-base-white)',\n      ink: 'text-(--color-base-black)'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"row in kinds\"\n      :key=\"row.kind\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)\"\n      :class=\"row.fill\"\n    >\n      <span\n        class=\"w-28 text-label-md\"\n        :class=\"row.ink\"\n        >{{ row.label }}</span\n      >\n      <Logo\n        name=\"Netshoes\"\n        :src=\"netshoesExtendedReversed\"\n        :src-light=\"netshoesExtendedColor\"\n        :kind=\"row.kind\"\n        class=\"max-w-32\"\n      />\n      <Logo\n        name=\"Itaú\"\n        :src=\"itauExtendedReversed\"\n        artwork=\"light\"\n        :kind=\"row.kind\"\n        class=\"max-w-32\"\n      />\n      <Logo\n        name=\"Claude\"\n        :src=\"claudeSymbol\"\n        :kind=\"row.kind\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :kind=\"row.kind\"\n      />\n    </div>\n  </div>\n</template>"
+   "name": "Variants",
+   "sfc": "<script setup>\n  import claudeSymbol from '@aziontech/webkit/assets/claude-symbol-color.svg'\n  import itauExtendedReversed from '@aziontech/webkit/assets/itau-extended-reversed.webp'\n  import netshoesExtendedColor from '@aziontech/webkit/assets/netshoes-extended-color.svg'\n  import netshoesExtendedReversed from '@aziontech/webkit/assets/netshoes-extended-reversed.svg'\n  import Logo from '@aziontech/webkit/logo'\n\n  const variants = [\n    { variant: 'color', label: 'Color', fill: 'bg-(--bg-canvas)', ink: 'text-(--text-muted)' },\n    {\n      variant: 'monochrome',\n      label: 'Monochrome',\n      fill: 'bg-(--bg-canvas)',\n      ink: 'text-(--text-muted)'\n    },\n    {\n      variant: 'current',\n      label: 'Current',\n      fill: 'bg-(--bg-canvas) text-(--text-muted)',\n      ink: 'text-(--text-muted)'\n    },\n    {\n      variant: 'knockout',\n      label: 'Knockout',\n      fill: 'bg-(--color-base-white)',\n      ink: 'text-(--color-base-black)'\n    }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"row in variants\"\n      :key=\"row.variant\"\n      class=\"flex flex-wrap items-center gap-(--spacing-xl) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md)\"\n      :class=\"row.fill\"\n    >\n      <span\n        class=\"w-28 text-label-md\"\n        :class=\"row.ink\"\n        >{{ row.label }}</span\n      >\n      <Logo\n        name=\"Netshoes\"\n        :src=\"netshoesExtendedReversed\"\n        :src-light=\"netshoesExtendedColor\"\n        :variant=\"row.variant\"\n        class=\"max-w-32\"\n      />\n      <Logo\n        name=\"Itaú\"\n        :src=\"itauExtendedReversed\"\n        artwork=\"light\"\n        :variant=\"row.variant\"\n        class=\"max-w-32\"\n      />\n      <Logo\n        name=\"Claude\"\n        :src=\"claudeSymbol\"\n        :variant=\"row.variant\"\n      />\n      <Logo\n        name=\"Acme Inc.\"\n        :variant=\"row.variant\"\n      />\n    </div>\n  </div>\n</template>"
   }
  ],
  "docs": "components/logo.md"

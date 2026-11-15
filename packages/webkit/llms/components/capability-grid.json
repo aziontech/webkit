@@ -28,7 +28,7 @@
   "Three or six items at three columns, four or eight at four, so rows stay full.",
   "Keep points to three short lines.",
   "Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).",
-  "Set `titleKind: 'start'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
+  "Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's \"Why you should be a partner\"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks."
  ],
  "props": [
   {
@@ -78,7 +78,7 @@
    "type": "CapabilityGridAction",
    "default": "undefined",
    "required": "false",
-   "doc": "Second button under the section title, `outlined`; same shape. Shown only with a label and a link."
+   "doc": "Second button under the section title, `outline`; same shape. Shown only with a label and a link."
   },
   {
    "name": "anchor",
@@ -88,8 +88,8 @@
    "doc": "In-page id set on the band so a hash link can target it."
   },
   {
-   "name": "titleKind",
-   "type": "SectionTitleKind",
+   "name": "titleVariant",
+   "type": "SectionTitleVariant",
    "default": "'center'",
    "required": "false",
    "doc": "Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns."
@@ -110,7 +110,7 @@
   },
   {
    "name": "Left title",
-   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'ai ai-check',\n      title: 'Grow with Azion',\n      description: 'Offer a platform your customers already trust, with pricing built for resale.'\n    },\n    {\n      icon: 'ai ai-check',\n      title: 'Get certified',\n      description: 'Train your team on the platform and earn the certifications your projects need.'\n    },\n    {\n      icon: 'ai ai-check',\n      title: 'Sell together',\n      description:\n        'Work joint accounts with our sales engineers, from the first call to production.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    title-kind=\"start\"\n    title=\"Why you should be a partner\"\n    description=\"Build, sell and deliver modern applications with the Azion team beside you.\"\n    :items=\"items\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import CapabilityGrid from '@aziontech/webkit/capability-grid'\n\n  const items = [\n    {\n      icon: 'ai ai-check',\n      title: 'Grow with Azion',\n      description: 'Offer a platform your customers already trust, with pricing built for resale.'\n    },\n    {\n      icon: 'ai ai-check',\n      title: 'Get certified',\n      description: 'Train your team on the platform and earn the certifications your projects need.'\n    },\n    {\n      icon: 'ai ai-check',\n      title: 'Sell together',\n      description:\n        'Work joint accounts with our sales engineers, from the first call to production.'\n    }\n  ]\n</script>\n\n<template>\n  <CapabilityGrid\n    title-variant=\"start\"\n    title=\"Why you should be a partner\"\n    description=\"Build, sell and deliver modern applications with the Azion team beside you.\"\n    :items=\"items\"\n  />\n</template>"
   }
  ],
  "docs": "components/capability-grid.md"

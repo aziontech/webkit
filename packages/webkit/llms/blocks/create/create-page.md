@@ -1,6 +1,6 @@
 # CreatePage (`create/create-page`)
 
-> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`kind="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
+> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
@@ -46,15 +46,15 @@ Each band is a `SettingsSection` with a title and a `hint` (the glyph that revea
 
 ### D. Field rows — `SettingRow`, `Input`, `HelperText` (required)
 
-A `SettingRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `HelperText kind="required"`; a value the endpoint rejects gets `:invalid` and `kind="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `kind="stacked"` so it takes the full measure below the name.
+A `SettingRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `HelperText type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
 
 ### E. Switch rows — `Switch` (optional)
 
-On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
+On/off settings use `SettingRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
+`SaveBar variant="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
 ## Do
 
@@ -68,7 +68,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 ## Don't
 
 - Don't show the sidebar on this page, or open it as a modal over the list.
-- Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar kind="centered"`.
+- Don't stretch the commit bar across the page or build the centred card by hand; it is `SaveBar variant="centered"`.
 - Don't print the band's guidance as a paragraph under its title; use the `hint`.
 - Don't mark fields required or invalid before the first submit, or show both states on one field.
 - Don't make Save deploy, publish or charge as a side effect; creating is not deploying.
@@ -99,7 +99,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 - Default: the Create Domain page at rest; General holds Name and Domain name, Advanced is collapsed, the bar shows Cancel and Save. Importing a zone file belongs to CreateZone, not to this page.
 - CreateZone: Create Zone after a zone file is imported; a Records section lists each imported record (type `Tag`, value, TTL) with a Remove `IconButton` per row and Discard import in the card footer. Import in the bar and a paste into Domain name both read a BIND zone file, skip the SOA and nameserver records, fill an empty Name and Domain name from `$ORIGIN`, and confirm in a toast; a file with no records raises an error toast. The list previews the first 50 records with an "and N more" line, and a re-import skips records already listed.
-- CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`kind="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
+- CreateOrganization: General with Name and a Mark color chosen from six `RadioGroup` cards (`variant="card"`) (each color built from semantic tokens: primary, warning, danger, success, info and the text grays, never palette primitives), each an `Avatar` with `pattern="marble"` seeded by the name in that color's `colors`, above an In the header preview drawn the same way, an Owner `Item` with Owner and Active `Tag`s, First workspace and a collapsed Advanced of `Select`s; a name already in use is invalid on submit, and the request ends in a success toast or an error toast with Retry.
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
@@ -134,7 +134,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -148,9 +148,9 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
   interface FormErrors {
     name: string
-    nameKind: HelperTextKind
+    nameKind: HelperTextType
     domain: string
-    domainKind: HelperTextKind
+    domainKind: HelperTextType
   }
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
@@ -233,7 +233,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Domains"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -243,7 +243,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -260,7 +260,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -316,7 +316,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                         <HelperText
                           v-if="errors.name"
                           id="create-domain-name-message"
-                          :kind="errors.nameKind"
+                          :type="errors.nameKind"
                           :label="errors.name"
                         />
                       </SettingRow>
@@ -341,7 +341,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                         <HelperText
                           v-if="errors.domain"
                           id="create-domain-domain-message"
-                          :kind="errors.domainKind"
+                          :type="errors.domainKind"
                           :label="errors.domain"
                         />
                       </SettingRow>
@@ -362,7 +362,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                       <SettingRow
                         title="DNSSEC"
                         description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.dnssec"
@@ -372,7 +372,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                       <SettingRow
                         title="Active"
                         description="When active, the domain answers authoritative DNS queries for its hostname."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -385,17 +385,17 @@ Each variant is the same screen in another state: `get_block("create/create-page
               </SettingsSection>
             </fieldset>
           </div>
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template #actions>
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
               />
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"

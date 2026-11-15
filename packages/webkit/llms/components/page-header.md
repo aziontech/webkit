@@ -114,7 +114,7 @@ No built-in strings: the title, description and every region come from the consu
       <Button
         label="Documentation"
         icon="ai ai-book"
-        kind="outlined"
+        variant="outline"
         size="medium"
         href="https://example.com/docs/resources"
         target="_blank"
@@ -122,7 +122,7 @@ No built-in strings: the title, description and every region come from the consu
       <Button
         label="Create Resource"
         icon="ai ai-plus"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

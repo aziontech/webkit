@@ -28,7 +28,7 @@
   "With `filters=\"facets\"`, give every item a `facets` entry per facet `id` it can be filtered by (an item without one never matches a selection on that facet), and keep each facet's `options` to values some item carries.",
   "Set `emptyTitle` (and `emptyActionLabel`) so a reader who filters everything away gets a way back; without it the list just disappears.",
   "Set `leading` to the number of entries a highlight band above already shows, so they are not listed twice until the reader filters.",
-  "Leave `rowKind` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`."
+  "Leave `rowVariant` unset to get the layout that fits the filter bar: `byline` for `category-search`, `center` for `facets`."
  ],
  "props": [
   {
@@ -151,8 +151,8 @@
    "doc": "Label of the empty-state button that clears every filter; no button renders without it."
   },
   {
-   "name": "rowKind",
-   "type": "ArticleIndexRowKind",
+   "name": "rowVariant",
+   "type": "ArticleIndexRowVariant",
    "default": "undefined",
    "required": "false",
    "doc": "Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`."

@@ -29,7 +29,7 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 ### A. Trigger and actions — `Button` (required)
 
-`Change plan` (outlined) opens the drawer. In each pricing card one large action: the current plan is disabled, the upgrade is `primary`, the rest `outlined`. In the upgrade drawer: Change, Cancel and Update on the payment method, and the footer's Cancel and Upgrade (`type="submit"`, `:loading` while submitting).
+`Change plan` (outlined) opens the drawer. In each pricing card one large action: the current plan is disabled, the upgrade is `primary`, the rest `outline`. In the upgrade drawer: Change, Cancel and Update on the payment method, and the footer's Cancel and Upgrade (`type="submit"`, `:loading` while submitting).
 
 ### B. Drawer — `Drawer` (required)
 
@@ -61,7 +61,7 @@ Says why the user is here before the cards: `Compare what each tier includes bef
 
 ### I. Plan — `CardPricing` (required)
 
-One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
+One per tier, `variant="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
 
 ### J. Divider — `Separator` (required)
 
@@ -532,7 +532,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
 <template>
   <Button
     label="Change plan"
-    kind="outlined"
+    variant="outline"
     size="medium"
     @click="changePlanOpen = true"
   />
@@ -577,7 +577,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                 :show-tag="plan.current"
                 tag-label="Current plan"
                 actions-position="bottom"
-                kind="contained"
+                variant="contained"
                 action-label=""
               >
                 <div class="flex w-full flex-col gap-(--spacing-md)">
@@ -592,7 +592,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                 <template #actions>
                   <Button
                     :label="plan.actionLabel"
-                    :kind="plan.action === 'upgrade' ? 'primary' : 'outlined'"
+                    :variant="plan.action === 'upgrade' ? 'primary' : 'outline'"
                     :disabled="plan.current"
                     size="large"
                     class="w-full"
@@ -719,7 +719,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                       <Button
                         id="card-change"
                         label="Change"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :disabled="submitting"
                         @click="startEditingCard"
@@ -834,7 +834,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                             class="w-full"
                             type="button"
                             label="Cancel"
-                            kind="outlined"
+                            variant="outline"
                             size="medium"
                             :disabled="submitting"
                             @click="cancelEditingCard"
@@ -845,7 +845,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                             class="w-full"
                             type="button"
                             label="Update"
-                            kind="primary"
+                            variant="primary"
                             size="medium"
                             :disabled="submitting"
                             @click="updateCard"
@@ -984,7 +984,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="submitting"
                 @click="upgradeOpen = false"
@@ -994,7 +994,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
               <Button
                 class="w-full"
                 label="Upgrade"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="submitting"
                 type="submit"

@@ -6,7 +6,7 @@
    "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <Tag\n    label=\"Label\"\n    variant=\"primary\"\n    size=\"medium\"\n  />\n</template>"
   },
   {
-   "name": "Types",
+   "name": "Severities",
    "summary": "All severity variants side by side; `highlight` is the brand orange as a tint, for the one value a list singles out (the Owner role).",
    "sfc": "<script setup>\n  import Tag from '@aziontech/webkit/tag'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <Tag\n      label=\"Label\"\n      severity=\"neutral\"\n    />\n    <Tag\n      label=\"Label\"\n      variant=\"primary\"\n    />\n    <Tag\n      label=\"Label\"\n      variant=\"accent\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"success\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"warning\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"danger\"\n    />\n    <Tag\n      label=\"Label\"\n      severity=\"info\"\n    />\n    <Tag\n      label=\"Label\"\n      variant=\"contrast\"\n    />\n    <Tag\n      label=\"Label\"\n      variant=\"highlight\"\n    />\n  </div>\n</template>"
   },

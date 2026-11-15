@@ -63,7 +63,7 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 ### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-`SaveBar kind="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`kind="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`state/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`state/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
@@ -492,13 +492,13 @@ Each variant is the same screen in another state: `get_block("create/release-imp
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 icon="ai ai-refresh"
                 @click="startRun"
@@ -516,13 +516,13 @@ Each variant is the same screen in another state: `get_block("create/release-imp
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 icon="ai ai-refresh"
                 @click="startRun"
@@ -688,7 +688,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                     v-if="!card.versions.length"
                     class="self-start"
                     label="Build a version"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     icon="ai ai-external-link"
                     href="/services/edge-policy/versions"
@@ -885,7 +885,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                     </span>
                     <Button
                       label="Retry"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       icon="ai ai-refresh"
                       @click="loadImpact"
@@ -1085,7 +1085,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
         </div>
       </div>
 
-      <SaveBar kind="docked">
+      <SaveBar variant="docked">
         <template #leading>
           <p class="text-body-sm text-(--text-muted)">
             Deploying puts every included resource into traffic at the version shown.
@@ -1106,7 +1106,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
             <Button
               class="w-full"
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="/services/web-app"
               :disabled="deploying"
@@ -1117,7 +1117,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
             title="Deploy this release?"
             :description="confirmBody"
             confirm-label="Deploy release"
-            kind="primary"
+            variant="primary"
             size="small"
             :disabled="!canDeploy"
             @confirm="confirmDeploy"
@@ -1127,7 +1127,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                 <Button
                   class="w-full"
                   :label="deploying ? 'Deploying…' : 'Deploy release'"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   icon="ai ai-cloud-upload"
                   :disabled="!canDeploy"

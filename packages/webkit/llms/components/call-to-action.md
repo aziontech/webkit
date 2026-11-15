@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use CallToAction (primitive) for an ask panel inside a hand-built SFC, mid-page or closing; set `kind="announcement"` for a loud mid-page announcement.
+- Use CallToAction (primitive) for an ask panel inside a hand-built SFC, mid-page or closing; set `variant="announcement"` for a loud mid-page announcement.
 - Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.
 - At the end of a marketing page or section, to carry the reader into signup, docs or sales.
 - Whenever a page needs one visually separated block whose whole job is the action.
@@ -23,7 +23,7 @@
 - framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
 - Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
-- Lead with the primary action and keep secondary ones `outlined` or `text`, so the panel has one obvious target.
+- Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
 - Use `eyebrow` only when the panel needs naming out of context; the headline usually carries the ask on its own.
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
 - In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.
@@ -61,7 +61,7 @@
 | `titleMuted` | `string` | `''` | false | Second line of the headline, set in muted ink; rendered as a second span of the same `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence — under the headline in `panel` and `lead`, in the aside cell in `split`, on the raised trailing column in `announcement`; overridden by the default slot. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `CallToActionKind` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. |
+| `variant` | `CallToActionVariant` | `'panel'` | false | Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. |
 | `framed` | `boolean` | `false` | false | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. |
 
 ## Slots
@@ -77,7 +77,7 @@
 ## States
 
 - Visual states: `default`
-- Register: `data-kind="panel" | "split" | "lead" | "primary" | "announcement"` on the root
+- Register: `data-variant="panel" | "split" | "lead" | "primary" | "announcement"` on the root
 - The band holds no state of its own; controls composed into `actions` / `aside` keep theirs
 
 ## Accessibility
@@ -107,7 +107,7 @@
     <template #actions>
       <Button label="Start for free" />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Talk to a specialist"
       />
     </template>
@@ -132,7 +132,7 @@
     <template #actions>
       <Button label="Start for free" />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Talk to a specialist"
       />
     </template>
@@ -140,7 +140,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -158,14 +158,14 @@
       <template #actions>
         <Button label="Start for free" />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Talk to a specialist"
         />
       </template>
     </CallToAction>
 
     <CallToAction
-      kind="split"
+      variant="split"
       eyebrow="Build"
       title="Build once."
       title-muted="Run anywhere."
@@ -173,20 +173,20 @@
     >
       <template #actions>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Start for free"
         />
       </template>
       <template #aside>
         <Button
-          kind="outlined"
+          variant="outline"
           label="Talk to our team"
         />
       </template>
     </CallToAction>
 
     <CallToAction
-      kind="lead"
+      variant="lead"
       eyebrow="Build"
       title="Built by you,"
       title-muted="or your agents."
@@ -194,11 +194,11 @@
     >
       <template #actions>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Deploy now"
         />
         <Button
-          kind="outlined"
+          variant="outline"
           label="Docs"
         />
       </template>

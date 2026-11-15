@@ -714,7 +714,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
                   @click="openExpanded('matched')"
@@ -727,7 +727,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Matched requests over time"
                   />
@@ -755,8 +755,8 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               empty-description="Nothing was recorded in this period."
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="form === 'bar'"
                 stacked
@@ -788,7 +788,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 v-for="entry in attention"
                 :key="entry.id"
                 role="listitem"
-                kind="inline"
+                variant="inline"
                 size="small"
               >
                 <Item.Media>
@@ -846,7 +846,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
                   @click="openExpanded('categories')"
@@ -859,7 +859,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
                   />
@@ -912,7 +912,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
                   @click="openExpanded('countries')"
@@ -925,7 +925,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by country"
                   />
@@ -981,7 +981,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
                   @click="openExpanded('ips')"
@@ -994,7 +994,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
                   />
@@ -1092,8 +1092,8 @@ Each variant is the same screen in another state: `get_block("dashboard/security
                 :aria-label="expandedReport.label"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="form === 'bar'"
                   stacked

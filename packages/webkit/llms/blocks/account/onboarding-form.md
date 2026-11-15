@@ -1,6 +1,6 @@
 # OnboardingForm (`account/onboarding-form`)
 
-> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `kind="card"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
+> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant="card"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
@@ -57,9 +57,9 @@ Large; full name with `autocomplete="name"`.
 
 ### H. Group label — `Field.Legend` (required)
 
-`Organization mark`, the `kind="label"` legend of the `fieldset` that holds the radio cards.
+`Organization mark`, the `type="label"` legend of the `fieldset` that holds the radio cards.
 
-### I. Mark picker — `RadioGroup` with `kind="card"` (required)
+### I. Mark picker — `RadioGroup` with `variant="card"` (required)
 
 Seven colors, `aria-label="Organization mark"`, each card showing the generated mark.
 
@@ -575,7 +575,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -584,7 +584,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="https://example.com/docs"
@@ -656,10 +656,10 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                           <fieldset
                             class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                           >
-                            <Field.Legend kind="label">Organization mark</Field.Legend>
+                            <Field.Legend type="label">Organization mark</Field.Legend>
                             <RadioGroup
                               v-model="accent"
-                              kind="card"
+                              variant="card"
                               orientation="horizontal"
                               :options="accents"
                               aria-label="Organization mark"
@@ -673,7 +673,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                     :colors="option.colors"
                                     pattern="marble"
                                     size="medium"
-                                    kind="square"
+                                    variant="square"
                                   />
                                   <span class="text-body-xs text-(--text-muted)">{{
                                     option.label
@@ -700,7 +700,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                         <div class="flex flex-col gap-(--spacing-xs)">
                           <RadioGroup
                             :model-value="pendingPlanId || plan"
-                            kind="card"
+                            variant="card"
                             orientation="horizontal"
                             :options="plans"
                             aria-label="Plan"
@@ -736,7 +736,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
 
                           <HelperText
                             v-if="planSubmitted && !plan"
-                            kind="required"
+                            type="required"
                             label="Select a plan to continue."
                           />
 
@@ -880,7 +880,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                               </p>
                                               <Button
                                                 label="Change"
-                                                kind="outlined"
+                                                variant="outline"
                                                 size="small"
                                                 @click="startEditing"
                                               />
@@ -983,7 +983,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                                   <Button
                                                     class="w-full"
                                                     label="Cancel"
-                                                    kind="outlined"
+                                                    variant="outline"
                                                     size="medium"
                                                     @click="editing = false"
                                                   />
@@ -992,7 +992,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                                   <Button
                                                     class="w-full"
                                                     label="Update"
-                                                    kind="primary"
+                                                    variant="primary"
                                                     size="medium"
                                                     @click="updateCard"
                                                   />
@@ -1142,7 +1142,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                         class="w-full"
                                         type="button"
                                         label="Cancel"
-                                        kind="outlined"
+                                        variant="outline"
                                         size="medium"
                                         @click="onOpenChange(false)"
                                       />
@@ -1151,7 +1151,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                       <Button
                                         class="w-full"
                                         label="Upgrade"
-                                        kind="primary"
+                                        variant="primary"
                                         size="medium"
                                         type="submit"
                                       />
@@ -1179,7 +1179,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                       <template #actions>
                         <Button
                           label="Retry"
-                          kind="secondary"
+                          variant="secondary"
                           size="small"
                           @click="createOrganization"
                         />
@@ -1204,19 +1204,19 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                           <fieldset
                             class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                           >
-                            <Field.Legend kind="label"
+                            <Field.Legend type="label"
                               >How are you planning to use the platform?</Field.Legend
                             >
                             <RadioGroup
                               v-model="usage"
-                              kind="card"
+                              variant="card"
                               orientation="horizontal"
                               :options="usageOptions"
                               aria-label="How are you planning to use the platform?"
                             />
                             <HelperText
                               v-if="profileSubmitted && !usage"
-                              kind="required"
+                              type="required"
                               label="Select one to continue."
                             />
                           </fieldset>
@@ -1224,17 +1224,17 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                           <fieldset
                             class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                           >
-                            <Field.Legend kind="label">What best describes your role?</Field.Legend>
+                            <Field.Legend type="label">What best describes your role?</Field.Legend>
                             <RadioGroup
                               v-model="role"
-                              kind="card"
+                              variant="card"
                               orientation="horizontal"
                               :options="roleOptions"
                               aria-label="What best describes your role?"
                             />
                             <HelperText
                               v-if="profileSubmitted && !role"
-                              kind="required"
+                              type="required"
                               label="Select one to continue."
                             />
                           </fieldset>
@@ -1286,7 +1286,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                     :colors="accentColors"
                     pattern="marble"
                     size="small"
-                    kind="square"
+                    variant="square"
                     class="shrink-0"
                   />
                   <span class="min-w-0 truncate text-label-md text-(--text-default)">
@@ -1300,7 +1300,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                   <Avatar
                     label="MW"
                     size="small"
-                    kind="square"
+                    variant="square"
                     class="shrink-0"
                   />
                   <span class="min-w-0 truncate text-label-md text-(--text-default)">
@@ -1385,7 +1385,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                     <Avatar
                       :label="accountInitials(ownerName)"
                       size="medium"
-                      kind="square"
+                      variant="square"
                     />
                     <span class="flex min-w-0 flex-col">
                       <span class="truncate text-label-sm text-(--text-default)">{{

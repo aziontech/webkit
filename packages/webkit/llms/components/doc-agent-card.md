@@ -20,7 +20,7 @@
 ## Don’t
 
 - To show the prompt text itself → use `DocPrompt`.
-- As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `CallToAction` (`kind="announcement"`).
+- As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `CallToAction` (`variant="announcement"`).
 - On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

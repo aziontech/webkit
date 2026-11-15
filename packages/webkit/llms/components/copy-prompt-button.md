@@ -25,7 +25,7 @@
 
 - To show the prompt text itself on the page → use `DocPrompt` (it renders the text with its own copy control).
 - To copy a value, a token or a code snippet → use `CopyButton`.
-- As a generic dark button → use `Button kind="secondary"`.
+- As a generic dark button → use `Button variant="secondary"`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -121,7 +121,7 @@
   <div class="flex flex-wrap items-center gap-(--spacing-sm)">
     <Button
       label="Get started"
-      kind="primary"
+      variant="primary"
       size="large"
       href="#"
     />

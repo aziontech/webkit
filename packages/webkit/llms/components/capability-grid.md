@@ -17,7 +17,7 @@
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleKind: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleVariant: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Don’t
 
@@ -41,16 +41,16 @@
 | `items` | `CapabilityGridItem[]` | `[]` | false | The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty. |
 | `columns` | `CapabilityGridColumns` | `3` | false | Capabilities per row from the large breakpoint up. |
 | `primaryAction` | `CapabilityGridAction` | `undefined` | false | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outlined`; same shape. Shown only with a label and a link. |
+| `secondaryAction` | `CapabilityGridAction` | `undefined` | false | Second button under the section title, `outline`; same shape. Shown only with a label and a link. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `titleKind` | `SectionTitleKind` | `'center'` | false | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
+| `titleVariant` | `SectionTitleVariant` | `'center'` | false | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
 
 ## States
 
 - Renders nothing without items.
 - Heading level drops to `h3` under a title and rises to `h2` without one.
 - An item with `href` renders its heading as a link that covers the cell.
-- `titleKind` is passed to the section title as its `kind`; it has no effect on a bare grid.
+- `titleVariant` is passed to the section title as its `variant`; it has no effect on a bare grid.
 
 ## Accessibility
 
@@ -183,7 +183,7 @@
 
 <template>
   <CapabilityGrid
-    title-kind="start"
+    title-variant="start"
     title="Why you should be a partner"
     description="Build, sell and deliver modern applications with the Azion team beside you."
     :items="items"

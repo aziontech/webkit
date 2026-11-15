@@ -39,7 +39,7 @@
  ],
  "props": [
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'plain' | 'band'",
    "default": "'plain'",
    "required": "false",

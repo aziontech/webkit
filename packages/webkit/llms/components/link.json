@@ -18,7 +18,7 @@
  "avoidWhen": [
   "A link inside a sentence → use a plain anchor with the text-link class.",
   "An action that changes something instead of navigating → use `button`.",
-  "A text action that runs something instead of navigating → use `button` with `kind=\"link\"`."
+  "A text action that runs something instead of navigating → use `button` with `variant=\"link\"`."
  ],
  "related": [
   "button` — set `href` when a link must look like a button.",

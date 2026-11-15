@@ -18,7 +18,7 @@
 - Render the floating bar with `v-if="dirty || saving"` inside a `Transition`, so it slides in when the first change is made.
 - Say what changed and when it takes effect in the status sentence; keep it to one line.
 - Disable Discard and set `loading` on Save while saving.
-- Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `kind="centered"`.
+- Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
 - floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
 
 ## Don’t
@@ -38,7 +38,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the kind table below. |
+| `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false | How the bar sits at the bottom of its scroll region. See the variant table below. |
 
 ## Slots
 
@@ -51,8 +51,8 @@
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop on the root
-- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `kind`. The other kinds publish nothing.
+- `data-variant` mirrors the `variant` prop on the root
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Accessibility
@@ -113,13 +113,13 @@ No built-in strings: the status sentence and the action labels come from the con
         <Button
           type="button"
           label="Discard"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="saving"
         />
         <Button
           label="Save"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="saving"
           @click="save"
@@ -139,19 +139,19 @@ No built-in strings: the status sentence and the action labels come from the con
 </script>
 
 <template>
-  <SaveBar kind="docked">
+  <SaveBar variant="docked">
     Project settings changed.
     <span class="text-(--text-muted)">Saving publishes them on the next deployment.</span>
     <template #actions>
       <Button
         type="button"
         label="Discard"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>
@@ -168,17 +168,17 @@ No built-in strings: the status sentence and the action labels come from the con
 </script>
 
 <template>
-  <SaveBar kind="plain">
+  <SaveBar variant="plain">
     <template #actions>
       <Button
         type="button"
         label="Cancel"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>

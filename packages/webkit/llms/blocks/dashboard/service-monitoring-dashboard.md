@@ -670,8 +670,8 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Line />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
@@ -699,8 +699,8 @@ Each variant is the same screen in another state: `get_block("dashboard/service-
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Line />
                 <Chart.Crosshair />
                 <Chart.Tooltip />

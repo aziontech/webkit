@@ -151,7 +151,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
       />
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />

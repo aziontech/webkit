@@ -11,7 +11,7 @@
  ],
  "related": [
   "SiteNav` — the bar and its mega-menus; `navigation` is bound onto it.",
-  "SiteFooter` — the footer; `footer` is bound onto it (`kind=\"site\"` closes a framed page).",
+  "SiteFooter` — the footer; `footer` is bound onto it (`variant=\"site\"` closes a framed page).",
   "SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.",
   "Command` — the search palette the bar's search button opens.",
   "shell/site` — the block that shows this layout with the azion.com navigation and footer."

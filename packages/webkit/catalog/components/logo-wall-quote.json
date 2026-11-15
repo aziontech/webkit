@@ -17,6 +17,6 @@
   "Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `Logo`.",
   "Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing.",
   "Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.",
-  "Keep to one or two actions under the quote: the primary (`secondary` kind) and an optional outlined `secondaryAction`."
+  "Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`."
  ]
 }

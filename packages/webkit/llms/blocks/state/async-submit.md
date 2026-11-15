@@ -197,7 +197,7 @@ Each variant is the same screen in another state: `get_block("state/async-submit
           <template #actions>
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               icon="ai ai-play"
               :loading="running"

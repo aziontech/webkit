@@ -42,17 +42,17 @@ Each topic is a section with a `SectionHeader` at `size="small"` (so every topic
 
 ### C. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
 
-One `SettingRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `kind="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `HelperText` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
+One `SettingRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `HelperText` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
 
 ### D. Save — `SaveBar`, `Button` (required)
 
-SaveAll ends with one full-bleed sticky `SaveBar kind="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
+SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
 
 ### E. Profile sections — `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
 
 The Profile variant adds `SettingsSection`, `Textarea`, `Tag`, `ConfirmDialog`, `Skeleton` and `Alert` to these parts.
 
-The Profile variant stacks one `SettingsSection` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `kind="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
+The Profile variant stacks one `SettingsSection` per group (General, Company information, Address information, Login settings, Source control, Appearance, Danger zone), each with a `hint` and an `anchor` over a flush `Card` whose `Item.List` holds the rows. Client ID is a `readonly` `Input`; Billing emails is a three-row `Textarea` that starts empty (an editable contact field never carries sample data) and is required; address rows use `postal-code`, `address-line1` and `address-line2` autocomplete. Requiring MFA is not a switch here: `account/mfa-settings` owns it, and the Multi-factor authentication row links there with `Manage MFA`. Source-control providers are `Item`s with `Item.Media`, a success `Tag` (`Active`) when connected, and `Manage` or `Connect` opening the provider in a new tab. The unsaved-changes `SaveBar` rises with a motion-reduced transition once the form differs from the saved copy. The danger Delete account opens a `variant="danger"` `ConfirmDialog` with a warning `Alert` and `Type <account name> to confirm.` over an `Input`; its confirm stays disabled until the typed name matches. ProfileLoading puts three `Card`s of `Skeleton` rows in place of the sections (`aria-busy`); ProfileError puts a danger `Alert` with Retry there; the heading stays in both.
 
 ## Do
 
@@ -274,7 +274,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                       <HelperText
                         v-if="submitted && nameEmpty"
                         id="full-name-error"
-                        kind="required"
+                        type="required"
                         label="This field is required."
                       />
                     </div>
@@ -301,7 +301,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                       <HelperText
                         v-if="submitted && emailInvalid"
                         id="email-error"
-                        :kind="emailEmpty ? 'required' : 'invalid'"
+                        :type="emailEmpty ? 'required' : 'invalid'"
                         :label="
                           emailEmpty ? 'This field is required.' : 'Enter a valid email address.'
                         "
@@ -394,7 +394,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                 <SettingRow
                   title="Product updates"
                   description="Occasional emails about new features and changes."
-                  kind="compact"
+                  variant="compact"
                 >
                   <Switch
                     v-model="form.productUpdates"
@@ -409,19 +409,19 @@ Each variant is the same screen in another state: `get_block("settings/settings-
       </fieldset>
     </div>
 
-    <SaveBar kind="plain">
+    <SaveBar variant="plain">
       <template #actions>
         <Button
           type="button"
           label="Discard"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="submitting || !dirty"
           @click="discard"
         />
         <Button
           label="Save"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="submitting"
           :disabled="!dirty"

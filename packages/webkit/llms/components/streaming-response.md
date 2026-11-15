@@ -171,7 +171,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
     />
     <Button
       label="Replay"
-      kind="outlined"
+      variant="outline"
       size="small"
       icon="ai ai-refresh"
       :disabled="streaming"

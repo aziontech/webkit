@@ -1,6 +1,6 @@
 # DeployDrawer (`create/deploy-drawer`)
 
-> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`kind="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
+> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
@@ -57,7 +57,7 @@ A full-width `ToggleGroup` in the card header switches between Use existing and 
 
 ### G. Environment — `RadioGroup`, `Tag` (required)
 
-Choice cards, a `RadioGroup` with `kind="card"` and one item per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
+Choice cards, a `RadioGroup` with `variant="card"` and one item per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
@@ -712,7 +712,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
     <DrawerTrigger>
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />
@@ -746,7 +746,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                   >
                     <Separator v-if="index" />
                     <Item
-                      kind="inline"
+                      variant="inline"
                       size="small"
                     >
                       <Item.Media>
@@ -788,7 +788,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                             <Button
                               label="Change version"
                               :aria-label="`Change version of ${row.name}`"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               icon="ai ai-chevron-down"
                               icon-position="trailing"
@@ -831,7 +831,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                   :alt="entry.author"
                                   :label="entry.author"
                                   size="small"
-                                  kind="square"
+                                  variant="square"
                                 />
                               </template>
                               <span class="inline-flex min-w-0 items-center gap-(--spacing-xs)">
@@ -860,7 +860,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                             >
                               <Button
                                 :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                kind="transparent"
+                                variant="ghost"
                                 size="small"
                                 class="w-full"
                               />
@@ -892,7 +892,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                 <Item
                                   v-for="dependency in row.dependencies"
                                   :key="dependency.key"
-                                  kind="inline"
+                                  variant="inline"
                                   size="small"
                                 >
                                   <Item.Media>
@@ -936,7 +936,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                         <Button
                                           label="Change version"
                                           :aria-label="`Change version of ${dependency.name}`"
-                                          kind="outlined"
+                                          variant="outline"
                                           size="small"
                                           icon="ai ai-chevron-down"
                                           icon-position="trailing"
@@ -979,7 +979,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                               :alt="entry.author"
                                               :label="entry.author"
                                               size="small"
-                                              kind="square"
+                                              variant="square"
                                             />
                                           </template>
                                           <span
@@ -1010,7 +1010,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                         >
                                           <Button
                                             :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                            kind="transparent"
+                                            variant="ghost"
                                             size="small"
                                             class="w-full"
                                           />
@@ -1052,7 +1052,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                 <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                     <Item
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                     >
                       <Item.Media>
@@ -1168,7 +1168,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                 >
                                   <Button
                                     :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                    kind="transparent"
+                                    variant="ghost"
                                     size="small"
                                     class="w-full"
                                   />
@@ -1193,7 +1193,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                           <DropdownMenu.Trigger>
                             <Button
                               label="Change"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               icon="ai ai-chevron-down"
                               icon-position="trailing"
@@ -1232,7 +1232,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
             >
               <RadioGroup
                 v-model="environment"
-                kind="card"
+                variant="card"
                 name="service-deploy-environment"
                 aria-label="Environment"
               >
@@ -1277,7 +1277,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                       class="min-w-0"
                     >
                       <Item
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                       >
                         <Item.Media>
@@ -1387,7 +1387,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
                                   >
                                     <Button
                                       :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                      kind="transparent"
+                                      variant="ghost"
                                       size="small"
                                       class="w-full"
                                     />
@@ -1433,7 +1433,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
             <span v-else />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               type="submit"
             />

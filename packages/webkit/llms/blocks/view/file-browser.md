@@ -34,7 +34,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Surface — `Card`, `DataTable` (required)
 
-One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `sortable` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `type: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 
@@ -54,7 +54,7 @@ A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps b
 
 ### F. Cell recipes — `Table.CellTime` (optional)
 
-Folders sort first with a link-coloured folder glyph; the folder name is a `Button kind="link"` that opens it (a row click does the same for a pointer), and the `..` name is a link button named Go up to the parent folder; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
+Folders sort first with a link-coloured folder glyph; the folder name is a `Button variant="link"` that opens it (a row click does the same for a pointer), and the `..` name is a link button named Go up to the parent folder; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
 ### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 
@@ -74,7 +74,7 @@ Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelCon
 
 Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it. In the Uploading variant Add to files also offers Upload folder: the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; the tokens and the transfer rows name each file by its path inside the folder (`site/css/main.css`), and as files finish their folders appear in the table under the folder in view.
 
-A second `FileDropzone kind="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
+A second `FileDropzone variant="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
 
 ### K. Transfer card and outcome toast — `Button` (optional)
 
@@ -287,7 +287,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
     },
     { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const addToFilesActions = [
@@ -475,7 +475,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <IconButton
                         icon="ai ai-refresh"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         :loading="loading"
                         aria-label="Refresh"
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     >
                       <IconButton
                         icon="ai ai-download"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         :disabled="!tableEl"
                         aria-label="Download CSV"
@@ -512,7 +512,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     <SplitButton
                       label="Add to files"
                       icon="ai ai-plus"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       :items="addToFilesActions"
                       class="shrink-0"
@@ -542,7 +542,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                   <Button
                     key="button-1"
                     v-if="row.kind === 'parent'"
-                    kind="link"
+                    variant="link"
                     label=".."
                     aria-label="Go up to the parent folder"
                     @click.stop="goUp"
@@ -550,7 +550,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                   <Button
                     key="button-2"
                     v-else-if="row.kind === 'folder'"
-                    kind="link"
+                    variant="link"
                     :label="value"
                     class="min-w-0"
                     @click.stop="enterFolder(row.name)"
@@ -634,7 +634,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                   <template #actions>
                     <Button
                       label="Clear search"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="search = ''"
                     />
@@ -651,7 +651,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                     <SplitButton
                       label="Add to files"
                       icon="ai ai-plus"
-                      kind="secondary"
+                      variant="secondary"
                       size="medium"
                       :items="addToFilesActions"
                     />
@@ -697,13 +697,13 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="close"
         />
         <Button
           :label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           @click="confirmDelete"

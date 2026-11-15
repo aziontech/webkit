@@ -17,7 +17,7 @@
  ],
  "avoidWhen": [
   "To draw the rules between real content cells → use `frame-box`, whose rules are structural.",
-  "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` kind and owns that treatment.",
+  "For the ruled divider between sections → use `section-gap`, which composes this layer's `lines` variant and owns that treatment.",
   "For a meaningful image or diagram → use `illustration`.",
   "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it, inside the positioned ancestor."
  ],
@@ -36,7 +36,7 @@
  ],
  "props": [
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
    "default": "'dots'",
    "required": "false",
@@ -64,11 +64,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <TextureMaterial\n      kind=\"dots\"\n      size=\"medium\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"relative h-80 w-full overflow-hidden bg-(--bg-canvas)\">\n    <TextureMaterial\n      variant=\"dots\"\n      size=\"medium\"\n      fade=\"none\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dots\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"grid\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"lines\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"dither\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial kind=\"pixelate\" />\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import TextureMaterial from '@aziontech/webkit/texture-material'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2\">\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial variant=\"dots\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial variant=\"grid\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial variant=\"lines\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial variant=\"dither\" />\n    </div>\n    <div class=\"relative h-64 overflow-hidden bg-(--bg-canvas)\">\n      <TextureMaterial variant=\"pixelate\" />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

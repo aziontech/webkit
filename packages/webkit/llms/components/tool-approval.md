@@ -1,6 +1,6 @@
 # Tool Approval
 
-> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`kind="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
+> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -41,7 +41,7 @@
 | `title` | `string` | `—` | true | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code. |
 | `description` | `string` | `''` | false | One or two sentences on what will happen and to what; backticks render as code. |
 | `status` | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false | pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. |
-| `kind` | `'default' \| 'danger'` | `'default'` | false | danger` for an action that cannot be undone: the approve button turns destructive. |
+| `variant` | `'default' \| 'danger'` | `'default'` | false | danger` for an action that cannot be undone: the approve button turns destructive. |
 | `confirmationPhrase` | `string` | `''` | false | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
 | `approveLabel` | `string` | `''` | false | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). |
 | `denyLabel` | `string` | `''` | false | Text of the deny button. Empty uses the locale catalog (`Deny`). |
@@ -62,14 +62,14 @@
 
 ## Sub-components
 
-_None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalKind`.
+_None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalVariant`.
 Composed DS components: `button`, `status-indicator`; the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
 
 ## States
 
-- `data-status` mirrors `status`; `data-kind`.
-- `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `kind="danger"`); Approve disabled until the phrase matches.
+- `data-status` mirrors `status`; `data-variant`.
+- `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 
 ## Accessibility
@@ -159,7 +159,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
     <ToolApproval
       title="Delete the domain `www.example.com`?"
       description="The domain stops answering at once and its certificate is revoked. This cannot be undone."
-      kind="danger"
+      variant="danger"
       confirmation-phrase="www.example.com"
       approve-label="Delete"
       :status="status"

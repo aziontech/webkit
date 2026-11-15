@@ -11,7 +11,7 @@
   "A full code sample with its own copy control → use `code-block`."
  ],
  "related": [
-  "icon-button` — the control it composes; `kind` and `size` are forwarded to it.",
+  "icon-button` — the control it composes; `variant` and `size` are forwarded to it.",
   "tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.",
   "code-block` — already embeds a copy-button for its content."
  ],

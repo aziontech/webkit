@@ -55,7 +55,7 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 ## Breadcrumb and environment
 
 - The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumbs`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
-- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumbs` with the module and the service as `items` and, in its default slot, a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
+- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumbs` with the module and the service as `items` and, in its default slot, a `Select` with `variant="ghost"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
 - The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
 
 ## Topology tab
@@ -371,7 +371,7 @@ jobs:
                         label="Visit"
                         href="https://analytics-app-z1x2c3.example.com"
                         target="_blank"
-                        kind="secondary"
+                        variant="secondary"
                         size="medium"
                         icon="ai ai-external-link"
                       />
@@ -381,7 +381,7 @@ jobs:
                           <Tooltip content="Resource actions">
                             <IconButton
                               icon="ai ai-ellipsis"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               aria-label="Resource actions"
                             />
@@ -495,7 +495,7 @@ jobs:
                           alt="John Smith"
                           label="John Smith"
                           size="small"
-                          kind="square"
+                          variant="square"
                           class="shrink-0"
                         />
                       </div>
@@ -505,7 +505,7 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Source</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
                         <Button
-                          kind="link"
+                          variant="link"
                           label="Connect Git repository"
                         />
                       </div>
@@ -542,7 +542,7 @@ jobs:
                       <Button
                         class="w-full"
                         label="Documentation"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-book"
                         href="https://example.com/docs/cli"
@@ -642,7 +642,7 @@ jobs:
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`/resources/analytics-app/${activeTab}`"
               />

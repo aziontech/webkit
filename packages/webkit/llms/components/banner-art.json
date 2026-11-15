@@ -30,8 +30,8 @@
  ],
  "props": [
   {
-   "name": "kind",
-   "type": "BannerArtKind",
+   "name": "variant",
+   "type": "BannerArtVariant",
    "default": "'map'",
    "required": "false",
    "doc": "Which backdrop to draw: `globe`, `map` or `network`."
@@ -51,11 +51,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n  import Hero from '@aziontech/webkit/hero-root'\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <Hero\n    kind=\"band\"\n    size=\"large\"\n    max-width=\"site\"\n  >\n    <template #background>\n      <BannerArt kind=\"map\" />\n    </template>\n    <HeroTitle\n      eyebrow=\"Network\"\n      eyebrow-prefix=\"//\"\n      title=\"Close to every user, by default\"\n      description=\"Requests land on the nearest location and stay there.\"\n      size=\"large\"\n    />\n  </Hero>\n</template>"
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n  import Hero from '@aziontech/webkit/hero-root'\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <Hero\n    variant=\"band\"\n    size=\"large\"\n    max-width=\"site\"\n  >\n    <template #background>\n      <BannerArt variant=\"map\" />\n    </template>\n    <HeroTitle\n      eyebrow=\"Network\"\n      eyebrow-prefix=\"//\"\n      title=\"Close to every user, by default\"\n      description=\"Requests land on the nearest location and stay there.\"\n      size=\"large\"\n    />\n  </Hero>\n</template>"
   },
   {
    "name": "Arts",
-   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n\n  const arts = [\n    { kind: 'globe', label: 'Globe' },\n    { kind: 'map', label: 'Map' },\n    { kind: 'network', label: 'Network' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"item in arts\"\n      :key=\"item.kind\"\n      class=\"relative h-80 overflow-hidden border border-(--border-default) bg-(--bg-canvas)\"\n    >\n      <BannerArt :kind=\"item.kind\" />\n      <p class=\"relative z-10 m-0 p-(--spacing-lg) text-heading-md text-(--text-default)\">\n        {{ item.label }}\n      </p>\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n\n  const arts = [\n    { variant: 'globe', label: 'Globe' },\n    { variant: 'map', label: 'Map' },\n    { variant: 'network', label: 'Network' }\n  ]\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      v-for=\"item in arts\"\n      :key=\"item.variant\"\n      class=\"relative h-80 overflow-hidden border border-(--border-default) bg-(--bg-canvas)\"\n    >\n      <BannerArt :variant=\"item.variant\" />\n      <p class=\"relative z-10 m-0 p-(--spacing-lg) text-heading-md text-(--text-default)\">\n        {{ item.label }}\n      </p>\n    </div>\n  </div>\n</template>"
   }
  ],
  "docs": "components/banner-art.md"

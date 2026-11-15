@@ -31,7 +31,7 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 ### A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 
-The page sets the trail with `ConsoleLayout.Breadcrumbs`: `items` are the module and the resource, and the slot holds the version, a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
+The page sets the trail with `ConsoleLayout.Breadcrumbs`: `items` are the module and the resource, and the slot holds the version, a `Select` with `variant="ghost"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
 The layout hides its breadcrumbs while compact, so the body opens on a row (`md:hidden`, its own `nav` named Breadcrumb) that carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
 
@@ -57,7 +57,7 @@ The side pane titled "Version history", closed with an `IconButton`. It starts o
 
 ### G. Revert — `Button`, `Tag` (optional, on an earlier Ready version)
 
-An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `kind="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `variant="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
 
 ## List tabs
 
@@ -423,7 +423,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
       ]"
     >
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="versionId"
         :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
@@ -499,7 +499,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
       <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           href="/resources/1784552864?tab=versions"
           aria-label="Back to web-app versions"
@@ -606,7 +606,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       aria-label="Version actions"
                     />
@@ -692,7 +692,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                   <SettingRow
                                     title="Active"
                                     description="When disabled, the resource stops serving traffic."
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <Switch
                                       v-model="settings.active"
@@ -717,7 +717,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                     :key="mod.key"
                                     :title="mod.title"
                                     :description="mod.description"
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <Switch
                                       v-model="settings.modules[mod.key]"
@@ -739,7 +739,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                 <Item.List>
                                   <SettingRow
                                     title="WebSocket Proxy"
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <template #description>
                                       Enhance real-time data exchange between your resource and
@@ -791,7 +791,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     <template #actions>
                       <Button
                         :label="`Open ${tabLabel}`"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`/resources/web-app/${activeTab}`"
                       />
@@ -845,7 +845,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     <SplitButton
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
                       :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       :items="saveOptions"
                       @item-click="(_event, item) => (saveAction = item.value)"
@@ -886,7 +886,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               </h2>
               <IconButton
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Close version history"
                 @click="historyExpanded = false"
@@ -924,7 +924,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                       >
                         <IconButton
                           icon="ai ai-pencil"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           aria-label="Edit version info"
                           @click="
@@ -955,13 +955,13 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                       <div class="flex justify-end gap-(--spacing-xs)">
                         <Button
                           label="Cancel"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="editing = false"
                         />
                         <Button
                           label="Save"
-                          kind="primary"
+                          variant="primary"
                           size="small"
                           @click="
                             () => {
@@ -987,7 +987,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             :alt="version.author"
                             :label="version.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate"
@@ -1065,7 +1065,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             :alt="entry.author"
                             :label="entry.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
@@ -1081,7 +1081,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               >
                 <Button
                   label="Show older"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="shown += 5"
                 />

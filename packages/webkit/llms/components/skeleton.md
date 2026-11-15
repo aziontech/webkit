@@ -9,12 +9,12 @@
 ## When to use
 
 - Content is loading and its final layout is known: text lines, cards, media blocks.
-- Avatar and icon placeholders, with `kind="circle"`.
+- Avatar and icon placeholders, with `variant="circle"`.
 
 ## Do
 
 - Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.
-- For `kind="circle"`, set `width` and `height` to the same value.
+- For `variant="circle"`, set `width` and `height` to the same value.
 - The skeleton is `aria-hidden`. Mark the container you own with `aria-busy="true"` while it loads.
 - Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated="false"` only for static captures.
 
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'rectangle' \| 'circle'` | `'rectangle'` | false | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
+| `variant` | `'rectangle' \| 'circle'` | `'rectangle'` | false | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
 | `width` | `string` | `'100%'` | false | CSS width (any length). |
 | `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
@@ -45,7 +45,7 @@
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors `kind` (`rectangle` | `circle`)
+- `data-variant` mirrors `variant` (`rectangle` | `circle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Accessibility
@@ -65,7 +65,7 @@
 
 <template>
   <Skeleton
-    kind="rectangle"
+    variant="rectangle"
     width="240px"
     height="100px"
     animated
@@ -73,7 +73,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -83,12 +83,12 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <Skeleton
-      kind="rectangle"
+      variant="rectangle"
       width="240px"
       height="100px"
     />
     <Skeleton
-      kind="circle"
+      variant="circle"
       width="100px"
       height="100px"
     />
@@ -110,12 +110,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-canvas</span>
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="60%"
         height="16px"
       />
@@ -125,12 +125,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-surface</span>
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="60%"
         height="16px"
       />
@@ -140,12 +140,12 @@
     >
       <span class="text-label-sm text-(--text-muted)">--bg-surface-raised</span>
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="60%"
         height="16px"
       />
@@ -155,12 +155,12 @@
     >
       <span class="text-label-sm text-(--text-default)">--bg-surface-overlay</span>
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="100%"
         height="16px"
       />
       <Skeleton
-        kind="rectangle"
+        variant="rectangle"
         width="60%"
         height="16px"
       />

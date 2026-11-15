@@ -1,6 +1,6 @@
 # Context Menu
 
-> Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio kinds, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.
+> Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio variants, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.
 
 - Import: `import ContextMenuRoot from '@aziontech/webkit/context-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import ContextMenu from '@aziontech/webkit/context-menu'`
@@ -65,7 +65,7 @@
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the area's content.
-- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-option`, including `kind="checkbox"` / `kind="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
+- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-option`, including `type="checkbox"` / `type="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
 
 ## v-model
 
@@ -244,13 +244,13 @@ No built-in strings: item labels and the panel's `aria-label` come from the cons
       <ContextMenu.Item
         value="hidden"
         label="Show hidden files"
-        kind="checkbox"
+        type="checkbox"
         :selected="view.hidden"
       />
       <ContextMenu.Item
         value="grid"
         label="Grid layout"
-        kind="checkbox"
+        type="checkbox"
         :selected="view.grid"
       />
     </ContextMenu.Group>

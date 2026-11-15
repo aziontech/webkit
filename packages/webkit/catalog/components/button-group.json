@@ -28,7 +28,7 @@
   "Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.",
   "Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.",
   "Set `loading` on an action while its request runs instead of disabling the whole group.",
-  "Use `kind=\"transparent\"` on a surface that already has a border (a panel header) and `outlined` on the canvas.",
+  "Use `variant=\"ghost\"` on a surface that already has a border (a panel header) and `outline` on the canvas.",
   "Do not mix text buttons into the group; a text action belongs beside it as its own `Button`."
  ]
 }

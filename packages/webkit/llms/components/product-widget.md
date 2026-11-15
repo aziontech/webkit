@@ -18,8 +18,8 @@
 
 - Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.
 - Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. A bare fragment floats on the cell's surface and a framed one fades its window into it, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`. The cell clips on both axes (`overflow-clip`, as a media split's media cell does): a fragment's collaborator cursor and shadows float onto the cell's padding, and at a large root font size (200% zoom) its mock text outgrows the drawing; clipping them at the cell's border keeps the page from scrolling sideways. Never frame a fragment with `overflow-x-visible`.
-- Leave `kind`, `chrome`, `width`, `tab` and `autoplayInterval` unset unless the host needs a different value: unset keeps the widget's own.
-- Leave a fragment's plating to the registry. Each fragment has its own default: a form or a list that reads as a console screen is framed in a console window titled with its module, and a fragment that draws its own card, terminal or code panel is bare, because a window around it would be a window in a window. Set `kind` only when the host needs the other plating, and `chrome` to drop the window's console bar. `width` and `fade` re-plate only the workload screens listed under Props; a fragment keeps its own design width and fade, and the root warns in development when a prop is set on a widget that does not read it.
+- Leave `variant`, `chrome`, `width`, `tab` and `autoplayInterval` unset unless the host needs a different value: unset keeps the widget's own.
+- Leave a fragment's plating to the registry. Each fragment has its own default: a form or a list that reads as a console screen is framed in a console window titled with its module, and a fragment that draws its own card, terminal or code panel is bare, because a window around it would be a window in a window. Set `variant` only when the host needs the other plating, and `chrome` to drop the window's console bar. `width` and `fade` re-plate only the workload screens listed under Props; a fragment keeps its own design width and fade, and the root warns in development when a prop is set on a widget that does not read it.
 - Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.
 - Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology.
 
@@ -43,7 +43,7 @@
 | `name` | `'ai-inference-function' \| 'ai-inference-model' \| 'ai-inference-template' \| 'application-accelerator-cookie' \| 'application-accelerator-method' \| 'application-accelerator-query-string' \| 'application-cache' \| 'application-function' \| 'application-rule' \| 'application-version' \| 'applications-create-method' \| 'applications-device-group' \| 'applications-rule-phases' \| 'bot-manager-metrics' \| 'bot-manager-rule' \| 'bot-manager-traffic' \| 'cli-terminal-deploy' \| 'cli-terminal-start' \| 'data-stream-connector' \| 'data-stream-sampling' \| 'data-stream-source' \| 'ddos-firewall-modules' \| 'ddos-http-events' \| 'ddos-requests-metric' \| 'edge-dns-dnssec' \| 'edge-dns-nameserver' \| 'edge-dns-record' \| 'firewall-function' \| 'firewall-modules' \| 'firewall-rules-order' \| 'function-code' \| 'functions-start' \| 'image-processor-events' \| 'image-processor-module' \| 'image-processor-rule' \| 'kv-store-function' \| 'kv-store-key' \| 'kv-store-security-list' \| 'load-balancer-address' \| 'load-balancer-method' \| 'load-balancer-origins' \| 'network-shield-ip-list' \| 'network-shield-lists' \| 'network-shield-rule' \| 'object-storage-access' \| 'object-storage-browser' \| 'object-storage-buckets' \| 'real-time-events-filter' \| 'real-time-events-log' \| 'real-time-events-volume' \| 'real-time-metrics-dashboard' \| 'real-time-metrics-filter' \| 'real-time-metrics-panel' \| 'sql-database-query' \| 'sql-database-row' \| 'sql-database-table' \| 'waf-allowed-rule' \| 'waf-firewall-rule' \| 'waf-threat' \| 'workload-deploy' \| 'workload-deploy-logs' \| 'workload-deployments' \| 'workload-domain' \| 'workload-domains' \| 'workload-overview' \| 'workload-rollout-rows' \| 'workload-topology-chain' \| 'workload-topology' \| 'workload-topology-flow' \| 'workloads-list'` | `—` | true | Name of the console widget to draw. |
 | `active` | `boolean` | `true` | false | Whether this widget is the one showing; it replays its entrance each time it becomes active. |
 | `hovered` | `boolean` | `false` | false | Whether the pointer is over the host; a fragment plays its beat while it is. |
-| `kind` | `'window' \| 'bare'` | `undefined` | false | How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating. |
+| `variant` | `'window' \| 'bare'` | `undefined` | false | How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating. |
 | `chrome` | `boolean` | `undefined` | false | Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it. |
 | `width` | `number` | `undefined` | false | Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. |
 | `fade` | `'none' \| 'bottom' \| 'top' \| 'left' \| 'right' \| 'y'` | `'none'` | false | Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. |
@@ -57,7 +57,7 @@
 - Visual states: `default` only. A widget is decorative: no hover, `focus-visible`, `disabled` or `loading` state of its own. `hovered` and `active` are triggers the host drives, not states the root renders.
 - Every widget is drawn in an inert `ShellMockup`, except `function-code`, whose frame is `interactive` so the viewer can switch its file tabs and copy its code. `functions-start` draws `function-code` on its `console` tab, and on its `agents` tab a `toggle-group` above its inert frame that switches the coding agent.
 - `cli-terminal-start` and `cli-terminal-deploy` play a recorded Azion CLI session (init to curl, or link and deploy); `workload-topology-flow` draws domains, a workload and its bindings joined by `flow` connectors, with the workload ringed in the primary glow.
-- `data-name` mirrors `name` on the root, and `data-kind` mirrors a fragment's plating (`window` or `bare`, the registry default when `kind` is unset); a workload screen leaves `data-kind` off the root. The window around a framed fragment carries `data-testid="<root testid>__frame"` and its body `<root testid>__frame-body`.
+- `data-name` mirrors `name` on the root, and `data-variant` mirrors a fragment's plating (`window` or `bare`, the registry default when `variant` is unset); a workload screen leaves `data-variant` off the root. The window around a framed fragment carries `data-testid="<root testid>__frame"` and its body `<root testid>__frame-body`.
 - Loading: the widget's code is loaded on demand, and the plating registry with the window part beside it. The root keeps its size while it loads and draws nothing until the widget (and its window) arrives, so a framed fragment is never drawn bare first. A `name` change clears the current widget at once, so the root never shows the earlier widget under the new `data-name`, whether the new load is still in flight or has failed.
 - A `name` outside the registry (from untyped code), or a widget chunk that fails to load, warns in development only (`import.meta.env.DEV`) and leaves the root empty; it never throws.
 - A plating prop the loaded widget does not read warns in development only, once per load, and changes nothing.
@@ -109,7 +109,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -121,25 +121,25 @@
     <div class="h-80 w-full">
       <ProductWidget
         name="workload-topology"
-        kind="window"
+        variant="window"
       />
     </div>
     <div class="h-80 w-full">
       <ProductWidget
         name="workload-topology"
-        kind="bare"
+        variant="bare"
       />
     </div>
     <div class="h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)">
       <ProductWidget
         name="edge-dns-record"
-        kind="window"
+        variant="window"
       />
     </div>
     <div class="h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)">
       <ProductWidget
         name="edge-dns-record"
-        kind="bare"
+        variant="bare"
       />
     </div>
   </div>

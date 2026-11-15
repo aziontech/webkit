@@ -18,7 +18,7 @@
  "avoidWhen": [
   "To show the prompt text itself on the page → use `DocPrompt` (it renders the text with its own copy control).",
   "To copy a value, a token or a code snippet → use `CopyButton`.",
-  "As a generic dark button → use `Button kind=\"secondary\"`."
+  "As a generic dark button → use `Button variant=\"secondary\"`."
  ],
  "related": [
   "DocPrompt` — the prompt rendered in full, with a copy control.",
@@ -105,7 +105,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <Button\n      label=\"Get started\"\n      kind=\"primary\"\n      size=\"large\"\n      href=\"#\"\n    />\n    <CopyPromptButton :value=\"prompt\" />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <Button\n      label=\"Get started\"\n      variant=\"primary\"\n      size=\"large\"\n      href=\"#\"\n    />\n    <CopyPromptButton :value=\"prompt\" />\n  </div>\n</template>"
   },
   {
    "name": "Agents",

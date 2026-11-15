@@ -1,6 +1,6 @@
 # CreateDrawer (`create/create-drawer`)
 
-> The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`kind="card"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
+> The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`variant="card"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.
 
 - Surface: app
 - Source: `blocks/create/create-drawer/create-drawer.vue` in `@aziontech/webkit`
@@ -55,7 +55,7 @@ A large `Select` in a required `Field` with its `Field.Label` and a `Field.Descr
 
 ### F. Domain source — `Field`, `RadioGroup` (required)
 
-Choice cards: a `RadioGroup` with `kind="card"`, one item per option with a title and a description, grouped in a `fieldset` under a `kind="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
+Choice cards: a `RadioGroup` with `variant="card"`, one item per option with a title and a description, grouped in a `fieldset` under a `type="label"` `Field.Legend`. Use cards when each option needs a sentence; a plain radio list when it does not.
 
 ### G. Domain name — `Field`, `InputGroup` (required)
 
@@ -345,7 +345,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
   <Button
     type="button"
     label="Add Domain"
-    kind="outlined"
+    variant="outline"
     size="medium"
     icon="ai ai-plus"
     @click="open = true"
@@ -431,10 +431,10 @@ Each variant is the same screen in another state: `get_block("create/create-draw
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                  <Field.Legend kind="label">Domain source</Field.Legend>
+                  <Field.Legend type="label">Domain source</Field.Legend>
                   <RadioGroup
                     v-model="form.kind"
-                    kind="card"
+                    variant="card"
                     name="domain-kind"
                     aria-label="Domain source"
                     :disabled="submitting"
@@ -495,7 +495,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
                     </Select>
                     <HelperText
                       id="domain-certificate-helper"
-                      kind="helper"
+                      type="helper"
                       >{{ certificateHint }}</HelperText
                     >
                   </Field>
@@ -526,7 +526,7 @@ Each variant is the same screen in another state: `get_block("create/create-draw
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Add Domain"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

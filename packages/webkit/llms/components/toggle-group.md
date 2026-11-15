@@ -24,7 +24,7 @@
 ## Don’t
 
 - The choice switches between content panels that belong to the control → use `tabs`.
-- The choice is a form field with a label, helper text or validation → use `radio-group` (`kind="card"` when each option needs a description).
+- The choice is a form field with a label, helper text or validation → use `radio-group` (`variant="card"` when each option needs a description).
 - The value is a binary on/off setting → use `switch` (in a horizontal `field` inside a form).
 - The user can pick more than one option → use `checkbox` (in a horizontal `field`).
 - The control triggers an action instead of holding a value → use `button` or `split-button`.
@@ -33,7 +33,7 @@
 ## Related
 
 - [tabs](tabs.md) — tabs that own their panels; reach for it when each option reveals its own content region.
-- [radio-group](radio-group.md) — the form-field single choice; `kind="card"` when each option carries a description.
+- [radio-group](radio-group.md) — the form-field single choice; `variant="card"` when each option carries a description.
 - [theme-switcher](theme-switcher.md) — the system / light / dark choice in app chrome.
 - [switch](switch.md) — a single boolean toggle.
 - [button](button.md) — a lone action; the segments here hold a value instead of firing one.

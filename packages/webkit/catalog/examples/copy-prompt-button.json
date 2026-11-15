@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "The dark chip beside the primary action of a docs home: the label, then the marks of the agents the prompt works with. It stays dark in both themes, so it reads as the AI entry point next to `Get started`.",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <Button\n      label=\"Get started\"\n      kind=\"primary\"\n      size=\"large\"\n      href=\"#\"\n    />\n    <CopyPromptButton :value=\"prompt\" />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import CopyPromptButton from '@aziontech/webkit/copy-prompt-button'\n\n  const prompt =\n    'Set up the Azion CLI, connect the Azion docs over MCP and link this project to my Azion account.'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <Button\n      label=\"Get started\"\n      variant=\"primary\"\n      size=\"large\"\n      href=\"#\"\n    />\n    <CopyPromptButton :value=\"prompt\" />\n  </div>\n</template>"
   },
   {
    "name": "Agents",

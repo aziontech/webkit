@@ -141,7 +141,7 @@
     >
       <Button
         label="Browse files"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         @click="inputEl?.click()"
       />

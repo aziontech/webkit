@@ -1,6 +1,6 @@
 # CreateWizard (`create/create-wizard`)
 
-> The page a first-level resource is created on one step at a time, built on the `Wizard` component: the creation header, a page heading, then the Wizard with its step rail on the start side (completed steps reachable, later ones locked), the current step's heading and fields, and its footer with Cancel, Previous and Next, Next turning into the create action on the last step. Next validates the step it leaves and stays put with the message under the field when it fails; a Review step shows the create's loading state and confirms it in a toast. Every create asks first where the resource runs: a chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings. CreateAndDeploy is the same frame for a resource that is bound to another and deployed in one act (a service that serves a project on a domain): Project, then Domain and deployment, ending on Create and deploy. Built from `Wizard`, `PageHeader`, `SettingRow`, `GlobalHeader`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind="card"`), `Item`, `Textarea`, `HelperText` and `Button`.
+> The page a first-level resource is created on one step at a time, built on the `Wizard` component: the creation header, a page heading, then the Wizard with its step rail on the start side (completed steps reachable, later ones locked), the current step's heading and fields, and its footer with Cancel, Previous and Next, Next turning into the create action on the last step. Next validates the step it leaves and stays put with the message under the field when it fails; a Review step shows the create's loading state and confirms it in a toast. Every create asks first where the resource runs: a chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings. CreateAndDeploy is the same frame for a resource that is bound to another and deployed in one act (a service that serves a project on a domain): Project, then Domain and deployment, ending on Create and deploy. Built from `Wizard`, `PageHeader`, `SettingRow`, `GlobalHeader`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`variant="card"`), `Item`, `Textarea`, `HelperText` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-wizard/create-wizard.vue` in `@aziontech/webkit`
@@ -58,7 +58,7 @@ Each step's fields are `SettingRow`s in an `Item.List` inside a flush `Card`, th
 
 ### G. Choice cards — `RadioGroup` (optional)
 
-A choice that changes what follows, such as the list type, is a `SettingRow kind="stacked"` holding a `RadioGroup` with `kind="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
+A choice that changes what follows, such as the list type, is a `SettingRow variant="stacked"` holding a `RadioGroup` with `variant="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
 
 ### H. Long entry — `Textarea`, `HelperText` (optional)
 
@@ -72,8 +72,8 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
 
-- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup kind="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
-- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup kind="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
+- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/deployment-logs` (InCreateFlow) and ends on `create/deploy-success`.
 
 ## Do
@@ -172,7 +172,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -204,7 +204,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   }
 
   interface FieldError {
-    kind: HelperTextKind
+    type: HelperTextType
     message: string
   }
 
@@ -393,10 +393,10 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
   const validate = (fields: FieldName[]) => {
     for (const field of fields) delete errors[field]
     if (fields.includes('name') && !form.name.trim()) {
-      errors.name = { kind: 'required', message: 'This field is required.' }
+      errors.name = { type: 'required', message: 'This field is required.' }
     }
     if (fields.includes('items') && !form.items.trim()) {
-      errors.items = { kind: 'required', message: 'This field is required.' }
+      errors.items = { type: 'required', message: 'This field is required.' }
     }
     return fields.every((field) => !errors[field])
   }
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Access Lists"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -498,7 +498,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -515,7 +515,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -603,7 +603,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                 </div>
                 <HelperText
                   v-if="whereMissing"
-                  kind="required"
+                  type="required"
                   label="Select a policy, or continue without one."
                 />
               </div>
@@ -612,13 +612,13 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                 <Button
                   type="button"
                   label="Create a policy"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                 />
                 <Button
                   type="button"
                   label="Continue without a policy"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="skip"
                 />
@@ -689,7 +689,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                           aria-label="Name"
                           placeholder="office-ranges"
                           autocomplete="off"
-                          :required="errors.name?.kind === 'required'"
+                          :required="errors.name?.type === 'required'"
                           :aria-describedby="
                             errors.name ? 'create-access-list-name-message' : undefined
                           "
@@ -698,7 +698,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                         <HelperText
                           v-if="errors.name"
                           id="create-access-list-name-message"
-                          :kind="errors.name.kind"
+                          :type="errors.name.type"
                           :label="errors.name.message"
                         />
                       </SettingRow>
@@ -721,11 +721,11 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                     <Item.List>
                       <SettingRow
                         title="Type"
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <RadioGroup
                           v-model="form.type"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="access-lists-type"
                           aria-label="Type"
@@ -742,7 +742,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                       <SettingRow
                         :title="listField.label"
                         :description="listField.helper"
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <Textarea
                           v-model="form.items"
@@ -750,7 +750,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                           :rows="5"
                           :aria-label="listField.label"
                           :placeholder="listField.placeholder"
-                          :required="errors.items?.kind === 'required'"
+                          :required="errors.items?.type === 'required'"
                           :aria-describedby="
                             errors.items ? 'create-access-list-items-message' : undefined
                           "
@@ -759,7 +759,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                         <HelperText
                           v-if="errors.items"
                           id="create-access-list-items-message"
-                          :kind="errors.items.kind"
+                          :type="errors.items.type"
                           :label="errors.items.message"
                         />
                       </SettingRow>
@@ -783,7 +783,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                     <Button
                       type="button"
                       label="Edit"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Edit where it runs"
                       @click="editStep('where-it-runs')"
@@ -823,7 +823,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                     <Button
                       type="button"
                       label="Edit"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Edit list settings"
                       @click="editStep('settings')"
@@ -845,7 +845,7 @@ Each variant is the same screen in another state: `get_block("create/create-wiza
                           <Button
                             type="button"
                             label="Edit"
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             aria-label="Edit name"
                             @click="editStep('general')"

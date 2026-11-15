@@ -1,6 +1,6 @@
 # Hero Band
 
-> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `kind` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
+> The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
 - Import: `import HeroBand from '@aziontech/webkit/hero-band'`
 - Category: sections · Surface: site · Structure: monolithic
@@ -8,8 +8,8 @@
 
 ## When to use
 
-- Use HeroBand for every marketing page opening; pick the layout with `kind`.
-- To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `kind="copy-on-top-art"` for a topology under the copy.
+- Use HeroBand for every marketing page opening; pick the layout with `variant`.
+- To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `variant="copy-on-top-art"` for a topology under the copy.
 - Rendering page JSON, or you need a whole band with no custom content → the section (`hero-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
 
 ## Do
@@ -38,7 +38,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `HeroBandKind` | `'title-band'` | false | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
+| `variant` | `HeroBandVariant` | `'title-band'` | false | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
 | `size` | `HeroBandSize` | `'medium'` | false | Vertical rhythm of the band; `large` is the opening a product page leads with. |
 | `eyebrow` | `string` | `''` | false | Short overline above the headline. |
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
@@ -74,7 +74,7 @@
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
+- `data-variant` mirrors the `variant` prop and drives the hero's height, width, backdrop and the copy alignment
 - `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `center`, `title-band` and `center-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `tickerMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
@@ -125,7 +125,7 @@
 
 <template>
   <HeroBand
-    kind="title-band"
+    variant="title-band"
     size="large"
     eyebrow="Cache"
     title="Deliver content fast, worldwide"
@@ -140,7 +140,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -151,7 +151,7 @@
 <template>
   <div class="flex flex-col">
     <HeroBand
-      kind="center"
+      variant="center"
       title-highlight="Build and run applications"
       title="globally, with no ops"
       description="Run code, AI, data, and security on 100+ data centers worldwide."
@@ -161,7 +161,7 @@
       :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
-      kind="title-band"
+      variant="title-band"
       size="large"
       eyebrow="Cache"
       title="Deliver content fast, worldwide"
@@ -170,7 +170,7 @@
       :secondary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     />
     <HeroBand
-      kind="pixel-floor"
+      variant="pixel-floor"
       eyebrow="AI Inference"
       title="Build and deploy AI agents and applications in seconds"
       description="Run AI inference close to users on Azion’s distributed infrastructure."
@@ -180,7 +180,7 @@
       :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
-      kind="copy-beside-art"
+      variant="copy-beside-art"
       eyebrow="AWS Alternative Comparison"
       title="AWS sells services. Your team becomes the integrator."
       description="Azion delivers one platform, distributed by default."
@@ -191,7 +191,7 @@
       :ticker-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
     />
     <HeroBand
-      kind="copy-on-top-art"
+      variant="copy-on-top-art"
       eyebrow="Workloads"
       title="Put your application close to users in seconds"
       description="Create a workload and it is live in every data center."
@@ -216,21 +216,21 @@
 <template>
   <div class="flex flex-col">
     <HeroBand
-      kind="center-band"
+      variant="center-band"
       eyebrow="Pricing"
       title="Pay for what runs, not for what waits"
       description="Start free and grow without changing plans."
       :primary-action="{ label: 'Start for free', href: '/signup' }"
     />
     <HeroBand
-      kind="compact-band"
+      variant="compact-band"
       eyebrow="Changelog"
       title="What shipped this month across the platform, the console and the CLI"
       title-length="long"
       description="New features and fixes, newest first."
     />
     <HeroBand
-      kind="center"
+      variant="center"
       plain
       title="Ship from your terminal"
       description="One command creates, builds and deploys a project."

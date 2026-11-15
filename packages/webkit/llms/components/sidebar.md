@@ -307,7 +307,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarMenuSub default-open>
             <SidebarMenuSubTrigger
               label="Edge Functions"
-              kind="inline"
+              type="inline"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem
@@ -345,7 +345,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             <SidebarMenuSubTrigger
               label="Settings"
               icon="ai ai-settings"
-              kind="drill"
+              type="drill"
             />
             <SidebarMenuSubContent>
               <SidebarMenuGroup label="Organization">
@@ -370,7 +370,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
         <SidebarFooter>
           <div class="flex items-center gap-(--spacing-xs)">
             <Avatar
-              kind="square"
+              variant="square"
               size="small"
               label="AM"
               alt="Alex Morgan"
@@ -386,7 +386,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <IconButton
                   icon="ai ai-ellipsis-vertical"
                   aria-label="Account menu"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                 />
               </DropdownMenuTrigger>
@@ -503,7 +503,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
               <SidebarMenuSubTrigger
                 label="Settings"
                 icon="ai ai-settings"
-                kind="drill"
+                type="drill"
               />
               <SidebarMenuSubContent>
                 <SidebarMenuGroup label="Organization">
@@ -524,7 +524,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarFooter>
             <div class="flex items-center gap-(--spacing-xs)">
               <Avatar
-                kind="square"
+                variant="square"
                 size="small"
                 label="JD"
                 alt="Jane Doe"

@@ -28,7 +28,7 @@
   "Pass `value` on the scale of `max`, for example `:value=\"3\" :max=\"5\"` for steps. Don't convert it to a percentage yourself.",
   "Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.",
   "There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.",
-  "The default is the `medium` bar with `flat` corners. Set `size=\"small\"` for a thin inline strip (table rows, upload rows, the top of a region); use `kind=\"rounded\"` and a larger `size` only when the bar stands alone."
+  "The default is the `medium` bar with `flat` corners. Set `size=\"small\"` for a thin inline strip (table rows, upload rows, the top of a region); use `variant=\"rounded\"` and a larger `size` only when the bar stands alone."
  ],
  "props": [
   {
@@ -46,8 +46,8 @@
    "doc": "Upper bound; percentage = `value / max * 100`."
   },
   {
-   "name": "kind",
-   "type": "ProgressKind` (`'rounded' | 'flat'`)",
+   "name": "variant",
+   "type": "ProgressVariant` (`'rounded' | 'flat'`)",
    "default": "'flat'",
    "required": "false",
    "doc": "Track and fill corner-radius variant."
@@ -78,7 +78,7 @@
   },
   {
    "name": "Shapes",
-   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      kind=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      kind=\"flat\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Progress from '@aziontech/webkit/progress'\n</script>\n\n<template>\n  <div class=\"flex w-[320px] flex-col gap-4\">\n    <Progress\n      :value=\"60\"\n      variant=\"rounded\"\n    />\n    <Progress\n      :value=\"60\"\n      variant=\"flat\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",

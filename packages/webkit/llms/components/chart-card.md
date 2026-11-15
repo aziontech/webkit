@@ -205,8 +205,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
         :labels="labels"
       >
         <Chart.Grid />
-        <Chart.Axis kind="y" />
-        <Chart.Axis kind="x" />
+        <Chart.Axis type="y" />
+        <Chart.Axis type="x" />
         <Chart.Line />
         <Chart.Crosshair />
         <Chart.Tooltip />
@@ -273,8 +273,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
           :labels="labels"
         >
           <Chart.Grid />
-          <Chart.Axis kind="y" />
-          <Chart.Axis kind="x" />
+          <Chart.Axis type="y" />
+          <Chart.Axis type="x" />
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
@@ -292,8 +292,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
           :labels="labels"
         >
           <Chart.Grid />
-          <Chart.Axis kind="y" />
-          <Chart.Axis kind="x" />
+          <Chart.Axis type="y" />
+          <Chart.Axis type="x" />
           <Chart.Line />
           <Chart.Crosshair />
           <Chart.Tooltip />
@@ -362,7 +362,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
         <DropdownMenuRoot>
           <DropdownMenuTrigger>
             <IconButton
-              kind="transparent"
+              variant="ghost"
               size="small"
               icon="ai ai-ellipsis"
               aria-label="More options"
@@ -391,8 +391,8 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
         :labels="labels"
       >
         <Chart.Grid />
-        <Chart.Axis kind="y" />
-        <Chart.Axis kind="x" />
+        <Chart.Axis type="y" />
+        <Chart.Axis type="x" />
         <Chart.Line />
         <Chart.Crosshair />
         <Chart.Tooltip />

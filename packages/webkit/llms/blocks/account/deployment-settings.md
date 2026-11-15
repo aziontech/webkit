@@ -493,7 +493,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { accessorKey: 'updatedAt', header: 'Last modified', sortable: true, minWidth: 170 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const properties: FilteringProperty[] = [
@@ -683,7 +683,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/deployment-settings"
             target="_blank"
@@ -691,7 +691,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
           <Button
             label="Create Deployment Setting"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             @click="openCreate"
           />
@@ -776,7 +776,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                   <SettingRow
                     title="Apply to existing Deployment Settings"
                     description="Give every setting this account already holds the binding policy above when you save. Default is never changed."
-                    kind="compact"
+                    variant="compact"
                   >
                     <Switch
                       v-model="form.applyToExisting"
@@ -863,7 +863,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                             <template #actions>
                               <Button
                                 label="Clear search"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="clearServiceSearch"
                               />
@@ -972,7 +972,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                   >
                     <IconButton
                       icon="ai ai-refresh"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       :loading="refreshing"
                       aria-label="Refresh"
@@ -985,7 +985,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                   >
                     <IconButton
                       icon="ai ai-download"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       :disabled="!matchingItems.length"
                       aria-label="Download CSV"
@@ -1110,7 +1110,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                         <template #actions>
                           <Button
                             label="Clear filters"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearFilters"
                           />
@@ -1137,14 +1137,14 @@ Each variant is the same screen in another state: `get_block("account/deployment
             <Button
               type="button"
               label="Discard"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="saving"
               @click="discard"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="saving"
               @click="save"
@@ -1243,7 +1243,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
-                    <Field.Legend kind="label">Binding policy</Field.Legend>
+                    <Field.Legend type="label">Binding policy</Field.Legend>
                     <RadioGroup
                       v-model="draft.bindingPolicy"
                       name="deployment-settings-binding"
@@ -1261,7 +1261,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
-                    <Field.Legend kind="label">Deployment policy</Field.Legend>
+                    <Field.Legend type="label">Deployment policy</Field.Legend>
                     <RadioGroup
                       v-model="draft.deploymentPolicy"
                       name="deployment-settings-policy"
@@ -1290,7 +1290,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="submitting"
                 @click="drawerOpen = false"
@@ -1298,7 +1298,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
               <Button
                 type="submit"
                 :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="submitting"
               />

@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.",
+ "purpose": "A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.",
  "setup": null,
  "useWhen": [
   "Use ConfirmDialog whenever the person must confirm an action they started (delete, discard, publish), including typed-name confirmation; an agent asking to run a tool uses ToolApproval, and a modal with your own body uses Dialog.",
@@ -28,7 +28,7 @@
  ],
  "bestPractices": [
   "The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.",
-  "kind=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
+  "variant=\"danger\"` only when the outcome removes or discards something; a commit is `primary`.",
   "Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.",
   "Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`."
  ],
@@ -62,7 +62,7 @@
    "doc": "Label of the cancel button. Empty uses the locale catalog (`Cancel`)."
   },
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'danger' | 'primary'",
    "default": "'danger'",
    "required": "false",
@@ -138,15 +138,15 @@
  "examples": [
   {
    "name": "Confirm",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Remove domain\"\n    description=\"shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response.\"\n    confirm-label=\"Remove Domain\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Remove domain\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Remove domain\"\n    description=\"shop.example.com stops answering for this resource once you save. Traffic already pointed at it gets no response.\"\n    confirm-label=\"Remove Domain\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Remove domain\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
   },
   {
    "name": "DiscardChanges",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Unsaved changes\"\n    description=\"This page has changes you haven't saved. If you leave now, they're discarded.\"\n    cancel-label=\"Keep editing\"\n    confirm-label=\"Discard changes\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Leave page\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Unsaved changes\"\n    description=\"This page has changes you haven't saved. If you leave now, they're discarded.\"\n    cancel-label=\"Keep editing\"\n    confirm-label=\"Discard changes\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Leave page\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
   },
   {
    "name": "RunAgain",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Clear cached content again?\"\n    description=\"This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request.\"\n    confirm-label=\"Clear again\"\n    kind=\"primary\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Run again\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import ConfirmDialog from '@aziontech/webkit/confirm-dialog'\n  import { ref } from 'vue'\n\n  const open = ref(false)\n</script>\n\n<template>\n  <ConfirmDialog\n    v-model:open=\"open\"\n    title=\"Clear cached content again?\"\n    description=\"This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request.\"\n    confirm-label=\"Clear again\"\n    variant=\"primary\"\n    @confirm=\"open = false\"\n  >\n    <template #trigger>\n      <Button\n        label=\"Run again\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n    </template>\n  </ConfirmDialog>\n</template>"
   }
  ],
  "docs": "components/confirm-dialog.md"

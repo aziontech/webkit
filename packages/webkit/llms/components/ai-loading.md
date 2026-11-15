@@ -35,16 +35,16 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`). |
-| `kind` | `'inline' \| 'bar'` | `'inline'` | false | inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
+| `variant` | `'inline' \| 'bar'` | `'inline'` | false | inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
 | `delay` | `number` | `1000` | false | Milliseconds to wait before showing anything, so a fast response never flickers a loading state. |
 
 ## Sub-components
 
-_None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: `progress`._
+_None. Exports: `"./ai-loading"`; type `AiLoadingVariant`. Composed DS components: `progress`._
 
 ## States
 
-- `data-kind`; `data-state="closed"` until the delay has passed, then `data-state="open"`. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
+- `data-variant`; `data-state="closed"` until the delay has passed, then `data-state="open"`. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
 
 ## Accessibility
 
@@ -101,7 +101,7 @@ _None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: 
 <template>
   <div class="w-full max-w-(--container-md)">
     <AiLoading
-      kind="bar"
+      variant="bar"
       label="Generating a table of cache hits by country"
     />
   </div>

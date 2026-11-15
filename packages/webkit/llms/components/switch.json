@@ -14,7 +14,7 @@
   "Use Switch for any on/off setting that applies at once — the answer for 'toggle'. For an on/off choice submitted with a form use Checkbox; to switch a view or mode in place use ToggleGroup.",
   "An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).",
   "A row that already names the setting outside the control, such as an `item` row whose title is the label.",
-  "A visibility or access toggle: `kind=\"privacy\"` shows a closed lock when off and an open lock when on."
+  "A visibility or access toggle: `variant=\"privacy\"` shows a closed lock when off and an open lock when on."
  ],
  "avoidWhen": [
   "The toggle needs its own label, description, or helper text in a form → wrap it in a horizontal `field` (`Field orientation=\"horizontal\"` + `Field.Content`).",
@@ -32,15 +32,15 @@
   "The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.",
   "Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.",
   "Use `autofocus` to focus the switch when it mounts (a dialog whose first control it is).",
-  "Keep `kind=\"default\"` unless the setting is about visibility or access."
+  "Keep `variant=\"default\"` unless the setting is about visibility or access."
  ],
  "props": [
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'default' | 'privacy'",
    "default": "'default'",
    "required": "false",
-   "doc": "Visual variant (`SwitchKind`). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+   "doc": "Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
   },
   {
    "name": "autofocus",
@@ -88,8 +88,8 @@
    "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const modelValue = ref(false)\n</script>\n\n<template>\n  <Switch\n    v-model=\"modelValue\"\n    aria-label=\"Toggle setting\"\n  />\n</template>"
   },
   {
-   "name": "Types",
-   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const defaultOff = ref(false)\n  const defaultOn = ref(true)\n  const privacyOff = ref(false)\n  const privacyOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"defaultOff\"\n      kind=\"default\"\n      aria-label=\"Default off\"\n    />\n    <Switch\n      v-model=\"defaultOn\"\n      kind=\"default\"\n      aria-label=\"Default on\"\n    />\n    <Switch\n      v-model=\"privacyOff\"\n      kind=\"privacy\"\n      aria-label=\"Privacy off\"\n    />\n    <Switch\n      v-model=\"privacyOn\"\n      kind=\"privacy\"\n      aria-label=\"Privacy on\"\n    />\n  </div>\n</template>"
+   "name": "Variants",
+   "sfc": "<script setup>\n  import Switch from '@aziontech/webkit/switch'\n  import { ref } from 'vue'\n\n  const defaultOff = ref(false)\n  const defaultOn = ref(true)\n  const privacyOff = ref(false)\n  const privacyOn = ref(true)\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-4)\">\n    <Switch\n      v-model=\"defaultOff\"\n      variant=\"default\"\n      aria-label=\"Default off\"\n    />\n    <Switch\n      v-model=\"defaultOn\"\n      variant=\"default\"\n      aria-label=\"Default on\"\n    />\n    <Switch\n      v-model=\"privacyOff\"\n      variant=\"privacy\"\n      aria-label=\"Privacy off\"\n    />\n    <Switch\n      v-model=\"privacyOn\"\n      variant=\"privacy\"\n      aria-label=\"Privacy on\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Disabled",

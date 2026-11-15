@@ -1,6 +1,6 @@
 # Dropdown Menu
 
-> Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name) is the selectable row with leading/trailing/command affordances, and with `kind="checkbox"` or `kind="radio"` it becomes a checkable item (`menuitemcheckbox` / `menuitemradio`). `DropdownMenu.Sub`, `DropdownMenu.SubTrigger` and `DropdownMenu.SubContent` nest a sub-menu that opens on hover or with `ArrowRight` and nests to any depth. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.
+> Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name) is the selectable row with leading/trailing/command affordances, and with `type="checkbox"` or `type="radio"` it becomes a checkable item (`menuitemcheckbox` / `menuitemradio`). `DropdownMenu.Sub`, `DropdownMenu.SubTrigger` and `DropdownMenu.SubContent` nest a sub-menu that opens on hover or with `ArrowRight` and nests to any depth. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.
 
 - Import: `import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import DropdownMenu from '@aziontech/webkit/dropdown-menu'`
@@ -21,7 +21,7 @@
 - Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); 6.0 removed the `DropdownMenu.Option` alias and the `left` / `right` slots. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.
 - Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `header` slot and footer actions in `footer`; those regions stay outside the scrolling list.
 - Nest at most two levels of sub-menus; deeper menus are hard to steer with a pointer. Put the `DropdownMenu.Sub` inside a `DropdownMenu.Group`, and the sub-menu's options inside a `DropdownMenu.Group` in `DropdownMenu.SubContent`, the same way as the top level.
-- Use `kind="checkbox"` for independent on/off settings and `kind="radio"` for one choice among the options of one `DropdownMenu.Group`. Drive `selected` from your own state in the `select` handler; checkable options keep the panel open so several can be toggled in a row.
+- Use `type="checkbox"` for independent on/off settings and `type="radio"` for one choice among the options of one `DropdownMenu.Group`. Drive `selected` from your own state in the `select` handler; checkable options keep the panel open so several can be toggled in a row.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Don’t
@@ -54,7 +54,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `kind="checkbox"` / `kind="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
 ## Slots
 
@@ -91,7 +91,7 @@
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `ai ai-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
-    - `kind: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuOptionKind`.
+    - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuOptionType`.
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
 - `dropdown-menu-sub/dropdown-menu-sub.vue` — sub-menu scope. Owns the open state of one nested menu and shares it with its `SubTrigger` and `SubContent`. Renders a `display: contents` wrapper carrying `data-testid` (`<root>__sub`) and `data-state`. Only one sub-menu per menu level is open at a time: hovering or focusing a sibling item closes it after a 150 ms grace period, so a pointer moving diagonally toward the sub-panel does not close it; entering the sub-panel cancels the close. Closing the root closes every sub-menu.
@@ -119,7 +119,7 @@
 - `data-state` values (root + trigger): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop on root, trigger, and option
 - `data-selected` on option mirrors the `selected` prop
-- `data-kind` on option mirrors the `kind` prop (`default` | `checkbox` | `radio`)
+- `data-type` on option mirrors the `type` prop (`default` | `checkbox` | `radio`)
 - `data-state` on sub, sub-trigger and sub-panel: `open` | `closed`; `data-disabled` on sub-trigger mirrors its `disabled` prop
 - `data-placement` on the sub-panel mirrors its resolved side (`right-start` | `right-end` | `left-start` | `left-end`)
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
@@ -134,7 +134,7 @@
   - Inside a sub-menu: `Down` / `Up` / `Home` / `End` move within it; `ArrowLeft` (`ArrowRight` under rtl) or `Esc` closes it and returns focus to its sub-trigger; `Enter` / `Space` activate; `Tab` closes the whole menu. Tests: `dropdown-menu.test.ts` › sub-menus.
   - Inside the panel: `Down` / `Up` move between enabled options (wrap-around); `Home` / `End` jump to first/last enabled option; a printable character moves to the next enabled option whose label starts with it (typeahead: characters typed within 500 ms accumulate, a repeated character cycles); `Enter` / `Space` activate the focused option; `Esc` closes the panel and returns focus to the trigger; `Tab` closes the panel and lets focus proceed to the next focusable element after the trigger; `Shift+Tab` closes it and returns focus to the trigger. Typing in a search field inside the header slot keeps `Home` / `End` for the caret. Tests: `dropdown-menu.test.ts` › keyboard map (spec).
   - Nested overlays: the open panel joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` activating an option or pressing `Esc` closes only the menu; a pointer-down inside a higher layer (a `Select` list opened from the header slot) does not close the menu.
-- ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, with a single tab stop; the panel's `aria-labelledby` follows the control's `id`; the `role="menu"` element wraps only the groups and options, and the optional header and footer slots (search fields, footers with buttons) sit beside it inside the floating panel, because a `menu` may own only menu items, groups and separators (`aria-required-children`); each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; a selected option is `role="menuitemradio"` with `aria-checked="true"` and a visible check mark; `kind="checkbox"` / `kind="radio"` options are `menuitemcheckbox` / `menuitemradio` with `aria-checked` mirroring `selected`; a sub-trigger is a `menuitem` with `aria-haspopup="menu"`, `aria-expanded` and `aria-controls`, and its sub-panel is a `role="menu"` labelled by it. The check and chevron glyphs are `aria-hidden`. Options are `tabindex="-1"` (roving focus through the arrows), so `Tab` leaves the menu. While closed, a menu attaches no `document` listener; the outside-`mousedown` listener lives only while the panel is open.
+- ARIA: the slotted control (or the wrapper, when the slot has none) exposes `aria-haspopup="menu"`, `aria-expanded`, `aria-controls`, with a single tab stop; the panel's `aria-labelledby` follows the control's `id`; the `role="menu"` element wraps only the groups and options, and the optional header and footer slots (search fields, footers with buttons) sit beside it inside the floating panel, because a `menu` may own only menu items, groups and separators (`aria-required-children`); each group uses `role="group"` + `aria-labelledby` pointing at its label id (when `label` is set); each option uses `role="menuitem"`, `aria-disabled` mirrors `disabled`; a selected option is `role="menuitemradio"` with `aria-checked="true"` and a visible check mark; `type="checkbox"` / `type="radio"` options are `menuitemcheckbox` / `menuitemradio` with `aria-checked` mirroring `selected`; a sub-trigger is a `menuitem` with `aria-haspopup="menu"`, `aria-expanded` and `aria-controls`, and its sub-panel is a `role="menu"` labelled by it. The check and chevron glyphs are `aria-hidden`. Options are `tabindex="-1"` (roving focus through the arrows), so `Tab` leaves the menu. While closed, a menu attaches no `document` listener; the outside-`mousedown` listener lives only while the panel is open.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons), including the disabled state (validated via `--text-disabled` token).
 - `motion-reduce:animate-none` on `animate-popup-scale-*`; `motion-reduce:transition-none` on `transition-colors` for hover/selected states.
 - Teleported panel: the `role="menu"` panel binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it lays out and is announced in the provider's direction and language although it renders under `body`.
@@ -177,7 +177,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
   <DropdownMenuRoot>
     <DropdownMenuTrigger>
       <IconButton
-        kind="outlined"
+        variant="outline"
         icon="ai ai-plus"
         aria-label="Open menu"
       />
@@ -227,7 +227,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
   <DropdownMenuRoot>
     <DropdownMenuTrigger>
       <IconButton
-        kind="outlined"
+        variant="outline"
         icon="ai ai-plus"
         aria-label="Open menu"
       />
@@ -273,7 +273,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
   <DropdownMenuRoot :open="true">
     <DropdownMenuTrigger>
       <IconButton
-        kind="outlined"
+        variant="outline"
         icon="ai ai-plus"
         aria-label="Open menu"
       />

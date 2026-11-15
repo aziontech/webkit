@@ -94,7 +94,7 @@
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
 - A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-double-click`.
 - `data-testid`: the root falls back to `data-tree` (a consumer `data-testid` wins); parts derive from the resolved root id — `<testId>__item` on every treeitem, `<testId>__toggle` on every chevron. Each treeitem also carries `data-item-id="<item.id>"` so a test reaches one node without depending on DOM order.
-- Loading renders five Skeleton rows (`kind="rectangle"`, row height, descending widths) at top level.
+- Loading renders five Skeleton rows (`variant="rectangle"`, row height, descending widths) at top level.
 
 ## Accessibility
 
@@ -483,7 +483,7 @@
       <template #actions="{ item }">
         <IconButton
           icon="ai ai-ellipsis"
-          kind="transparent"
+          variant="ghost"
           size="small"
           :aria-label="'More actions for ' + item.label"
         />

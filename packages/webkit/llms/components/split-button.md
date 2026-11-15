@@ -29,7 +29,7 @@
 
 ## Related
 
-- [button](button.md) — the primary segment; `kind` here is limited to `primary`, `secondary` and `outlined`.
+- [button](button.md) — the primary segment; `variant` here is limited to `primary`, `secondary` and `outline`.
 - [dropdown-menu](dropdown-menu.md) — the overlay menu the toggle composes; use it alone when there is no default action.
 - [icon-button](icon-button.md) — the chevron toggle segment.
 
@@ -40,7 +40,7 @@
 | `label` | `string` | `''` | false | Visible label text on the primary command button. |
 | `icon` | `string` | `''` | false | Azion icon class for the primary button's leading icon. |
 | `items` | `SplitButtonItem[]` | `[]` | false | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions. |
-| `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false | Visual variant applied to both joined segments. |
+| `variant` | `'primary' \| 'secondary' \| 'outline'` | `'primary'` | false | Visual variant applied to both joined segments. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables both segments and prevents the menu from opening. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the primary button and takes the disabled status: both segments are disabled and the menu cannot open while it resolves. |
@@ -67,7 +67,7 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`, `loading`
-- `data-kind` mirrors the `kind` prop
+- `data-variant` mirrors the `variant` prop
 - `data-size` mirrors the `size` prop
 - `data-disabled` mirrors the `disabled` prop
 - `data-loading` mirrors the `loading` prop
@@ -121,7 +121,7 @@
 
 <template>
   <SplitButton
-    kind="primary"
+    variant="primary"
     size="large"
     label="Save"
     icon="ai ai-check"
@@ -130,7 +130,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -146,17 +146,17 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <SplitButton
-      kind="primary"
+      variant="primary"
       label="Primary"
       :items="items"
     />
     <SplitButton
-      kind="secondary"
+      variant="secondary"
       label="Secondary"
       :items="items"
     />
     <SplitButton
-      kind="outlined"
+      variant="outline"
       label="Outlined"
       :items="items"
     />

@@ -754,9 +754,9 @@ Each variant is the same screen in another state: `get_block("dashboard/alerts-d
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
+              <Chart.Axis type="y" />
               <Chart.Axis
-                kind="x"
+                type="x"
                 :ticks="6"
               />
               <Chart.Bar stacked />

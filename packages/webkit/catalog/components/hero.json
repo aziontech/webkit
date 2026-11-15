@@ -6,26 +6,26 @@
   "As the opening band of a marketing, hub or documentation page.",
   "Whenever a band must span the window while its copy stays on the page's measure.",
   "For any band that carries a decorative backdrop behind its content.",
-  "With `kind=\"screen\"` when the opening should measure exactly one viewport."
+  "With `variant=\"screen\"` when the opening should measure exactly one viewport."
  ],
  "avoidWhen": [
   "For a marketing page opening placed from page JSON → use `hero-band` (or `hero-form` for a lead form).",
   "For the framed column of bands below the opening → use `section-container`.",
   "For one band inside that column → use `section-module`.",
   "For a section header further down the page → use `section-title`, which renders an `h2`.",
-  "For a mid-page announcement → use `call-to-action` with `kind=\"announcement\"`; for the closing ask → use `call-to-action`.",
+  "For a mid-page announcement → use `call-to-action` with `variant=\"announcement\"`; for the closing ask → use `call-to-action`.",
   "For a copy-and-media pairing that is not the page opening → use `media-split`."
  ],
  "related": [
   "section-container` — the framed column below it; this band's `border-b` is that column's top edge.",
   "section-module` — the brick stacked inside that column.",
-  "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than kind, size and fade.",
+  "texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than variant, size and fade.",
   "media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.",
-  "call-to-action` — the mid-page announcement band (`kind=\"announcement\"`) and the closing ask."
+  "call-to-action` — the mid-page announcement band (`variant=\"announcement\"`) and the closing ask."
  ],
  "bestPractices": [
   "One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.",
-  "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.",
+  "Pass `variant=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.",
   "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
   "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
   "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",

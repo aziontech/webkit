@@ -30,16 +30,16 @@
   "Render the floating bar with `v-if=\"dirty || saving\"` inside a `Transition`, so it slides in when the first change is made.",
   "Say what changed and when it takes effect in the status sentence; keep it to one line.",
   "Disable Discard and set `loading` on Save while saving.",
-  "Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `kind=\"centered\"`.",
+  "Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant=\"centered\"`.",
   "floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen."
  ],
  "props": [
   {
-   "name": "kind",
+   "name": "variant",
    "type": "'floating' | 'docked' | 'plain' | 'fade' | 'centered'",
    "default": "'floating'",
    "required": "false",
-   "doc": "How the bar sits at the bottom of its scroll region. See the kind table below."
+   "doc": "How the bar sits at the bottom of its scroll region. See the variant table below."
   }
  ],
  "events": [],
@@ -65,15 +65,15 @@
  "examples": [
   {
    "name": "Floating",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n  import { ref } from 'vue'\n\n  const saving = ref(false)\n\n  const save = () => {\n    saving.value = true\n    setTimeout(() => {\n      saving.value = false\n    }, 1200)\n  }\n</script>\n\n<template>\n  <div class=\"relative flex h-64 flex-col overflow-auto\">\n    <div class=\"layout-boundary-inline flex-1 py-(--spacing-lg) text-body-sm text-(--text-muted)\">\n      The settings form scrolls under the bar.\n    </div>\n    <SaveBar>\n      You have unsaved changes.\n      <template #actions>\n        <Button\n          type=\"button\"\n          label=\"Discard\"\n          kind=\"outlined\"\n          size=\"medium\"\n          :disabled=\"saving\"\n        />\n        <Button\n          label=\"Save\"\n          kind=\"primary\"\n          size=\"medium\"\n          :loading=\"saving\"\n          @click=\"save\"\n        />\n      </template>\n    </SaveBar>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n  import { ref } from 'vue'\n\n  const saving = ref(false)\n\n  const save = () => {\n    saving.value = true\n    setTimeout(() => {\n      saving.value = false\n    }, 1200)\n  }\n</script>\n\n<template>\n  <div class=\"relative flex h-64 flex-col overflow-auto\">\n    <div class=\"layout-boundary-inline flex-1 py-(--spacing-lg) text-body-sm text-(--text-muted)\">\n      The settings form scrolls under the bar.\n    </div>\n    <SaveBar>\n      You have unsaved changes.\n      <template #actions>\n        <Button\n          type=\"button\"\n          label=\"Discard\"\n          variant=\"outline\"\n          size=\"medium\"\n          :disabled=\"saving\"\n        />\n        <Button\n          label=\"Save\"\n          variant=\"primary\"\n          size=\"medium\"\n          :loading=\"saving\"\n          @click=\"save\"\n        />\n      </template>\n    </SaveBar>\n  </div>\n</template>"
   },
   {
    "name": "Docked",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n</script>\n\n<template>\n  <SaveBar kind=\"docked\">\n    Project settings changed.\n    <span class=\"text-(--text-muted)\">Saving publishes them on the next deployment.</span>\n    <template #actions>\n      <Button\n        type=\"button\"\n        label=\"Discard\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n      <Button\n        label=\"Save\"\n        kind=\"primary\"\n        size=\"medium\"\n      />\n    </template>\n  </SaveBar>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n</script>\n\n<template>\n  <SaveBar variant=\"docked\">\n    Project settings changed.\n    <span class=\"text-(--text-muted)\">Saving publishes them on the next deployment.</span>\n    <template #actions>\n      <Button\n        type=\"button\"\n        label=\"Discard\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n      <Button\n        label=\"Save\"\n        variant=\"primary\"\n        size=\"medium\"\n      />\n    </template>\n  </SaveBar>\n</template>"
   },
   {
    "name": "Plain",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n</script>\n\n<template>\n  <SaveBar kind=\"plain\">\n    <template #actions>\n      <Button\n        type=\"button\"\n        label=\"Cancel\"\n        kind=\"outlined\"\n        size=\"medium\"\n      />\n      <Button\n        label=\"Save\"\n        kind=\"primary\"\n        size=\"medium\"\n      />\n    </template>\n  </SaveBar>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SaveBar from '@aziontech/webkit/save-bar'\n</script>\n\n<template>\n  <SaveBar variant=\"plain\">\n    <template #actions>\n      <Button\n        type=\"button\"\n        label=\"Cancel\"\n        variant=\"outline\"\n        size=\"medium\"\n      />\n      <Button\n        label=\"Save\"\n        variant=\"primary\"\n        size=\"medium\"\n      />\n    </template>\n  </SaveBar>\n</template>"
   }
  ],
  "docs": "components/save-bar.md"

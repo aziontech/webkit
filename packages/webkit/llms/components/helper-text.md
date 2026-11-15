@@ -10,13 +10,13 @@
 
 - Use HelperText only under a control that is not inside Field; inside Field use Field.Description or Field.Error. For a one-sentence note beside a label use Hint.
 - Guidance under a bare input you compose yourself (format hints, limits).
-- A validation error (`kind="invalid"`), a required reminder (`kind="required"`), or a locked-field notice (`kind="disabled"`) under a field.
+- A validation error (`type="invalid"`), a required reminder (`type="required"`), or a locked-field notice (`type="disabled"`) under a field.
 
 ## Do
 
 - Give it an `id` and point the input's `aria-describedby` at it so screen readers read it with the field.
-- Pick `kind` from the field state: `invalid` for errors, `required` for a missing required value, `disabled` when the field is locked.
-- Keep it to one short line; `kind="disabled"` already prepends the lock icon, so do not add another.
+- Pick `type` from the field state: `invalid` for errors, `required` for a missing required value, `disabled` when the field is locked.
+- Keep it to one short line; `type="disabled"` already prepends the lock icon, so do not add another.
 
 ## Don’t
 
@@ -28,7 +28,7 @@
 ## Related
 
 - Field.Label` — sits above the input; HelperText sits below it.
-- [field](field.md) — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
+- [field](field.md) — `Field.Description` switches the helper `type` from the Field's `disabled`, `invalid` and `required` state.
 - [alert](alert.md) — banner-level feedback with severity and an optional action.
 
 ## Props
@@ -36,7 +36,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false | Visual variant; `disabled` also prepends a `ai ai-lock` icon. |
+| `type` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false | Visual variant; `disabled` also prepends a `ai ai-lock` icon. |
 
 ## Slots
 
@@ -47,14 +47,14 @@
 ## States
 
 - Visual states: `helper`, `invalid`, `required`, `disabled`
-- `data-kind` mirrors the `kind` prop
+- `data-type` mirrors the `type` prop
 
 ## Accessibility
 
 - Root is a `<p>` element so the text is part of the document flow; consumers wire the input with `aria-describedby="<helper-id>"` to expose the helper text to assistive tech.
-- Keyboard map: not focusable (descriptive text); the lock icon for `kind="disabled"` is decorative and marked `aria-hidden="true"`.
-- ARIA: when `kind="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
-- Contrast ≥4.5:1 between each `kind` color and `var(--bg-canvas)` (verified with the theme by the styled visual suite).
+- Keyboard map: not focusable (descriptive text); the lock icon for `type="disabled"` is decorative and marked `aria-hidden="true"`.
+- ARIA: when `type="invalid"`, consumers should also set `aria-invalid="true"` on the associated input; the helper text content carries the human-readable error.
+- Contrast ≥4.5:1 between each `type` color and `var(--bg-canvas)` (verified with the theme by the styled visual suite).
 - `motion-reduce:transition-none motion-reduce:transform-none` not applicable (no motion).
 - Touch target: text is non-interactive; not subject to the 40×40 px rule.
 
@@ -69,7 +69,7 @@
 
 <template>
   <HelperText
-    kind="helper"
+    type="helper"
     label="Helper Text"
   />
 </template>
@@ -85,19 +85,19 @@
 <template>
   <div class="flex flex-col gap-2">
     <HelperText
-      kind="helper"
+      type="helper"
       label="Helper Text"
     />
     <HelperText
-      kind="invalid"
+      type="invalid"
       label="Text Error"
     />
     <HelperText
-      kind="required"
+      type="required"
       label="Text Error"
     />
     <HelperText
-      kind="disabled"
+      type="disabled"
       label="Helper Text"
     />
   </div>

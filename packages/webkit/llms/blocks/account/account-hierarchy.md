@@ -305,7 +305,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     { accessorKey: 'status', header: 'Status', minWidth: 112 },
     { accessorKey: 'charges', header: 'Charges', align: 'end', minWidth: 112 },
     { accessorKey: 'labels', header: 'Labels', minWidth: 120 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const expanded = ref<Record<string, boolean>>({ 'org-1001': true, 'grp-2101': true })
@@ -510,7 +510,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           <Button
             label="Create Workspace"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             href="/account/resources/new"
           />
@@ -525,7 +525,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         <Button
           label="Create Group"
           icon="ai ai-folder"
-          kind="outlined"
+          variant="outline"
           size="medium"
           href="/account/resources/new-group"
         />
@@ -536,7 +536,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         <Button
           label="Move"
           icon="ai ai-arrow-right-left"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="!selectedCount"
           @click="openMove(selected)"
@@ -544,7 +544,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         <Button
           label="Labels"
           icon="ai ai-tag"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="!selectedCount"
           @click="openLabels(selected)"
@@ -552,7 +552,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
         <Button
           label="Delete"
           icon="ai ai-trash"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="!selectedCount"
           @click="openDelete(selected)"
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :loading="refreshing"
               aria-label="Refresh resources"
@@ -571,7 +571,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           <Button
             :label="detailsOpen ? 'Hide details' : 'Show details'"
             :icon="detailsOpen ? 'ai ai-eye-off' : 'ai ai-eye'"
-            kind="transparent"
+            variant="ghost"
             size="medium"
             :aria-expanded="detailsOpen"
             :aria-controls="`${uid}-details`"
@@ -595,7 +595,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             <Button
               v-if="selectedCount"
               label="Clear selection"
-              kind="transparent"
+              variant="ghost"
               size="small"
               @click="clearSelection"
             />
@@ -609,7 +609,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             <template #actions>
               <Button
                 label="Retry"
-                kind="secondary"
+                variant="secondary"
                 size="small"
                 @click="retryLoad"
               />
@@ -632,7 +632,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                   <Button
                     label="Create Workspace"
                     icon="ai ai-plus"
-                    kind="secondary"
+                    variant="secondary"
                     size="small"
                     href="/account/resources/new"
                   />
@@ -671,7 +671,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                   <template #actions>
                     <Button
                       label="Clear search"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearQuery"
                     />
@@ -706,7 +706,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                         v-if="row.type !== 'workspace'"
                         :label="initials(row.name)"
                         size="small"
-                        kind="square"
+                        variant="square"
                       />
                       <i
                         v-else
@@ -890,7 +890,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                             }}</span>
                           </div>
                           <KeyValuePairs
-                            kind="split"
+                            variant="split"
                             aria-label="Role bindings"
                           >
                             <KeyValuePairs.Item
@@ -948,7 +948,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                           <Button
                             label="Edit labels"
                             icon="ai ai-tag"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             class="self-start"
                             @click="openLabels([focused])"
@@ -1018,13 +1018,13 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               @click="moveOpen = false"
             />
             <Button
               label="Move"
-              kind="primary"
+              variant="primary"
               size="medium"
               @click="confirmMove"
             />
@@ -1097,13 +1097,13 @@ Each variant is the same screen in another state: `get_block("account/account-hi
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               @click="labelsOpen = false"
             />
             <Button
               label="Save labels"
-              kind="primary"
+              variant="primary"
               size="medium"
               :disabled="!addLabels.length && !removeLabels.length"
               @click="confirmLabels"

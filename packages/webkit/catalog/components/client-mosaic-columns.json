@@ -5,7 +5,7 @@
  ],
  "avoidWhen": [
   "For a bento of client stories with photos and logos → use `client-mosaic`.",
-  "For a quotation → use `client-quotes` or `logo-wall-quote` `kind=\"quote\"`."
+  "For a quotation → use `client-quotes` or `logo-wall-quote` `variant=\"quote\"`."
  ],
  "related": [
   "client-mosaic` — the bento sibling.",

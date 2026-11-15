@@ -19,7 +19,7 @@
   "Give every entry an `href`; an entry without one links to `#`.",
   "Listen to `search` and open the page's `Command` from it (`@search=\"searchOpen = true\"` beside `<Command v-model:open=\"searchOpen\">`); the trigger already carries ⌘K / Ctrl K.",
   "Leave `secondaryActionOnPhones` off: on a phone the bar keeps the menu button, the mark, the call to action and search, as azion.com does, and Login stays in the sheet footer.",
-  "The bar is `--layout-header-height` tall: `HeroBand` already takes it out of a screen-filling band; a bare `Hero kind=\"screen\"` takes `offset=\"var(--layout-header-height)\"`, never a literal length.",
+  "The bar is `--layout-header-height` tall: `HeroBand` already takes it out of a screen-filling band; a bare `Hero variant=\"screen\"` takes `offset=\"var(--layout-header-height)\"`, never a literal length.",
   "Don't wrap the bar, add a second search button beside it, or bind ⌘K yourself."
  ]
 }

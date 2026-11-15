@@ -21,7 +21,7 @@
   "A full code sample with its own copy control → use `code-block`."
  ],
  "related": [
-  "icon-button` — the control it composes; `kind` and `size` are forwarded to it.",
+  "icon-button` — the control it composes; `variant` and `size` are forwarded to it.",
   "tooltip` — composed to show `ariaLabel` and then `copiedLabel` on hover and focus.",
   "code-block` — already embeds a copy-button for its content."
  ],
@@ -55,9 +55,9 @@
    "doc": "Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`)."
   },
   {
-   "name": "kind",
-   "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
-   "default": "'transparent'",
+   "name": "variant",
+   "type": "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
+   "default": "'ghost'",
    "required": "false",
    "doc": "Visual variant forwarded to `IconButton`."
   },

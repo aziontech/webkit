@@ -11,14 +11,14 @@
 - Use Switch for any on/off setting that applies at once — the answer for 'toggle'. For an on/off choice submitted with a form use Checkbox; to switch a view or mode in place use ToggleGroup.
 - An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).
 - A row that already names the setting outside the control, such as an `item` row whose title is the label.
-- A visibility or access toggle: `kind="privacy"` shows a closed lock when off and an open lock when on.
+- A visibility or access toggle: `variant="privacy"` shows a closed lock when off and an open lock when on.
 
 ## Do
 
 - The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.
 - Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.
 - Use `autofocus` to focus the switch when it mounts (a dialog whose first control it is).
-- Keep `kind="default"` unless the setting is about visibility or access.
+- Keep `variant="default"` unless the setting is about visibility or access.
 
 ## Don’t
 
@@ -39,7 +39,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'default' \| 'privacy'` | `'default'` | false | Visual variant (`SwitchKind`). `privacy` renders a lock icon inside the handle (closed when off, open when on). |
+| `variant` | `'default' \| 'privacy'` | `'default'` | false | Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on). |
 | `autofocus` | `boolean` | `false` | false | Moves focus to the switch once, when it mounts. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies the disabled tokens. |
 | `invalid` | `boolean` | `false` | false | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too. |
@@ -56,7 +56,7 @@
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
-- `data-kind` mirrors the `kind` prop (`default` | `privacy`)
+- `data-variant` mirrors the `variant` prop (`default` | `privacy`)
 - `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
@@ -66,7 +66,7 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` focuses; `Space` / `Enter` toggles. When `disabled`, the native `<button disabled>` root is skipped by `Tab` and both keys are inert.
-- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `kind="privacy"` is decorative — `aria-hidden="true"`.
+- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `variant="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically a horizontal `Field`, whose label extends the target). The component still exposes a clickable root.
@@ -92,7 +92,7 @@
 </template>
 ```
 
-### Types
+### Variants
 
 ```vue
 <script setup>
@@ -109,22 +109,22 @@
   <div class="flex flex-wrap items-center gap-(--spacing-4)">
     <Switch
       v-model="defaultOff"
-      kind="default"
+      variant="default"
       aria-label="Default off"
     />
     <Switch
       v-model="defaultOn"
-      kind="default"
+      variant="default"
       aria-label="Default on"
     />
     <Switch
       v-model="privacyOff"
-      kind="privacy"
+      variant="privacy"
       aria-label="Privacy off"
     />
     <Switch
       v-model="privacyOn"
-      kind="privacy"
+      variant="privacy"
       aria-label="Privacy on"
     />
   </div>

@@ -65,7 +65,7 @@ A Delete team section at the end of the form opens a `ConfirmDialog` that says h
 
 Variants CreateTeam and EditTeam only; they add `GlobalHeader`, `Brand` and `Breadcrumb`.
 
-Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar kind="centered"` floats at the bottom of that scroll region on both pages.
+Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar variant="centered"` floats at the bottom of that scroll region on both pages.
 
 ### J. Permission matrix — `Table`, `EmptyState` (CreateTeam, EditTeam)
 
@@ -113,7 +113,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 ## States
 
 - Default: five teams (one with every permission, one inactive with no members) with the property filter, Refresh, Download CSV, preferences, sorting, row menus, duplicate and delete wired.
-- CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar kind="centered"`, a raised card centred over the bottom of the scroll region, as on Edit Team. A filter with no match shows a small `EmptyState` with Clear filter.
+- CreateTeam: the create page in the creation frame (Back to Teams and permissions, no rail) with three permissions preselected; the matrix filter, Select all, Clear, Edit-implies-View, required name and at-least-one-permission errors, and a success toast on Create. Cancel and Create sit in a `SaveBar variant="centered"`, a raised card centred over the bottom of the scroll region, as on Edit Team. A filter with no match shows a small `EmptyState` with Clear filter.
 - EditTeam: in the same creation frame, a saved team with three members and six permissions; add and remove members, Discard, Save changes with a success toast, Delete team behind a `ConfirmDialog`.
 - Empty: no team yet; the heading and an empty state with Create Team.
 - Loading: the first load; the controls row and the table's loading rows.
@@ -266,7 +266,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
     { accessorKey: 'permissionNames', header: 'Permissions', grow: 2 },
     { accessorKey: 'members', header: 'Members', sortable: true, minWidth: 100 },
     { accessorKey: 'status', header: 'Status', minWidth: 110 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const statusOptions = [...new Set(rows.value.map((row) => row.status))]
@@ -357,7 +357,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/teams"
             target="_blank"
@@ -365,7 +365,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           <Button
             label="Create Team"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             href="/account/teams/new"
           />
@@ -391,7 +391,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
@@ -404,7 +404,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -426,7 +426,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="retryLoad"
             />
@@ -449,7 +449,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                 <Button
                   label="Create Team"
                   icon="ai ai-plus"
-                  kind="secondary"
+                  variant="secondary"
                   size="small"
                   href="/account/teams/new"
                 />
@@ -477,7 +477,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                   <Avatar
                     :label="row.name"
                     size="small"
-                    kind="square"
+                    variant="square"
                   />
                   <div class="flex min-w-0 flex-col">
                     <Table.CellLink
@@ -547,7 +547,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />

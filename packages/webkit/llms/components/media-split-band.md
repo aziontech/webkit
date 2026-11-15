@@ -16,7 +16,7 @@
 ## Do
 
 - Give the band exactly one media: `scene`, `codeTabs`, `widget` (a `ProductWidget` name), `diagram` (a `Diagram` name), `image` or `illustration`; when several are set the first of that order wins.
-- A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `kind: 'transparent'` action for a quiet "Learn more".
+- A code sample holds controls of its own (tabs, copy), so the band never links to its lone action while it shows code; give it a `variant: 'ghost'` action for a quiet "Learn more".
 - On a product page prefer `widget` or `diagram`: they show the product itself. Do not drop to `media-split` and its `media` slot to place one.
 - Set `image.framed` for a picture that is an object rather than a scene (a badge, a logo, a screenshot): it sits whole on a rounded, bordered plate inset in the cell instead of covering it.
 - Use `size="large"` for a band that carries only its headline and description.
@@ -47,7 +47,7 @@
 | `description` | `string` | `''` | false | Paragraph under the headline. |
 | `size` | `MediaSplitBandSize` | `'medium'` | false | Type scale of the copy; `large` sets the headline at heading-xl and centres the copy beside the media, `medium` aligns it to the top of the media. |
 | `orientation` | `MediaSplitBandOrientation` | `'horizontal'` | false | Axis the band splits on; `vertical` stacks the media under the copy for a wide scene. |
-| `texture` | `TextureMaterialKind` | `'pixelate'` | false | Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`. |
+| `texture` | `TextureMaterialVariant` | `'pixelate'` | false | Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`. |
 | `linked` | `boolean` | `true` | false | Links the whole band to a lone action; turn it off when the media holds controls of its own. |
 | `scene` | `MediaSplitBandScene` | `undefined` | false | Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media. |
 | `codeTabs` | `MediaSplitBandCodeTab[]` | `[]` | false | Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped. |
@@ -58,8 +58,8 @@
 | `image` | `MediaSplitBandImage` | `undefined` | false | Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration drawn in the media cell when no other media is set. |
 | `illustrationAriaLabel` | `string` | `''` | false | Accessible name of the illustration; empty keeps it decorative. |
-| `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind. |
-| `secondaryAction` | `MediaSplitBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked. |
+| `primaryAction` | `MediaSplitBandAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `variant` overrides the drawn variant. |
+| `secondaryAction` | `MediaSplitBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked. |
 
 ## Assets
 
@@ -78,7 +78,7 @@
 - A widget plays its beat while the pointer is over the band, and shows its finished state on touch and under reduced motion (owned by `product-widget`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
 - Scenes, code block, widget and diagram load on demand (`defineAsyncComponent`)
 - Code: the sample opens on `defaultFile` (or the first tab), numbers its lines and types them in once; the band does not link to a lone action while it shows code
-- An action's `kind` (`secondary`, `outlined`, `transparent`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
+- An action's `variant` (`secondary`, `outline`, `ghost`) wins over the drawn default; an action's `icon` is drawn before the label when it has no trailing chevron
 
 ## Accessibility
 
@@ -177,7 +177,7 @@
     label: 'Learn more',
     href: 'https://www.azion.com/en/documentation/products/build/applications/application-accelerator/',
     trailing: true,
-    kind: 'transparent'
+    variant: 'ghost'
   }
 </script>
 

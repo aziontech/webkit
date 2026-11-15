@@ -2251,9 +2251,9 @@
  "removed": {
   "article-index-blog": "ArticleIndex from @aziontech/webkit/article-index (filters defaults to category-search)",
   "article-index-resource-hub": "ArticleIndex from @aziontech/webkit/article-index with filters=\"facets\"",
-  "banner": "CallToAction from @aziontech/webkit/call-to-action with kind=\"announcement\"; the aside slot becomes the default slot",
+  "banner": "CallToAction from @aziontech/webkit/call-to-action with variant=\"announcement\"; the aside slot becomes the default slot",
   "calendar-preset": "DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options",
-  "closing-call-to-action-agents": "ClosingCallToAction from @aziontech/webkit/closing-call-to-action with kind=\"primary\" and the same audiences, typedLead, typedWords and description",
+  "closing-call-to-action-agents": "ClosingCallToAction from @aziontech/webkit/closing-call-to-action with variant=\"primary\" and the same audiences, typedLead, typedWords and description",
   "closing-call-to-action-templates": "TemplateGallery from @aziontech/webkit/template-gallery with closing; the same title, actions, templates and deployLabel",
   "code-split": "MediaSplitBand from @aziontech/webkit/media-split-band with the same codeTabs, defaultFile and actions",
   "compare-support-tiers": "ComparePlans from @aziontech/webkit/compare-plans; pass the tiers as plans",
@@ -2272,7 +2272,7 @@
   "field-password": "Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)",
   "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
   "field-radio": "RadioGroup v-model with a RadioGroup.Item per option (description on the item)",
-  "field-radio-block": "RadioGroup kind=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
+  "field-radio-block": "RadioGroup variant=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
   "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
   "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
   "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
@@ -2282,23 +2282,23 @@
   "field-time": "Field + FieldLabel + Input + FieldDescription",
   "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
   "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
-  "hero-copy-on-top-art": "HeroBand from @aziontech/webkit/hero-band with kind=\"copy-on-top-art\" and the same levels",
+  "hero-copy-on-top-art": "HeroBand from @aziontech/webkit/hero-band with variant=\"copy-on-top-art\" and the same levels",
   "hero-with-opening": "HeroBand from @aziontech/webkit/hero-band with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
   "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
-  "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
+  "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
   "quote-carousel": "ClientQuotes from @aziontech/webkit/client-quotes, or Quote cards in a CardCarousel",
-  "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes kind=\"card\" with description on the item",
-  "radio-cards": "RadioGroup kind=\"card\" orientation=\"horizontal\" with :options (the items move to options as is); the #default=\"{ item }\" slot becomes #option=\"{ option }\" and #tag=\"{ item }\" becomes #tag=\"{ option }\"",
-  "resource-grid": "CapabilityGrid from @aziontech/webkit/capability-grid with title-kind=\"horizontal\"; items keep title, description and href",
+  "radio-button": "a radio is a RadioGroup.Item inside one RadioGroup that holds the v-model: <RadioGroup v-model><RadioGroup.Item value>Label</RadioGroup.Item></RadioGroup>; a Field.Label choice card becomes variant=\"card\" with description on the item",
+  "radio-cards": "RadioGroup variant=\"card\" orientation=\"horizontal\" with :options (the items move to options as is); the #default=\"{ item }\" slot becomes #option=\"{ option }\" and #tag=\"{ item }\" becomes #tag=\"{ option }\"",
+  "resource-grid": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"horizontal\"; items keep title, description and href",
   "shell-mockup": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
   "shell-mockup-part": "ProductWidget from @aziontech/webkit/product-widget; the frame and its parts are internal",
   "shell-mockup-root": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
   "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
-  "sticky-carousel": "ProcessScroll from @aziontech/webkit/process-scroll with pinned and title-kind=\"centered\"; items become steps",
+  "sticky-carousel": "ProcessScroll from @aziontech/webkit/process-scroll with pinned and title-variant=\"centered\"; items become steps",
   "sticky-scroll-code": "FeatureScroll from @aziontech/webkit/feature-scroll; items keep title, description, code and action",
-  "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu kind); the property kind shows its own tokens",
+  "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu type); the property type shows its own tokens",
   "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
-  "use-case-links": "CapabilityGrid from @aziontech/webkit/capability-grid with title-kind=\"left\"; items keep icon, title, description and href",
+  "use-case-links": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"left\"; items keep icon, title, description and href",
   "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config"
  },
  "imports": {
@@ -2415,7 +2415,7 @@
      "doc": "pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'default' | 'danger'",
      "default": "'default'",
      "required": "false",
@@ -2489,7 +2489,7 @@
      "doc": "Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`)."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'inline' | 'bar'",
      "default": "'inline'",
      "required": "false",
@@ -2533,11 +2533,11 @@
      "doc": "Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`)."
     },
     {
-     "name": "kind",
+     "name": "type",
      "type": "'code' | 'table' | 'document'",
      "default": "'document'",
      "required": "false",
-     "doc": "What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot."
+     "doc": "What the artifact is; picks the icon and `data-type`. The body is always the owner's slot."
     },
     {
      "name": "versions",
@@ -3527,8 +3527,8 @@
      "doc": "Visible label text, the fallback of the default slot (pass one or the other). Use `IconButton` for icon-only controls."
     },
     {
-     "name": "kind",
-     "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger' | 'link'",
+     "name": "variant",
+     "type": "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'link'",
      "default": "'primary'",
      "required": "false",
      "doc": "Visual variant. `link` draws an inline text action in the link colour, with no box."
@@ -3719,9 +3719,9 @@
      "doc": "Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`)."
     },
     {
-     "name": "kind",
-     "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
-     "default": "'transparent'",
+     "name": "variant",
+     "type": "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
+     "default": "'ghost'",
      "required": "false",
      "doc": "Visual variant forwarded to `IconButton`."
     },
@@ -3971,8 +3971,8 @@
      "doc": "Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders."
     },
     {
-     "name": "kind",
-     "type": "'primary' | 'secondary' | 'outlined' | 'transparent' | 'danger'",
+     "name": "variant",
+     "type": "'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'",
      "default": "'primary'",
      "required": "false",
      "doc": "Visual variant."
@@ -4078,8 +4078,8 @@
      "doc": "Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions."
     },
     {
-     "name": "kind",
-     "type": "'primary' | 'secondary' | 'outlined'",
+     "name": "variant",
+     "type": "'primary' | 'secondary' | 'outline'",
      "default": "'primary'",
      "required": "false",
      "doc": "Visual variant applied to both joined segments."
@@ -4973,7 +4973,7 @@
      "doc": "One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other."
     },
     {
-     "name": "kind",
+     "name": "type",
      "type": "'donut' | 'pie'",
      "default": "'donut'",
      "required": "false",
@@ -5401,8 +5401,8 @@
      "doc": "Formats the figure."
     },
     {
-     "name": "kind",
-     "type": "StatTileKind",
+     "name": "variant",
+     "type": "StatTileVariant",
      "default": "'mono'",
      "required": "false",
      "doc": "Figure face: `mono` is the big-number mono figure, `sans` the large heading figure."
@@ -5623,7 +5623,7 @@
      "doc": "The series, oldest first; null leaves a gap."
     },
     {
-     "name": "kind",
+     "name": "type",
      "type": "'area' | 'line' | 'bar'",
      "default": "'area'",
      "required": "false",
@@ -5921,8 +5921,8 @@
      "doc": "Icon class for the fallback when no image or label (Azion icon class)."
     },
     {
-     "name": "kind",
-     "type": "AvatarKind",
+     "name": "variant",
+     "type": "AvatarVariant",
      "default": "'circle'",
      "required": "false",
      "doc": "Visual shape of the avatar container."
@@ -6010,7 +6010,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'default' | 'reduced' | 'extended'",
      "default": "'default'",
      "required": "false",
@@ -6021,7 +6021,7 @@
      "type": "'small' | 'medium' | 'large'",
      "default": "'medium'",
      "required": "false",
-     "doc": "Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio."
+     "doc": "Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio."
     },
     {
      "name": "decorative",
@@ -6309,7 +6309,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Heading rendered in the header when the `header` slot is empty; with `kind=\"integration\"`, the item name."
+     "doc": "Heading rendered in the header when the `header` slot is empty; with `variant=\"integration\"`, the item name."
     },
     {
      "name": "padded",
@@ -6319,7 +6319,7 @@
      "doc": "Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'default' | 'integration'",
      "default": "'default'",
      "required": "false",
@@ -6330,56 +6330,56 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Integration kind: icon class for the logo mark. The `logo` slot takes an image instead."
+     "doc": "Integration variant: icon class for the logo mark. The `logo` slot takes an image instead."
     },
     {
      "name": "vendor",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Integration kind: who publishes the item, shown as \"by {vendor}\"."
+     "doc": "Integration variant: who publishes the item, shown as \"by {vendor}\"."
     },
     {
      "name": "description",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Integration kind: one or two sentences on what the item does."
+     "doc": "Integration variant: one or two sentences on what the item does."
     },
     {
      "name": "badges",
      "type": "CardBadge[]",
      "default": "[]",
      "required": "false",
-     "doc": "Integration kind: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
+     "doc": "Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant)."
     },
     {
      "name": "installed",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Integration kind: shows the Installed tag."
+     "doc": "Integration variant: shows the Installed tag."
     },
     {
      "name": "href",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Integration kind: the title links here; without it the title is a button that emits `select`."
+     "doc": "Integration variant: the title links here; without it the title is a button that emits `select`."
     },
     {
      "name": "featured",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner."
+     "doc": "Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner."
     }
    ],
    "events": [
     {
      "name": "select",
      "payload": "event: MouseEvent",
-     "notes": "Integration kind without `href`: the title (the whole tile) was activated."
+     "notes": "Integration variant without `href`: the title (the whole tile) was activated."
     }
    ],
    "slots": [
@@ -6396,7 +6396,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "Main card body: children passed without a slot name. With `kind=\"integration\"` it renders under the description."
+     "notes": "Main card body: children passed without a slot name. With `variant=\"integration\"` it renders under the description."
     },
     {
      "name": "footer",
@@ -6406,12 +6406,12 @@
     {
      "name": "logo",
      "scope": "—",
-     "notes": "Integration kind: replaces the logo mark, for an `img` with an empty `alt`."
+     "notes": "Integration variant: replaces the logo mark, for an `img` with an empty `alt`."
     },
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Integration kind: one action at the end of the tile, above the stretched title target."
+     "notes": "Integration variant: one action at the end of the tile, above the stretched title target."
     }
    ],
    "surface": "app",
@@ -6476,11 +6476,11 @@
      "doc": "Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot."
     },
     {
-     "name": "kind",
-     "type": "'contained' | 'transparent'",
+     "name": "variant",
+     "type": "'contained' | 'ghost'",
      "default": "'contained'",
      "required": "false",
-     "doc": "Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page."
+     "doc": "Whether the card draws its own surface: `contained` has a border and a surface, `ghost` sits on the page."
     },
     {
      "name": "value",
@@ -6831,7 +6831,7 @@
      "doc": "Short uppercase overline rendered above the headline."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'center' | 'start' | 'split'",
      "default": "'center'",
      "required": "false",
@@ -6875,7 +6875,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Call-to-action row under the copy, aligned with the chosen `kind`."
+     "notes": "Call-to-action row under the copy, aligned with the chosen `variant`."
     }
    ],
    "surface": "site",
@@ -6904,8 +6904,8 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
-     "type": "'default' | 'outlined' | 'muted' | 'inline' | 'option'",
+     "name": "variant",
+     "type": "'default' | 'outline' | 'muted' | 'inline' | 'option'",
      "default": "'default'",
      "required": "false",
      "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected."
@@ -6953,8 +6953,8 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
-     "type": "'default' | 'outlined' | 'muted' | 'inline' | 'option'",
+     "name": "variant",
+     "type": "'default' | 'outline' | 'muted' | 'inline' | 'option'",
      "default": "'default'",
      "required": "false",
      "doc": "Item root surface variant. `inline` removes the row's outer padding (transparent surface) for inline placement and divided in-card lists. `option` is a compact chooser row (38 px, title at body-md) that fills when its element is pressed or selected."
@@ -7221,10 +7221,10 @@
      "type": "'color' | 'light' | 'dark'",
      "default": "'color'",
      "required": "false",
-     "doc": "The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `kind` is not `color`."
+     "doc": "The ink a single file is drawn in: `light` art (for dark surfaces) is inverted on the light theme, `dark` art is inverted on the dark theme, `color` is kept as is. Ignored when `srcLight` is set or `variant` is not `color`."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'color' | 'monochrome' | 'current' | 'knockout'",
      "default": "'color'",
      "required": "false",
@@ -7286,7 +7286,7 @@
      "doc": "Whether the pointer is over the host; a fragment plays its beat while it is."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'window' | 'bare'",
      "default": "undefined",
      "required": "false",
@@ -7404,7 +7404,7 @@
      "doc": "A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'combined' | 'separate'",
      "default": "'combined'",
      "required": "false",
@@ -7436,7 +7436,7 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'stacked' | 'split'",
      "default": "'stacked'",
      "required": "false",
@@ -7601,7 +7601,7 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'stacked' | 'split'",
      "default": "'stacked'",
      "required": "false",
@@ -8131,7 +8131,7 @@
      "doc": "Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from."
     },
     {
-     "name": "kind",
+     "name": "type",
      "type": "'code' | 'output'",
      "default": "'code'",
      "required": "false",
@@ -8386,7 +8386,7 @@
      "type": "TableColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
+     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, sortable?, grow?, principal?, frozen?, width?, minWidth?, align?, type?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `type: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
     },
     {
      "name": "rowKey",
@@ -8414,7 +8414,7 @@
      "type": "(row: TRow) => boolean",
      "default": "undefined",
      "required": "false",
-     "doc": "decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
+     "doc": "decides per row whether it can be selected (`(row) => row.type === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
     },
     {
      "name": "selectOnRowClick",
@@ -8491,7 +8491,7 @@
      "type": "FilterField[]",
      "default": "[]",
      "required": "false",
-     "doc": "Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu kind, properties for the property kind."
+     "doc": "Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu type, properties for the property type."
     },
     {
      "name": "initialState",
@@ -9480,7 +9480,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "type",
      "type": "'previous' | 'next' | 'number' | 'more'",
      "default": "'number'",
      "required": "false",
@@ -9505,14 +9505,14 @@
     {
      "name": "click",
      "payload": "MouseEvent",
-     "notes": "Fires on activation. Not emitted while `disabled` (the native `disabled` attribute also blocks it), and never for `kind=\"more\"`."
+     "notes": "Fires on activation. Not emitted while `disabled` (the native `disabled` attribute also blocks it), and never for `type=\"more\"`."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "The page number. Rendered only when `kind` is `number`."
+     "notes": "The page number. Rendered only when `type` is `number`."
     }
    ],
    "surface": "app",
@@ -10029,7 +10029,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'note' | 'info' | 'tip' | 'check' | 'warning' | 'danger'",
      "default": "'note'",
      "required": "false",
@@ -10409,7 +10409,7 @@
     {
      "name": "footer",
      "scope": "—",
-     "notes": "The footer under the article (`Footer kind=\"content\"`)."
+     "notes": "The footer under the article (`Footer variant=\"content\"`)."
     },
     {
      "name": "search",
@@ -10630,7 +10630,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'block' | 'line'",
      "default": "'block'",
      "required": "false",
@@ -11008,7 +11008,7 @@
      "doc": "Shows the label header (the sample label or the language name) on a single sample."
     },
     {
-     "name": "kind",
+     "name": "type",
      "type": "'code' | 'output'",
      "default": "'code'",
      "required": "false",
@@ -11533,7 +11533,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'rectangle' | 'circle'",
      "default": "'rectangle'",
      "required": "false",
@@ -11711,8 +11711,8 @@
      "doc": "Upper bound; percentage = `value / max * 100`."
     },
     {
-     "name": "kind",
-     "type": "ProgressKind` (`'rounded' | 'flat'`)",
+     "name": "variant",
+     "type": "ProgressVariant` (`'rounded' | 'flat'`)",
      "default": "'flat'",
      "required": "false",
      "doc": "Track and fill corner-radius variant."
@@ -12869,7 +12869,7 @@
      "doc": "Fallback text when the default slot is empty."
     },
     {
-     "name": "kind",
+     "name": "type",
      "type": "'helper' | 'invalid' | 'required' | 'disabled'",
      "default": "'helper'",
      "required": "false",
@@ -13100,7 +13100,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'inline' | 'overlay'",
      "default": "'inline'",
      "required": "false",
@@ -13172,14 +13172,14 @@
     {
      "name": "reject",
      "payload": "(event: DragEvent, files: File[])",
-     "notes": "Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple=\"false\"`. `files` holds only the rejected files and is never empty. When a drop has both kinds of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`."
+     "notes": "Activation event. Fires on the same drop when one or more files were filtered out, because they do not match `accept` or exceed `multiple=\"false\"`. `files` holds only the rejected files and is never empty. When a drop has both variants of file, `drop` fires first, then `reject`, with the same `event`. Not emitted when `disabled`."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "Actions or extra content under the description, typically a \"Browse files\" `Button`. Rendered only in `kind=\"inline\"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered."
+     "notes": "Actions or extra content under the description, typically a \"Browse files\" `Button`. Rendered only in `variant=\"inline\"`. The overlay is `aria-hidden` decoration, so interactive content there would be unreachable and is not rendered."
     }
    ],
    "surface": "app",
@@ -13276,7 +13276,7 @@
      "type": "FilterMenuField[]",
      "default": "[]",
      "required": "false",
-     "doc": "Fields the menu lists, in order, each with its kind and values."
+     "doc": "Fields the menu lists, in order, each with its type and values."
     },
     {
      "name": "label",
@@ -13343,7 +13343,7 @@
      "type": "FilterMenuField[]",
      "default": "[]",
      "required": "false",
-     "doc": "Fields the menu lists, in order, each with its kind and values."
+     "doc": "Fields the menu lists, in order, each with its type and values."
     },
     {
      "name": "label",
@@ -13469,11 +13469,11 @@
      "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'default' | 'card'",
      "default": "'default'",
      "required": "false",
-     "doc": "Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupKind`, exported."
+     "doc": "Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupVariant`, exported."
     },
     {
      "name": "options",
@@ -13567,11 +13567,11 @@
      "doc": "Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'default' | 'card'",
      "default": "'default'",
      "required": "false",
-     "doc": "Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupKind`, exported."
+     "doc": "Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupVariant`, exported."
     },
     {
      "name": "options",
@@ -13648,8 +13648,8 @@
      "doc": "Fallback text when the default slot is empty."
     },
     {
-     "name": "kind",
-     "type": "'filled' | 'outlined' | 'dashed'",
+     "name": "variant",
+     "type": "'filled' | 'outline' | 'dashed'",
      "default": "'filled'",
      "required": "false",
      "doc": "Visual variant. Filled (grey fill) is an applied value, outlined an available one, dashed the control that adds one."
@@ -13701,7 +13701,7 @@
     {
      "name": "remove",
      "payload": "(event: MouseEvent, label: string)",
-     "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), **immediately** — the chip does not hide or unmount itself first, so the consumer decides whether the chip disappears, stays, or becomes an `outlined` offer. `label` is the chip's `label` prop, identifying which chip was removed."
+     "notes": "Fires when `removable` is true and the remove button is activated (click / Enter / Space), **immediately** — the chip does not hide or unmount itself first, so the consumer decides whether the chip disappears, stays, or becomes an `outline` offer. `label` is the chip's `label` prop, identifying which chip was removed."
     },
     {
      "name": "click",
@@ -13797,11 +13797,11 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'default' | 'privacy'",
      "default": "'default'",
      "required": "false",
-     "doc": "Visual variant (`SwitchKind`). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
+     "doc": "Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on)."
     },
     {
      "name": "autofocus",
@@ -14247,7 +14247,7 @@
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
-     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `kind=\"checkbox\"` / `kind=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
+     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type=\"checkbox\"` / `type=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
     }
    ],
    "slots": [
@@ -14323,7 +14323,7 @@
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
-     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `kind=\"checkbox\"` / `kind=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
+     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type=\"checkbox\"` / `type=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
     }
    ],
    "slots": [
@@ -14477,7 +14477,7 @@
      "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'summary' | 'chips'",
      "default": "'summary'",
      "required": "false",
@@ -14488,7 +14488,7 @@
      "type": "number",
      "default": "0",
      "required": "false",
-     "doc": "With `kind=\"chips\"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps."
+     "doc": "With `variant=\"chips\"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps."
     },
     {
      "name": "searchable",
@@ -14647,7 +14647,7 @@
      "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'summary' | 'chips'",
      "default": "'summary'",
      "required": "false",
@@ -14658,7 +14658,7 @@
      "type": "number",
      "default": "0",
      "required": "false",
-     "doc": "With `kind=\"chips\"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps."
+     "doc": "With `variant=\"chips\"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps."
     },
     {
      "name": "searchable",
@@ -14812,11 +14812,11 @@
      "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`."
     },
     {
-     "name": "kind",
-     "type": "'outlined' | 'transparent'",
-     "default": "'outlined'",
+     "name": "variant",
+     "type": "'outline' | 'ghost'",
+     "default": "'outline'",
      "required": "false",
-     "doc": "Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb."
+     "doc": "Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb."
     },
     {
      "name": "disabled",
@@ -14921,11 +14921,11 @@
      "doc": "Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`."
     },
     {
-     "name": "kind",
-     "type": "'outlined' | 'transparent'",
-     "default": "'outlined'",
+     "name": "variant",
+     "type": "'outline' | 'ghost'",
+     "default": "'outline'",
      "required": "false",
-     "doc": "Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb."
+     "doc": "Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb."
     },
     {
      "name": "disabled",
@@ -15095,7 +15095,7 @@
      "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'content' | 'site'",
      "default": "'content'",
      "required": "false",
@@ -15172,7 +15172,7 @@
      "doc": "Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'content' | 'site'",
      "default": "'content'",
      "required": "false",
@@ -15810,7 +15810,7 @@
      "type": "SiteLayoutFooter",
      "default": "undefined",
      "required": "false",
-     "doc": "The footer, bound onto `SiteFooter`: `{ kind?, home?, columns?, socials?, statusLabel?, languages? }`; `kind` defaults to `site`. No footer when absent."
+     "doc": "The footer, bound onto `SiteFooter`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent."
     },
     {
      "name": "searchPlaceholder",
@@ -16409,7 +16409,7 @@
      "doc": "One sentence under the title that says what the setting does."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'field' | 'compact' | 'stacked'",
      "default": "'field'",
      "required": "false",
@@ -16467,11 +16467,11 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'floating' | 'docked' | 'plain' | 'fade' | 'centered'",
      "default": "'floating'",
      "required": "false",
-     "doc": "How the bar sits at the bottom of its scroll region. See the kind table below."
+     "doc": "How the bar sits at the bottom of its scroll region. See the variant table below."
     }
    ],
    "slots": [
@@ -16513,7 +16513,7 @@
      "doc": "Accessible name for the header landmark. Empty uses the locale catalog (`Global header`)."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'content' | 'site'",
      "default": "'content'",
      "required": "false",
@@ -16558,7 +16558,7 @@
      "doc": "Accessible name for the header landmark. Empty uses the locale catalog (`Global header`)."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'content' | 'site'",
      "default": "'content'",
      "required": "false",
@@ -16871,8 +16871,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "LogoWallKind",
+     "name": "variant",
+     "type": "LogoWallVariant",
      "default": "'square'",
      "required": "false",
      "doc": "The cell's proportion; `rectangle` sets every cell at 3:2, keeps three columns below `sm`, and holds three columns beside `aside` from `lg`."
@@ -16966,8 +16966,8 @@
      "doc": "Alternative text describing what the image shows."
     },
     {
-     "name": "kind",
-     "type": "MediaSplitKind",
+     "name": "variant",
+     "type": "MediaSplitVariant",
      "default": "'media-end'",
      "required": "false",
      "doc": "Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first."
@@ -17016,7 +17016,7 @@
     },
     {
      "name": "texture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'grid'",
      "required": "false",
      "doc": "Texture the media half is grounded with; `none` leaves the cell bare."
@@ -17083,7 +17083,7 @@
     {
      "name": "actions",
      "scope": "—",
-     "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind=\"secondary\"` for the action, `kind=\"outlined\"` for a second beside it, `icon=\"ai ai-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
+     "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant=\"secondary\"` for the action, `variant=\"outline\"` for a second beside it, `icon=\"ai ai-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
     }
    ],
    "surface": "site",
@@ -17099,7 +17099,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'plain' | 'band'",
      "default": "'plain'",
      "required": "false",
@@ -17297,8 +17297,8 @@
      "doc": "Short uppercase overline rendered above the headline."
     },
     {
-     "name": "kind",
-     "type": "CallToActionKind",
+     "name": "variant",
+     "type": "CallToActionVariant",
      "default": "'panel'",
      "required": "false",
      "doc": "Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column."
@@ -17425,8 +17425,8 @@
      "doc": "Accessible name for the scrollable track, announced before its contents."
     },
     {
-     "name": "kind",
-     "type": "CarouselKind",
+     "name": "variant",
+     "type": "CarouselVariant",
      "default": "'strip'",
      "required": "false",
      "doc": "Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card."
@@ -17470,8 +17470,8 @@
      "doc": "Accessible name for the scrollable track, announced before its contents."
     },
     {
-     "name": "kind",
-     "type": "CarouselKind",
+     "name": "variant",
+     "type": "CarouselVariant",
      "default": "'strip'",
      "required": "false",
      "doc": "Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card."
@@ -17530,8 +17530,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "BannerArtKind",
+     "name": "variant",
+     "type": "BannerArtVariant",
      "default": "'map'",
      "required": "false",
      "doc": "Which backdrop to draw: `globe`, `map` or `network`."
@@ -17561,8 +17561,8 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
-     "type": "HeroKind",
+     "name": "variant",
+     "type": "HeroVariant",
      "default": "'band'",
      "required": "false",
      "doc": "Height of the band; `screen` fills one viewport minus `--hero-banner-offset`."
@@ -17597,7 +17597,7 @@
     },
     {
      "name": "texture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'none'",
      "required": "false",
      "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
@@ -17618,7 +17618,7 @@
     },
     {
      "name": "floorTexture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'none'",
      "required": "false",
      "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
@@ -17649,7 +17649,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+     "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length."
     },
     {
      "name": "bottomHeight",
@@ -17721,8 +17721,8 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
-     "type": "HeroKind",
+     "name": "variant",
+     "type": "HeroVariant",
      "default": "'band'",
      "required": "false",
      "doc": "Height of the band; `screen` fills one viewport minus `--hero-banner-offset`."
@@ -17757,7 +17757,7 @@
     },
     {
      "name": "texture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'none'",
      "required": "false",
      "doc": "Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot."
@@ -17778,7 +17778,7 @@
     },
     {
      "name": "floorTexture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'none'",
      "required": "false",
      "doc": "Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip."
@@ -17809,7 +17809,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length."
+     "doc": "Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length."
     },
     {
      "name": "bottomHeight",
@@ -17993,8 +17993,8 @@
      "doc": "Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled."
     },
     {
-     "name": "kind",
-     "type": "QuoteKind",
+     "name": "variant",
+     "type": "QuoteVariant",
      "default": "'inline'",
      "required": "false",
      "doc": "Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one."
@@ -18083,7 +18083,7 @@
     },
     {
      "name": "texture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'none'",
      "required": "false",
      "doc": "Texture the media column is grounded with; `none` leaves it bare."
@@ -18585,7 +18585,7 @@
     {
      "name": "navigate",
      "payload": "(event: MouseEvent, node: SidebarMenuNode)",
-     "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
+     "notes": "A leaf row — or the **label** of a row that owns children, of either type, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
     }
    ],
    "slots": [
@@ -18659,7 +18659,7 @@
     {
      "name": "navigate",
      "payload": "(event: MouseEvent, node: SidebarMenuNode)",
-     "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
+     "notes": "A leaf row — or the **label** of a row that owns children, of either type, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
     }
    ],
    "slots": [
@@ -19702,7 +19702,7 @@
      "doc": "Label of the cancel button. Empty uses the locale catalog (`Cancel`)."
     },
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'danger' | 'primary'",
      "default": "'danger'",
      "required": "false",
@@ -23299,8 +23299,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "ArticleCardsKind",
+     "name": "variant",
+     "type": "ArticleCardsVariant",
      "default": "'start'",
      "required": "false",
      "doc": "Placement of the heading: `start` sets it at the start, `center` centres it over the cards."
@@ -23545,8 +23545,8 @@
      "doc": "Label of the empty-state button that clears every filter; no button renders without it."
     },
     {
-     "name": "rowKind",
-     "type": "ArticleIndexRowKind",
+     "name": "rowVariant",
+     "type": "ArticleIndexRowVariant",
      "default": "undefined",
      "required": "false",
      "doc": "Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`."
@@ -23816,8 +23816,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "ClosingCallToActionKind",
+     "name": "variant",
+     "type": "ClosingCallToActionVariant",
      "default": "'split'",
      "required": "false",
      "doc": "Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone."
@@ -23890,7 +23890,7 @@
      "type": "ClosingCallToActionAudience[]",
      "default": "[]",
      "required": "false",
-     "doc": "The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, kind?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more."
+     "doc": "The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more."
     },
     {
      "name": "typedLead",
@@ -24338,7 +24338,7 @@
      "type": "FeatureScrollItem[]",
      "default": "[]",
      "required": "false",
-     "doc": "The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the step, secondary unless `kind` says otherwise."
+     "doc": "The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise."
     }
    ],
    "surface": "site",
@@ -24437,8 +24437,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "FeatureTilesKind",
+     "name": "variant",
+     "type": "FeatureTilesVariant",
      "default": "'artwork'",
      "required": "false",
      "doc": "Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule."
@@ -24534,8 +24534,8 @@
      "doc": "Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
     },
     {
-     "name": "titleKind",
-     "type": "SectionTitleKind",
+     "name": "titleVariant",
+     "type": "SectionTitleVariant",
      "default": "'center'",
      "required": "false",
      "doc": "Alignment of the section title over the grid: `center`, `start` or `split`."
@@ -24575,8 +24575,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "HeroBandKind",
+     "name": "variant",
+     "type": "HeroBandVariant",
      "default": "'title-band'",
      "required": "false",
      "doc": "Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot."
@@ -24786,7 +24786,7 @@
      "type": "CapabilityGridAction",
      "default": "undefined",
      "required": "false",
-     "doc": "Second button under the section title, `outlined`; same shape. Shown only with a label and a link."
+     "doc": "Second button under the section title, `outline`; same shape. Shown only with a label and a link."
     },
     {
      "name": "anchor",
@@ -24796,8 +24796,8 @@
      "doc": "In-page id set on the band so a hash link can target it."
     },
     {
-     "name": "titleKind",
-     "type": "SectionTitleKind",
+     "name": "titleVariant",
+     "type": "SectionTitleVariant",
      "default": "'center'",
      "required": "false",
      "doc": "Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns."
@@ -24816,15 +24816,15 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'console' | 'diagram'",
      "default": "'console'",
      "required": "false",
      "doc": "What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height."
     },
     {
-     "name": "titleKind",
-     "type": "SectionTitleKind",
+     "name": "titleVariant",
+     "type": "SectionTitleVariant",
      "default": "'center'",
      "required": "false",
      "doc": "Layout of the headline block."
@@ -24873,7 +24873,7 @@
     },
     {
      "name": "texture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'pixelate'",
      "required": "false",
      "doc": "Texture the panel is grounded with."
@@ -24918,7 +24918,7 @@
      "type": "ConsolePanelAction",
      "default": "undefined",
      "required": "false",
-     "doc": "Second button under the headline, `outlined`; same shape. Shown only with a label and a link."
+     "doc": "Second button under the headline, `outline`; same shape. Shown only with a label and a link."
     }
    ],
    "slots": [
@@ -24955,8 +24955,8 @@
      "doc": "Overline above the title."
     },
     {
-     "name": "titleKind",
-     "type": "SectionTitleKind",
+     "name": "titleVariant",
+     "type": "SectionTitleVariant",
      "default": "'split'",
      "required": "false",
      "doc": "Alignment of the section title over the card row."
@@ -25139,7 +25139,7 @@
      "type": "HeroFormField[]",
      "default": "[]",
      "required": "false",
-     "doc": "The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it."
+     "doc": "The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it."
     },
     {
      "name": "submitLabel",
@@ -25256,7 +25256,7 @@
      "type": "JobPostingForm",
      "default": "—",
      "required": "true",
-     "doc": "The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, kind, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`."
+     "doc": "The application form: `{ title, description?, submitLabel, anchor?, ariaLabel?, fields }`, where `anchor` is the id of the apply section the rail button links to and a field is `{ name, type, label, required?, helper?, placeholder?, accept?, autocomplete?, country? }`."
     },
     {
      "name": "messages",
@@ -25305,7 +25305,7 @@
      "type": "JobPostingSection[]",
      "default": "[]",
      "required": "false",
-     "doc": "The description, one row per section in order; each is `{ title, blocks }` where a block is `{ kind: 'text', text }` or `{ kind: 'list', items }`."
+     "doc": "The description, one row per section in order; each is `{ title, blocks }` where a block is `{ variant: 'text', text }` or `{ type: 'list', items }`."
     },
     {
      "name": "secondaryAction",
@@ -25522,15 +25522,15 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "LogoWallQuoteKind",
+     "name": "variant",
+     "type": "LogoWallQuoteVariant",
      "default": "'wall'",
      "required": "false",
      "doc": "Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos."
     },
     {
-     "name": "quoteKind",
-     "type": "LogoWallQuoteQuoteKind",
+     "name": "quoteVariant",
+     "type": "LogoWallQuoteQuoteVariant",
      "default": "'signed'",
      "required": "false",
      "doc": "Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence."
@@ -25648,7 +25648,7 @@
     },
     {
      "name": "texture",
-     "type": "TextureMaterialKind",
+     "type": "TextureMaterialVariant",
      "default": "'pixelate'",
      "required": "false",
      "doc": "Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`."
@@ -25728,14 +25728,14 @@
      "type": "MediaSplitBandAction",
      "default": "undefined",
      "required": "false",
-     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind."
+     "doc": "First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `variant` overrides the drawn variant."
     },
     {
      "name": "secondaryAction",
      "type": "MediaSplitBandAction",
      "default": "undefined",
      "required": "false",
-     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked."
+     "doc": "Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked."
     }
    ],
    "surface": "site",
@@ -25751,8 +25751,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "MediaSplitStackKind",
+     "name": "variant",
+     "type": "MediaSplitStackVariant",
      "default": "'media-end'",
      "required": "false",
      "doc": "Layout of the run: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band."
@@ -25806,8 +25806,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "NetworkSectionKind",
+     "name": "variant",
+     "type": "NetworkSectionVariant",
      "default": "'outcomes'",
      "required": "false",
      "doc": "Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures."
@@ -26098,8 +26098,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "SiteFooterKind",
+     "name": "variant",
+     "type": "SiteFooterVariant",
      "default": "'site'",
      "required": "false",
      "doc": "Where the footer sits: `site` closes a framed marketing page and draws its frame, `content` runs the bands full bleed."
@@ -26682,8 +26682,8 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
-     "type": "CardGridKind",
+     "name": "variant",
+     "type": "CardGridVariant",
      "default": "'gap'",
      "required": "false",
      "doc": "Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks."
@@ -26746,8 +26746,8 @@
    "structure": "composition",
    "props": [
     {
-     "name": "kind",
-     "type": "CardGridKind",
+     "name": "variant",
+     "type": "CardGridVariant",
      "default": "'gap'",
      "required": "false",
      "doc": "Register of the grid: gutters between self-contained cards, hairline rules drawn by the gaps, or framed cells that draw their own rules and marks."
@@ -26816,7 +26816,7 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
+     "name": "variant",
      "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
      "default": "'dots'",
      "required": "false",
@@ -26926,8 +26926,8 @@
      "doc": "Short uppercase overline rendered above the headline."
     },
     {
-     "name": "kind",
-     "type": "SectionModuleKind",
+     "name": "variant",
+     "type": "SectionModuleVariant",
      "default": "'start'",
      "required": "false",
      "doc": "Layout of the default header row."
@@ -27054,8 +27054,8 @@
    "structure": "monolithic",
    "props": [
     {
-     "name": "kind",
-     "type": "MediaTileKind",
+     "name": "variant",
+     "type": "MediaTileVariant",
      "default": "'frame'",
      "required": "false",
      "doc": "Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates."
@@ -27413,9 +27413,9 @@
      "doc": "Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders."
     },
     {
-     "name": "kind",
-     "type": "'transparent' | 'outlined'",
-     "default": "'transparent'",
+     "name": "variant",
+     "type": "'ghost' | 'outline'",
+     "default": "'ghost'",
      "required": "false",
      "doc": "Visual variant of every button."
     },
@@ -28686,7 +28686,7 @@
    "title": "Blocks/Account/OnboardingForm",
    "source": "blocks/account/onboarding-form/onboarding-form.vue",
    "surface": "app",
-   "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `kind=\"card\"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
+   "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant=\"card\"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
    "intents": [
     "onboarding",
     "onboarding form",
@@ -29456,7 +29456,7 @@
    "title": "Blocks/Auth/SignIn",
    "source": "blocks/auth/sign-in/sign-in.vue",
    "surface": "app",
-   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
+   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `variant=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
    "intents": [
     "login",
     "log in",
@@ -29645,7 +29645,7 @@
    "title": "Blocks/Create/CreateDrawer",
    "source": "blocks/create/create-drawer/create-drawer.vue",
    "surface": "app",
-   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`kind=\"card\"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.",
+   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`variant=\"card\"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.",
    "intents": [
     "create domain",
     "add domain",
@@ -29928,7 +29928,7 @@
    "title": "Blocks/Create/CreatePage",
    "source": "blocks/create/create-page/create-page.vue",
    "surface": "app",
-   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`kind=\"card\"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.",
+   "summary": "The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`variant=\"card\"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.",
    "intents": [
     "create page",
     "create resource page",
@@ -30043,7 +30043,7 @@
    "title": "Blocks/Create/CreateWizard",
    "source": "blocks/create/create-wizard/create-wizard.vue",
    "surface": "app",
-   "summary": "The page a first-level resource is created on one step at a time, built on the `Wizard` component: the creation header, a page heading, then the Wizard with its step rail on the start side (completed steps reachable, later ones locked), the current step's heading and fields, and its footer with Cancel, Previous and Next, Next turning into the create action on the last step. Next validates the step it leaves and stays put with the message under the field when it fails; a Review step shows the create's loading state and confirms it in a toast. Every create asks first where the resource runs: a chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings. CreateAndDeploy is the same frame for a resource that is bound to another and deployed in one act (a service that serves a project on a domain): Project, then Domain and deployment, ending on Create and deploy. Built from `Wizard`, `PageHeader`, `SettingRow`, `GlobalHeader`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind=\"card\"`), `Item`, `Textarea`, `HelperText` and `Button`.",
+   "summary": "The page a first-level resource is created on one step at a time, built on the `Wizard` component: the creation header, a page heading, then the Wizard with its step rail on the start side (completed steps reachable, later ones locked), the current step's heading and fields, and its footer with Cancel, Previous and Next, Next turning into the create action on the last step. Next validates the step it leaves and stays put with the message under the field when it fails; a Review step shows the create's loading state and confirms it in a toast. Every create asks first where the resource runs: a chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings. CreateAndDeploy is the same frame for a resource that is bound to another and deployed in one act (a service that serves a project on a domain): Project, then Domain and deployment, ending on Create and deploy. Built from `Wizard`, `PageHeader`, `SettingRow`, `GlobalHeader`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`variant=\"card\"`), `Item`, `Textarea`, `HelperText` and `Button`.",
    "intents": [
     "multipage create",
     "multi-step create page",
@@ -30167,7 +30167,7 @@
    "title": "Blocks/Create/DeployDrawer",
    "source": "blocks/create/deploy-drawer/deploy-drawer.vue",
    "surface": "app",
-   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`kind=\"card\"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
+   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant=\"card\"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
    "intents": [
     "deploy drawer",
     "deploy panel",
@@ -32596,7 +32596,7 @@
    "title": "Blocks/Edit/EditResource",
    "source": "blocks/edit/edit-resource/edit-resource.vue",
    "surface": "app",
-   "summary": "The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `RadioGroup` choice cards (`kind=\"card\"`), `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
+   "summary": "The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `RadioGroup` choice cards (`variant=\"card\"`), `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
    "intents": [
     "settings page",
     "resource settings",
@@ -32923,7 +32923,7 @@
    "title": "Blocks/Edit/RuleBuilder",
    "source": "blocks/edit/rule-builder/rule-builder.vue",
    "surface": "app",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`kind=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -33525,7 +33525,7 @@
    "title": "Blocks/Shell/Docs",
    "source": "blocks/shell/docs/docs.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPrevNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`variant=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPrevNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -33693,7 +33693,7 @@
    "title": "Blocks/Shell/Site",
    "source": "blocks/shell/site/site.vue",
    "surface": "site",
-   "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`kind: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.",
+   "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.",
    "intents": [
     "site shell",
     "marketing site layout",
@@ -33806,7 +33806,7 @@
    "title": "Blocks/State/FirstUse",
    "source": "blocks/state/first-use/first-use.vue",
    "surface": "app",
-   "summary": "The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media kind=\"icon\"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The block a first-level list renders before the account owns any resource of that kind: a flush Card holding an EmptyState (the resource glyph, headline, lead and a Documentation link) over an Item.List of the ways to create the first one, each led by `Item.Media type=\"icon\"` (the CLI method copies `azion deploy`), with the promo cards below it, each a link covering its card: Catalog templates (only for resource kinds that have a template catalog) and agent onboarding, whose frames carry the Claude, Codex, Gemini and Cursor marks from the webkit assets. The EmptyState’s icon slot shows the resource glyph; an app may draw a richer figure there. Every list that is still empty renders it with its own nouns, methods and promos. Built from Card, EmptyState, Item, Button, InputGroup, Input, CopyButton and Link. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "empty state",
     "empty list",
@@ -34451,7 +34451,7 @@
    "title": "Blocks/View/Marketplace",
    "source": "blocks/view/marketplace/marketplace.vue",
    "surface": "app",
-   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card kind=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "marketplace",
     "integration catalog",
@@ -35113,7 +35113,7 @@
    "title": "Blocks/View/TemplateBrowser",
    "source": "blocks/view/template-browser/template-browser.vue",
    "surface": "app",
-   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card kind=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "template browser",
     "template gallery",

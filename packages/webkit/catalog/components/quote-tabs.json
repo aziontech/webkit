@@ -7,7 +7,7 @@
   "As a success-story band where the wall of customers and the quotation are the same content, not two lists."
  ],
  "avoidWhen": [
-  "For one quotation on its own → use `quote` with `kind=\"highlight\"`.",
+  "For one quotation on its own → use `quote` with `variant=\"highlight\"`.",
   "For a band of customer quotes the reader browses by client → use `client-quotes`.",
   "For a wall whose cards link to each customer's story → use `logo-wall`.",
   "For a moving strip of marks with no links → use `ticker`.",

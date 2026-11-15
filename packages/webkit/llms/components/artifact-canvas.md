@@ -42,7 +42,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `—` | true | File name or title of the artifact (`top-orders.sql`); names the panel. |
 | `meta` | `string` | `''` | false | Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`). |
-| `kind` | `'code' \| 'table' \| 'document'` | `'document'` | false | What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot. |
+| `type` | `'code' \| 'table' \| 'document'` | `'document'` | false | What the artifact is; picks the icon and `data-type`. The body is always the owner's slot. |
 | `versions` | `number` | `1` | false | How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager. |
 | `copyValue` | `string` | `''` | false | Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy. |
 | `downloadHref` | `string` | `''` | false | URL of the version shown, for Download (`download` takes the title). Empty hides Download. |
@@ -75,7 +75,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
 
 ## States
 
-- `data-kind` on the root (`code`, `table`, `document`); `data-streaming` while a version is generated.
+- `data-type` on the root (`code`, `table`, `document`); `data-streaming` while a version is generated.
 - One version: no pager; the toolbar keeps Copy and Download, and is not drawn when neither is set and the `actions` slot is empty.
 - `streaming`: the pager is disabled, the body has `aria-busy="true"`, and the status reads `Generating a new version`.
 - No `copyValue` / `downloadHref`: that control is not drawn.
@@ -205,7 +205,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
           v-model:version="version"
           title="top-orders.sql"
           :meta="`SQL · ${versions[version].split('\n').length} lines`"
-          kind="code"
+          type="code"
           :versions="versions.length"
           :copy-value="versions[version]"
           @close="hide"
@@ -256,7 +256,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
       <ArtifactCanvas
         title="cache-hits-by-country.csv"
         meta="Last 7 days · 3 rows"
-        kind="table"
+        type="table"
         :streaming="streaming"
         download-href="data:text/csv;charset=utf-8,country,requests,hit"
       >
@@ -304,7 +304,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
     <Button
       class="self-start"
       label="Regenerate"
-      kind="outlined"
+      variant="outline"
       size="small"
       icon="ai ai-refresh"
       :loading="streaming"

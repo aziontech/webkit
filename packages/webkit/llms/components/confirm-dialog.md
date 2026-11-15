@@ -1,6 +1,6 @@
 # Confirm Dialog
 
-> A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
+> A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
 
 - Import: `import ConfirmDialog from '@aziontech/webkit/confirm-dialog'`
 - Category: overlay · Surface: app · Structure: monolithic
@@ -16,7 +16,7 @@
 ## Do
 
 - The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.
-- kind="danger"` only when the outcome removes or discards something; a commit is `primary`.
+- variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
 - Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
 
@@ -41,7 +41,7 @@
 | `description` | `string` | `''` | false | One sentence that says what happens on confirm. |
 | `confirmLabel` | `string` | `''` | false | Label of the confirm button. Empty uses the locale catalog (`Confirm`). |
 | `cancelLabel` | `string` | `''` | false | Label of the cancel button. Empty uses the locale catalog (`Cancel`). |
-| `kind` | `'danger' \| 'primary'` | `'danger'` | false | Kind of the confirm button. |
+| `variant` | `'danger' \| 'primary'` | `'danger'` | false | Kind of the confirm button. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Width of the dialog. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
@@ -104,7 +104,7 @@
     <template #trigger>
       <Button
         label="Remove domain"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>
@@ -135,7 +135,7 @@
     <template #trigger>
       <Button
         label="Leave page"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>
@@ -160,13 +160,13 @@
     title="Clear cached content again?"
     description="This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request."
     confirm-label="Clear again"
-    kind="primary"
+    variant="primary"
     @confirm="open = false"
   >
     <template #trigger>
       <Button
         label="Run again"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

@@ -213,13 +213,13 @@
       <Button
         label="Add row"
         icon="ai ai-plus"
-        kind="outlined"
+        variant="outline"
         size="small"
         @click="add"
       />
       <Button
         label="Delete rows"
-        kind="outlined"
+        variant="outline"
         size="small"
         :disabled="selectedCount === 0"
         @click="remove"

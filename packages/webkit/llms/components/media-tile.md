@@ -47,7 +47,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `MediaTileKind` | `'frame'` | false | Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates. |
+| `variant` | `MediaTileVariant` | `'frame'` | false | Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates. |
 | `title` | `string` | `—` | true | The caption's run-in lead, naming what the panel above it shows. |
 | `description` | `string` | `''` | false | The sentence continuing the caption after the lead; overridden by the default slot. |
 | `src` | `string` | `''` | false | URL of the tile's media image; ignored when the `media` slot is filled. |
@@ -66,7 +66,7 @@
 ## States
 
 - Visual states: `default`
-- `data-kind` carries the register, and is what moves the inset from the frame to the tile
+- `data-variant` carries the register, and is what moves the inset from the frame to the tile
 - `data-media` mirrors whether the frame holds any media
 - `data-padded` mirrors the `padded` prop
 - `data-fluid` mirrors the `fluid` prop, and is what stretches the media to the frame's width
@@ -117,11 +117,11 @@
 <template>
   <div class="flex flex-col gap-8">
     <CardGridRoot
-      kind="gap"
+      variant="gap"
       :columns="2"
     >
       <MediaTile
-        kind="frame"
+        variant="frame"
         title="Framed."
         description="The frame wraps the media alone, and the caption sits under it on the page column."
       >
@@ -130,7 +130,7 @@
         </template>
       </MediaTile>
       <MediaTile
-        kind="frame"
+        variant="frame"
         title="One frame per tile."
         description="The gutters of the gap register keep every frame its own, marks included."
       >
@@ -140,11 +140,11 @@
       </MediaTile>
     </CardGridRoot>
     <CardGridRoot
-      kind="divider"
+      variant="divider"
       :columns="2"
     >
       <MediaTile
-        kind="plain"
+        variant="plain"
         title="Plain."
         description="No rules of its own: the tile is the cell, filled and inset, and the grid draws the seam."
       >
@@ -153,7 +153,7 @@
         </template>
       </MediaTile>
       <MediaTile
-        kind="plain"
+        variant="plain"
         title="One rule per seam."
         description="The divider register rules every column, so a frame here would double each line."
       >

@@ -2,7 +2,7 @@
  "purpose": "Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use AiLoading. A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).",
  "useWhen": [
   "Content is loading and its final layout is known: text lines, cards, media blocks.",
-  "Avatar and icon placeholders, with `kind=\"circle\"`."
+  "Avatar and icon placeholders, with `variant=\"circle\"`."
  ],
  "avoidWhen": [
   "The duration is unknown and no layout is reserved → use `progress` with `indeterminate`, or `spinner`.",
@@ -18,7 +18,7 @@
  ],
  "bestPractices": [
   "Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.",
-  "For `kind=\"circle\"`, set `width` and `height` to the same value.",
+  "For `variant=\"circle\"`, set `width` and `height` to the same value.",
   "The skeleton is `aria-hidden`. Mark the container you own with `aria-busy=\"true\"` while it loads.",
   "Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated=\"false\"` only for static captures."
  ]

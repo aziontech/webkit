@@ -36,7 +36,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ### B. Attached table — `DataTable` (required)
 
-A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
+A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `type: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
 
 ### C. Environment chip — `Tag` (optional)
 
@@ -147,7 +147,7 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
     { accessorKey: 'environment', header: 'Environment' },
     { accessorKey: 'policy', header: 'Policy' },
     { accessorKey: 'certificate', header: 'Certificate' },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const countLabel = computed(
@@ -227,7 +227,7 @@ Each variant is the same screen in another state: `get_block("detail/attached-re
           <Button
             type="button"
             label="Add Domain"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-plus"
           />
