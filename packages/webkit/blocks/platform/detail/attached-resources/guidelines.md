@@ -4,6 +4,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ## When to use
 
+- Use attached-resources inside a section of a resource's Settings tab for a short list of the records it owns; it is a section, not a page.
 - A section of a resource's Settings tab lists related records owned by that resource (domains, attached origins, bound certificates) and the list is short enough to read without search or paging.
 - Each related record has two to four attributes worth scanning side by side, and one or two row actions.
 - The user adds a related record from inside the resource, so the action reads `Add <Module>`.

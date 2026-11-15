@@ -4,6 +4,7 @@ The band a create flow uses when the resource being created needs another resour
 
 ## When to use
 
+- Use resource-picker inside a create flow to bind one resource the user may reuse or create; it is a card, not a page.
 - A create flow binds a whole resource that the user may reuse or create: the project a service serves, the deployment a release is cut against, the firewall that protects a workload.
 - The candidates can run past seven, so the list needs search, paging and a no-match line.
 - Creating the bound resource takes one or a few fields that fit in the same card.
