@@ -1,10 +1,8 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
+  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -14,16 +12,6 @@
   interface StatusTag {
     label: string
     severity: TagSeverity
-  }
-  type StepStatus = 'done' | 'running' | 'failed' | 'skipped' | 'pending'
-  interface DeployStep {
-    key: string
-    title: string
-    description: string
-    status: StepStatus
-    duration: string
-    tag?: StatusTag
-    lines: LogViewLine[]
   }
 
   const REPO = { name: 'web-app', scope: 'acme' }
@@ -47,6 +35,8 @@
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
     return { label: 'Idle', severity: 'neutral' }
   })
+
+  type DeployStep = LogViewStep & { tag?: StatusTag }
 
   const steps: DeployStep[] = [
     {
@@ -275,15 +265,14 @@
       lines: []
     }
   ]
-  const lines = steps.flatMap((step, index) =>
-    step.lines.map((line) => ({ ...line, id: `${index}-${line.id}` }))
-  )
   const logViews = [
     { label: 'Phased', value: 'phased' },
     { label: 'Complete', value: 'complete' }
   ]
 
-  const logView = ref('phased')
+  const stepTag = (key: string) => steps.find((step) => step.key === key)?.tag
+
+  const logView = ref<LogViewStepsView>('phased')
   const openStep = ref('rules')
 
   const RUN_TOAST = 'async-submit-run'
@@ -370,10 +359,13 @@
           </template>
 
           <template #content>
-            <div class="flex w-full flex-col">
-              <div
-                class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-              >
+            <LogView.Steps
+              v-model:view="logView"
+              v-model:open-step="openStep"
+              :steps="steps"
+              :view-switch="false"
+            >
+              <template #header>
                 <p class="shrink-0 text-heading-xxs text-(--text-default)">Logs</p>
                 <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
                   <Tag
@@ -381,106 +373,22 @@
                     severity="danger"
                   />
                 </div>
-              </div>
-              <Accordion
-                v-if="logView === 'phased'"
-                v-model="openStep"
-                type="single"
-                collapsible
-              >
-                <Accordion.Item
-                  v-for="step in steps"
-                  :key="step.key"
-                  :value="step.key"
-                >
-                  <Accordion.Trigger>
-                    <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
-                      <span class="flex size-5 shrink-0 items-center justify-center">
-                        <i
-                          v-if="step.status === 'done'"
-                          class="pi pi-check-circle text-(--success-contrast)"
-                          aria-hidden="true"
-                        />
-                        <i
-                          v-else-if="step.status === 'failed'"
-                          class="pi pi-times-circle text-(--danger-contrast)"
-                          aria-hidden="true"
-                        />
-                        <i
-                          v-else-if="step.status === 'skipped'"
-                          class="pi pi-minus-circle text-(--text-muted) opacity-60"
-                          aria-hidden="true"
-                        />
-                        <span
-                          v-else
-                          class="size-3.5 rounded-full border border-dashed border-(--border-default)"
-                        />
-                      </span>
-                      <span
-                        :data-state="step.status"
-                        class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
-                      >
-                        <span
-                          :data-state="step.status"
-                          class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
-                        >
-                          {{ step.title }}
-                        </span>
-                        <Tag
-                          v-if="step.tag"
-                          :label="step.tag.label"
-                          :severity="step.tag.severity"
-                          size="small"
-                        />
-                        <span
-                          :data-state="step.status"
-                          class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
-                        >
-                          {{ step.description }}
-                        </span>
-                      </span>
-                      <span class="ms-auto flex shrink-0 items-center">
-                        <span
-                          v-if="step.duration"
-                          class="text-label-code-md text-(--text-muted)"
-                        >
-                          {{ step.duration }}
-                        </span>
-                      </span>
-                    </span>
-                  </Accordion.Trigger>
-                  <Accordion.Content>
-                    <LogView
-                      :lines="step.lines"
-                      :bordered="false"
-                      copyable
-                      :loading="step.status === 'pending'"
-                      loading-label="Waiting to start…"
-                    >
-                      <LogViewContent>
-                        <template #empty>
-                          <template v-if="step.status === 'skipped'">
-                            Never ran. The deployment stopped at routing rules.
-                          </template>
-                          <template v-else>No log lines yet.</template>
-                        </template>
-                      </LogViewContent>
-                    </LogView>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-              <LogView
-                v-else
-                :lines="lines"
-                :bordered="false"
-                copyable
-                loading-label="Waiting to start…"
-              >
-                <LogViewContent>
-                  <template #empty>No log lines yet.</template>
-                </LogViewContent>
-              </LogView>
-            </div>
+              </template>
+              <template #step-meta="{ step }">
+                <Tag
+                  v-if="stepTag(step.key)"
+                  v-bind="stepTag(step.key)"
+                  size="small"
+                />
+              </template>
+              <template #step-empty="{ step }">
+                {{
+                  step.status === 'skipped'
+                    ? 'Never ran. The deployment stopped at routing rules.'
+                    : 'No log lines yet.'
+                }}
+              </template>
+            </LogView.Steps>
           </template>
         </Card>
       </div>

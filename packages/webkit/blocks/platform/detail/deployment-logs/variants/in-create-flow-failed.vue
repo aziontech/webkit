@@ -1,31 +1,20 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
+  import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
+  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Tag from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
-  type StepStatus = 'done' | 'running' | 'pending' | 'failed' | 'skipped'
-
-  interface DeploymentStep {
-    key: string
-    title: string
-    description: string
-    status: StepStatus
-    duration: string
-    lines: LogViewLine[]
-  }
-  const STATUS_TEXT: Record<StepStatus, string> = {
-    done: 'Done',
-    running: 'In progress',
-    pending: 'Waiting',
-    failed: 'Failed',
-    skipped: 'Skipped'
+  type DeployStep = LogViewStep & {
+    tag?: {
+      label: string
+      severity: TagSeverity
+    }
   }
 
-  const steps: DeploymentStep[] = [
+  const steps: DeployStep[] = [
     {
       key: 'token',
       title: 'Access token',
@@ -210,8 +199,9 @@
       key: 'rules',
       title: 'Routing rules',
       description: 'Request rules and cache policies applied',
-      status: 'done',
+      status: 'failed',
       duration: '4s',
+      tag: { label: 'Failed', severity: 'danger' },
       lines: [
         {
           id: '0',
@@ -223,13 +213,21 @@
           id: '1',
           time: '13:48:09',
           type: 'text',
-          message: "[TASK] - # Rule 'Deliver Static Assets' created"
+          level: 'warn',
+          message: '[ERROR] - # Routing rules rejected the configuration'
         },
         {
           id: '2',
+          time: '13:48:10',
+          type: 'text',
+          message: "409 Conflict: rule 'default-cache' already bound to this domain"
+        },
+        {
+          id: '3',
           time: '13:48:11',
-          type: 'success',
-          message: '[TASK] - # Routing rules configured successfully.'
+          type: 'text',
+          level: 'warn',
+          message: '[ERROR] - # Deploy finalized with errors. Nothing was published.'
         }
       ]
     },
@@ -237,35 +235,26 @@
       key: 'deploy',
       title: 'Publish',
       description: 'Repository wired and the deploy published',
-      status: 'done',
-      duration: '4s',
-      lines: [
-        {
-          id: '0',
-          time: '13:48:12',
-          type: 'text',
-          message: "branch 'main' set up to track 'origin/main'."
-        },
-        {
-          id: '1',
-          time: '13:48:13',
-          type: 'text',
-          message: '[TASK] - #. Set the access token as a repository secret.'
-        },
-        {
-          id: '2',
-          time: '13:48:15',
-          type: 'success',
-          message: '[TASK] - #. Deploy finalized successfully.'
-        }
-      ]
+      status: 'skipped',
+      duration: '',
+      tag: { label: 'Skipped', severity: 'neutral' },
+      lines: []
     }
   ]
-  const lines = steps.flatMap((step, index) =>
-    step.lines.map((line) => ({ ...line, id: `${index}-${line.id}` }))
-  )
-  const logView = ref('phased')
-  const openStep = ref<string | null>(null)
+  const logViews = [
+    { label: 'Phased', value: 'phased' },
+    { label: 'Complete', value: 'complete' }
+  ]
+
+  const stepTag = (key: string) => steps.find((step) => step.key === key)?.tag
+
+  const logView = ref<LogViewStepsView>('phased')
+  const openStep = ref('rules')
+  const redeploying = ref(false)
+
+  const redeploy = () => {
+    redeploying.value = true
+  }
 </script>
 
 <template>
@@ -276,115 +265,70 @@
     <template #header>
       <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
       <StatusIndicator
+        v-if="redeploying"
         loading
         severity="info"
-        label="Building"
+        label="Redeploying"
+      />
+      <ToggleGroup
+        v-else
+        v-model="logView"
+        :options="logViews"
+        class="shrink-0"
+        aria-label="Log view"
       />
     </template>
 
     <template #content>
-      <div class="flex w-full flex-col">
-        <div
-          class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-        >
+      <LogView.Steps
+        v-model:view="logView"
+        v-model:open-step="openStep"
+        :steps="steps"
+        :view-switch="false"
+      >
+        <template #header>
           <p class="shrink-0 text-heading-xxs text-(--text-default)">Logs</p>
           <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
             <Tag
-              label="Completed"
-              severity="success"
+              label="Failed on routing rules"
+              severity="danger"
             />
           </div>
-        </div>
-        <Accordion
-          v-if="logView === 'phased'"
-          v-model="openStep"
-          type="single"
-          collapsible
-        >
-          <Accordion.Item
-            v-for="step in steps"
-            :key="step.key"
-            :value="step.key"
-          >
-            <Accordion.Trigger>
-              <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
-                <span class="flex size-5 shrink-0 items-center justify-center">
-                  <i
-                    v-if="step.status === 'done'"
-                    class="pi pi-check-circle text-(--success-contrast)"
-                    aria-hidden="true"
-                  />
-                  <i
-                    v-else-if="step.status === 'failed'"
-                    class="pi pi-times-circle text-(--danger-contrast)"
-                    aria-hidden="true"
-                  />
-                  <i
-                    v-else-if="step.status === 'skipped'"
-                    class="pi pi-minus-circle text-(--text-muted) opacity-60"
-                    aria-hidden="true"
-                  />
-                  <span
-                    v-else
-                    class="size-3.5 rounded-full border border-dashed border-(--border-default)"
-                  />
-                </span>
-                <span class="sr-only">
-                  {{ STATUS_TEXT[step.status] }}
-                </span>
-                <span
-                  :data-state="step.status"
-                  class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
-                >
-                  <span
-                    :data-state="step.status"
-                    class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
-                  >
-                    {{ step.title }}
-                  </span>
-                  <span
-                    :data-state="step.status"
-                    class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
-                  >
-                    {{ step.description }}
-                  </span>
-                </span>
-                <span class="ms-auto flex shrink-0 items-center">
-                  <span
-                    v-if="step.duration"
-                    class="text-label-code-md text-(--text-muted)"
-                  >
-                    {{ step.duration }}
-                  </span>
-                </span>
-              </span>
-            </Accordion.Trigger>
-            <Accordion.Content>
-              <LogView
-                :lines="step.lines"
-                :bordered="false"
-                copyable
-                :loading="step.status === 'pending'"
-                loading-label="Waiting to start…"
-              >
-                <LogViewContent>
-                  <template #empty>No log lines yet.</template>
-                </LogViewContent>
-              </LogView>
-            </Accordion.Content>
-          </Accordion.Item>
-        </Accordion>
-        <LogView
-          v-else
-          :lines="lines"
-          :bordered="false"
-          copyable
-          loading-label="Waiting to start…"
-        >
-          <LogViewContent>
-            <template #empty>No log lines yet.</template>
-          </LogViewContent>
-        </LogView>
+        </template>
+        <template #step-meta="{ step }">
+          <Tag
+            v-if="stepTag(step.key)"
+            v-bind="stepTag(step.key)"
+            size="small"
+          />
+        </template>
+        <template #step-empty="{ step }">
+          {{
+            step.status === 'skipped'
+              ? 'Never ran. The deployment stopped at routing rules.'
+              : 'No log lines yet.'
+          }}
+        </template>
+      </LogView.Steps>
+    </template>
+
+    <template #footer>
+      <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+        <Button
+          label="Edit"
+          kind="outlined"
+          size="medium"
+          href="/create/templates/nuxt-ecommerce"
+          :disabled="redeploying"
+        />
+        <Button
+          label="Redeploy"
+          kind="primary"
+          size="medium"
+          icon="pi pi-refresh"
+          :loading="redeploying"
+          @click="redeploy"
+        />
       </div>
     </template>
   </Card>

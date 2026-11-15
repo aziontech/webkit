@@ -10,6 +10,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ## When to use
 
+- Use async-submit when the action runs long enough that the user leaves (build, deploy, import) and the result must reach them later.
 - Any action that takes long enough to leave: build, deploy, redeploy, import, provision, a bulk change.
 - When the outcome must reach the user on whatever page they are on when it lands.
 - As the reference for the idle, running, failed and succeeded states of a run started from a page.
@@ -17,7 +18,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 ## When not to use
 
 - A save that answers in about a second: use `platform/states/form-validation`.
-- The full deployment flow with its own steps and logs page: use `platform/create/deployment-flow` and `platform/detail/deployment-logs`.
+- A run the user watches to the end inside a create flow, or a deployment's own page: use `platform/detail/deployment-logs` (InCreateFlow, DeploymentDetail).
 - Confirming a finished deploy with next steps: use `platform/create/deploy-success`.
 - A deploy configured in a side panel: use `platform/create/deploy-drawer`.
 
@@ -89,7 +90,6 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 ## Related
 
 - `platform/states/form-validation` — the synchronous counterpart: field, section and toast placement for a save that answers right away.
-- `platform/create/deployment-flow` — the deployment logs card the Running and Failed states reuse.
-- `platform/detail/deployment-logs` — the full logs of a run, the page Edit or a failure leads into.
+- `platform/detail/deployment-logs` — the deployment logs card (`LogView.Steps`) the Running and Failed states reuse, and the full logs of a run the page Edit or a failure leads into.
 - `platform/create/deploy-success` — the confirmation page after a deploy completes.
 - `shells/console` — the layout this body renders in, which the user moves through while the run reports back.

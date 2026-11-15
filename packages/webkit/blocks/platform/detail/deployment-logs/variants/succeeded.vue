@@ -1,22 +1,9 @@
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
+  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
   import Tag from '@aziontech/webkit/tag'
-  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
-  type StepStatus = 'done' | 'failed' | 'skipped' | 'running' | 'pending'
-  type DeployStep = {
-    key: string
-    title: string
-    description: string
-    status: StepStatus
-    duration: string
-    lines: LogViewLine[]
-  }
-
-  const steps: DeployStep[] = [
+  const steps: LogViewStep[] = [
     {
       key: 'token',
       title: 'Access token',
@@ -252,31 +239,18 @@
       ]
     }
   ]
-  const lines = steps.flatMap((step, index) =>
-    step.lines.map((line) => ({ ...line, id: `${index}-${line.id}` }))
-  )
-  const logViews = [
-    { label: 'Phased', value: 'phased' },
-    { label: 'Complete', value: 'complete' }
-  ]
 
-  const logView = ref('phased')
+  const logView = ref<LogViewStepsView>('phased')
   const openStep = ref('deploy')
-
-  const stepStatusLabels: Record<StepStatus, string> = {
-    done: 'Done',
-    failed: 'Failed',
-    skipped: 'Skipped',
-    running: 'Running',
-    pending: 'Not started'
-  }
 </script>
 
 <template>
-  <div class="flex w-full flex-col">
-    <div
-      class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-    >
+  <LogView.Steps
+    v-model:view="logView"
+    v-model:open-step="openStep"
+    :steps="steps"
+  >
+    <template #header>
       <h2 class="m-0 shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
       <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <Tag
@@ -284,101 +258,7 @@
           severity="success"
         />
         <span class="text-label-sm text-(--text-muted)">Deployed in 42s</span>
-        <ToggleGroup
-          v-model="logView"
-          :options="logViews"
-          size="medium"
-          aria-label="Log view"
-        />
       </div>
-    </div>
-    <Accordion
-      v-if="logView === 'phased'"
-      v-model="openStep"
-      type="single"
-      collapsible
-    >
-      <Accordion.Item
-        v-for="step in steps"
-        :key="step.key"
-        :value="step.key"
-      >
-        <Accordion.Trigger>
-          <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
-            <span class="flex size-5 shrink-0 items-center justify-center">
-              <i
-                v-if="step.status === 'done'"
-                class="pi pi-check-circle text-(--success-contrast)"
-                aria-hidden="true"
-              />
-              <i
-                v-else-if="step.status === 'failed'"
-                class="pi pi-times-circle text-(--danger-contrast)"
-                aria-hidden="true"
-              />
-              <i
-                v-else-if="step.status === 'skipped'"
-                class="pi pi-minus-circle text-(--text-muted) opacity-60"
-                aria-hidden="true"
-              />
-              <span
-                v-else
-                class="size-3.5 rounded-full border border-dashed border-(--border-default)"
-              />
-            </span>
-            <span class="sr-only">{{ stepStatusLabels[step.status] }}</span>
-            <span
-              :data-state="step.status"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
-            >
-              <span
-                :data-state="step.status"
-                class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
-              >
-                {{ step.title }}
-              </span>
-              <span
-                :data-state="step.status"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
-              >
-                {{ step.description }}
-              </span>
-            </span>
-            <span class="ms-auto flex shrink-0 items-center">
-              <span
-                v-if="step.duration"
-                class="text-label-code-md text-(--text-muted)"
-              >
-                {{ step.duration }}
-              </span>
-            </span>
-          </span>
-        </Accordion.Trigger>
-        <Accordion.Content>
-          <LogView
-            :lines="step.lines"
-            :bordered="false"
-            copyable
-            :loading="step.status === 'pending'"
-            loading-label="Waiting to start…"
-          >
-            <LogViewContent>
-              <template #empty>No log lines yet.</template>
-            </LogViewContent>
-          </LogView>
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion>
-    <LogView
-      v-else
-      :lines="lines"
-      :bordered="false"
-      copyable
-      loading-label="Waiting to start…"
-    >
-      <LogViewContent>
-        <template #empty>No log lines yet.</template>
-      </LogViewContent>
-    </LogView>
-  </div>
+    </template>
+  </LogView.Steps>
 </template>

@@ -12,7 +12,7 @@ The modal progress of one deploy that sends several Deployment Settings live, ea
 ## When not to use
 
 - A deploy of one service or project: use `platform/create/deploy-drawer`, which closes and reports through the toast.
-- A deploy with build steps and logs: use `platform/create/deployment-flow` and `platform/detail/deployment-logs`.
+- A deploy with build steps and logs: use `platform/detail/deployment-logs`.
 - Reviewing what a multi-resource release reaches before it runs: use `platform/create/release-impact`.
 
 ## Building blocks
