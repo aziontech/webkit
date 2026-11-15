@@ -4,17 +4,18 @@ import { userEvent } from 'vitest/browser'
 
 import Activity from '../../blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue'
 import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
+import AnalyticsUsage from '../../blocks/platform/dashboard/analytics-dashboard/variants/usage.vue'
 import Composition from '../../blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue'
 import CompositionEmpty from '../../blocks/platform/dashboard/composition-dashboard/variants/empty.vue'
 import Switcher from '../../blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue'
 import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/variants/empty.vue'
 import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
 import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
-import Data from '../../blocks/platform/dashboard/data-dashboard/data-dashboard.vue'
 import Executive from '../../blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
 import Funnel from '../../blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue'
 import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
 import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
+import HealthRealUser from '../../blocks/platform/dashboard/health-score-dashboard/variants/real-user.vue'
 import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
 import ProjectStatus from '../../blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue'
@@ -123,11 +124,17 @@ describe('platform/dashboard/health-score-dashboard', () => {
     const tile = byTestId('chart-stat-tile', view.container)!
     expect(tile.textContent).toContain('No value')
   })
+
+  it('shows the real-user web vitals in the RealUser variant', () => {
+    const view = render(HealthRealUser)
+    expect(view.getByRole('heading', { level: 1, name: 'Real-user monitoring' })).toBeTruthy()
+    expect(view.container.textContent).toContain('Largest contentful paint')
+  })
 })
 
 describe.each([
   ['analytics-dashboard', Analytics],
-  ['data-dashboard', Data],
+  ['analytics-dashboard#Usage', AnalyticsUsage],
   ['security-dashboard', Security]
 ])('platform/dashboard/%s period', (_name, Block) => {
   it('drives the delta comparison from the Period Select in the header', async () => {

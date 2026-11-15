@@ -15,9 +15,8 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When not to use
 
-- Investigating a metric by dimension: use `platform/dashboard/analytics-dashboard` or
-  `platform/dashboard/data-dashboard`.
-- Tracking one project's tasks and sprint: use `platform/dashboard/project-status-dashboard`.
+- Investigating a metric by dimension: use `platform/dashboard/analytics-dashboard`
+  (Usage for consumption).
 - A total broken into categories: use `platform/dashboard/composition-dashboard`.
 
 ## Building blocks

@@ -17,8 +17,8 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When not to use
 
-- Analysing traffic or usage: use `platform/dashboard/analytics-dashboard` or
-  `platform/dashboard/data-dashboard`.
+- Analysing traffic or usage: use `platform/dashboard/analytics-dashboard`
+  (Traffic by default, Usage for consumption).
 - The empty first page of one resource list: use `platform/states/first-use`.
 - Only the shell, with another page inside: use `shells/console`.
 - A placeholder while Home loads: use the Overview and Onboarding wires of `platform/states/page-wires`.

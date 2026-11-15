@@ -122,6 +122,6 @@ crosshair on every card. A legend with totals appears only when a card has more 
 ## Related
 
 - `platform/dashboard/analytics-dashboard` — the static version of the same cards.
-- `platform/dashboard/data-dashboard` — a fixed dashboard when the order tells the story.
+- `platform/dashboard/analytics-dashboard` — a fixed dashboard when the order tells the story.
 - `Board` — the grid component: layout model, bounds, reorder, resize and announcements.
 - `ChartCard` — the card inside each item, with the drag handle and resize corner.

@@ -12,7 +12,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When not to use
 
-- A single dashboard with its own page: use the dashboard block directly (`platform/dashboard/analytics-dashboard`, `platform/dashboard/security-dashboard`, `platform/dashboard/data-dashboard`, and the rest of `platform/dashboard`).
+- A single dashboard with its own page: use the dashboard block directly (`platform/dashboard/analytics-dashboard`, `platform/dashboard/security-dashboard`, and the rest of `platform/dashboard`).
 - A dashboard the reader arranges by hand: use `platform/dashboard/configurable-dashboard` (it is the body of the Custom entry).
 - An overview of the whole account with resources and recent activity: use `platform/dashboard/home-dashboard`.
 
@@ -85,5 +85,5 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 ## Related
 
 - `platform/dashboard/configurable-dashboard` — the Custom entry, laid out by the reader.
-- `platform/dashboard/analytics-dashboard`, `platform/dashboard/data-dashboard`, `platform/dashboard/security-dashboard` — the Traffic, Usage and Threats bodies on their own pages.
+- `platform/dashboard/analytics-dashboard` (Default and Usage), `platform/dashboard/security-dashboard` — the Traffic, Usage and Threats bodies on their own pages.
 - `platform/dashboard/home-dashboard` — the account overview.

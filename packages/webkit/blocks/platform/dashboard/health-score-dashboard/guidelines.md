@@ -10,6 +10,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use health-score-dashboard when many signals roll up into one banded score (including real-user web vitals).
 - Many raw signals (latency, packet loss, DNS time, Wi-Fi signal) are combined into one score the
   reader can act on.
 - The score has fixed bands that mean the same thing everywhere on the page.
@@ -87,6 +88,18 @@ One `Item` per incident, with `href` to the incident's page (`/incidents/inciden
 is a link: what is affected, the cause, how many devices and what share of samples, when it opened,
 and its band.
 
+### N. Real-user monitoring — `PageHeader`, `Select`, `StatTile`, `Hint` (optional)
+
+Variant RealUser only: the timings measured in the reader's browsers that such a score is built
+from. Title `Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`,
+`Last 7 days`, `Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals
+`StatTile`s (`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
+aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
+each with the latest value, its unit, a sparkline of the period and the period name in the aside.
+A timing has no "previous period" the reader acts on here, so these tiles carry no delta and no
+`inverse`.
+
 ## Do
 
 - Use the same three bands, with the same thresholds and words, in every region.
@@ -106,6 +119,7 @@ and its band.
 - **Title:** `Experience score`.
 - **Band words:** one word each. `Good`, `Fair`, `Poor`.
 - **Cause:** subject, a middle dot, the cause in lowercase. `CRM · slow DNS lookups`.
+- **RealUser:** title `Real-user monitoring`, description `Real-user timings collected in the browser, for the selected period.`; tile labels are the timing in sentence case (`First input delay`); the aside of a trend tile is the period name (`Last 24 hours`).
 - **Empty state:** name the period. `No open incidents in the last 24 hours` / `An incident opens when an application or a location stays poor for several samples in a row.`
 
 ## Accessibility
@@ -121,6 +135,7 @@ and its band.
 - Default: the scored period.
 - Loading: the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples; the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
+- RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
 - Failed: the request failed; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related

@@ -10,18 +10,19 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use analytics-dashboard for KPI tiles, charts and a table over one shared period: Traffic (requests, status codes) by default, Usage for consumption per product or project.
 - The reader monitors volume and quality of traffic (requests, bytes, status codes) over a period.
 - Several metrics share one time window and one set of dimensions (host, country, status code).
 - The reader needs to move from a total to the breakdown and then to the rows behind it.
 
 ## When not to use
 
-- Usage per project or product, with the previous period overlaid: use
-  `platform/dashboard/data-dashboard`.
 - Latency percentiles and live service health with an alert rail: use
   `platform/dashboard/service-monitoring-dashboard`.
 - Blocked and allowed requests and the rules behind them: use `platform/dashboard/security-dashboard`.
 - The reader arranges the cards themselves: use `platform/dashboard/configurable-dashboard`.
+- Money split by category over time: use `platform/dashboard/composition-dashboard`.
+- Real-user web vitals or one banded score: use `platform/dashboard/health-score-dashboard`.
 
 ## Building blocks
 
@@ -129,6 +130,20 @@ without icon, `Open <Product> dashboard`, to the product dashboard and view the 
 The header actions hold the `Period` `Select` and an outlined Refresh `IconButton` in a `Tooltip`;
 Refresh holds the charts at reduced opacity (`refetching`) while the data reloads.
 
+### Q. Usage — `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Hint`, `Input`, `EmptyState` (optional)
+
+Variant Usage only: what the account's projects consumed in the period, against the previous period.
+Title `Data usage`. Six tiles: `Requests`, `Data transferred`, `Jobs run`, `Images processed`,
+`Requests inspected`, `Logs exported`, each with its period total, a sparkline and the change
+`vs previous 24 hours`. Consumption is neither good nor bad by itself, so these tiles do not pass
+`inverse`; pass it only on a metric where a rise is bad. Three cards follow:
+`Data transferred, this period vs previous` draws `This period` and `Previous period` as two series of
+the same metric (the current period declared first, so it takes the first series color), with the Line
+or Bar `ToggleGroup`; `Data transferred by project` is a labeled horizontal bar chart, largest first;
+`Usage by project` is a searchable (`Search projects`), paginated `DataTable` of requests and data
+transferred per project. The empty copy is `No usage yet` /
+`Usage appears here once a project serves requests.`
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
@@ -158,6 +173,7 @@ Refresh holds the charts at reduced opacity (`refetching`) while the data reload
 - **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
 - **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
 - **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
+- **Usage:** title `Data usage`, description `What your projects consumed in the period, against the previous period.`; card titles say what is compared (`Data transferred, this period vs previous`); series `This period`, `Previous period`.
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
 
@@ -179,11 +195,14 @@ Refresh holds the charts at reduced opacity (`refetching`) while the data reload
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
 - Expanded: the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
+- Usage: the Data usage page, consumption per meter and per project against the previous period.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
-- `platform/dashboard/data-dashboard` — the same grammar for usage per project, with the previous period overlaid.
+- `platform/dashboard/composition-dashboard` — when the total is money split by category.
+- `platform/dashboard/health-score-dashboard` — real-user web vitals and banded scores.
+- `platform/account/change-plan-drawer` — where usage limits are changed.
 - `platform/dashboard/configurable-dashboard` — when the reader arranges the cards.
 - `platform/dashboard/service-monitoring-dashboard` — latency percentiles and an alert rail.
 - `ChartCard` / `StatTile` — the card and tile every dashboard shares.
