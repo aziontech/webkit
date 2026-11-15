@@ -1,7 +1,7 @@
 import type { Messages } from '../types'
 
 export const ptBR: Messages = {
-  actionConfirmation: {
+  toolApproval: {
     approve: 'Aprovar',
     deny: 'Negar',
     approved: 'Aprovado',
@@ -704,9 +704,6 @@ export const ptBR: Messages = {
     collapseNamed: 'Recolher {label}',
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
-  },
-  miniButton: {
-    label: 'Saiba mais'
   },
   multiSelect: {
     empty: 'Nenhum resultado',

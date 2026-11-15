@@ -228,5 +228,25 @@
         "secondary": "neutral"
       }
     }
+  },
+  "link": {
+    "showIcon": {
+      "removed": "set icon to show a trailing glyph (icon=\"pi pi-external-link\"); leave it empty to hide it"
+    }
+  },
+  "tabs-item": {
+    "selected": {
+      "removed": "a row of pressed pills outside a Tabs root is ToggleGroup; inside a root the root v-model selects the item"
+    }
+  },
+  "navigation-menu-trigger": {
+    "nativeButton": {
+      "removed": "the trigger is always a button, or an anchor with href; delete the attribute"
+    }
+  },
+  "sidebar": {
+    "collapsed": {
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    }
   }
 }

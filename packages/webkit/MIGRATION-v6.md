@@ -39,22 +39,24 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 
 ## 2. Renamed components
 
-| v5 import                              | v6 import                          | v5 component       | v6 component    |
-| -------------------------------------- | ---------------------------------- | ------------------ | --------------- |
-| `@aziontech/webkit/paginator`          | `@aziontech/webkit/pagination`     | `Paginator`        | `Pagination`    |
-| `@aziontech/webkit/tab-view`           | `@aziontech/webkit/tabs`           | `TabView`          | `Tabs`          |
-| `@aziontech/webkit/card-box`           | `@aziontech/webkit/card`           | `CardBox`          | `Card`          |
-| `@aziontech/webkit/message`            | `@aziontech/webkit/alert`          | `Message`          | `Alert`         |
-| `@aziontech/webkit/divider`            | `@aziontech/webkit/separator`      | `Divider`          | `Separator`     |
-| `@aziontech/webkit/progress-bar`       | `@aziontech/webkit/progress`       | `ProgressBar`      | `Progress`      |
-| `@aziontech/webkit/command-menu`       | `@aziontech/webkit/command`        | `CommandMenu`      | `Command`       |
-| `@aziontech/webkit/dropdown`           | `@aziontech/webkit/dropdown-menu`  | `Dropdown`         | `DropdownMenu`  |
-| `@aziontech/webkit/input-text`         | `@aziontech/webkit/input`          | `InputText`        | `Input`         |
-| `@aziontech/webkit/input-number`       | `@aziontech/webkit/number-input`   | `InputNumber`      | `NumberInput`   |
-| `@aziontech/webkit/input-password`     | `@aziontech/webkit/password-input` | `InputPassword`    | `PasswordInput` |
-| `@aziontech/webkit/box-grid-selection` | `@aziontech/webkit/radio-cards`    | `BoxGridSelection` | `RadioCards`    |
-| `@aziontech/webkit/resizable-panel`    | `@aziontech/webkit/resizable`      | `ResizablePanel`   | `Resizable`     |
-| `@aziontech/webkit/segmented-button`   | `@aziontech/webkit/toggle-group`   | `SegmentedButton`  | `ToggleGroup`   |
+| v5 import                               | v6 import                          | v5 component         | v6 component    |
+| --------------------------------------- | ---------------------------------- | -------------------- | --------------- |
+| `@aziontech/webkit/paginator`           | `@aziontech/webkit/pagination`     | `Paginator`          | `Pagination`    |
+| `@aziontech/webkit/tab-view`            | `@aziontech/webkit/tabs`           | `TabView`            | `Tabs`          |
+| `@aziontech/webkit/card-box`            | `@aziontech/webkit/card`           | `CardBox`            | `Card`          |
+| `@aziontech/webkit/message`             | `@aziontech/webkit/alert`          | `Message`            | `Alert`         |
+| `@aziontech/webkit/divider`             | `@aziontech/webkit/separator`      | `Divider`            | `Separator`     |
+| `@aziontech/webkit/progress-bar`        | `@aziontech/webkit/progress`       | `ProgressBar`        | `Progress`      |
+| `@aziontech/webkit/command-menu`        | `@aziontech/webkit/command`        | `CommandMenu`        | `Command`       |
+| `@aziontech/webkit/dropdown`            | `@aziontech/webkit/dropdown-menu`  | `Dropdown`           | `DropdownMenu`  |
+| `@aziontech/webkit/input-text`          | `@aziontech/webkit/input`          | `InputText`          | `Input`         |
+| `@aziontech/webkit/input-number`        | `@aziontech/webkit/number-input`   | `InputNumber`        | `NumberInput`   |
+| `@aziontech/webkit/input-password`      | `@aziontech/webkit/password-input` | `InputPassword`      | `PasswordInput` |
+| `@aziontech/webkit/box-grid-selection`  | `@aziontech/webkit/radio-cards`    | `BoxGridSelection`   | `RadioCards`    |
+| `@aziontech/webkit/resizable-panel`     | `@aziontech/webkit/resizable`      | `ResizablePanel`     | `Resizable`     |
+| `@aziontech/webkit/segmented-button`    | `@aziontech/webkit/toggle-group`   | `SegmentedButton`    | `ToggleGroup`   |
+| `@aziontech/webkit/menu`                | `@aziontech/webkit/sidebar-menu`   | `Menu`               | `SidebarMenu`   |
+| `@aziontech/webkit/action-confirmation` | `@aziontech/webkit/tool-approval`  | `ActionConfirmation` | `ToolApproval`  |
 
 The AI tooling knows the old names too: the MCP and `catalog.json#aliases` resolve a retired or
 market name (`paginator`, `message`, `modal`, `sheet`, `tiles`, `segmented-control`, …) to the v6
@@ -292,7 +294,7 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `ConversationHistory`   | `remove`            | `(id)`                           | `(event, id)`                                       |
 | `PromptInput`           | `submit`            | `(value, references)`            | `(event, { value, references })`                    |
 | `PromptInput`           | `stop`              | `()`                             | `(event)`                                           |
-| `ActionConfirmation`    | `approve`, `deny`   | `()`                             | `(event)`                                           |
+| `ToolApproval`          | `approve`, `deny`   | `()`                             | `(event)`                                           |
 | `ArtifactCanvas`        | `close`             | `()`                             | `(event)` (a `KeyboardEvent` when Escape closes it) |
 | `ArtifactPreview`       | `open`              | `()`                             | `(event)`                                           |
 | `ChatMessage`           | `retry`             | `()`                             | `(event)`                                           |
@@ -379,15 +381,13 @@ rewrite this, because the replacement depends on whether the child was a link or
 ### Deprecated overlay and feedback names (removed in 7.0)
 
 The old names still work in v6 and are marked `@deprecated`; move to the new ones when you touch the
-code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` `kind="shape"`
+code. The codemod rewrites `progress` `shape` and `skeleton` `kind="shape"`
 (section 3); the rest need a hand edit, because a mechanical rename would invert or retype a value.
 
 | Component    | Deprecated                     | Use instead                                               |
 | ------------ | ------------------------------ | --------------------------------------------------------- |
 | `toast-item` | `type` (and the value `error`) | `severity` (`danger`); store entries carry `severity` too |
 | `toast`      | `ToastType`                    | `ToastSeverity`; `toast.error()` keeps its name           |
-| `tooltip`    | `@show`, `@hide`               | `@update:open`                                            |
-| `popover`    | `PopoverWidth`                 | `PopoverSize`                                             |
 | `progress`   | `ProgressShape`                | `ProgressKind`                                            |
 
 `Dialog` and `Drawer` gain `closable`, separate from `dismissible`: `dismissible` gates `Esc` and the
@@ -455,24 +455,12 @@ removed: its dot was the brand orange, outside the shared severity scale; `neutr
 takes its place, or `info` if the orange marked something to notice. The codemod rewrites all three
 to `neutral`.
 
-### Navigation: deprecated names, removed in 7.0
-
-These keep working in v6 and are marked `@deprecated` in their JSDoc and spec; move to the new name before 7.0.
-
-| Component         | Deprecated                                   | Use                                                                   |
-| ----------------- | -------------------------------------------- | --------------------------------------------------------------------- |
-| `dropdown-menu`   | `DropdownMenu.Option`                        | `DropdownMenu.Item` (or the `DropdownMenuItem` export)                |
-| `dropdown-menu`   | `#left` / `#right` on an item                | `#leading` / `#trailing`                                              |
-| `link`            | `showIcon`                                   | `icon` (set shows it; `target="_blank"` adds the external-link glyph) |
-| `menu`            | `Menu.Item kind="group"`                     | the `label` of `Menu.Group`                                           |
-| `navigation-menu` | `native-button` on `NavigationMenu.Trigger`  | nothing: the trigger is always a button or an anchor                  |
-| `tabs`            | `Tabs.Content` without `value` (the wrapper) | a plain element; `Tabs.Content value="…"` is the panel                |
-| `tabs`            | `selected` on a standalone `Tabs.Item`       | `ToggleGroup`                                                         |
+### Navigation defaults
 
 Defaults that showed placeholder content now default to empty: `Link` (`href`, `icon`: a same-tab
-link shows no trailing icon unless `icon` is set), `Menu.Item` (`label`, `icon`, `tagValue`: no home
-glyph on an item without `icon`), `Tabs.Item` (`label`) and `Breadcrumb.Item` (`label`, `href`).
-`Menu.SubTrigger` `click` now also passes `{ label, href }` as its second argument.
+link shows no trailing icon unless `icon` is set), `SidebarMenu.Item` (`label`, `icon`, `tagValue`: no
+home glyph on an item without `icon`), `Tabs.Item` (`label`) and `Breadcrumb.Item` (`label`, `href`).
+`SidebarMenu.SubTrigger` `click` now also passes `{ label, href }` as its second argument.
 
 `Select` now follows the `input-<name>` rule like the rest of the inputs category: `select` →
 `input-select`, and its parts `select-trigger`, `select-content`, `select-option` and `select-group`
@@ -689,11 +677,9 @@ components the same locale, `t()` and `Intl` helpers.
 These old names keep working through v6 and are marked `@deprecated` in the types and the specs.
 Move to the new name when you touch the code; they are removed in 7.0.
 
-| Component        | Deprecated                           | Use instead                                    | Codemod                                                         |
-| ---------------- | ------------------------------------ | ---------------------------------------------- | --------------------------------------------------------------- |
-| `Sidebar`        | `v-model:collapsed`                  | `v-model:open` (inverted: `open = !collapsed`) | no, the bound value inverts                                     |
-| `Resizable.Pane` | `v-model:collapsed`                  | `v-model:expanded` (inverted)                  | no, the bound value inverts                                     |
-| `GlobalHeader`   | `.Left`, `.Middle`, `.Nav`, `.Right` | `.Start`, `.Center`, `.Center`, `.End`         | no; the new parts use `__start` / `__center` / `__end` test ids |
+| Component        | Deprecated          | Use instead                   | Codemod                     |
+| ---------------- | ------------------- | ----------------------------- | --------------------------- |
+| `Resizable.Pane` | `v-model:collapsed` | `v-model:expanded` (inverted) | no, the bound value inverts |
 
 The navigation rail now has one name across the layouts: `open` on `Sidebar` and `navigationOpen`
 on `AppLayout` and `ConsoleLayout`. `@aziontech/webkit/sidebar` is now the compound
@@ -731,12 +717,41 @@ props in section 3; move the rest by hand:
 - `DocCardGroup`: the `DocCardGroupCols` type → `DocCardGroupColumns`.
 - `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
   `#prefix`, `#iconRight` → `#suffix`.
-- `MiniButton`: `:show-icon="false"` → `icon=""`.
 - `Select`: `multiple` → `MultiSelect`.
 - `SplitButton`: read or restore the mirrored action with `v-model:selected`.
 - `Switch`: `focused` → `autofocus`; `SwitchType` → `SwitchKind`.
-- `ToggleGroup`: a disabled option without `locked` still shows the lock; set `locked: true` on
-  the options that need it, since 7.0 draws the lock only for `locked`.
+- `ToggleGroup`: a disabled option no longer shows the lock by itself; set `locked: true` on the
+  options a plan or a permission blocks.
+
+### Actions, navigation and overlay: one component per job
+
+The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a removed one.
+
+- `menu` → `sidebar-menu` (`Menu` → `SidebarMenu`, every part `menu-*` → `sidebar-menu-*`, types
+  `MenuNode` → `SidebarMenuNode`, …): it is only the navigation tree of `Sidebar`, `ConsoleLayout`
+  and `DocLayout`. Test ids follow: `navigation-menu-*` → `navigation-sidebar-menu-*`.
+  `SidebarMenu.Item` drops `kind="group"`: put the title on `SidebarMenu.Group label`.
+- `HelpPanel.Tutorial` and `HelpPanel.Task` are removed (`help-panel-tutorial`, `help-panel-task`,
+  the `HelpPanelTaskStatus` type): a tutorial is `TutorialPanel` inside `TutorialPanel.Provider`,
+  with its tasks and steps as data and a `Hotspot` on each real control.
+- `action-confirmation` → `tool-approval` (`ActionConfirmation` → `ToolApproval`, types
+  `ToolApprovalState`, `ToolApprovalKind`, test id `ai-tool-approval`, locale key `toolApproval.*`):
+  it is only an agent's request to run a tool; a person confirming their own action uses `ConfirmDialog`.
+- Removed deprecated names (no alias): `Link` `showIcon` (set `icon`), `Tabs.Item` `selected`
+  (`ToggleGroup`), `SplitButton` `model` (`items`), `DropdownMenu.Option` (`DropdownMenu.Item`) and
+  the item `#left` / `#right` slots (`#leading` / `#trailing`), `NavigationMenu.Trigger`
+  `native-button`, `Tooltip` `@show` / `@hide` (`@update:open`), `Popover` `width` and `PopoverWidth`
+  (`size`, `PopoverSize`), `Sidebar` `v-model:collapsed` (`v-model:open`, inverted) and
+  `GlobalHeader.Left` / `.Middle` / `.Nav` / `.Right` (`.Start` / `.Center` / `.End`, test ids
+  `__start` / `__center` / `__end`), and `Tabs.Content` without a `value` (wrap the panels in a
+  plain element; `Tabs.Content value="…"` is the panel).
+- `Tree` with an `actions` slot renders as a `treegrid`: rows are `role="row"` with a label and an
+  actions `gridcell`, the row buttons are reached with the arrow keys, and the tree stays one tab
+  stop. Without `actions` it is the same `tree` as before.
+- `Breadcrumb.Item` moved into the breadcrumb folder; its import `@aziontech/webkit/breadcrumb-item`
+  is unchanged.
+- `MiniButton` is removed. A text link that navigates → `<Link label href icon>` (it takes the
+  link colour); a text action with no `href` → `<Button kind="link">`.
 
 ## 5. Field report: Azion Console
 

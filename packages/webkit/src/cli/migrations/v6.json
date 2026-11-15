@@ -70,6 +70,16 @@
       "to": "toggle-group",
       "from": "SegmentedButton",
       "binding": "ToggleGroup"
+    },
+    "menu": {
+      "to": "sidebar-menu",
+      "from": "Menu",
+      "binding": "SidebarMenu"
+    },
+    "action-confirmation": {
+      "to": "tool-approval",
+      "from": "ActionConfirmation",
+      "binding": "ToolApproval"
     }
   },
   "removed": {
@@ -87,7 +97,10 @@
     "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
     "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
     "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
-    "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)"
+    "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
+    "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
+    "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+    "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data"
   },
   "types": {
     "BoxGridSelectionItem": "RadioCardsItem",
@@ -117,7 +130,8 @@
     "TabViewContext": "TabsContext",
     "TabViewSlideDirection": "TabsSlideDirection",
     "TabViewTabRegistration": "TabsTabRegistration",
-    "TabViewValue": "TabsValue"
+    "TabViewValue": "TabsValue",
+    "PopoverWidth": "PopoverSize"
   },
   "legacy": {
     "major": 3,
@@ -268,13 +282,13 @@
       "list-data-table/composables": "console list table composables; use Table props (sort, selection, pagination)",
       "list-data-table/types": "console list table types; use the Table types",
       "listbox": "PrimeVue Listbox; use RadioCards, a Command list or Select",
-      "menu": "PrimeVue Menu (model prop); use Menu or DropdownMenu",
+      "menu": "PrimeVue Menu (model prop); use SidebarMenu or DropdownMenu",
       "message": "PrimeVue Message; use Alert (severity, title, description)",
       "multiselect": "PrimeVue MultiSelect; use MultiSelect with MultiSelect.Trigger / Content / Option",
-      "overlay/dropdown-menu-content": "put DropdownMenu.Option children straight in DropdownMenu",
-      "overlay/dropdown-menu-factory": "build DropdownMenu.Option items from your array with v-for",
-      "overlay/dropdown-menu-from-model": "build DropdownMenu.Option items from your array with v-for",
-      "overlay/dropdown-menu-item": "use DropdownMenu.Option (dropdown-menu-option)",
+      "overlay/dropdown-menu-content": "put DropdownMenu.Item children straight in DropdownMenu",
+      "overlay/dropdown-menu-factory": "build DropdownMenu.Item items from your array with v-for",
+      "overlay/dropdown-menu-from-model": "build DropdownMenu.Item items from your array with v-for",
+      "overlay/dropdown-menu-item": "use DropdownMenu.Item (dropdown-menu-option)",
       "overlay/dropdown-menu-portal": "DropdownMenu teleports its panel on its own",
       "overlay/dropdown-menu-separator": "use DropdownMenu.Group to split options",
       "overlaypanel": "PrimeVue OverlayPanel (toggle(event)); use Popover with Popover.Trigger / Content",
