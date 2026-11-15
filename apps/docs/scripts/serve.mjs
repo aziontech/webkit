@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url'
 
 const DIST = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
 
+const EXAMPLE_FRAME = '/frame/example/'
+
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript',
@@ -28,6 +30,7 @@ function locate(pathname) {
   const page = join(file, 'index.html')
   if (existsSync(page)) return page
   if (existsSync(`${file}.html`)) return `${file}.html`
+  if (pathname.startsWith(EXAMPLE_FRAME)) return locate(EXAMPLE_FRAME)
   return null
 }
 

@@ -32,7 +32,7 @@ export const routes: RouteRecordRaw[] = [
     meta: { bare: true }
   },
   {
-    path: '/frame/example/:name(.*)/:file',
+    path: '/frame/example/:path(.*)*',
     name: 'example-frame',
     component: () => import('./pages/example-frame-page.vue'),
     meta: { bare: true }

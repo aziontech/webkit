@@ -1,5 +1,3 @@
-import { readFileSync } from 'node:fs'
-import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import tailwindcss from '@tailwindcss/vite'
@@ -9,19 +7,7 @@ import type { ViteSSGOptions } from 'vite-ssg'
 
 import { buildIndex } from './plugins/content.ts'
 import { docsPlugin } from './plugins/docs-plugin.ts'
-import { walk, WEBKIT } from './plugins/paths.ts'
 import { FOUNDATION_SLUGS } from './src/lib/foundations.ts'
-
-function exampleFrames(): string[] {
-  const root = join(WEBKIT, 'examples')
-  return walk(root, (name) => name === 'examples.json').flatMap((file) => {
-    const dir = relative(root, dirname(file))
-    const data = JSON.parse(readFileSync(file, 'utf8')) as { examples: { file: string }[] }
-    return data.examples.map(
-      (example) => `/frame/example/${dir}/${example.file.replace(/\.vue$/, '')}`
-    )
-  })
-}
 
 function staticRoutes(): string[] {
   const { components, blocks } = buildIndex()
@@ -37,7 +23,7 @@ function staticRoutes(): string[] {
     ...blocks.flatMap((block) =>
       block.states.map((state) => `/frame/block/${block.id}/${state.slug}`)
     ),
-    ...exampleFrames(),
+    '/frame/example',
     '/404'
   ]
 }

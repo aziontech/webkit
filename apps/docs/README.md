@@ -60,6 +60,8 @@ in the browser. The output is plain static files:
   Upload `apps/docs/dist/` as is.
 - Serve `/<route>/` from `/<route>/index.html` (the default on most hosts) and `404/index.html` for
   unknown paths.
+- Serve every `/frame/example/<name>/<file>` from `frame/example/index.html`: the example frame is
+  one prerendered page that reads the example from its path (`scripts/serve.mjs` does this).
 - The site expects to live at the domain root. To serve it under a path, set Vite's `base` in
   `vite.config.ts`.
 

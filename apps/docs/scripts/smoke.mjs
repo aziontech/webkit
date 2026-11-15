@@ -38,9 +38,7 @@ function routes(dir = DIST, out = []) {
   return out.sort()
 }
 
-const all = routes().filter(
-  (route) => !route.startsWith('/llms') && !route.startsWith('/frame/example/')
-)
+const all = routes().filter((route) => !route.startsWith('/llms'))
 const only = process.env.SMOKE_ONLY
   ? all.filter((route) => route.includes(process.env.SMOKE_ONLY))
   : all
