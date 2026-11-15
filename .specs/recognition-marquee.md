@@ -3,10 +3,10 @@ name: recognition-marquee
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 656af38c466f5dd834e14b823d5460f34a2e6ba6850073d5ee92ec8e17a7e7e6
+checksum: 30792376205b4ae509361ee3183e812c34914f19bc712c6639d90b094ba16644
 template: 2
 ---
 
@@ -148,7 +148,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ## Performance
 
-- Bundle budget: 19 KB gzip, the `.size-limit.json` entry `recognition-marquee`.
+- Bundle budget: 20.9 KB gzip, the `.size-limit.json` entry `recognition-marquee` (the shared marquee loop with its pause control and its locale strings).
 - Runtime budget: one CSS animation on the compositor; no script runs per frame.
 - Heavy parts: none; images decode asynchronously.
 

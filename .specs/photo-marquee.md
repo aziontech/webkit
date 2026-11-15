@@ -3,10 +3,10 @@ name: photo-marquee
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 4d98144981091d829655542568547196a9d64ab648269aa5a30be279de32c4db
+checksum: 5d495eedb854f751be9ac93a8191631856ce6e8bff2171772393fe802632d4e9
 template: 2
 ---
 
@@ -133,7 +133,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ## Performance
 
-- Bundle budget: 5 KB gzip, the `.size-limit.json` entry `photo-marquee`.
+- Bundle budget: 7.25 KB gzip, the `.size-limit.json` entry `photo-marquee` (the shared marquee loop with its pause control and its locale strings).
 - Runtime budget: one CSS animation on the compositor; no script runs per frame.
 - Heavy parts: none; images decode asynchronously.
 

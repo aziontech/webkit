@@ -3,11 +3,11 @@ name: media-split-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 4de70e8c1b074235f09001fed49583a72249f972fc163d89a9f0c8985ed29c92
+checksum: a61fb38710175cd4866ef2b6cf193f2bcc3c43ce754143f5e1ae6a7ed3462074
 ---
 
 # MediaSplitBand — Component Spec
@@ -160,7 +160,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 11 KB gzip for `./media-split-band` (initial chunk only) in `.size-limit.json`; scenes, `code-block`, `product-widget` and `diagram` are async chunks.
+- Bundle budget: 6.95 KB gzip for `./media-split-band` (initial chunk only) in `.size-limit.json`; scenes, `code-block`, `product-widget` and `diagram` are async chunks.
 - Runtime budget: none: static apart from the widget beat while hovered.
 - Heavy parts: the scenes, `code-block`, `product-widget` and `diagram`, all lazy.
 

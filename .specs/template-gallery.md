@@ -4,10 +4,10 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 6eddc50b416149aac54a737eab9d7b9b0b4246cc7b2631fc943efafe0143d94d
+checksum: 1e1c5ffb53fbdecbcab9da1e4c27be6bb123ec83def175225ac7d03ce0aabb40
 ---
 
 # TemplateGallery — Component Spec
@@ -156,7 +156,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 27.7 KB for `./template-gallery` gzip in `.size-limit.json`, initial chunk only.
+- Bundle budget: 28.35 KB for `./template-gallery` gzip in `.size-limit.json`, initial chunk only.
 - Renders every template it is given: keep the list to the dozen or so a closing band shows, and link to the full gallery for the rest.
 
 ## Examples

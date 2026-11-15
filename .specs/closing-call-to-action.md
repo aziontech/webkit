@@ -3,10 +3,10 @@ name: closing-call-to-action
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 28458c384d4760ed71a7dd2c1d6ca571c20f80f487fc76eecbda84753745770d
+checksum: 5b6f1ec41161157a4ea7cf47f1b122536d2d78619c20f8829f4d04a28003e2d1
 template: 2
 ---
 
@@ -159,7 +159,7 @@ No built-in strings of its own: every visible text is a prop from the page JSON,
 
 ## Performance
 
-- Bundle budget: 8.3 KB gzip, the `.size-limit.json` entry `closing-call-to-action` (entry chunk only: `section-command` loads on demand, only when `command` is set, and the audience switch only when `audiences` is set).
+- Bundle budget: 6.15 KB gzip, the `.size-limit.json` entry `closing-call-to-action` (entry chunk only: `section-command` loads on demand, only when `command` is set, and the audience switch only when `audiences` is set).
 - Runtime budget: one timer for the typed word with `audiences` and `typedWords`, cleared on scope dispose; none under reduced motion. The `primary` texture animates on the compositor and stops under reduced motion.
 - Heavy parts: none.
 
