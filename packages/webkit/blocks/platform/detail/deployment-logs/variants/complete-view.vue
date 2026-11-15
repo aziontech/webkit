@@ -101,7 +101,8 @@
         {
           id: '3',
           time: '13:47:48',
-          type: 'warning',
+          type: 'text',
+          level: 'warn',
           message: '24 vulnerabilities (5 low, 7 moderate, 10 high, 2 critical)'
         },
         {

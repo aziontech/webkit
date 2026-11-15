@@ -173,7 +173,7 @@
                 :data-testid="`${ctx.testId.value}__line`"
                 :data-type="line.type"
                 :data-level="line.level"
-                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[type=warning]:bg-(--warning) data-[type=warning]:hover:bg-(--warning) data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
+                class="text-label-code-sm relative flex gap-(--spacing-md) border-s-2 border-s-transparent px-(--spacing-md) py-(--spacing-xxs) transition-colors duration-150 ease-out before:pointer-events-none before:absolute before:inset-0 before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out before:content-[''] hover:border-s-(--ring-color) hover:bg-(--bg-surface-raised) hover:before:opacity-100 data-[level=warn]:bg-(--warning) data-[level=warn]:hover:bg-(--warning) data-[level=error]:bg-(--danger) data-[level=error]:hover:bg-(--danger) motion-reduce:transition-none motion-reduce:before:transition-none"
               >
                 <span
                   v-if="line.time"
@@ -199,7 +199,7 @@
                   v-if="line.type !== 'folder'"
                   :data-testid="`${ctx.testId.value}__line-message`"
                   dir="auto"
-                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-contrast) data-[type=success]:gap-(--spacing-xs) data-[type=warning]:text-(--warning-contrast) max-sm:whitespace-nowrap"
+                  class="relative z-1 flex min-w-0 flex-1 items-center gap-(--spacing-xs) text-(--text-default) data-[level=error]:text-(--danger-contrast) data-[type=success]:gap-(--spacing-xs) data-[level=warn]:text-(--warning-contrast) max-sm:whitespace-nowrap"
                   :data-type="line.type"
                   :data-level="line.level"
                 >

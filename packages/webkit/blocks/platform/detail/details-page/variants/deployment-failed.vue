@@ -237,7 +237,8 @@
         {
           id: '1',
           time: '14:03:01',
-          type: 'warning',
+          type: 'text',
+          level: 'warn',
           message: '[ERROR] [manifest] Error while creating rule"Deliver static assets"'
         },
         {
@@ -249,7 +250,8 @@
         {
           id: '3',
           time: '14:03:03',
-          type: 'warning',
+          type: 'text',
+          level: 'warn',
           message: '[ERROR] [manifest] Deploy aborted. Nothing was published.'
         }
       ]

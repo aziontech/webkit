@@ -17,7 +17,13 @@
       size: '12.4 kB',
       gzipSize: '4.1 kB'
     },
-    { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }
+    {
+      id: '4',
+      time: '13:47:43',
+      type: 'text',
+      level: 'warn',
+      message: 'Bundle larger than recommended'
+    }
   ]
   const search = ref('')
   const level = ref('')

@@ -3,12 +3,12 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 81cdc2ece251ddc682e24d3fb7ea1b2e856c13238eb8dca9757a1df88aae6b84
+checksum: 6cd33387755fcd0fdf18424116bfe4247f3cfb28517f71d02af28263f3dd3472
 created: 2026-05-26
 last_updated: 2026-11-15
 ---
@@ -40,9 +40,9 @@ Composition-based terminal log viewer for CI/deploy output. **LogView** is the r
 
 ## Best practices
 
-- Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`, `warning`); the type drives the line's rendering and the warnings filter.
+- Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the warnings filter and the level toggles.
 - For a run log, give each line a `level` and put the run offset (`120 ms`, `1.24 s`) in `time`; pass the levels the run can print as `levels` so every level is offered even when it has no line yet. Bind `v-model:level` when the app needs the chosen level.
-- Bind `v-model:search` and `v-model:warnings-only` when the app needs the filter state; otherwise leave them unbound and the header manages them.
+- Bind `v-model:search` and `v-model:level` when the app needs the filter state; otherwise leave them unbound and the header manages them.
 - Set `:bordered="false"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).
 - The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.
 - Use the header's `left` / `right` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar.
@@ -94,7 +94,7 @@ Composition-based terminal log viewer for CI/deploy output. **LogView** is the r
 
 LogView ships its sub-components attached to the root (`LogView.Header`, `LogView.Content`, `LogView.Footer`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
-- `log-view-header.vue` (`LogView.Header`) — Default 48px toolbar: line count, warning filter (a native button, 32 px, 44 px on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `left`, `right`, `search`.
+- `log-view-header.vue` (`LogView.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, 44 px on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `left`, `right`, `search`.
 - `log-view-content.vue` (`LogView.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
 - `log-view-footer.vue` (`LogView.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
 
@@ -102,7 +102,7 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 
 | Prop                | Type                 | Default | Required | JSDoc                                                                                                                                                                                                                                                               |
 | ------------------- | -------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `lines`             | `LogViewLine[]`      | `[]`    | false    | Log entries; filtered in LogViewContent by search and warnings-only.                                                                                                                                                                                                |
+| `lines`             | `LogViewLine[]`      | `[]`    | false    | Log entries; filtered in LogViewContent by search and level.                                                                                                                                                                                                   |
 | `bordered`          | `boolean`            | `true`  | false    | Draw the outer card border and corner radius around the log shell. On by default; set `:bordered="false"` to render the shell flush inside a surface that already frames it (an accordion panel, a drawer). Internal dividers (header/footer edges) are unaffected. |
 | `searchPlaceholder` | `string`             | `''`    | false    | Placeholder for the default header search field. Empty uses the locale catalog (`Find in logs`).                                                                                                                                                                    |
 | `copyable`          | `boolean`            | `true`  | false    | Shows the copy-to-clipboard control (a CopyButton pinned top-right over the log content in LogViewContent).                                                                                                                                                         |
@@ -117,7 +117,6 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | Model                   | Type                     | Default | Emits                 | Notes                                                                                                                                                                      |
 | ----------------------- | ------------------------ | ------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:search`        | `string`                 | `''`    | `update:search`       | Two-way search query; filters LogViewContent and highlights matches.                                                                                                       |
-| `v-model:warnings-only` | `boolean`                | `false` | `update:warningsOnly` | **@deprecated since 6.0 — use `v-model:level` with `'warn'`. Removed in 7.0.** When true, shows only warning lines (`level: 'warn'`, or the deprecated `type: 'warning'`). |
 | `v-model:level`         | `LogViewLineLevel \| ''` | `''`    | `update:level`        | The level the log is filtered to; empty shows every level. A level toggle sets it and pressing the active one clears it.                                                   |
 
 ## Events
@@ -140,7 +139,7 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | ------------ | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `id`         | `string`                                                              | Stable row key.                                                                                                                                                                                |
 | `time`       | `string`                                                              | Timestamp label.                                                                                                                                                                               |
-| `type`       | `'text' \| 'folder' \| 'framework-version' \| 'success' \| 'warning'` | Log line variant. `warning` is **@deprecated since 6.0 — use `level: 'warn'`. Removed in 7.0.**; until then a `warning` line with no `level` counts as `warn` in the level counts and filters. |
+| `type`       | `'text' \| 'folder' \| 'framework-version' \| 'success'` | Log line variant; a warning is a `text` line with `level: 'warn'`. |
 | `message`    | `string`                                                              | Primary log text.                                                                                                                                                                              |
 | `folderType` | `string`                                                              | Optional filename highlight for `folder`.                                                                                                                                                      |
 | `size`       | `string`                                                              | Optional raw size for `folder`.                                                                                                                                                                |
@@ -153,14 +152,14 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 ## States
 
 - Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`, `error`, `empty`
-- `data-disabled` / `data-warnings-only` / `data-level` / `data-loading` / `data-error` / `data-border` on the LogView root
-- `level` is the one severity axis: the warnings filter, the warning count and the level toggles all read `level`, falling back to `warn` for a deprecated `type: 'warning'` line
+- `data-disabled` / `data-level` / `data-loading` / `data-error` / `data-border` on the LogView root
+- `level` is the one severity axis: the warnings filter, the warning count and the level toggles all read `level`; the warning filter is the `warn` level toggle (it sets and clears `v-model:level`)
 - `error` state: LogViewContent renders a danger `Alert` with the message in place of the log body; copy is hidden
 - `empty` state: the package `EmptyState` (see LogViewContent above)
 - `loading` state: LogViewContent renders a centered spinner + `loadingLabel` in place of the log body
 - Log line `data-type` reflects `line.type` and `data-level` reflects `line.level`; `warn` rows take the warning tint, `error` rows the danger tint and danger text
 - Level toggles carry `data-level` and `data-active` (the chosen level); every toggle shows the count of lines at its level in the whole log
-- Long logs: above 300 visible lines `LogViewContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, warnings-only, the line count and copy work on every line, mounted or not.
+- Long logs: above 300 visible lines `LogViewContent` mounts lines in chunks of 100 as they scroll near view (unmounted chunks keep an estimated 24 px per line), so a 10,000-line log mounts within its runtime budget. Search, the level filter, the line count and copy work on every line, mounted or not.
 
 ## Motion & Animations
 
@@ -179,7 +178,7 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | surface (line hover)                                 | `var(--bg-surface-raised)`                                                                                                     |
 | text (default line)                                  | `var(--text-default)`                                                                                                          |
 | text (timestamp)                                     | `var(--text-muted)`                                                                                                            |
-| text (warning line)                                  | `var(--warning-contrast)`                                                                                                      |
+| text (`warn` line message)                           | `var(--warning-contrast)`                                                                                                      |
 | text (success line)                                  | `var(--success-contrast)`                                                                                                      |
 | surface (`error` level row)                          | `var(--danger)`                                                                                                                |
 | text (timestamp on an `error` level row)             | `var(--text-default)` (muted fails contrast on the danger tint)                                                                |
@@ -210,7 +209,7 @@ the height of a single row the moment the root stopped stretching.
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus on the interactive controls in the header/footer.
-- LogViewContent carries a visually hidden `role="log"` region (`aria-live="polite"`) that holds only the lines appended to `lines` since the last update (filtered by the current search and warnings-only view). The scrolling log body is not a live region, so the lines already present at mount and the chunks that mount on scroll are never announced; replacing `lines` with a different log clears the region.
+- LogViewContent carries a visually hidden `role="log"` region (`aria-live="polite"`) that holds only the lines appended to `lines` since the last update (filtered by the current search and level). The scrolling log body is not a live region, so the lines already present at mount and the chunks that mount on scroll are never announced; replacing `lines` with a different log clears the region.
 - The level filter is a `role="group"` named `Log levels`; each toggle is a button with `aria-pressed` named with its level and line count (`warn, 3 lines`), the level also in visible text, so the state is never colour only.
 - The warning filter exposes `aria-pressed`; the copy control (a CopyButton in LogViewContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.

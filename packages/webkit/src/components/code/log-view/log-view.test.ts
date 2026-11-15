@@ -8,7 +8,7 @@ import Default from '../../../../examples/log-view/default.vue'
 import Levels from '../../../../examples/log-view/levels.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import LogViewCompound from './index'
-import type { LogViewLine } from './injection-key'
+import type { LogViewLine, LogViewLineLevel } from './injection-key'
 import LogView from './log-view.vue'
 import LogViewContent from './log-view-content.vue'
 import LogViewFooter from './log-view-footer.vue'
@@ -24,7 +24,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-// Grounded in complete-deploy-log.js shapes: text / success / folder / warning lines.
+// Grounded in complete-deploy-log.js shapes: text / success / folder lines and one warn line.
 const LINES: LogViewLine[] = [
   { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },
   { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },
@@ -37,12 +37,18 @@ const LINES: LogViewLine[] = [
     size: '12.4 kB',
     gzipSize: '4.1 kB'
   },
-  { id: '4', time: '13:47:43', type: 'warning', message: 'Bundle larger than recommended' }
+  {
+    id: '4',
+    time: '13:47:43',
+    type: 'text',
+    level: 'warn',
+    message: 'Bundle larger than recommended'
+  }
 ]
 
 /**
  * Composes the real tree (LogView + Header + Content + Footer) around parent-owned
- * refs so v-model:search / v-model:warnings-only round-trips are observable, and the
+ * refs so v-model:search / v-model:level round-trips are observable, and the
  * root `copy` event can be captured. Mirrors the documented composition usage.
  */
 function makeHost(options: {
@@ -54,7 +60,7 @@ function makeHost(options: {
   onCopy?: (event: Event, value: string) => void
 }) {
   const search = ref('')
-  const warningsOnly = ref(false)
+  const level = ref<LogViewLineLevel | ''>('')
 
   const Host = defineComponent({
     setup() {
@@ -70,9 +76,9 @@ function makeHost(options: {
             'onUpdate:search': (v: string) => {
               search.value = v
             },
-            warningsOnly: warningsOnly.value,
-            'onUpdate:warningsOnly': (v: boolean) => {
-              warningsOnly.value = v
+            level: level.value,
+            'onUpdate:level': (v: LogViewLineLevel | '') => {
+              level.value = v
             },
             onCopy: options.onCopy,
             class: 'h-[480px]'
@@ -86,7 +92,7 @@ function makeHost(options: {
     }
   })
 
-  return { Host, search, warningsOnly }
+  return { Host, search, level }
 }
 
 describe('LogView (composition: provide/inject over Header/Content/Footer)', () => {
@@ -218,7 +224,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
     })
 
     it('omits the warnings filter entirely when there are no warning lines', () => {
-      const noWarnings = LINES.filter((l) => l.type !== 'warning')
+      const noWarnings = LINES.filter((l) => l.level !== 'warn')
       const { Host } = makeHost({ lines: noWarnings })
       const { queryByTestId, getByTestId } = render(Host)
       // Template: v-if="ctx.warningCount.value > 0".
@@ -283,9 +289,9 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
     })
   })
 
-  describe('warnings-only: context-aware filter button toggles the injected boolean', () => {
-    it('emits update:warningsOnly on click, round-trips v-model, and filters content to warnings', async () => {
-      const { Host, warningsOnly } = makeHost({})
+  describe('warnings filter: the context-aware button toggles the warn level', () => {
+    it('sets v-model:level to warn on click and filters content to warnings', async () => {
+      const { Host, level } = makeHost({})
       const { getByTestId, getAllByTestId } = render(Host)
 
       const filter = getByTestId('code-log-view__header__warnings-filter')
@@ -293,28 +299,31 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
 
       await fireEvent.click(filter)
 
-      // v-model:warnings-only round-tripped to the parent.
-      expect(warningsOnly.value).toBe(true)
+      expect(level.value).toBe('warn')
       // aria-pressed reflects the injected state.
       expect(filter.getAttribute('aria-pressed')).toBe('true')
 
       // Only the single warning line survives the filter.
       const rows = getAllByTestId('code-log-view__line')
       expect(rows).toHaveLength(1)
-      expect(rows[0].getAttribute('data-type')).toBe('warning')
-      // Root mirrors the state as data-warnings-only.
-      expect(getByTestId('code-log-view').getAttribute('data-warnings-only')).toBe('true')
+      expect(rows[0].getAttribute('data-level')).toBe('warn')
+      expect(getByTestId('code-log-view').getAttribute('data-level')).toBe('warn')
+      expect(getByTestId('code-log-view').hasAttribute('data-warnings-only')).toBe(false)
+
+      await fireEvent.click(filter)
+      expect(level.value).toBe('')
+      expect(getAllByTestId('code-log-view__line')).toHaveLength(LINES.length)
     })
 
-    it('toggles warnings-only via keyboard (Enter) on the filter button', async () => {
-      const { Host, warningsOnly } = makeHost({})
+    it('toggles the warn level via keyboard (Enter) on the filter button', async () => {
+      const { Host, level } = makeHost({})
       const { getByTestId } = render(Host)
 
       const filter = getByTestId('code-log-view__header__warnings-filter')
       filter.focus()
       await userEvent.keyboard('{Enter}')
 
-      expect(warningsOnly.value).toBe(true)
+      expect(level.value).toBe('warn')
       expect(filter.getAttribute('aria-pressed')).toBe('true')
     })
   })
@@ -365,13 +374,12 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       ).toBe(true)
     })
 
-    it('does not toggle warnings-only while disabled (click is a no-op)', async () => {
-      const { Host, warningsOnly } = makeHost({ disabled: true })
+    it('does not toggle the warn level while disabled (click is a no-op)', async () => {
+      const { Host, level } = makeHost({ disabled: true })
       const { getByTestId } = render(Host)
 
-      // toggleWarningsOnly early-returns when props.disabled is true.
       await fireEvent.click(getByTestId('code-log-view__header__warnings-filter'))
-      expect(warningsOnly.value).toBe(false)
+      expect(level.value).toBe('')
     })
   })
 
@@ -598,7 +606,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
   })
 
   describe('one severity axis', () => {
-    it('counts and filters a deprecated type warning line as level warn', async () => {
+    it('counts and filters a warn line through the level toggle', async () => {
       const level = ref<'' | 'warn'>('')
       const view = render(
         defineComponent({
@@ -619,7 +627,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       await fireEvent.click(toggle)
       const rows = view.getAllByTestId('code-log-view__line')
       expect(rows).toHaveLength(1)
-      expect(rows[0]?.getAttribute('data-type')).toBe('warning')
+      expect(rows[0]?.getAttribute('data-level')).toBe('warn')
     })
   })
 
