@@ -78,26 +78,26 @@ describe('ToolCall', () => {
     })
     await expectNoA11yViolations(container)
   })
-})
 
-describe('ToolCall slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { ToolCall },
-      setup: () => ({ shown }),
-      template: `<ToolCall name="search"><template v-if="shown" #input><span data-testid="probe">Slotted</span></template></ToolCall>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { ToolCall },
+        setup: () => ({ shown }),
+        template: `<ToolCall name="search"><template v-if="shown" #input><span data-testid="probe">Slotted</span></template></ToolCall>`
+      })
+      expect(queryByTestId('ai-tool-call__trigger')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('ai-tool-call__trigger')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('ai-tool-call__trigger')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('ai-tool-call__trigger')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('ai-tool-call__trigger')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('ai-tool-call__trigger')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
 })

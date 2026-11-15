@@ -379,14 +379,14 @@ describe('Checkbox', () => {
       inputs.forEach((input) => expect(input.disabled).toBe(true))
     })
   })
-})
 
-describe('Checkbox touch target', () => {
-  it('grows the native input to 24px, and 44px on coarse pointers', () => {
-    const view = render(Checkbox, { attrs: { 'aria-label': 'Option' } })
-    const input = view.getByRole('checkbox')
+  describe('touch target', () => {
+    it('grows the native input to 24px, and 44px on coarse pointers', () => {
+      const view = render(Checkbox, { attrs: { 'aria-label': 'Option' } })
+      const input = view.getByRole('checkbox')
 
-    expect(input.className).toContain('inset-[min(0rem,calc(50%-12px))]')
-    expect(input.className).toContain('pointer-coarse:inset-[min(0rem,calc(50%-22px))]')
+      expect(input.className).toContain('inset-[min(0rem,calc(50%-12px))]')
+      expect(input.className).toContain('pointer-coarse:inset-[min(0rem,calc(50%-22px))]')
+    })
   })
 })

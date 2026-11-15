@@ -355,131 +355,137 @@ describe('Alert', () => {
       'Your workload finished deploying in 42 seconds.'
     )
   })
-})
 
-const boxOf = (width: number) => {
-  const host = document.createElement('div')
-  host.style.width = `${width}px`
-  document.body.appendChild(host)
-  return host
-}
+  const boxOf = (width: number) => {
+    const host = document.createElement('div')
+    host.style.width = `${width}px`
+    document.body.appendChild(host)
+    return host
+  }
 
-describe('Alert in a narrow box', () => {
-  const mountIn = (width: number) =>
-    render(Alert, {
-      props: { label: 'The certificate expires in 3 days.', actionLabel: 'Renew', closable: true },
-      container: boxOf(width)
+  describe('in a narrow box', () => {
+    const mountIn = (width: number) =>
+      render(Alert, {
+        props: {
+          label: 'The certificate expires in 3 days.',
+          actionLabel: 'Renew',
+          closable: true
+        },
+        container: boxOf(width)
+      })
+
+    it('moves the action to its own line under the message', () => {
+      const view = mountIn(320)
+      const action = view.getByRole('button', { name: 'Renew' })
+      const close = view.getByRole('button', { name: 'Close message' })
+
+      expect(action.getBoundingClientRect().top).toBeGreaterThanOrEqual(
+        close.getBoundingClientRect().bottom
+      )
     })
 
-  it('moves the action to its own line under the message', () => {
-    const view = mountIn(320)
-    const action = view.getByRole('button', { name: 'Renew' })
-    const close = view.getByRole('button', { name: 'Close message' })
+    it('keeps the action on the message line in a wide box', () => {
+      const view = mountIn(900)
+      const action = view.getByRole('button', { name: 'Renew' })
+      const close = view.getByRole('button', { name: 'Close message' })
 
-    expect(action.getBoundingClientRect().top).toBeGreaterThanOrEqual(
-      close.getBoundingClientRect().bottom
-    )
-  })
-
-  it('keeps the action on the message line in a wide box', () => {
-    const view = mountIn(900)
-    const action = view.getByRole('button', { name: 'Renew' })
-    const close = view.getByRole('button', { name: 'Close message' })
-
-    expect(action.getBoundingClientRect().top).toBeLessThan(close.getBoundingClientRect().bottom)
-  })
-
-  it('renders no action wrapper without an action', () => {
-    const view = render(Alert, { props: { label: 'Saved.' } })
-
-    expect(view.container.querySelector('[data-slot="alert-action"]')).toBeNull()
-  })
-})
-
-describe('Alert slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { Alert },
-      setup: () => ({ shown }),
-      template: `<Alert><template #default>Saved.</template><template v-if="shown" #action><span data-testid="probe">Slotted</span></template></Alert>`
-    })
-    expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(true)
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
-    expect(queryByTestId('probe')).toBeNull()
-  })
-})
-
-describe('Alert title', () => {
-  it('renders no title and no data-titled by default', () => {
-    const { getByTestId, queryByTestId } = render(Alert, { props: { label: 'Saved.' } })
-
-    expect(getByTestId('feedback-alert')).not.toHaveAttribute('data-titled')
-    expect(queryByTestId('feedback-alert__title')).toBeNull()
-  })
-
-  it('renders the title above the label copy and marks the root', () => {
-    const { getByTestId } = render(Alert, {
-      props: { title: 'Deploy failed', label: 'Check the logs.' }
+      expect(action.getBoundingClientRect().top).toBeLessThan(close.getBoundingClientRect().bottom)
     })
 
-    const root = getByTestId('feedback-alert')
-    const title = getByTestId('feedback-alert__title')
-    const content = getByTestId('feedback-alert__content')
-    expect(root).toHaveAttribute('data-titled')
-    expect(title).toHaveTextContent('Deploy failed')
-    expect(content).toHaveTextContent('Check the logs.')
-    expect(title.compareDocumentPosition(content) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    it('renders no action wrapper without an action', () => {
+      const view = render(Alert, { props: { label: 'Saved.' } })
+
+      expect(view.container.querySelector('[data-slot="alert-action"]')).toBeNull()
+    })
   })
 
-  it('renders the title over default-slot copy', () => {
-    const { getByTestId } = render(Alert, {
-      props: { title: 'Request limit at 90%' },
-      slots: { default: 'Requests above the limit are throttled.' }
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { Alert },
+        setup: () => ({ shown }),
+        template: `<Alert><template #default>Saved.</template><template v-if="shown" #action><span data-testid="probe">Slotted</span></template></Alert>`
+      })
+      expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(true)
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
+      expect(queryByTestId('probe')).toBeNull()
+    })
+  })
+
+  describe('title', () => {
+    it('renders no title and no data-titled by default', () => {
+      const { getByTestId, queryByTestId } = render(Alert, { props: { label: 'Saved.' } })
+
+      expect(getByTestId('feedback-alert')).not.toHaveAttribute('data-titled')
+      expect(queryByTestId('feedback-alert__title')).toBeNull()
     })
 
-    expect(getByTestId('feedback-alert__title')).toHaveTextContent('Request limit at 90%')
-    expect(getByTestId('feedback-alert__content')).toHaveTextContent('throttled')
-  })
+    it('renders the title above the label copy and marks the root', () => {
+      const { getByTestId } = render(Alert, {
+        props: { title: 'Deploy failed', label: 'Check the logs.' }
+      })
 
-  it('renders only the title when there is no copy', () => {
-    const { getByTestId, queryByTestId } = render(Alert, { props: { title: 'Saved' } })
-
-    expect(getByTestId('feedback-alert__title')).toHaveTextContent('Saved')
-    expect(queryByTestId('feedback-alert__content')).toBeNull()
-  })
-
-  it('does not leak the title prop onto the root as a native tooltip', () => {
-    const { getByTestId } = render(Alert, { props: { title: 'Saved', label: 'Done.' } })
-
-    expect(getByTestId('feedback-alert')).not.toHaveAttribute('title')
-  })
-
-  it('reads the title inside the live region before the copy', () => {
-    const { getByRole } = render(Alert, {
-      props: { severity: 'danger', title: 'Deploy failed', label: 'Check the logs.' }
+      const root = getByTestId('feedback-alert')
+      const title = getByTestId('feedback-alert__title')
+      const content = getByTestId('feedback-alert__content')
+      expect(root).toHaveAttribute('data-titled')
+      expect(title).toHaveTextContent('Deploy failed')
+      expect(content).toHaveTextContent('Check the logs.')
+      expect(title.compareDocumentPosition(content) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     })
 
-    const region = getByRole('alert')
-    const title = region.querySelector('[data-testid="feedback-alert__title"]')
-    const content = region.querySelector('[data-testid="feedback-alert__content"]')
-    expect(title).toHaveTextContent('Deploy failed')
-    expect(content).toHaveTextContent('Check the logs.')
-    expect(title!.compareDocumentPosition(content!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-  })
+    it('renders the title over default-slot copy', () => {
+      const { getByTestId } = render(Alert, {
+        props: { title: 'Request limit at 90%' },
+        slots: { default: 'Requests above the limit are throttled.' }
+      })
 
-  it('renders the WithTitle example with no a11y violations', async () => {
-    const { container, getAllByTestId } = render(WithTitle)
+      expect(getByTestId('feedback-alert__title')).toHaveTextContent('Request limit at 90%')
+      expect(getByTestId('feedback-alert__content')).toHaveTextContent('throttled')
+    })
 
-    expect(getAllByTestId('feedback-alert__title')).toHaveLength(4)
-    await expectNoA11yViolations(container)
+    it('renders only the title when there is no copy', () => {
+      const { getByTestId, queryByTestId } = render(Alert, { props: { title: 'Saved' } })
+
+      expect(getByTestId('feedback-alert__title')).toHaveTextContent('Saved')
+      expect(queryByTestId('feedback-alert__content')).toBeNull()
+    })
+
+    it('does not leak the title prop onto the root as a native tooltip', () => {
+      const { getByTestId } = render(Alert, { props: { title: 'Saved', label: 'Done.' } })
+
+      expect(getByTestId('feedback-alert')).not.toHaveAttribute('title')
+    })
+
+    it('reads the title inside the live region before the copy', () => {
+      const { getByRole } = render(Alert, {
+        props: { severity: 'danger', title: 'Deploy failed', label: 'Check the logs.' }
+      })
+
+      const region = getByRole('alert')
+      const title = region.querySelector('[data-testid="feedback-alert__title"]')
+      const content = region.querySelector('[data-testid="feedback-alert__content"]')
+      expect(title).toHaveTextContent('Deploy failed')
+      expect(content).toHaveTextContent('Check the logs.')
+      expect(
+        title!.compareDocumentPosition(content!) & Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy()
+    })
+
+    it('renders the WithTitle example with no a11y violations', async () => {
+      const { container, getAllByTestId } = render(WithTitle)
+
+      expect(getAllByTestId('feedback-alert__title')).toHaveLength(4)
+      await expectNoA11yViolations(container)
+    })
   })
 })

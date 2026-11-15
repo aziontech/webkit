@@ -522,58 +522,58 @@ describe('Chart', () => {
       view.unmount()
     }
   })
-})
 
-describe('Chart table twin on devices', () => {
-  it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
-    const view = mount()
-    const twin = view.getByTestId('chart-chart__twin')
+  describe('table twin on devices', () => {
+    it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
+      const view = mount()
+      const twin = view.getByTestId('chart-chart__twin')
 
-    expect(twin.parentElement?.className).toBe('sr-only')
-  })
-})
-
-describe('ChartLegend total', () => {
-  it('shows the totals with total, and not with the removed totals', () => {
-    const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
-    const withTotal = next.getAllByTestId('chart-chart__legend__item')[0]!.textContent
-    next.unmount()
-    const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
-    expect(legacy.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
-    legacy.unmount()
-    const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
-    expect(none.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
-  })
-})
-
-describe('linearLayout hit-testing', () => {
-  const nearest = (positions: number[], offset: number) => {
-    let best = 0
-    positions.forEach((position, index) => {
-      if (Math.abs(position - offset) < Math.abs(positions[best] - offset)) best = index
+      expect(twin.parentElement?.className).toBe('sr-only')
     })
-    return best
-  }
-
-  it('finds the nearest point of an ascending axis, in a fraction of a linear scan', () => {
-    const values = Array.from({ length: 200_000 }, (_, i) => i)
-    const layout = linearLayout(values, 0, 1000)
-    const positions = values.map((_, i) => layout.position(i))
-    for (const offset of [-5, 0, 0.002, 333.3333, 500, 999.999, 1005]) {
-      expect(layout.indexAt(offset)).toBe(nearest(positions, offset))
-    }
-    const t0 = performance.now()
-    for (let i = 0; i < 2000; i++) layout.indexAt((i * 7) % 1000)
-    expect(performance.now() - t0).toBeLessThan(50)
   })
 
-  it('keeps the first of equal positions and scans an axis that is not sorted', () => {
-    const tied = linearLayout([1, 2, 2, 2, 3], 0, 100)
-    expect(tied.indexAt(50)).toBe(1)
-    const unsorted = linearLayout([5, 1, 9, 3], 0, 100)
-    const positions = [5, 1, 9, 3].map((_, i) => unsorted.position(i))
-    for (const offset of [0, 20, 60, 100]) {
-      expect(unsorted.indexAt(offset)).toBe(nearest(positions, offset))
+  describe('ChartLegend total', () => {
+    it('shows the totals with total, and not with the removed totals', () => {
+      const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
+      const withTotal = next.getAllByTestId('chart-chart__legend__item')[0]!.textContent
+      next.unmount()
+      const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
+      expect(legacy.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
+      legacy.unmount()
+      const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
+      expect(none.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
+    })
+  })
+
+  describe('linearLayout hit-testing', () => {
+    const nearest = (positions: number[], offset: number) => {
+      let best = 0
+      positions.forEach((position, index) => {
+        if (Math.abs(position - offset) < Math.abs(positions[best] - offset)) best = index
+      })
+      return best
     }
+
+    it('finds the nearest point of an ascending axis, in a fraction of a linear scan', () => {
+      const values = Array.from({ length: 200_000 }, (_, i) => i)
+      const layout = linearLayout(values, 0, 1000)
+      const positions = values.map((_, i) => layout.position(i))
+      for (const offset of [-5, 0, 0.002, 333.3333, 500, 999.999, 1005]) {
+        expect(layout.indexAt(offset)).toBe(nearest(positions, offset))
+      }
+      const t0 = performance.now()
+      for (let i = 0; i < 2000; i++) layout.indexAt((i * 7) % 1000)
+      expect(performance.now() - t0).toBeLessThan(50)
+    })
+
+    it('keeps the first of equal positions and scans an axis that is not sorted', () => {
+      const tied = linearLayout([1, 2, 2, 2, 3], 0, 100)
+      expect(tied.indexAt(50)).toBe(1)
+      const unsorted = linearLayout([5, 1, 9, 3], 0, 100)
+      const positions = [5, 1, 9, 3].map((_, i) => unsorted.position(i))
+      for (const offset of [0, 20, 60, 100]) {
+        expect(unsorted.indexAt(offset)).toBe(nearest(positions, offset))
+      }
+    })
   })
 })

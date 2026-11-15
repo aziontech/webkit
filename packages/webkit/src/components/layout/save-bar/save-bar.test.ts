@@ -146,128 +146,132 @@ describe('SaveBar', () => {
   it('has no accessibility violations as a create page footer', async () => {
     await expectNoA11yViolations(render(Centered).container)
   })
-})
 
-const boxOf = (width: number) => {
-  const host = document.createElement('div')
-  host.style.width = `${width}px`
-  document.body.appendChild(host)
-  return host
-}
+  const boxOf = (width: number) => {
+    const host = document.createElement('div')
+    host.style.width = `${width}px`
+    document.body.appendChild(host)
+    return host
+  }
 
-describe('SaveBar in a narrow box', () => {
-  const mountIn = (width: number) =>
-    render(SaveBar, {
-      props: { kind: 'plain' },
-      slots: {
-        default: 'You have unsaved changes',
-        actions: '<button type="button">Discard</button><button type="button">Save</button>'
-      },
-      container: boxOf(width)
+  describe('in a narrow box', () => {
+    const mountIn = (width: number) =>
+      render(SaveBar, {
+        props: { kind: 'plain' },
+        slots: {
+          default: 'You have unsaved changes',
+          actions: '<button type="button">Discard</button><button type="button">Save</button>'
+        },
+        container: boxOf(width)
+      })
+
+    it('stacks full-width actions under the message', () => {
+      const view = mountIn(320)
+      const actions = view.getByTestId('layout-save-bar__actions')
+      const save = view.getByRole('button', { name: 'Save' })
+
+      expect(getComputedStyle(actions).flexDirection).toBe('column-reverse')
+      expect(Math.round(save.getBoundingClientRect().width)).toBe(
+        Math.round(actions.getBoundingClientRect().width)
+      )
     })
 
-  it('stacks full-width actions under the message', () => {
-    const view = mountIn(320)
-    const actions = view.getByTestId('layout-save-bar__actions')
-    const save = view.getByRole('button', { name: 'Save' })
+    it('keeps the actions in a row in a wide box', () => {
+      const view = mountIn(1024)
 
-    expect(getComputedStyle(actions).flexDirection).toBe('column-reverse')
-    expect(Math.round(save.getBoundingClientRect().width)).toBe(
-      Math.round(actions.getBoundingClientRect().width)
+      expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe(
+        'row'
+      )
+    })
+  })
+
+  describe('fade in a narrow box', () => {
+    it('keeps Back and the action on one row, without a border', () => {
+      const view = render(Fade, { container: boxOf(320) })
+      const back = view.getByRole('button', { name: 'Back' })
+      const next = view.getByRole('button', { name: 'Continue' })
+      const root = view.getByTestId('layout-save-bar')
+
+      expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe(
+        'row'
+      )
+      expect(Math.round(back.getBoundingClientRect().top)).toBe(
+        Math.round(next.getBoundingClientRect().top)
+      )
+      expect(back.getBoundingClientRect().left).toBeLessThan(next.getBoundingClientRect().left)
+      expect(getComputedStyle(root).borderTopWidth).toBe('0px')
+      expect(getComputedStyle(root).backgroundImage).toContain('gradient')
+    })
+  })
+
+  describe('floating inset', () => {
+    const documentStyle = () => document.documentElement.style
+    const inset = () => documentStyle().getPropertyValue('--save-bar-inset')
+    const toastOffset = () => documentStyle().getPropertyValue('--toast-offset-bottom')
+
+    it('publishes its height on the document root while mounted and clears it on unmount', async () => {
+      const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
+
+      await vi.waitFor(() => expect(inset()).toMatch(/^[1-9]\d*px$/))
+      expect(toastOffset()).toBe(inset())
+
+      view.unmount()
+      expect(inset()).toBe('')
+      expect(toastOffset()).toBe('')
+    })
+
+    it.each(['docked', 'plain', 'fade', 'centered'] as const)(
+      'publishes nothing for kind=%s',
+      async (kind) => {
+        const view = render(SaveBar, {
+          props: { kind },
+          slots: { default: 'You have unsaved changes.' }
+        })
+        await nextTick()
+        await nextTick()
+
+        expect(inset()).toBe('')
+        expect(toastOffset()).toBe('')
+        view.unmount()
+      }
     )
-  })
 
-  it('keeps the actions in a row in a wide box', () => {
-    const view = mountIn(1024)
+    it('clears the inset when the kind changes away from floating', async () => {
+      const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
+      await vi.waitFor(() => expect(inset()).not.toBe(''))
 
-    expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe('row')
-  })
-})
-
-describe('SaveBar fade in a narrow box', () => {
-  it('keeps Back and the action on one row, without a border', () => {
-    const view = render(Fade, { container: boxOf(320) })
-    const back = view.getByRole('button', { name: 'Back' })
-    const next = view.getByRole('button', { name: 'Continue' })
-    const root = view.getByTestId('layout-save-bar')
-
-    expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe('row')
-    expect(Math.round(back.getBoundingClientRect().top)).toBe(
-      Math.round(next.getBoundingClientRect().top)
-    )
-    expect(back.getBoundingClientRect().left).toBeLessThan(next.getBoundingClientRect().left)
-    expect(getComputedStyle(root).borderTopWidth).toBe('0px')
-    expect(getComputedStyle(root).backgroundImage).toContain('gradient')
-  })
-})
-
-describe('SaveBar floating inset', () => {
-  const documentStyle = () => document.documentElement.style
-  const inset = () => documentStyle().getPropertyValue('--save-bar-inset')
-  const toastOffset = () => documentStyle().getPropertyValue('--toast-offset-bottom')
-
-  it('publishes its height on the document root while mounted and clears it on unmount', async () => {
-    const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
-
-    await vi.waitFor(() => expect(inset()).toMatch(/^[1-9]\d*px$/))
-    expect(toastOffset()).toBe(inset())
-
-    view.unmount()
-    expect(inset()).toBe('')
-    expect(toastOffset()).toBe('')
-  })
-
-  it.each(['docked', 'plain', 'fade', 'centered'] as const)(
-    'publishes nothing for kind=%s',
-    async (kind) => {
-      const view = render(SaveBar, {
-        props: { kind },
-        slots: { default: 'You have unsaved changes.' }
-      })
-      await nextTick()
+      await view.rerender({ kind: 'docked' })
       await nextTick()
 
       expect(inset()).toBe('')
       expect(toastOffset()).toBe('')
       view.unmount()
-    }
-  )
+    })
 
-  it('clears the inset when the kind changes away from floating', async () => {
-    const view = render(SaveBar, { slots: { default: 'You have unsaved changes.' } })
-    await vi.waitFor(() => expect(inset()).not.toBe(''))
+    it('reserves scroll room when it would cover the end of a scroll region', async () => {
+      const shown = ref(true)
+      const host = document.createElement('div')
+      host.style.cssText = 'height: 200px; overflow-y: auto'
+      document.body.appendChild(host)
+      const view = render(
+        {
+          components: { SaveBar },
+          setup: () => ({ shown }),
+          template:
+            '<div><div style="height: 600px">Form</div><SaveBar v-if="shown">You have unsaved changes.</SaveBar></div>'
+        },
+        { container: host }
+      )
+      const root = view.getByTestId('layout-save-bar')
 
-    await view.rerender({ kind: 'docked' })
-    await nextTick()
+      await vi.waitFor(() => expect(root.style.height).toMatch(/^[1-9]\d*px$/))
+      expect(root.style.height).toBe(inset())
 
-    expect(inset()).toBe('')
-    expect(toastOffset()).toBe('')
-    view.unmount()
-  })
-
-  it('reserves scroll room when it would cover the end of a scroll region', async () => {
-    const shown = ref(true)
-    const host = document.createElement('div')
-    host.style.cssText = 'height: 200px; overflow-y: auto'
-    document.body.appendChild(host)
-    const view = render(
-      {
-        components: { SaveBar },
-        setup: () => ({ shown }),
-        template:
-          '<div><div style="height: 600px">Form</div><SaveBar v-if="shown">You have unsaved changes.</SaveBar></div>'
-      },
-      { container: host }
-    )
-    const root = view.getByTestId('layout-save-bar')
-
-    await vi.waitFor(() => expect(root.style.height).toMatch(/^[1-9]\d*px$/))
-    expect(root.style.height).toBe(inset())
-
-    shown.value = false
-    await nextTick()
-    expect(inset()).toBe('')
-    view.unmount()
-    host.remove()
+      shown.value = false
+      await nextTick()
+      expect(inset()).toBe('')
+      view.unmount()
+      host.remove()
+    })
   })
 })

@@ -568,38 +568,37 @@ describe('Sidebar', () => {
       )
     })
   })
-})
 
-describe('Sidebar slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { Sidebar },
-      setup: () => ({ shown }),
-      template: `<Sidebar><template v-if="shown" #footer><span data-testid="probe">Slotted</span></template><a href="/home">Home</a></Sidebar>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { Sidebar },
+        setup: () => ({ shown }),
+        template: `<Sidebar><template v-if="shown" #footer><span data-testid="probe">Slotted</span></template><a href="/home">Home</a></Sidebar>`
+      })
+      expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('layout-sidebar__footer')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('layout-sidebar__footer')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('layout-sidebar__footer')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('layout-sidebar__footer')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
-})
 
-describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () => {
-  const railMenu = {
-    components: { Sidebar, SidebarMenu, SidebarMenuGroup, SidebarMenuItem },
-    setup() {
-      const open = ref(false)
-      return { open }
-    },
-    template: `
+  describe('icon rail (collapsible="icon") and the toggle shortcut', () => {
+    const railMenu = {
+      components: { Sidebar, SidebarMenu, SidebarMenuGroup, SidebarMenuItem },
+      setup() {
+        const open = ref(false)
+        return { open }
+      },
+      template: `
       <Sidebar v-model:open="open" collapsible="icon" shortcut>
         <SidebarMenu role="presentation">
           <SidebarMenuGroup label="Build">
@@ -612,74 +611,75 @@ describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () =>
       <input data-testid="field" />
       <span data-testid="state">{{ !open }}</span>
     `
-  }
+    }
 
-  it('keeps a collapsed icon sidebar in the layout: data-rail, not inert, not aria-hidden', () => {
-    const { getByTestId, queryByTestId } = render(railMenu)
-    const root = getByTestId('layout-sidebar')
-    expect(root.hasAttribute('data-rail')).toBe(true)
-    expect(root.hasAttribute('inert')).toBe(false)
-    expect(root.getAttribute('aria-hidden')).toBeNull()
-    expect(queryByTestId('layout-sidebar__expand')).toBeNull()
-    expect(getByTestId('footer-scope').textContent).toBe('rail')
-  })
+    it('keeps a collapsed icon sidebar in the layout: data-rail, not inert, not aria-hidden', () => {
+      const { getByTestId, queryByTestId } = render(railMenu)
+      const root = getByTestId('layout-sidebar')
+      expect(root.hasAttribute('data-rail')).toBe(true)
+      expect(root.hasAttribute('inert')).toBe(false)
+      expect(root.getAttribute('aria-hidden')).toBeNull()
+      expect(queryByTestId('layout-sidebar__expand')).toBeNull()
+      expect(getByTestId('footer-scope').textContent).toBe('rail')
+    })
 
-  it('keeps each row reachable by its label and hides rows without an icon', () => {
-    const { getByRole, getAllByTestId } = render(railMenu)
-    expect(getByRole('link', { name: 'Applications' })).toBeTruthy()
-    const rows = getAllByTestId('navigation-sidebar-menu-item')
-    expect(rows.every((row) => row.hasAttribute('data-rail'))).toBe(true)
-  })
+    it('keeps each row reachable by its label and hides rows without an icon', () => {
+      const { getByRole, getAllByTestId } = render(railMenu)
+      expect(getByRole('link', { name: 'Applications' })).toBeTruthy()
+      const rows = getAllByTestId('navigation-sidebar-menu-item')
+      expect(rows.every((row) => row.hasAttribute('data-rail'))).toBe(true)
+    })
 
-  it('shows the row label in a tooltip on focus', async () => {
-    const { getByRole } = render(railMenu)
-    getByRole('link', { name: 'Applications' }).focus()
-    await waitFor(() =>
-      expect(document.body.querySelector('[role="tooltip"]')?.textContent?.trim()).toBe(
-        'Applications'
+    it('shows the row label in a tooltip on focus', async () => {
+      const { getByRole } = render(railMenu)
+      getByRole('link', { name: 'Applications' }).focus()
+      await waitFor(() =>
+        expect(document.body.querySelector('[role="tooltip"]')?.textContent?.trim()).toBe(
+          'Applications'
+        )
       )
-    )
-  })
+    })
 
-  it('expands from the rail footer button', async () => {
-    const { getByTestId } = render(railMenu)
-    const expand = getByTestId('layout-sidebar__expand-button')
-    expect(expand.getAttribute('aria-keyshortcuts')).toBe('Control+B Meta+B')
-    await fireEvent.click(expand)
-    await waitFor(() => expect(getByTestId('state').textContent).toBe('false'))
-    expect(getByTestId('layout-sidebar').hasAttribute('data-rail')).toBe(false)
-    expect(getByTestId('footer-scope').textContent).toBe('full')
-  })
+    it('expands from the rail footer button', async () => {
+      const { getByTestId } = render(railMenu)
+      const expand = getByTestId('layout-sidebar__expand-button')
+      expect(expand.getAttribute('aria-keyshortcuts')).toBe('Control+B Meta+B')
+      await fireEvent.click(expand)
+      await waitFor(() => expect(getByTestId('state').textContent).toBe('false'))
+      expect(getByTestId('layout-sidebar').hasAttribute('data-rail')).toBe(false)
+      expect(getByTestId('footer-scope').textContent).toBe('full')
+    })
 
-  it('toggles with Ctrl+B and Cmd+B, but not while typing in a field', async () => {
-    const { getByTestId } = render(railMenu)
-    await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
-    await waitFor(() => expect(getByTestId('state').textContent).toBe('false'))
-    await fireEvent.keyDown(document.body, { key: 'b', metaKey: true })
-    await waitFor(() => expect(getByTestId('state').textContent).toBe('true'))
-    await fireEvent.keyDown(getByTestId('field'), { key: 'b', ctrlKey: true })
-    await nextTick()
-    expect(getByTestId('state').textContent).toBe('true')
-  })
+    it('toggles with Ctrl+B and Cmd+B, but not while typing in a field', async () => {
+      const { getByTestId } = render(railMenu)
+      await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
+      await waitFor(() => expect(getByTestId('state').textContent).toBe('false'))
+      await fireEvent.keyDown(document.body, { key: 'b', metaKey: true })
+      await waitFor(() => expect(getByTestId('state').textContent).toBe('true'))
+      await fireEvent.keyDown(getByTestId('field'), { key: 'b', ctrlKey: true })
+      await nextTick()
+      expect(getByTestId('state').textContent).toBe('true')
+    })
 
-  it('ignores the shortcut unless the shortcut prop is set', async () => {
-    const onUpdate = vi.fn()
-    render(Sidebar, { props: { collapsible: true, 'onUpdate:open': onUpdate } })
-    await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
-    await nextTick()
-    expect(onUpdate).not.toHaveBeenCalled()
-  })
+    it('ignores the shortcut unless the shortcut prop is set', async () => {
+      const onUpdate = vi.fn()
+      render(Sidebar, { props: { collapsible: true, 'onUpdate:open': onUpdate } })
+      await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
+      await nextTick()
+      expect(onUpdate).not.toHaveBeenCalled()
+    })
 
-  it('keeps collapsible=true as the offcanvas collapse', () => {
-    const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
-    const root = getByTestId('layout-sidebar')
-    expect(root.hasAttribute('inert')).toBe(true)
-    expect(root.hasAttribute('data-rail')).toBe(false)
-    expect(getByTestId('layout-sidebar__expand')).toBeTruthy()
-  })
+    it('keeps collapsible=true as the offcanvas collapse', () => {
+      const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
+      const root = getByTestId('layout-sidebar')
+      expect(root.hasAttribute('inert')).toBe(true)
+      expect(root.hasAttribute('data-rail')).toBe(false)
+      expect(getByTestId('layout-sidebar__expand')).toBeTruthy()
+    })
 
-  it('renders the IconRail example without axe violations', async () => {
-    const { container } = render(IconRail)
-    await expectNoA11yViolations(container)
+    it('renders the IconRail example without axe violations', async () => {
+      const { container } = render(IconRail)
+      await expectNoA11yViolations(container)
+    })
   })
 })

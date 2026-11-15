@@ -252,41 +252,41 @@ describe('SidebarMenuItem', () => {
     expect(getByTestId('navigation-sidebar-menu-item')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
-})
 
-describe('SidebarMenuItem slot presence', () => {
-  it('follows a v-if tag slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { SidebarMenuItem },
-      setup: () => ({ shown }),
-      template: `<ul><SidebarMenuItem label="Home"><template v-if="shown" #tag><span data-testid="probe">New</span></template></SidebarMenuItem></ul>`
+  describe('slot presence', () => {
+    it('follows a v-if tag slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { SidebarMenuItem },
+        setup: () => ({ shown }),
+        template: `<ul><SidebarMenuItem label="Home"><template v-if="shown" #tag><span data-testid="probe">New</span></template></SidebarMenuItem></ul>`
+      })
+      expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('navigation-sidebar-menu-item__tag')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('navigation-sidebar-menu-item__tag')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
-})
 
-describe('SidebarMenuItem defaults', () => {
-  it('renders no placeholder label and no icon when neither is set', () => {
-    const { getByTestId, queryByTestId } = render(SidebarMenuItem, { props: { label: 'Logs' } })
-    expect(queryByTestId('navigation-sidebar-menu-item__icon')).toBeNull()
-    expect(getByTestId('navigation-sidebar-menu-item__label').textContent?.trim()).toBe('Logs')
+  describe('defaults', () => {
+    it('renders no placeholder label and no icon when neither is set', () => {
+      const { getByTestId, queryByTestId } = render(SidebarMenuItem, { props: { label: 'Logs' } })
+      expect(queryByTestId('navigation-sidebar-menu-item__icon')).toBeNull()
+      expect(getByTestId('navigation-sidebar-menu-item__label').textContent?.trim()).toBe('Logs')
 
-    const blank = render(SidebarMenuItem)
-    expect(
-      blank.container
-        .querySelector('[data-testid="navigation-sidebar-menu-item__label"]')
-        ?.textContent?.trim()
-    ).toBe('')
+      const blank = render(SidebarMenuItem)
+      expect(
+        blank.container
+          .querySelector('[data-testid="navigation-sidebar-menu-item__label"]')
+          ?.textContent?.trim()
+      ).toBe('')
+    })
   })
 })

@@ -201,15 +201,15 @@ describe('OtpInput', () => {
       cleanup()
     }
   })
-})
 
-describe('OtpInput test ids', () => {
-  it('falls back to otp-input on the root and lets a passed data-testid win', () => {
-    render(OtpInput)
-    expect(document.body.querySelector('[data-testid="input-otp-input"]')).not.toBeNull()
-    cleanup()
-    render(OtpInput, { attrs: { 'data-testid': 'login-code' } })
-    expect(document.body.querySelector('[data-testid="login-code"]')).not.toBeNull()
-    expect(document.body.querySelector('[data-testid="input-otp-input"]')).toBeNull()
+  describe('test ids', () => {
+    it('falls back to otp-input on the root and lets a passed data-testid win', () => {
+      render(OtpInput)
+      expect(document.body.querySelector('[data-testid="input-otp-input"]')).not.toBeNull()
+      cleanup()
+      render(OtpInput, { attrs: { 'data-testid': 'login-code' } })
+      expect(document.body.querySelector('[data-testid="login-code"]')).not.toBeNull()
+      expect(document.body.querySelector('[data-testid="input-otp-input"]')).toBeNull()
+    })
   })
 })

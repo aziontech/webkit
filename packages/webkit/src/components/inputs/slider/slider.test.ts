@@ -333,27 +333,27 @@ describe('Slider', () => {
       }
     )
   })
-})
 
-describe('Slider documented examples', () => {
-  it.each([
-    ['Default', Default],
-    ['Disabled', Disabled],
-    ['Invalid', Invalid],
-    ['ReferenceValues', ReferenceValues],
-    ['Ticks', Ticks]
-  ] as const)(
-    'renders the %s example with a named slider and no axe violations',
-    async (_, example) => {
-      const view = render(example)
-      expect(view.getAllByRole('slider').length).toBeGreaterThan(0)
-      await expectNoA11yViolations(view.container)
-    }
-  )
+  describe('documented examples', () => {
+    it.each([
+      ['Default', Default],
+      ['Disabled', Disabled],
+      ['Invalid', Invalid],
+      ['ReferenceValues', ReferenceValues],
+      ['Ticks', Ticks]
+    ] as const)(
+      'renders the %s example with a named slider and no axe violations',
+      async (_, example) => {
+        const view = render(example)
+        expect(view.getAllByRole('slider').length).toBeGreaterThan(0)
+        await expectNoA11yViolations(view.container)
+      }
+    )
 
-  it('renders the Disabled example with a disabled slider', () => {
-    const view = render(Disabled)
-    const slider = view.getAllByRole('slider')[0] as HTMLInputElement
-    expect(slider.disabled || slider.getAttribute('aria-disabled') === 'true').toBe(true)
+    it('renders the Disabled example with a disabled slider', () => {
+      const view = render(Disabled)
+      const slider = view.getAllByRole('slider')[0] as HTMLInputElement
+      expect(slider.disabled || slider.getAttribute('aria-disabled') === 'true').toBe(true)
+    })
   })
 })

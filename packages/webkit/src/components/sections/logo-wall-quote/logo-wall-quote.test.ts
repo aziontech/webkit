@@ -189,42 +189,42 @@ describe('LogoWallQuote', () => {
 
     await expectNoA11yViolations(container)
   })
-})
 
-describe('LogoWallQuote — quote band', () => {
-  it('renders the quote alone with no logos', () => {
-    const { getByTestId, getByText } = render(LogoWallQuote, {
-      props: { kind: 'quote', quote, anchor: 'quote' }
-    })
-    const root = getByTestId(TESTID)
-    expect(root).toHaveAttribute('data-kind', 'quote')
-    expect(root).toHaveAttribute('id', 'quote')
-    expect(getByText(quote.text)).toBeInTheDocument()
-  })
-
-  it('signs the quote band with the theme-aware company mark and both actions', () => {
-    const { getByRole } = render(LogoWallQuote, {
-      props: {
-        kind: 'quote',
-        quote: { ...quote, artwork: 'light' },
-        primaryAction,
-        secondaryAction: { label: 'Talk to sales', href: '/contact' }
-      }
+  describe('quote band', () => {
+    it('renders the quote alone with no logos', () => {
+      const { getByTestId, getByText } = render(LogoWallQuote, {
+        props: { kind: 'quote', quote, anchor: 'quote' }
+      })
+      const root = getByTestId(TESTID)
+      expect(root).toHaveAttribute('data-kind', 'quote')
+      expect(root).toHaveAttribute('id', 'quote')
+      expect(getByText(quote.text)).toBeInTheDocument()
     })
 
-    expect(getByRole('img', { name: 'Zoop' })).toHaveAttribute('data-artwork', 'light')
-    expect(getByRole('link', { name: 'Talk to sales' })).toHaveAttribute('href', '/contact')
-  })
+    it('signs the quote band with the theme-aware company mark and both actions', () => {
+      const { getByRole } = render(LogoWallQuote, {
+        props: {
+          kind: 'quote',
+          quote: { ...quote, artwork: 'light' },
+          primaryAction,
+          secondaryAction: { label: 'Talk to sales', href: '/contact' }
+        }
+      })
 
-  it('renders nothing in the quote layout without a quote', () => {
-    const { queryByTestId } = render(LogoWallQuote, { props: { kind: 'quote' } })
-    expect(queryByTestId(TESTID)).toBeNull()
-  })
+      expect(getByRole('img', { name: 'Zoop' })).toHaveAttribute('data-artwork', 'light')
+      expect(getByRole('link', { name: 'Talk to sales' })).toHaveAttribute('href', '/contact')
+    })
 
-  it('has no axe violations in the quote band example', async () => {
-    const { default: QuoteBand } =
-      await import('../../../../examples/logo-wall-quote/quote-band.vue')
-    const { container } = render(QuoteBand)
-    await expectNoA11yViolations(container)
+    it('renders nothing in the quote layout without a quote', () => {
+      const { queryByTestId } = render(LogoWallQuote, { props: { kind: 'quote' } })
+      expect(queryByTestId(TESTID)).toBeNull()
+    })
+
+    it('has no axe violations in the quote band example', async () => {
+      const { default: QuoteBand } =
+        await import('../../../../examples/logo-wall-quote/quote-band.vue')
+      const { container } = render(QuoteBand)
+      await expectNoA11yViolations(container)
+    })
   })
 })

@@ -225,26 +225,26 @@ describe('MediaTile', () => {
 
     await expectNoA11yViolations(container)
   })
-})
 
-describe('MediaTile slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { MediaTile },
-      setup: () => ({ shown }),
-      template: `<MediaTile title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaTile>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { MediaTile },
+        setup: () => ({ shown }),
+        template: `<MediaTile title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaTile>`
+      })
+      expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(false)
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(true)
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(false)
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(false)
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(true)
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(false)
-    expect(queryByTestId('probe')).toBeNull()
   })
 })

@@ -506,19 +506,19 @@ describe('Chip', () => {
       }
     )
   })
-})
 
-describe('Chip remove touch target', () => {
-  it.each(['small', 'medium'] as const)('extends the %s remove hit area', (size) => {
-    const { getByTestId } = render(Chip, { props: { label: 'region', removable: true, size } })
-    const target = getByTestId('input-chip__remove').querySelector('[data-slot="touch-target"]')
-    expect(target?.getAttribute('aria-hidden')).toBe('true')
+  describe('remove touch target', () => {
+    it.each(['small', 'medium'] as const)('extends the %s remove hit area', (size) => {
+      const { getByTestId } = render(Chip, { props: { label: 'region', removable: true, size } })
+      const target = getByTestId('input-chip__remove').querySelector('[data-slot="touch-target"]')
+      expect(target?.getAttribute('aria-hidden')).toBe('true')
+    })
   })
-})
 
-describe('Chip Disabled example', () => {
-  it('renders a disabled remove button', () => {
-    const { getAllByTestId } = render(Disabled)
-    expect((getAllByTestId('input-chip__remove')[0] as HTMLButtonElement).disabled).toBe(true)
+  describe('Disabled example', () => {
+    it('renders a disabled remove button', () => {
+      const { getAllByTestId } = render(Disabled)
+      expect((getAllByTestId('input-chip__remove')[0] as HTMLButtonElement).disabled).toBe(true)
+    })
   })
 })

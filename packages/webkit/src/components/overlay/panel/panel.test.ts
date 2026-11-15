@@ -180,14 +180,14 @@ describe('Panel', () => {
     const { getByTestId } = render(composed())
     await expectNoA11yViolations(getByTestId('overlay-panel'))
   })
-})
 
-describe('compound API (index.ts)', () => {
-  it('attaches Header, Content and Footer for dot-notation', async () => {
-    const { default: Compound } = await import('./index')
-    expect(Compound).toBe(Panel)
-    expect(Compound.Header).toBe(PanelHeader)
-    expect(Compound.Content).toBe(PanelContent)
-    expect(Compound.Footer).toBe(PanelFooter)
+  describe('compound API (index.ts)', () => {
+    it('attaches Header, Content and Footer for dot-notation', async () => {
+      const { default: Compound } = await import('./index')
+      expect(Compound).toBe(Panel)
+      expect(Compound.Header).toBe(PanelHeader)
+      expect(Compound.Content).toBe(PanelContent)
+      expect(Compound.Footer).toBe(PanelFooter)
+    })
   })
 })

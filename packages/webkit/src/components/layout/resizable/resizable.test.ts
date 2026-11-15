@@ -104,107 +104,107 @@ describe('Resizable', () => {
     const { container } = render(group())
     await expectNoA11yViolations(container)
   })
-})
 
-describe('Resizable keyboard and models', () => {
-  const setup = async (paneProps: Record<string, unknown> = {}, dir = 'ltr') => {
-    const basis: number[] = []
-    const expanded: boolean[] = []
-    const size = ref(300)
-    const view = render({
-      render: () =>
-        h('div', { dir }, [
+  describe('keyboard and models', () => {
+    const setup = async (paneProps: Record<string, unknown> = {}, dir = 'ltr') => {
+      const basis: number[] = []
+      const expanded: boolean[] = []
+      const size = ref(300)
+      const view = render({
+        render: () =>
+          h('div', { dir }, [
+            group({
+              basis: size.value,
+              'onUpdate:basis': (value: number) => {
+                size.value = value
+                basis.push(value)
+              },
+              'onUpdate:expanded': (value: boolean) => expanded.push(value),
+              ...paneProps
+            })
+          ])
+      })
+      await nextTick()
+      return { ...view, handle: view.getByRole('separator'), basis, expanded }
+    }
+
+    it('ArrowLeft grows the pane after the handle and ArrowRight shrinks it (ltr)', async () => {
+      const { handle, basis } = await setup()
+      await fireEvent.keyDown(handle, { key: 'ArrowLeft' })
+      expect(basis.at(-1)).toBe(324)
+      await nextTick()
+      expect(handle.getAttribute('aria-valuenow')).toBe('324')
+      await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+      expect(basis.at(-1)).toBe(300)
+    })
+
+    it('mirrors the arrows under rtl', async () => {
+      const { handle, basis } = await setup({}, 'rtl')
+      await fireEvent.keyDown(handle, { key: 'ArrowRight' })
+      expect(basis.at(-1)).toBe(324)
+      await fireEvent.keyDown(handle, { key: 'ArrowLeft' })
+      expect(basis.at(-1)).toBe(300)
+    })
+
+    it('Home and End jump to the pane bounds', async () => {
+      const { handle, basis } = await setup()
+      await fireEvent.keyDown(handle, { key: 'Home' })
+      expect(basis.at(-1)).toBe(200)
+      await nextTick()
+      expect(handle.getAttribute('aria-valuenow')).toBe('200')
+      await fireEvent.keyDown(handle, { key: 'End' })
+      expect(basis.at(-1)).toBe(600)
+      await nextTick()
+      expect(handle.getAttribute('aria-valuenow')).toBe('600')
+    })
+
+    it('Enter collapses a collapsible pane and restores it, emitting expanded', async () => {
+      const { handle, expanded, getAllByTestId } = await setup({ collapsible: true })
+      const pane = getAllByTestId('layout-resizable__pane')[1]
+      await fireEvent.keyDown(handle, { key: 'Enter' })
+      expect(expanded.at(-1)).toBe(false)
+      expect(pane.dataset.collapsed).toBe('true')
+      await fireEvent.keyDown(handle, { key: 'Enter' })
+      expect(expanded.at(-1)).toBe(true)
+      expect(pane.dataset.collapsed).toBeUndefined()
+    })
+
+    it('has no collapsed model: only expanded drives the pane', async () => {
+      const { getAllByTestId } = await setup({ collapsed: true, collapsible: true })
+      expect(getAllByTestId('layout-resizable__pane')[1].dataset.collapsed).toBeUndefined()
+    })
+
+    it('Enter does nothing on a pane that is not collapsible', async () => {
+      const { handle, expanded } = await setup()
+      await fireEvent.keyDown(handle, { key: 'Enter' })
+      expect(expanded).toEqual([])
+    })
+
+    it('expanded false renders the pane collapsed, and a bound parent drives it back', async () => {
+      const expanded = ref(false)
+      const { getAllByTestId } = render({
+        setup: () => () =>
           group({
-            basis: size.value,
-            'onUpdate:basis': (value: number) => {
-              size.value = value
-              basis.push(value)
-            },
-            'onUpdate:expanded': (value: boolean) => expanded.push(value),
-            ...paneProps
+            collapsible: true,
+            expanded: expanded.value,
+            'onUpdate:expanded': (value: boolean) => (expanded.value = value)
           })
-        ])
+      })
+      const pane = getAllByTestId('layout-resizable__pane')[1]
+      expect(pane.dataset.collapsed).toBe('true')
+      expanded.value = true
+      await nextTick()
+      expect(pane.dataset.collapsed).toBeUndefined()
     })
-    await nextTick()
-    return { ...view, handle: view.getByRole('separator'), basis, expanded }
-  }
-
-  it('ArrowLeft grows the pane after the handle and ArrowRight shrinks it (ltr)', async () => {
-    const { handle, basis } = await setup()
-    await fireEvent.keyDown(handle, { key: 'ArrowLeft' })
-    expect(basis.at(-1)).toBe(324)
-    await nextTick()
-    expect(handle.getAttribute('aria-valuenow')).toBe('324')
-    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
-    expect(basis.at(-1)).toBe(300)
   })
 
-  it('mirrors the arrows under rtl', async () => {
-    const { handle, basis } = await setup({}, 'rtl')
-    await fireEvent.keyDown(handle, { key: 'ArrowRight' })
-    expect(basis.at(-1)).toBe(324)
-    await fireEvent.keyDown(handle, { key: 'ArrowLeft' })
-    expect(basis.at(-1)).toBe(300)
-  })
+  describe('on devices', () => {
+    it('clips the handle hit area at its own edge', () => {
+      const { getByTestId } = render(group())
 
-  it('Home and End jump to the pane bounds', async () => {
-    const { handle, basis } = await setup()
-    await fireEvent.keyDown(handle, { key: 'Home' })
-    expect(basis.at(-1)).toBe(200)
-    await nextTick()
-    expect(handle.getAttribute('aria-valuenow')).toBe('200')
-    await fireEvent.keyDown(handle, { key: 'End' })
-    expect(basis.at(-1)).toBe(600)
-    await nextTick()
-    expect(handle.getAttribute('aria-valuenow')).toBe('600')
-  })
-
-  it('Enter collapses a collapsible pane and restores it, emitting expanded', async () => {
-    const { handle, expanded, getAllByTestId } = await setup({ collapsible: true })
-    const pane = getAllByTestId('layout-resizable__pane')[1]
-    await fireEvent.keyDown(handle, { key: 'Enter' })
-    expect(expanded.at(-1)).toBe(false)
-    expect(pane.dataset.collapsed).toBe('true')
-    await fireEvent.keyDown(handle, { key: 'Enter' })
-    expect(expanded.at(-1)).toBe(true)
-    expect(pane.dataset.collapsed).toBeUndefined()
-  })
-
-  it('has no collapsed model: only expanded drives the pane', async () => {
-    const { getAllByTestId } = await setup({ collapsed: true, collapsible: true })
-    expect(getAllByTestId('layout-resizable__pane')[1].dataset.collapsed).toBeUndefined()
-  })
-
-  it('Enter does nothing on a pane that is not collapsible', async () => {
-    const { handle, expanded } = await setup()
-    await fireEvent.keyDown(handle, { key: 'Enter' })
-    expect(expanded).toEqual([])
-  })
-
-  it('expanded false renders the pane collapsed, and a bound parent drives it back', async () => {
-    const expanded = ref(false)
-    const { getAllByTestId } = render({
-      setup: () => () =>
-        group({
-          collapsible: true,
-          expanded: expanded.value,
-          'onUpdate:expanded': (value: boolean) => (expanded.value = value)
-        })
+      expect(getByTestId('layout-resizable').className).toContain(
+        'data-[orientation=horizontal]:overflow-x-clip'
+      )
     })
-    const pane = getAllByTestId('layout-resizable__pane')[1]
-    expect(pane.dataset.collapsed).toBe('true')
-    expanded.value = true
-    await nextTick()
-    expect(pane.dataset.collapsed).toBeUndefined()
-  })
-})
-
-describe('Resizable on devices', () => {
-  it('clips the handle hit area at its own edge', () => {
-    const { getByTestId } = render(group())
-
-    expect(getByTestId('layout-resizable').className).toContain(
-      'data-[orientation=horizontal]:overflow-x-clip'
-    )
   })
 })

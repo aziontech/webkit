@@ -173,31 +173,31 @@ describe('FileTokenGroup', () => {
       view.unmount()
     }
   })
-})
 
-describe('FileTokenGroup names', () => {
-  it('emits remove only, not the removed dismiss', async () => {
-    const items = files()
-    const view = render(FileTokenGroup, { props: { items } })
-    await fireEvent.click(view.getByRole('button', { name: 'Remove a.txt' }))
-    expect(view.emitted('remove')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
-    expect(view.emitted('dismiss')).toBeUndefined()
-  })
+  describe('names', () => {
+    it('emits remove only, not the removed dismiss', async () => {
+      const items = files()
+      const view = render(FileTokenGroup, { props: { items } })
+      await fireEvent.click(view.getByRole('button', { name: 'Remove a.txt' }))
+      expect(view.emitted('remove')?.[0]?.[1]).toEqual({ index: 0, item: items[0] })
+      expect(view.emitted('dismiss')).toBeUndefined()
+    })
 
-  it('lays tokens out with orientation and ignores the removed alignment', () => {
-    const next = render(FileTokenGroup, { props: { items: files(), orientation: 'horizontal' } })
-    expect(next.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
-      'horizontal'
-    )
-    next.unmount()
-    const legacy = render(FileTokenGroup, { props: { items: files(), alignment: 'horizontal' } })
-    expect(legacy.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
-      'vertical'
-    )
-  })
+    it('lays tokens out with orientation and ignores the removed alignment', () => {
+      const next = render(FileTokenGroup, { props: { items: files(), orientation: 'horizontal' } })
+      expect(next.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
+        'horizontal'
+      )
+      next.unmount()
+      const legacy = render(FileTokenGroup, { props: { items: files(), alignment: 'horizontal' } })
+      expect(legacy.getByTestId('input-file-token-group').getAttribute('data-orientation')).toBe(
+        'vertical'
+      )
+    })
 
-  it('renders the ReadOnly example with no remove buttons', () => {
-    const view = render(ReadOnly)
-    expect(view.queryAllByRole('button', { name: /^Remove/ })).toHaveLength(0)
+    it('renders the ReadOnly example with no remove buttons', () => {
+      const view = render(ReadOnly)
+      expect(view.queryAllByRole('button', { name: /^Remove/ })).toHaveLength(0)
+    })
   })
 })

@@ -142,25 +142,25 @@ describe('Overline', () => {
     expect(getByText('</>')).toBeInTheDocument()
     expect(getByText('CLOSING TAG')).toBeInTheDocument()
   })
-})
 
-describe('Overline on phones', () => {
-  it('lets a single-line label wrap at any width or zoom so it never overflows', () => {
-    const view = render(Overline, { slots: { default: 'Trusted by mission-critical workloads' } })
+  describe('on phones', () => {
+    it('lets a single-line label wrap at any width or zoom so it never overflows', () => {
+      const view = render(Overline, { slots: { default: 'Trusted by mission-critical workloads' } })
 
-    expect(view.getByText('Trusted by mission-critical workloads').className).not.toContain(
-      'whitespace-nowrap'
-    )
-    expect(view.getByTestId('content-overline').className).toContain('max-w-full')
+      expect(view.getByText('Trusted by mission-critical workloads').className).not.toContain(
+        'whitespace-nowrap'
+      )
+      expect(view.getByTestId('content-overline').className).toContain('max-w-full')
+    })
   })
-})
 
-describe('Overline colors', () => {
-  it('paints the label and the prefix through real token utilities', () => {
-    const view = render(Overline, { props: { prefix: '//' }, slots: { default: 'LABEL' } })
+  describe('colors', () => {
+    it('paints the label and the prefix through real token utilities', () => {
+      const view = render(Overline, { props: { prefix: '//' }, slots: { default: 'LABEL' } })
 
-    expect(view.getByText('LABEL').className).toContain('text-(--text-primary)')
-    expect(view.getByText('//').className).toContain('text-(--text-default)')
-    expect(view.getByText('LABEL').className).not.toMatch(/(^|\s)text-primary(\s|$)/)
+      expect(view.getByText('LABEL').className).toContain('text-(--text-primary)')
+      expect(view.getByText('//').className).toContain('text-(--text-default)')
+      expect(view.getByText('LABEL').className).not.toMatch(/(^|\s)text-primary(\s|$)/)
+    })
   })
 })

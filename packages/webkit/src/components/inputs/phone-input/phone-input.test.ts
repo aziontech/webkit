@@ -590,28 +590,28 @@ describe('PhoneInput', () => {
       expect(input.value).toBe('(415) 555-0100')
     })
   })
-})
 
-describe('PhoneInput test ids', () => {
-  it('falls back to phone-input on the root and lets a passed data-testid win', () => {
-    const view = render(PhoneInput)
-    expect(view.getByTestId('input-phone-input')).toBeTruthy()
-    view.unmount()
-    const custom = render(PhoneInput, { attrs: { 'data-testid': 'contact-phone' } })
-    expect(custom.getByTestId('contact-phone')).toBeTruthy()
-    expect(custom.queryByTestId('input-phone-input')).toBeNull()
-  })
-})
-
-describe('PhoneInput — native form submit', () => {
-  it('submits the E.164 number under its name and keeps the name off the visible input', () => {
-    const { getByTestId } = render({
-      components: { PhoneInput },
-      template:
-        '<form data-testid="form"><PhoneInput model-value="4155550100" country="US" name="phone" aria-label="Phone" /></form>'
+  describe('test ids', () => {
+    it('falls back to phone-input on the root and lets a passed data-testid win', () => {
+      const view = render(PhoneInput)
+      expect(view.getByTestId('input-phone-input')).toBeTruthy()
+      view.unmount()
+      const custom = render(PhoneInput, { attrs: { 'data-testid': 'contact-phone' } })
+      expect(custom.getByTestId('contact-phone')).toBeTruthy()
+      expect(custom.queryByTestId('input-phone-input')).toBeNull()
     })
-    const form = getByTestId('form') as HTMLFormElement
-    expect(new FormData(form).getAll('phone')).toEqual(['+14155550100'])
-    expect(getByTestId('input-phone-input__input').hasAttribute('name')).toBe(false)
+  })
+
+  describe('native form submit', () => {
+    it('submits the E.164 number under its name and keeps the name off the visible input', () => {
+      const { getByTestId } = render({
+        components: { PhoneInput },
+        template:
+          '<form data-testid="form"><PhoneInput model-value="4155550100" country="US" name="phone" aria-label="Phone" /></form>'
+      })
+      const form = getByTestId('form') as HTMLFormElement
+      expect(new FormData(form).getAll('phone')).toEqual(['+14155550100'])
+      expect(getByTestId('input-phone-input__input').hasAttribute('name')).toBe(false)
+    })
   })
 })

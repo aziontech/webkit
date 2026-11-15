@@ -155,38 +155,38 @@ describe('ArtifactCanvas', () => {
       view.getByRole('heading', { level: 2, name: 'top-orders.sql' })
     )
   })
-})
 
-describe('ArtifactCanvas slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { ArtifactCanvas },
-      setup: () => ({ shown }),
-      template: `<ArtifactCanvas title="Report"><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ArtifactCanvas>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { ArtifactCanvas },
+        setup: () => ({ shown }),
+        template: `<ArtifactCanvas title="Report"><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ArtifactCanvas>`
+      })
+      expect(queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('ai-artifact-canvas__toolbar')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('ai-artifact-canvas__toolbar')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
-})
 
-describe('ArtifactCanvas test ids', () => {
-  it('lets a consumer data-testid win over the fallback', () => {
-    const { getByTestId, queryByTestId } = render(ArtifactCanvas, {
-      props: { title: 'Report' },
-      attrs: { 'data-testid': 'canvas' }
+  describe('test ids', () => {
+    it('lets a consumer data-testid win over the fallback', () => {
+      const { getByTestId, queryByTestId } = render(ArtifactCanvas, {
+        props: { title: 'Report' },
+        attrs: { 'data-testid': 'canvas' }
+      })
+      expect(getByTestId('canvas')).toBeInTheDocument()
+      expect(getByTestId('canvas__title')).toBeInTheDocument()
+      expect(queryByTestId('ai-artifact-canvas')).toBeNull()
     })
-    expect(getByTestId('canvas')).toBeInTheDocument()
-    expect(getByTestId('canvas__title')).toBeInTheDocument()
-    expect(queryByTestId('ai-artifact-canvas')).toBeNull()
   })
 })

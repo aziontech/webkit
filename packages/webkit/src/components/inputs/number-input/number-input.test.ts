@@ -465,16 +465,16 @@ describe('NumberInput', () => {
       expect(getByTestId('input-number-input').getAttribute('aria-invalid')).toBe('true')
     })
   })
-})
 
-describe('NumberInput — direction of the typed value', () => {
-  it('uses dir="auto" so a value in another script keeps its own direction', () => {
-    const { getByTestId } = render(NumberInput)
-    expect(getByTestId('input-number-input').getAttribute('dir')).toBe('auto')
-  })
+  describe('direction of the typed value', () => {
+    it('uses dir="auto" so a value in another script keeps its own direction', () => {
+      const { getByTestId } = render(NumberInput)
+      expect(getByTestId('input-number-input').getAttribute('dir')).toBe('auto')
+    })
 
-  it('lets a dir attribute override the default', () => {
-    const { getByTestId } = render(NumberInput, { attrs: { dir: 'ltr' } })
-    expect(getByTestId('input-number-input').getAttribute('dir')).toBe('ltr')
+    it('lets a dir attribute override the default', () => {
+      const { getByTestId } = render(NumberInput, { attrs: { dir: 'ltr' } })
+      expect(getByTestId('input-number-input').getAttribute('dir')).toBe('ltr')
+    })
   })
 })

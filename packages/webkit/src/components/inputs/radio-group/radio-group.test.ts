@@ -170,99 +170,99 @@ describe('RadioGroup', () => {
       view.unmount()
     }
   })
-})
 
-describe('RadioGroup kind="card" and options', () => {
-  const options = [
-    { value: 'free', label: 'Free', description: 'For side projects.', icon: 'ai ai-user' },
-    { value: 'pro', label: 'Pro', description: 'For production apps.' },
-    { value: 'scale', label: 'Scale', disabled: true }
-  ]
+  describe('kind="card" and options', () => {
+    const options = [
+      { value: 'free', label: 'Free', description: 'For side projects.', icon: 'ai ai-user' },
+      { value: 'pro', label: 'Pro', description: 'For production apps.' },
+      { value: 'scale', label: 'Scale', disabled: true }
+    ]
 
-  it('renders one item per option with its label, description and icon', () => {
-    const view = host(`<RadioGroup :options="options" aria-label="Plan" />`, () => ({ options }))
-    const items = view.getAllByTestId('input-radio-group__item')
-    expect(items).toHaveLength(3)
-    expect(view.getAllByTestId('input-radio-group__item__label').map((n) => n.textContent)).toEqual(
-      ['Free', 'Pro', 'Scale']
-    )
-    expect(view.getAllByTestId('input-radio-group__item__icon')).toHaveLength(1)
-    expect((view.getByRole('radio', { name: 'Scale' }) as HTMLInputElement).disabled).toBe(true)
-  })
+    it('renders one item per option with its label, description and icon', () => {
+      const view = host(`<RadioGroup :options="options" aria-label="Plan" />`, () => ({ options }))
+      const items = view.getAllByTestId('input-radio-group__item')
+      expect(items).toHaveLength(3)
+      expect(
+        view.getAllByTestId('input-radio-group__item__label').map((n) => n.textContent)
+      ).toEqual(['Free', 'Pro', 'Scale'])
+      expect(view.getAllByTestId('input-radio-group__item__icon')).toHaveLength(1)
+      expect((view.getByRole('radio', { name: 'Scale' }) as HTMLInputElement).disabled).toBe(true)
+    })
 
-  it('describes each radio by its description', () => {
-    const view = host(`<RadioGroup :options="options" aria-label="Plan" />`, () => ({ options }))
-    const radio = view.getByRole('radio', { name: 'Free' })
-    const description = document.getElementById(radio.getAttribute('aria-describedby') ?? '')
-    expect(description?.textContent).toBe('For side projects.')
-  })
+    it('describes each radio by its description', () => {
+      const view = host(`<RadioGroup :options="options" aria-label="Plan" />`, () => ({ options }))
+      const radio = view.getByRole('radio', { name: 'Free' })
+      const description = document.getElementById(radio.getAttribute('aria-describedby') ?? '')
+      expect(description?.textContent).toBe('For side projects.')
+    })
 
-  it('marks the group and every item data-kind="card" and selects by clicking the card', async () => {
-    const value = ref<string | undefined>('free')
-    const view = host(
-      `<RadioGroup v-model="value" kind="card" :options="options" aria-label="Plan" />`,
-      () => ({ value, options })
-    )
-    expect(view.getByRole('radiogroup').getAttribute('data-kind')).toBe('card')
-    const items = view.getAllByTestId('input-radio-group__item')
-    expect(items.every((item) => item.getAttribute('data-kind') === 'card')).toBe(true)
-    await fireEvent.click(view.getByText('For production apps.'))
-    expect(value.value).toBe('pro')
-    expect(items[1].hasAttribute('data-checked')).toBe(true)
-  })
+    it('marks the group and every item data-kind="card" and selects by clicking the card', async () => {
+      const value = ref<string | undefined>('free')
+      const view = host(
+        `<RadioGroup v-model="value" kind="card" :options="options" aria-label="Plan" />`,
+        () => ({ value, options })
+      )
+      expect(view.getByRole('radiogroup').getAttribute('data-kind')).toBe('card')
+      const items = view.getAllByTestId('input-radio-group__item')
+      expect(items.every((item) => item.getAttribute('data-kind') === 'card')).toBe(true)
+      await fireEvent.click(view.getByText('For production apps.'))
+      expect(value.value).toBe('pro')
+      expect(items[1].hasAttribute('data-checked')).toBe(true)
+    })
 
-  it('keeps the card radios one tab stop moved by the arrow keys', async () => {
-    const value = ref<string | undefined>('free')
-    const view = host(
-      `<RadioGroup v-model="value" kind="card" :options="options" aria-label="Plan" />`,
-      () => ({ value, options })
-    )
-    view.getByRole('radio', { name: 'Free' }).focus()
-    await userEvent.keyboard('{ArrowDown}')
-    expect(value.value).toBe('pro')
-    await userEvent.keyboard('{ArrowDown}')
-    expect(value.value).toBe('free')
-  })
+    it('keeps the card radios one tab stop moved by the arrow keys', async () => {
+      const value = ref<string | undefined>('free')
+      const view = host(
+        `<RadioGroup v-model="value" kind="card" :options="options" aria-label="Plan" />`,
+        () => ({ value, options })
+      )
+      view.getByRole('radio', { name: 'Free' }).focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(value.value).toBe('pro')
+      await userEvent.keyboard('{ArrowDown}')
+      expect(value.value).toBe('free')
+    })
 
-  it('names a radio by an option ariaLabel', () => {
-    const view = host(`<RadioGroup :options="named" aria-label="Mark" />`, () => ({
-      named: [{ value: 'orange', label: '', ariaLabel: 'Orange mark' }]
-    }))
-    expect(view.getByRole('radio', { name: 'Orange mark' })).toBeTruthy()
-  })
+    it('names a radio by an option ariaLabel', () => {
+      const view = host(`<RadioGroup :options="named" aria-label="Mark" />`, () => ({
+        named: [{ value: 'orange', label: '', ariaLabel: 'Orange mark' }]
+      }))
+      expect(view.getByRole('radio', { name: 'Orange mark' })).toBeTruthy()
+    })
 
-  it('renders the option and tag slots for each data-driven option', () => {
-    const view = host(
-      `<RadioGroup :options="options" kind="card" aria-label="Plan">
+    it('renders the option and tag slots for each data-driven option', () => {
+      const view = host(
+        `<RadioGroup :options="options" kind="card" aria-label="Plan">
          <template #option="{ option, selected }"><b :data-selected="selected">{{ option.value }}</b></template>
          <template #tag="{ option }"><i data-testid="tag">{{ option.label }} tag</i></template>
        </RadioGroup>`,
-      () => ({ options })
-    )
-    expect(view.getByText('free').tagName).toBe('B')
-    expect(view.getAllByTestId('tag').map((n) => n.textContent)).toEqual([
-      'Free tag',
-      'Pro tag',
-      'Scale tag'
-    ])
-  })
+        () => ({ options })
+      )
+      expect(view.getByText('free').tagName).toBe('B')
+      expect(view.getAllByTestId('tag').map((n) => n.textContent)).toEqual([
+        'Free tag',
+        'Pro tag',
+        'Scale tag'
+      ])
+    })
 
-  it('renders composed items with the card look, description and tag', () => {
-    const view = host(
-      `<RadioGroup kind="card" aria-label="Plan">
+    it('renders composed items with the card look, description and tag', () => {
+      const view = host(
+        `<RadioGroup kind="card" aria-label="Plan">
          <RadioGroupItem value="a" description="First">A<template #tag><span data-testid="t">Tag</span></template></RadioGroupItem>
        </RadioGroup>`
-    )
-    expect(view.getByTestId('input-radio-group__item').getAttribute('data-kind')).toBe('card')
-    expect(view.getByTestId('input-radio-group__item__description').textContent).toBe('First')
-    expect(view.getByTestId('t')).toBeTruthy()
-  })
+      )
+      expect(view.getByTestId('input-radio-group__item').getAttribute('data-kind')).toBe('card')
+      expect(view.getByTestId('input-radio-group__item__description').textContent).toBe('First')
+      expect(view.getByTestId('t')).toBeTruthy()
+    })
 
-  it('submits the card selection under name', async () => {
-    const view = render(Card)
-    const form = document.createElement('form')
-    view.container.parentElement?.appendChild(form)
-    form.appendChild(view.container)
-    expect(new FormData(form).get('plan')).toBe('pro')
+    it('submits the card selection under name', async () => {
+      const view = render(Card)
+      const form = document.createElement('form')
+      view.container.parentElement?.appendChild(form)
+      form.appendChild(view.container)
+      expect(new FormData(form).get('plan')).toBe('pro')
+    })
   })
 })

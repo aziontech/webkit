@@ -468,70 +468,70 @@ describe('Wizard', () => {
       await expectNoA11yViolations(container)
     })
   })
-})
 
-describe('useWizardContext', () => {
-  it('throws when a step renders outside a Wizard', () => {
-    const Loose = defineComponent({
-      setup() {
-        useWizardContext()
-        return () => null
-      }
+  describe('useWizardContext', () => {
+    it('throws when a step renders outside a Wizard', () => {
+      const Loose = defineComponent({
+        setup() {
+          useWizardContext()
+          return () => null
+        }
+      })
+
+      expect(() => render(Loose)).toThrow(/must be used within a Wizard/)
     })
 
-    expect(() => render(Loose)).toThrow(/must be used within a Wizard/)
+    it('throws when a Wizard.Step renders outside a Wizard', () => {
+      expect(() => render(WizardStep, { props: { title: 'Loose' } })).toThrow(
+        /must be used within a Wizard/
+      )
+    })
   })
 
-  it('throws when a Wizard.Step renders outside a Wizard', () => {
-    expect(() => render(WizardStep, { props: { title: 'Loose' } })).toThrow(
-      /must be used within a Wizard/
-    )
-  })
-})
+  describe('on devices', () => {
+    const inBox = (width: number, locale = 'en') =>
+      defineComponent({
+        components: { Flow, WebkitProvider },
+        setup: () => ({ width: `${width}px`, locale, catalogs: LOCALES }),
+        template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><Flow /></div></WebkitProvider>`
+      })
 
-describe('Wizard on devices', () => {
-  const inBox = (width: number, locale = 'en') =>
-    defineComponent({
-      components: { Flow, WebkitProvider },
-      setup: () => ({ width: `${width}px`, locale, catalogs: LOCALES }),
-      template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><Flow /></div></WebkitProvider>`
+    const progressOf = (view: ReturnType<typeof render>) =>
+      view.getByTestId('navigation-wizard__progress')
+
+    it('shows a polite Step n of N line when the rail hides in a narrow box', async () => {
+      const view = render(inBox(400))
+      await nextTick()
+      await nextTick()
+      const progress = progressOf(view)
+
+      expect(progress.getAttribute('aria-live')).toBe('polite')
+      expect(progress.textContent?.trim()).toBe('Step 1 of 3')
+      expect(getComputedStyle(progress).display).not.toBe('none')
+      const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).display).toBe('none')
+
+      await userEvent.click(view.getByRole('button', { name: 'Next' }))
+      await nextTick()
+      expect(progress.textContent?.trim()).toBe('Step 2 of 3')
     })
 
-  const progressOf = (view: ReturnType<typeof render>) =>
-    view.getByTestId('navigation-wizard__progress')
+    it('hides the line when the rail is visible', async () => {
+      const view = render(inBox(1200))
+      await nextTick()
+      await nextTick()
 
-  it('shows a polite Step n of N line when the rail hides in a narrow box', async () => {
-    const view = render(inBox(400))
-    await nextTick()
-    await nextTick()
-    const progress = progressOf(view)
+      expect(getComputedStyle(progressOf(view)).display).toBe('none')
+      const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
+      expect(getComputedStyle(counter).display).not.toBe('none')
+    })
 
-    expect(progress.getAttribute('aria-live')).toBe('polite')
-    expect(progress.textContent?.trim()).toBe('Step 1 of 3')
-    expect(getComputedStyle(progress).display).not.toBe('none')
-    const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
-    expect(getComputedStyle(counter).display).toBe('none')
+    it('translates the line', async () => {
+      const view = render(inBox(400, 'pt-BR'))
+      await nextTick()
+      await nextTick()
 
-    await userEvent.click(view.getByRole('button', { name: 'Next' }))
-    await nextTick()
-    expect(progress.textContent?.trim()).toBe('Step 2 of 3')
-  })
-
-  it('hides the line when the rail is visible', async () => {
-    const view = render(inBox(1200))
-    await nextTick()
-    await nextTick()
-
-    expect(getComputedStyle(progressOf(view)).display).toBe('none')
-    const counter = within(view.getByRole('group')).getByText('Step 1 of 3')
-    expect(getComputedStyle(counter).display).not.toBe('none')
-  })
-
-  it('translates the line', async () => {
-    const view = render(inBox(400, 'pt-BR'))
-    await nextTick()
-    await nextTick()
-
-    expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
+      expect(progressOf(view).textContent?.trim()).toBe('Etapa 1 de 3')
+    })
   })
 })

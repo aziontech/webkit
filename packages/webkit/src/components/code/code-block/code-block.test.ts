@@ -765,251 +765,251 @@ describe('CodeBlock', () => {
       ).toBe(false)
     })
   })
-})
 
-describe('CodeBlock docs surfaces', () => {
-  const shell = [{ label: 'Shell', value: 'sh', language: 'bash', code: 'azion deploy' }]
+  describe('docs surfaces', () => {
+    const shell = [{ label: 'Shell', value: 'sh', language: 'bash', code: 'azion deploy' }]
 
-  describe('label header', () => {
-    it('is off by default', () => {
-      const { queryByTestId } = render(CodeBlock, { props: { tabs: shell } })
-      expect(queryByTestId('code-code-block__label')).toBeNull()
+    describe('label header', () => {
+      it('is off by default', () => {
+        const { queryByTestId } = render(CodeBlock, { props: { tabs: shell } })
+        expect(queryByTestId('code-code-block__label')).toBeNull()
+      })
+
+      it('names the block with the tab label when showLabel is on', () => {
+        const { getByTestId } = render(CodeBlock, { props: { tabs: shell, showLabel: true } })
+        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Shell')
+      })
+
+      it('falls back to the readable language name when the tab label is empty', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: {
+            tabs: [{ label: '', value: 'js', language: 'js', code: 'const a = 1' }],
+            showLabel: true
+          }
+        })
+        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
+      })
+
+      it('uses title over the tab label', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: { tabs: shell, title: 'Terminal' }
+        })
+        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Terminal')
+      })
+
+      it('gives way to the tab strip and to the filename bar', () => {
+        const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
+        expect(tabs.queryByTestId('code-code-block__label')).toBeNull()
+        tabs.unmount()
+        const file = render(CodeBlock, { props: { tabs: fileNameTab, showLabel: true } })
+        expect(file.queryByTestId('code-code-block__label')).toBeNull()
+      })
     })
 
-    it('names the block with the tab label when showLabel is on', () => {
-      const { getByTestId } = render(CodeBlock, { props: { tabs: shell, showLabel: true } })
-      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Shell')
-    })
+    describe('output kind', () => {
+      const output = [
+        { label: 'Text', value: 'out', language: 'bash', code: 'HTTP/2 200\nx-cache: HIT' }
+      ]
 
-    it('falls back to the readable language name when the tab label is empty', () => {
-      const { getByTestId } = render(CodeBlock, {
-        props: {
-          tabs: [{ label: '', value: 'js', language: 'js', code: 'const a = 1' }],
-          showLabel: true
+      it('labels the block Output, drops the copy control and marks the root', () => {
+        const { getByTestId, queryByTestId } = render(CodeBlock, {
+          props: { tabs: output, kind: 'output' }
+        })
+        const root = getByTestId('code-code-block')
+        expect(root.getAttribute('data-kind')).toBe('output')
+        expect(root.hasAttribute('data-copyable')).toBe(false)
+        expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
+        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Output')
+      })
+
+      it('draws every line flat, without syntax tokens', () => {
+        const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, kind: 'output' } })
+        for (const line of getAllByTestId('code-code-block__line-content')) {
+          expect(line.children).toHaveLength(1)
         }
       })
-      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
-    })
 
-    it('uses title over the tab label', () => {
-      const { getByTestId } = render(CodeBlock, {
-        props: { tabs: shell, title: 'Terminal' }
+      it('keeps a copy control when copyable is set explicitly', () => {
+        const { getByTestId } = render(CodeBlock, {
+          props: { tabs: output, kind: 'output', copyable: true }
+        })
+        expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
       })
-      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Terminal')
+
+      it('a code block stays copyable by default', () => {
+        const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
+        expect(getByTestId('code-code-block').getAttribute('data-kind')).toBe('code')
+        expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
+      })
+
+      it('has no a11y violations beside its command', async () => {
+        const { container } = render({
+          components: { CodeBlock },
+          setup: () => ({ shell, output }),
+          template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" kind="output" data-testid="out" /></div>`
+        })
+        await expectNoA11yViolations(container)
+      })
     })
 
-    it('gives way to the tab strip and to the filename bar', () => {
-      const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
-      expect(tabs.queryByTestId('code-code-block__label')).toBeNull()
-      tabs.unmount()
-      const file = render(CodeBlock, { props: { tabs: fileNameTab, showLabel: true } })
-      expect(file.queryByTestId('code-code-block__label')).toBeNull()
+    describe('shell prompt', () => {
+      it('draws a leading $ as a prompt token and the rest as a command', () => {
+        const tokens = highlightCodeLine('bash', '$ azion deploy')
+        expect(tokens[0]).toEqual({ text: '$ ', type: 'prompt' })
+        expect(tokens.find((token) => token.text.trim() === 'azion')?.type).toBe('function')
+      })
+
+      it('copies the commands without their prompts, and skips unprompted lines', async () => {
+        const writeText = stubClipboardResolved()
+        const { getByTestId, emitted } = render(CodeBlock, {
+          props: {
+            tabs: [
+              {
+                label: 'Shell',
+                value: 'sh',
+                language: 'bash',
+                code: '$ azion login\n$ azion deploy \\\n  --local\nDeploy finished'
+              }
+            ]
+          }
+        })
+        await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+        await waitFor(() => expect(emitted().copy).toBeTruthy())
+        expect(writeText).toHaveBeenCalledWith('azion login\nazion deploy \\\n  --local')
+      })
+
+      it('copies a block without prompts as written', async () => {
+        const writeText = stubClipboardResolved()
+        const { getByTestId, emitted } = render(CodeBlock, { props: { tabs: shell } })
+        await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+        await waitFor(() => expect(emitted().copy).toBeTruthy())
+        expect(writeText).toHaveBeenCalledWith('azion deploy')
+      })
     })
   })
 
-  describe('output kind', () => {
-    const output = [
-      { label: 'Text', value: 'out', language: 'bash', code: 'HTTP/2 200\nx-cache: HIT' }
-    ]
+  describe('computed diff', () => {
+    const original = 'a\nb\nc\nd'
+    const modified = 'a\nx\nc\nd\ne'
+    const tab = [{ label: 'Diff', value: 'diff', language: 'plaintext', code: modified, original }]
+    const states = (view: ReturnType<typeof render>, id: string) =>
+      view.getAllByTestId(id).map((line) => line.getAttribute('data-state'))
+    const texts = (view: ReturnType<typeof render>, id: string) =>
+      view.getAllByTestId(id).map((line) => line.textContent?.trim())
 
-    it('labels the block Output, drops the copy control and marks the root', () => {
-      const { getByTestId, queryByTestId } = render(CodeBlock, {
-        props: { tabs: output, kind: 'output' }
-      })
-      const root = getByTestId('code-code-block')
-      expect(root.getAttribute('data-kind')).toBe('output')
-      expect(root.hasAttribute('data-copyable')).toBe(false)
-      expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
-      expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Output')
+    it('computes a minimal line diff that rebuilds both versions', () => {
+      const rows = diffLines(original, modified)
+      expect(rows.map((row) => row.change)).toEqual([
+        'unchanged',
+        'removed',
+        'added',
+        'unchanged',
+        'unchanged',
+        'added'
+      ])
+      const before = original.split('\n')
+      const after = modified.split('\n')
+      expect(
+        rows.filter((row) => row.change !== 'added').map((row) => before[(row.oldNumber ?? 0) - 1])
+      ).toEqual(before)
+      expect(
+        rows.filter((row) => row.change !== 'removed').map((row) => after[(row.newNumber ?? 0) - 1])
+      ).toEqual(after)
+      expect(pairDiffLines(rows)).toHaveLength(5)
     })
 
-    it('draws every line flat, without syntax tokens', () => {
-      const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, kind: 'output' } })
-      for (const line of getAllByTestId('code-code-block__line-content')) {
-        expect(line.children).toHaveLength(1)
-      }
+    it('falls back to removed then added when the edits pass the limit', () => {
+      const rows = diffLines('a\nb', 'c\nd', 1)
+      expect(rows.map((row) => row.change)).toEqual(['removed', 'removed', 'added', 'added'])
     })
 
-    it('keeps a copy control when copyable is set explicitly', () => {
-      const { getByTestId } = render(CodeBlock, {
-        props: { tabs: output, kind: 'output', copyable: true }
-      })
-      expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
+    it('diffs 5,000-line versions with scattered edits quickly', () => {
+      const before = Array.from({ length: 5000 }, (_, i) => `line ${i}`)
+      const after = before.map((line, i) => (i % 50 === 0 ? `${line} changed` : line))
+      const start = performance.now()
+      const rows = diffLines(before.join('\n'), after.join('\n'))
+      expect(performance.now() - start).toBeLessThan(200)
+      expect(rows.filter((row) => row.change === 'added')).toHaveLength(100)
     })
 
-    it('a code block stays copyable by default', () => {
-      const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
-      expect(getByTestId('code-code-block').getAttribute('data-kind')).toBe('code')
-      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
+    it('draws a unified diff with markers, side numbers and spoken changes', () => {
+      const view = render(CodeBlock, { props: { tabs: tab } })
+      expect(states(view, 'code-code-block__line')).toEqual([
+        'default',
+        'removed',
+        'added',
+        'default',
+        'default',
+        'added'
+      ])
+      expect(texts(view, 'code-code-block__line-content')).toEqual(['a', 'b', 'x', 'c', 'd', 'e'])
+      expect(texts(view, 'code-code-block__line-number')).toEqual([
+        '01',
+        '02',
+        '02',
+        '03',
+        '04',
+        '05'
+      ])
+      expect(texts(view, 'code-code-block__diff-marker')).toEqual(['', '-', '+', '', '', '+'])
+      const lines = view.getAllByTestId('code-code-block__line')
+      expect(lines[1]?.querySelector('.sr-only')?.textContent).toBe('Removed')
+      expect(lines[2]?.querySelector('.sr-only')?.textContent).toBe('Added')
     })
 
-    it('has no a11y violations beside its command', async () => {
-      const { container } = render({
-        components: { CodeBlock },
-        setup: () => ({ shell, output }),
-        template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" kind="output" data-testid="out" /></div>`
-      })
-      await expectNoA11yViolations(container)
-    })
-  })
-
-  describe('shell prompt', () => {
-    it('draws a leading $ as a prompt token and the rest as a command', () => {
-      const tokens = highlightCodeLine('bash', '$ azion deploy')
-      expect(tokens[0]).toEqual({ text: '$ ', type: 'prompt' })
-      expect(tokens.find((token) => token.text.trim() === 'azion')?.type).toBe('function')
-    })
-
-    it('copies the commands without their prompts, and skips unprompted lines', async () => {
+    it('draws a split diff with aligned, paired columns and copies the modified code', async () => {
       const writeText = stubClipboardResolved()
-      const { getByTestId, emitted } = render(CodeBlock, {
+      const view = render(CodeBlock, { props: { tabs: tab, diffView: 'split' } })
+      expect(view.getByTestId('code-code-block__panel').hasAttribute('data-split')).toBe(true)
+      expect(view.queryAllByTestId('code-code-block__line')).toHaveLength(0)
+      const [left, right] = view.getAllByRole('group') as HTMLElement[]
+      expect(left?.getAttribute('aria-label')).toBe('Original')
+      expect(right?.getAttribute('aria-label')).toBe('Modified')
+      const leftLines = within(left as HTMLElement).getAllByTestId('code-code-block__split-line')
+      const rightLines = within(right as HTMLElement).getAllByTestId('code-code-block__split-line')
+      expect(leftLines.map((line) => line.getAttribute('data-state'))).toEqual([
+        'default',
+        'removed',
+        'default',
+        'default',
+        'empty'
+      ])
+      expect(rightLines.map((line) => line.getAttribute('data-state'))).toEqual([
+        'default',
+        'added',
+        'default',
+        'default',
+        'added'
+      ])
+      await fireEvent.click(within(view.getByTestId('code-code-block__copy')).getByRole('button'))
+      await waitFor(() => expect(writeText).toHaveBeenCalledWith(modified))
+    })
+
+    it('mounts a long split diff in chunks', () => {
+      const before = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`)
+      const after = before.map((line, i) => (i % 100 === 0 ? `${line} + 1` : line))
+      const view = render(CodeBlock, {
         props: {
+          diffView: 'split',
           tabs: [
             {
-              label: 'Shell',
-              value: 'sh',
-              language: 'bash',
-              code: '$ azion login\n$ azion deploy \\\n  --local\nDeploy finished'
+              label: 'Long',
+              value: 'long',
+              language: 'javascript',
+              code: after.join('\n'),
+              original: before.join('\n')
             }
           ]
         }
       })
-      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
-      await waitFor(() => expect(emitted().copy).toBeTruthy())
-      expect(writeText).toHaveBeenCalledWith('azion login\nazion deploy \\\n  --local')
+      const mounted = view.getAllByTestId('code-code-block__split-line').length
+      expect(mounted).toBeGreaterThan(0)
+      expect(mounted).toBeLessThan(4000)
     })
 
-    it('copies a block without prompts as written', async () => {
-      const writeText = stubClipboardResolved()
-      const { getByTestId, emitted } = render(CodeBlock, { props: { tabs: shell } })
-      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
-      await waitFor(() => expect(emitted().copy).toBeTruthy())
-      expect(writeText).toHaveBeenCalledWith('azion deploy')
+    it('has no axe violations in the computed diff example', async () => {
+      const view = render(ComputedDiff)
+      await expectNoA11yViolations(view.container)
     })
-  })
-})
-
-describe('CodeBlock computed diff', () => {
-  const original = 'a\nb\nc\nd'
-  const modified = 'a\nx\nc\nd\ne'
-  const tab = [{ label: 'Diff', value: 'diff', language: 'plaintext', code: modified, original }]
-  const states = (view: ReturnType<typeof render>, id: string) =>
-    view.getAllByTestId(id).map((line) => line.getAttribute('data-state'))
-  const texts = (view: ReturnType<typeof render>, id: string) =>
-    view.getAllByTestId(id).map((line) => line.textContent?.trim())
-
-  it('computes a minimal line diff that rebuilds both versions', () => {
-    const rows = diffLines(original, modified)
-    expect(rows.map((row) => row.change)).toEqual([
-      'unchanged',
-      'removed',
-      'added',
-      'unchanged',
-      'unchanged',
-      'added'
-    ])
-    const before = original.split('\n')
-    const after = modified.split('\n')
-    expect(
-      rows.filter((row) => row.change !== 'added').map((row) => before[(row.oldNumber ?? 0) - 1])
-    ).toEqual(before)
-    expect(
-      rows.filter((row) => row.change !== 'removed').map((row) => after[(row.newNumber ?? 0) - 1])
-    ).toEqual(after)
-    expect(pairDiffLines(rows)).toHaveLength(5)
-  })
-
-  it('falls back to removed then added when the edits pass the limit', () => {
-    const rows = diffLines('a\nb', 'c\nd', 1)
-    expect(rows.map((row) => row.change)).toEqual(['removed', 'removed', 'added', 'added'])
-  })
-
-  it('diffs 5,000-line versions with scattered edits quickly', () => {
-    const before = Array.from({ length: 5000 }, (_, i) => `line ${i}`)
-    const after = before.map((line, i) => (i % 50 === 0 ? `${line} changed` : line))
-    const start = performance.now()
-    const rows = diffLines(before.join('\n'), after.join('\n'))
-    expect(performance.now() - start).toBeLessThan(200)
-    expect(rows.filter((row) => row.change === 'added')).toHaveLength(100)
-  })
-
-  it('draws a unified diff with markers, side numbers and spoken changes', () => {
-    const view = render(CodeBlock, { props: { tabs: tab } })
-    expect(states(view, 'code-code-block__line')).toEqual([
-      'default',
-      'removed',
-      'added',
-      'default',
-      'default',
-      'added'
-    ])
-    expect(texts(view, 'code-code-block__line-content')).toEqual(['a', 'b', 'x', 'c', 'd', 'e'])
-    expect(texts(view, 'code-code-block__line-number')).toEqual([
-      '01',
-      '02',
-      '02',
-      '03',
-      '04',
-      '05'
-    ])
-    expect(texts(view, 'code-code-block__diff-marker')).toEqual(['', '-', '+', '', '', '+'])
-    const lines = view.getAllByTestId('code-code-block__line')
-    expect(lines[1]?.querySelector('.sr-only')?.textContent).toBe('Removed')
-    expect(lines[2]?.querySelector('.sr-only')?.textContent).toBe('Added')
-  })
-
-  it('draws a split diff with aligned, paired columns and copies the modified code', async () => {
-    const writeText = stubClipboardResolved()
-    const view = render(CodeBlock, { props: { tabs: tab, diffView: 'split' } })
-    expect(view.getByTestId('code-code-block__panel').hasAttribute('data-split')).toBe(true)
-    expect(view.queryAllByTestId('code-code-block__line')).toHaveLength(0)
-    const [left, right] = view.getAllByRole('group') as HTMLElement[]
-    expect(left?.getAttribute('aria-label')).toBe('Original')
-    expect(right?.getAttribute('aria-label')).toBe('Modified')
-    const leftLines = within(left as HTMLElement).getAllByTestId('code-code-block__split-line')
-    const rightLines = within(right as HTMLElement).getAllByTestId('code-code-block__split-line')
-    expect(leftLines.map((line) => line.getAttribute('data-state'))).toEqual([
-      'default',
-      'removed',
-      'default',
-      'default',
-      'empty'
-    ])
-    expect(rightLines.map((line) => line.getAttribute('data-state'))).toEqual([
-      'default',
-      'added',
-      'default',
-      'default',
-      'added'
-    ])
-    await fireEvent.click(within(view.getByTestId('code-code-block__copy')).getByRole('button'))
-    await waitFor(() => expect(writeText).toHaveBeenCalledWith(modified))
-  })
-
-  it('mounts a long split diff in chunks', () => {
-    const before = Array.from({ length: 2000 }, (_, i) => `const v${i} = ${i}`)
-    const after = before.map((line, i) => (i % 100 === 0 ? `${line} + 1` : line))
-    const view = render(CodeBlock, {
-      props: {
-        diffView: 'split',
-        tabs: [
-          {
-            label: 'Long',
-            value: 'long',
-            language: 'javascript',
-            code: after.join('\n'),
-            original: before.join('\n')
-          }
-        ]
-      }
-    })
-    const mounted = view.getAllByTestId('code-code-block__split-line').length
-    expect(mounted).toBeGreaterThan(0)
-    expect(mounted).toBeLessThan(4000)
-  })
-
-  it('has no axe violations in the computed diff example', async () => {
-    const view = render(ComputedDiff)
-    await expectNoA11yViolations(view.container)
   })
 })

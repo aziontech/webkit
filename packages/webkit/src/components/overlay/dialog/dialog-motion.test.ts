@@ -35,41 +35,43 @@ function longMotion(root: HTMLElement): string[] {
   return [...animations, ...transitions]
 }
 
-describe('overlay entrance motion under prefers-reduced-motion', () => {
-  afterEach(async () => {
-    await commands.emulateMedia({ reducedMotion: null })
-  })
+describe('Dialog', () => {
+  describe('overlay entrance motion under prefers-reduced-motion', () => {
+    afterEach(async () => {
+      await commands.emulateMedia({ reducedMotion: null })
+    })
 
-  it('Dialog opens with no animation or transition longer than 1ms', async () => {
-    await commands.emulateMedia({ reducedMotion: 'reduce' })
-    render(DialogDefault)
-    await settle()
-    await fireEvent.click(byTestId('overlay-dialog__trigger')!)
-    await settle()
-    const panel = byTestId('overlay-dialog__panel')
-    expect(panel).not.toBeNull()
-    expect(longMotion(panel!.closest('[role="dialog"]') ?? panel!)).toEqual([])
-  })
+    it('Dialog opens with no animation or transition longer than 1ms', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      render(DialogDefault)
+      await settle()
+      await fireEvent.click(byTestId('overlay-dialog__trigger')!)
+      await settle()
+      const panel = byTestId('overlay-dialog__panel')
+      expect(panel).not.toBeNull()
+      expect(longMotion(panel!.closest('[role="dialog"]') ?? panel!)).toEqual([])
+    })
 
-  it('Drawer opens with no animation or transition longer than 1ms', async () => {
-    await commands.emulateMedia({ reducedMotion: 'reduce' })
-    render(DrawerDefault)
-    await settle()
-    await fireEvent.click(byTestId('overlay-drawer__trigger')!)
-    await settle()
-    const panel = byTestId('overlay-drawer__panel')
-    expect(panel).not.toBeNull()
-    expect(longMotion(panel!)).toEqual([])
-  })
+    it('Drawer opens with no animation or transition longer than 1ms', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      render(DrawerDefault)
+      await settle()
+      await fireEvent.click(byTestId('overlay-drawer__trigger')!)
+      await settle()
+      const panel = byTestId('overlay-drawer__panel')
+      expect(panel).not.toBeNull()
+      expect(longMotion(panel!)).toEqual([])
+    })
 
-  it('Popover opens with no animation or transition longer than 1ms', async () => {
-    await commands.emulateMedia({ reducedMotion: 'reduce' })
-    render(PopoverDefault)
-    await settle()
-    await fireEvent.click(byTestId('overlay-popover__trigger')!.querySelector('button')!)
-    await settle()
-    const panel = byTestId('overlay-popover__panel')
-    expect(panel).not.toBeNull()
-    expect(longMotion(panel!)).toEqual([])
+    it('Popover opens with no animation or transition longer than 1ms', async () => {
+      await commands.emulateMedia({ reducedMotion: 'reduce' })
+      render(PopoverDefault)
+      await settle()
+      await fireEvent.click(byTestId('overlay-popover__trigger')!.querySelector('button')!)
+      await settle()
+      const panel = byTestId('overlay-popover__panel')
+      expect(panel).not.toBeNull()
+      expect(longMotion(panel!)).toEqual([])
+    })
   })
 })

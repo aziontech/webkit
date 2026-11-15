@@ -246,26 +246,30 @@ describe('AppLayout', () => {
     const { container } = render(layout({ toolsOpen: true, splitPanelOpen: true }))
     await expectNoA11yViolations(container)
   })
-})
 
-describe('AppLayout right-to-left', () => {
-  it('grows a side split panel with ArrowRight under rtl', async () => {
-    const { getByRole } = render(
-      layout({ splitPanelOpen: true, splitPanelPosition: 'side', splitPanelSize: 300 }, 1200, 'rtl')
-    )
-    const separator = getByRole('separator')
-    await fireEvent.keyDown(separator, { key: 'ArrowRight' })
-    expect(separator.getAttribute('aria-valuenow')).toBe('316')
-    await fireEvent.keyDown(separator, { key: 'ArrowLeft' })
-    expect(separator.getAttribute('aria-valuenow')).toBe('300')
-  })
+  describe('right-to-left', () => {
+    it('grows a side split panel with ArrowRight under rtl', async () => {
+      const { getByRole } = render(
+        layout(
+          { splitPanelOpen: true, splitPanelPosition: 'side', splitPanelSize: 300 },
+          1200,
+          'rtl'
+        )
+      )
+      const separator = getByRole('separator')
+      await fireEvent.keyDown(separator, { key: 'ArrowRight' })
+      expect(separator.getAttribute('aria-valuenow')).toBe('316')
+      await fireEvent.keyDown(separator, { key: 'ArrowLeft' })
+      expect(separator.getAttribute('aria-valuenow')).toBe('300')
+    })
 
-  it('grows a side split panel with ArrowLeft under ltr', async () => {
-    const { getByRole } = render(
-      layout({ splitPanelOpen: true, splitPanelPosition: 'side', splitPanelSize: 300 })
-    )
-    const separator = getByRole('separator')
-    await fireEvent.keyDown(separator, { key: 'ArrowLeft' })
-    expect(separator.getAttribute('aria-valuenow')).toBe('316')
+    it('grows a side split panel with ArrowLeft under ltr', async () => {
+      const { getByRole } = render(
+        layout({ splitPanelOpen: true, splitPanelPosition: 'side', splitPanelSize: 300 })
+      )
+      const separator = getByRole('separator')
+      await fireEvent.keyDown(separator, { key: 'ArrowLeft' })
+      expect(separator.getAttribute('aria-valuenow')).toBe('316')
+    })
   })
 })

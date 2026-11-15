@@ -254,16 +254,15 @@ describe('TutorialPanel', () => {
     expect(marker.getBoundingClientRect().left).toBeGreaterThan(input.getBoundingClientRect().left)
     await expectNoA11yViolations(container)
   })
-})
 
-const Guide = defineComponent({
-  components: { HelpPanel, TutorialPanelTasks, TutorialPanelTask },
-  props: {
-    second: { type: String, default: 'current' },
-    completed: { type: Boolean, default: false },
-    withActions: { type: Boolean, default: true }
-  },
-  template: `
+  const Guide = defineComponent({
+    components: { HelpPanel, TutorialPanelTasks, TutorialPanelTask },
+    props: {
+      second: { type: String, default: 'current' },
+      completed: { type: Boolean, default: false },
+      withActions: { type: Boolean, default: true }
+    },
+    template: `
     <HelpPanel aria-label="Help: Get started">
       <TutorialPanelTasks
         title="Put your first site online"
@@ -283,99 +282,100 @@ const Guide = defineComponent({
       </TutorialPanelTasks>
     </HelpPanel>
   `
-})
-
-const tasksOf = (view: ReturnType<typeof render>) =>
-  view.getAllByTestId('content-tutorial-panel-task')
-
-describe('TutorialPanel task list', () => {
-  it('numbers the tasks in order and mirrors their status', async () => {
-    const view = render(Guide)
-    await nextTick()
-    const tasks = tasksOf(view)
-    expect(tasks.map((task) => task.getAttribute('data-status'))).toEqual([
-      'complete',
-      'current',
-      'upcoming'
-    ])
-    expect(tasks[1]?.textContent).toContain('2')
-    expect(tasks[2]?.textContent).toContain('3')
   })
 
-  it('marks only the current task with aria-current and announces each status', async () => {
-    const view = render(Guide)
-    await nextTick()
-    const tasks = tasksOf(view)
-    expect(tasks.map((task) => task.getAttribute('aria-current'))).toEqual([null, 'step', null])
-    expect(tasks[0]?.textContent).toContain('Complete')
-    expect(tasks[1]?.textContent).toContain('Current task')
-    expect(tasks[2]?.textContent).toContain('Not started')
-  })
+  const tasksOf = (view: ReturnType<typeof render>) =>
+    view.getAllByTestId('content-tutorial-panel-task')
 
-  it('derives the progress line from the task statuses', async () => {
-    const view = render(Guide)
-    await nextTick()
-    const progress = view.getByTestId('content-tutorial-panel-tasks__progress')
-    expect(progress.textContent?.trim()).toBe('1 of 3 complete')
-    expect(progress.getAttribute('aria-live')).toBe('polite')
-
-    await view.rerender({ second: 'complete' })
-    await nextTick()
-    expect(progress.textContent?.trim()).toBe('2 of 3 complete')
-  })
-
-  it('renders the tasks inside an ordered list labelled by the tutorial heading', () => {
-    const view = render(Guide)
-    const tutorial = view.getByRole('region', { name: 'Put your first site online' })
-    expect(tutorial.querySelector('ol')?.children).toHaveLength(3)
-  })
-
-  it('shows the Completed tag only when the owner marks the tutorial done', async () => {
-    const view = render(Guide)
-    const tutorial = view.getByTestId('content-tutorial-panel-tasks')
-    expect(tutorial.hasAttribute('data-completed')).toBe(false)
-    expect(view.queryByTestId('content-tutorial-panel-tasks__completed')).toBeNull()
-
-    await view.rerender({ completed: true })
-    expect(tutorial.hasAttribute('data-completed')).toBe(true)
-    expect(view.getByTestId('content-tutorial-panel-tasks__completed').textContent).toContain(
-      'Completed'
-    )
-  })
-
-  it('renders the actions row when the slot has content', () => {
-    const view = render(Guide)
-    const actions = view.getByTestId('content-tutorial-panel-tasks__actions')
-    expect(actions.querySelector('button')?.textContent).toBe('Continue')
-  })
-
-  it('omits the actions row when the slot is empty', () => {
-    const view = render(Guide, { props: { withActions: false } })
-    expect(view.queryByTestId('content-tutorial-panel-tasks__actions')).toBeNull()
-  })
-
-  it('has no axe violations with a completed tutorial', async () => {
-    const { container } = render(Guide, { props: { completed: true } })
-    await nextTick()
-    await expectNoA11yViolations(container)
-  })
-})
-
-describe('useTutorialTasksContext', () => {
-  it('throws when resolved outside a TutorialPanel task list', () => {
-    const Loose = defineComponent({
-      setup() {
-        useTutorialTasksContext()
-        return () => null
-      }
+  describe('task list', () => {
+    it('numbers the tasks in order and mirrors their status', async () => {
+      const view = render(Guide)
+      await nextTick()
+      const tasks = tasksOf(view)
+      expect(tasks.map((task) => task.getAttribute('data-status'))).toEqual([
+        'complete',
+        'current',
+        'upcoming'
+      ])
+      expect(tasks[1]?.textContent).toContain('2')
+      expect(tasks[2]?.textContent).toContain('3')
     })
 
-    expect(() => render(Loose)).toThrow(/must be used within a TutorialPanel/)
+    it('marks only the current task with aria-current and announces each status', async () => {
+      const view = render(Guide)
+      await nextTick()
+      const tasks = tasksOf(view)
+      expect(tasks.map((task) => task.getAttribute('aria-current'))).toEqual([null, 'step', null])
+      expect(tasks[0]?.textContent).toContain('Complete')
+      expect(tasks[1]?.textContent).toContain('Current task')
+      expect(tasks[2]?.textContent).toContain('Not started')
+    })
+
+    it('derives the progress line from the task statuses', async () => {
+      const view = render(Guide)
+      await nextTick()
+      const progress = view.getByTestId('content-tutorial-panel-tasks__progress')
+      expect(progress.textContent?.trim()).toBe('1 of 3 complete')
+      expect(progress.getAttribute('aria-live')).toBe('polite')
+
+      await view.rerender({ second: 'complete' })
+      await nextTick()
+      expect(progress.textContent?.trim()).toBe('2 of 3 complete')
+    })
+
+    it('renders the tasks inside an ordered list labelled by the tutorial heading', () => {
+      const view = render(Guide)
+      const tutorial = view.getByRole('region', { name: 'Put your first site online' })
+      expect(tutorial.querySelector('ol')?.children).toHaveLength(3)
+    })
+
+    it('shows the Completed tag only when the owner marks the tutorial done', async () => {
+      const view = render(Guide)
+      const tutorial = view.getByTestId('content-tutorial-panel-tasks')
+      expect(tutorial.hasAttribute('data-completed')).toBe(false)
+      expect(view.queryByTestId('content-tutorial-panel-tasks__completed')).toBeNull()
+
+      await view.rerender({ completed: true })
+      expect(tutorial.hasAttribute('data-completed')).toBe(true)
+      expect(view.getByTestId('content-tutorial-panel-tasks__completed').textContent).toContain(
+        'Completed'
+      )
+    })
+
+    it('renders the actions row when the slot has content', () => {
+      const view = render(Guide)
+      const actions = view.getByTestId('content-tutorial-panel-tasks__actions')
+      expect(actions.querySelector('button')?.textContent).toBe('Continue')
+    })
+
+    it('omits the actions row when the slot is empty', () => {
+      const view = render(Guide, { props: { withActions: false } })
+      expect(view.queryByTestId('content-tutorial-panel-tasks__actions')).toBeNull()
+    })
+
+    it('has no axe violations with a completed tutorial', async () => {
+      const { container } = render(Guide, { props: { completed: true } })
+      await nextTick()
+      await expectNoA11yViolations(container)
+    })
   })
 
-  it('throws when a Task is rendered outside a task list', () => {
-    expect(() => render(TutorialPanelTask, { props: { title: 'Loose' } })).toThrow(
-      /must be used within a TutorialPanel/
-    )
+  describe('useTutorialTasksContext', () => {
+    it('throws when resolved outside a TutorialPanel task list', () => {
+      const Loose = defineComponent({
+        setup() {
+          useTutorialTasksContext()
+          return () => null
+        }
+      })
+
+      expect(() => render(Loose)).toThrow(/must be used within a TutorialPanel/)
+    })
+
+    it('throws when a Task is rendered outside a task list', () => {
+      expect(() => render(TutorialPanelTask, { props: { title: 'Loose' } })).toThrow(
+        /must be used within a TutorialPanel/
+      )
+    })
   })
 })

@@ -318,137 +318,137 @@ describe('Textarea', () => {
       expect(control).toHaveAttribute('aria-required', 'true')
     })
   })
-})
 
-describe('Textarea — direction of the typed value', () => {
-  it('uses dir="auto" so a value in another script keeps its own direction', () => {
-    const { getByTestId } = render(Textarea)
-    expect(getByTestId('input-textarea').getAttribute('dir')).toBe('auto')
-  })
-
-  it('lets a dir attribute override the default', () => {
-    const { getByTestId } = render(Textarea, { attrs: { dir: 'ltr' } })
-    expect(getByTestId('input-textarea').getAttribute('dir')).toBe('ltr')
-  })
-})
-
-describe('Textarea — monospace', () => {
-  it('omits data-monospace by default', () => {
-    const { getByTestId } = render(Textarea)
-    expect(getByTestId('input-textarea').hasAttribute('data-monospace')).toBe(false)
-  })
-
-  it('marks the field with data-monospace and still edits the value', async () => {
-    const { getByTestId, emitted } = render(Textarea, {
-      props: { monospace: true },
-      attrs: { 'aria-label': 'Zone file' }
-    })
-    const textarea = getByTestId('input-textarea')
-    expect(textarea.hasAttribute('data-monospace')).toBe(true)
-    await userEvent.type(textarea, '@ A')
-    expect(emitted()['update:modelValue']?.at(-1)).toEqual(['@ A'])
-  })
-
-  it('renders the Monospace and ReadOnly examples in the code face with no a11y violations', async () => {
-    const paste = render(Monospace)
-    const zone = paste.getByLabelText('Zone file') as HTMLTextAreaElement
-    expect(zone.hasAttribute('data-monospace')).toBe(true)
-    expect(zone.value).toContain('$ORIGIN example.com.')
-    await expectNoA11yViolations(paste.container)
-    paste.unmount()
-    const fixed = render(ReadOnly)
-    expect(fixed.getByLabelText('Certificate').hasAttribute('data-monospace')).toBe(true)
-  })
-})
-
-describe('Textarea — exposed focus()', () => {
-  it('focus() on a template ref moves focus to the native textarea', async () => {
-    const field = ref<InstanceType<typeof Textarea> | null>(null)
-    const Host = defineComponent({
-      setup: () => () => h(Textarea, { ref: field, 'aria-label': 'Name' })
-    })
-    const { container } = render(Host)
-    await nextTick()
-
-    const native = container.querySelector('textarea')
-    expect(native).not.toBeNull()
-    expect(document.activeElement).not.toBe(native)
-
-    field.value?.focus()
-
-    expect(document.activeElement).toBe(native)
-  })
-})
-
-describe('Textarea — autoResize', () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
-  it('keeps the fixed field and the chosen resize axis by default', () => {
-    const { getByTestId } = render(Textarea, { props: { resize: 'both', maxRows: 4 } })
-
-    const control = getByTestId('input-textarea')
-    expect(control).not.toHaveAttribute('data-auto-resize')
-    expect(control).not.toHaveAttribute('data-max-rows')
-    expect(control).toHaveAttribute('data-resize', 'both')
-  })
-
-  it('marks the field, turns the drag handle off and passes the row bounds', () => {
-    const { getByTestId } = render(Textarea, {
-      props: { autoResize: true, resize: 'both', minRows: 2, maxRows: 5 }
+  describe('direction of the typed value', () => {
+    it('uses dir="auto" so a value in another script keeps its own direction', () => {
+      const { getByTestId } = render(Textarea)
+      expect(getByTestId('input-textarea').getAttribute('dir')).toBe('auto')
     })
 
-    const control = getByTestId('input-textarea')
-    expect(control).toHaveAttribute('data-auto-resize')
-    expect(control).toHaveAttribute('data-resize', 'none')
-    expect(control).toHaveAttribute('data-max-rows', '5')
-    expect(control.style.getPropertyValue('--textarea-min-rows')).toBe('2')
-    expect(control.style.getPropertyValue('--textarea-max-rows')).toBe('5')
-  })
-
-  it('sets no row limit when maxRows is 0', () => {
-    const { getByTestId } = render(Textarea, { props: { autoResize: true } })
-
-    const control = getByTestId('input-textarea')
-    expect(control).not.toHaveAttribute('data-max-rows')
-    expect(control.style.getPropertyValue('--textarea-min-rows')).toBe('1')
-  })
-
-  it('measures a taller height as lines are typed where field-sizing is missing', async () => {
-    vi.spyOn(globalThis.CSS, 'supports').mockReturnValue(false)
-    const { getByTestId } = render(Textarea, {
-      props: { autoResize: true },
-      attrs: { 'aria-label': 'Question' }
+    it('lets a dir attribute override the default', () => {
+      const { getByTestId } = render(Textarea, { attrs: { dir: 'ltr' } })
+      expect(getByTestId('input-textarea').getAttribute('dir')).toBe('ltr')
     })
-    await nextTick()
-    await nextTick()
-
-    const control = getByTestId('input-textarea') as HTMLTextAreaElement
-    const oneLine = parseFloat(control.style.height)
-    expect(oneLine).toBeGreaterThan(0)
-
-    await userEvent.type(control, 'one{Enter}two{Enter}three{Enter}four')
-    await nextTick()
-    await nextTick()
-
-    expect(parseFloat(control.style.height)).toBeGreaterThan(oneLine)
   })
 
-  it('leaves the height to CSS where field-sizing is supported', async () => {
-    vi.spyOn(globalThis.CSS, 'supports').mockReturnValue(true)
-    const { getByTestId } = render(Textarea, { props: { autoResize: true } })
-    await nextTick()
+  describe('monospace', () => {
+    it('omits data-monospace by default', () => {
+      const { getByTestId } = render(Textarea)
+      expect(getByTestId('input-textarea').hasAttribute('data-monospace')).toBe(false)
+    })
 
-    expect(getByTestId('input-textarea').style.height).toBe('')
+    it('marks the field with data-monospace and still edits the value', async () => {
+      const { getByTestId, emitted } = render(Textarea, {
+        props: { monospace: true },
+        attrs: { 'aria-label': 'Zone file' }
+      })
+      const textarea = getByTestId('input-textarea')
+      expect(textarea.hasAttribute('data-monospace')).toBe(true)
+      await userEvent.type(textarea, '@ A')
+      expect(emitted()['update:modelValue']?.at(-1)).toEqual(['@ A'])
+    })
+
+    it('renders the Monospace and ReadOnly examples in the code face with no a11y violations', async () => {
+      const paste = render(Monospace)
+      const zone = paste.getByLabelText('Zone file') as HTMLTextAreaElement
+      expect(zone.hasAttribute('data-monospace')).toBe(true)
+      expect(zone.value).toContain('$ORIGIN example.com.')
+      await expectNoA11yViolations(paste.container)
+      paste.unmount()
+      const fixed = render(ReadOnly)
+      expect(fixed.getByLabelText('Certificate').hasAttribute('data-monospace')).toBe(true)
+    })
   })
 
-  it('renders the AutoResize example as a labelled growing field with no a11y violations', async () => {
-    const { container, getByLabelText } = render(AutoResize)
+  describe('exposed focus()', () => {
+    it('focus() on a template ref moves focus to the native textarea', async () => {
+      const field = ref<InstanceType<typeof Textarea> | null>(null)
+      const Host = defineComponent({
+        setup: () => () => h(Textarea, { ref: field, 'aria-label': 'Name' })
+      })
+      const { container } = render(Host)
+      await nextTick()
 
-    const control = getByLabelText('Question')
-    expect(control).toHaveAttribute('data-auto-resize')
-    expect(control).toHaveAttribute('data-max-rows', '6')
-    await expectNoA11yViolations(container)
+      const native = container.querySelector('textarea')
+      expect(native).not.toBeNull()
+      expect(document.activeElement).not.toBe(native)
+
+      field.value?.focus()
+
+      expect(document.activeElement).toBe(native)
+    })
+  })
+
+  describe('autoResize', () => {
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
+    it('keeps the fixed field and the chosen resize axis by default', () => {
+      const { getByTestId } = render(Textarea, { props: { resize: 'both', maxRows: 4 } })
+
+      const control = getByTestId('input-textarea')
+      expect(control).not.toHaveAttribute('data-auto-resize')
+      expect(control).not.toHaveAttribute('data-max-rows')
+      expect(control).toHaveAttribute('data-resize', 'both')
+    })
+
+    it('marks the field, turns the drag handle off and passes the row bounds', () => {
+      const { getByTestId } = render(Textarea, {
+        props: { autoResize: true, resize: 'both', minRows: 2, maxRows: 5 }
+      })
+
+      const control = getByTestId('input-textarea')
+      expect(control).toHaveAttribute('data-auto-resize')
+      expect(control).toHaveAttribute('data-resize', 'none')
+      expect(control).toHaveAttribute('data-max-rows', '5')
+      expect(control.style.getPropertyValue('--textarea-min-rows')).toBe('2')
+      expect(control.style.getPropertyValue('--textarea-max-rows')).toBe('5')
+    })
+
+    it('sets no row limit when maxRows is 0', () => {
+      const { getByTestId } = render(Textarea, { props: { autoResize: true } })
+
+      const control = getByTestId('input-textarea')
+      expect(control).not.toHaveAttribute('data-max-rows')
+      expect(control.style.getPropertyValue('--textarea-min-rows')).toBe('1')
+    })
+
+    it('measures a taller height as lines are typed where field-sizing is missing', async () => {
+      vi.spyOn(globalThis.CSS, 'supports').mockReturnValue(false)
+      const { getByTestId } = render(Textarea, {
+        props: { autoResize: true },
+        attrs: { 'aria-label': 'Question' }
+      })
+      await nextTick()
+      await nextTick()
+
+      const control = getByTestId('input-textarea') as HTMLTextAreaElement
+      const oneLine = parseFloat(control.style.height)
+      expect(oneLine).toBeGreaterThan(0)
+
+      await userEvent.type(control, 'one{Enter}two{Enter}three{Enter}four')
+      await nextTick()
+      await nextTick()
+
+      expect(parseFloat(control.style.height)).toBeGreaterThan(oneLine)
+    })
+
+    it('leaves the height to CSS where field-sizing is supported', async () => {
+      vi.spyOn(globalThis.CSS, 'supports').mockReturnValue(true)
+      const { getByTestId } = render(Textarea, { props: { autoResize: true } })
+      await nextTick()
+
+      expect(getByTestId('input-textarea').style.height).toBe('')
+    })
+
+    it('renders the AutoResize example as a labelled growing field with no a11y violations', async () => {
+      const { container, getByLabelText } = render(AutoResize)
+
+      const control = getByLabelText('Question')
+      expect(control).toHaveAttribute('data-auto-resize')
+      expect(control).toHaveAttribute('data-max-rows', '6')
+      await expectNoA11yViolations(container)
+    })
   })
 })

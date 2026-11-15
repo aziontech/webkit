@@ -99,84 +99,84 @@ describe('ConversationHistory', () => {
     const states = render(States)
     await expectNoA11yViolations(states.container)
   })
-})
 
-describe('ConversationHistory — reference time from WebkitProvider', () => {
-  const groupNames = (view: ReturnType<typeof render>) =>
-    within(view.getByRole('navigation', { name: 'Conversation history' }))
-      .getAllByRole('list')
-      .map((list) =>
-        document.getElementById(list.getAttribute('aria-labelledby')!)!.textContent!.trim()
-      )
+  describe('reference time from WebkitProvider', () => {
+    const groupNames = (view: ReturnType<typeof render>) =>
+      within(view.getByRole('navigation', { name: 'Conversation history' }))
+        .getAllByRole('list')
+        .map((list) =>
+          document.getElementById(list.getAttribute('aria-labelledby')!)!.textContent!.trim()
+        )
 
-  it('groups against the provider now when the now prop is unset', () => {
-    const view = render(WebkitProvider, {
-      props: { catalogs: LOCALES, now },
-      slots: { default: () => h(ConversationHistory, { items }) }
+    it('groups against the provider now when the now prop is unset', () => {
+      const view = render(WebkitProvider, {
+        props: { catalogs: LOCALES, now },
+        slots: { default: () => h(ConversationHistory, { items }) }
+      })
+      expect(groupNames(view)).toEqual([
+        'Today',
+        'Yesterday',
+        'Previous 7 days',
+        'Previous 30 days',
+        'Older'
+      ])
     })
-    expect(groupNames(view)).toEqual([
-      'Today',
-      'Yesterday',
-      'Previous 7 days',
-      'Previous 30 days',
-      'Older'
-    ])
+
+    it('lets the now prop override the provider', () => {
+      const view = render(WebkitProvider, {
+        props: { catalogs: LOCALES, now: '2027-06-01T12:00:00' },
+        slots: { default: () => h(ConversationHistory, { items, now }) }
+      })
+      expect(groupNames(view)[0]).toBe('Today')
+    })
   })
 
-  it('lets the now prop override the provider', () => {
-    const view = render(WebkitProvider, {
-      props: { catalogs: LOCALES, now: '2027-06-01T12:00:00' },
-      slots: { default: () => h(ConversationHistory, { items, now }) }
+  describe('naming and test ids', () => {
+    it('takes its accessible name from ariaLabel, not from the removed label', () => {
+      const named = render(ConversationHistory, { props: { items, now, ariaLabel: 'Chats' } })
+      expect(named.getByRole('navigation', { name: 'Chats' })).toBeInTheDocument()
+      named.unmount()
+      const legacy = render(ConversationHistory, {
+        props: { items, now, label: 'Old chats' } as never
+      })
+      expect(legacy.queryByRole('navigation', { name: 'Old chats' })).toBeNull()
     })
-    expect(groupNames(view)[0]).toBe('Today')
-  })
-})
 
-describe('ConversationHistory naming and test ids', () => {
-  it('takes its accessible name from ariaLabel, not from the removed label', () => {
-    const named = render(ConversationHistory, { props: { items, now, ariaLabel: 'Chats' } })
-    expect(named.getByRole('navigation', { name: 'Chats' })).toBeInTheDocument()
-    named.unmount()
-    const legacy = render(ConversationHistory, {
-      props: { items, now, label: 'Old chats' } as never
+    it('lets a consumer data-testid win over the fallback', () => {
+      const { getByTestId, queryByTestId } = render(ConversationHistory, {
+        props: { items, now },
+        attrs: { 'data-testid': 'chats' }
+      })
+      expect(getByTestId('chats')).toBeInTheDocument()
+      expect(queryByTestId('ai-conversation-history')).toBeNull()
     })
-    expect(legacy.queryByRole('navigation', { name: 'Old chats' })).toBeNull()
-  })
 
-  it('lets a consumer data-testid win over the fallback', () => {
-    const { getByTestId, queryByTestId } = render(ConversationHistory, {
-      props: { items, now },
-      attrs: { 'data-testid': 'chats' }
+    it('keeps every conversation of a large history, newest first in each group', () => {
+      const many = Array.from({ length: 300 }, (_, i) => ({
+        id: `c${i}`,
+        title: `Chat ${i}`,
+        updatedAt: new Date(Date.parse('2026-11-11T14:00:00') - i * 60_000).toISOString()
+      }))
+      const { getAllByTestId } = render(ConversationHistory, { props: { items: many, now } })
+      const rows = getAllByTestId('ai-conversation-history__item')
+      expect(rows).toHaveLength(300)
+      expect(rows[0]!.textContent).toContain('Chat 0')
+      expect(rows[299]!.textContent).toContain('Chat 299')
     })
-    expect(getByTestId('chats')).toBeInTheDocument()
-    expect(queryByTestId('ai-conversation-history')).toBeNull()
-  })
 
-  it('keeps every conversation of a large history, newest first in each group', () => {
-    const many = Array.from({ length: 300 }, (_, i) => ({
-      id: `c${i}`,
-      title: `Chat ${i}`,
-      updatedAt: new Date(Date.parse('2026-11-11T14:00:00') - i * 60_000).toISOString()
-    }))
-    const { getAllByTestId } = render(ConversationHistory, { props: { items: many, now } })
-    const rows = getAllByTestId('ai-conversation-history__item')
-    expect(rows).toHaveLength(300)
-    expect(rows[0]!.textContent).toContain('Chat 0')
-    expect(rows[299]!.textContent).toContain('Chat 299')
-  })
-
-  it('mounts a long group in chunks instead of every row at once', async () => {
-    const base = Date.parse('2026-11-11T14:00:00')
-    const items = Array.from({ length: 1000 }, (_, i) => ({
-      id: `c${i}`,
-      title: `Conversation ${i}`,
-      updatedAt: base - 40 * 86_400_000 - i * 60_000
-    }))
-    const { getAllByTestId, container } = render(ConversationHistory, {
-      props: { items, now: '2026-11-11T15:00:00' }
+    it('mounts a long group in chunks instead of every row at once', async () => {
+      const base = Date.parse('2026-11-11T14:00:00')
+      const items = Array.from({ length: 1000 }, (_, i) => ({
+        id: `c${i}`,
+        title: `Conversation ${i}`,
+        updatedAt: base - 40 * 86_400_000 - i * 60_000
+      }))
+      const { getAllByTestId, container } = render(ConversationHistory, {
+        props: { items, now: '2026-11-11T15:00:00' }
+      })
+      expect(getAllByTestId('ai-conversation-history__item').length).toBeLessThan(1000)
+      expect(getAllByTestId('ai-conversation-history__item')[0]).toHaveTextContent('Conversation 0')
+      expect(container.querySelector('[data-chunk][aria-hidden="true"]')).not.toBeNull()
     })
-    expect(getAllByTestId('ai-conversation-history__item').length).toBeLessThan(1000)
-    expect(getAllByTestId('ai-conversation-history__item')[0]).toHaveTextContent('Conversation 0')
-    expect(container.querySelector('[data-chunk][aria-hidden="true"]')).not.toBeNull()
   })
 })

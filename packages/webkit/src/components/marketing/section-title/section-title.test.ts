@@ -262,26 +262,26 @@ describe('SectionTitle', () => {
       expect(getByText('One sentence.')).toBeInTheDocument()
     })
   })
-})
 
-describe('SectionTitle slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { SectionTitle },
-      setup: () => ({ shown }),
-      template: `<SectionTitle title="Edge"><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></SectionTitle>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { SectionTitle },
+        setup: () => ({ shown }),
+        template: `<SectionTitle title="Edge"><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></SectionTitle>`
+      })
+      expect(queryByTestId('probe')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('probe')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('probe')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('probe')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('probe')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('probe')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
 })

@@ -323,178 +323,182 @@ describe('Input', () => {
       expect(getAllByTestId('input-input')).toHaveLength(3)
     })
   })
-})
 
-describe('Input — rendered HTML stays stable', () => {
-  it('renders the same HTML as before when autocomplete and spellcheck are absent', () => {
-    const { container } = render(Input, {
-      props: { placeholder: 'Type here' },
-      attrs: { id: 'plain' }
+  describe('rendered HTML stays stable', () => {
+    it('renders the same HTML as before when autocomplete and spellcheck are absent', () => {
+      const { container } = render(Input, {
+        props: { placeholder: 'Type here' },
+        attrs: { id: 'plain' }
+      })
+      expect(container.innerHTML).toMatchSnapshot()
     })
-    expect(container.innerHTML).toMatchSnapshot()
-  })
-})
-
-describe('Input — autocomplete and spellcheck', () => {
-  it('applies autocomplete and type to the <input>', () => {
-    const { getByTestId } = render(Input, { props: { type: 'email', autocomplete: 'email' } })
-    const input = getByTestId('input-input')
-
-    expect(input.getAttribute('type')).toBe('email')
-    expect(input.getAttribute('autocomplete')).toBe('email')
   })
 
-  it('renders spellcheck="false" on the <input> when spellcheck is false', () => {
-    const { getByTestId } = render(Input, { props: { spellcheck: false } })
-    expect(getByTestId('input-input').getAttribute('spellcheck')).toBe('false')
-  })
+  describe('autocomplete and spellcheck', () => {
+    it('applies autocomplete and type to the <input>', () => {
+      const { getByTestId } = render(Input, { props: { type: 'email', autocomplete: 'email' } })
+      const input = getByTestId('input-input')
 
-  it('omits autocomplete and spellcheck when they are not set', () => {
-    const { getByTestId } = render(Input)
-    const input = getByTestId('input-input')
-
-    expect(input.hasAttribute('autocomplete')).toBe(false)
-    expect(input.hasAttribute('spellcheck')).toBe(false)
-  })
-})
-
-describe('Input — read-only look', () => {
-  it('marks a read-only field with data-readonly and keeps it focusable and copyable', () => {
-    const { getByTestId, container } = render(Input, {
-      props: { readonly: true, modelValue: '9757a' }
+      expect(input.getAttribute('type')).toBe('email')
+      expect(input.getAttribute('autocomplete')).toBe('email')
     })
-    const root = container.firstElementChild as HTMLElement
-    const input = getByTestId('input-input') as HTMLInputElement
 
-    expect(input.readOnly).toBe(true)
-    expect(input.disabled).toBe(false)
-    expect(input.value).toBe('9757a')
-    expect(root.hasAttribute('data-readonly')).toBe(true)
-    input.focus()
-    expect(document.activeElement).toBe(input)
-  })
-
-  it('does not emit update:modelValue from a read-only field', async () => {
-    const { getByTestId, emitted } = render(Input, {
-      props: { readonly: true, modelValue: '9757a' }
+    it('renders spellcheck="false" on the <input> when spellcheck is false', () => {
+      const { getByTestId } = render(Input, { props: { spellcheck: false } })
+      expect(getByTestId('input-input').getAttribute('spellcheck')).toBe('false')
     })
-    const input = getByTestId('input-input') as HTMLInputElement
-    input.focus()
-    await userEvent.keyboard('x')
-    expect(input.value).toBe('9757a')
-    expect(emitted()['update:modelValue']).toBeUndefined()
-  })
 
-  it('keeps the read-only state apart from the disabled state', () => {
-    const readonly = render(Input, { props: { readonly: true } }).container
-      .firstElementChild as HTMLElement
-    const disabled = render(Input, { props: { disabled: true } }).container
-      .firstElementChild as HTMLElement
+    it('omits autocomplete and spellcheck when they are not set', () => {
+      const { getByTestId } = render(Input)
+      const input = getByTestId('input-input')
 
-    expect(readonly.hasAttribute('data-readonly')).toBe(true)
-    expect(readonly.hasAttribute('data-disabled')).toBe(false)
-    expect(disabled.hasAttribute('data-readonly')).toBe(false)
-  })
-
-  it('omits data-readonly on an editable field', () => {
-    const { container } = render(Input)
-    expect((container.firstElementChild as HTMLElement).hasAttribute('data-readonly')).toBe(false)
-  })
-})
-
-describe('Input — monospace', () => {
-  it('renders the ReadOnly example: read-only monospace fields with a copy action', async () => {
-    const { container, getByRole } = render(ReadOnly)
-    const roots = container.querySelectorAll('[data-readonly][data-monospace]')
-    expect(roots.length).toBe(2)
-    expect(getByRole('button', { name: 'Copy the create function command' })).toBeTruthy()
-    await expectNoA11yViolations(container)
-  })
-
-  it('omits data-monospace by default', () => {
-    const { container } = render(Input)
-    expect((container.firstElementChild as HTMLElement).hasAttribute('data-monospace')).toBe(false)
-  })
-
-  it('marks the field with data-monospace and still edits the value', async () => {
-    const { container, getByTestId, emitted } = render(Input, {
-      props: { monospace: true, spellcheck: false }
+      expect(input.hasAttribute('autocomplete')).toBe(false)
+      expect(input.hasAttribute('spellcheck')).toBe(false)
     })
-    const root = container.firstElementChild as HTMLElement
-    expect(root.hasAttribute('data-monospace')).toBe(true)
-    const input = getByTestId('input-input') as HTMLInputElement
-    expect(input.getAttribute('spellcheck')).toBe('false')
-    await userEvent.type(input, 'ab')
-    expect(emitted()['update:modelValue']).toEqual([['a'], ['ab']])
   })
 
-  it('has no a11y violations as a read-only monospace command field', async () => {
-    const { container } = render(Input, {
-      props: { readonly: true, monospace: true, modelValue: 'azion create edge-function' },
-      attrs: { 'aria-label': 'CLI command' }
+  describe('read-only look', () => {
+    it('marks a read-only field with data-readonly and keeps it focusable and copyable', () => {
+      const { getByTestId, container } = render(Input, {
+        props: { readonly: true, modelValue: '9757a' }
+      })
+      const root = container.firstElementChild as HTMLElement
+      const input = getByTestId('input-input') as HTMLInputElement
+
+      expect(input.readOnly).toBe(true)
+      expect(input.disabled).toBe(false)
+      expect(input.value).toBe('9757a')
+      expect(root.hasAttribute('data-readonly')).toBe(true)
+      input.focus()
+      expect(document.activeElement).toBe(input)
     })
-    await expectNoA11yViolations(container)
-  })
-})
 
-describe('Input — password managers', () => {
-  it('hides a plain field from password managers so no sign-in prompt appears', () => {
-    const input = render(Input).getByTestId('input-input')
-    expect(input).toHaveAttribute('data-1p-ignore', 'true')
-    expect(input).toHaveAttribute('data-lpignore', 'true')
-    expect(input).toHaveAttribute('data-bwignore', 'true')
-    expect(input).toHaveAttribute('data-form-type', 'other')
-  })
-
-  it('keeps a login field fillable (autocomplete="username", type="email")', () => {
-    const username = render(Input, { props: { autocomplete: 'username' } }).getByTestId(
-      'input-input'
-    )
-    expect(username).not.toHaveAttribute('data-1p-ignore')
-    const email = render(Input, { props: { type: 'email' } }).getAllByTestId('input-input')[1]
-    expect(email).not.toHaveAttribute('data-1p-ignore')
-  })
-
-  it('hides read-only fields even when they carry an autocomplete token', () => {
-    const input = render(Input, {
-      props: { readonly: true, autocomplete: 'username' }
-    }).getByTestId('input-input')
-    expect(input).toHaveAttribute('data-1p-ignore', 'true')
-  })
-
-  it('lets a consumer override the hint through attrs', () => {
-    const input = render(Input, { attrs: { 'data-1p-ignore': 'false' } }).getByTestId('input-input')
-    expect(input).toHaveAttribute('data-1p-ignore', 'false')
-  })
-})
-
-describe('Input — direction of the typed value', () => {
-  it('uses dir="auto" so a value in another script keeps its own direction', () => {
-    const { getByTestId } = render(Input)
-    expect(getByTestId('input-input').getAttribute('dir')).toBe('auto')
-  })
-
-  it('lets a dir attribute override the default', () => {
-    const { getByTestId } = render(Input, { attrs: { dir: 'ltr' } })
-    expect(getByTestId('input-input').getAttribute('dir')).toBe('ltr')
-  })
-})
-
-describe('Input — exposed focus()', () => {
-  it('focus() on a template ref moves focus to the native input', async () => {
-    const field = ref<InstanceType<typeof Input> | null>(null)
-    const Host = defineComponent({
-      setup: () => () => h(Input, { ref: field, 'aria-label': 'Name' })
+    it('does not emit update:modelValue from a read-only field', async () => {
+      const { getByTestId, emitted } = render(Input, {
+        props: { readonly: true, modelValue: '9757a' }
+      })
+      const input = getByTestId('input-input') as HTMLInputElement
+      input.focus()
+      await userEvent.keyboard('x')
+      expect(input.value).toBe('9757a')
+      expect(emitted()['update:modelValue']).toBeUndefined()
     })
-    const { container } = render(Host)
-    await nextTick()
 
-    const native = container.querySelector('input')
-    expect(native).not.toBeNull()
-    expect(document.activeElement).not.toBe(native)
+    it('keeps the read-only state apart from the disabled state', () => {
+      const readonly = render(Input, { props: { readonly: true } }).container
+        .firstElementChild as HTMLElement
+      const disabled = render(Input, { props: { disabled: true } }).container
+        .firstElementChild as HTMLElement
 
-    field.value?.focus()
+      expect(readonly.hasAttribute('data-readonly')).toBe(true)
+      expect(readonly.hasAttribute('data-disabled')).toBe(false)
+      expect(disabled.hasAttribute('data-readonly')).toBe(false)
+    })
 
-    expect(document.activeElement).toBe(native)
+    it('omits data-readonly on an editable field', () => {
+      const { container } = render(Input)
+      expect((container.firstElementChild as HTMLElement).hasAttribute('data-readonly')).toBe(false)
+    })
+  })
+
+  describe('monospace', () => {
+    it('renders the ReadOnly example: read-only monospace fields with a copy action', async () => {
+      const { container, getByRole } = render(ReadOnly)
+      const roots = container.querySelectorAll('[data-readonly][data-monospace]')
+      expect(roots.length).toBe(2)
+      expect(getByRole('button', { name: 'Copy the create function command' })).toBeTruthy()
+      await expectNoA11yViolations(container)
+    })
+
+    it('omits data-monospace by default', () => {
+      const { container } = render(Input)
+      expect((container.firstElementChild as HTMLElement).hasAttribute('data-monospace')).toBe(
+        false
+      )
+    })
+
+    it('marks the field with data-monospace and still edits the value', async () => {
+      const { container, getByTestId, emitted } = render(Input, {
+        props: { monospace: true, spellcheck: false }
+      })
+      const root = container.firstElementChild as HTMLElement
+      expect(root.hasAttribute('data-monospace')).toBe(true)
+      const input = getByTestId('input-input') as HTMLInputElement
+      expect(input.getAttribute('spellcheck')).toBe('false')
+      await userEvent.type(input, 'ab')
+      expect(emitted()['update:modelValue']).toEqual([['a'], ['ab']])
+    })
+
+    it('has no a11y violations as a read-only monospace command field', async () => {
+      const { container } = render(Input, {
+        props: { readonly: true, monospace: true, modelValue: 'azion create edge-function' },
+        attrs: { 'aria-label': 'CLI command' }
+      })
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('password managers', () => {
+    it('hides a plain field from password managers so no sign-in prompt appears', () => {
+      const input = render(Input).getByTestId('input-input')
+      expect(input).toHaveAttribute('data-1p-ignore', 'true')
+      expect(input).toHaveAttribute('data-lpignore', 'true')
+      expect(input).toHaveAttribute('data-bwignore', 'true')
+      expect(input).toHaveAttribute('data-form-type', 'other')
+    })
+
+    it('keeps a login field fillable (autocomplete="username", type="email")', () => {
+      const username = render(Input, { props: { autocomplete: 'username' } }).getByTestId(
+        'input-input'
+      )
+      expect(username).not.toHaveAttribute('data-1p-ignore')
+      const email = render(Input, { props: { type: 'email' } }).getAllByTestId('input-input')[1]
+      expect(email).not.toHaveAttribute('data-1p-ignore')
+    })
+
+    it('hides read-only fields even when they carry an autocomplete token', () => {
+      const input = render(Input, {
+        props: { readonly: true, autocomplete: 'username' }
+      }).getByTestId('input-input')
+      expect(input).toHaveAttribute('data-1p-ignore', 'true')
+    })
+
+    it('lets a consumer override the hint through attrs', () => {
+      const input = render(Input, { attrs: { 'data-1p-ignore': 'false' } }).getByTestId(
+        'input-input'
+      )
+      expect(input).toHaveAttribute('data-1p-ignore', 'false')
+    })
+  })
+
+  describe('direction of the typed value', () => {
+    it('uses dir="auto" so a value in another script keeps its own direction', () => {
+      const { getByTestId } = render(Input)
+      expect(getByTestId('input-input').getAttribute('dir')).toBe('auto')
+    })
+
+    it('lets a dir attribute override the default', () => {
+      const { getByTestId } = render(Input, { attrs: { dir: 'ltr' } })
+      expect(getByTestId('input-input').getAttribute('dir')).toBe('ltr')
+    })
+  })
+
+  describe('exposed focus()', () => {
+    it('focus() on a template ref moves focus to the native input', async () => {
+      const field = ref<InstanceType<typeof Input> | null>(null)
+      const Host = defineComponent({
+        setup: () => () => h(Input, { ref: field, 'aria-label': 'Name' })
+      })
+      const { container } = render(Host)
+      await nextTick()
+
+      const native = container.querySelector('input')
+      expect(native).not.toBeNull()
+      expect(document.activeElement).not.toBe(native)
+
+      field.value?.focus()
+
+      expect(document.activeElement).toBe(native)
+    })
   })
 })

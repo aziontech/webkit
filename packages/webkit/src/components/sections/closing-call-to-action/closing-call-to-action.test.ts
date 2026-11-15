@@ -196,188 +196,189 @@ describe('ClosingCallToAction', () => {
 
     await expectNoA11yViolations(container)
   })
-})
 
-const PROMPT = 'Connect Azion MCP: https://mcp.azion.com'
-const SENTENCE = 'A person and an agent ship the same way.'
+  const PROMPT = 'Connect Azion MCP: https://mcp.azion.com'
+  const SENTENCE = 'A person and an agent ship the same way.'
 
-const audiences = [
-  {
-    value: 'humans',
-    label: 'For humans',
-    actions: [
-      { label: 'Start for free', href: '/signup', kind: 'secondary', trailing: true },
-      { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
-    ]
-  },
-  {
-    value: 'agents',
-    label: 'For agents',
-    copy: { label: 'Copy prompt', text: PROMPT },
-    actions: [{ label: 'Read the agent docs', href: '/site/docs/agent-setup', trailing: true }]
+  const audiences = [
+    {
+      value: 'humans',
+      label: 'For humans',
+      actions: [
+        { label: 'Start for free', href: '/signup', kind: 'secondary', trailing: true },
+        { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+      ]
+    },
+    {
+      value: 'agents',
+      label: 'For agents',
+      copy: { label: 'Copy prompt', text: PROMPT },
+      actions: [{ label: 'Read the agent docs', href: '/site/docs/agent-setup', trailing: true }]
+    }
+  ]
+
+  const audienceProps = {
+    kind: 'primary',
+    anchor: 'contact',
+    title: 'Built by you, or your agents.',
+    typedLead: 'Drive one platform from the',
+    typedWords: ['Console', 'CLI', 'MCP server'],
+    description: SENTENCE,
+    audiences,
+    audiencesAriaLabel: 'Audience',
+    lineAriaLabel: 'Prompt'
   }
-]
 
-const audienceProps = {
-  kind: 'primary',
-  anchor: 'contact',
-  title: 'Built by you, or your agents.',
-  typedLead: 'Drive one platform from the',
-  typedWords: ['Console', 'CLI', 'MCP server'],
-  description: SENTENCE,
-  audiences,
-  audiencesAriaLabel: 'Audience',
-  lineAriaLabel: 'Prompt'
-}
+  const audienceBand = (props: Record<string, unknown> = {}) =>
+    render(ClosingCallToAction, { props: { ...audienceProps, ...props } })
 
-const audienceBand = (props: Record<string, unknown> = {}) =>
-  render(ClosingCallToAction, { props: { ...audienceProps, ...props } })
+  const reduceMotion = (matches: boolean) =>
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      (query: string) =>
+        ({
+          matches,
+          media: query,
+          onchange: null,
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          addListener: () => {},
+          removeListener: () => {},
+          dispatchEvent: () => false
+        }) as MediaQueryList
+    )
 
-const reduceMotion = (matches: boolean) =>
-  vi.spyOn(window, 'matchMedia').mockImplementation(
-    (query: string) =>
-      ({
-        matches,
-        media: query,
-        onchange: null,
-        addEventListener: () => {},
-        removeEventListener: () => {},
-        addListener: () => {},
-        removeListener: () => {},
-        dispatchEvent: () => false
-      }) as MediaQueryList
-  )
-
-describe('ClosingCallToAction audiences', () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-    vi.useRealTimers()
-  })
-
-  it('opens the primary close on the first audience in place of the command and actions', async () => {
-    const { findByRole, getByRole, queryByRole } = audienceBand({
-      command: 'npm create azion@latest',
-      primaryAction: { label: 'Sign up', href: '/sign-up' }
+  describe('audiences', () => {
+    afterEach(() => {
+      vi.restoreAllMocks()
+      vi.useRealTimers()
     })
 
-    expect(await findByRole('radiogroup', { name: 'Audience' })).toBeInTheDocument()
-    expect(getByRole('radio', { name: 'For humans' }).getAttribute('aria-checked')).toBe('true')
-    expect(getByRole('link', { name: 'Start for free' }).getAttribute('href')).toBe('/signup')
-    expect(queryByRole('link', { name: 'Sign up' })).toBeNull()
-    expect(queryByRole('textbox', { name: 'Prompt' })).toBeNull()
-  })
+    it('opens the primary close on the first audience in place of the command and actions', async () => {
+      const { findByRole, getByRole, queryByRole } = audienceBand({
+        command: 'npm create azion@latest',
+        primaryAction: { label: 'Sign up', href: '/sign-up' }
+      })
 
-  it('moves the description under the typed line', async () => {
-    const { findByText, getAllByText } = audienceBand()
+      expect(await findByRole('radiogroup', { name: 'Audience' })).toBeInTheDocument()
+      expect(getByRole('radio', { name: 'For humans' }).getAttribute('aria-checked')).toBe('true')
+      expect(getByRole('link', { name: 'Start for free' }).getAttribute('href')).toBe('/signup')
+      expect(queryByRole('link', { name: 'Sign up' })).toBeNull()
+      expect(queryByRole('textbox', { name: 'Prompt' })).toBeNull()
+    })
 
-    const sentence = await findByText(SENTENCE)
-    expect(getAllByText(SENTENCE)).toHaveLength(1)
-    expect(sentence.closest('p')?.textContent).toContain(
-      'Drive one platform from the Console, CLI, MCP server.'
-    )
-  })
+    it('moves the description under the typed line', async () => {
+      const { findByText, getAllByText } = audienceBand()
 
-  it('swaps the copyable line and the actions when the audience changes', async () => {
-    const { findByRole, getByRole, queryByRole } = audienceBand()
-
-    await userEvent.click(await findByRole('radio', { name: 'For agents' }))
-
-    expect((getByRole('textbox', { name: 'Prompt' }) as HTMLInputElement).value).toBe(PROMPT)
-    expect(getByRole('link', { name: 'Read the agent docs' }).getAttribute('href')).toBe(
-      '/site/docs/agent-setup'
-    )
-    expect(queryByRole('link', { name: 'Start for free' })).toBeNull()
-  })
-
-  it('copies exactly the line it shows', async () => {
-    const writeText = vi.fn(() => Promise.resolve())
-    vi.spyOn(navigator, 'clipboard', 'get').mockReturnValue({
-      writeText
-    } as unknown as Clipboard)
-    const { findByRole, getByRole } = audienceBand()
-
-    await userEvent.click(await findByRole('radio', { name: 'For agents' }))
-    await userEvent.click(getByRole('button', { name: 'Copy prompt' }))
-
-    expect(writeText).toHaveBeenCalledWith(PROMPT)
-  })
-
-  it('draws the shell prompt only on a line marked shell', async () => {
-    const shellAudiences = [
-      {
-        ...audiences[1],
-        value: 'cli',
-        label: 'CLI',
-        copy: { label: 'Copy command', text: 'npm i -g azion', shell: true }
-      },
-      audiences[1]
-    ]
-    const { findByRole, getByTestId } = audienceBand({ audiences: shellAudiences })
-
-    expect(((await findByRole('textbox', { name: 'Prompt' })) as HTMLInputElement).value).toBe(
-      'npm i -g azion'
-    )
-    const prompt = () =>
-      Array.from(getByTestId(TESTID).querySelectorAll('[aria-hidden="true"]')).some(
-        (el) => el.textContent?.trim() === '$'
+      const sentence = await findByText(SENTENCE)
+      expect(getAllByText(SENTENCE)).toHaveLength(1)
+      expect(sentence.closest('p')?.textContent).toContain(
+        'Drive one platform from the Console, CLI, MCP server.'
       )
-    expect(prompt()).toBe(true)
-  })
-
-  it('ignores audiences outside the primary close', () => {
-    const { queryByRole, getByRole } = audienceBand({
-      kind: 'panel',
-      primaryAction: { label: 'Sign up', href: '/sign-up' }
     })
 
-    expect(queryByRole('radiogroup')).toBeNull()
-    expect(getByRole('link', { name: 'Sign up' })).toBeInTheDocument()
-  })
+    it('swaps the copyable line and the actions when the audience changes', async () => {
+      const { findByRole, getByRole, queryByRole } = audienceBand()
 
-  it('has no a11y violations on each audience', async () => {
-    const { container, findByRole } = audienceBand()
-    const agents = await findByRole('radio', { name: 'For agents' })
-    await expectNoA11yViolations(container)
+      await userEvent.click(await findByRole('radio', { name: 'For agents' }))
 
-    await userEvent.click(agents)
-    await expectNoA11yViolations(container)
-  })
+      expect((getByRole('textbox', { name: 'Prompt' }) as HTMLInputElement).value).toBe(PROMPT)
+      expect(getByRole('link', { name: 'Read the agent docs' }).getAttribute('href')).toBe(
+        '/site/docs/agent-setup'
+      )
+      expect(queryByRole('link', { name: 'Start for free' })).toBeNull()
+    })
 
-  it('types the first word one character at a time', async () => {
-    reduceMotion(false)
-    vi.useFakeTimers()
-    const { container } = render(ClosingCallToActionAudiences, { props: audienceProps })
-    const typed = () =>
-      container.querySelector('[aria-hidden="true"] .text-\\(--text-default\\)')?.textContent ?? ''
+    it('copies exactly the line it shows', async () => {
+      const writeText = vi.fn(() => Promise.resolve())
+      vi.spyOn(navigator, 'clipboard', 'get').mockReturnValue({
+        writeText
+      } as unknown as Clipboard)
+      const { findByRole, getByRole } = audienceBand()
 
-    vi.advanceTimersByTime(90)
-    await nextTick()
-    expect(typed()).toBe('C')
+      await userEvent.click(await findByRole('radio', { name: 'For agents' }))
+      await userEvent.click(getByRole('button', { name: 'Copy prompt' }))
 
-    vi.advanceTimersByTime(90 * 6)
-    await nextTick()
-    expect(typed()).toBe('Console')
-  })
+      expect(writeText).toHaveBeenCalledWith(PROMPT)
+    })
 
-  it('shows the full word list at once under reduced motion', async () => {
-    reduceMotion(true)
-    const { getByText } = render(ClosingCallToActionAudiences, { props: audienceProps })
-    await nextTick()
+    it('draws the shell prompt only on a line marked shell', async () => {
+      const shellAudiences = [
+        {
+          ...audiences[1],
+          value: 'cli',
+          label: 'CLI',
+          copy: { label: 'Copy command', text: 'npm i -g azion', shell: true }
+        },
+        audiences[1]
+      ]
+      const { findByRole, getByTestId } = audienceBand({ audiences: shellAudiences })
 
-    const visible = getByText(
-      'Drive one platform from the Console, CLI, MCP server.'
-    ).nextElementSibling
-    expect(visible?.getAttribute('aria-hidden')).toBe('true')
-    expect(visible?.textContent).toContain('Console, CLI, MCP server')
-  })
+      expect(((await findByRole('textbox', { name: 'Prompt' })) as HTMLInputElement).value).toBe(
+        'npm i -g azion'
+      )
+      const prompt = () =>
+        Array.from(getByTestId(TESTID).querySelectorAll('[aria-hidden="true"]')).some(
+          (el) => el.textContent?.trim() === '$'
+        )
+      expect(prompt()).toBe(true)
+    })
 
-  it('clears its timer when unmounted', () => {
-    reduceMotion(false)
-    vi.useFakeTimers()
-    const { unmount } = render(ClosingCallToActionAudiences, { props: audienceProps })
+    it('ignores audiences outside the primary close', () => {
+      const { queryByRole, getByRole } = audienceBand({
+        kind: 'panel',
+        primaryAction: { label: 'Sign up', href: '/sign-up' }
+      })
 
-    expect(vi.getTimerCount()).toBeGreaterThan(0)
-    unmount()
-    expect(vi.getTimerCount()).toBe(0)
+      expect(queryByRole('radiogroup')).toBeNull()
+      expect(getByRole('link', { name: 'Sign up' })).toBeInTheDocument()
+    })
+
+    it('has no a11y violations on each audience', async () => {
+      const { container, findByRole } = audienceBand()
+      const agents = await findByRole('radio', { name: 'For agents' })
+      await expectNoA11yViolations(container)
+
+      await userEvent.click(agents)
+      await expectNoA11yViolations(container)
+    })
+
+    it('types the first word one character at a time', async () => {
+      reduceMotion(false)
+      vi.useFakeTimers()
+      const { container } = render(ClosingCallToActionAudiences, { props: audienceProps })
+      const typed = () =>
+        container.querySelector('[aria-hidden="true"] .text-\\(--text-default\\)')?.textContent ??
+        ''
+
+      vi.advanceTimersByTime(90)
+      await nextTick()
+      expect(typed()).toBe('C')
+
+      vi.advanceTimersByTime(90 * 6)
+      await nextTick()
+      expect(typed()).toBe('Console')
+    })
+
+    it('shows the full word list at once under reduced motion', async () => {
+      reduceMotion(true)
+      const { getByText } = render(ClosingCallToActionAudiences, { props: audienceProps })
+      await nextTick()
+
+      const visible = getByText(
+        'Drive one platform from the Console, CLI, MCP server.'
+      ).nextElementSibling
+      expect(visible?.getAttribute('aria-hidden')).toBe('true')
+      expect(visible?.textContent).toContain('Console, CLI, MCP server')
+    })
+
+    it('clears its timer when unmounted', () => {
+      reduceMotion(false)
+      vi.useFakeTimers()
+      const { unmount } = render(ClosingCallToActionAudiences, { props: audienceProps })
+
+      expect(vi.getTimerCount()).toBeGreaterThan(0)
+      unmount()
+      expect(vi.getTimerCount()).toBe(0)
+    })
   })
 })

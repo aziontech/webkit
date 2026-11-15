@@ -362,19 +362,19 @@ describe('ToggleGroup', () => {
     })
     expect(getByTestId('actions-toggle-group__indicator').style.transition).toBe('')
   })
-})
 
-describe('ToggleGroup — native form submit', () => {
-  it('submits the selected value under its name', async () => {
-    const { getByTestId, getAllByTestId } = render({
-      components: { ToggleGroup },
-      setup: () => ({ options: OPTIONS }),
-      template:
-        '<form data-testid="form"><ToggleGroup :options="options" name="range" aria-label="Range" /></form>'
+  describe('native form submit', () => {
+    it('submits the selected value under its name', async () => {
+      const { getByTestId, getAllByTestId } = render({
+        components: { ToggleGroup },
+        setup: () => ({ options: OPTIONS }),
+        template:
+          '<form data-testid="form"><ToggleGroup :options="options" name="range" aria-label="Range" /></form>'
+      })
+      const form = getByTestId('form') as HTMLFormElement
+      expect(new FormData(form).get('range')).toBe('one')
+      await fireEvent.click(getAllByTestId('actions-toggle-group__option')[2])
+      expect(new FormData(form).get('range')).toBe('three')
     })
-    const form = getByTestId('form') as HTMLFormElement
-    expect(new FormData(form).get('range')).toBe('one')
-    await fireEvent.click(getAllByTestId('actions-toggle-group__option')[2])
-    expect(new FormData(form).get('range')).toBe('three')
   })
 })

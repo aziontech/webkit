@@ -146,51 +146,51 @@ describe('SettingRow', () => {
     await expectNoA11yViolations(render(Nested).container)
     await expectNoA11yViolations(render(WithHint).container)
   })
-})
 
-const boxOf = (width: number) => {
-  const host = document.createElement('div')
-  host.style.width = `${width}px`
-  document.body.appendChild(host)
-  return host
-}
-
-describe('SettingRow in a narrow box', () => {
-  const mountIn = (width: number, props: Record<string, unknown> = {}) =>
-    render(SettingRow, {
-      props: { title: 'Cache TTL', description: 'How long the edge keeps a copy.', ...props },
-      slots: { default: '<input aria-label="TTL" />' },
-      container: boxOf(width)
-    })
-
-  const beside = (view: ReturnType<typeof mountIn>) => {
-    const title = view.getByTestId('layout-setting-row__title')
-    const control = view.getByTestId('layout-setting-row__control')
-    return control.getBoundingClientRect().top < title.getBoundingClientRect().bottom
+  const boxOf = (width: number) => {
+    const host = document.createElement('div')
+    host.style.width = `${width}px`
+    document.body.appendChild(host)
+    return host
   }
 
-  it('keeps the control beside the copy by default, as the console does on a phone', () => {
-    expect(beside(mountIn(320))).toBe(true)
-  })
+  describe('in a narrow box', () => {
+    const mountIn = (width: number, props: Record<string, unknown> = {}) =>
+      render(SettingRow, {
+        props: { title: 'Cache TTL', description: 'How long the edge keeps a copy.', ...props },
+        slots: { default: '<input aria-label="TTL" />' },
+        container: boxOf(width)
+      })
 
-  it('top-aligns the title with a tall control', () => {
-    const view = render(SettingRow, {
-      props: { title: 'Nameservers', description: 'Set Azion Edge DNS as the authority.' },
-      slots: { default: '<textarea aria-label="Nameservers" rows="8"></textarea>' },
-      container: boxOf(900)
+    const beside = (view: ReturnType<typeof mountIn>) => {
+      const title = view.getByTestId('layout-setting-row__title')
+      const control = view.getByTestId('layout-setting-row__control')
+      return control.getBoundingClientRect().top < title.getBoundingClientRect().bottom
+    }
+
+    it('keeps the control beside the copy by default, as the console does on a phone', () => {
+      expect(beside(mountIn(320))).toBe(true)
     })
-    const row = view.getByTestId('layout-setting-row').getBoundingClientRect()
-    const title = view.getByTestId('layout-setting-row__title').getBoundingClientRect()
-    const control = view.getByTestId('layout-setting-row__control').getBoundingClientRect()
 
-    expect(Math.abs(title.top - control.top)).toBeLessThan(row.height / 4)
-  })
+    it('top-aligns the title with a tall control', () => {
+      const view = render(SettingRow, {
+        props: { title: 'Nameservers', description: 'Set Azion Edge DNS as the authority.' },
+        slots: { default: '<textarea aria-label="Nameservers" rows="8"></textarea>' },
+        container: boxOf(900)
+      })
+      const row = view.getByTestId('layout-setting-row').getBoundingClientRect()
+      const title = view.getByTestId('layout-setting-row__title').getBoundingClientRect()
+      const control = view.getByTestId('layout-setting-row__control').getBoundingClientRect()
 
-  it('moves a stackable field control under the copy at full width', () => {
-    expect(beside(mountIn(320, { stackable: true }))).toBe(false)
-  })
+      expect(Math.abs(title.top - control.top)).toBeLessThan(row.height / 4)
+    })
 
-  it('keeps a stackable control beside the copy in a wide box', () => {
-    expect(beside(mountIn(900, { stackable: true }))).toBe(true)
+    it('moves a stackable field control under the copy at full width', () => {
+      expect(beside(mountIn(320, { stackable: true }))).toBe(false)
+    })
+
+    it('keeps a stackable control beside the copy in a wide box', () => {
+      expect(beside(mountIn(900, { stackable: true }))).toBe(true)
+    })
   })
 })

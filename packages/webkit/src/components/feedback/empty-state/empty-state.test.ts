@@ -165,19 +165,19 @@ describe('EmptyState', () => {
       expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium'])
     })
   })
-})
 
-describe('EmptyState on devices', () => {
-  it('keeps every action in the slot inside one centred action column', () => {
-    const view = render(EmptyState, {
-      props: { title: 'No domains' },
-      slots: {
-        actions: '<button type="button">Add domain</button><a href="#docs">Read the docs</a>'
-      }
+  describe('on devices', () => {
+    it('keeps every action in the slot inside one centred action column', () => {
+      const view = render(EmptyState, {
+        props: { title: 'No domains' },
+        slots: {
+          actions: '<button type="button">Add domain</button><a href="#docs">Read the docs</a>'
+        }
+      })
+
+      const actions = view.getByTestId('feedback-empty-state__actions')
+      expect(actions.contains(view.getByRole('button', { name: 'Add domain' }))).toBe(true)
+      expect(actions.contains(view.getByRole('link', { name: 'Read the docs' }))).toBe(true)
     })
-
-    const actions = view.getByTestId('feedback-empty-state__actions')
-    expect(actions.contains(view.getByRole('button', { name: 'Add domain' }))).toBe(true)
-    expect(actions.contains(view.getByRole('link', { name: 'Read the docs' }))).toBe(true)
   })
 })

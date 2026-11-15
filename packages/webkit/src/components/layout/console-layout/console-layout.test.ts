@@ -79,1009 +79,1019 @@ const mount = (
 }
 
 describe('ConsoleLayout', () => {
-  it('renders the chrome around one main landmark holding the page body', () => {
-    const { getByTestId, getAllByRole, getByText } = mount()
-    expect(getByTestId('layout-console-layout')).toBeTruthy()
-    const mains = getAllByRole('main')
-    expect(mains).toHaveLength(1)
-    expect(within(mains[0]!).getByText('Workloads page')).toBeTruthy()
-    expect(getByText('Workloads')).toBeTruthy()
-    expect(getByText('Preview')).toBeTruthy()
-  })
+  describe('basics', () => {
+    it('renders the chrome around one main landmark holding the page body', () => {
+      const { getByTestId, getAllByRole, getByText } = mount()
+      expect(getByTestId('layout-console-layout')).toBeTruthy()
+      const mains = getAllByRole('main')
+      expect(mains).toHaveLength(1)
+      expect(within(mains[0]!).getByText('Workloads page')).toBeTruthy()
+      expect(getByText('Workloads')).toBeTruthy()
+      expect(getByText('Preview')).toBeTruthy()
+    })
 
-  it('puts the middle region between the header start and end so the actions sit at the end', () => {
-    const { getByTestId } = mount()
-    const header = getByTestId('layout-console-layout__header')
-    const regions = [
-      ...header.querySelectorAll(
-        '[data-testid$="__start"], [data-testid$="__center"], [data-testid$="__end"]'
+    it('puts the middle region between the header start and end so the actions sit at the end', () => {
+      const { getByTestId } = mount()
+      const header = getByTestId('layout-console-layout__header')
+      const regions = [
+        ...header.querySelectorAll(
+          '[data-testid$="__start"], [data-testid$="__center"], [data-testid$="__end"]'
+        )
+      ]
+        .filter(
+          (el) =>
+            el.parentElement?.closest('[data-testid="layout-console-layout__header"]') === header
+        )
+        .map((el) => el.getAttribute('data-testid')?.split('__').pop())
+      expect(regions).toEqual(['start', 'center', 'end'])
+    })
+
+    it('lets a consumer override data-testid', () => {
+      const { getByTestId } = mount({ 'data-testid': 'console' })
+      expect(getByTestId('console')).toBeTruthy()
+    })
+
+    it('marks the row matching the current route as the current page', () => {
+      const router = fakeRouter('/workloads/42')
+      const { getByRole } = mount({}, { router })
+      expect(getByRole('link', { name: 'Workloads' }).getAttribute('aria-current')).toBe('page')
+      expect(getByRole('link', { name: 'Home' }).getAttribute('aria-current')).toBeNull()
+    })
+
+    it('prefers an explicit activeId over the route', () => {
+      const router = fakeRouter('/workloads')
+      const { getByRole } = mount({ activeId: 'firewall' }, { router })
+      expect(getByRole('link', { name: /Firewall/ }).getAttribute('aria-current')).toBe('page')
+    })
+
+    it('opens the drill level that holds the current row', async () => {
+      const router = fakeRouter('/account/users')
+      const { findByRole } = mount({}, { router })
+      const row = await findByRole('link', { name: 'Users management' })
+      expect(row.getAttribute('aria-current')).toBe('page')
+    })
+
+    it('follows an in-app row with the router and emits navigate with the row', async () => {
+      const router = fakeRouter('/')
+      const onNavigate = vi.fn()
+      const { getByRole } = mount({ onNavigate }, { router })
+      await userEvent.click(getByRole('link', { name: 'Workloads' }))
+      expect(onNavigate).toHaveBeenCalledTimes(1)
+      const [event, item] = onNavigate.mock.calls[0]!
+      expect(event).toBeInstanceOf(MouseEvent)
+      expect(item.id).toBe('workloads')
+      expect(router.push).toHaveBeenCalledWith('/workloads')
+    })
+
+    it('leaves a modified click on a route row to the browser', async () => {
+      const router = fakeRouter('/')
+      const { getByRole } = mount({}, { router })
+      await fireEvent.click(getByRole('link', { name: 'Workloads' }), { ctrlKey: true })
+      expect(router.push).not.toHaveBeenCalled()
+    })
+
+    it('leaves a row with no destination to the navigate handler', async () => {
+      const router = fakeRouter('/')
+      const onNavigate = vi.fn()
+      const { getByRole } = mount(
+        { onNavigate, navigation: [{ items: [{ id: 'agent', label: 'Agent' }] }] },
+        { router }
       )
-    ]
-      .filter(
-        (el) =>
-          el.parentElement?.closest('[data-testid="layout-console-layout__header"]') === header
+      await userEvent.click(getByRole('button', { name: 'Agent' }))
+      expect(onNavigate.mock.calls[0]![1].id).toBe('agent')
+      expect(router.push).not.toHaveBeenCalled()
+    })
+
+    it('renders rows as anchors to their href', () => {
+      const { getByRole } = mount()
+      expect(getByRole('link', { name: 'Workloads' }).getAttribute('href')).toBe('/workloads')
+      expect(getByRole('link', { name: /Firewall/ }).getAttribute('href')).toBe('/firewall')
+    })
+
+    it('follows an external row the browser way, not with the router', async () => {
+      const router = fakeRouter('/')
+      const { getByRole } = mount(
+        {
+          navigation: [
+            {
+              items: [
+                { id: 'docs', label: 'Docs', href: 'https://www.azion.com/en/documentation/' }
+              ]
+            }
+          ]
+        },
+        { router }
       )
-      .map((el) => el.getAttribute('data-testid')?.split('__').pop())
-    expect(regions).toEqual(['start', 'center', 'end'])
-  })
-
-  it('lets a consumer override data-testid', () => {
-    const { getByTestId } = mount({ 'data-testid': 'console' })
-    expect(getByTestId('console')).toBeTruthy()
-  })
-
-  it('marks the row matching the current route as the current page', () => {
-    const router = fakeRouter('/workloads/42')
-    const { getByRole } = mount({}, { router })
-    expect(getByRole('link', { name: 'Workloads' }).getAttribute('aria-current')).toBe('page')
-    expect(getByRole('link', { name: 'Home' }).getAttribute('aria-current')).toBeNull()
-  })
-
-  it('prefers an explicit activeId over the route', () => {
-    const router = fakeRouter('/workloads')
-    const { getByRole } = mount({ activeId: 'firewall' }, { router })
-    expect(getByRole('link', { name: /Firewall/ }).getAttribute('aria-current')).toBe('page')
-  })
-
-  it('opens the drill level that holds the current row', async () => {
-    const router = fakeRouter('/account/users')
-    const { findByRole } = mount({}, { router })
-    const row = await findByRole('link', { name: 'Users management' })
-    expect(row.getAttribute('aria-current')).toBe('page')
-  })
-
-  it('follows an in-app row with the router and emits navigate with the row', async () => {
-    const router = fakeRouter('/')
-    const onNavigate = vi.fn()
-    const { getByRole } = mount({ onNavigate }, { router })
-    await userEvent.click(getByRole('link', { name: 'Workloads' }))
-    expect(onNavigate).toHaveBeenCalledTimes(1)
-    const [event, item] = onNavigate.mock.calls[0]!
-    expect(event).toBeInstanceOf(MouseEvent)
-    expect(item.id).toBe('workloads')
-    expect(router.push).toHaveBeenCalledWith('/workloads')
-  })
-
-  it('leaves a modified click on a route row to the browser', async () => {
-    const router = fakeRouter('/')
-    const { getByRole } = mount({}, { router })
-    await fireEvent.click(getByRole('link', { name: 'Workloads' }), { ctrlKey: true })
-    expect(router.push).not.toHaveBeenCalled()
-  })
-
-  it('leaves a row with no destination to the navigate handler', async () => {
-    const router = fakeRouter('/')
-    const onNavigate = vi.fn()
-    const { getByRole } = mount(
-      { onNavigate, navigation: [{ items: [{ id: 'agent', label: 'Agent' }] }] },
-      { router }
-    )
-    await userEvent.click(getByRole('button', { name: 'Agent' }))
-    expect(onNavigate.mock.calls[0]![1].id).toBe('agent')
-    expect(router.push).not.toHaveBeenCalled()
-  })
-
-  it('renders rows as anchors to their href', () => {
-    const { getByRole } = mount()
-    expect(getByRole('link', { name: 'Workloads' }).getAttribute('href')).toBe('/workloads')
-    expect(getByRole('link', { name: /Firewall/ }).getAttribute('href')).toBe('/firewall')
-  })
-
-  it('follows an external row the browser way, not with the router', async () => {
-    const router = fakeRouter('/')
-    const { getByRole } = mount(
-      {
-        navigation: [
-          {
-            items: [{ id: 'docs', label: 'Docs', href: 'https://www.azion.com/en/documentation/' }]
-          }
-        ]
-      },
-      { router }
-    )
-    await fireEvent.click(getByRole('link', { name: 'Docs' }))
-    expect(router.push).not.toHaveBeenCalled()
-  })
-
-  it('shows the breadcrumbs and follows a crumb route with the router', async () => {
-    const router = fakeRouter('/workloads/42')
-    const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Workloads', href: '/workloads' }, { label: 'edge-app' }] },
-      { router }
-    )
-    const header = within(getByRole('banner'))
-    expect(header.getByText('edge-app')).toBeTruthy()
-    await fireEvent.click(header.getByRole('link', { name: 'Workloads' }))
-    expect(router.push).toHaveBeenCalledWith('/workloads')
-  })
-
-  it('opens the palette from the header search with every navigation page', async () => {
-    const onOpen = vi.fn()
-    const { getByRole } = mount({ 'onUpdate:searchOpen': onOpen })
-    await userEvent.click(within(getByRole('banner')).getByRole('button', { name: /search/i }))
-    expect(onOpen).toHaveBeenCalledWith(true)
-    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
-    const palette = within(dialog)
-    expect(palette.getByText('Workloads')).toBeTruthy()
-    expect(palette.getByText('Users management')).toBeTruthy()
-    expect(palette.getByRole('combobox').getAttribute('placeholder')).toBe(
-      'Search pages and commands'
-    )
-  })
-
-  it('navigates to a palette page and reports other palette items as search-select', async () => {
-    const router = fakeRouter('/')
-    const onNavigate = vi.fn()
-    const onSearchSelect = vi.fn()
-    const { getByRole } = mount(
-      { onNavigate, 'onSearch-select': onSearchSelect, searchOpen: true },
-      { router },
-      {
-        search: ({ query }: { query: string }) =>
-          query
-            ? null
-            : h(CommandGroup, { heading: 'Recents' }, () =>
-                h(CommandItem, { value: 'recent:edge-app' }, () => 'edge-app')
-              )
-      }
-    )
-    expect(getByRole('main')).toBeTruthy()
-    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
-    await userEvent.click(within(dialog).getByText('edge-app'))
-    expect(onSearchSelect).toHaveBeenCalledTimes(1)
-    expect(onSearchSelect.mock.calls[0]![1]).toBe('recent:edge-app')
-    expect(onNavigate).not.toHaveBeenCalled()
-  })
-
-  it('follows a palette page with the router', async () => {
-    const router = fakeRouter('/')
-    const onNavigate = vi.fn()
-    mount({ onNavigate, searchOpen: true }, { router })
-    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
-    await userEvent.click(within(dialog).getByText('Users management'))
-    expect(onNavigate.mock.calls[0]![1].id).toBe('settings-users')
-    expect(router.push).toHaveBeenCalledWith('/account/users')
-  })
-
-  it('lets a page open the palette through useConsoleLayout', async () => {
-    const Page = defineComponent({
-      setup() {
-        const { openSearch } = useConsoleLayout()
-        return () => h('button', { type: 'button', onClick: openSearch }, 'Find a workload')
-      }
+      await fireEvent.click(getByRole('link', { name: 'Docs' }))
+      expect(router.push).not.toHaveBeenCalled()
     })
-    const { getByRole } = mount({}, {}, { default: () => h(Page) })
-    await userEvent.click(getByRole('button', { name: 'Find a workload' }))
-    expect(await waitFor(() => within(document.body).getByRole('dialog'))).toBeTruthy()
-  })
 
-  it('throws when useConsoleLayout is used outside the layout', () => {
-    const Loose = defineComponent({
-      setup() {
-        useConsoleLayout()
-        return () => null
-      }
+    it('shows the breadcrumbs and follows a crumb route with the router', async () => {
+      const router = fakeRouter('/workloads/42')
+      const { getByRole } = mount(
+        { breadcrumbs: [{ label: 'Workloads', href: '/workloads' }, { label: 'edge-app' }] },
+        { router }
+      )
+      const header = within(getByRole('banner'))
+      expect(header.getByText('edge-app')).toBeTruthy()
+      await fireEvent.click(header.getByRole('link', { name: 'Workloads' }))
+      expect(router.push).toHaveBeenCalledWith('/workloads')
     })
-    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    expect(() => render(Loose)).toThrow(/within <ConsoleLayout>/)
-    spy.mockRestore()
-  })
 
-  it('returns null outside the layout with the optional form', () => {
-    let seen: unknown = 'unset'
-    const Loose = defineComponent({
-      setup() {
-        seen = useConsoleLayout({ optional: true })
-        return () => h('p', 'Standalone body')
-      }
+    it('opens the palette from the header search with every navigation page', async () => {
+      const onOpen = vi.fn()
+      const { getByRole } = mount({ 'onUpdate:searchOpen': onOpen })
+      await userEvent.click(within(getByRole('banner')).getByRole('button', { name: /search/i }))
+      expect(onOpen).toHaveBeenCalledWith(true)
+      const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+      const palette = within(dialog)
+      expect(palette.getByText('Workloads')).toBeTruthy()
+      expect(palette.getByText('Users management')).toBeTruthy()
+      expect(palette.getByRole('combobox').getAttribute('placeholder')).toBe(
+        'Search pages and commands'
+      )
     })
-    const { getByText } = render(Loose)
-    expect(getByText('Standalone body')).toBeTruthy()
-    expect(seen).toBeNull()
-  })
 
-  it('opens the palette through the optional form inside the layout', async () => {
-    const Page = defineComponent({
-      setup() {
-        const layout = useConsoleLayout({ optional: true })
-        return () =>
-          h('button', { type: 'button', onClick: () => layout?.openSearch() }, 'Find a workload')
-      }
+    it('navigates to a palette page and reports other palette items as search-select', async () => {
+      const router = fakeRouter('/')
+      const onNavigate = vi.fn()
+      const onSearchSelect = vi.fn()
+      const { getByRole } = mount(
+        { onNavigate, 'onSearch-select': onSearchSelect, searchOpen: true },
+        { router },
+        {
+          search: ({ query }: { query: string }) =>
+            query
+              ? null
+              : h(CommandGroup, { heading: 'Recents' }, () =>
+                  h(CommandItem, { value: 'recent:edge-app' }, () => 'edge-app')
+                )
+        }
+      )
+      expect(getByRole('main')).toBeTruthy()
+      const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+      await userEvent.click(within(dialog).getByText('edge-app'))
+      expect(onSearchSelect).toHaveBeenCalledTimes(1)
+      expect(onSearchSelect.mock.calls[0]![1]).toBe('recent:edge-app')
+      expect(onNavigate).not.toHaveBeenCalled()
     })
-    const { getByRole } = mount({}, {}, { default: () => h(Page) })
-    await userEvent.click(getByRole('button', { name: 'Find a workload' }))
-    expect(await waitFor(() => within(document.body).getByRole('dialog'))).toBeTruthy()
-  })
 
-  it('shows the account and opens the account menu from the header avatar', async () => {
-    const { getByRole, getByText } = mount(
-      { account: { name: 'Ana Souza', email: 'ana@example.com' } },
-      {},
-      { 'account-menu': () => h('p', 'Account settings') }
-    )
-    expect(getByText('Ana Souza')).toBeTruthy()
-    const trigger = within(getByRole('banner')).getByRole('button', { name: 'AN, account menu' })
-    await userEvent.click(trigger)
-    await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
-    expect(within(document.body).getAllByText('Account settings').length).toBeGreaterThan(0)
-  })
-
-  const accountMenu = () =>
-    h(DropdownMenuGroup, null, () => [
-      h(DropdownMenuOption, { value: 'settings', label: 'Account settings' }),
-      h(DropdownMenuOption, { value: 'logout', label: 'Log out' })
-    ])
-
-  it('emits account-select when an account option is chosen with the keyboard', async () => {
-    const onAccountSelect = vi.fn()
-    const { getByRole } = mount(
-      { account: { name: 'Jane Doe' }, onAccountSelect },
-      {},
-      { 'account-menu': accountMenu }
-    )
-    const trigger = within(getByRole('banner')).getByRole('button', {
-      name: 'JA, account menu'
+    it('follows a palette page with the router', async () => {
+      const router = fakeRouter('/')
+      const onNavigate = vi.fn()
+      mount({ onNavigate, searchOpen: true }, { router })
+      const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+      await userEvent.click(within(dialog).getByText('Users management'))
+      expect(onNavigate.mock.calls[0]![1].id).toBe('settings-users')
+      expect(router.push).toHaveBeenCalledWith('/account/users')
     })
-    await userEvent.click(trigger)
-    const option = await waitFor(() =>
-      within(document.body).getByRole('menuitem', { name: 'Log out' })
-    )
-    option.focus()
-    await userEvent.keyboard('{Enter}')
-    expect(onAccountSelect).toHaveBeenCalledTimes(1)
-    const [event, value] = onAccountSelect.mock.calls[0]
-    expect(event).toBeInstanceOf(KeyboardEvent)
-    expect(value).toBe('logout')
-  })
 
-  it('emits account-select when an option of the rail account menu is clicked', async () => {
-    const onAccountSelect = vi.fn()
-    const { getByTestId } = mount(
-      { account: { name: 'Jane Doe' }, onAccountSelect },
-      {},
-      { 'account-menu': accountMenu }
-    )
-    const footer = within(getByTestId('layout-console-layout__account'))
-    await userEvent.click(footer.getByRole('button', { name: 'Account menu' }))
-    const option = await waitFor(() =>
-      within(document.body).getByRole('menuitem', { name: 'Account settings' })
-    )
-    await userEvent.click(option)
-    expect(onAccountSelect).toHaveBeenCalledTimes(1)
-    const [event, value] = onAccountSelect.mock.calls[0]
-    expect(event).toBeInstanceOf(MouseEvent)
-    expect(value).toBe('settings')
-  })
-
-  it('starts the header avatar trigger name with the visible initials', async () => {
-    const { container, getByRole } = mount(
-      { account: { name: 'Jane Doe' } },
-      {},
-      { 'account-menu': accountMenu }
-    )
-    const trigger = within(getByRole('banner')).getByRole('button', {
-      name: 'JA, account menu'
-    })
-    expect(trigger.textContent?.trim()).toBe('JA')
-    const results = await axe.run(container, {
-      runOnly: { type: 'rule', values: ['label-content-name-mismatch'] }
-    })
-    expect(results.violations).toEqual([])
-    expect(results.passes.map((rule) => rule.id)).toContain('label-content-name-mismatch')
-    await expectNoA11yViolations(container)
-  })
-
-  it('names the header avatar trigger Account menu when the account has an image', () => {
-    const { getByRole } = mount(
-      { account: { name: 'Jane Doe', src: 'https://example.com/jane.png' } },
-      {},
-      { 'account-menu': accountMenu }
-    )
-    expect(within(getByRole('banner')).getByRole('button', { name: 'Account menu' })).toBeTruthy()
-  })
-
-  it('renders the actions slot with the compact flag', () => {
-    const { getByRole } = mount(
-      {},
-      {},
-      {
-        actions: ({ compact }: { compact: boolean }) =>
-          h('button', { type: 'button' }, compact ? 'New' : 'Create')
-      }
-    )
-    expect(within(getByRole('banner')).getByRole('button', { name: 'Create' })).toBeTruthy()
-  })
-
-  it('swaps the breadcrumbs for the hamburger and the brand on a narrow layout', async () => {
-    const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Workloads' }] },
-      { width: 480 },
-      {
-        actions: ({ compact }: { compact: boolean }) =>
-          h('button', { type: 'button' }, compact ? 'New' : 'Create')
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() =>
-      expect(header.getByRole('button', { name: 'Open navigation' })).toBeTruthy()
-    )
-    expect(header.getByRole('link', { name: 'Azion home' })).toBeTruthy()
-    expect(header.queryByText('Workloads')).toBeNull()
-    expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
-  })
-
-  it('renders a header-start switcher and a composed breadcrumb trail', () => {
-    const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Ignored' }] },
-      {},
-      {
-        'header-start': () => h('button', { type: 'button' }, 'Switch account'),
-        breadcrumbs: () => h('span', 'Composed trail')
-      }
-    )
-    const header = within(getByRole('banner'))
-    expect(header.getByRole('button', { name: 'Switch account' })).toBeTruthy()
-    expect(header.getByText('Composed trail')).toBeTruthy()
-    expect(header.queryByText('Ignored')).toBeNull()
-  })
-
-  it('renders the sidebar-header slot in the rail under the wordmark, not compact', () => {
-    const { getByTestId } = mount(
-      {},
-      {},
-      {
-        'sidebar-header': ({ compact }: { compact: boolean }) =>
-          h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
-      }
-    )
-    const region = getByTestId('layout-console-layout__sidebar-header')
-    const rail = within(getByTestId('layout-console-layout__navigation'))
-
-    expect(rail.getByRole('button', { name: 'Rail switcher' })).toBeTruthy()
-    expect(region.contains(rail.getByRole('button', { name: 'Rail switcher' }))).toBe(true)
-    expect(
-      rail.getByRole('link', { name: 'Azion home' }).compareDocumentPosition(region) &
-        Node.DOCUMENT_POSITION_FOLLOWING
-    ).toBeTruthy()
-  })
-
-  it('renders no sidebar-header region without the slot', () => {
-    const { queryByTestId } = mount()
-
-    expect(queryByTestId('layout-console-layout__sidebar-header')).toBeNull()
-  })
-
-  it('passes compact to the sidebar-header slot in the compact drawer', async () => {
-    const user = userEvent.setup()
-    const { getByRole, findByRole } = mount(
-      {},
-      { width: 480 },
-      {
-        'sidebar-header': ({ compact }: { compact: boolean }) =>
-          h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
-      }
-    )
-    await waitFor(() =>
-      expect(
-        within(getByRole('banner')).getByRole('button', { name: 'Open navigation' })
-      ).toBeTruthy()
-    )
-    await user.click(within(getByRole('banner')).getByRole('button', { name: 'Open navigation' }))
-
-    expect(await findByRole('button', { name: 'Compact switcher' })).toBeTruthy()
-  })
-
-  it('shows flash notifications and toggles the tools region from an action', async () => {
-    const onTools = vi.fn()
-    const { getByRole, getByText } = mount(
-      { toolsLabel: 'Notifications', 'onUpdate:toolsOpen': onTools },
-      {},
-      {
-        notifications: () => h('div', { role: 'status' }, 'Deploy failed'),
-        actions: ({ toggleTools }: { toggleTools: () => void }) =>
-          h('button', { type: 'button', onClick: toggleTools }, 'Bell'),
-        tools: () => h('p', 'You are all caught up')
-      }
-    )
-    expect(getByRole('status').textContent).toContain('Deploy failed')
-    await userEvent.click(within(getByRole('banner')).getByRole('button', { name: 'Bell' }))
-    expect(onTools).toHaveBeenCalledWith(true)
-    await waitFor(() => expect(getByText('You are all caught up')).toBeTruthy())
-    expect(getByRole('region', { name: 'Notifications' })).toBeTruthy()
-  })
-
-  it('has no axe violations', async () => {
-    const { container } = mount({
-      breadcrumbs: [{ label: 'Workloads', href: '/workloads' }, { label: 'edge-app' }],
-      account: { name: 'Ana Souza' }
-    })
-    await expectNoA11yViolations(container)
-  })
-
-  it('renders right-to-left without violations', async () => {
-    const { container, getByRole } = mount({}, { dir: 'rtl' })
-    expect(getByRole('main')).toBeTruthy()
-    await expectNoA11yViolations(container)
-  })
-})
-
-describe('ConsoleLayout — active row in view', () => {
-  const longNavigation: ConsoleLayoutNavGroup[] = [
-    {
-      items: Array.from({ length: 40 }, (_, index) => ({
-        id: `row-${index}`,
-        label: `Resource ${index}`,
-        href: `/resources/${index}`
-      }))
-    }
-  ]
-
-  const scrollerOf = (getByTestId: (id: string) => HTMLElement) => {
-    const scroller = getByTestId('layout-console-layout__navigation__scroll')
-    scroller.style.height = '120px'
-    scroller.style.overflowY = 'auto'
-    return scroller
-  }
-
-  const withShortRail = async (run: () => Promise<void>) => {
-    const sheet = document.createElement('style')
-    sheet.textContent =
-      '[data-testid="layout-console-layout__navigation__scroll"]{height:120px;overflow-y:auto}'
-    document.head.append(sheet)
-    try {
-      await run()
-    } finally {
-      sheet.remove()
-    }
-  }
-
-  const currentRow = (scroller: HTMLElement) =>
-    scroller.querySelector<HTMLElement>('[aria-current="page"]') as HTMLElement
-
-  const inView = (scroller: HTMLElement, row: HTMLElement) => {
-    const box = scroller.getBoundingClientRect()
-    const rect = row.getBoundingClientRect()
-    return rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1
-  }
-
-  it('scrolls the rail, not the page, to a current row below the fold', async () => {
-    const pageScroll = document.scrollingElement?.scrollTop ?? 0
-    const { getByTestId, rerender } = render(ConsoleLayout, {
-      props: { navigation: longNavigation, activeId: 'row-0' }
-    })
-    const scroller = scrollerOf(getByTestId)
-    expect(scroller.scrollTop).toBe(0)
-    await rerender({ navigation: longNavigation, activeId: 'row-38' })
-    await nextTick()
-    expect(scroller.scrollTop).toBeGreaterThan(0)
-    expect(currentRow(scroller).textContent).toContain('Resource 38')
-    expect(inView(scroller, currentRow(scroller))).toBe(true)
-    expect(document.scrollingElement?.scrollTop ?? 0).toBe(pageScroll)
-  })
-
-  it('scrolls back up to a current row above the visible part', async () => {
-    const { getByTestId, rerender } = render(ConsoleLayout, {
-      props: { navigation: longNavigation, activeId: 'row-0' }
-    })
-    const scroller = scrollerOf(getByTestId)
-    await rerender({ navigation: longNavigation, activeId: 'row-38' })
-    await nextTick()
-    const low = scroller.scrollTop
-    await rerender({ navigation: longNavigation, activeId: 'row-2' })
-    await nextTick()
-    expect(scroller.scrollTop).toBeLessThan(low)
-    expect(inView(scroller, currentRow(scroller))).toBe(true)
-  })
-
-  it('scrolls the rail to the current row on mount', async () => {
-    await withShortRail(async () => {
-      const { getByTestId } = render(ConsoleLayout, {
-        props: { navigation: longNavigation, activeId: 'row-36' }
+    it('lets a page open the palette through useConsoleLayout', async () => {
+      const Page = defineComponent({
+        setup() {
+          const { openSearch } = useConsoleLayout()
+          return () => h('button', { type: 'button', onClick: openSearch }, 'Find a workload')
+        }
       })
+      const { getByRole } = mount({}, {}, { default: () => h(Page) })
+      await userEvent.click(getByRole('button', { name: 'Find a workload' }))
+      expect(await waitFor(() => within(document.body).getByRole('dialog'))).toBeTruthy()
+    })
+
+    it('throws when useConsoleLayout is used outside the layout', () => {
+      const Loose = defineComponent({
+        setup() {
+          useConsoleLayout()
+          return () => null
+        }
+      })
+      const spy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      expect(() => render(Loose)).toThrow(/within <ConsoleLayout>/)
+      spy.mockRestore()
+    })
+
+    it('returns null outside the layout with the optional form', () => {
+      let seen: unknown = 'unset'
+      const Loose = defineComponent({
+        setup() {
+          seen = useConsoleLayout({ optional: true })
+          return () => h('p', 'Standalone body')
+        }
+      })
+      const { getByText } = render(Loose)
+      expect(getByText('Standalone body')).toBeTruthy()
+      expect(seen).toBeNull()
+    })
+
+    it('opens the palette through the optional form inside the layout', async () => {
+      const Page = defineComponent({
+        setup() {
+          const layout = useConsoleLayout({ optional: true })
+          return () =>
+            h('button', { type: 'button', onClick: () => layout?.openSearch() }, 'Find a workload')
+        }
+      })
+      const { getByRole } = mount({}, {}, { default: () => h(Page) })
+      await userEvent.click(getByRole('button', { name: 'Find a workload' }))
+      expect(await waitFor(() => within(document.body).getByRole('dialog'))).toBeTruthy()
+    })
+
+    it('shows the account and opens the account menu from the header avatar', async () => {
+      const { getByRole, getByText } = mount(
+        { account: { name: 'Ana Souza', email: 'ana@example.com' } },
+        {},
+        { 'account-menu': () => h('p', 'Account settings') }
+      )
+      expect(getByText('Ana Souza')).toBeTruthy()
+      const trigger = within(getByRole('banner')).getByRole('button', { name: 'AN, account menu' })
+      await userEvent.click(trigger)
+      await waitFor(() => expect(trigger.getAttribute('aria-expanded')).toBe('true'))
+      expect(within(document.body).getAllByText('Account settings').length).toBeGreaterThan(0)
+    })
+
+    const accountMenu = () =>
+      h(DropdownMenuGroup, null, () => [
+        h(DropdownMenuOption, { value: 'settings', label: 'Account settings' }),
+        h(DropdownMenuOption, { value: 'logout', label: 'Log out' })
+      ])
+
+    it('emits account-select when an account option is chosen with the keyboard', async () => {
+      const onAccountSelect = vi.fn()
+      const { getByRole } = mount(
+        { account: { name: 'Jane Doe' }, onAccountSelect },
+        {},
+        { 'account-menu': accountMenu }
+      )
+      const trigger = within(getByRole('banner')).getByRole('button', {
+        name: 'JA, account menu'
+      })
+      await userEvent.click(trigger)
+      const option = await waitFor(() =>
+        within(document.body).getByRole('menuitem', { name: 'Log out' })
+      )
+      option.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(onAccountSelect).toHaveBeenCalledTimes(1)
+      const [event, value] = onAccountSelect.mock.calls[0]
+      expect(event).toBeInstanceOf(KeyboardEvent)
+      expect(value).toBe('logout')
+    })
+
+    it('emits account-select when an option of the rail account menu is clicked', async () => {
+      const onAccountSelect = vi.fn()
+      const { getByTestId } = mount(
+        { account: { name: 'Jane Doe' }, onAccountSelect },
+        {},
+        { 'account-menu': accountMenu }
+      )
+      const footer = within(getByTestId('layout-console-layout__account'))
+      await userEvent.click(footer.getByRole('button', { name: 'Account menu' }))
+      const option = await waitFor(() =>
+        within(document.body).getByRole('menuitem', { name: 'Account settings' })
+      )
+      await userEvent.click(option)
+      expect(onAccountSelect).toHaveBeenCalledTimes(1)
+      const [event, value] = onAccountSelect.mock.calls[0]
+      expect(event).toBeInstanceOf(MouseEvent)
+      expect(value).toBe('settings')
+    })
+
+    it('starts the header avatar trigger name with the visible initials', async () => {
+      const { container, getByRole } = mount(
+        { account: { name: 'Jane Doe' } },
+        {},
+        { 'account-menu': accountMenu }
+      )
+      const trigger = within(getByRole('banner')).getByRole('button', {
+        name: 'JA, account menu'
+      })
+      expect(trigger.textContent?.trim()).toBe('JA')
+      const results = await axe.run(container, {
+        runOnly: { type: 'rule', values: ['label-content-name-mismatch'] }
+      })
+      expect(results.violations).toEqual([])
+      expect(results.passes.map((rule) => rule.id)).toContain('label-content-name-mismatch')
+      await expectNoA11yViolations(container)
+    })
+
+    it('names the header avatar trigger Account menu when the account has an image', () => {
+      const { getByRole } = mount(
+        { account: { name: 'Jane Doe', src: 'https://example.com/jane.png' } },
+        {},
+        { 'account-menu': accountMenu }
+      )
+      expect(within(getByRole('banner')).getByRole('button', { name: 'Account menu' })).toBeTruthy()
+    })
+
+    it('renders the actions slot with the compact flag', () => {
+      const { getByRole } = mount(
+        {},
+        {},
+        {
+          actions: ({ compact }: { compact: boolean }) =>
+            h('button', { type: 'button' }, compact ? 'New' : 'Create')
+        }
+      )
+      expect(within(getByRole('banner')).getByRole('button', { name: 'Create' })).toBeTruthy()
+    })
+
+    it('swaps the breadcrumbs for the hamburger and the brand on a narrow layout', async () => {
+      const { getByRole } = mount(
+        { breadcrumbs: [{ label: 'Workloads' }] },
+        { width: 480 },
+        {
+          actions: ({ compact }: { compact: boolean }) =>
+            h('button', { type: 'button' }, compact ? 'New' : 'Create')
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() =>
+        expect(header.getByRole('button', { name: 'Open navigation' })).toBeTruthy()
+      )
+      expect(header.getByRole('link', { name: 'Azion home' })).toBeTruthy()
+      expect(header.queryByText('Workloads')).toBeNull()
+      expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
+    })
+
+    it('renders a header-start switcher and a composed breadcrumb trail', () => {
+      const { getByRole } = mount(
+        { breadcrumbs: [{ label: 'Ignored' }] },
+        {},
+        {
+          'header-start': () => h('button', { type: 'button' }, 'Switch account'),
+          breadcrumbs: () => h('span', 'Composed trail')
+        }
+      )
+      const header = within(getByRole('banner'))
+      expect(header.getByRole('button', { name: 'Switch account' })).toBeTruthy()
+      expect(header.getByText('Composed trail')).toBeTruthy()
+      expect(header.queryByText('Ignored')).toBeNull()
+    })
+
+    it('renders the sidebar-header slot in the rail under the wordmark, not compact', () => {
+      const { getByTestId } = mount(
+        {},
+        {},
+        {
+          'sidebar-header': ({ compact }: { compact: boolean }) =>
+            h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
+        }
+      )
+      const region = getByTestId('layout-console-layout__sidebar-header')
+      const rail = within(getByTestId('layout-console-layout__navigation'))
+
+      expect(rail.getByRole('button', { name: 'Rail switcher' })).toBeTruthy()
+      expect(region.contains(rail.getByRole('button', { name: 'Rail switcher' }))).toBe(true)
+      expect(
+        rail.getByRole('link', { name: 'Azion home' }).compareDocumentPosition(region) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      ).toBeTruthy()
+    })
+
+    it('renders no sidebar-header region without the slot', () => {
+      const { queryByTestId } = mount()
+
+      expect(queryByTestId('layout-console-layout__sidebar-header')).toBeNull()
+    })
+
+    it('passes compact to the sidebar-header slot in the compact drawer', async () => {
+      const user = userEvent.setup()
+      const { getByRole, findByRole } = mount(
+        {},
+        { width: 480 },
+        {
+          'sidebar-header': ({ compact }: { compact: boolean }) =>
+            h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
+        }
+      )
+      await waitFor(() =>
+        expect(
+          within(getByRole('banner')).getByRole('button', { name: 'Open navigation' })
+        ).toBeTruthy()
+      )
+      await user.click(within(getByRole('banner')).getByRole('button', { name: 'Open navigation' }))
+
+      expect(await findByRole('button', { name: 'Compact switcher' })).toBeTruthy()
+    })
+
+    it('shows flash notifications and toggles the tools region from an action', async () => {
+      const onTools = vi.fn()
+      const { getByRole, getByText } = mount(
+        { toolsLabel: 'Notifications', 'onUpdate:toolsOpen': onTools },
+        {},
+        {
+          notifications: () => h('div', { role: 'status' }, 'Deploy failed'),
+          actions: ({ toggleTools }: { toggleTools: () => void }) =>
+            h('button', { type: 'button', onClick: toggleTools }, 'Bell'),
+          tools: () => h('p', 'You are all caught up')
+        }
+      )
+      expect(getByRole('status').textContent).toContain('Deploy failed')
+      await userEvent.click(within(getByRole('banner')).getByRole('button', { name: 'Bell' }))
+      expect(onTools).toHaveBeenCalledWith(true)
+      await waitFor(() => expect(getByText('You are all caught up')).toBeTruthy())
+      expect(getByRole('region', { name: 'Notifications' })).toBeTruthy()
+    })
+
+    it('has no axe violations', async () => {
+      const { container } = mount({
+        breadcrumbs: [{ label: 'Workloads', href: '/workloads' }, { label: 'edge-app' }],
+        account: { name: 'Ana Souza' }
+      })
+      await expectNoA11yViolations(container)
+    })
+
+    it('renders right-to-left without violations', async () => {
+      const { container, getByRole } = mount({}, { dir: 'rtl' })
+      expect(getByRole('main')).toBeTruthy()
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('active row in view', () => {
+    const longNavigation: ConsoleLayoutNavGroup[] = [
+      {
+        items: Array.from({ length: 40 }, (_, index) => ({
+          id: `row-${index}`,
+          label: `Resource ${index}`,
+          href: `/resources/${index}`
+        }))
+      }
+    ]
+
+    const scrollerOf = (getByTestId: (id: string) => HTMLElement) => {
       const scroller = getByTestId('layout-console-layout__navigation__scroll')
-      await waitFor(() => expect(scroller.scrollTop).toBeGreaterThan(0))
+      scroller.style.height = '120px'
+      scroller.style.overflowY = 'auto'
+      return scroller
+    }
+
+    const withShortRail = async (run: () => Promise<void>) => {
+      const sheet = document.createElement('style')
+      sheet.textContent =
+        '[data-testid="layout-console-layout__navigation__scroll"]{height:120px;overflow-y:auto}'
+      document.head.append(sheet)
+      try {
+        await run()
+      } finally {
+        sheet.remove()
+      }
+    }
+
+    const currentRow = (scroller: HTMLElement) =>
+      scroller.querySelector<HTMLElement>('[aria-current="page"]') as HTMLElement
+
+    const inView = (scroller: HTMLElement, row: HTMLElement) => {
+      const box = scroller.getBoundingClientRect()
+      const rect = row.getBoundingClientRect()
+      return rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1
+    }
+
+    it('scrolls the rail, not the page, to a current row below the fold', async () => {
+      const pageScroll = document.scrollingElement?.scrollTop ?? 0
+      const { getByTestId, rerender } = render(ConsoleLayout, {
+        props: { navigation: longNavigation, activeId: 'row-0' }
+      })
+      const scroller = scrollerOf(getByTestId)
+      expect(scroller.scrollTop).toBe(0)
+      await rerender({ navigation: longNavigation, activeId: 'row-38' })
+      await nextTick()
+      expect(scroller.scrollTop).toBeGreaterThan(0)
+      expect(currentRow(scroller).textContent).toContain('Resource 38')
+      expect(inView(scroller, currentRow(scroller))).toBe(true)
+      expect(document.scrollingElement?.scrollTop ?? 0).toBe(pageScroll)
+    })
+
+    it('scrolls back up to a current row above the visible part', async () => {
+      const { getByTestId, rerender } = render(ConsoleLayout, {
+        props: { navigation: longNavigation, activeId: 'row-0' }
+      })
+      const scroller = scrollerOf(getByTestId)
+      await rerender({ navigation: longNavigation, activeId: 'row-38' })
+      await nextTick()
+      const low = scroller.scrollTop
+      await rerender({ navigation: longNavigation, activeId: 'row-2' })
+      await nextTick()
+      expect(scroller.scrollTop).toBeLessThan(low)
       expect(inView(scroller, currentRow(scroller))).toBe(true)
     })
-  })
 
-  it('leaves the rail where it is when the current row is already visible', async () => {
-    const { getByTestId, rerender } = render(ConsoleLayout, {
-      props: { navigation: longNavigation, activeId: 'row-0' }
-    })
-    const scroller = scrollerOf(getByTestId)
-    await rerender({ navigation: longNavigation, activeId: 'row-1' })
-    await nextTick()
-    expect(scroller.scrollTop).toBe(0)
-  })
-})
-
-describe('ConsoleLayout — page entrance on route change', () => {
-  const countingPage = () => {
-    const mounts = { count: 0 }
-    const Page = defineComponent({
-      setup() {
-        onMounted(() => {
-          mounts.count += 1
+    it('scrolls the rail to the current row on mount', async () => {
+      await withShortRail(async () => {
+        const { getByTestId } = render(ConsoleLayout, {
+          props: { navigation: longNavigation, activeId: 'row-36' }
         })
-        return () => h('h1', 'Page body')
-      }
+        const scroller = getByTestId('layout-console-layout__navigation__scroll')
+        await waitFor(() => expect(scroller.scrollTop).toBeGreaterThan(0))
+        expect(inView(scroller, currentRow(scroller))).toBe(true)
+      })
     })
-    return { mounts, Page }
-  }
 
-  it('remounts the main landmark and the page body when the route path changes', async () => {
-    const router = fakeRouter('/workloads')
-    const { mounts, Page } = countingPage()
-    const { getByRole } = mount({}, { router }, { default: () => h(Page) })
-    const first = getByRole('main')
-    expect(mounts.count).toBe(1)
-    router.currentRoute.value = { path: '/firewall' }
-    await nextTick()
-    await nextTick()
-    const second = getByRole('main')
-    expect(second).not.toBe(first)
-    expect(first.isConnected).toBe(false)
-    expect(mounts.count).toBe(2)
-    expect(within(second).getByText('Page body')).toBeTruthy()
+    it('leaves the rail where it is when the current row is already visible', async () => {
+      const { getByTestId, rerender } = render(ConsoleLayout, {
+        props: { navigation: longNavigation, activeId: 'row-0' }
+      })
+      const scroller = scrollerOf(getByTestId)
+      await rerender({ navigation: longNavigation, activeId: 'row-1' })
+      await nextTick()
+      expect(scroller.scrollTop).toBe(0)
+    })
   })
 
-  it('keeps the page body while the route path stays the same', async () => {
-    const router = fakeRouter('/workloads')
-    const { mounts, Page } = countingPage()
-    const { getByRole } = mount({}, { router }, { default: () => h(Page) })
-    const first = getByRole('main')
-    router.currentRoute.value = { path: '/workloads' }
-    await nextTick()
-    await nextTick()
-    expect(getByRole('main')).toBe(first)
-    expect(mounts.count).toBe(1)
-  })
+  describe('page entrance on route change', () => {
+    const countingPage = () => {
+      const mounts = { count: 0 }
+      const Page = defineComponent({
+        setup() {
+          onMounted(() => {
+            mounts.count += 1
+          })
+          return () => h('h1', 'Page body')
+        }
+      })
+      return { mounts, Page }
+    }
 
-  it('mounts the page body once without a router, then remounts it on popstate', async () => {
-    const original = `${location.pathname}${location.search}${location.hash}`
-    const { mounts, Page } = countingPage()
-    try {
-      const { getByRole } = mount({}, {}, { default: () => h(Page) })
-      await nextTick()
-      await nextTick()
+    it('remounts the main landmark and the page body when the route path changes', async () => {
+      const router = fakeRouter('/workloads')
+      const { mounts, Page } = countingPage()
+      const { getByRole } = mount({}, { router }, { default: () => h(Page) })
       const first = getByRole('main')
       expect(mounts.count).toBe(1)
-      history.replaceState(history.state, '', '/console-layout-route-change')
-      dispatchEvent(new PopStateEvent('popstate'))
-      await waitFor(() => expect(mounts.count).toBe(2))
-      expect(getByRole('main')).not.toBe(first)
-    } finally {
-      history.replaceState(history.state, '', original)
-    }
-  })
-})
-
-describe('ConsoleLayout — navigation rail state', () => {
-  const rail = (view: ReturnType<typeof render>) =>
-    view.getByTestId('layout-console-layout__navigation')
-
-  it('renders the rail expanded by default', () => {
-    const view = mount()
-    expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
-  })
-
-  it('collapses the rail when navigationOpen is false', () => {
-    const view = mount({ navigationOpen: false })
-    expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
-  })
-
-  it('emits update:navigationOpen when the rail collapses itself', async () => {
-    const onOpen = vi.fn()
-    const view = mount({ 'onUpdate:navigationOpen': onOpen })
-    await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
-    expect(onOpen).toHaveBeenCalledWith(false)
-    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
-  })
-
-  it('ignores the removed navigationExpanded model', () => {
-    const view = mount({ navigationExpanded: false })
-    expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
-  })
-
-  it('toggles navigationOpen with Ctrl+B / Cmd+B on wide layouts', async () => {
-    const onExpanded = vi.fn()
-    const view = mount({ 'onUpdate:navigationOpen': onExpanded })
-    await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
-    expect(onExpanded).toHaveBeenLastCalledWith(false)
-    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
-    await fireEvent.keyDown(document.body, { key: 'b', metaKey: true })
-    expect(onExpanded).toHaveBeenLastCalledWith(true)
-    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
-  })
-
-  it('does not handle Ctrl+B while the navigation is the compact drawer', async () => {
-    const onExpanded = vi.fn()
-    const view = mount({ 'onUpdate:navigationOpen': onExpanded }, { width: 480 })
-    await waitFor(() =>
-      expect(
-        within(view.getByRole('banner')).getByRole('button', { name: 'Open navigation' })
-      ).toBeTruthy()
-    )
-    await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
-    await nextTick()
-    expect(onExpanded).not.toHaveBeenCalled()
-  })
-
-  it('folds and restores the rail from the palette in the NavigationExpanded example', async () => {
-    const view = render(
-      defineComponent({
-        render: () => h('div', { style: { width: '1200px' } }, [h(NavigationExpandedExample)])
-      })
-    )
-    await waitFor(() => rail(view))
-    expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
-
-    await userEvent.click(
-      within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
-        name: /search/i
-      })
-    )
-    const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
-    await userEvent.click(within(dialog).getByText('Collapse sidebar'))
-    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
-
-    await userEvent.click(
-      within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
-        name: /search/i
-      })
-    )
-    const reopened = await waitFor(() => within(document.body).getByRole('dialog'))
-    await userEvent.click(within(reopened).getByText('Expand sidebar'))
-    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
-  })
-})
-
-describe('ConsoleLayout — page trail', () => {
-  const pageTrail = (control?: () => unknown) =>
-    h(
-      ConsoleLayoutBreadcrumbs,
-      {
-        items: [
-          { label: 'Applications', href: '/applications' },
-          { label: 'azion-site', href: '/applications/azion-site' }
-        ]
-      },
-      control ? { default: control } : undefined
-    )
-
-  it('attaches Breadcrumbs to the compound root', () => {
-    expect(ConsoleLayoutCompound.Breadcrumbs).toBe(ConsoleLayoutBreadcrumbs)
-  })
-
-  it('replaces the layout trail with the page trail and ends on its control crumb', async () => {
-    const { getByRole, getByTestId } = mount(
-      { breadcrumbs: [{ label: 'Layout crumb' }] },
-      {},
-      {
-        default: () => [
-          pageTrail(() =>
-            h('button', { type: 'button', 'aria-label': 'Switch environment' }, 'Production')
-          ),
-          h('h1', 'Application page')
-        ]
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() => expect(header.getByRole('link', { name: 'azion-site' })).toBeTruthy())
-    expect(header.queryByText('Layout crumb')).toBeNull()
-    const trail = header.getByRole('navigation', { name: 'Breadcrumb' })
-    const crumbs = within(trail).getAllByRole('listitem')
-    expect(crumbs).toHaveLength(3)
-    expect(within(crumbs[2]!).getByRole('button', { name: 'Switch environment' })).toBeTruthy()
-    expect(within(getByTestId('layout-console-layout__main')).queryByText('Production')).toBeNull()
-  })
-
-  it('gives each top-level control its own crumb', async () => {
-    const { getByRole } = mount(
-      {},
-      {},
-      {
-        default: () =>
-          pageTrail(() => [
-            h('button', { type: 'button' }, 'Production'),
-            h('button', { type: 'button' }, 'Version 3')
-          ])
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() => expect(header.getByRole('button', { name: 'Version 3' })).toBeTruthy())
-    const crumbs = within(header.getByRole('navigation', { name: 'Breadcrumb' })).getAllByRole(
-      'listitem'
-    )
-    expect(crumbs.map((crumb) => crumb.textContent?.trim())).toEqual([
-      'Applications',
-      'azion-site',
-      'Production',
-      'Version 3'
-    ])
-  })
-
-  it('renders data-only page crumbs with the last one as the current page', async () => {
-    const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Layout crumb' }] },
-      {},
-      {
-        default: () => pageTrail()
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() => expect(header.getByText('azion-site')).toBeTruthy())
-    expect(header.queryByText('Layout crumb')).toBeNull()
-    expect(header.getByText('azion-site').closest('[aria-current="page"]')).toBeTruthy()
-  })
-
-  it('keeps the page reactivity in the control crumb', async () => {
-    const count = ref(0)
-    const { getByRole } = mount(
-      {},
-      {},
-      {
-        default: () =>
-          pageTrail(() =>
-            h('button', { type: 'button', onClick: () => count.value++ }, `Version ${count.value}`)
-          )
-      }
-    )
-    const header = within(getByRole('banner'))
-    const control = await waitFor(() => header.getByRole('button', { name: 'Version 0' }))
-    await userEvent.click(control)
-    await waitFor(() => expect(header.getByRole('button', { name: 'Version 1' })).toBeTruthy())
-  })
-
-  it('follows a page crumb with the router', async () => {
-    const router = fakeRouter('/applications/azion-site')
-    const { getByRole } = mount(
-      {},
-      { router },
-      {
-        default: () => pageTrail(() => h('span', 'Production'))
-      }
-    )
-    const header = within(getByRole('banner'))
-    await fireEvent.click(await waitFor(() => header.getByRole('link', { name: 'Applications' })))
-    expect(router.push).toHaveBeenCalledWith('/applications')
-  })
-
-  it('restores the layout trail when the page unmounts', async () => {
-    const shown = ref(true)
-    const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Layout crumb' }] },
-      {},
-      {
-        default: () => (shown.value ? pageTrail(() => h('span', 'Production')) : null)
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() => expect(header.getByText('Production')).toBeTruthy())
-    shown.value = false
-    await waitFor(() => expect(header.getByText('Layout crumb')).toBeTruthy())
-    expect(header.queryByText('Production')).toBeNull()
-    expect(header.queryByText('azion-site')).toBeNull()
-  })
-
-  it('shows the most recent page trail and falls back to the earlier one', async () => {
-    const second = ref(true)
-    const { getByRole } = mount(
-      {},
-      {},
-      {
-        default: () => [
-          h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'First page' }] }),
-          second.value ? h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Second page' }] }) : null
-        ]
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() => expect(header.getByText('Second page')).toBeTruthy())
-    expect(header.queryByText('First page')).toBeNull()
-    second.value = false
-    await waitFor(() => expect(header.getByText('First page')).toBeTruthy())
-  })
-
-  it('clears a kept-alive page trail while the page is deactivated', async () => {
-    const PageA = defineComponent({
-      name: 'PageA',
-      render: () => h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Page A' }] })
-    })
-    const PageB = defineComponent({ name: 'PageB', render: () => h('p', 'Page B body') })
-    const current = ref<'a' | 'b'>('a')
-    const { getByRole } = mount(
-      { breadcrumbs: [{ label: 'Layout crumb' }] },
-      {},
-      {
-        default: () => h(KeepAlive, null, [current.value === 'a' ? h(PageA) : h(PageB)])
-      }
-    )
-    const header = within(getByRole('banner'))
-    await waitFor(() => expect(header.getByText('Page A')).toBeTruthy())
-    current.value = 'b'
-    await waitFor(() => expect(header.getByText('Layout crumb')).toBeTruthy())
-    current.value = 'a'
-    await waitFor(() => expect(header.getByText('Page A')).toBeTruthy())
-  })
-
-  it('renders nothing and does not throw outside a ConsoleLayout', () => {
-    const { container } = render(
-      defineComponent({
-        render: () => h('div', [pageTrail(() => h('span', 'Production')), h('p', 'Body')])
-      })
-    )
-    expect(container.textContent).toBe('Body')
-  })
-
-  it('server-renders the layout trail and hydrates without mismatches, then shows the page trail', async () => {
-    const App = defineComponent({
-      render: () => h('div', { style: { width: '1200px' } }, [h(PageBreadcrumbsExample)])
-    })
-    const context: SSRContext = {}
-    const html = await renderToString(createSSRApp(App), context)
-    const host = document.createElement('div')
-    host.innerHTML = html
-    document.body.appendChild(host)
-    const teleported: Node[] = []
-    for (const [to, markup] of Object.entries(context.teleports ?? {})) {
-      const target = document.querySelector(to) as (Element & { _lpa?: Node | null }) | null
-      if (!target) continue
-      const parsed = document.createElement('template')
-      parsed.innerHTML = markup
-      teleported.push(...Array.from(parsed.content.childNodes))
-      target._lpa = null
-      target.prepend(parsed.content)
-    }
-    const serverHeader = host.querySelector('[data-testid="layout-console-layout__header"]')
-    expect(serverHeader?.textContent).toContain('Applications')
-    expect(serverHeader?.textContent).not.toContain('azion-site')
-    const messages: string[] = []
-    const collect = (...args: unknown[]) => messages.push(args.map(String).join(' '))
-    const warn = vi.spyOn(console, 'warn').mockImplementation(collect)
-    const error = vi.spyOn(console, 'error').mockImplementation(collect)
-    try {
-      const app = createSSRApp(App)
-      app.mount(host)
+      router.currentRoute.value = { path: '/firewall' }
       await nextTick()
-      expect(messages.filter((m) => /hydration/i.test(m))).toEqual([])
-      const header = within(host.querySelector('header') as HTMLElement)
-      await waitFor(() => expect(header.getByText('azion-site')).toBeTruthy())
-      expect(header.getByRole('combobox', { name: 'Switch environment' })).toBeTruthy()
-      app.unmount()
-    } finally {
-      warn.mockRestore()
-      error.mockRestore()
-      host.remove()
-      for (const node of teleported) node.parentNode?.removeChild(node)
-    }
+      await nextTick()
+      const second = getByRole('main')
+      expect(second).not.toBe(first)
+      expect(first.isConnected).toBe(false)
+      expect(mounts.count).toBe(2)
+      expect(within(second).getByText('Page body')).toBeTruthy()
+    })
+
+    it('keeps the page body while the route path stays the same', async () => {
+      const router = fakeRouter('/workloads')
+      const { mounts, Page } = countingPage()
+      const { getByRole } = mount({}, { router }, { default: () => h(Page) })
+      const first = getByRole('main')
+      router.currentRoute.value = { path: '/workloads' }
+      await nextTick()
+      await nextTick()
+      expect(getByRole('main')).toBe(first)
+      expect(mounts.count).toBe(1)
+    })
+
+    it('mounts the page body once without a router, then remounts it on popstate', async () => {
+      const original = `${location.pathname}${location.search}${location.hash}`
+      const { mounts, Page } = countingPage()
+      try {
+        const { getByRole } = mount({}, {}, { default: () => h(Page) })
+        await nextTick()
+        await nextTick()
+        const first = getByRole('main')
+        expect(mounts.count).toBe(1)
+        history.replaceState(history.state, '', '/console-layout-route-change')
+        dispatchEvent(new PopStateEvent('popstate'))
+        await waitFor(() => expect(mounts.count).toBe(2))
+        expect(getByRole('main')).not.toBe(first)
+      } finally {
+        history.replaceState(history.state, '', original)
+      }
+    })
   })
 
-  it('has no axe violations with a page trail ending on a select', async () => {
-    const { container, getByRole } = render(
-      defineComponent({
-        render: () => h('div', { style: { width: '1200px' } }, [h(PageBreadcrumbsExample)])
-      })
-    )
-    await waitFor(() => expect(within(getByRole('banner')).getByText('azion-site')).toBeTruthy())
-    await expectNoA11yViolations(container)
+  describe('navigation rail state', () => {
+    const rail = (view: ReturnType<typeof render>) =>
+      view.getByTestId('layout-console-layout__navigation')
+
+    it('renders the rail expanded by default', () => {
+      const view = mount()
+      expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+    })
+
+    it('collapses the rail when navigationOpen is false', () => {
+      const view = mount({ navigationOpen: false })
+      expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
+    })
+
+    it('emits update:navigationOpen when the rail collapses itself', async () => {
+      const onOpen = vi.fn()
+      const view = mount({ 'onUpdate:navigationOpen': onOpen })
+      await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
+      expect(onOpen).toHaveBeenCalledWith(false)
+      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+    })
+
+    it('ignores the removed navigationExpanded model', () => {
+      const view = mount({ navigationExpanded: false })
+      expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+    })
+
+    it('toggles navigationOpen with Ctrl+B / Cmd+B on wide layouts', async () => {
+      const onExpanded = vi.fn()
+      const view = mount({ 'onUpdate:navigationOpen': onExpanded })
+      await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
+      expect(onExpanded).toHaveBeenLastCalledWith(false)
+      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+      await fireEvent.keyDown(document.body, { key: 'b', metaKey: true })
+      expect(onExpanded).toHaveBeenLastCalledWith(true)
+      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
+    })
+
+    it('does not handle Ctrl+B while the navigation is the compact drawer', async () => {
+      const onExpanded = vi.fn()
+      const view = mount({ 'onUpdate:navigationOpen': onExpanded }, { width: 480 })
+      await waitFor(() =>
+        expect(
+          within(view.getByRole('banner')).getByRole('button', { name: 'Open navigation' })
+        ).toBeTruthy()
+      )
+      await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
+      await nextTick()
+      expect(onExpanded).not.toHaveBeenCalled()
+    })
+
+    it('folds and restores the rail from the palette in the NavigationExpanded example', async () => {
+      const view = render(
+        defineComponent({
+          render: () => h('div', { style: { width: '1200px' } }, [h(NavigationExpandedExample)])
+        })
+      )
+      await waitFor(() => rail(view))
+      expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+
+      await userEvent.click(
+        within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
+          name: /search/i
+        })
+      )
+      const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
+      await userEvent.click(within(dialog).getByText('Collapse sidebar'))
+      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+
+      await userEvent.click(
+        within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
+          name: /search/i
+        })
+      )
+      const reopened = await waitFor(() => within(document.body).getByRole('dialog'))
+      await userEvent.click(within(reopened).getByText('Expand sidebar'))
+      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
+    })
   })
-})
 
-describe('ConsoleLayout — fill page', () => {
-  it('keeps the fill root a direct child of the main landmark', () => {
-    const { getByRole } = render(FillPageExample)
-    const main = getByRole('main')
-    const root = main.querySelector(':scope > [data-layout-fill]')
-    expect(root).toBeTruthy()
-    expect(within(root as HTMLElement).getByRole('group', { name: 'Source lines' })).toBeTruthy()
-    expect(getByRole('main').querySelectorAll('[data-layout-fill]')).toHaveLength(1)
-  })
-
-  it('has no axe violations', async () => {
-    const { container } = render(FillPageExample)
-    await expectNoA11yViolations(container)
-  })
-})
-
-describe('ConsoleLayout — sidebar header example', () => {
-  const wide = () =>
-    render(
-      defineComponent({
-        render: () => h('div', { style: { width: '1200px' } }, [h(SidebarHeaderExample)])
-      })
-    )
-
-  it('puts the switcher in the rail and leaves the header start empty on a wide layout', () => {
-    const { getByTestId } = wide()
-
-    expect(
-      within(getByTestId('layout-console-layout__sidebar-header')).getByRole('button', {
-        name: 'Account: Acme Inc.. Switch account'
-      })
-    ).toBeTruthy()
-    expect(
-      within(getByTestId('layout-console-layout__header')).queryByRole('button', {
-        name: /Switch account/
-      })
-    ).toBeNull()
-  })
-
-  it('has no axe violations', async () => {
-    const { container } = wide()
-    await expectNoA11yViolations(container)
-  })
-})
-
-describe('ConsoleLayout — duplicate destinations in development', () => {
-  const pageMenu = (href: string) =>
-    h(SidebarMenu, {
-      'aria-label': 'Account pages',
-      groups: [
+  describe('page trail', () => {
+    const pageTrail = (control?: () => unknown) =>
+      h(
+        ConsoleLayoutBreadcrumbs,
         {
           items: [
-            { id: 'page-profile', label: 'Profile', href: '/profile' },
-            { id: 'page-team', label: 'Team members', href }
+            { label: 'Applications', href: '/applications' },
+            { label: 'azion-site', href: '/applications/azion-site' }
           ]
-        }
-      ]
+        },
+        control ? { default: control } : undefined
+      )
+
+    it('attaches Breadcrumbs to the compound root', () => {
+      expect(ConsoleLayoutCompound.Breadcrumbs).toBe(ConsoleLayoutBreadcrumbs)
     })
 
-  const duplicateWarnings = (spy: ReturnType<typeof vi.spyOn>) =>
-    spy.mock.calls
-      .map((call: unknown[]) => String(call[0]))
-      .filter((message: string) => message.includes('webkit-navigation-levels'))
+    it('replaces the layout trail with the page trail and ends on its control crumb', async () => {
+      const { getByRole, getByTestId } = mount(
+        { breadcrumbs: [{ label: 'Layout crumb' }] },
+        {},
+        {
+          default: () => [
+            pageTrail(() =>
+              h('button', { type: 'button', 'aria-label': 'Switch environment' }, 'Production')
+            ),
+            h('h1', 'Application page')
+          ]
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() => expect(header.getByRole('link', { name: 'azion-site' })).toBeTruthy())
+      expect(header.queryByText('Layout crumb')).toBeNull()
+      const trail = header.getByRole('navigation', { name: 'Breadcrumb' })
+      const crumbs = within(trail).getAllByRole('listitem')
+      expect(crumbs).toHaveLength(3)
+      expect(within(crumbs[2]!).getByRole('button', { name: 'Switch environment' })).toBeTruthy()
+      expect(
+        within(getByTestId('layout-console-layout__main')).queryByText('Production')
+      ).toBeNull()
+    })
 
-  it('warns once per route when a page SidebarMenu repeats a navigation row', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    try {
-      const router = fakeRouter('/account/users')
+    it('gives each top-level control its own crumb', async () => {
+      const { getByRole } = mount(
+        {},
+        {},
+        {
+          default: () =>
+            pageTrail(() => [
+              h('button', { type: 'button' }, 'Production'),
+              h('button', { type: 'button' }, 'Version 3')
+            ])
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() => expect(header.getByRole('button', { name: 'Version 3' })).toBeTruthy())
+      const crumbs = within(header.getByRole('navigation', { name: 'Breadcrumb' })).getAllByRole(
+        'listitem'
+      )
+      expect(crumbs.map((crumb) => crumb.textContent?.trim())).toEqual([
+        'Applications',
+        'azion-site',
+        'Production',
+        'Version 3'
+      ])
+    })
+
+    it('renders data-only page crumbs with the last one as the current page', async () => {
+      const { getByRole } = mount(
+        { breadcrumbs: [{ label: 'Layout crumb' }] },
+        {},
+        {
+          default: () => pageTrail()
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() => expect(header.getByText('azion-site')).toBeTruthy())
+      expect(header.queryByText('Layout crumb')).toBeNull()
+      expect(header.getByText('azion-site').closest('[aria-current="page"]')).toBeTruthy()
+    })
+
+    it('keeps the page reactivity in the control crumb', async () => {
+      const count = ref(0)
+      const { getByRole } = mount(
+        {},
+        {},
+        {
+          default: () =>
+            pageTrail(() =>
+              h(
+                'button',
+                { type: 'button', onClick: () => count.value++ },
+                `Version ${count.value}`
+              )
+            )
+        }
+      )
+      const header = within(getByRole('banner'))
+      const control = await waitFor(() => header.getByRole('button', { name: 'Version 0' }))
+      await userEvent.click(control)
+      await waitFor(() => expect(header.getByRole('button', { name: 'Version 1' })).toBeTruthy())
+    })
+
+    it('follows a page crumb with the router', async () => {
+      const router = fakeRouter('/applications/azion-site')
       const { getByRole } = mount(
         {},
         { router },
-        { default: () => pageMenu('/account/users?tab=2#list') }
+        {
+          default: () => pageTrail(() => h('span', 'Production'))
+        }
       )
-      await waitFor(() => expect(duplicateWarnings(warn)).toHaveLength(1))
-      const [message] = duplicateWarnings(warn)
-      expect(message).toContain('"Team members" (page SidebarMenu)')
-      expect(message).toContain('"Users management" (navigation)')
-      expect(message).toContain('/account/users')
-      expect(message).not.toContain('Profile')
-      getByRole('main').append(document.createElement('span'))
-      await nextTick()
-      await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(duplicateWarnings(warn)).toHaveLength(1)
-    } finally {
-      warn.mockRestore()
-    }
+      const header = within(getByRole('banner'))
+      await fireEvent.click(await waitFor(() => header.getByRole('link', { name: 'Applications' })))
+      expect(router.push).toHaveBeenCalledWith('/applications')
+    })
+
+    it('restores the layout trail when the page unmounts', async () => {
+      const shown = ref(true)
+      const { getByRole } = mount(
+        { breadcrumbs: [{ label: 'Layout crumb' }] },
+        {},
+        {
+          default: () => (shown.value ? pageTrail(() => h('span', 'Production')) : null)
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() => expect(header.getByText('Production')).toBeTruthy())
+      shown.value = false
+      await waitFor(() => expect(header.getByText('Layout crumb')).toBeTruthy())
+      expect(header.queryByText('Production')).toBeNull()
+      expect(header.queryByText('azion-site')).toBeNull()
+    })
+
+    it('shows the most recent page trail and falls back to the earlier one', async () => {
+      const second = ref(true)
+      const { getByRole } = mount(
+        {},
+        {},
+        {
+          default: () => [
+            h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'First page' }] }),
+            second.value ? h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Second page' }] }) : null
+          ]
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() => expect(header.getByText('Second page')).toBeTruthy())
+      expect(header.queryByText('First page')).toBeNull()
+      second.value = false
+      await waitFor(() => expect(header.getByText('First page')).toBeTruthy())
+    })
+
+    it('clears a kept-alive page trail while the page is deactivated', async () => {
+      const PageA = defineComponent({
+        name: 'PageA',
+        render: () => h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Page A' }] })
+      })
+      const PageB = defineComponent({ name: 'PageB', render: () => h('p', 'Page B body') })
+      const current = ref<'a' | 'b'>('a')
+      const { getByRole } = mount(
+        { breadcrumbs: [{ label: 'Layout crumb' }] },
+        {},
+        {
+          default: () => h(KeepAlive, null, [current.value === 'a' ? h(PageA) : h(PageB)])
+        }
+      )
+      const header = within(getByRole('banner'))
+      await waitFor(() => expect(header.getByText('Page A')).toBeTruthy())
+      current.value = 'b'
+      await waitFor(() => expect(header.getByText('Layout crumb')).toBeTruthy())
+      current.value = 'a'
+      await waitFor(() => expect(header.getByText('Page A')).toBeTruthy())
+    })
+
+    it('renders nothing and does not throw outside a ConsoleLayout', () => {
+      const { container } = render(
+        defineComponent({
+          render: () => h('div', [pageTrail(() => h('span', 'Production')), h('p', 'Body')])
+        })
+      )
+      expect(container.textContent).toBe('Body')
+    })
+
+    it('server-renders the layout trail and hydrates without mismatches, then shows the page trail', async () => {
+      const App = defineComponent({
+        render: () => h('div', { style: { width: '1200px' } }, [h(PageBreadcrumbsExample)])
+      })
+      const context: SSRContext = {}
+      const html = await renderToString(createSSRApp(App), context)
+      const host = document.createElement('div')
+      host.innerHTML = html
+      document.body.appendChild(host)
+      const teleported: Node[] = []
+      for (const [to, markup] of Object.entries(context.teleports ?? {})) {
+        const target = document.querySelector(to) as (Element & { _lpa?: Node | null }) | null
+        if (!target) continue
+        const parsed = document.createElement('template')
+        parsed.innerHTML = markup
+        teleported.push(...Array.from(parsed.content.childNodes))
+        target._lpa = null
+        target.prepend(parsed.content)
+      }
+      const serverHeader = host.querySelector('[data-testid="layout-console-layout__header"]')
+      expect(serverHeader?.textContent).toContain('Applications')
+      expect(serverHeader?.textContent).not.toContain('azion-site')
+      const messages: string[] = []
+      const collect = (...args: unknown[]) => messages.push(args.map(String).join(' '))
+      const warn = vi.spyOn(console, 'warn').mockImplementation(collect)
+      const error = vi.spyOn(console, 'error').mockImplementation(collect)
+      try {
+        const app = createSSRApp(App)
+        app.mount(host)
+        await nextTick()
+        expect(messages.filter((m) => /hydration/i.test(m))).toEqual([])
+        const header = within(host.querySelector('header') as HTMLElement)
+        await waitFor(() => expect(header.getByText('azion-site')).toBeTruthy())
+        expect(header.getByRole('combobox', { name: 'Switch environment' })).toBeTruthy()
+        app.unmount()
+      } finally {
+        warn.mockRestore()
+        error.mockRestore()
+        host.remove()
+        for (const node of teleported) node.parentNode?.removeChild(node)
+      }
+    })
+
+    it('has no axe violations with a page trail ending on a select', async () => {
+      const { container, getByRole } = render(
+        defineComponent({
+          render: () => h('div', { style: { width: '1200px' } }, [h(PageBreadcrumbsExample)])
+        })
+      )
+      await waitFor(() => expect(within(getByRole('banner')).getByText('azion-site')).toBeTruthy())
+      await expectNoA11yViolations(container)
+    })
   })
 
-  it('stays silent when the page SidebarMenu shares no route with the navigation', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    try {
-      const router = fakeRouter('/account/users')
-      const { getByRole } = mount({}, { router }, { default: () => pageMenu('/team') })
-      await waitFor(() => expect(getByRole('main').querySelector('a[href="/team"]')).toBeTruthy())
-      await nextTick()
-      await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(duplicateWarnings(warn)).toEqual([])
-    } finally {
-      warn.mockRestore()
-    }
+  describe('fill page', () => {
+    it('keeps the fill root a direct child of the main landmark', () => {
+      const { getByRole } = render(FillPageExample)
+      const main = getByRole('main')
+      const root = main.querySelector(':scope > [data-layout-fill]')
+      expect(root).toBeTruthy()
+      expect(within(root as HTMLElement).getByRole('group', { name: 'Source lines' })).toBeTruthy()
+      expect(getByRole('main').querySelectorAll('[data-layout-fill]')).toHaveLength(1)
+    })
+
+    it('has no axe violations', async () => {
+      const { container } = render(FillPageExample)
+      await expectNoA11yViolations(container)
+    })
   })
-  it('ignores the rows of a closed drill level', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    try {
-      const router = fakeRouter('/workloads')
-      const { getByRole } = mount({}, { router }, { default: () => pageMenu('/account/users') })
-      await waitFor(() =>
-        expect(getByRole('main').querySelector('a[href="/account/users"]')).toBeTruthy()
+
+  describe('sidebar header example', () => {
+    const wide = () =>
+      render(
+        defineComponent({
+          render: () => h('div', { style: { width: '1200px' } }, [h(SidebarHeaderExample)])
+        })
       )
-      await nextTick()
-      await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(duplicateWarnings(warn)).toEqual([])
-    } finally {
-      warn.mockRestore()
-    }
+
+    it('puts the switcher in the rail and leaves the header start empty on a wide layout', () => {
+      const { getByTestId } = wide()
+
+      expect(
+        within(getByTestId('layout-console-layout__sidebar-header')).getByRole('button', {
+          name: 'Account: Acme Inc.. Switch account'
+        })
+      ).toBeTruthy()
+      expect(
+        within(getByTestId('layout-console-layout__header')).queryByRole('button', {
+          name: /Switch account/
+        })
+      ).toBeNull()
+    })
+
+    it('has no axe violations', async () => {
+      const { container } = wide()
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('duplicate destinations in development', () => {
+    const pageMenu = (href: string) =>
+      h(SidebarMenu, {
+        'aria-label': 'Account pages',
+        groups: [
+          {
+            items: [
+              { id: 'page-profile', label: 'Profile', href: '/profile' },
+              { id: 'page-team', label: 'Team members', href }
+            ]
+          }
+        ]
+      })
+
+    const duplicateWarnings = (spy: ReturnType<typeof vi.spyOn>) =>
+      spy.mock.calls
+        .map((call: unknown[]) => String(call[0]))
+        .filter((message: string) => message.includes('webkit-navigation-levels'))
+
+    it('warns once per route when a page SidebarMenu repeats a navigation row', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      try {
+        const router = fakeRouter('/account/users')
+        const { getByRole } = mount(
+          {},
+          { router },
+          { default: () => pageMenu('/account/users?tab=2#list') }
+        )
+        await waitFor(() => expect(duplicateWarnings(warn)).toHaveLength(1))
+        const [message] = duplicateWarnings(warn)
+        expect(message).toContain('"Team members" (page SidebarMenu)')
+        expect(message).toContain('"Users management" (navigation)')
+        expect(message).toContain('/account/users')
+        expect(message).not.toContain('Profile')
+        getByRole('main').append(document.createElement('span'))
+        await nextTick()
+        await new Promise((resolve) => setTimeout(resolve, 0))
+        expect(duplicateWarnings(warn)).toHaveLength(1)
+      } finally {
+        warn.mockRestore()
+      }
+    })
+
+    it('stays silent when the page SidebarMenu shares no route with the navigation', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      try {
+        const router = fakeRouter('/account/users')
+        const { getByRole } = mount({}, { router }, { default: () => pageMenu('/team') })
+        await waitFor(() => expect(getByRole('main').querySelector('a[href="/team"]')).toBeTruthy())
+        await nextTick()
+        await new Promise((resolve) => setTimeout(resolve, 0))
+        expect(duplicateWarnings(warn)).toEqual([])
+      } finally {
+        warn.mockRestore()
+      }
+    })
+    it('ignores the rows of a closed drill level', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      try {
+        const router = fakeRouter('/workloads')
+        const { getByRole } = mount({}, { router }, { default: () => pageMenu('/account/users') })
+        await waitFor(() =>
+          expect(getByRole('main').querySelector('a[href="/account/users"]')).toBeTruthy()
+        )
+        await nextTick()
+        await new Promise((resolve) => setTimeout(resolve, 0))
+        expect(duplicateWarnings(warn)).toEqual([])
+      } finally {
+        warn.mockRestore()
+      }
+    })
   })
 })

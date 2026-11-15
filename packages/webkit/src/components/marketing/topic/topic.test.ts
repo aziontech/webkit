@@ -129,26 +129,26 @@ describe('Topic', () => {
     })
     await expectNoA11yViolations(container)
   })
-})
 
-describe('Topic slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { Topic },
-      setup: () => ({ shown }),
-      template: `<Topic title="Edge"><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></Topic>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { Topic },
+        setup: () => ({ shown }),
+        template: `<Topic title="Edge"><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></Topic>`
+      })
+      expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(false)
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(true)
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(false)
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(false)
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(true)
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(false)
-    expect(queryByTestId('probe')).toBeNull()
   })
 })

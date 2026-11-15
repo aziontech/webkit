@@ -35,81 +35,81 @@ const rich = [
   '```'
 ].join('\n')
 
-describe('parseMarkdown', () => {
-  it('parses blocks in order', () => {
-    expect(parseMarkdown(rich).map((block) => block.type)).toEqual([
-      'heading',
-      'paragraph',
-      'list',
-      'list',
-      'table',
-      'quote',
-      'rule',
-      'code'
-    ])
-  })
-
-  it('tolerates incomplete markdown while streaming', () => {
-    expect(parseInline('a **bol')).toEqual([
-      { type: 'text', value: 'a ' },
-      { type: 'strong', children: [{ type: 'text', value: 'bol' }] }
-    ])
-    expect(parseInline('see [the do')).toEqual([{ type: 'text', value: 'see the do' }])
-    const open = parseMarkdown('```js\nconst a = 1')
-    expect(open[0]).toMatchObject({ type: 'code', closed: false, value: 'const a = 1' })
-  })
-
-  it('keeps a lone asterisk literal', () => {
-    expect(parseInline('5 * 3 and snake_case')).toEqual([
-      { type: 'text', value: '5 * 3 and snake_case' }
-    ])
-  })
-
-  it('parses an appended stream to the same blocks as a full parse at every step', () => {
-    const source = [
-      rich,
-      '',
-      'Then | not a table',
-      '| A | B |',
-      '|---|---|',
-      '| 1 | 2 |',
-      'para',
-      '- item',
-      '  continued',
-      '```js x',
-      '~~~ts',
-      'const a = 1',
-      '',
-      '~~~',
-      '# Done\r\nlast'
-    ].join('\n')
-    let state: MarkdownParse | undefined
-    for (let end = 1; end <= source.length; end += 1) {
-      state = parseMarkdownIncremental(source.slice(0, end), state)
-      expect(state.blocks, `after ${end} chars`).toEqual(parseMarkdown(source.slice(0, end)))
-    }
-  })
-
-  it('keeps settled blocks as the same objects while text is appended', () => {
-    const first = parseMarkdownIncremental('```js\nconst a = 1\n```\n\nSome')
-    const next = parseMarkdownIncremental('```js\nconst a = 1\n```\n\nSome more', first)
-    expect(next.blocks[0]).toBe(first.blocks[0])
-    expect(next.blocks[1]).not.toBe(first.blocks[1])
-  })
-
-  it('allows only safe link protocols', () => {
-    expect(safeHref('https://a.b')).toBe('https://a.b')
-    expect(safeHref('/docs')).toBe('/docs')
-    expect(safeHref('#s-1')).toBe('#s-1')
-    expect(safeHref('mailto:a@b.c')).toBe('mailto:a@b.c')
-    expect(safeHref('javascript:alert(1)')).toBeNull()
-    expect(safeHref('JaVaScRiPt:alert(1)')).toBeNull()
-    expect(safeHref('data:text/html,x')).toBeNull()
-    expect(safeHref('//evil.example')).toBeNull()
-  })
-})
-
 describe('StreamingResponse', () => {
+  describe('parseMarkdown', () => {
+    it('parses blocks in order', () => {
+      expect(parseMarkdown(rich).map((block) => block.type)).toEqual([
+        'heading',
+        'paragraph',
+        'list',
+        'list',
+        'table',
+        'quote',
+        'rule',
+        'code'
+      ])
+    })
+
+    it('tolerates incomplete markdown while streaming', () => {
+      expect(parseInline('a **bol')).toEqual([
+        { type: 'text', value: 'a ' },
+        { type: 'strong', children: [{ type: 'text', value: 'bol' }] }
+      ])
+      expect(parseInline('see [the do')).toEqual([{ type: 'text', value: 'see the do' }])
+      const open = parseMarkdown('```js\nconst a = 1')
+      expect(open[0]).toMatchObject({ type: 'code', closed: false, value: 'const a = 1' })
+    })
+
+    it('keeps a lone asterisk literal', () => {
+      expect(parseInline('5 * 3 and snake_case')).toEqual([
+        { type: 'text', value: '5 * 3 and snake_case' }
+      ])
+    })
+
+    it('parses an appended stream to the same blocks as a full parse at every step', () => {
+      const source = [
+        rich,
+        '',
+        'Then | not a table',
+        '| A | B |',
+        '|---|---|',
+        '| 1 | 2 |',
+        'para',
+        '- item',
+        '  continued',
+        '```js x',
+        '~~~ts',
+        'const a = 1',
+        '',
+        '~~~',
+        '# Done\r\nlast'
+      ].join('\n')
+      let state: MarkdownParse | undefined
+      for (let end = 1; end <= source.length; end += 1) {
+        state = parseMarkdownIncremental(source.slice(0, end), state)
+        expect(state.blocks, `after ${end} chars`).toEqual(parseMarkdown(source.slice(0, end)))
+      }
+    })
+
+    it('keeps settled blocks as the same objects while text is appended', () => {
+      const first = parseMarkdownIncremental('```js\nconst a = 1\n```\n\nSome')
+      const next = parseMarkdownIncremental('```js\nconst a = 1\n```\n\nSome more', first)
+      expect(next.blocks[0]).toBe(first.blocks[0])
+      expect(next.blocks[1]).not.toBe(first.blocks[1])
+    })
+
+    it('allows only safe link protocols', () => {
+      expect(safeHref('https://a.b')).toBe('https://a.b')
+      expect(safeHref('/docs')).toBe('/docs')
+      expect(safeHref('#s-1')).toBe('#s-1')
+      expect(safeHref('mailto:a@b.c')).toBe('mailto:a@b.c')
+      expect(safeHref('javascript:alert(1)')).toBeNull()
+      expect(safeHref('JaVaScRiPt:alert(1)')).toBeNull()
+      expect(safeHref('data:text/html,x')).toBeNull()
+      expect(safeHref('//evil.example')).toBeNull()
+    })
+  })
+
   it('renders the fallback data-testid and lets a consumer override it', () => {
     expect(render(StreamingResponse).getByTestId('ai-streaming-response')).toBeTruthy()
     expect(

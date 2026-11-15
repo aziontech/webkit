@@ -95,23 +95,23 @@ describe('ResponseBranches', () => {
     await nextTick()
     expect(view.getByText('4 of 4')).toBeTruthy()
   })
-})
 
-describe('ResponseBranches naming and test ids', () => {
-  it('names the pager from ariaLabel, not from the removed label', () => {
-    const named = render(ResponseBranches, { props: { count: 3, ariaLabel: 'Answers' } })
-    expect(named.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
-    named.unmount()
-    const legacy = render(ResponseBranches, { props: { count: 3, label: 'Drafts' } as never })
-    expect(legacy.queryByRole('group', { name: 'Drafts' })).toBeNull()
-  })
-
-  it('lets a consumer data-testid win over the fallback', () => {
-    const { getByTestId } = render(ResponseBranches, {
-      props: { count: 3 },
-      attrs: { 'data-testid': 'branches' }
+  describe('naming and test ids', () => {
+    it('names the pager from ariaLabel, not from the removed label', () => {
+      const named = render(ResponseBranches, { props: { count: 3, ariaLabel: 'Answers' } })
+      expect(named.getByRole('group', { name: 'Answers' })).toBeInTheDocument()
+      named.unmount()
+      const legacy = render(ResponseBranches, { props: { count: 3, label: 'Drafts' } as never })
+      expect(legacy.queryByRole('group', { name: 'Drafts' })).toBeNull()
     })
-    expect(getByTestId('branches')).toBeInTheDocument()
-    expect(getByTestId('branches__pager')).toBeInTheDocument()
+
+    it('lets a consumer data-testid win over the fallback', () => {
+      const { getByTestId } = render(ResponseBranches, {
+        props: { count: 3 },
+        attrs: { 'data-testid': 'branches' }
+      })
+      expect(getByTestId('branches')).toBeInTheDocument()
+      expect(getByTestId('branches__pager')).toBeInTheDocument()
+    })
   })
 })

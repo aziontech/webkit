@@ -361,69 +361,69 @@ describe('Switch', () => {
       expect(switches.map((node) => node.getAttribute('aria-checked'))).toEqual(['false', 'true'])
     })
   })
-})
 
-describe('Switch touch target', () => {
-  it('extends its hit area to 24px, and 44px on coarse pointers', () => {
-    const view = render(Switch, { attrs: { 'aria-label': 'Enabled' } })
+  describe('touch target', () => {
+    it('extends its hit area to 24px, and 44px on coarse pointers', () => {
+      const view = render(Switch, { attrs: { 'aria-label': 'Enabled' } })
 
-    expect(view.getByRole('switch').className).toContain(
-      'pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
-    )
-  })
-})
-
-describe('Switch direction', () => {
-  it('mirrors the checked handle slide under rtl', () => {
-    const view = render(Switch, {
-      props: { modelValue: true },
-      attrs: { 'aria-label': 'Enabled' }
+      expect(view.getByRole('switch').className).toContain(
+        'pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]'
+      )
     })
-    const handle = view.getByTestId('input-switch__handle').className
-    expect(handle).toContain('group-data-[checked]:translate-x-3.5')
-    expect(handle).toContain('rtl:group-data-[checked]:-translate-x-3.5')
-  })
-})
-
-describe('Switch autofocus and privacy lock', () => {
-  it('focuses itself on mount with autofocus', () => {
-    const host = document.createElement('div')
-    document.body.appendChild(host)
-    const app = createApp(Switch, { autofocus: true, 'aria-label': 'Public' })
-    app.mount(host)
-    const node = host.querySelector('[role="switch"]')
-    expect(document.activeElement).toBe(node)
-    expect(node?.hasAttribute('data-focused')).toBe(false)
-    app.unmount()
-    host.remove()
   })
 
-  it('renders both lock glyphs for kind="privacy" and none for default', () => {
-    const privacy = render(Switch, {
-      props: { kind: 'privacy' },
-      attrs: { 'aria-label': 'Public' }
-    })
-    expect(privacy.getByTestId('input-switch__lock')).toBeTruthy()
-    expect(privacy.getByTestId('input-switch__lock-open')).toBeTruthy()
-    privacy.unmount()
-    const plain = render(Switch, { attrs: { 'aria-label': 'Public' } })
-    expect(plain.queryByTestId('input-switch__lock')).toBeNull()
-  })
-})
-
-describe('Switch — native form submit', () => {
-  it('submits on under its name while on, and nothing while off', async () => {
-    const { getByTestId, getByRole } = render(
-      defineComponent({
-        components: { Switch },
-        setup: () => ({ on: ref(true) }),
-        template:
-          '<form data-testid="form"><Switch v-model="on" name="alerts" aria-label="Alerts" /></form>'
+  describe('direction', () => {
+    it('mirrors the checked handle slide under rtl', () => {
+      const view = render(Switch, {
+        props: { modelValue: true },
+        attrs: { 'aria-label': 'Enabled' }
       })
-    )
-    const form = getByTestId('form') as HTMLFormElement
-    expect(new FormData(form).get('alerts')).toBe('on')
-    await fireEvent.click(getByRole('switch'))
-    expect(new FormData(form).has('alerts')).toBe(false)
+      const handle = view.getByTestId('input-switch__handle').className
+      expect(handle).toContain('group-data-[checked]:translate-x-3.5')
+      expect(handle).toContain('rtl:group-data-[checked]:-translate-x-3.5')
+    })
+  })
+
+  describe('autofocus and privacy lock', () => {
+    it('focuses itself on mount with autofocus', () => {
+      const host = document.createElement('div')
+      document.body.appendChild(host)
+      const app = createApp(Switch, { autofocus: true, 'aria-label': 'Public' })
+      app.mount(host)
+      const node = host.querySelector('[role="switch"]')
+      expect(document.activeElement).toBe(node)
+      expect(node?.hasAttribute('data-focused')).toBe(false)
+      app.unmount()
+      host.remove()
+    })
+
+    it('renders both lock glyphs for kind="privacy" and none for default', () => {
+      const privacy = render(Switch, {
+        props: { kind: 'privacy' },
+        attrs: { 'aria-label': 'Public' }
+      })
+      expect(privacy.getByTestId('input-switch__lock')).toBeTruthy()
+      expect(privacy.getByTestId('input-switch__lock-open')).toBeTruthy()
+      privacy.unmount()
+      const plain = render(Switch, { attrs: { 'aria-label': 'Public' } })
+      expect(plain.queryByTestId('input-switch__lock')).toBeNull()
+    })
+  })
+
+  describe('native form submit', () => {
+    it('submits on under its name while on, and nothing while off', async () => {
+      const { getByTestId, getByRole } = render(
+        defineComponent({
+          components: { Switch },
+          setup: () => ({ on: ref(true) }),
+          template:
+            '<form data-testid="form"><Switch v-model="on" name="alerts" aria-label="Alerts" /></form>'
+        })
+      )
+      const form = getByTestId('form') as HTMLFormElement
+      expect(new FormData(form).get('alerts')).toBe('on')
+      await fireEvent.click(getByRole('switch'))
+      expect(new FormData(form).has('alerts')).toBe(false)
+    })
   })
 })

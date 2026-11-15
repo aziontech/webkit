@@ -188,26 +188,26 @@ describe('ChatMessage', () => {
     )
     await expectNoA11yViolations(container)
   })
-})
 
-describe('ChatMessage slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { ChatMessage },
-      setup: () => ({ shown }),
-      template: `<ChatMessage state="complete">Answer.<template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ChatMessage>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { ChatMessage },
+        setup: () => ({ shown }),
+        template: `<ChatMessage state="complete">Answer.<template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ChatMessage>`
+      })
+      expect(queryByTestId('ai-chat-message__actions')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('ai-chat-message__actions')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('ai-chat-message__actions')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('ai-chat-message__actions')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('ai-chat-message__actions')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('ai-chat-message__actions')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
 })
