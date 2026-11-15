@@ -6,7 +6,7 @@
 
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
-import { COMPONENT_CATEGORIES } from './component-categories.mjs'
+import { COMPONENT_CATEGORIES } from './_lib/component-categories.mjs'
 
 const ROOT = process.cwd()
 

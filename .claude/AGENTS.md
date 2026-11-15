@@ -125,7 +125,7 @@ For onboarding content, prioritize the docs site's `Foundations` pages.
 
 ## 11) Webkit Layer Components (mandatory for agents)
 
-**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `templates`, `utils` — the registry is [`.claude/hooks/component-categories.mjs`](./hooks/component-categories.mjs)).
+**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `templates`, `utils` — the registry is [`.claude/hooks/_lib/component-categories.mjs`](./hooks/_lib/component-categories.mjs)).
 
 ### 11.1) Sources of truth (read first)
 
