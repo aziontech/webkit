@@ -15,7 +15,7 @@ import DeleteFailed from '../../blocks/platform/delete/delete-with-confirmation/
 import SettingsForm from '../../blocks/platform/settings/settings-form/settings-form.vue'
 import AsyncSubmit from '../../blocks/platform/states/async-submit/async-submit.vue'
 import FirstUse from '../../blocks/platform/states/first-use/first-use.vue'
-import FormError from '../../blocks/platform/states/form-error/form-error.vue'
+import SectionRejected from '../../blocks/platform/states/form-validation/variants/section-rejected.vue'
 import ProjectIntake from '../../blocks/platform/states/project-intake/project-intake.vue'
 import Initializing from '../../blocks/platform/states/project-intake/variants/initializing.vue'
 import UploadFailed from '../../blocks/platform/states/project-intake/variants/upload-failed.vue'
@@ -279,7 +279,7 @@ describe('platform/states/first-use', () => {
   })
 })
 
-describe('platform/states async-submit and form-error', () => {
+describe('platform/states async-submit and form-validation', () => {
   it('async-submit: no simulation panel, and Deploy starts the run', async () => {
     const view = render(AsyncSubmit)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
@@ -289,11 +289,16 @@ describe('platform/states async-submit and form-error', () => {
     view.unmount()
   })
 
-  it('form-error: Save surfaces the rejection the server already holds', async () => {
-    const view = render(FormError)
+  it('form-validation SectionRejected: the section alert recovers with Reload origins', async () => {
+    const view = render(SectionRejected)
     expect(view.queryByRole('complementary', { name: 'Scenario simulation' })).toBeNull()
     expect(view.getByRole('link', { name: 'Services' })).toBeTruthy()
-    await fireEvent.click(view.getByRole('button', { name: 'Save' }))
-    await waitFor(() => expect(view.container.textContent).toContain('no longer exists'))
+    expect(view.container.textContent).toContain('This origin no longer exists.')
+    await fireEvent.click(view.getByRole('button', { name: 'Reload origins' }))
+    await waitFor(
+      () => expect(view.container.textContent).toContain('Select an origin to continue.'),
+      { timeout: 4000 }
+    )
+    expect(view.container.textContent).not.toContain('This origin no longer exists.')
   })
 })

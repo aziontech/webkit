@@ -11,7 +11,7 @@ The table schema of a SQL database: the definition of one table and the drawers 
 ## When not to use
 
 - Running SQL or reading query results: use `platform/view/query-editor`.
-- Rows of a resource that is not a database (variables, records): use `platform/edit/attribute-editor` or `platform/detail/record-table`.
+- Rows of a resource that is not a database (variables, records): use `platform/edit/variables` or `platform/detail/record-table`.
 - A form that creates a resource in its own page: use `platform/create/single-page-create`.
 - A generic item created inside a resource: use `platform/create/create-in-drawer`.
 
@@ -23,7 +23,7 @@ One `Card :padded="false"` around a `DataTable :bordered="false"` named `Columns
 
 ### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
 
-A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `platform/states/form-error`.
+A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `platform/states/form-validation` (SectionRejected).
 
 ### C. Column rows — `AttributeEditor`, `Select`, `Checkbox`, `HelperText` (required)
 
@@ -103,6 +103,6 @@ Raised through `toast` with one id, so each change replaces the last toast. Sche
 - `platform/view/query-editor` — the database page whose buttons open these drawers and dialogs.
 - `platform/create/create-in-drawer` — the drawer recipe these drawers follow.
 - `platform/delete/delete-with-confirmation` — the typed confirmation Truncate table follows.
-- `platform/states/form-error` — the rule for the server's name conflict.
+- `platform/states/form-validation` (SectionRejected) — the rule for the server's name conflict.
 - `platform/states/async-submit` — the long-action rule; schema changes use item actions, not Edit and Redeploy.
 - `CodeEditor`, `Select`, `Field` — see `skills/webkit-form` and `skills/webkit-create-surface`.

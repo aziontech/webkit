@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: a2eb7e3ed490ade5f45b3a849b1cedb77ad7aee56fa9dc635ebd9a1cf62e2d43
+checksum: e7088f7d96a95a4d9494031cd041b112a3689a9b73b21d69f070d552271606c3
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ Key and value tags of one resource, after Cloudscape's tag editor, built on `Att
 - `attribute-editor` — the rows, Add, Remove, limit text, focus and announcements underneath.
 - `input` — key and value controls; suggestions come from a native `datalist`.
 - `tag` — how the saved tags read outside the editor.
-- `platform/states/form-error` — the rule for server errors passed through `errors`.
+- `platform/states/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
 
 ## Best practices
 
@@ -185,7 +185,7 @@ _none_
 
 - **Suggestions use a native `datalist`.** It is accessible and costs nothing; the `Combobox` component being built in parallel can replace it later without changing the API.
 - **Saved keys are read-only.** Renaming a saved key is a remove plus an add, as in Cloudscape.
-- **Empty keys are flagged on `validate()`, not while typing**, so a new row does not start red (form-error rule: show required errors after Save).
+- **Empty keys are flagged on `validate()`, not while typing**, so a new row does not start red (form-validation rule: show required errors after Save).
 
 ## Constraints — DO NOT
 

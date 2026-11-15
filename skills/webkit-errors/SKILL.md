@@ -87,7 +87,7 @@ not go in a `Alert`.** The `Alert` is for what the **server** said.
 ## 2. Server rejection scoped to one field → a `Alert` in that section
 
 The standard is the design sample's `/forms/error-validation` screen, shipped as the block
-**`platform/states/form-error`** (states InSync, Rejected, Reloading, Reloaded). Start from it.
+**`platform/states/form-validation`** (states SectionRejected, SectionReloading, SectionReloaded). Start from it.
 
 The case most apps get wrong. Two people work the same module: User 1 fills in a form and links a
 resource; User 2 deletes that resource through the API before User 1 saves. User 1's browser is never
@@ -321,8 +321,8 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
   `closable`, `action`), the `@aziontech/webkit/field` compound + `/helper-text` (the field's own
   required / invalid state).
-- **Blocks:** `platform/states/form-error` (row 2, the section `Alert` with its recovery action),
-  `platform/states/form-validation` (rows 1 and 3 on a short form), `platform/auth` (row 4),
+- **Blocks:** `platform/states/form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
+  its recovery action, in SectionRejected), `platform/auth` (row 4),
   `platform/states/async-submit` (row 5, Edit and Redeploy).
 - **Companion skills:** `/webkit-form` (the field triad, submit-time validation, the locked scope),
   `/webkit-ui-states` (the full loading / empty / partial / error surface and async behaviour),

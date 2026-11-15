@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
 import AsyncSubmitSucceeded from '../../blocks/platform/states/async-submit/variants/succeeded.vue'
-import FormErrorRejected from '../../blocks/platform/states/form-error/variants/rejected.vue'
+import FormValidationSectionRejected from '../../blocks/platform/states/form-validation/variants/section-rejected.vue'
 import type { LogViewLine } from '../components/code/log-view/injection-key'
 import LogView from '../components/code/log-view/log-view.vue'
 import LogViewContent from '../components/code/log-view/log-view-content.vue'
@@ -59,8 +59,8 @@ describe('live regions', () => {
     expect(nested()).toEqual([])
   })
 
-  it('form-error puts the rejection in one alert, not repeated by another region', async () => {
-    render(FormErrorRejected)
+  it('form-validation SectionRejected puts the rejection in one alert, not repeated by another region', async () => {
+    render(FormValidationSectionRejected)
     await nextTick()
     const alerts = [...document.querySelectorAll<HTMLElement>('[role="alert"]')]
     expect(alerts.length).toBeGreaterThan(0)

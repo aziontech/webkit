@@ -36,7 +36,7 @@ A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says 
 
 ### E. Outcome — `Alert` (required)
 
-Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
+Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -85,5 +85,5 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 
 - `platform/view/rules-list` — the firewall's rules, where a WAF rule set is applied.
 - `platform/view/table-view` — the list recipe this table follows.
-- `platform/states/form-error` — the failure pattern in the dialog.
+- `platform/states/form-validation` (SectionRejected) — the failure pattern in the dialog.
 - `platform/dashboard/security-dashboard` — attack volume over time.

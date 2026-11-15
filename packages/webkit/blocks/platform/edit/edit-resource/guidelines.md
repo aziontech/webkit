@@ -13,7 +13,7 @@ The settings page of one existing resource. The user comes here to change how th
 
 - Creating the resource for the first time: use `platform/create/single-page-create`, which shares this field list.
 - Account or organization settings outside one resource (profile, preferences, notifications): use `platform/settings/settings-form`.
-- A resource whose content is code or a document: use `platform/edit/code-editor`.
+- A resource whose content is code or a document: use `platform/edit/function-editor`.
 - Deleting the resource: the Danger zone action opens `platform/delete/delete-with-confirmation`.
 - A short list of attached records inside a section: use `platform/detail/attached-resources` as that section's body.
 
@@ -49,7 +49,7 @@ A setting whose value is a document (a JSON data set) gets a stacked row, under 
 
 ### H. Section warnings and server errors — `SettingsSection`, `Button` (optional)
 
-A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the form-error rule (`platform/states/form-error`): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the async-submit toast with Edit and Redeploy does not apply here.
+A setting with a side effect beyond this resource carries a warning `Alert` above its section's `Card` while it is on (`Saving a stream with sampling on turns off every other data stream in this account.`). A server rejection scoped to one section follows the form-validation rule (`platform/states/form-validation`, SectionRejected): one danger `Alert` above that section that says what happened and that nothing else was lost, with the recovery action on it (`Send test record`); the field it concerns turns invalid with its own one-line reason and takes the focus. Never a toast, never a summary at the top of the page. Saving a settings page is not a build or deploy, so the async-submit toast with Edit and Redeploy does not apply here.
 
 ### I. Leave guard — `Tabs`, `SaveBar` (optional)
 
@@ -57,7 +57,7 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 ### J. Changed elsewhere — `Button`, `SaveBar` (optional)
 
-When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-error rule (`platform/states/form-error`) applied to an edit: one message above the form, the recovery action on it.
+When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-validation rule (`platform/states/form-validation`, SectionRejected) applied to an edit: one message above the form, the recovery action on it.
 
 ### K. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
 
@@ -131,7 +131,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - ResourceSettings: a first-level resource with no tabs at its own settings route; Save checks every field before it commits.
 - UnsavedChanges: after one edit; the save bar is up with Discard and Save.
 - Saving: while the request is in flight; Save is loading and Discard is disabled.
-- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-error rule.
+- DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
 - CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
@@ -143,7 +143,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 Some settings only take effect once the resource is deployed (cache settings of an application, protocols of a workload). For those:
 
 - Say so in the save bar hint, e.g. "Saving deploys storefront to Production."
-- On Save, validate first (field errors per the form-error rule), then run the deploy on its own: a loading toast while it runs, then the async-submit toast with **Edit** (back to the form, focus on its first field) and **Redeploy**. Never offer View deployments.
+- On Save, validate first (field errors per the form-validation rule), then run the deploy on its own: a loading toast while it runs, then the async-submit toast with **Edit** (back to the form, focus on its first field) and **Redeploy**. Never offer View deployments.
 - Keep the form usable while it runs; the baseline moves to the saved values only when the deploy succeeds.
 - Keep switches that depend on each other consistent in both directions, e.g. HTTP/3 turns HTTPS on and HTTPS off turns HTTP/3 and mutual authentication off.
 
@@ -155,7 +155,6 @@ Some settings only take effect once the resource is deployed (cache settings of 
 - `platform/delete/delete-with-confirmation` — the dialog behind the Danger zone action.
 - `platform/settings/settings-form` — account settings that end with the same save band.
 - `SaveBar` — the unsaved-changes band; see `skills/webkit-form`.
-- `platform/states/form-error` — the section-scoped server error DataStream follows.
+- `platform/states/form-validation` (SectionRejected) — the section-scoped server error DataStream and the changed-elsewhere notice follow.
 - `platform/dashboard/analytics-dashboard` (Metrics) — where the records a stream sends are counted.
 - `useUnsavedChanges` — the dirty baseline and leave guard behind the save bar, the tab mark and the leave dialog.
-- `platform/states/form-error` — the rule the changed-elsewhere notice follows.

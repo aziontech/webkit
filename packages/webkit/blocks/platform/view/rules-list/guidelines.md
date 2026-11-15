@@ -105,5 +105,5 @@ Each phase renders every rule, unpaged: paging an ordered list would hide the ne
 
 - `platform/edit/rule-builder` — the drawer that adds or edits one rule.
 - `platform/view/table-view` — lists whose order does not matter.
-- `platform/states/form-error` — the failed-save `Alert` pattern the review dialog follows.
+- `platform/states/form-validation` (SectionRejected) — the failed-save `Alert` pattern the review dialog follows.
 - `platform/view/waf-tuning` — the WAF tuning list a firewall's WAF rule links to.
