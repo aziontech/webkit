@@ -17,7 +17,9 @@
     "submissions in analysis",
     "resultados da análise",
     "painel de varredura",
-    "itens sinalizados"
+    "itens sinalizados",
+    "waiting for a verdict",
+    "asynchronous analysis results"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {

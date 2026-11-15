@@ -2,7 +2,6 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import Activity from '../../blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue'
 import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
 import AnalyticsUsage from '../../blocks/platform/dashboard/analytics-dashboard/variants/usage.vue'
 import Composition from '../../blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue'
@@ -20,6 +19,7 @@ import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
 import ProjectStatus from '../../blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue'
 import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
+import SecurityByActor from '../../blocks/platform/dashboard/security-dashboard/variants/by-actor.vue'
 import ServiceMonitoring from '../../blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue'
 import { useToastRegion } from './toast-region'
 
@@ -210,9 +210,9 @@ describe('platform/dashboard exports', () => {
   })
 })
 
-describe('platform/dashboard/activity-outcomes-dashboard', () => {
+describe('platform/dashboard/security-dashboard#ByActor', () => {
   it('narrows the log by destination and offers Clear filters when nothing matches', async () => {
-    const view = render(Activity)
+    const view = render(SecurityByActor)
     const table = () => byTestId('data-data-table', view.container)
     expect(table()?.textContent).toContain('storage.example.com')
     const input = view.getByRole('textbox', { name: 'Destination host' })
@@ -231,13 +231,13 @@ describe('platform/dashboard/activity-outcomes-dashboard', () => {
   })
 
   it('moves the time range to the header and the closed-set filters into FilterMenu', async () => {
-    const view = render(Activity)
+    const view = render(SecurityByActor)
     expect(byTestId('data-filter-menu', view.container)).not.toBeNull()
     expect(view.getByRole('combobox', { name: 'Time range' })).toBeTruthy()
   })
 
   it('emits refresh from the Refresh button', async () => {
-    const view = render(Activity)
+    const view = render(SecurityByActor)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.emitted('refresh')?.length).toBe(1)
   })
