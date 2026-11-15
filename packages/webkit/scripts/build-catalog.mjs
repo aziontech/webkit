@@ -518,8 +518,8 @@ const ASSET_KINDS = {
     title: 'Brand marks',
     summary:
       'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.',
-    markers: ['svg/brands/registry.ts'],
-    registry: 'src/svg/brands/registry.ts',
+    markers: ['assets/brands/registry.ts'],
+    registry: 'src/assets/brands/registry.ts',
     unknown:
       'An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.'
   },

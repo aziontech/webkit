@@ -200,6 +200,24 @@ test('migrateIcons moves the v5 X mark to ai-x-brand only for a v5 project', () 
   assert.equal(once, '<i class="ai ai-x" /><i class="ai ai-x-brand" />')
 })
 
+test('migrateSource rewrites a renamed logo asset path and keeps its binding', () => {
+  const sfc = [
+    '<script setup>',
+    "import cocacola from '@aziontech/webkit/assets/cocacola-extended-color.svg'",
+    "import gfg from '@aziontech/webkit/assets/gfg-extended-mono.svg'",
+    '</script>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, loadMigration(6))
+  assert.match(
+    source,
+    /import cocacola from '@aziontech\/webkit\/assets\/coca-cola-extended-color\.svg'/
+  )
+  assert.match(
+    source,
+    /import gfg from '@aziontech\/webkit\/assets\/global-fashion-group-extended-mono\.svg'/
+  )
+})
+
 test('the icon map points every old name at a real Azion glyph', () => {
   const { icons } = loadMigration(6)
   const svgRaw = join(PKG, '../icons/src/svg-raw')

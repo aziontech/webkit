@@ -12,6 +12,7 @@ export const brandMarks = {
   axur: () => import('./axur.vue'),
   azure: () => import('./azure.vue'),
   caixa: () => import('./caixa.vue'),
+  'cloudflare-workers': () => import('./cloudflare-workers.vue'),
   'coca-cola': () => import('./coca-cola.vue'),
   contabilizei: () => import('./contabilizei.vue'),
   dafiti: () => import('./dafiti.vue'),
@@ -61,8 +62,7 @@ export const brandMarks = {
   terraform: () => import('./terraform.vue'),
   vite: () => import('./vite.vue'),
   vitepress: () => import('./vitepress.vue'),
-  vue: () => import('./vue.vue'),
-  'workers-cloudflare': () => import('./workers-cloudflare.vue')
+  vue: () => import('./vue.vue')
 } satisfies Record<string, BrandMarkLoader>
 
 /** Every registered mark name. */
@@ -78,6 +78,7 @@ export const brandMarkLabels: Record<BrandMarkName, string> = {
   axur: 'Axur',
   azure: 'Azure',
   caixa: 'Caixa',
+  'cloudflare-workers': 'Cloudflare Workers',
   'coca-cola': 'Coca-Cola',
   contabilizei: 'Contabilizei',
   dafiti: 'Dafiti',
@@ -127,8 +128,7 @@ export const brandMarkLabels: Record<BrandMarkName, string> = {
   terraform: 'Terraform',
   vite: 'Vite',
   vitepress: 'VitePress',
-  vue: 'Vue',
-  'workers-cloudflare': 'Cloudflare Workers'
+  vue: 'Vue'
 }
 
 export const brandMarkNames = Object.keys(brandMarks).sort() as BrandMarkName[]

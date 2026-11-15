@@ -1,17 +1,17 @@
 import agibankColor from './agibank-extended-color.svg'
 import agibank from './agibank-extended-reversed.svg'
-import americamovil from './americamovil-extended-color.svg'
+import americaMovil from './america-movil-extended-color.svg'
 import { CLIENT_BRANDS, type ClientBrand, normalizeClientName } from './brands'
 import caixa from './caixa-extended-color.svg'
 import caixaSymbol from './caixa-symbol-color.svg'
-import cocacola from './cocacola-extended-color.svg'
+import cocaCola from './coca-cola-extended-color.svg'
 import dafitiMono from './dafiti-extended-mono.svg'
 import dafiti from './dafiti-extended-reversed.svg'
 import exame from './exame-extended-color.svg'
 import fourbankColor from './fourbank-extended-color.svg'
 import fourbank from './fourbank-extended-reversed.svg'
-import gfgMono from './gfg-extended-mono.svg'
-import gfg from './gfg-extended-reversed.svg'
+import globalFashionGroupMono from './global-fashion-group-extended-mono.svg'
+import globalFashionGroup from './global-fashion-group-extended-reversed.svg'
 import gpaColor from './gpa-extended-color.svg'
 import gpa from './gpa-extended-reversed.svg'
 import gpaSymbol from './gpa-symbol-color.svg'
@@ -34,8 +34,8 @@ import nznColor from './nzn-extended-color.svg'
 import nzn from './nzn-extended-reversed.svg'
 import gpaPhoto from './photos/gpa-photo.jpg'
 import netshoesPhoto from './photos/netshoes-photo.jpg'
-import primevideoMono from './primevideo-extended-mono.svg'
-import primevideo from './primevideo-extended-reversed.svg'
+import primeVideoMono from './prime-video-extended-mono.svg'
+import primeVideo from './prime-video-extended-reversed.svg'
 import radwareColor from './radware-extended-color.svg'
 import radware from './radware-extended-reversed.svg'
 import renner from './renner-extended-color.svg'
@@ -74,10 +74,10 @@ export const CLIENTS: Client[] = [
   { name: 'Agibank', logo: agibank, logoLight: agibankColor },
   { name: 'iFood', logo: ifood, artwork: 'color' },
   { name: 'Radware', logo: radware, logoLight: radwareColor },
-  { name: 'América Móvil', logo: americamovil, artwork: 'color' },
+  { name: 'América Móvil', logo: americaMovil, artwork: 'color' },
   { name: 'GPA', logo: gpa, logoLight: gpaColor },
   { name: 'Fourbank', logo: fourbank, logoLight: fourbankColor },
-  { name: 'Global Fashion Group', logo: gfg, logoLight: gfgMono },
+  { name: 'Global Fashion Group', logo: globalFashionGroup, logoLight: globalFashionGroupMono },
   {
     name: 'HeroSpark',
     logo: herospark,
@@ -108,8 +108,8 @@ export const CLIENTS: Client[] = [
     brand: CLIENT_BRANDS['renner']
   },
   { name: 'Netshoes', logo: netshoes, logoLight: netshoesColor },
-  { name: 'Coca-Cola', logo: cocacola, artwork: 'color' },
-  { name: 'Prime Video', logo: primevideo, logoLight: primevideoMono },
+  { name: 'Coca-Cola', logo: cocaCola, artwork: 'color' },
+  { name: 'Prime Video', logo: primeVideo, logoLight: primeVideoMono },
   { name: 'Dafiti', logo: dafiti, logoLight: dafitiMono },
   { name: 'Caixa', logo: caixa, artwork: 'color' },
   { name: 'Exame', logo: exame, artwork: 'color' },

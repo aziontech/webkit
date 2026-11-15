@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { type Component, computed, markRaw, ref, shallowRef, useAttrs, watch } from 'vue'
 
-  import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
+  import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
   import Overline from '../../content/overline/overline.vue'
   import TickerLoop from './ticker-loop.vue'
 

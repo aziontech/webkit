@@ -250,7 +250,7 @@ wordmark, `symbol` the mark; `color` for light surfaces, `reversed` for dark one
 ink); `catalog.json` lists every file under `imports` with `"kind": "asset"`. A client wall
 (`ClientQuotes`, `LogoWall`) on the dark site shows each brand in colour: `-extended-color` where it
 reads on black (GPA, Zoop, HeroSpark, Magalu), `-extended-reversed` where the colour logo has dark
-lettering (Axur, Contabilizei, Dafiti, `gfg`); a one-ink registry `mark` only for a client with no
+lettering (Axur, Contabilizei, Dafiti, Global Fashion Group); a one-ink registry `mark` only for a client with no
 logo file. Photos, covers,
 banners and clips are your content: pass URLs your app serves, or
 `@aziontech/webkit/assets/placeholder-image.svg` / `placeholder-clip.webm` until you have them.

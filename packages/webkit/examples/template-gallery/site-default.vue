@@ -91,7 +91,7 @@
     'aws',
     'gcp',
     'azure',
-    'workers-cloudflare',
+    'cloudflare-workers',
     'terraform',
     'github',
     'openai',

@@ -137,6 +137,7 @@ export function renameSubpath(subpath, components) {
 }
 
 function renameBinding(name, rule) {
+  if (!rule.from || !rule.binding) return name
   if (name === rule.from) return rule.binding
   const extendsFrom = rule.binding.startsWith(rule.from) && rule.binding !== rule.from
   const alreadyNew =

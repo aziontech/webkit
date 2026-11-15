@@ -12,6 +12,8 @@ Both key on `normalizeClientName` (NFD, accents folded, non-alphanumerics droppe
 
 Every logo in `logos/` is `<brand>-<type>-<colormode>.<ext>`, one file per combination:
 
+- **brand** — the brand name in kebab case, one word per word, spelled the same as its mark in
+  `assets/brands/` (`coca-cola`, `prime-video`, `global-fashion-group`, `loja-do-mecanico`).
 - **type** — `extended` (the full logo) or `symbol` (the mark alone).
 - **colormode** — classified by the fills the file actually declares:
   - `color` — the brand's own colours, for a light surface.
