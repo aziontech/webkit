@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
@@ -130,7 +138,7 @@ test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it 
     '  <i class="pi pi-amazon" />',
     '</template>',
     '<script setup>',
-    "const items = [{ icon: 'pi pi-twitter' }, { icon: 'pi-cog' }]",
+    "const items = [{ icon: 'pi pi-twitter' }, { icon: 'pi pi-times' }, { icon: 'pi-cog' }]",
     "const pip = 'api-pi-check'",
     '</script>'
   ].join('\n')
@@ -138,28 +146,79 @@ test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it 
   assert.match(source, /icon="ai ai-check"/)
   assert.match(source, /class="ai ai-circle-minus text-\(--text-muted\)"/)
   assert.match(source, /'ai ai-chevron-up' : 'ai {2}ai-chevron-down'/)
-  assert.match(source, /icon: 'ai ai-x'/)
+  assert.match(source, /icon: 'ai ai-x-brand'/)
+  assert.match(source, /icon: 'ai ai-x' \}/)
   assert.match(source, /class="pi pi-amazon"/)
   assert.match(source, /'api-pi-check'/)
   assert.ok(changes.includes('pi pi-check → ai ai-check'))
   assert.deepEqual(warnings, [
-    'PrimeIcons class pi-amazon has no Azion icon: third-party mark with no Azion glyph: draw your own SVG or keep importing @aziontech/icons/primeicons',
-    'PrimeIcons class pi-cog outside a "pi pi-cog" pair: rewrite it to ai ai-cog by hand'
+    'PrimeIcons class pi-amazon has no Azion icon: third-party mark with no Azion glyph: draw your own SVG or install the primeicons package',
+    'PrimeIcons class pi-cog outside a "pi pi-cog" pair: rewrite it to ai ai-settings by hand'
   ])
   assert.equal(migrateIcons(source, icons).source, source)
 })
 
-test('the icon map covers every PrimeIcons glyph and points at real Azion glyphs', () => {
+test('migrateIcons renames v5 Azion glyphs, the colored base class and brand marks', () => {
+  const { icons } = loadMigration(6)
+  const sfc = [
+    '<i class="ai ai-times" />',
+    "const nav = [{ icon: 'ai ai-cog' }, { icon: 'ai ai-angle-down' }, { icon: 'ai ai-bars' }]",
+    '<i class="ai-cor ai-next" /><i class="ai-cor ai-js" /><i class="ai-cor ai-x" />',
+    "const mark = ['ai-cor', 'ai-ellipsis-v']",
+    '.ai-cor.ai-open { inline-size: 1em }'
+  ].join('\n')
+  const { source, changes, warnings } = migrateIcons(sfc, icons, { fromMajor: 5 })
+  assert.equal(
+    source,
+    [
+      '<i class="ai ai-x" />',
+      "const nav = [{ icon: 'ai ai-settings' }, { icon: 'ai ai-chevron-down' }, { icon: 'ai ai-menu' }]",
+      '<i class="ai-color ai-nextjs" /><i class="ai-color ai-javascript" /><i class="ai-color ai-x-brand" />',
+      "const mark = ['ai-color', 'ai-ellipsis-v']",
+      '.ai-color.ai-openai { inline-size: 1em }'
+    ].join('\n')
+  )
+  assert.ok(changes.includes('ai ai-times → ai ai-x'))
+  assert.deepEqual(warnings, [
+    'Azion icon class ai-ellipsis-v outside an "ai ai-ellipsis-v" pair: rewrite it to ai-ellipsis-vertical by hand'
+  ])
+})
+
+test('migrateIcons moves the v5 X mark to ai-x-brand only for a v5 project', () => {
+  const { icons } = loadMigration(6)
+  const sfc = '<i class="ai ai-x" />'
+  assert.equal(migrateIcons(sfc, icons, { fromMajor: 5 }).source, '<i class="ai ai-x-brand" />')
+  const v6 = migrateIcons(sfc, icons, { declaredMajor: 6 })
+  assert.equal(v6.source, sfc)
+  assert.deepEqual(v6.warnings, [])
+  const unknown = migrateIcons(sfc, icons)
+  assert.equal(unknown.source, sfc)
+  assert.match(unknown.warnings[0], /ai ai-x: ai-x is the close glyph in v6/)
+  const once = migrateIcons('<i class="ai ai-times" /><i class="ai ai-x" />', icons, {
+    fromMajor: 5
+  }).source
+  assert.equal(once, '<i class="ai ai-x" /><i class="ai ai-x-brand" />')
+})
+
+test('the icon map points every old name at a real Azion glyph', () => {
   const { icons } = loadMigration(6)
   const svgRaw = join(PKG, '../icons/src/svg-raw')
-  const pi = readdirSync(join(svgRaw, 'pi'))
-    .filter((f) => f.startsWith('pi-'))
-    .map((f) => f.slice(0, -4))
   const ai = new Set(readdirSync(join(svgRaw, 'ai')).map((f) => f.slice(0, -4)))
-  assert.deepEqual(Object.keys(icons).sort(), pi.sort())
-  for (const [from, to] of Object.entries(icons)) {
+  const colored = new Set(readdirSync(join(svgRaw, 'ai-color')).map((f) => f.slice(0, -4)))
+  assert.ok(!existsSync(join(svgRaw, 'pi')), 'the PrimeIcons set is not shipped in v6')
+  assert.ok(Object.keys(icons.primeicons).length > 300)
+  for (const [from, to] of Object.entries(icons.primeicons)) {
     if (typeof to === 'string') assert.ok(ai.has(to), `${from} → ${to} is not an Azion glyph`)
     else assert.ok(to.removed, `${from} needs a target or a removed note`)
+  }
+  for (const [from, to] of Object.entries(icons.azionicons)) {
+    const target = typeof to === 'string' ? to : to.to
+    assert.ok(ai.has(target), `${from} → ${target} is not an Azion glyph`)
+    assert.ok(!ai.has(from) || from === 'ai-x', `${from} still ships`)
+  }
+  for (const [from, to] of Object.entries(icons.color)) {
+    assert.ok(colored.has(to), `${from} → ${to} is not a colored icon`)
+    assert.ok(!colored.has(from), `${from} still ships`)
   }
 })
 
