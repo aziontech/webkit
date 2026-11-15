@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 67c79dabe0c4c05f9239a18c7be6c74a24693cbd6d9fde5225d71d29fe00a8f8
+checksum: 8a42d16af0d85fc78c91a71bb9789a598ae4372e68f7894745193fc39773a32d
 created: 2026-05-28
 last_updated: 2026-11-15
 ---
@@ -52,10 +52,12 @@ The other regions render conditionally from tab data. Tab header appears when `t
 - It is a marketing band that pairs a claim with its code → use `code-split`, or `sticky-scroll-code` for several claims.
 - It is a terminal session of CLI commands on a product page → use `cli-terminal`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
+- The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
 
 ## Related
 
 - `copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.
+- `code-editor` — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.
 - `log-view` — terminal-style viewer for CI and deploy logs.
 - `code-split` — page section built around one code sample.
 - `scroll-area` — the scroll container the code region runs in.
