@@ -59,7 +59,7 @@
       class="flex flex-col gap-(--spacing-sm)"
       :aria-labelledby="`category-${group.id}`"
     >
-      <div class="flex flex-col gap-(--spacing-xxs)">
+      <div class="flex flex-col gap-(--spacing-2xs)">
         <h2
           :id="`category-${group.id}`"
           class="flex items-baseline gap-(--spacing-xs) text-heading-sm"
@@ -102,7 +102,7 @@
           >
             <a
               :href="item.to"
-              class="inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-elements) text-label-md text-(--text-default) hover:text-(--text-link) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+              class="inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) text-label-md text-(--text-default) hover:text-(--text-link) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
             >
               <span class="truncate">{{ item.label }}</span>
               <i

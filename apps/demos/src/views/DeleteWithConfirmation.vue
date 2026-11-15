@@ -77,7 +77,7 @@
       </p>
       <p
         :id="confirmLabelId"
-        class="m-0 flex flex-wrap items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+        class="m-0 flex flex-wrap items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
       >
         <span>Type</span>
         <Tooltip
@@ -86,14 +86,14 @@
         >
           <button
             type="button"
-            class="inline-flex max-w-full cursor-pointer items-center rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-default) hover:bg-(--bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+            class="inline-flex max-w-full cursor-pointer items-center rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-overlay) px-(--spacing-2xs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:border-(--border-default) hover:bg-(--bg-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
             :aria-label="copied ? 'Copied ' + name : 'Copy ' + name + ' to the clipboard'"
             @click="copyName"
           >
             <span class="truncate">{{ name }}</span>
             <i
               :class="copied ? 'ai ai-check' : 'ai ai-copy'"
-              class="ms-(--spacing-xxs) shrink-0 text-body-xs text-(--text-default)"
+              class="ms-(--spacing-2xs) shrink-0 text-body-xs text-(--text-default)"
               aria-hidden="true"
             />
             <span
@@ -102,7 +102,7 @@
             >
               <span class="min-w-0 overflow-hidden">
                 <span
-                  class="block whitespace-nowrap ps-(--spacing-xxs) text-body-xs text-(--text-default)"
+                  class="block whitespace-nowrap ps-(--spacing-2xs) text-body-xs text-(--text-default)"
                   >Copied</span
                 >
               </span>

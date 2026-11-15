@@ -84,7 +84,7 @@
         <legend class="sr-only">Profile settings</legend>
 
         <section class="flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+          <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -148,7 +148,7 @@
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Preferences</p>
+          <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Preferences</p>
           <Card :padded="false">
             <template #content>
               <Item.List>
@@ -214,7 +214,7 @@
         </section>
 
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
-          <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Notifications</p>
+          <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Notifications</p>
           <Card :padded="false">
             <template #content>
               <Item.List>

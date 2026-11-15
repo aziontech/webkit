@@ -55,7 +55,7 @@
     class="flex flex-col gap-(--spacing-md)"
     aria-labelledby="color-explorer"
   >
-    <div class="flex flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <h2
         id="color-explorer"
         class="text-heading-sm"
@@ -100,40 +100,40 @@
       >
         <span
           :data-category="category"
-          class="text-heading-sm text-(--text-default) data-[category=text]:text-(--preview) data-[category=theme]:rounded-(--shape-elements) data-[category=theme]:bg-(--bg-surface) data-[category=theme]:px-(--spacing-xs)"
+          class="text-heading-sm text-(--text-default) data-[category=text]:text-(--preview) data-[category=theme]:rounded-(--shape-control) data-[category=theme]:bg-(--bg-surface) data-[category=theme]:px-(--spacing-xs)"
           >{{ category === 'text' ? t.sampleText : token.name }}</span
         >
       </div>
       <dl
         class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
       >
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">{{ t.tailwind }}</dt>
           <dd><CopyChip :value="tailwindClass(token.name, 'color')" /></dd>
         </div>
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">{{ t.cssVariable }}</dt>
           <dd><CopyChip :value="`var(${token.name})`" /></dd>
         </div>
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">
             {{ t.current }} · {{ mode === 'dark' ? t.dark : t.light }}
           </dt>
           <dd class="flex items-center gap-(--spacing-xs)">
             <span
-              class="size-4 rounded-(--shape-elements) border border-(--border-default)"
+              class="size-4 rounded-(--shape-control) border border-(--border-default)"
               :style="{ background: `var(${token.name})` }"
               aria-hidden="true"
             />
             <code class="text-label-code-sm">{{ current }}</code>
           </dd>
         </div>
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <dt class="text-overline-sm text-(--text-muted)">{{ t.light }} → {{ t.dark }}</dt>
           <dd class="flex flex-wrap items-center gap-(--spacing-xs)">
             <span
               data-theme="light"
-              class="size-4 rounded-(--shape-elements) border border-(--border-default)"
+              class="size-4 rounded-(--shape-control) border border-(--border-default)"
               :style="{ background: `var(${token.name})` }"
               aria-hidden="true"
             />
@@ -144,7 +144,7 @@
             />
             <span
               data-theme="dark"
-              class="size-4 rounded-(--shape-elements) border border-(--border-default)"
+              class="size-4 rounded-(--shape-control) border border-(--border-default)"
               :style="{ background: `var(${token.name})` }"
               aria-hidden="true"
             />
@@ -153,10 +153,10 @@
         </div>
         <div
           v-if="token.usage"
-          class="flex flex-col gap-(--spacing-xxs)"
+          class="flex flex-col gap-(--spacing-2xs)"
         >
           <dt class="text-overline-sm text-(--text-muted)">{{ t.usage }}</dt>
-          <dd class="flex flex-col gap-(--spacing-xxs)">
+          <dd class="flex flex-col gap-(--spacing-2xs)">
             <span class="text-body-sm">{{ token.usage.job }}</span>
             <span class="text-body-xs text-(--text-muted)">
               {{ t.usedBy }}: <InlineCode :text="token.usage.usedBy" />

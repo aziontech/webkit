@@ -327,7 +327,7 @@ function tokenUsage(): { match: (name: string) => boolean; usage: TokenUsage }[]
 }
 
 function responsiveSpacing(): Record<string, Record<string, string>> {
-  const file = join(THEME, 'src/tokens/semantic/spacings.data.js')
+  const file = join(THEME, 'src/tokens/semantic/spacing.js')
   if (!existsSync(file)) return {}
   const out: Record<string, Record<string, string>> = {}
   for (const match of readFileSync(file, 'utf8').matchAll(/'(spacing-[\w-]+)':\s*\{([^}]*)\}/g)) {
@@ -378,7 +378,7 @@ function declarations(block: string): Map<string, string> {
 }
 
 export function buildTokens(catalog: Catalog = readCatalog()) {
-  const css = readFileSync(join(THEME, 'dist/v4/globals.css'), 'utf8')
+  const css = readFileSync(join(THEME, 'dist/globals.css'), 'utf8')
   const theme = new Map<string, string>()
   for (const block of cssBlocks(css, '@theme'))
     for (const [k, v] of declarations(block)) theme.set(k, v)

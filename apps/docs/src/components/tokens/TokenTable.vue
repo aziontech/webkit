@@ -85,7 +85,7 @@
         >
           <span
             v-if="token.usage"
-            class="flex min-w-0 flex-col gap-(--spacing-xxs)"
+            class="flex min-w-0 flex-col gap-(--spacing-2xs)"
           >
             <span class="text-body-sm text-(--text-default)">{{ token.usage.job }}</span>
             <span class="text-body-xs text-(--text-muted)">

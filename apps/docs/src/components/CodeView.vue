@@ -15,7 +15,7 @@
     class="docs-code relative overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
   >
     <div
-      class="flex items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xxs)"
+      class="flex items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-2xs)"
     >
       <span class="truncate text-label-code-sm text-(--text-muted)">{{ label }}</span>
       <CopyButton

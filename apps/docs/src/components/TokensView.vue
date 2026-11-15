@@ -80,7 +80,7 @@
         class="flex flex-col gap-(--spacing-sm)"
         aria-labelledby="primitive-palette"
       >
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <h2
             id="primitive-palette"
             class="text-heading-sm"
@@ -101,7 +101,7 @@
         >
           <button
             type="button"
-            class="flex w-full flex-col gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-sm) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+            class="flex w-full flex-col gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-sm) text-start transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             @click="copyValue(name)"
           >
             <code class="text-label-code-sm text-(--text-muted)">{{ name }}</code>
@@ -122,7 +122,7 @@
 
     <template v-else-if="kind === 'spacing'">
       <section class="flex flex-col gap-(--spacing-sm)">
-        <div class="flex flex-col gap-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-2xs)">
           <h2 class="text-heading-sm">{{ t.spacingRhythm }}</h2>
           <p class="text-body-sm text-(--text-muted)">{{ t.spacingRhythmLead }}</p>
         </div>
@@ -182,7 +182,7 @@
           <li
             v-for="animation in tokens.motion.animations"
             :key="animation.name"
-            class="flex flex-col items-start gap-(--spacing-xxs) rounded-(--shape-card) border border-(--border-default) p-(--spacing-sm)"
+            class="flex flex-col items-start gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) p-(--spacing-sm)"
           >
             <CopyChip :value="`animate-${animation.name}`" />
             <code class="text-label-code-sm text-(--text-muted)">{{ animation.value }}</code>

@@ -10,7 +10,7 @@
   <span
     v-if="sample === 'swatch'"
     :data-theme="theme"
-    class="inline-block size-8 shrink-0 rounded-(--shape-elements) border border-(--border-default)"
+    class="inline-block size-8 shrink-0 rounded-(--shape-control) border border-(--border-default)"
     :style="{ background: `var(${name})` }"
     aria-hidden="true"
   />
@@ -28,7 +28,7 @@
   />
   <span
     v-else-if="sample === 'shadow'"
-    class="inline-block size-8 shrink-0 rounded-(--shape-elements) bg-(--bg-surface-raised)"
+    class="inline-block size-8 shrink-0 rounded-(--shape-control) bg-(--bg-surface-raised)"
     :style="{ boxShadow: `var(${name})` }"
     aria-hidden="true"
   />

@@ -26,8 +26,6 @@
             stored === 'dark' ||
             (stored === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)
           var root = document.documentElement
-          root.classList.remove('azion-dark', 'azion-light')
-          root.classList.add(dark ? 'azion-dark' : 'azion-light')
           root.dataset.theme = dark ? 'dark' : 'light'
         } catch (e) {}
       })()

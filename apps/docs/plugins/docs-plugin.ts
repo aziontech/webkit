@@ -80,7 +80,7 @@ export function docsPlugin(): Plugin {
         return `export default ${JSON.stringify(buildIndex(undefined, [...FOUNDATION_SLUGS, ...ASSET_LLMS]))}`
       }
       if (id === `\0${TOKENS}`) {
-        this.addWatchFile(join(THEME, 'dist/v4/globals.css'))
+        this.addWatchFile(join(THEME, 'dist/globals.css'))
         return `export default ${JSON.stringify(buildTokens())}`
       }
       if (id === `\0${ASSETS}`) {

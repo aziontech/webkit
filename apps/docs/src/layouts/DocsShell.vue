@@ -60,7 +60,7 @@
   <div class="flex min-h-screen w-full flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:start-(--spacing-sm) focus:top-(--spacing-sm) focus:z-50 focus:rounded-(--shape-elements) focus:bg-(--bg-surface) focus:px-(--spacing-sm) focus:py-(--spacing-xs)"
+      class="sr-only focus:not-sr-only focus:absolute focus:start-(--spacing-sm) focus:top-(--spacing-sm) focus:z-50 focus:rounded-(--shape-control) focus:bg-(--bg-surface) focus:px-(--spacing-sm) focus:py-(--spacing-xs)"
       >Skip to content</a
     >
     <div class="@container sticky top-0 z-40 w-full">
@@ -80,14 +80,14 @@
               <a
                 href="/"
                 :aria-label="t.home"
-                class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
               >
                 <Brand
                   kind="default"
                   size="small"
                 />
                 <span
-                  class="rounded-(--shape-elements) border border-(--border-muted) px-(--spacing-xxs) text-overline-sm text-(--text-muted)"
+                  class="rounded-(--shape-control) border border-(--border-muted) px-(--spacing-2xs) text-overline-sm text-(--text-muted)"
                 >
                   WebKit
                 </span>
@@ -95,7 +95,7 @@
             </GlobalHeader.Brand>
             <nav
               :aria-label="t.navigation"
-              class="ms-(--spacing-sm) hidden items-center gap-(--spacing-xxs) lg:flex"
+              class="ms-(--spacing-sm) hidden items-center gap-(--spacing-2xs) lg:flex"
             >
               <a
                 v-for="section in sections"
@@ -103,7 +103,7 @@
                 :href="section.to"
                 :aria-current="activeSection === section.to ? 'page' : undefined"
                 :class="[
-                  'rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-md transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none',
+                  'rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-md transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none',
                   activeSection === section.to ? 'text-(--text-default)' : 'text-(--text-muted)'
                 ]"
                 >{{ section.label }}</a
@@ -210,7 +210,7 @@
                 v-for="section in sections"
                 :key="section.to"
                 :href="section.to"
-                class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-label-md"
+                class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-md"
                 >{{ section.label }}</a
               >
             </div>

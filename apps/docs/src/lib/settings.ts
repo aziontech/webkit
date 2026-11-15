@@ -33,8 +33,6 @@ export function applyTheme(theme: ThemeSetting) {
   const root = globalThis.document?.documentElement
   if (!root) return
   const mode = resolvedTheme(theme)
-  root.classList.remove('azion-dark', 'azion-light')
-  root.classList.add('azion', `azion-${mode}`)
   root.dataset.theme = mode
 }
 

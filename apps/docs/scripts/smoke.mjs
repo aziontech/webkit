@@ -92,8 +92,6 @@ async function visit(route) {
           let skipped = 0
           for (const theme of ['dark', 'light']) {
             const root = document.documentElement
-            root.classList.remove('azion-dark', 'azion-light')
-            root.classList.add(`azion-${theme}`)
             root.dataset.theme = theme
             await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)))
             const listed = known[theme] ?? {}

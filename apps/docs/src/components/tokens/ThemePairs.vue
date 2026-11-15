@@ -17,14 +17,14 @@
       class="flex flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-canvas) p-(--spacing-sm) text-(--text-default)"
     >
       <p class="text-overline-sm text-(--text-muted)">{{ mode === 'light' ? t.light : t.dark }}</p>
-      <ul class="flex flex-col gap-(--spacing-xxs)">
+      <ul class="flex flex-col gap-(--spacing-2xs)">
         <li
           v-for="token in tokens"
           :key="token.name"
           class="flex min-w-0 items-center gap-(--spacing-xs)"
         >
           <span
-            class="size-6 shrink-0 rounded-(--shape-elements) border border-(--border-default)"
+            class="size-6 shrink-0 rounded-(--shape-control) border border-(--border-default)"
             :style="{ background: `var(${token.name})` }"
             aria-hidden="true"
           />

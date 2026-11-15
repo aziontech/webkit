@@ -33,7 +33,7 @@ body {
   color: var(--shiki-light);
 }
 
-.azion-dark .docs-code .shiki span {
+[data-theme='dark'] .docs-code .shiki span {
   color: var(--shiki-dark);
 }
 
@@ -68,7 +68,7 @@ body {
   color: var(--shiki-light);
 }
 
-.azion-dark .docs-html pre.shiki span {
+[data-theme='dark'] .docs-html pre.shiki span {
   color: var(--shiki-dark);
 }
 

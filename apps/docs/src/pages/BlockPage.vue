@@ -290,12 +290,12 @@
               <a
                 v-if="item.linked"
                 :href="`/components/${item.name}`"
-                class="inline-flex rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                class="inline-flex rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                 >{{ item.title }}</a
               >
               <span
                 v-else
-                class="inline-flex rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm"
+                class="inline-flex rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm"
                 >{{ item.title }}</span
               >
             </li>

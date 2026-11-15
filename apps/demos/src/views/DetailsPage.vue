@@ -201,7 +201,7 @@ jobs:
                             target="_blank"
                             rel="noopener noreferrer"
                             data-link
-                            class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                            class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                           >
                             <span class="truncate underline-offset-2 group-hover/link:underline">{{
                               host
@@ -298,7 +298,7 @@ jobs:
                   <div
                     class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
                   >
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Deployment</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
@@ -309,7 +309,7 @@ jobs:
                             <a
                               href="/deployments/1213275262"
                               data-link
-                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                             >
                               <span class="truncate underline-offset-2 group-hover/link:underline"
                                 >1213275262</span
@@ -330,7 +330,7 @@ jobs:
                       </div>
                     </div>
 
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Domains</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
@@ -343,7 +343,7 @@ jobs:
                               target="_blank"
                               rel="noopener noreferrer"
                               data-link
-                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                              class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                             >
                               <span
                                 class="truncate underline-offset-2 group-hover/link:underline"
@@ -360,7 +360,7 @@ jobs:
                       </div>
                     </div>
 
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Status</span>
                       <div class="flex min-h-7 min-w-0 items-center">
                         <StatusIndicator
@@ -370,7 +370,7 @@ jobs:
                       </div>
                     </div>
 
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Created</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <span class="truncate text-body-sm text-(--text-default)">
@@ -386,7 +386,7 @@ jobs:
                       </div>
                     </div>
 
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Source</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
                         <Button
@@ -396,7 +396,7 @@ jobs:
                       </div>
                     </div>
 
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
                       <span class="text-label-sm text-(--text-muted)">Framework</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <i
@@ -492,7 +492,7 @@ jobs:
                             <p class="text-pretty text-body-sm text-(--text-muted)">
                               {{ step.description }}
                             </p>
-                            <div class="mt-(--spacing-xxs) min-w-0">
+                            <div class="mt-(--spacing-2xs) min-w-0">
                               <CodeBlock
                                 :tabs="step.tabs"
                                 :line-numbers="false"

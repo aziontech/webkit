@@ -35,8 +35,6 @@ function write(name: string, value: string) {
 function apply() {
   const root = globalThis.document?.documentElement
   if (!root) return
-  root.classList.remove('azion-dark', 'azion-light')
-  root.classList.add('azion', `azion-${settings.theme}`)
   root.dataset.theme = settings.theme
   root.lang = settings.locale
 }
