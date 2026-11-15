@@ -1,7 +1,7 @@
 {
   "id": "platform/account/payment-method-card",
   "name": "PaymentMethodCard",
-  "title": "Templates/Platform/Account/PaymentMethodCard",
+  "title": "Blocks/Account/PaymentMethodCard",
   "surface": "product",
   "kind": "fragment",
   "summary": "The Payment method card of the Upgrade to Pro drawer: the card on file as one bordered row with the Visa plate, the last four digits and a Change action, which swaps the row for the card form until Cancel or Update. The drawer disables it while the upgrade is submitting. Built from `Card`, `Field` with `Input` and `Select`, `Alert`, `Button` and `PaymentBrand` (the monochrome card-brand plate in theme tokens).",

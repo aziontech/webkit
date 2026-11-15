@@ -13,6 +13,5 @@ export const COMPONENT_CATEGORIES = [
   'navigation',
   'overlay',
   'sections',
-  'templates',
   'utils'
 ]
