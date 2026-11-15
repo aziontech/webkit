@@ -3,14 +3,14 @@ name: toggle-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 440ed030b1a5dd2f65de931331559ec93c1cd509f2adf4d20b840c198a46210b
+checksum: 62a472e6b5a3d33d90842d6278208fd4d69ab5904bbecf745bafc79f9c6fd3a0
 created: 2026-11-09
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ToggleGroup — Component Spec
@@ -21,6 +21,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 ## When to use
 
+- Use ToggleGroup (segmented control) to switch a view or mode in place (Table/Chart, 1h/24h), with two to five short segments; it is not a form field (pick one of a few in a form with RadioGroup).
 - Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.
 - Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.
 - Show a choice that is currently unavailable as a disabled segment instead of hiding it; mark it `locked` when it is unavailable because of a plan or a permission.
@@ -89,7 +90,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 
 **Generic.** Props stay an inline literal in `defineProps` because the component is generic (`TValue`): a named `interface Props` inside a generic `<script setup>` fails declaration emit (TS4025).
 
-**Locked options.** `locked: true` on an option draws the trailing lock icon (unavailable because of a plan or a permission). `locked: false` draws no lock even when the option is disabled. When `locked` is unset, a disabled option still draws the lock: this implicit lock is `@deprecated since 6.0 — set locked: true on the option. Removed in 7.0.`; from 7.0 a disabled option without `locked` draws no lock.
+**Locked options.** `locked: true` on an option draws the trailing lock icon (unavailable because of a plan or a permission). `disabled` alone draws no lock; set `locked: true` on the options a plan or a permission blocks (6.0 removed the implicit lock on disabled options).
 
 ## v-model
 

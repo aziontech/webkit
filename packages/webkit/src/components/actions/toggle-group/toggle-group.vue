@@ -83,7 +83,7 @@
         ),
         value: String(option.value ?? option.label ?? index),
         disabled: props.disabled || Boolean(option.disabled),
-        locked: option.locked ?? Boolean(option.disabled)
+        locked: Boolean(option.locked)
       }))
   )
 
@@ -290,7 +290,7 @@
 </script>
 
 <script lang="ts">
-  /** One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A number value is coerced to its string. `locked` draws the trailing lock icon; a disabled option without `locked` still draws it until 7.0. */
+  /** One segment; type a list as ToggleGroupOption of the model's union so each value is one of it. A number value is coerced to its string. `locked` draws the trailing lock icon; `disabled` alone draws none. */
   export type ToggleGroupOption<TOptionValue extends string | number = string | number> = {
     label?: string | number
     value?: TOptionValue
