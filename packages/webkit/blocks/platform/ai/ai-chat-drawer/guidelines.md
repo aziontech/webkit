@@ -4,6 +4,7 @@ The generative AI assistant beside the work: the reader is on a resource page â€
 
 ## When to use
 
+- Use ai-chat-drawer when the questions are about the page the user is on and they should keep it in view.
 - A resource or list page where questions are about what is on screen: why a metric moved, what a setting does, how to fix a status.
 - A global Agent entry point in the console header, when the reader should keep their place.
 - A short exchange that ends back on the page (the reader acts on the answer there).

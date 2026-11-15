@@ -20,7 +20,9 @@
     "assistente de ia na gaveta",
     "perguntar à ia",
     "painel lateral de ia",
-    "asistente de ia en panel lateral"
+    "asistente de ia en panel lateral",
+    "ask about this page",
+    "assistant side panel"
   ],
   "skills": ["webkit-genai", "webkit-ui-states", "webkit-microcopy"],
   "primary": {

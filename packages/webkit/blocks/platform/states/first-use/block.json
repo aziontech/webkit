@@ -18,7 +18,8 @@
     "zero state",
     "estado vazio",
     "lista vazia",
-    "primeiro uso"
+    "primeiro uso",
+    "first resource empty state"
   ],
   "skills": ["webkit-ui-states", "webkit-microcopy"],
   "primary": {

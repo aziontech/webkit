@@ -4,6 +4,7 @@ The last stop before a resource is gone for good. The user chose Delete from a r
 
 ## When to use
 
+- Use delete-with-confirmation when the user deletes a resource from the UI and must type its name.
 - Any permanent delete of a resource, a folder of files or a record, opened from the row Delete action of `platform/view/table-view`, `platform/view/file-browser` or `platform/detail/record-table`.
 - The resource takes other things with it (settings, instances, files) and the user must read that before confirming.
 - A delete that lives in a settings page as its own row (the danger zone): use the LabelledField variant, a labelled field inside the same medium `ConfirmDialog` opened from an outlined `Item`.

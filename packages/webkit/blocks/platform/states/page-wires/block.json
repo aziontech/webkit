@@ -16,7 +16,9 @@
     "wireframe loading",
     "carregando",
     "esqueleto de carregamento",
-    "tela de carregamento"
+    "tela de carregamento",
+    "whole page loading",
+    "shell skeleton"
   ],
   "skills": ["webkit-ui-states"],
   "primary": {

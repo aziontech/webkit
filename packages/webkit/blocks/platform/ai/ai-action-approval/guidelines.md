@@ -4,6 +4,7 @@ The moment an assistant needs permission. The reader asked for something that ch
 
 ## When to use
 
+- Use ai-action-approval when an AI assistant proposes an action with side effects inside a conversation (ToolApproval).
 - The assistant is about to call a tool or run a command with side effects: deploy, purge, change a rule, delete.
 - A one-time decision about a consequential action, made inside the conversation.
 - An irreversible action: add a typed confirmation to the card.

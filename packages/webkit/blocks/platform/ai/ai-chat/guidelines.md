@@ -4,6 +4,7 @@ A full page where a person talks with the generative AI assistant about their ac
 
 ## When to use
 
+- Use ai-chat when the conversation is the page (an assistant page).
 - A dedicated assistant page (Console → AI assistant) where the conversation is the main task.
 - Open-ended questions across the whole account: how-to, troubleshooting, explaining settings or metrics.
 - A conversation the reader expects to scroll back through and continue.

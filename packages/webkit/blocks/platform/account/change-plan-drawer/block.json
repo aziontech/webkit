@@ -31,7 +31,9 @@
     "finalizar compra",
     "upgrade checkout",
     "accept terms",
-    "checkout de upgrade"
+    "checkout de upgrade",
+    "change my plan",
+    "upgrade plan drawer"
   ],
   "skills": ["webkit-microcopy", "webkit-ux-heuristics", "webkit-form", "webkit-errors"],
   "primary": {

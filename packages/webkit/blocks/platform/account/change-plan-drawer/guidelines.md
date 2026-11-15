@@ -4,6 +4,7 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 ## When to use
 
+- Use change-plan-drawer to change a signed-in account's plan.
 - Changing the subscription plan from Billing or from an upgrade prompt anywhere in the console.
 
 ## When not to use
