@@ -137,7 +137,9 @@ specific empty (`no-invoices`). Banned: `failed`, `failure`, `fail`, `done`, `fi
 The first example of every component is **`default.vue`**; the others are named after what
 they show, usually the prop: `variants.vue`, `sizes.vue`, `severities.vue`, `statuses.vue`,
 `disabled.vue`, `readonly.vue`, `loading.vue`, `empty.vue`, `error.vue`, `groups.vue`,
-`with-<thing>.vue` (`with-addon-start.vue`).
+`with-<thing>.vue` (`with-addon-start.vue`). A marketing section's `site-<example>.json` and
+`site-<example>.vue` mirror `<example>.vue` and take its name (see
+[`SECTIONS.md`](../docs/SECTIONS.md)).
 
 Banned file names: `types`, `kinds`, `basic`, `overview`, `playground`, `demo`, `sample`,
 `example`, `usage`, `simple`, `read-only` (→ `readonly`), `grouped` (→ `groups`), `levels`
