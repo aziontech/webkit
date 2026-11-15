@@ -1995,6 +1995,7 @@
   "customer-spotlight": "ClientMosaicColumns from @aziontech/webkit/client-mosaic-columns with reveal=\"hover\"; items become cells and each card's description becomes story",
   "dialog-overlay": "delete the <DialogOverlay /> element: DialogContent renders the portal and the overlay itself",
   "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
+  "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
   "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
   "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
   "drawer-portal": "delete the <DrawerPortal> wrapper (keep its children): DrawerContent renders the portal and the overlay itself",
