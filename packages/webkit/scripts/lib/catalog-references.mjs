@@ -44,7 +44,7 @@ export function staleReferences(catalog, { retired = new Set(), details = (_, e)
       if (known.has(ref) || ATTRIBUTE.test(ref)) return
       if (PATH.test(ref) && roots.has(ref.split('/')[0])) {
         report(name, field, ref, 'is a folder path, not an import or a pattern id')
-      } else if (KEBAB.test(ref) && retired.has(ref)) {
+      } else if (ref.includes('-') && KEBAB.test(ref) && retired.has(ref)) {
         report(name, field, ref, 'was renamed or removed in v6')
       } else if (KEBAB.test(ref) && ref.endsWith('-block')) {
         report(name, field, ref, 'names a pattern that does not exist')
