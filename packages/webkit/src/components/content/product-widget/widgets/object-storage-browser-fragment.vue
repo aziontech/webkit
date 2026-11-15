@@ -3,7 +3,7 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import SplitButton from '../../../actions/split-button/split-button.vue'
-  import TableRoot from '../../../data/table/table.vue'
+  import DataTable from '../../../data/data-table/data-table.vue'
   import Input from '../../../inputs/input/input.vue'
   import Breadcrumb from '../../../navigation/breadcrumb/breadcrumb.vue'
   import Avatar from '../../avatar/avatar.vue'
@@ -192,7 +192,7 @@
       <ShellMockupPart :order="0">
         <Card :padded="false">
           <template #content>
-            <TableRoot
+            <DataTable
               :data="rows"
               :columns="COLUMNS"
               row-key="id"
@@ -277,7 +277,7 @@
                   }}</span>
                 </div>
               </template>
-            </TableRoot>
+            </DataTable>
           </template>
         </Card>
       </ShellMockupPart>

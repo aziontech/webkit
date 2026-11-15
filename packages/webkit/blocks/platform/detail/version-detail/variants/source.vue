@@ -4,6 +4,8 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
@@ -16,8 +18,6 @@
   import Select from '@aziontech/webkit/select'
   import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -684,7 +684,7 @@
                       />
                       <Card :padded="false">
                         <template #content>
-                          <TableRoot
+                          <DataTable
                             ref="tableRef"
                             v-model:globalFilter="search"
                             :data="rows"
@@ -774,7 +774,7 @@
                                 </template>
                               </EmptyState>
                             </template>
-                          </TableRoot>
+                          </DataTable>
                         </template>
                       </Card>
                     </section>

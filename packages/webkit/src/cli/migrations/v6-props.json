@@ -152,11 +152,231 @@
   },
   "table": {
     "border": "bordered",
-    "rowsPerPageOptions": "pageSizeOptions"
+    "rowsPerPageOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; the page sizes are pageSizeOptions"
+    },
+    "columns": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "columnVisibility": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "data": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "enableRowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "enableSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "error": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "estimateRowHeight": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "expanded": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportFilename": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filterFields": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filters": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "getSubRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "globalFilter": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "headerKind": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; use density there (it compacts the header and the rows)"
+    },
+    "initialState": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "loading": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualFiltering": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualPagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSize": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSizeOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "paginated": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "reorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowCount": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowKey": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowReorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelectable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "selectOnRowClick": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "sorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "stackable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "state": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "striped": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "virtual": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    }
   },
   "table-root": {
     "border": "bordered",
-    "rowsPerPageOptions": "pageSizeOptions"
+    "rowsPerPageOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; the page sizes are pageSizeOptions"
+    },
+    "columns": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "columnVisibility": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "data": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "enableRowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "enableSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "error": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "estimateRowHeight": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "expanded": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportFilename": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "exportRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filterFields": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "filters": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "getSubRows": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "globalFilter": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "headerKind": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; use density there (it compacts the header and the rows)"
+    },
+    "initialState": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "loading": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualFiltering": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualPagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "manualSorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSize": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pageSizeOptions": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "paginated": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "pagination": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "reorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowCount": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowKey": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowReorderable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelectable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "rowSelection": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "selectOnRowClick": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "sorting": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "stackable": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "state": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "striped": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    },
+    "virtual": {
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+    }
   },
   "tabs": {
     "value": "modelValue"
@@ -259,6 +479,17 @@
   "sidebar": {
     "collapsed": {
       "removed": "use v-model:open, inverted: open = !collapsed"
+    }
+  },
+  "table-filter": {
+    "kind": {
+      "to": "kind",
+      "values": {
+        "builder": "property"
+      }
+    },
+    "count": {
+      "removed": "Table.Filter hosts FilterMenu or PropertyFilter, which count the applied filters themselves"
     }
   }
 }

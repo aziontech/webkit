@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/activity-history/activity-history.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/activity-history")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), [DataTable](../../../components/data-table.md), [DateRangePicker](../../../components/date-range-picker.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -43,9 +43,9 @@ The period comes first in the reader's mind and is filtered before the collectio
 
 Refresh and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 25, 50 or 100; columns), saved under `storageKey`.
 
-### E. Event table — `Card`, `Table`, `Tag`, `CopyButton`, `useCollection` (required)
+### E. Event table — `Card`, `DataTable`, `Table`, `Tag`, `CopyButton`, `useCollection` (required)
 
-One `useCollection` over the events in the period, sorted by Date descending, `Table` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
+One `useCollection` over the events in the period, sorted by Date descending, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: Event (sentence in past tense naming the object), Category as a small `Tag` with one severity per category (a category is not a status), User, IP address (left to right, with a `CopyButton` named `Copy IP address`), and Date through `Table.CellTime` (relative, exact time on the tooltip).
 
 ### F. No match and empty period — `EmptyState` (required)
 
@@ -114,6 +114,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import DataTable from '@aziontech/webkit/data-table'
   import type {
     DateRangeUnit,
     DateRangeValue,
@@ -465,7 +466,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="activityTable"
               v-bind="tableProps"
               :loading="loading"
@@ -522,7 +523,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
       </section>

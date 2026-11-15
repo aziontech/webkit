@@ -2,6 +2,11 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import DataTable, {
+    type DropdownMenuOptionValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -10,11 +15,6 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, {
-    type DropdownMenuOptionValue,
-    type TableColumn,
-    type TableExposed
-  } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -310,7 +310,7 @@
               :padded="false"
             >
               <template #content>
-                <TableRoot
+                <DataTable
                   ref="deploymentsTable"
                   v-bind="tableProps"
                   :loading="loading || fetching"
@@ -433,7 +433,7 @@
                       </template>
                     </EmptyState>
                   </template>
-                </TableRoot>
+                </DataTable>
               </template>
             </Card>
           </section>

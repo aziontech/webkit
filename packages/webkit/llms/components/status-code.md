@@ -137,8 +137,8 @@ _none_ — the method and the code are data and are never translated; the compon
 
 ```vue
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import StatusCode from '@aziontech/webkit/status-code'
-  import Table from '@aziontech/webkit/table'
 
   const rows = [
     { id: 'r1', time: '12:04:31', method: 'GET', status: 200, path: '/', duration: '38 ms' },
@@ -186,7 +186,7 @@ _none_ — the method and the code are data and are never translated; the compon
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="rows"
     :columns="columns"
     density="compact"
@@ -198,6 +198,6 @@ _none_ — the method and the code are data and are never translated; the compon
         :method="row.method"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>
 ```

@@ -85,6 +85,8 @@
     grouped?: boolean
     /** Fetches the values of a property for the typed text, after the operator. Replaces its options in the suggestions. */
     loadValues?: (property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>
+    /** Hides the Match all / Match any toggle, so the tokens always combine with AND. */
+    hideOperations?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -98,7 +100,8 @@
     validate: undefined,
     suggest: undefined,
     grouped: false,
-    loadValues: undefined
+    loadValues: undefined,
+    hideOperations: false
   })
 
   const emit = defineEmits<{
@@ -974,7 +977,7 @@
         @click="startGroup"
       />
       <ToggleGroup
-        v-if="conditionCount > 1"
+        v-if="conditionCount > 1 && !hideOperations"
         :model-value="operation"
         :options="operationOptions"
         :aria-label="t('propertyFilter.operation')"

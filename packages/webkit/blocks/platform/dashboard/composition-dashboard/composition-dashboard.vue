@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -11,7 +12,6 @@
   import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -611,7 +611,7 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               :data="contributors"
               :columns="contributorColumns"
               row-key="id"
@@ -683,7 +683,7 @@
                   size="small"
                 />
               </template>
-            </TableRoot>
+            </DataTable>
           </ChartCard.Content>
         </ChartCard>
       </div>

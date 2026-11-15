@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -11,7 +12,6 @@
   import type { SidebarMenuGroupNode, SidebarMenuNode } from '@aziontech/webkit/sidebar-menu'
   import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -292,7 +292,7 @@
               </header>
               <Card :padded="false">
                 <template #content>
-                  <TableRoot
+                  <DataTable
                     v-bind="tableProps"
                     :loading="loading || fetching"
                     enable-sorting
@@ -359,7 +359,7 @@
                         </template>
                       </EmptyState>
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </template>
               </Card>
             </section>

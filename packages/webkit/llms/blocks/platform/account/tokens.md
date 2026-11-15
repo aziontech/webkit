@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/tokens")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), [DataTable](../../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -35,9 +35,9 @@ Title `Personal tokens` and one sentence that says what a token does and that it
 
 The table-view controls row (`platform/view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when the account has no token.
 
-### C. Token table — `Card`, `Table`, `useCollection` (required)
+### C. Token table — `Card`, `DataTable`, `Table`, `useCollection` (required)
 
-One `useCollection` over the rows, `Table` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `Table.CellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `Table.CellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
+One `useCollection` over the rows, `DataTable` bound with `v-bind="tableProps"` inside a flush `Card`. Columns: Name, Description (muted; `No description` when empty), Status, Expires, Last used, Created, and the row menu. Status uses `Table.CellStatus`: Active (success), `Expires in N days` within 7 days (warning), Expired (danger), Revoked (secondary). Last used and Created use `Table.CellTime` (relative time, exact time on the tooltip, the creator's avatar on Created); a token never used reads `Never used`.
 
 ### D. Row actions — `DropdownMenu` (required)
 
@@ -131,6 +131,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import DataTable from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -536,7 +537,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="tokensTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
@@ -627,7 +628,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
       </section>

@@ -1,25 +1,21 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, inject, ref, useAttrs, watch } from 'vue'
 
-  import type { MessageKey } from '../../../../composables/use-locale'
-  import { useTranslate } from '../../../../composables/use-locale/use-translate'
-  import * as en from '../../../../i18n/messages/en'
-  import Button from '../../../actions/button/button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Badge from '../../../content/badge/badge.vue'
-  import Input from '../../../inputs/input/input.vue'
-  import Popover from '../../../overlay/popover/popover.vue'
-  import PopoverContent from '../../../overlay/popover/popover-content/popover-content.vue'
-  import PopoverTitle from '../../../overlay/popover/popover-title/popover-title.vue'
-  import PopoverTrigger from '../../../overlay/popover/popover-trigger/popover-trigger.vue'
+  import type { PropertyFilterQuery } from '../../../../composables/use-collection/property-filter'
   import { useFilterMenuLabels } from '../../filter-menu/composables/use-filter-menu-labels'
   import type FilterMenuComponent from '../../filter-menu/filter-menu.vue'
   import type { FilterMenuModel } from '../../filter-menu/types'
-  import { toAppliedFilters, toMenuFields, toMenuModel } from '../filter-menu-bridge'
+  import {
+    fromQuery,
+    toAppliedFilters,
+    toMenuFields,
+    toMenuModel,
+    toProperties,
+    toQuery
+  } from '../filter-menu-bridge'
   import {
     type AppliedFilter,
     type FilterField,
-    type FilterOperator,
     type TableFilterKind,
     TableInjectionKey
   } from '../injection-key'
@@ -31,44 +27,25 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Field catalog for the built-in builder (falls back to the table's `filterFields`). */
+      /** Fields to filter on; empty uses the table's `filterFields`. */
       fields?: FilterField[]
-      /** Popover heading. Empty uses the locale catalog (`Filters`). */
+      /** Trigger text of the menu, accessible name of the property filter. Empty uses the locale catalog. */
       title?: string
-      /** Applied filters shown on the trigger; 0 counts the table's applied filters. */
-      count?: number
-      /** Builder renders the field, operator and value form; menu renders the drill-in FilterMenu over the same filters. */
+      /** `menu` hosts FilterMenu (facets picked from known values); `property` hosts PropertyFilter (typed conditions with operators). */
       kind?: TableFilterKind
     }>(),
     {
       fields: () => [],
       title: '',
-      count: 0,
-      kind: 'builder'
+      kind: 'menu'
     }
   )
 
   const emit = defineEmits<{
     apply: [event: Event, filters: AppliedFilter[]]
-    clear: [event: Event]
-  }>()
-
-  defineSlots<{
-    /** Escape hatch — replace the built-in builder with a custom one (e.g. AQL). */
-    default(props: {
-      fields: FilterField[]
-      applied: AppliedFilter[]
-      apply: (event: Event) => void
-      clear: (event: Event) => void
-      remove: (event: Event, filter: AppliedFilter) => void
-    }): unknown
-    /** Replace the default trigger button; it toggles the panel on click by itself. `expanded` is the panel state; `open` opens it from elsewhere. */
-    trigger(props: { open: () => void; expanded: boolean; count: number }): unknown
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ tableFilter: en.tableFilter })
-  const heading = computed(() => props.title || t('tableFilter.title'))
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
@@ -77,283 +54,71 @@
       (ctx ? `${ctx.testId}__filter` : 'data-table__filter')
   )
 
-  const open = ref<boolean>(false)
-  const close = (): void => {
-    open.value = false
-  }
-  const openPanel = (): void => {
-    queueMicrotask(() => {
-      open.value = true
-    })
-  }
-
   const fields = computed<FilterField[]>(() =>
     props.fields.length ? props.fields : (ctx?.filterFields.value ?? [])
   )
-  const applied = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? [])
-  const count = computed<number>(() => (props.count > 0 ? props.count : applied.value.length))
-  const triggerName = computed<string>(() =>
-    count.value > 0
-      ? t('tableFilter.triggerCount', { title: heading.value, count: count.value })
-      : heading.value
-  )
-
-  const DEFAULT_OPERATORS: Record<FilterField['type'], FilterOperator[]> = {
-    text: ['contains', 'eq', 'neq', 'starts-with', 'ends-with', 'is-empty', 'is-not-empty'],
-    number: ['eq', 'neq', 'gt', 'gte', 'lt', 'lte'],
-    select: ['eq', 'neq'],
-    'multi-select': ['in', 'not-in'],
-    boolean: ['eq'],
-    date: ['eq', 'gt', 'lt', 'gte', 'lte']
-  }
-  const OPERATOR_KEYS: Record<FilterOperator, MessageKey> = {
-    eq: 'tableFilter.eq',
-    neq: 'tableFilter.neq',
-    contains: 'tableFilter.contains',
-    'not-contains': 'tableFilter.notContains',
-    'starts-with': 'tableFilter.startsWith',
-    'ends-with': 'tableFilter.endsWith',
-    gt: 'tableFilter.gt',
-    gte: 'tableFilter.gte',
-    lt: 'tableFilter.lt',
-    lte: 'tableFilter.lte',
-    in: 'tableFilter.in',
-    'not-in': 'tableFilter.notIn',
-    'is-empty': 'tableFilter.isEmpty',
-    'is-not-empty': 'tableFilter.isNotEmpty',
-    within: 'tableFilter.within',
-    between: 'tableFilter.between'
-  }
-  const NO_VALUE_OPERATORS: FilterOperator[] = ['is-empty', 'is-not-empty']
-
-  const draftField = ref<string>('')
-  const draftOperator = ref<FilterOperator>('contains')
-  const draftValue = ref<string>('')
-  const editingKey = ref<string | null>(null)
-
-  const selectedField = computed<FilterField | undefined>(() =>
-    fields.value.find((field) => field.id === draftField.value)
-  )
-  const operators = computed<FilterOperator[]>(() =>
-    selectedField.value
-      ? (selectedField.value.operators ?? DEFAULT_OPERATORS[selectedField.value.type])
-      : []
-  )
-  const valueOptions = computed<{ label: string; value: string | number | boolean }[]>(() =>
-    selectedField.value?.type === 'select' ? (selectedField.value.options ?? []) : []
-  )
-  const needsValue = computed<boolean>(() => !NO_VALUE_OPERATORS.includes(draftOperator.value))
-  const operatorLabel = (operator: FilterOperator): string =>
-    OPERATOR_KEYS[operator] ? t(OPERATOR_KEYS[operator]) : operator
-
-  const filterKey = (filter: AppliedFilter): string =>
-    `${filter.field}|${filter.operator}|${JSON.stringify(filter.value)}`
-
-  const resetDraft = (): void => {
-    const first = fields.value[0]
-    draftField.value = first?.id ?? ''
-    draftValue.value = ''
-    editingKey.value = null
-  }
-
-  watch(draftField, () => {
-    const next = operators.value
-    if (!next.includes(draftOperator.value)) draftOperator.value = next[0] ?? 'eq'
-    draftValue.value = ''
-  })
-
-  const commit = (event: Event): void => {
-    if (!draftField.value) return
-    const next: AppliedFilter = {
-      field: draftField.value,
-      operator: draftOperator.value,
-      value: needsValue.value ? draftValue.value : ''
-    }
-    const current = applied.value
-    const list = editingKey.value
-      ? current.map((filter) => (filterKey(filter) === editingKey.value ? next : filter))
-      : [...current, next]
+  const local = ref<AppliedFilter[]>([])
+  const applied = computed<AppliedFilter[]>(() => ctx?.appliedFilters.value ?? local.value)
+  const commit = (event: Event, list: AppliedFilter[]): void => {
+    local.value = list
     ctx?.applyFilters(event, list)
     emit('apply', event, list)
-    resetDraft()
-    close()
   }
-  const clearAll = (event: Event): void => {
-    ctx?.clearFilters()
-    emit('clear', event)
-    resetDraft()
-  }
-  const removeOne = (event: Event, filter: AppliedFilter): void => ctx?.removeFilter(event, filter)
 
   const FilterMenu = defineAsyncComponent(() => import('../../filter-menu/filter-menu.vue'))
+  const PropertyFilter = defineAsyncComponent(
+    () => import('../../property-filter/property-filter.vue')
+  )
+
   const menuRef = ref<InstanceType<typeof FilterMenuComponent> | null>(null)
   const menuLabels = useFilterMenuLabels()
   const menuFields = computed(() => toMenuFields(fields.value))
   const menuModel = computed<FilterMenuModel>(() => toMenuModel(applied.value, menuFields.value))
   const onMenuChange = (next: FilterMenuModel): void => {
     const ids = new Set(menuFields.value.map((field) => field.id))
-    const list = [
+    commit(new Event('change'), [
       ...applied.value.filter((filter) => !ids.has(filter.field)),
       ...toAppliedFilters(next, menuFields.value, (field) => menuLabels.summaryText(next, field))
-    ]
-    const event = new Event('change')
-    ctx?.applyFilters(event, list)
-    emit('apply', event, list)
+    ])
+  }
+
+  const properties = computed(() => toProperties(fields.value))
+  const query = computed<PropertyFilterQuery>(() => toQuery(applied.value, fields.value))
+  const onQueryChange = (next: PropertyFilterQuery): void => {
+    commit(new Event('change'), fromQuery(next, applied.value, fields.value))
   }
 
   watch(
     () => ctx?.editingFilter.value ?? null,
     (filter) => {
-      if (!filter) return
-      if (props.kind === 'menu') {
-        menuRef.value?.open(filter.field)
-        if (ctx) ctx.editingFilter.value = null
-        return
-      }
-      draftField.value = filter.field
-      draftOperator.value = filter.operator
-      draftValue.value = Array.isArray(filter.value)
-        ? filter.value.join(', ')
-        : String(filter.value)
-      editingKey.value = filterKey(filter)
-      open.value = true
+      if (!filter || props.kind !== 'menu') return
+      menuRef.value?.open(filter.field)
       if (ctx) ctx.editingFilter.value = null
     }
   )
-
-  resetDraft()
 </script>
 
 <template>
   <FilterMenu
     v-if="kind === 'menu'"
     ref="menuRef"
+    v-bind="$attrs"
     :data-testid="testId"
     :fields="menuFields"
     :label="title"
     :model-value="menuModel"
     @update:model-value="onMenuChange"
   />
-  <Popover
+  <PropertyFilter
     v-else
-    v-model:open="open"
-    placement="bottom-end"
-    :data-testid="`${testId}__popover`"
-    class="relative"
-  >
-    <PopoverTrigger>
-      <slot
-        name="trigger"
-        :open="openPanel"
-        :expanded="open"
-        :count="count"
-      >
-        <IconButton
-          :data-testid="testId"
-          icon="pi pi-filter"
-          :ariaLabel="triggerName"
-          kind="outlined"
-          size="medium"
-        />
-        <span
-          v-if="count > 0"
-          aria-hidden="true"
-          class="pointer-events-none absolute -top-2 -end-2 min-w-5"
-        >
-          <Badge
-            :data-testid="`${testId}__count`"
-            :label="String(count)"
-            severity="primary"
-            size="small"
-            class="w-full"
-          />
-        </span>
-      </slot>
-    </PopoverTrigger>
-
-    <PopoverContent>
-      <div
-        :data-testid="`${testId}__panel`"
-        class="flex min-w-(--container-2xs) flex-col gap-(--spacing-sm) p-(--spacing-sm)"
-      >
-        <PopoverTitle class="text-label-md">{{ heading }}</PopoverTitle>
-
-        <slot
-          :fields="fields"
-          :applied="applied"
-          :apply="commit"
-          :clear="clearAll"
-          :remove="removeOne"
-        >
-          <div class="flex flex-col gap-(--spacing-xs)">
-            <select
-              v-model="draftField"
-              :data-testid="`${testId}__field`"
-              :aria-label="t('tableFilter.field')"
-              class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-            >
-              <option
-                v-for="field in fields"
-                :key="field.id"
-                :value="field.id"
-              >
-                {{ field.label }}
-              </option>
-            </select>
-
-            <select
-              :value="draftOperator"
-              :data-testid="`${testId}__operator`"
-              :aria-label="t('tableFilter.operator')"
-              :disabled="!draftField"
-              class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:cursor-not-allowed disabled:opacity-60"
-              @change="
-                (event) =>
-                  (draftOperator = (event.target as HTMLSelectElement).value as FilterOperator)
-              "
-            >
-              <option
-                v-for="operator in operators"
-                :key="operator"
-                :value="operator"
-              >
-                {{ operatorLabel(operator) }}
-              </option>
-            </select>
-
-            <select
-              v-if="needsValue && valueOptions.length > 0"
-              v-model="draftValue"
-              :data-testid="`${testId}__value`"
-              :aria-label="t('tableFilter.value')"
-              class="h-8 rounded-(--shape-elements) border border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
-            >
-              <option
-                v-for="option in valueOptions"
-                :key="String(option.value)"
-                :value="String(option.value)"
-              >
-                {{ option.label }}
-              </option>
-            </select>
-            <Input
-              v-else-if="needsValue"
-              v-model="draftValue"
-              :type="selectedField?.type === 'number' ? 'number' : 'text'"
-              :data-testid="`${testId}__value`"
-              :aria-label="t('tableFilter.value')"
-              :placeholder="t('tableFilter.value')"
-            />
-
-            <Button
-              :label="t('tableFilter.apply')"
-              size="small"
-              :disabled="!draftField"
-              @click="commit"
-            />
-          </div>
-        </slot>
-      </div>
-    </PopoverContent>
-  </Popover>
+    v-bind="$attrs"
+    :data-testid="testId"
+    :properties="properties"
+    :aria-label="title"
+    :free-text="false"
+    hide-operations
+    :query="query"
+    class="min-w-0 flex-1"
+    @update:query="onQueryChange"
+  />
 </template>

@@ -1,11 +1,11 @@
 # CompositionDashboard (`platform/dashboard/composition-dashboard`)
 
-> A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors TableRoot across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `TableRoot`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors DataTable across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `DataTable`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/composition-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -84,7 +84,7 @@ category folds into Other; never invent a hue.
 This month's split with the total in its center (`This month`). Same category order and colors as the
 stacked chart, so the two read as one.
 
-### L. Top contributors — `TableRoot` (required)
+### L. Top contributors — `DataTable` (required)
 
 Rank, the resource behind its category glyph, the category, the amount, its share of the total and the
 change against last month. Amounts and shares use tabular numbers and align right.
@@ -164,6 +164,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -173,7 +174,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Progress from '@aziontech/webkit/progress'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -773,7 +773,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               :data="contributors"
               :columns="contributorColumns"
               row-key="id"
@@ -845,7 +845,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   size="small"
                 />
               </template>
-            </TableRoot>
+            </DataTable>
           </ChartCard.Content>
         </ChartCard>
       </div>

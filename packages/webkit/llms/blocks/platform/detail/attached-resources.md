@@ -1,11 +1,11 @@
 # AttachedResources (`platform/detail/attached-resources`)
 
-> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `Table.CellActions` and `Button`.
+> An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `Table.CellActions` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/detail/attached-resources/attached-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/attached-resources")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [DataTable](../../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuOption`, [Table](../../../components/table.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-tables`
 
 ## Asked as
@@ -33,9 +33,9 @@ A short list of the things one resource is attached to, shown in place inside it
 
 `Card :padded="false"` holds the table and the footer as one surface, so the table runs edge to edge and the footer rule meets the card border. It sits as the body of a `SettingsSection` band of the Settings tab, under that section's heading.
 
-### B. Attached table — `TableRoot` (required)
+### B. Attached table — `DataTable` (required)
 
-A data-driven `TableRoot :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
+A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
 
 ### C. Environment chip — `Tag` (optional)
 
@@ -92,7 +92,7 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 - `platform/edit/edit-resource` — the Settings tab whose Domains section renders this card.
 - `platform/view/table-view` — the full list, with filters and pages, for longer related lists.
 - `platform/delete/delete-with-confirmation` — the dialog behind the row menu's Delete.
-- `TableRoot` — the table this card wraps; see `skills/webkit-tables`.
+- `DataTable` — the table this card wraps; see `skills/webkit-tables`.
 
 ## Variants
 
@@ -106,11 +106,11 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
 
@@ -158,7 +158,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   <Card :padded="false">
     <template #content>
       <div class="flex min-w-0 flex-col">
-        <TableRoot
+        <DataTable
           :data="domains"
           :columns="columns"
           row-key="id"
@@ -217,7 +217,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
               </DropdownMenuGroup>
             </Table.CellActions>
           </template>
-        </TableRoot>
+        </DataTable>
 
         <div
           class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"

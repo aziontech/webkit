@@ -7,6 +7,8 @@
   import Checkbox from '@aziontech/webkit/checkbox'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -28,8 +30,6 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -738,7 +738,7 @@
             :padded="false"
           >
             <template #content>
-              <TableRoot
+              <DataTable
                 ref="table"
                 v-bind="tableProps"
                 :loading="loading || fetching"
@@ -871,7 +871,7 @@
                     </template>
                   </EmptyState>
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
           </Card>
         </section>

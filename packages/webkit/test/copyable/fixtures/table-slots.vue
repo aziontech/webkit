@@ -1,6 +1,5 @@
 <script setup lang="ts">
-  import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
@@ -38,7 +37,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="domains"
     :columns="columns"
     :row-selectable="(row) => row.kind === 'file'"
@@ -75,9 +74,9 @@
         {{ value.toUpperCase() }}
       </span>
     </template>
-  </Table>
+  </DataTable>
 
-  <TableRoot
+  <DataTable
     :data="literalRows"
     :columns="literalColumns"
   >
@@ -88,9 +87,9 @@
         {{ value.toFixed(0) }}
       </span>
     </template>
-  </TableRoot>
+  </DataTable>
 
-  <Table v-bind="collection.tableProps.value">
+  <DataTable v-bind="collection.tableProps.value">
     <template #cell-name="{ row }">{{ row.hits.toFixed(0) }}</template>
-  </Table>
+  </DataTable>
 </template>

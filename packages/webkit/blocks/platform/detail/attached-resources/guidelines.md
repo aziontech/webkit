@@ -21,9 +21,9 @@ A short list of the things one resource is attached to, shown in place inside it
 
 `Card :padded="false"` holds the table and the footer as one surface, so the table runs edge to edge and the footer rule meets the card border. It sits as the body of a `SettingsSection` band of the Settings tab, under that section's heading.
 
-### B. Attached table — `TableRoot` (required)
+### B. Attached table — `DataTable` (required)
 
-A data-driven `TableRoot :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
+A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-key`, one row per attached record, each cell rendered through a `#cell-<accessorKey>` slot. The first column is `principal` and carries the record's name (the domain). The last column is `kind: 'action'` with no header text. No sorting, search or paging: if the list needs them, it is a record table instead.
 
 ### C. Environment chip — `Tag` (optional)
 
@@ -80,4 +80,4 @@ Below a top rule, a muted count on the left ("3 domains") and an outlined medium
 - `platform/edit/edit-resource` — the Settings tab whose Domains section renders this card.
 - `platform/view/table-view` — the full list, with filters and pages, for longer related lists.
 - `platform/delete/delete-with-confirmation` — the dialog behind the row menu's Delete.
-- `TableRoot` — the table this card wraps; see `skills/webkit-tables`.
+- `DataTable` — the table this card wraps; see `skills/webkit-tables`.

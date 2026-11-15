@@ -51,7 +51,7 @@
     },
     {
       "name": "Summary",
-      "summary": "The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources TableRoot card and a Recent activity TableRoot card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.",
+      "summary": "The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources DataTable card and a Recent activity DataTable card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.",
       "file": "variants/summary.vue"
     }
   ]

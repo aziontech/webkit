@@ -1,11 +1,11 @@
 # FileBrowser (`platform/view/file-browser`)
 
-> The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh and download IconButtons and the `Table.ColumnSelector`, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders stay first under any sort with a link-coloured folder glyph and a link-button name that opens them, a .. row leads back up once inside a folder, Size sorts on bytes and Last modified on the timestamp, the rows page at 50, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). An empty folder renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button, and a search that matches nothing shows No matching files with Clear search; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `Table.ColumnSelector`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The file browser a storage resource opens on: one flush `Card` holding a borderless `DataTable` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh and download IconButtons and the `CollectionPreferences` (columns section), then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders stay first under any sort with a link-coloured folder glyph and a link-button name that opens them, a .. row leads back up once inside a folder, Size sorts on bytes and Last modified on the timestamp, the rows page at 50, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). An empty folder renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button, and a search that matches nothing shows No matching files with Clear search; inside a folder the .. row always remains. Built from `Card`, `DataTable` with `TableSearch`, `IconButton`, `Tooltip`, `CollectionPreferences` (columns section), `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/file-browser/file-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/file-browser")`
-- Components: [Alert](../../../components/alert.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SplitButton](../../../components/split-button.md), [Table](../../../components/table.md), `TableRoot`, `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
+- Components: [Alert](../../../components/alert.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DataTable](../../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SplitButton](../../../components/split-button.md), [Table](../../../components/table.md), `TableSearch`, [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), [UploadProgress](../../../components/upload-progress.md)
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -32,9 +32,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Surface — `Card`, `TableRoot` (required)
+### A. Surface — `Card`, `DataTable` (required)
 
-One `Card :padded="false"` around a `TableRoot :bordered="false"` with `row-key`, `enable-sorting` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `enable-sorting` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 
@@ -44,9 +44,9 @@ The toolbar opens with the storage glyph and the storage name, the page's `h1`, 
 
 Large outlined `IconButton`s for Refresh (`:loading` while the listing reloads) and Download CSV (`exportCsv` on the table ref), each named by a `Tooltip` and an `aria-label` with the same words. They sit on the search row and act on the listing.
 
-### D. Columns — `Table.ColumnSelector` (optional)
+### D. Columns — `CollectionPreferences` (optional)
 
-The last toolbar control is `Table.ColumnSelector`, which reads the table's columns from context: one switch per column, Name locked as Always shown, and Show all columns once one is hidden. Do not build a popover of `Switch`es by hand.
+The last toolbar control is `CollectionPreferences` with only its columns section (`:sections="['columns']"`), which reads the table's columns from context: one switch per column with its order, Name locked, and Confirm writes them back to the table. Do not build a popover of `Switch`es by hand.
 
 ### E. Path and create — `Breadcrumb`, `SplitButton` (required)
 
@@ -84,7 +84,7 @@ Every transfer (upload, move) runs in one floating `UploadProgress` at the inlin
 
 When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. Each of these toasts passes `position: 'top-right'` so it never covers the transfer card, whatever corner the app's region defaults to.
 
-### L. Selection and Move — `TableRoot`, `DropdownMenuOption` (optional)
+### L. Selection and Move — `DataTable`, `DropdownMenuOption` (optional)
 
 Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
@@ -159,7 +159,7 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - `platform/detail/record-table` — records of a resource, not files.
 - `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
 - `platform/states/async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
-- `TableRoot` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
 
 ## Variants
 
@@ -180,7 +180,13 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable, {
+    type DropdownMenuOptionValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -188,11 +194,6 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
   import Input from '@aziontech/webkit/input'
   import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, {
-    type DropdownMenuOptionValue,
-    type TableColumn,
-    type TableExposed
-  } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
@@ -431,7 +432,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
           <template #content>
-            <TableRoot
+            <DataTable
               ref="tableRef"
               v-model:sorting="sorting"
               v-model:global-filter="search"
@@ -494,7 +495,10 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
                         @click="tableRef?.exportCsv({ filename: 'files.csv' })"
                       />
                     </Tooltip>
-                    <Table.ColumnSelector class="shrink-0" />
+                    <CollectionPreferences
+                      :sections="['columns']"
+                      class="shrink-0"
+                    />
                   </div>
 
                   <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
@@ -654,7 +658,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/fi
                   </template>
                 </EmptyState>
               </template>
-            </TableRoot>
+            </DataTable>
           </template>
         </Card>
       </section>

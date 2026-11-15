@@ -1932,8 +1932,7 @@
   "comparison": "compare-plans",
   "config-provider": "webkit-provider",
   "cta": "closing-call-to-action",
-  "data-table": "table",
-  "datatable": "table",
+  "datatable": "data-table",
   "feature-grid": "capability-grid",
   "input-otp": "otp-input",
   "kebab": "dropdown-menu",
@@ -1999,7 +1998,9 @@
   "field-time": "Field + FieldLabel + Input + FieldDescription",
   "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
   "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
-  "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href"
+  "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
+  "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu kind); the property kind shows its own tokens",
+  "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)"
  },
  "imports": {
   "catalog.json": {
@@ -8185,14 +8186,9 @@
     "@aziontech/webkit/table-toolbar",
     "@aziontech/webkit/table-search",
     "@aziontech/webkit/table-filter",
-    "@aziontech/webkit/table-applied-filters",
-    "@aziontech/webkit/table-column-selector",
     "@aziontech/webkit/table-export",
     "@aziontech/webkit/table-refresh-button",
     "@aziontech/webkit/table-live-button"
-   ],
-   "models": [
-    "live"
    ],
    "category": "data",
    "structure": "composition",
@@ -8202,432 +8198,50 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under the sticky header)."
+     "doc": "Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under a frozen header)."
     },
     {
      "name": "bordered",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); set `bordered` / `:bordered=\"…\"` to draw the `var(--border-default)` outline. The internal row dividers are unaffected."
-    },
-    {
-     "name": "data",
-     "type": "TRow[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Data-driven mode: row records."
-    },
-    {
-     "name": "columns",
-     "type": "TableColumn[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack."
-    },
-    {
-     "name": "rowKey",
-     "type": "string",
-     "default": "'id'",
-     "required": "false",
-     "doc": "Field used as the stable row id (for selection)."
-    },
-    {
-     "name": "enableSorting",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Enable sorting globally; per-column `enableSorting` overrides."
-    },
-    {
-     "name": "enableRowSelection",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Add a leading selection-checkbox column."
-    },
-    {
-     "name": "rowSelectable",
-     "type": "(row: TRow) => boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
-    },
-    {
-     "name": "selectOnRowClick",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
-    },
-    {
-     "name": "headerKind",
-     "type": "'default' | 'compact'",
-     "default": "'default'",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `density`, which now sets the header and the rows. Removed in 7.0.** Header density (data-driven): `compact` shrinks the column-header row's height and padding; the header is compact when either `headerKind` or `density` is `compact`."
-    },
-    {
-     "name": "paginated",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Render a Pagination in the footer."
-    },
-    {
-     "name": "pageSize",
-     "type": "number",
-     "default": "10",
-     "required": "false",
-     "doc": "Rows per page when paginated."
-    },
-    {
-     "name": "sorting",
-     "type": "SortingState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:sorting (TanStack SortingState)."
-    },
-    {
-     "name": "rowSelection",
-     "type": "RowSelectionState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:rowSelection (TanStack RowSelectionState)."
-    },
-    {
-     "name": "columnVisibility",
-     "type": "VisibilityState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:columnVisibility (TanStack VisibilityState)."
-    },
-    {
-     "name": "globalFilter",
-     "type": "string",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:globalFilter text."
-    },
-    {
-     "name": "pagination",
-     "type": "PaginationState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:pagination (TanStack PaginationState)."
-    },
-    {
-     "name": "manualSorting",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Server-side sorting: emit events, do not sort locally."
-    },
-    {
-     "name": "manualPagination",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Server-side pagination: emit events, do not slice locally."
-    },
-    {
-     "name": "manualFiltering",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Server-side filtering: emit events, do not filter locally."
-    },
-    {
-     "name": "rowCount",
-     "type": "number",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Total row count for manual pagination."
-    },
-    {
-     "name": "rowsPerPageOptions",
-     "type": "number[]",
-     "default": "[10, 25, 50, 100]",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `pageSizeOptions`. Removed in 7.0.** Rows-per-page options shown in the footer selector."
-    },
-    {
-     "name": "pageSizeOptions",
-     "type": "number[]",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Page-size options shown in the footer selector, the same name as `pagination`. Unset uses `rowsPerPageOptions`. `rowCount` keeps its TanStack name (the total for manual pagination)."
-    },
-    {
-     "name": "loading",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`."
-    },
-    {
-     "name": "error",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Data-driven mode: message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows."
-    },
-    {
-     "name": "filters",
-     "type": "AppliedFilter[]",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
-    },
-    {
-     "name": "filterFields",
-     "type": "FilterField[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder."
-    },
-    {
-     "name": "state",
-     "type": "TableStateSnapshot",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:state — an aggregate serializable snapshot layered over the per-concern models. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern."
-    },
-    {
-     "name": "initialState",
-     "type": "Partial<TableStateSnapshot>",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model."
-    },
-    {
-     "name": "exportRows",
-     "type": "(scope: 'filtered' | 'all') => TRow[] | Promise<TRow[]>",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download."
-    },
-    {
-     "name": "exportFilename",
-     "type": "string",
-     "default": "'export.csv'",
-     "required": "false",
-     "doc": "Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given."
-    },
-    {
-     "name": "stackable",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
-    },
-    {
-     "name": "wrapLines",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: cell text wraps onto several lines instead of truncating."
-    },
-    {
-     "name": "striped",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: every other body row takes the raised surface."
+     "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); the internal row dividers are unaffected."
     },
     {
      "name": "density",
      "type": "'comfortable' | 'compact'",
      "default": "'comfortable'",
      "required": "false",
-     "doc": "Density of the header and the body rows: `compact` shrinks their height and padding (the header through `Table.Header`'s `density`). A saved `CollectionPreferences` density therefore covers the whole table."
+     "doc": "Density of the body cells: `compact` shrinks their height and padding. Set `density` on `Table.Header` too for a compact header."
     },
     {
-     "name": "virtual",
+     "name": "wrapLines",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout."
-    },
-    {
-     "name": "estimateRowHeight",
-     "type": "number",
-     "default": "48",
-     "required": "false",
-     "doc": "Row height (px) assumed in `virtual` mode until a row is measured."
-    },
-    {
-     "name": "reorderable",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied."
-    },
-    {
-     "name": "rowReorderable",
-     "type": "(row: TRow) => boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "With `reorderable`: decides per row whether it can move (`(row) => !row.locked`). A rejected row keeps its place: its grip is disabled, and no row is dropped onto it or moved past it with the keys."
-    },
-    {
-     "name": "getSubRows",
-     "type": "(row: TRow) => TRow[] | undefined",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
-    },
-    {
-     "name": "expanded",
-     "type": "ExpandedState",
-     "default": "undefined",
-     "required": "false",
-     "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
-    },
-    {
-     "name": "moreRows",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested."
-    },
-    {
-     "name": "loadingMore",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Data-driven mode: the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
-    },
-    {
-     "name": "live",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Two-way value (`v-model:live`)."
-    }
-   ],
-   "events": [
-    {
-     "name": "update:sorting",
-     "payload": "value: SortingState",
-     "notes": "v-model:sorting."
-    },
-    {
-     "name": "update:rowSelection",
-     "payload": "value: RowSelectionState",
-     "notes": "v-model:rowSelection."
-    },
-    {
-     "name": "update:columnVisibility",
-     "payload": "value: VisibilityState",
-     "notes": "v-model:columnVisibility."
-    },
-    {
-     "name": "update:globalFilter",
-     "payload": "value: string",
-     "notes": "v-model:globalFilter."
-    },
-    {
-     "name": "update:pagination",
-     "payload": "value: PaginationState",
-     "notes": "v-model:pagination."
-    },
-    {
-     "name": "row-click",
-     "payload": "(event: MouseEvent, row: TRow)",
-     "notes": "Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record."
-    },
-    {
-     "name": "update:filters",
-     "payload": "value: AppliedFilter[]",
-     "notes": "v-model:filters."
-    },
-    {
-     "name": "update:state",
-     "payload": "value: TableStateSnapshot",
-     "notes": "v-model:state; debounced so bursts of changes coalesce."
-    },
-    {
-     "name": "filter-apply",
-     "payload": "(event: Event, filters: AppliedFilter[])",
-     "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
-    },
-    {
-     "name": "filter-remove",
-     "payload": "(event: Event, filter: AppliedFilter)",
-     "notes": "One applied filter/chip was removed."
-    },
-    {
-     "name": "refresh",
-     "payload": "—",
-     "notes": "Refresh requested (`Table.RefreshButton` or `reload()`); the app refetches."
-    },
-    {
-     "name": "export",
-     "payload": "rows: TRow[]",
-     "notes": "Export requested with the resolved rows; a consumer may handle it server-side (otherwise the built-in CSV util downloads)."
-    },
-    {
-     "name": "update:data",
-     "payload": "value: TRow[]",
-     "notes": "reorderable`: the records in their new order; bind `v-model:data`."
-    },
-    {
-     "name": "reorder",
-     "payload": "payload: { from: number; to: number; row: TRow }",
-     "notes": "reorderable`: a row moved from index `from` to index `to` of `data`."
-    },
-    {
-     "name": "update:expanded",
-     "payload": "value: ExpandedState",
-     "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
-    },
-    {
-     "name": "load-more",
-     "payload": "—",
-     "notes": "moreRows`: the end of the rows neared the viewport, or the Load more button was pressed; the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
+     "doc": "Cell text wraps onto several lines instead of truncating."
     }
    ],
    "slots": [
     {
      "name": "default",
      "scope": "—",
-     "notes": "Composition mode: the scrollable region (TableCaption, TableHeader, TableBody)."
-    },
-    {
-     "name": "footer",
-     "scope": "—",
-     "notes": "Footer region rendered below the scroll viewport (e.g. TableFooter + Pagination), so it never scrolls with the body. In data-driven mode it renders automatically when `paginated`."
-    },
-    {
-     "name": "caption",
-     "scope": "—",
-     "notes": "Data-driven mode: caption content (wrapped in TableCaption), fixed above the scroll viewport."
+     "notes": "The scrollable region: `Table.Caption`, `Table.Header`, `Table.Body`."
     },
     {
      "name": "title",
      "scope": "—",
-     "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport (both modes)."
+     "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport."
     },
     {
      "name": "toolbar",
-     "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
-     "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode; `selectedRows` / `selectedCount` / `clearSelection` expose the selection for bulk-action toolbars, and `loading` mirrors the prop."
-    },
-    {
-     "name": "filters",
-     "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
-     "notes": "Active-filter chips row below the toolbar (both modes); same scope as `toolbar`."
-    },
-    {
-     "name": "empty",
      "scope": "—",
-     "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
+     "notes": "Action band above the scroll viewport, end-aligned beside the title."
     },
     {
-     "name": "error",
-     "scope": "{ message: string }",
-     "notes": "Data-driven mode: shown in place of the rows while `error` is set; `message` is the `error` prop. Defaults to a small `EmptyState` with the error mark, `table.errorTitle` and the message."
+     "name": "footer",
+     "scope": "—",
+     "notes": "Footer region rendered below the scroll viewport (`Table.Footer` + `Pagination`), so it never scrolls with the body."
     }
    ],
    "surface": "product",
@@ -8640,11 +8254,73 @@
    "kind": "root",
    "rootOf": "table",
    "treeShakeableImport": "@aziontech/webkit/table-root",
+   "category": "data",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "maxHeight",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Max height (CSS length). The viewport scrolls dynamically: horizontal scroll appears automatically when columns overflow the width; vertical scroll appears only when `maxHeight` is set smaller than the content (under a frozen header)."
+    },
+    {
+     "name": "bordered",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Draw the outer card border around the table. Off by default (the table is typically framed by a surrounding surface); the internal row dividers are unaffected."
+    },
+    {
+     "name": "density",
+     "type": "'comfortable' | 'compact'",
+     "default": "'comfortable'",
+     "required": "false",
+     "doc": "Density of the body cells: `compact` shrinks their height and padding. Set `density` on `Table.Header` too for a compact header."
+    },
+    {
+     "name": "wrapLines",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Cell text wraps onto several lines instead of truncating."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "The scrollable region: `Table.Caption`, `Table.Header`, `Table.Body`."
+    },
+    {
+     "name": "title",
+     "scope": "—",
+     "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport."
+    },
+    {
+     "name": "toolbar",
+     "scope": "—",
+     "notes": "Action band above the scroll viewport, end-aligned beside the title."
+    },
+    {
+     "name": "footer",
+     "scope": "—",
+     "notes": "Footer region rendered below the scroll viewport (`Table.Footer` + `Pagination`), so it never scrolls with the body."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/table-root.json"
+  },
+  "data-table": {
+   "import": "@aziontech/webkit/data-table",
+   "target": "./src/components/data/data-table/data-table.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/data-table",
    "models": [
     "live"
    ],
    "category": "data",
-   "structure": "composition",
+   "structure": "monolithic",
    "props": [
     {
      "name": "maxHeight",
@@ -8665,14 +8341,14 @@
      "type": "TRow[]",
      "default": "[]",
      "required": "false",
-     "doc": "Data-driven mode: row records."
+     "doc": "row records."
     },
     {
      "name": "columns",
      "type": "TableColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "Data-driven mode: column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** overrides the `Table.ColumnSelector` label when `header` is not a string; **`hideable: false`** excludes the column from `Table.ColumnSelector` (e.g. the actions column); **`orderable: true`** opts the column into `columnOrder`. When non-empty, the table renders itself via TanStack."
+     "doc": "column definitions (`{ id?, accessorKey?, header?, label?, enableSorting?, grow?, principal?, frozen?, width?, minWidth?, align?, kind?, resizable?, hideable?, orderable? }`; `width` (px) sets a fixed pixel column (also needed when a frozen column precedes another frozen column on the same edge, so sticky offsets can be summed); **`minWidth`** (px) sets a **floor** instead: the table measures the column's own content — its header, including the sort affordance, and every rendered body cell — and pins the column to the larger of the two, as **one** width applied to the header and every body cell (a per-cell `min-width` would let each row size to its own content and drift the header away from the body). It is for a column whose content is a chip or a short token: a fixed `width` there is a bet in both directions — too generous and it reserves space the rest of the row needs, too tight and the chip inside it truncates. The measured width tracks the **rendered page**, so a column can change width when paging or sorting brings longer content into view; `width` wins when both are set, and a user resize wins over both. a `grow` column without `width` keeps a shared fixed basis so the header and body stay aligned and the cell never wraps. A column with no `grow` defaults to weight `2` for the **principal** column and `1` for the rest, so the columns fill the available space proportionally. The principal column is the one flagged `principal: true`, or — when none is flagged — the first non-action column. A `kind: 'action'` column is automatically pinned to the trailing (right) edge — staying reachable while the rest scrolls horizontally — and is never resizable. **`resizable: true`** opts a column into a live mouse/touch drag-to-resize handle on its header (native pointer events; the `@tanstack/vue-table` exception covers sorting/pagination/selection/visibility, not sizing). On the first drag of any divider every flexible column freezes at its current rendered width; from then on dragging changes **only that column** and the table grows (horizontal scroll) — the others are untouched. The drag floor is the column's own content width (header label + visible body cells), so a column never shrinks past its content. Frozen and action columns ignore `resizable`. **`label`** names the column in `CollectionPreferences` when `header` is not a string; **`hideable: false`** lists the column locked in `CollectionPreferences`; **`orderable: true`** opts the column into `columnOrder`."
     },
     {
      "name": "rowKey",
@@ -8700,21 +8376,14 @@
      "type": "(row: TRow) => boolean",
      "default": "undefined",
      "required": "false",
-     "doc": "Data-driven mode: decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
+     "doc": "decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all."
     },
     {
      "name": "selectOnRowClick",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
-    },
-    {
-     "name": "headerKind",
-     "type": "'default' | 'compact'",
-     "default": "'default'",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `density`, which now sets the header and the rows. Removed in 7.0.** Header density (data-driven): `compact` shrinks the column-header row's height and padding; the header is compact when either `headerKind` or `density` is `compact`."
+     "doc": "clicking a row toggles its selection (requires `enableRowSelection`); interactive cells still own their own click."
     },
     {
      "name": "paginated",
@@ -8794,46 +8463,39 @@
      "doc": "Total row count for manual pagination."
     },
     {
-     "name": "rowsPerPageOptions",
+     "name": "pageSizeOptions",
      "type": "number[]",
      "default": "[10, 25, 50, 100]",
      "required": "false",
-     "doc": "**@deprecated since 6.0 — use `pageSizeOptions`. Removed in 7.0.** Rows-per-page options shown in the footer selector."
-    },
-    {
-     "name": "pageSizeOptions",
-     "type": "number[]",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Page-size options shown in the footer selector, the same name as `pagination`. Unset uses `rowsPerPageOptions`. `rowCount` keeps its TanStack name (the total for manual pagination)."
+     "doc": "Page-size options shown in the footer selector, the same name as `pagination`. `rowCount` keeps its TanStack name (the total for manual pagination)."
     },
     {
      "name": "loading",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`."
+     "doc": "render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`."
     },
     {
      "name": "error",
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Data-driven mode: message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows."
+     "doc": "message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows."
     },
     {
      "name": "filters",
      "type": "AppliedFilter[]",
      "default": "undefined",
      "required": "false",
-     "doc": "v-model:filters — structured applied conditions committed by `Table.Filter`, distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
+     "doc": "v-model:filters — structured applied conditions committed by `Table.Filter` (menu picks or property tokens), distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are emitted for a server refetch."
     },
     {
      "name": "filterFields",
      "type": "FilterField[]",
      "default": "[]",
      "required": "false",
-     "doc": "Field catalog the built-in `Table.Filter` builder offers (id, label, value type, allowed operators, select options). Omit and use `Table.Filter`'s default slot to plug a custom builder."
+     "doc": "Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu kind, properties for the property kind."
     },
     {
      "name": "state",
@@ -8868,21 +8530,21 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
+     "doc": "opt in to stacked rows. When the table's own box is narrower than `--container-lg`, each row renders as a card of label and value pairs instead of the horizontally scrolling grid. Off by default: a console list scrolls sideways on a phone."
     },
     {
      "name": "wrapLines",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: cell text wraps onto several lines instead of truncating."
+     "doc": "cell text wraps onto several lines instead of truncating."
     },
     {
      "name": "striped",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: every other body row takes the raised surface."
+     "doc": "every other body row takes the raised surface."
     },
     {
      "name": "density",
@@ -8896,7 +8558,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout."
+     "doc": "render only the rows in view, for thousands of rows. The viewport scrolls vertically within `maxHeight` (40rem when empty). Ignored in the stacked layout."
     },
     {
      "name": "estimateRowHeight",
@@ -8910,7 +8572,7 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied."
+     "doc": "a leading grip column lets people drag rows, or move the focused grip's row with Arrow Up, Arrow Down, Home and End, into a new order. Emits `update:data` (bind `v-model:data`) and `reorder`; locked while a sort is applied."
     },
     {
      "name": "rowReorderable",
@@ -8924,7 +8586,7 @@
      "type": "(row: TRow) => TRow[] | undefined",
      "default": "undefined",
      "required": "false",
-     "doc": "Data-driven mode: tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
+     "doc": "tree rows. Returns a row's children (`(row) => row.children`); a row with children gets an expand toggle in the principal column, its children render under it indented one step (`--spacing-md`) per level, and the grid element takes `role=\"treegrid\"`. Sorting and filtering keep each child under its parent; selection is per row (selecting a parent does not select its children). `reorderable` is ignored in tree mode."
     },
     {
      "name": "expanded",
@@ -8938,14 +8600,14 @@
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested."
+     "doc": "more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested."
     },
     {
      "name": "loadingMore",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Data-driven mode: the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
+     "doc": "the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
     },
     {
      "name": "live",
@@ -8984,7 +8646,7 @@
     {
      "name": "row-click",
      "payload": "(event: MouseEvent, row: TRow)",
-     "notes": "Fires when a rendered row is clicked (data-driven mode). `event` is the click; `row` is the clicked record."
+     "notes": "Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record."
     },
     {
      "name": "update:filters",
@@ -8999,12 +8661,12 @@
     {
      "name": "filter-apply",
      "payload": "(event: Event, filters: AppliedFilter[])",
-     "notes": "The filter builder was committed (Apply) — the explicit re-query signal for `manualFiltering`."
+     "notes": "Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`."
     },
     {
      "name": "filter-remove",
      "payload": "(event: Event, filter: AppliedFilter)",
-     "notes": "One applied filter/chip was removed."
+     "notes": "One applied filter was removed (a `FilterMenu.Chips` chip)."
     },
     {
      "name": "refresh",
@@ -9039,48 +8701,153 @@
    ],
    "slots": [
     {
-     "name": "default",
-     "scope": "—",
-     "notes": "Composition mode: the scrollable region (TableCaption, TableHeader, TableBody)."
-    },
-    {
-     "name": "footer",
-     "scope": "—",
-     "notes": "Footer region rendered below the scroll viewport (e.g. TableFooter + Pagination), so it never scrolls with the body. In data-driven mode it renders automatically when `paginated`."
-    },
-    {
      "name": "caption",
      "scope": "—",
-     "notes": "Data-driven mode: caption content (wrapped in TableCaption), fixed above the scroll viewport."
+     "notes": "caption content (wrapped in TableCaption), fixed above the scroll viewport."
     },
     {
      "name": "title",
      "scope": "—",
-     "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport (both modes)."
+     "notes": "Title text shown at the start of the toolbar band, fixed above the scroll viewport."
     },
     {
      "name": "toolbar",
      "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
-     "notes": "Action band (search, filter trigger, refresh, export, column-selector) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance in data-driven mode, `undefined` in composition mode; `selectedRows` / `selectedCount` / `clearSelection` expose the selection for bulk-action toolbars, and `loading` mirrors the prop."
+     "notes": "Action band (search, filter, refresh, export, column preferences) above the scroll viewport, end-aligned beside the title. `table` is the TanStack instance; `selectedRows` / `selectedCount` / `clearSelection` expose the selection for bulk-action toolbars, and `loading` mirrors the prop."
     },
     {
      "name": "filters",
      "scope": "{ table, selectedRows, selectedCount, clearSelection, loading }",
-     "notes": "Active-filter chips row below the toolbar (both modes); same scope as `toolbar`."
+     "notes": "Active-filter chips row below the toolbar; same scope as `toolbar`."
     },
     {
      "name": "empty",
      "scope": "—",
-     "notes": "Data-driven mode: shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
+     "notes": "shown when there are no rows. Defaults to an empty-state block (illustration + title + description) following Figma; override the slot for custom copy/actions."
     },
     {
      "name": "error",
      "scope": "{ message: string }",
-     "notes": "Data-driven mode: shown in place of the rows while `error` is set; `message` is the `error` prop. Defaults to a small `EmptyState` with the error mark, `table.errorTitle` and the message."
+     "notes": "shown in place of the rows while `error` is set; `message` is the `error` prop. Defaults to a small `EmptyState` with the error mark, `table.errorTitle` and the message."
     }
    ],
    "surface": "product",
-   "docsFile": "catalog/components/table-root.json"
+   "examplesFile": "catalog/examples/data-table.json",
+   "docsFile": "catalog/components/data-table.json"
+  },
+  "data-grid": {
+   "import": "@aziontech/webkit/data-grid",
+   "target": "./src/components/data/data-grid/data-grid.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/data-grid",
+   "models": [
+    "modelValue",
+    "rowSelection"
+   ],
+   "category": "data",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "columns",
+     "type": "DataGridColumn[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "Columns in order: `{ id, header, type?, options?, editable?, width?, minWidth?, align? }`; `type` picks the editor (default text)."
+    },
+    {
+     "name": "rowKey",
+     "type": "string",
+     "default": "'id'",
+     "required": "false",
+     "doc": "Field used as the stable row id (cursor, selection and edits follow it)."
+    },
+    {
+     "name": "enableRowSelection",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Adds a leading checkbox column with Select all."
+    },
+    {
+     "name": "frozenFirstColumn",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Pins the first data column to the inline start edge while the grid scrolls sideways."
+    },
+    {
+     "name": "readonly",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "No cell can be edited; the cursor, range selection and copy still work."
+    },
+    {
+     "name": "maxHeight",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Max height (CSS length) of the scrolling viewport; the header stays on top."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the grid when no visible heading names it."
+    },
+    {
+     "name": "modelValue",
+     "type": "TRow[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model`)."
+    },
+    {
+     "name": "rowSelection",
+     "type": "Record<string, boolean>",
+     "default": "—",
+     "required": "false",
+     "doc": "Two-way value (`v-model:rowSelection`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "change",
+     "payload": "(event: Event, edit: DataGridCellEdit)",
+     "notes": "A cell edit was committed (Enter, Tab, blur, a toggle); `edit` is `{ row, columnId, value, previous }`."
+    },
+    {
+     "name": "row-add",
+     "payload": "(event: Event)",
+     "notes": "The `add` function of the toolbar slot ran; the app appends a row to the `v-model`."
+    },
+    {
+     "name": "row-delete",
+     "payload": "(event: Event, rows: TRow[])",
+     "notes": "The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`."
+    },
+    {
+     "name": "copy",
+     "payload": "(event: ClipboardEvent, text: string)",
+     "notes": "Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard."
+    }
+   ],
+   "slots": [
+    {
+     "name": "toolbar",
+     "scope": "{ selectedRows: TRow[]; selectedCount: number; add: (event: Event) => void; remove: (event: Event) => void }",
+     "notes": "Action band above the grid (add and delete buttons); `add` and `remove` emit the row hooks."
+    },
+    {
+     "name": "empty",
+     "scope": "—",
+     "notes": "Shown in place of the rows when there are none. Defaults to a small `EmptyState`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/data-grid.json",
+   "docsFile": "catalog/components/data-grid.json"
   },
   "table-header": {
    "import": "@aziontech/webkit/table-header",
@@ -9218,22 +8985,6 @@
    "treeShakeableImport": "@aziontech/webkit/table-filter",
    "surface": "product"
   },
-  "table-applied-filters": {
-   "import": "@aziontech/webkit/table-applied-filters",
-   "target": "./src/components/data/table/table-applied-filters/table-applied-filters.vue",
-   "kind": "subcomponent",
-   "parent": "table",
-   "treeShakeableImport": "@aziontech/webkit/table-applied-filters",
-   "surface": "product"
-  },
-  "table-column-selector": {
-   "import": "@aziontech/webkit/table-column-selector",
-   "target": "./src/components/data/table/table-column-selector/table-column-selector.vue",
-   "kind": "subcomponent",
-   "parent": "table",
-   "treeShakeableImport": "@aziontech/webkit/table-column-selector",
-   "surface": "product"
-  },
   "table-export": {
    "import": "@aziontech/webkit/table-export",
    "target": "./src/components/data/table/table-export/table-export.vue",
@@ -9341,6 +9092,13 @@
      "doc": "Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one."
     },
     {
+     "name": "hideOperations",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters)."
+    },
+    {
      "name": "loadValues",
      "type": "(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>",
      "default": "undefined",
@@ -9397,7 +9155,7 @@
      "type": "CollectionPreferencesColumn[]",
      "default": "[]",
      "required": "false",
-     "doc": "Columns to show, hide and order. Empty hides the columns section."
+     "doc": "Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one."
     },
     {
      "name": "pageSizeOptions",
@@ -29783,6 +29541,7 @@
     "Card",
     "CollectionPreferences",
     "CopyButton",
+    "DataTable",
     "DateRangePicker",
     "EmptyState",
     "IconButton",
@@ -29799,6 +29558,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/date-range-picker",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
@@ -29862,6 +29622,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "Currency",
+    "DataTable",
     "DropdownMenu",
     "EmptyState",
     "IconButton",
@@ -29888,6 +29649,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/currency",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
@@ -29963,6 +29725,7 @@
     "Card",
     "CollectionPreferences",
     "ConfirmDialog",
+    "DataTable",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -29999,6 +29762,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -30168,6 +29932,7 @@
     "Button",
     "Card",
     "ConfirmDialog",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -30198,6 +29963,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -30272,6 +30038,7 @@
     "Card",
     "CollectionPreferences",
     "ConfirmDialog",
+    "DataTable",
     "DropdownMenu",
     "EmptyState",
     "IconButton",
@@ -30292,6 +30059,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
@@ -30599,6 +30367,7 @@
     "CollectionPreferences",
     "Combobox",
     "ConfirmDialog",
+    "DataTable",
     "DropdownMenu",
     "EmptyState",
     "Field",
@@ -30627,6 +30396,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
@@ -30701,6 +30471,7 @@
     "CollectionPreferences",
     "ConfirmDialog",
     "CopyButton",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -30736,6 +30507,7 @@
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -30824,6 +30596,7 @@
     "Card",
     "CollectionPreferences",
     "ConfirmDialog",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -30858,6 +30631,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -32640,7 +32414,7 @@
    "title": "Templates/Platform/Dashboard/ActivityOutcomesDashboard",
    "source": "blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue",
    "surface": "product",
-   "summary": "An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with the time range Select and a Refresh IconButton sits over a filter row: a `FilterMenu` with actor, outcome and category fields, its `FilterMenu.Chips`, and a destination Input. Every region reads the filters, and a filter that matches nothing shows a no-match state with Clear filters. A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Built from `PageHeader`, `Select`, `IconButton`, `FilterMenu`, `Input`, `Button`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `TableRoot`, `Table`, `Tag`, `SeverityTag`, `EmptyState` and, in Failed, `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with the time range Select and a Refresh IconButton sits over a filter row: a `FilterMenu` with actor, outcome and category fields, its `FilterMenu.Chips`, and a destination Input. Every region reads the filters, and a filter that matches nothing shows a no-match state with Clear filters. A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a DataTable with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Built from `PageHeader`, `Select`, `IconButton`, `FilterMenu`, `Input`, `Button`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `DataTable`, `Table`, `Tag`, `SeverityTag`, `EmptyState` and, in Failed, `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "activity outcomes dashboard",
     "requests and decisions",
@@ -32663,6 +32437,7 @@
     "Button",
     "Chart",
     "ChartCard",
+    "DataTable",
     "EmptyState",
     "FilterMenu",
     "Hint",
@@ -32673,7 +32448,6 @@
     "SeverityTag",
     "StatTile",
     "Table",
-    "TableRoot",
     "Tag",
     "use-locale"
    ],
@@ -32683,6 +32457,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/filter-menu",
     "@aziontech/webkit/hint",
@@ -32693,7 +32468,6 @@
     "@aziontech/webkit/severity-tag",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/use-locale"
    ],
@@ -32717,7 +32491,7 @@
    "title": "Templates/Platform/Dashboard/AlertsDashboard",
    "source": "blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue",
    "surface": "product",
-   "summary": "An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `Table`, `TableRoot`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `Table`, `DataTable`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "alerts dashboard",
     "open alerts",
@@ -32740,6 +32514,7 @@
     "Card",
     "Chart",
     "ChartCard",
+    "DataTable",
     "EmptyState",
     "Hint",
     "PageHeader",
@@ -32748,7 +32523,6 @@
     "Skeleton",
     "StatTile",
     "Table",
-    "TableRoot",
     "Tag",
     "use-locale"
    ],
@@ -32758,6 +32532,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
     "@aziontech/webkit/page-header",
@@ -32766,7 +32541,6 @@
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/use-locale"
    ],
@@ -32790,7 +32564,7 @@
    "title": "Templates/Platform/Dashboard/AnalyticsDashboard",
    "source": "blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue",
    "surface": "product",
-   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "metrics",
     "metric panel",
@@ -32831,6 +32605,7 @@
     "Alert",
     "Chart",
     "ChartCard",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -32847,7 +32622,6 @@
     "PanelHeader",
     "Select",
     "StatTile",
-    "TableRoot",
     "Tabs",
     "Tag",
     "toast",
@@ -32860,6 +32634,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -32876,7 +32651,6 @@
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
@@ -32914,7 +32688,7 @@
    "title": "Templates/Platform/Dashboard/CompositionDashboard",
    "source": "blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue",
    "surface": "product",
-   "summary": "A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors TableRoot across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `TableRoot`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "A composition dashboard: how a total breaks down into its parts and how that mix moved over time, here the organization’s monthly spend by category. Under a page heading with the period Select and an Export button sits a row of four StatTiles, the total first and then its three largest categories, each with the change against the previous month and a 12-month sparkline; a rise reads as bad, so every tile is `inverse`. Below, a 12-column grid of ChartCards: the stacked Chart of spend by category over 12 months (Area or Bar from a ToggleGroup, crosshair, one tooltip for every category, a legend with range totals) beside a DonutChart of the current month’s split with the total in its center, and a ranked contributors DataTable across the full width: rank, the resource name behind its category glyph, the category Tag, the amount, its share of the total as a Progress with the percentage, and the change against last month as a Tag. Built from `PageHeader`, `StatTile`, `Chart`, `DonutChart`, `ChartCard`, `DataTable`, `Tag`, `Progress`, `Hint`, `ToggleGroup`, `Select`, `DropdownMenu`, `IconButton`, `Button` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "composition dashboard",
     "spend breakdown",
@@ -32937,6 +32711,7 @@
     "Button",
     "Chart",
     "ChartCard",
+    "DataTable",
     "DonutChart",
     "DropdownMenu",
     "EmptyState",
@@ -32946,7 +32721,6 @@
     "Progress",
     "Select",
     "StatTile",
-    "TableRoot",
     "Tag",
     "toast",
     "ToggleGroup",
@@ -32958,6 +32732,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
@@ -32967,7 +32742,6 @@
     "@aziontech/webkit/progress",
     "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
@@ -33136,7 +32910,7 @@
    "title": "Templates/Platform/Dashboard/DataDashboard",
    "source": "blocks/platform/dashboard/data-dashboard/data-dashboard.vue",
    "surface": "product",
-   "summary": "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated DataTable lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "data dashboard",
     "metrics dashboard",
@@ -33162,6 +32936,7 @@
     "Alert",
     "Chart",
     "ChartCard",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -33176,7 +32951,6 @@
     "PanelHeader",
     "Select",
     "StatTile",
-    "TableRoot",
     "Tag",
     "toast",
     "ToggleGroup",
@@ -33188,6 +32962,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -33202,7 +32977,6 @@
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
@@ -33310,7 +33084,7 @@
    "title": "Templates/Platform/Dashboard/FunnelCohortDashboard",
    "source": "blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue",
    "surface": "product",
-   "summary": "A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `TableRoot` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `TableRoot` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `DataTable` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `DataTable` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "funnel dashboard",
     "conversion funnel",
@@ -33331,6 +33105,7 @@
     "Button",
     "Chart",
     "ChartCard",
+    "DataTable",
     "DropdownMenu",
     "EmptyState",
     "Hint",
@@ -33338,7 +33113,6 @@
     "PageHeader",
     "Select",
     "StatTile",
-    "TableRoot",
     "toast",
     "use-locale",
     "utils/csv"
@@ -33348,6 +33122,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
@@ -33355,7 +33130,6 @@
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
@@ -33487,6 +33261,7 @@
     "geminiMark",
     "Button",
     "Card",
+    "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "EmptyState",
@@ -33503,7 +33278,6 @@
     "StatTile",
     "StatTileGroup",
     "Table",
-    "TableRoot",
     "Tag",
     "toast",
     "Tooltip",
@@ -33517,6 +33291,7 @@
     "@aziontech/webkit/assets/gemini-symbol-color.svg",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/empty-state",
@@ -33533,7 +33308,6 @@
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/stat-tile-group",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
@@ -33559,7 +33333,7 @@
    "title": "Templates/Platform/Dashboard/ProjectStatusDashboard",
    "source": "blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue",
    "surface": "product",
-   "summary": "A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a TableRoot with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `TableRoot`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "A project status dashboard: where a project stands against its plan, for one project and sprint at a time. The page opens with a PageHeader whose actions hold two Selects (project and sprint), then a row of four StatTiles (completion, tasks done, open tasks and overdue, each against the previous sprint), over a 12-column grid of ChartCards. A DonutChart splits every task by status (done, in progress, not started, and blocked in the danger color) beside the sprint burndown, a Chart of two Lines (actual story points left against the ideal straight line to zero) tagged with how far behind the sprint runs. The milestone timeline and the at-risk list share the next row: the timeline is an Item list with the date, title and a StatusIndicator per checkpoint, since there is no timeline component; the at-risk list is Item rows with the reason and a Tag. The owners table closes the grid, a DataTable with each owner’s Avatar and name, open and done counts, and overdue as a danger Tag. Every card carries the same header: title with a Hint, its tags, and a menu with Copy link and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `DonutChart`, `Chart`, `Item`, `StatusIndicator`, `DataTable`, `Avatar`, `Tag`, `Select`, `Hint`, `DropdownMenu`, `EmptyState`, `Skeleton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "project status",
     "sprint dashboard",
@@ -33582,6 +33356,7 @@
     "Button",
     "Chart",
     "ChartCard",
+    "DataTable",
     "DonutChart",
     "DropdownMenu",
     "EmptyState",
@@ -33593,7 +33368,6 @@
     "Skeleton",
     "StatTile",
     "StatusIndicator",
-    "TableRoot",
     "Tag",
     "toast",
     "use-locale",
@@ -33605,6 +33379,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
@@ -33616,7 +33391,6 @@
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/use-locale",
@@ -33642,7 +33416,7 @@
    "title": "Templates/Platform/Dashboard/ScanResultsDashboard",
    "source": "blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue",
    "surface": "product",
-   "summary": "A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated TableRoot: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `TableRoot`, `Table.CellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "A scan results dashboard: items sent for analysis, the verdict each one received and what is still waiting. A page heading with a Refresh IconButton sits over a row of six StatTiles (submitted, in analysis, last 24 hours, flagged, held for a verdict and open alerts), each with a Hint that defines it. Below, three cards share a row: a DonutChart of the verdicts (Clean, Suspicious, Flagged and Pending, in their status hues) with the item count in its center, a BarList of the sources the items came from, and a Card that sums up the deliveries held for a verdict and the items delivered before they were flagged, each with a Link to its list. A Submissions card across the full width holds the filter row (an Input search and Selects for status, verdict and source) over a paginated DataTable: name, the verdict Tag, category, score, type, size, source, first submitter and last seen. Built from `PageHeader`, `StatTile`, `DonutChart`, `BarList`, `ChartCard`, `Card`, `DataTable`, `Table.CellStatus`, `Link`, `Input`, `Select`, `Hint`, `IconButton`, `Skeleton` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "scan results",
     "scan dashboard",
@@ -33664,6 +33438,7 @@
     "BarList",
     "Card",
     "ChartCard",
+    "DataTable",
     "DonutChart",
     "EmptyState",
     "Hint",
@@ -33675,7 +33450,6 @@
     "Skeleton",
     "StatTile",
     "Table",
-    "TableRoot",
     "use-locale"
    ],
    "imports": [
@@ -33683,6 +33457,7 @@
     "@aziontech/webkit/bar-list",
     "@aziontech/webkit/card",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
@@ -33694,7 +33469,6 @@
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
@@ -33717,7 +33491,7 @@
    "title": "Templates/Platform/Dashboard/SecurityDashboard",
    "source": "blocks/platform/dashboard/security-dashboard/security-dashboard.vue",
    "surface": "product",
-   "summary": "The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated TableRoot. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `TableRoot`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated DataTable. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `DataTable`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "security dashboard",
     "waf dashboard",
@@ -33740,6 +33514,7 @@
     "Button",
     "Chart",
     "ChartCard",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -33757,7 +33532,6 @@
     "Select",
     "Skeleton",
     "StatTile",
-    "TableRoot",
     "Tag",
     "toast",
     "ToggleGroup",
@@ -33771,6 +33545,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -33788,7 +33563,6 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
@@ -33951,7 +33725,7 @@
    "title": "Templates/Platform/Detail/AttachedResources",
    "source": "blocks/platform/detail/attached-resources/attached-resources.vue",
    "surface": "product",
-   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `TableRoot`, `Tag`, `Table.CellActions` and `Button`.",
+   "summary": "An attached-resources card in a resource settings tab, here its domains: a borderless data-driven table of the addresses the resource answers on, each with its environment as the row's one medium rounded tag, its deployment policy as text, its certificate as a verified glyph and text, and a row actions menu, over a footer that counts them and adds one. Rendered in the Domains section of a resource’s Settings tab, where an environment-less domain leaves its Environment and Policy cells empty and the count reads domain or domains. Built from `Card`, `DataTable`, `Tag`, `Table.CellActions` and `Button`.",
    "intents": [
     "domains section",
     "domains card",
@@ -33972,19 +33746,19 @@
    "components": [
     "Button",
     "Card",
+    "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "Table",
-    "TableRoot",
     "Tag"
    ],
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag"
    ],
    "primary": "Default",
@@ -34054,7 +33828,7 @@
    "title": "Templates/Platform/Detail/DetailsPage",
    "source": "blocks/platform/detail/details-page/details-page.vue",
    "surface": "product",
-   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page has no tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The FirstDeploy variant draws the summary cards before and during the first deploy, Invocation the summary card of one function invocation, DeploymentQueued a deployment that has not started, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `TableRoot`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
+   "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page has no tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The FirstDeploy variant draws the summary cards before and during the first deploy, Invocation the summary card of one function invocation, DeploymentQueued a deployment that has not started, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
    "intents": [
     "overview page",
     "resource overview",
@@ -34112,6 +33886,7 @@
     "ConfirmDialog",
     "ConsoleLayout",
     "CopyButton",
+    "DataTable",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -34137,7 +33912,6 @@
     "SettingRow",
     "SettingsSection",
     "StatusIndicator",
-    "TableRoot",
     "Tabs",
     "Tag",
     "toast",
@@ -34156,6 +33930,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -34181,7 +33956,6 @@
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
@@ -34418,7 +34192,7 @@
    "title": "Templates/Platform/Detail/RecordTable",
    "source": "blocks/platform/detail/record-table/record-table.vue",
    "surface": "product",
-   "summary": "A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `HelperText` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `HelperText`, `Button`, `PropertyFilter`, `CollectionPreferences`, `TableRoot` and `EmptyState`. A page body for ConsoleLayout.",
+   "summary": "A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `HelperText` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `HelperText`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.",
    "intents": [
     "dns zone",
     "dns records",
@@ -34448,6 +34222,7 @@
     "Card",
     "CollectionPreferences",
     "CopyButton",
+    "DataTable",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -34473,7 +34248,6 @@
     "SettingsSection",
     "Switch",
     "Table",
-    "TableRoot",
     "Tabs",
     "Tag",
     "Textarea",
@@ -34487,6 +34261,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -34512,7 +34287,6 @@
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
@@ -34537,7 +34311,7 @@
    "title": "Templates/Platform/Detail/SectionedResource",
    "source": "blocks/platform/detail/sectioned-resource/sectioned-resource.vue",
    "surface": "product",
-   "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `SidebarMenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `SidebarMenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `SidebarMenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `SidebarMenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `DataTable` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "local navigation",
     "in-page navigation",
@@ -34568,6 +34342,7 @@
    "components": [
     "Button",
     "Card",
+    "DataTable",
     "EmptyState",
     "Field",
     "IconButton",
@@ -34577,7 +34352,6 @@
     "Select",
     "SidebarMenuRoot",
     "Table",
-    "TableRoot",
     "Tabs",
     "ToggleGroup",
     "Tooltip",
@@ -34586,6 +34360,7 @@
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
@@ -34595,7 +34370,6 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/sidebar-menu-root",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
@@ -34618,7 +34392,7 @@
    "title": "Templates/Platform/Detail/VersionDetail",
    "source": "blocks/platform/detail/version-detail/version-detail.vue",
    "surface": "product",
-   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumbs`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `TableRoot`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
+   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumbs`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
    "intents": [
     "version detail",
     "resource version",
@@ -34661,6 +34435,7 @@
     "CodeEditor",
     "ConfirmDialog",
     "ConsoleLayout",
+    "DataTable",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -34690,7 +34465,6 @@
     "SplitButton",
     "Switch",
     "Table",
-    "TableRoot",
     "Tabs",
     "Tag",
     "Textarea",
@@ -34705,6 +34479,7 @@
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -34734,7 +34509,6 @@
     "@aziontech/webkit/split-button",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
@@ -34782,7 +34556,7 @@
    "title": "Templates/Platform/Edit/AttributeEditor",
    "source": "blocks/platform/edit/attribute-editor/attribute-editor.vue",
    "surface": "product",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `TableRoot`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `TableRoot`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
    "intents": [
     "variables",
     "environment variables",
@@ -34831,6 +34605,7 @@
     "Checkbox",
     "CollectionPreferences",
     "ConfirmDialog",
+    "DataTable",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -34853,7 +34628,6 @@
     "SettingsSection",
     "Switch",
     "Table",
-    "TableRoot",
     "Textarea",
     "toast",
     "ToggleGroup",
@@ -34869,6 +34643,7 @@
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -34891,7 +34666,6 @@
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
@@ -35049,7 +34823,7 @@
    "title": "Templates/Platform/Edit/EditResource",
    "source": "blocks/platform/edit/edit-resource/edit-resource.vue",
    "surface": "product",
-   "summary": "The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `TableRoot`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
+   "summary": "The settings page of a resource, a page body for ConsoleLayout (the layout's breadcrumb names the resource): a small Settings page heading over stacked `SettingsSection` bands in the form column, each a heading with an anchor-link button and a hint glyph over a flush `Card` of field rows. The commit band is not there at rest: on the first edit a zero-height sticky strip at the bottom of the scroll region slides up a full-bleed band with a top rule, an info glyph, the unsaved-changes label with an optional muted hint, and Discard beside Save (stacked under the label on small screens), and it leaves once Save lands or Discard restores the record. The account settings pages end with the same band. A resource with a tab bar renders it as its Settings tab; a first-level resource with no tabs renders it as its own `/<resource>/:id/settings` page. Variants cover a record changed elsewhere (warning `Alert` with Reload, overwrite confirmation), the Danger zone with a typed-name delete, and the leave guard from `useUnsavedChanges` with the dirty mark on the tab. Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `Item`, `Input`, `Select`, `MultiSelect`, `Switch`, `Textarea`, `Field` choice cards around `RadioButton`, `DataTable`, `Tag`, `Tooltip`, `Alert`, `ConfirmDialog`, `CopyButton`, `HelperText` and `Button`, with `useUnsavedChanges`.",
    "intents": [
     "settings page",
     "resource settings",
@@ -35125,6 +34899,7 @@
     "ConfirmDialog",
     "ConsoleLayout",
     "CopyButton",
+    "DataTable",
     "DrawerContent",
     "DrawerDescription",
     "Drawer",
@@ -35149,7 +34924,6 @@
     "SettingRow",
     "SettingsSection",
     "Switch",
-    "TableRoot",
     "Tabs",
     "Tag",
     "Textarea",
@@ -35166,6 +34940,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-root",
@@ -35190,7 +34965,6 @@
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/textarea",
@@ -35320,7 +35094,7 @@
    "title": "Templates/Platform/Edit/SchemaEditor",
    "source": "blocks/platform/edit/schema-editor/schema-editor.vue",
    "surface": "product",
-   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `TableRoot` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.",
+   "summary": "The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.",
    "intents": [
     "schema editor",
     "create table",
@@ -35354,6 +35128,7 @@
     "Checkbox",
     "CodeEditor",
     "ConfirmDialog",
+    "DataTable",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -35371,7 +35146,6 @@
     "SettingsSection",
     "Switch",
     "Table",
-    "TableRoot",
     "Tag",
     "toast",
     "Tooltip"
@@ -35384,6 +35158,7 @@
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -35401,7 +35176,6 @@
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
@@ -36061,7 +35835,7 @@
    "title": "Templates/Platform/View/FileBrowser",
    "source": "blocks/platform/view/file-browser/file-browser.vue",
    "surface": "product",
-   "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `TableRoot` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh and download IconButtons and the `Table.ColumnSelector`, then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders stay first under any sort with a link-coloured folder glyph and a link-button name that opens them, a .. row leads back up once inside a folder, Size sorts on bytes and Last modified on the timestamp, the rows page at 50, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). An empty folder renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button, and a search that matches nothing shows No matching files with Clear search; inside a folder the .. row always remains. Built from `Card`, `TableRoot` with `TableSearch`, `IconButton`, `Tooltip`, `Table.ColumnSelector`, `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The file browser a storage resource opens on: one flush `Card` holding a borderless `DataTable` whose toolbar is the whole page header. The toolbar stacks the storage name beside the storage glyph, a large row of the table’s own search plus the refresh and download IconButtons and the `CollectionPreferences` (columns section), then a `Breadcrumb` of the folder path beside the Add to files `SplitButton` (Upload file, Add folder). Folders stay first under any sort with a link-coloured folder glyph and a link-button name that opens them, a .. row leads back up once inside a folder, Size sorts on bytes and Last modified on the timestamp, the rows page at 50, files take a glyph by extension, Size is muted and Last modified is `Table.CellTime` (the editor's avatar and a relative time); folders carry Open and files Download in their row menu, with Delete below, which opens a `ConfirmDialog` (a warning `Alert` and an `Input` that must match the name). An empty folder renders the table’s empty slot: an `EmptyState` (This folder is empty) with a secondary Add to files split button, and a search that matches nothing shows No matching files with Clear search; inside a folder the .. row always remains. Built from `Card`, `DataTable` with `TableSearch`, `IconButton`, `Tooltip`, `CollectionPreferences` (columns section), `Breadcrumb`, `SplitButton`, `Table.CellTime`, `Table.CellActions` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "file browser",
     "file manager",
@@ -36090,8 +35864,10 @@
     "Breadcrumb",
     "Button",
     "Card",
+    "CollectionPreferences",
     "Combobox",
     "ConfirmDialog",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -36109,7 +35885,6 @@
     "PanelHeader",
     "SplitButton",
     "Table",
-    "TableRoot",
     "TableSearch",
     "toast",
     "Tooltip",
@@ -36120,8 +35895,10 @@
     "@aziontech/webkit/breadcrumb-root",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/combobox",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -36139,7 +35916,6 @@
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/split-button",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/table-search",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
@@ -36201,6 +35977,7 @@
     "Alert",
     "Button",
     "Card",
+    "DataTable",
     "DocProse",
     "DrawerContent",
     "Drawer",
@@ -36232,6 +36009,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/doc-prose",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
@@ -36303,7 +36081,7 @@
    "title": "Templates/Platform/View/QueryEditor",
    "source": "blocks/platform/view/query-editor/query-editor.vue",
    "surface": "product",
-   "summary": "The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band (rows paged in a `TableRoot`, or JSON in a copyable `CodeBlock`); on Tables the panel lists the tables as option `Item` rows and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `TableRoot`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it. Its root carries data-layout-fill (every variant but CreateDatabase), so the main stops scrolling and the panel, the rows, the editor and the results scroll on their own.",
+   "summary": "The query editor page (the app passes the Databases breadcrumb to the layout): the Tables and Editor tabs, each pairing a resizable, collapsible `Sidebar` (288px at rest) with a working pane. On Editor the panel holds the query history and the pane stacks the Run query, Prettify and Templates toolbar, the SQL `CodeEditor`, and the Results band (rows paged in a `DataTable`, or JSON in a copyable `CodeBlock`); on Tables the panel lists the tables as option `Item` rows and the pane holds the selected table with its Data and Definition switch, its rows in a paged, selectable `DataTable`. A database with no tables shows the Create Table empty state, and the Templates button opens the SQL quick templates drawer. Its page-level parts are `PageTabs`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main; CreateDatabase is a focused create page with its own header and no rail, rendered outside it. Its root carries data-layout-fill (every variant but CreateDatabase), so the main stops scrolling and the panel, the rows, the editor and the results scroll on their own.",
    "intents": [
     "query editor",
     "sql editor",
@@ -36349,6 +36127,7 @@
     "Card",
     "CodeBlock",
     "CodeEditor",
+    "DataTable",
     "DrawerContent",
     "Drawer",
     "DrawerTitle",
@@ -36373,7 +36152,6 @@
     "Sidebar",
     "Skeleton",
     "Switch",
-    "TableRoot",
     "Tabs",
     "Tag",
     "toast",
@@ -36389,6 +36167,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/code-editor",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
@@ -36413,7 +36192,6 @@
     "@aziontech/webkit/sidebar-root",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
@@ -36458,7 +36236,7 @@
    "title": "Templates/Platform/View/RulesList",
    "source": "blocks/platform/view/rules-list/rules-list.vue",
    "surface": "product",
-   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `TableRoot` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `TableRoot`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "rules list",
     "rules engine list",
@@ -36490,6 +36268,7 @@
     "Button",
     "Card",
     "Combobox",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -36513,7 +36292,6 @@
     "SettingRow",
     "SettingsSection",
     "Switch",
-    "TableRoot",
     "Tag",
     "toast",
     "Tooltip"
@@ -36525,6 +36303,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/combobox",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -36548,7 +36327,6 @@
     "@aziontech/webkit/setting-row",
     "@aziontech/webkit/settings-section",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip"
@@ -36588,7 +36366,7 @@
    "title": "Templates/Platform/View/SplitView",
    "source": "blocks/platform/view/split-view/split-view.vue",
    "surface": "product",
-   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.Chips`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `TableRoot`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.Chips`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
    "intents": [
     "real-time events",
     "events visualizer",
@@ -36631,6 +36409,7 @@
     "Chip",
     "CodeBlock",
     "CopyButton",
+    "DataTable",
     "DateRangePicker",
     "DrawerContent",
     "Drawer",
@@ -36648,7 +36427,6 @@
     "Resizable",
     "Sidebar",
     "Skeleton",
-    "TableRoot",
     "Tabs",
     "Tag",
     "Tooltip",
@@ -36664,6 +36442,7 @@
     "@aziontech/webkit/chip",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/copy-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/date-range-picker",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-root",
@@ -36681,7 +36460,6 @@
     "@aziontech/webkit/resizable",
     "@aziontech/webkit/sidebar-root",
     "@aziontech/webkit/skeleton",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
@@ -36783,6 +36561,7 @@
     "Card",
     "CollectionPreferences",
     "ConfirmDialog",
+    "DataTable",
     "DropdownMenuGroup",
     "DropdownMenuOption",
     "EmptyState",
@@ -36792,7 +36571,6 @@
     "PropertyFilter",
     "StatusIndicator",
     "Table",
-    "TableRoot",
     "Tag",
     "Tooltip",
     "use-collection",
@@ -36804,6 +36582,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
     "@aziontech/webkit/dropdown-menu-option",
     "@aziontech/webkit/empty-state",
@@ -36813,7 +36592,6 @@
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
     "@aziontech/webkit/use-collection",
@@ -36924,7 +36702,7 @@
    "title": "Templates/Platform/View/WafTuning",
    "source": "blocks/platform/view/waf-tuning/waf-tuning.vue",
    "surface": "product",
-   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `TableRoot` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `TableRoot`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "waf tuning",
     "web application firewall",
@@ -36950,6 +36728,7 @@
     "Alert",
     "Button",
     "Card",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -36964,7 +36743,6 @@
     "PanelHeader",
     "Select",
     "Table",
-    "TableRoot",
     "Textarea",
     "toast",
     "Tooltip",
@@ -36974,6 +36752,7 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -36988,7 +36767,6 @@
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
@@ -37070,6 +36848,7 @@
     "Command",
     "ConsoleLayout",
     "ConsoleLayout",
+    "DataTable",
     "DialogContent",
     "DialogDescription",
     "Dialog",
@@ -37104,6 +36883,7 @@
     "@aziontech/webkit/command",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/console-layout-root",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-root",
@@ -37151,7 +36931,7 @@
    "title": "Templates/Shells/Documentation",
    "source": "blocks/shells/documentation/documentation.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPrevNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPrevNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `DataTable` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `DataTable`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -37212,6 +36992,7 @@
     "Button",
     "CodeBlock",
     "CopyPromptButton",
+    "DataTable",
     "Diagram",
     "DocAccordionGroup",
     "DocAccordionItem",
@@ -37242,7 +37023,6 @@
     "Logo",
     "Select",
     "StatusIndicator",
-    "Table",
     "Tag",
     "ThemeSwitcher",
     "use-color-mode"
@@ -37258,6 +37038,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/copy-prompt-button",
+    "@aziontech/webkit/data-table",
     "@aziontech/webkit/diagram",
     "@aziontech/webkit/doc-accordion-group",
     "@aziontech/webkit/doc-accordion-item",
@@ -37288,7 +37069,6 @@
     "@aziontech/webkit/logo",
     "@aziontech/webkit/select",
     "@aziontech/webkit/status-indicator",
-    "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/theme-switcher",
     "@aziontech/webkit/use-color-mode"

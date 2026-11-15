@@ -1,11 +1,11 @@
 # ActivityOutcomesDashboard (`platform/dashboard/activity-outcomes-dashboard`)
 
-> An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with the time range Select and a Refresh IconButton sits over a filter row: a `FilterMenu` with actor, outcome and category fields, its `FilterMenu.Chips`, and a destination Input. Every region reads the filters, and a filter that matches nothing shows a no-match state with Clear filters. A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a TableRoot with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Built from `PageHeader`, `Select`, `IconButton`, `FilterMenu`, `Input`, `Button`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `TableRoot`, `Table`, `Tag`, `SeverityTag`, `EmptyState` and, in Failed, `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An activity outcomes dashboard: what a set of actors requested through the rules and what the rules decided. A page heading with the time range Select and a Refresh IconButton sits over a filter row: a `FilterMenu` with actor, outcome and category fields, its `FilterMenu.Chips`, and a destination Input. Every region reads the filters, and a filter that matches nothing shows a no-match state with Clear filters. A grid of seven StatTiles, four per row until the widest screens, counts the outcomes (requests, allowed, blocked, held, approved, denied and over budget), each with its delta against the previous period and a Hint that defines it. Below, a ChartCard plots outcomes over time as a Chart with stacked bars, one series per exclusive outcome in its status color (allowed success, blocked danger, held warning), with a legend that toggles a series and shows its total. Three ChartCards break the same requests down by actor, category and destination with a BarList each, and a last ChartCard holds the request log, a DataTable with time, actor, an outcome Tag, category, a SeverityTag, destination, method and the rule that decided it. Built from `PageHeader`, `Select`, `IconButton`, `FilterMenu`, `Input`, `Button`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `DataTable`, `Table`, `Tag`, `SeverityTag`, `EmptyState` and, in Failed, `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/activity-outcomes-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), `use-locale`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), [EmptyState](../../../components/empty-state.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -100,7 +100,7 @@ ranks. Rank by count, largest first.
 Each log row states its outcome as a `Table.CellStatus` in the same status hue as its series in the chart, so the
 chart and the log read the same scale. The card header's count (`<n> requests`) is also a `Tag`.
 
-### L. Request log — `TableRoot` (required)
+### L. Request log — `DataTable` (required)
 
 Columns: time, actor, outcome, category, severity, destination, method and the rule that decided it.
 Figures and times use tabular numbers. The rule column is what makes the page actionable: the reader
@@ -184,6 +184,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FilterMenu, {
     type FilterMenuField,
@@ -197,7 +198,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
@@ -995,7 +995,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               v-if="loading || filteredRows.length"
               :data="filteredRows"
               :columns="columns"
@@ -1023,7 +1023,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-method="{ row }">
                 <span class="font-mono text-body-sm">{{ row.method }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
             <EmptyState
               key="empty-state-1"
               v-else-if="filtering"

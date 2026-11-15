@@ -2,10 +2,10 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import { type TableColumn } from '@aziontech/webkit/data-table'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import { type TableColumn } from '@aziontech/webkit/table-root'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
 

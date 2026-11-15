@@ -3,11 +3,11 @@ name: collection-preferences
 category: data
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 8f4f72457a5278f6cc85535c3b9c8da241ff17dc770dc85f238b3cf24c85edd8
+checksum: fc9ef1c0e9ac18f0f0e63efff04972d1cb6b4bab6f386b8847b4c6e0a10c594c
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # CollectionPreferences — Component Spec
@@ -16,20 +16,22 @@ last_updated: 2026-11-14
 
 The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`.
 
+It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot with no `columns`, it reads the table through context: the columns are the table's hideable leaf columns (a column with `hideable: false` is listed locked), the draft starts from the table's column visibility and order, and Confirm writes both back to the table (`update:columnVisibility`) besides emitting `confirm` and `update:preferences`. Bound to `useCollection`, `preferencesProps` supplies `columns` and the context is not read.
+
 ## When to use
 
+- Use CollectionPreferences for every 'how this list looks' setting: page size, visible and ordered columns, density, wrap.
 - A table or card collection whose people choose how many items a page shows and which fields they see.
 - Any collection driven by `useCollection`, which saves the result per collection.
 
 ## When NOT to use
 
-- A single column-visibility toggle inside a table toolbar → use `table-column-selector` (it applies each switch at once; this panel drafts every preference and commits on Confirm). Offer one of the two for columns on a screen, not both; both edit the same `{ id, visible }` column shape that `useCollection` saves.
 - Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`.
 
 ## Related
 
 - `use-collection` — saves the preferences; `preferencesProps` is the binding.
-- `table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order.
+- `data-table` — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.
 - `cards` — takes the page size and the visible fields.
 - `property-filter` — sits beside it in the controls row.
 
@@ -64,15 +66,15 @@ The preferences panel of a collection, after Cloudscape's collection preferences
 
 ## Props
 
-| Prop              | Type                             | Default                                                        | Required | JSDoc                                                             |
-| ----------------- | -------------------------------- | -------------------------------------------------------------- | -------- | ----------------------------------------------------------------- |
-| `columns`         | `CollectionPreferencesColumn[]`  | `[]`                                                           | false    | Columns to show, hide and order. Empty hides the columns section. |
-| `pageSizeOptions` | `number[]`                       | `[]`                                                           | false    | Page sizes offered. Empty hides the page size section.            |
-| `sections`        | `CollectionPreferencesSection[]` | `['page-size', 'columns', 'wrap-lines', 'striped', 'density']` | false    | Sections the panel shows, in this order.                          |
-| `container`       | `'dialog' \| 'drawer'`           | `'dialog'`                                                     | false    | Opens in a centered dialog or a side drawer.                      |
-| `title`           | `string`                         | `''`                                                           | false    | Panel title and trigger label. Empty uses the locale catalog.     |
-| `disabled`        | `boolean`                        | `false`                                                        | false    | Disables the trigger.                                             |
-| `defaultOpen`     | `boolean`                        | `false`                                                        | false    | Initial open state when uncontrolled (`v-model:open` unbound).    |
+| Prop              | Type                             | Default                                                        | Required | JSDoc                                                                                                                     |
+| ----------------- | -------------------------------- | -------------------------------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `columns`         | `CollectionPreferencesColumn[]`  | `[]`                                                           | false    | Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one. |
+| `pageSizeOptions` | `number[]`                       | `[]`                                                           | false    | Page sizes offered. Empty hides the page size section.                                                                    |
+| `sections`        | `CollectionPreferencesSection[]` | `['page-size', 'columns', 'wrap-lines', 'striped', 'density']` | false    | Sections the panel shows, in this order.                                                                                  |
+| `container`       | `'dialog' \| 'drawer'`           | `'dialog'`                                                     | false    | Opens in a centered dialog or a side drawer.                                                                              |
+| `title`           | `string`                         | `''`                                                           | false    | Panel title and trigger label. Empty uses the locale catalog.                                                             |
+| `disabled`        | `boolean`                        | `false`                                                        | false    | Disables the trigger.                                                                                                     |
+| `defaultOpen`     | `boolean`                        | `false`                                                        | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                            |
 
 Types: `CollectionPreferencesValue = { pageSize?: number; columns?: { id: string; visible: boolean }[]; wrapLines?: boolean; striped?: boolean; density?: 'comfortable' | 'compact' }`; `CollectionPreferencesColumn = { id: string; label: string; locked?: boolean }`; `CollectionPreferencesSection = 'page-size' | 'columns' | 'wrap-lines' | 'striped' | 'density'`.
 

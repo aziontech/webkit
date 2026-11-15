@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/team-permissions/team-permissions.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/team-permissions")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [Combobox](../../../components/combobox.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DataTable](../../../components/data-table.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), [PropertyFilter](../../../components/property-filter.md), [SaveBar](../../../components/save-bar.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -35,9 +35,9 @@ Title `Teams and permissions` and the sentence that states the model. Actions: D
 
 The table-view controls row (`platform/view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, description and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden when there is no team.
 
-### C. Team table — `Card`, `Table`, `Avatar`, `useCollection` (required)
+### C. Team table — `Card`, `DataTable`, `Table`, `Avatar`, `useCollection` (required)
 
-`Table` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `Table.CellLink` to the team's page and its description under it. Permissions: `Table.CellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `Table.CellStatus` (Active, Inactive).
+`DataTable` with `v-bind="tableProps"` in a flush `Card`. Name: a square `Avatar` with the initials, the name as `Table.CellLink` to the team's page and its description under it. Permissions: `Table.CellTags` shows as many as fit and the rest behind `+N`; a team with every permission reads `All permissions`. Members as a number, Status as `Table.CellStatus` (Active, Inactive).
 
 ### D. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
@@ -69,7 +69,7 @@ Creating or editing a team is a full page in the creation frame of `platform/cre
 
 ### J. Permission matrix — `Table`, `EmptyState` (CreateTeam, EditTeam)
 
-The matrix is the `Table` compound in hand-authored mode, `bordered`: `aria-label="Permissions granted by this team"` names it, `Table.Header` holds Resource, View and Edit as `Table.HeadCell`s, and each area is one `Table.Body` whose first `Table.Row` carries the area's group `Checkbox` and whose next rows are the resources, with a `Checkbox` per action in a centred `Table.Cell` (a dash for an action the resource does not have). When the filter matches nothing, a small `EmptyState` (`No matching permissions`) with Clear filter takes the table's place.
+The matrix is the `Table` compound composed by hand, `bordered`: `aria-label="Permissions granted by this team"` names it, `Table.Header` holds Resource, View and Edit as `Table.HeadCell`s, and each area is one `Table.Body` whose first `Table.Row` carries the area's group `Checkbox` and whose next rows are the resources, with a `Checkbox` per action in a centred `Table.Cell` (a dash for an action the resource does not have). When the filter matches nothing, a small `EmptyState` (`No matching permissions`) with Clear filter takes the table's place.
 
 ### Outcomes — through `toast`
 
@@ -102,7 +102,7 @@ Duplicate and Delete end in a success toast. Team changes are not deploys, so th
 
 ## Accessibility
 
-- The matrix is the `Table` (role `table`) named by its `aria-label`, with column headers Resource, View and Edit and one row group per area whose first row holds the area's checkbox.
+- The matrix is the `DataTable` (role `table`) named by its `aria-label`, with column headers Resource, View and Edit and one row group per area whose first row holds the area's checkbox.
 - Each matrix checkbox is named `View <Resource>` or `Edit <Resource>`; the area checkbox is named by its label and reports mixed when partly checked.
 - After a failed save, focus moves to the name field or to the permissions filter.
 - Members are a list named `Members`; after Remove, focus moves to the next member's Remove button, or to Add member when the list is empty.
@@ -148,6 +148,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -463,7 +464,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="teamsTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
@@ -553,7 +554,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
       </section>

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/billing/billing.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/billing")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Currency](../../../components/currency.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PaymentBrand](../../../components/payment-brand.md), [PropertyFilter](../../../components/property-filter.md), [SectionHeader](../../../components/section-header.md), [Skeleton](../../../components/skeleton.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Currency](../../../components/currency.md), [DataTable](../../../components/data-table.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PaymentBrand](../../../components/payment-brand.md), [PropertyFilter](../../../components/property-filter.md), [SectionHeader](../../../components/section-header.md), [Skeleton](../../../components/skeleton.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -52,9 +52,9 @@ A `Card` whose header holds the `Subscription plan` heading and the outlined `Ch
 
 A small `SectionHeader` `Invoices` over the table-view controls row: `PropertyFilter` bound with `v-bind="propertyFilterProps"` (Invoice ID free text, Plan, Cycle and Status with options), then Refresh (`Refresh invoices`) and Download CSV as outlined icon buttons in tooltips, then `CollectionPreferences` (page size 10, 25 or 50; columns), saved under `storageKey`.
 
-### G. Invoices table — `Table`, `useCollection` (required)
+### G. Invoices table — `DataTable`, `Table`, `useCollection` (required)
 
-One `useCollection` over the invoices, newest first, `Table` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `Currency`, Payment method with its plate, Status as `Table.CellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
+One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `Currency`, Payment method with its plate, Status as `Table.CellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
 
 ### H. No invoices and no match — `EmptyState` (conditional)
 
@@ -66,7 +66,7 @@ A `SectionHeader` with Update over a `Card` of four-column `KeyValuePairs`: Bill
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
-A `SectionHeader` with Add payment method over a flush `Card` and a `Table` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `Table.CellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
+A `SectionHeader` with Add payment method over a flush `Card` and a `DataTable` of cards: Card holder with a small success `Default` tag, Card as the brand plate and the last four, Expiration date, and `Table.CellActions` named after the card with `Set as default` and `Remove` as `DropdownMenu` options, both disabled on the default card. Set as default applies at once with a toast; Remove asks in a `ConfirmDialog` first.
 
 ### Outcomes — through `toast`
 
@@ -138,6 +138,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Currency from '@aziontech/webkit/currency'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -647,7 +648,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               :padded="false"
             >
               <template #content>
-                <Table
+                <DataTable
                   ref="invoicesTable"
                   v-bind="tableProps"
                   :loading="loading"
@@ -725,7 +726,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                       </template>
                     </EmptyState>
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </div>
@@ -792,7 +793,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             </SectionHeader>
             <Card :padded="false">
               <template #content>
-                <Table
+                <DataTable
                   :data="paymentMethods"
                   :columns="methodColumns"
                   row-key="id"
@@ -857,7 +858,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                       </DropdownMenu.Group>
                     </Table.CellActions>
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </div>

@@ -77,7 +77,7 @@ Holds the summary card's sentences while the results load.
 Status, verdict and source, each with an "Any" option (`Any status`, `Any verdict`, `Any source`) and
 an `aria-label`.
 
-### M. Submissions — `TableRoot` (required)
+### M. Submissions — `DataTable` (required)
 
 Paginated: name, verdict, category, score, type, size, source, first submitter and last seen. Score,
 size and dates in tabular figures.

@@ -2,6 +2,7 @@
   import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -18,7 +19,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -830,7 +830,7 @@
                   </Input>
                 </div>
               </div>
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="ipRows"
                 :columns="ipColumns"
@@ -853,7 +853,7 @@
                 <template #cell-requests="{ row }">
                   <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </ChartCard.Content>
         </ChartCard>
@@ -910,7 +910,7 @@
               empty-title="No blocked requests in this period"
               :aria-label="expandedReport.label"
             />
-            <TableRoot
+            <DataTable
               v-else
               :data="ipRows"
               :columns="ipColumns"
@@ -932,7 +932,7 @@
               <template #cell-requests="{ row }">
                 <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
           </div>
         </PanelContent>
       </DialogContent>

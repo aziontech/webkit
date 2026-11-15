@@ -50,7 +50,7 @@
   }>()
 
   const slots = defineSlots<{
-    /** The artifact of the version shown: a `CodeBlock`, a `TableRoot`, prose. Scrolls inside. */
+    /** The artifact of the version shown: a `CodeBlock`, a `DataTable`, prose. Scrolls inside. */
     default?(props: { version: number }): unknown
     /** Extra icon actions in the toolbar, before Copy and Download (Insert into editor, Run). */
     actions?(): unknown

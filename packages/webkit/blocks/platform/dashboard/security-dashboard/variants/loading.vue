@@ -2,6 +2,7 @@
   import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -11,7 +12,6 @@
   import Select from '@aziontech/webkit/select'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -683,7 +683,7 @@
                   </Input>
                 </div>
               </div>
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="ipRows"
                 :columns="ipColumns"
@@ -707,7 +707,7 @@
                 <template #cell-requests="{ row }">
                   <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </ChartCard.Content>
         </ChartCard>

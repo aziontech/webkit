@@ -58,7 +58,7 @@ the band is one `useCollection` call:
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const { tableProps, propertyFilterProps, preferencesProps, status, clearFilters } = useCollection(
@@ -114,7 +114,7 @@ the band is one `useCollection` call:
           <section class="flex min-h-0 flex-col">
             <Card :padded="false">
               <template #content>
-                <Table
+                <DataTable
                   v-bind="tableProps"
                   :bordered="false"
                   @row-click="open"
@@ -122,7 +122,7 @@ the band is one `useCollection` call:
                   <template #empty>
                     <!-- status === 'no-match' here; 'empty' renders the first-use state instead -->
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </section>

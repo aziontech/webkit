@@ -45,9 +45,9 @@ The Records tab opens with a small `PageHeader` titled Records with a one-senten
 
 One row above the table: a `PropertyFilter` ("Filter records") that takes free text or a property token (Name, Type, Policy, Value), then outlined `IconButton`s for Refresh and Download CSV, each named by a `Tooltip`, and `CollectionPreferences` for page size and visible columns. `useCollection` owns the filter, sort, page and column state: the filter rewinds to the first page, ID is hidden by default and Name cannot be hidden. It is the same recipe as `platform/view/table-view`.
 
-### H. Records table — `Card`, `TableRoot`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
+### H. Records table — `Card`, `DataTable`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Tag` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
+`Card :padded="false"` around `DataTable :bordered="false"` bound to `useCollection`'s `tableProps` (row key, sorting, pages of 10 and the column visibility) and `:loading`. Name is `principal`. Type is a secondary `Tag`. ID is `Table.CellId` ("Copy record ID") and Value is `Table.CellLink` with `copyable`, so their copy buttons stay pinned at the cell end while the text truncates; row actions are `Table.CellActions` named after the record. Weight and Description stay blank when they do not apply; no dash, no "None".
 
 ### I. Empty and no-match — `EmptyState`, `Button` (required)
 
@@ -100,7 +100,7 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 - MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
-- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `TableRoot` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
 
 ## Importing a zone file
 

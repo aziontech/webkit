@@ -1,6 +1,6 @@
 # Filter Menu
 
-> The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multi` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom range on a `Calendar`. Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. `Table.Filter` and `Table.AppliedFilters` render it with `kind="menu"` and map it onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with and/or) and from the `table-filter` builder (a field + operator + value form): this menu offers only the values a field has, one click each, which is what most lists need.
+> The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multi` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom range on a `Calendar`. Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. Inside a DataTable, `Table.Filter kind="menu"` renders it and `FilterMenu.Chips` with no `fields` renders its chips, both mapped onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with operators and and/or): this menu offers only the values a field has, one click each, which is what most lists need.
 
 - Import: `import FilterMenuRoot from '@aziontech/webkit/filter-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import FilterMenu from '@aziontech/webkit/filter-menu'`
@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use FilterMenu when people filter by picking known values per field (status, region, owner) and see them as chips — the default console list filter.
 - A resource list or table filtered by a few closed-set fields (status, owner, region, type) and a modification date.
 - A catalog or listing page (marketplace, templates, posts) that narrows by category, author or date, outside a table.
 - Filters people pick rather than type, where each field has a short list of values.
@@ -24,14 +25,14 @@
 ## Don’t
 
 - Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`. FilterMenu is for faceted picks from known values; PropertyFilter is for expression search.
-- A table that needs comparisons on numbers or free-text conditions → use `table-filter` with its builder.
+- A table that needs comparisons on numbers or text conditions → use `property-filter` (`Table.Filter kind="property"` inside a DataTable).
 - Two to four fixed choices always on screen → use `toggle-group` or selectable `chip`s.
 - A single search over names → use `input`, or `table-search` inside a table.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [table](table.md) — `Table.Filter` and `Table.AppliedFilters` with `kind="menu"` render this menu and its chips over the table's `filters` model.
+- [data-table](data-table.md) — `Table.Filter kind="menu"` and `FilterMenu.Chips` (no `fields`) render this menu and its chips over the table's `filters` model.
 - [property-filter](property-filter.md) — the token-based filter field for typed queries.
 - [popover](popover.md) — the overlay the menu opens in.
 - [calendar](calendar.md) — the range picker the custom date period uses.
@@ -63,11 +64,14 @@ so activating a chip opens that menu at the chip's field with no wiring. The lin
 identity: an inline `:fields="[...]"` literal or a computed that rebuilds the array gives the menu
 and the chips two arrays, so a chip that finds no listening menu warns once per activation in the
 console (`FilterMenu.Chips: no FilterMenu has these fields.`). When the arrays differ
-on purpose (as in `Table.AppliedFilters`, which links through the table context), the consumer calls
-the root's exposed `open(fieldId)`.
+on purpose, the consumer calls the root's exposed `open(fieldId)`. **Inside a DataTable**, chips
+with no `fields` read the table context instead: their fields come from the table's
+`filterFields`, their value from its `filters` model, removing a chip removes that field's filter
+through the table (`filter-remove`), and activating one reopens `Table.Filter kind="menu"` at the
+field. That is the one applied-filters row of a table.
 
 - `filter-menu-chips/filter-menu-chips.vue` — One filled, clickable, removable `Chip` per applied field, in `fields` order, inside a `role="group"` named `Applied filters`. Each chip reads `<field label>` (muted) + up to three option avatars (when the picked options carry `avatar`) + the first value's label + `+N` (muted) when more values are picked. Chips enter, leave and reflow with a `TransitionGroup`. Renders nothing when no field is applied.
-  - Props: `fields?: FilterMenuField[]` (default `[]` — the same array the menu receives).
+  - Props: `fields?: FilterMenuField[]` (default `[]` — the same array the menu receives; empty inside a DataTable reads the table's filter fields and filters).
   - v-model: `Record<string, FilterMenuValue[]>` (default `{}`); removing a chip deletes the field's key.
   - Events: `edit: [event: MouseEvent | KeyboardEvent, field: FilterMenuField]` (a chip was activated; the linked menu opens at the field), `remove: [event: MouseEvent, field: FilterMenuField]` (a chip's remove button was pressed; the model loses the field).
   - Slots: none.

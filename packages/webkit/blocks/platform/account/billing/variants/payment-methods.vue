@@ -5,6 +5,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Currency from '@aziontech/webkit/currency'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -514,7 +515,7 @@
               :padded="false"
             >
               <template #content>
-                <Table
+                <DataTable
                   ref="invoicesTable"
                   v-bind="tableProps"
                   :loading="loading"
@@ -592,7 +593,7 @@
                       </template>
                     </EmptyState>
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </div>
@@ -659,7 +660,7 @@
             </SectionHeader>
             <Card :padded="false">
               <template #content>
-                <Table
+                <DataTable
                   :data="paymentMethods"
                   :columns="methodColumns"
                   row-key="id"
@@ -724,7 +725,7 @@
                       </DropdownMenu.Group>
                     </Table.CellActions>
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </div>

@@ -96,7 +96,7 @@ order; reserve the status role for a series whose color means a state.
 Searches `Top hosts` (`Search hosts or services`). It filters this table only, so it sits inside the
 card, not in the page header.
 
-### L. Top hosts — `TableRoot` (required)
+### L. Top hosts — `DataTable` (required)
 
 A searchable, paginated table of hosts with tabular figures, right-aligned numbers.
 
@@ -110,13 +110,13 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 
 In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Item`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
 
-### O. Sub-dashboards and breakdowns — `ToggleGroup`, `Input`, `TableRoot`, `EmptyState` (optional)
+### O. Sub-dashboards and breakdowns — `ToggleGroup`, `Input`, `DataTable`, `EmptyState` (optional)
 
 In the Metrics variant a product with more than one dashboard shows a medium `ToggleGroup` under the
 product tabs, named `<Product> dashboards`. Applications offers `Overview`, `Status codes` and
 `Request breakdown`; Firewall offers `Overview` and `Denied sources`. A dashboard picks which cards
 it shows and adds breakdown cards: a full-width `ChartCard` with a search `Input` and a paginated
-`TableRoot` (five rows, sorted columns). The status breakdown adds a second `ToggleGroup` that
+`DataTable` (five rows, sorted columns). The status breakdown adds a second `ToggleGroup` that
 filters by status class (`All`, `2xx`, `3xx`, `4xx`, `5xx`). Changing the product returns to its
 Overview; the period stays.
 

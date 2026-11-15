@@ -10,21 +10,22 @@
  "subcomponents": [
   "@aziontech/webkit/filter-menu-chips"
  ],
- "purpose": "The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multi` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom range on a `Calendar`. Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. `Table.Filter` and `Table.AppliedFilters` render it with `kind=\"menu\"` and map it onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with and/or) and from the `table-filter` builder (a field + operator + value form): this menu offers only the values a field has, one click each, which is what most lists need.",
+ "purpose": "The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multi` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom range on a `Calendar`. Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. Inside a DataTable, `Table.Filter kind=\"menu\"` renders it and `FilterMenu.Chips` with no `fields` renders its chips, both mapped onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with operators and and/or): this menu offers only the values a field has, one click each, which is what most lists need.",
  "setup": null,
  "useWhen": [
+  "Use FilterMenu when people filter by picking known values per field (status, region, owner) and see them as chips — the default console list filter.",
   "A resource list or table filtered by a few closed-set fields (status, owner, region, type) and a modification date.",
   "A catalog or listing page (marketplace, templates, posts) that narrows by category, author or date, outside a table.",
   "Filters people pick rather than type, where each field has a short list of values."
  ],
  "avoidWhen": [
   "Filters typed as text, with operators or and/or logic, or a query people keep as text → use `property-filter`. FilterMenu is for faceted picks from known values; PropertyFilter is for expression search.",
-  "A table that needs comparisons on numbers or free-text conditions → use `table-filter` with its builder.",
+  "A table that needs comparisons on numbers or text conditions → use `property-filter` (`Table.Filter kind=\"property\"` inside a DataTable).",
   "Two to four fixed choices always on screen → use `toggle-group` or selectable `chip`s.",
   "A single search over names → use `input`, or `table-search` inside a table."
  ],
  "related": [
-  "table` — `Table.Filter` and `Table.AppliedFilters` with `kind=\"menu\"` render this menu and its chips over the table's `filters` model.",
+  "data-table` — `Table.Filter kind=\"menu\"` and `FilterMenu.Chips` (no `fields`) render this menu and its chips over the table's `filters` model.",
   "property-filter` — the token-based filter field for typed queries.",
   "popover` — the overlay the menu opens in.",
   "calendar` — the range picker the custom date period uses.",

@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use PropertyFilter when people type queries with operators (Status = Active, Requests > 100) or free text they want to keep.
 - A list or table that people narrow by several fields at once (status, region, owner) and by text.
 - Any collection driven by `useCollection`, client or server mode.
 - Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`.
@@ -29,7 +30,7 @@
 
 - A single text search over a short list → use `input` bound to `filterProps`.
 - A few fixed choices always on screen → use `toggle-group` or `chip` filters.
-- A structured filter builder with its own panel inside a table toolbar → use `table-filter`.
+- Inside a DataTable toolbar, `Table.Filter kind="property"` renders this field wired to the table's filters; bind PropertyFilter to `useCollection` yourself only for OR queries or free text.
 - Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -54,6 +55,7 @@
 | `validate` | `(text: string) => string` | `undefined` | false | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check. |
 | `suggest` | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | `undefined` | false | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
 | `grouped` | `boolean` | `false` | false | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one. |
+| `hideOperations` | `boolean` | `false` | false | Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters). |
 | `loadValues` | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | `undefined` | false | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions. |
 | `query` | `PropertyFilterQuery` | `—` | false | Two-way value (`v-model:query`). |
 | `text` | `string` | `''` | false | Two-way value (`v-model:text`). |
@@ -189,8 +191,8 @@
 
 ```vue
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import TableRoot from '@aziontech/webkit/table-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const workloads = Array.from({ length: 36 }, (_, i) => ({
@@ -233,7 +235,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <PropertyFilter v-bind="propertyFilterProps" />
-    <TableRoot v-bind="tableProps" />
+    <DataTable v-bind="tableProps" />
   </div>
 </template>
 ```

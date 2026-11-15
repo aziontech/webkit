@@ -568,3 +568,26 @@ describe('PropertyFilter groups, async values, operator groups and value slot (s
     expect(view.queryByTestId('data-property-filter__value-editor')).toBeNull()
   })
 })
+
+describe('PropertyFilter hideOperations', () => {
+  const query = {
+    operation: 'and' as const,
+    tokens: [
+      { propertyKey: 'status', operator: '=' as const, value: 'Active' },
+      { propertyKey: 'region', operator: '=' as const, value: 'us-east' }
+    ]
+  }
+  const properties = [
+    { key: 'status', label: 'Status' },
+    { key: 'region', label: 'Region' }
+  ]
+
+  it('offers the Match all / Match any toggle by default and hides it with hideOperations', () => {
+    const shown = render(PropertyFilter, { props: { properties, query } })
+    expect(shown.getByTestId('data-property-filter__operation')).toBeTruthy()
+    shown.unmount()
+    const hidden = render(PropertyFilter, { props: { properties, query, hideOperations: true } })
+    expect(hidden.queryByTestId('data-property-filter__operation')).toBeNull()
+    expect(hidden.getByTestId('data-property-filter').textContent).toContain('us-east')
+  })
+})

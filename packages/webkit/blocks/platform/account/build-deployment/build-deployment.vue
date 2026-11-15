@@ -5,6 +5,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -875,7 +876,7 @@
 
               <Card :padded="false">
                 <template #content>
-                  <Table
+                  <DataTable
                     ref="settingsTable"
                     v-bind="tableProps"
                     :loading="loading || refreshing"
@@ -991,7 +992,7 @@
                         </template>
                       </EmptyState>
                     </template>
-                  </Table>
+                  </DataTable>
                 </template>
               </Card>
             </div>

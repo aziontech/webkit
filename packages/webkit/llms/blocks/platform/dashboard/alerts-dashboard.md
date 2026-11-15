@@ -1,11 +1,11 @@
 # AlertsDashboard (`platform/dashboard/alerts-dashboard`)
 
-> An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `Table`, `TableRoot`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> An alerts dashboard: what is open, how severe it is, what kind it is and who is involved. A page heading with the period Select sits over four StatTiles (open, critical or high open, alerts in the period and the false positive rate), each with its delta and a Hint. Below, a ChartCard stacks the alerts raised each day by severity level, with every series colored from the severity ramp so the bars, the legend and the tooltip read the same scale as the tables. Beside it, Open by severity lists one SeverityTag per level with its open count and its share of the open alerts. A BarList ranks the alerts by type, the Highest risk table pairs each entity with its risk score and the SeverityTag of its worst open alert, and the Open alerts table leads every row with its SeverityTag, sortable from critical to info. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `PageHeader`, `Select`, `SeverityTag`, `Skeleton`, `StatTile`, `Table`, `DataTable`, `Tag` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/alerts-dashboard/alerts-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/alerts-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), `use-locale`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -92,7 +92,7 @@ risk (`No entities at risk yet`) and the table.
 
 Ranks alert types by count, largest first, labelled `Alerts by type`.
 
-### L. Highest risk and Open alerts — `TableRoot` (required)
+### L. Highest risk and Open alerts — `DataTable` (required)
 
 Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert.
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.
@@ -164,6 +164,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -172,7 +173,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
@@ -846,7 +846,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               v-if="loading || entities.length"
               :data="entities"
               :columns="entityColumns"
@@ -875,7 +875,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-alerts="{ row }">
                 <span class="tabular-nums">{{ row.alerts }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
             <EmptyState
               v-else
               size="small"
@@ -894,7 +894,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               v-if="loading || alerts.length"
               :data="alerts"
               :columns="alertColumns"
@@ -919,7 +919,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   :severity="statusSeverity[row.status]"
                 />
               </template>
-            </TableRoot>
+            </DataTable>
             <EmptyState
               v-else
               size="small"

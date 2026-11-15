@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import Hint from '@aziontech/webkit/hint'
@@ -7,7 +8,6 @@
   import Link from '@aziontech/webkit/link'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -271,7 +271,7 @@
 
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 :data="zones"
                 :columns="zoneColumns"
                 row-key="id"
@@ -321,7 +321,7 @@
                     </DropdownMenuGroup>
                   </Table.CellActions>
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
             <template #footer>
               <Link
@@ -346,7 +346,7 @@
 
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 :data="activity"
                 :columns="activityColumns"
                 row-key="id"
@@ -369,7 +369,7 @@
                     >{{ row.operation }}</span
                   >
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
             <template #footer>
               <Link

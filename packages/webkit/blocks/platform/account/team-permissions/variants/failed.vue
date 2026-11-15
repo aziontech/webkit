@@ -5,6 +5,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -321,7 +322,7 @@
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="teamsTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
@@ -411,7 +412,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
       </section>

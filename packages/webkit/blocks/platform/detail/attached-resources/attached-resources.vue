@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
 
@@ -53,7 +53,7 @@
   <Card :padded="false">
     <template #content>
       <div class="flex min-w-0 flex-col">
-        <TableRoot
+        <DataTable
           :data="domains"
           :columns="columns"
           row-key="id"
@@ -112,7 +112,7 @@
               </DropdownMenuGroup>
             </Table.CellActions>
           </template>
-        </TableRoot>
+        </DataTable>
 
         <div
           class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"

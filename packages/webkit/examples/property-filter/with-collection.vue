@@ -1,6 +1,6 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import TableRoot from '@aziontech/webkit/table-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const workloads = Array.from({ length: 36 }, (_, i) => ({
@@ -43,6 +43,6 @@
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <PropertyFilter v-bind="propertyFilterProps" />
-    <TableRoot v-bind="tableProps" />
+    <DataTable v-bind="tableProps" />
   </div>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -9,7 +10,6 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
@@ -736,7 +736,7 @@
                 </div>
               </div>
 
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="hosts"
                 :columns="hostColumns"
@@ -771,7 +771,7 @@
                 <template #cell-requests="{ row }">
                   <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </ChartCard.Content>
         </ChartCard>

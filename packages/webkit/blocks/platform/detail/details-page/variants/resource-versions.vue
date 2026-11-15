@@ -2,14 +2,14 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -291,7 +291,7 @@
 
               <Card :padded="false">
                 <template #content>
-                  <TableRoot
+                  <DataTable
                     ref="tableRef"
                     v-model:pagination="pagination"
                     v-model:globalFilter="search"
@@ -388,7 +388,7 @@
                         </DropdownMenu.Group>
                       </DropdownMenu>
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </template>
               </Card>
             </section>

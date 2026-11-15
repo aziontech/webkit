@@ -93,7 +93,17 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "56.35 KB"
+    "limit": "1.95 KB"
+  },
+  {
+    "name": "data-table",
+    "path": "src/components/data/data-table/data-table.vue",
+    "limit": "56.25 KB"
+  },
+  {
+    "name": "data-grid",
+    "path": "src/components/data/data-grid/data-grid.vue",
+    "limit": "8.55 KB"
   },
   {
     "name": "property-filter",
@@ -103,7 +113,7 @@
   {
     "name": "collection-preferences",
     "path": "src/components/data/collection-preferences/collection-preferences.vue",
-    "limit": "32 KB"
+    "limit": "30.4 KB"
   },
   {
     "name": "card",
@@ -1420,19 +1430,19 @@
   {
     "name": "filter-menu",
     "path": "src/components/data/filter-menu/index.ts",
-    "limit": "34.3 KB",
+    "limit": "26.8 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-root",
     "path": "src/components/data/filter-menu/filter-menu.vue",
-    "limit": "31.1 KB",
+    "limit": "23.05 KB",
     "entryOnly": true
   },
   {
     "name": "filter-menu-chips",
     "path": "src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue",
-    "limit": "21.15 KB",
+    "limit": "21.35 KB",
     "entryOnly": true
   },
   {
@@ -1650,7 +1660,7 @@
   {
     "name": "table",
     "path": "src/components/data/table/index.ts",
-    "limit": "91.55 KB",
+    "limit": "17.35 KB",
     "entryOnly": true
   },
   {
@@ -1706,19 +1716,7 @@
   {
     "name": "table-filter",
     "path": "src/components/data/table/table-filter/table-filter.vue",
-    "limit": "20.2 KB",
-    "entryOnly": true
-  },
-  {
-    "name": "table-applied-filters",
-    "path": "src/components/data/table/table-applied-filters/table-applied-filters.vue",
-    "limit": "10.4 KB",
-    "entryOnly": true
-  },
-  {
-    "name": "table-column-selector",
-    "path": "src/components/data/table/table-column-selector/table-column-selector.vue",
-    "limit": "13.05 KB",
+    "limit": "2.3 KB",
     "entryOnly": true
   },
   {

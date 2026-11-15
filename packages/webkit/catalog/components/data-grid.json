@@ -1,0 +1,27 @@
+{
+ "purpose": "An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role=\"grid\"`, `gridcell`, a roving tab stop), not a read-only table. The rows are a two-way model (`v-model`); every committed edit writes the new rows and emits `change` with the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-delete` and the app changes the rows. It loads no table engine and no virtualization library: thousands of rows scroll natively inside `maxHeight`, and each row is laid out lazily with CSS `content-visibility: auto`.",
+ "useWhen": [
+  "Use DataGrid only when people edit many cells of many records in place, spreadsheet-style; for a short list of rows in a form use AttributeEditor, for read-and-act lists use Table.",
+  "A database table editor or the editable results of a query: typed cells (text, number, boolean, a choice), keyboard-first editing, copy of a cell range.",
+  "Bulk corrections across rows, where opening a drawer per record would be slower than editing the cells."
+ ],
+ "avoidWhen": [
+  "People read, sort, filter, select and act on records but do not edit cells → use `data-table` (or a hand-composed `table`).",
+  "A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.",
+  "One record edited field by field → use a form with `field` controls.",
+  "Key and value pairs shown for reading → use `key-value-list`."
+ ],
+ "related": [
+  "data-table` — the read-and-act table (sorting, filters, paging, toolbar parts); DataGrid is its editable counterpart.",
+  "table` — the parts and tokens DataGrid shares its look with.",
+  "attribute-editor` — a few rows of the same fields inside a form.",
+  "collection-preferences` — the display preferences of a list; DataGrid's column widths are dragged in place instead."
+ ],
+ "bestPractices": [
+  "Give every row a stable id under `row-key` (default `'id'`): the cursor, the selection and the edits follow it.",
+  "Type each column (`text`, `number`, `boolean`, `select`) so the editor matches the value; mark computed or key columns `editable: false`.",
+  "Freeze the first column (`frozen-first-column`) when it names the row and the grid scrolls sideways.",
+  "Keep adding and deleting in the app: handle `row-add` and `row-delete`, then write the new rows to the `v-model`. Confirm a delete of more than a few rows in a `confirm-dialog`.",
+  "Use `readonly` while saving or for people who may not edit; the cursor, selection and copy still work."
+ ]
+}

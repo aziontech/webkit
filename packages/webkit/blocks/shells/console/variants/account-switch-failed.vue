@@ -6,6 +6,8 @@
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -20,7 +22,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
@@ -659,7 +660,7 @@
               :padded="false"
             >
               <template #content>
-                <Table
+                <DataTable
                   :data="accountRows"
                   :columns="accountColumns"
                   row-key="id"
@@ -745,7 +746,7 @@
                       </template>
                     </EmptyState>
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </div>

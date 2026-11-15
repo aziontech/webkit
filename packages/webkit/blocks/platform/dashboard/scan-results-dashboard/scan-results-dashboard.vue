@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import type { ChartColor, ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -14,7 +15,6 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import type { TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
@@ -720,7 +720,7 @@
                   </Select>
                 </div>
               </div>
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="rows"
                 :columns="submissionColumns"
@@ -772,7 +772,7 @@
                     >{{ row.lastSeen }}</time
                   >
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
             <EmptyState
               v-else

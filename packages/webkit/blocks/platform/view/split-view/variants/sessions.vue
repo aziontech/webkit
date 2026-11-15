@@ -8,6 +8,7 @@
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
@@ -22,7 +23,6 @@
   import Popover from '@aziontech/webkit/popover'
   import Resizable from '@aziontech/webkit/resizable'
   import Sidebar from '@aziontech/webkit/sidebar-root'
-  import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -1622,7 +1622,7 @@
 
               <section class="flex min-h-0 min-w-0 flex-1 flex-col">
                 <div class="flex min-h-0 flex-1">
-                  <TableRoot
+                  <DataTable
                     ref="tableRef"
                     v-model:pagination="pagination"
                     :data="matchedEvents"
@@ -1722,7 +1722,7 @@
                         description="Widen the period or clear a filter to see more of the log."
                       />
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </div>
               </section>
             </div>

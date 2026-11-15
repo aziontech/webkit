@@ -2,6 +2,7 @@
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FilterMenu, {
     type FilterMenuField,
@@ -15,7 +16,6 @@
   import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
@@ -583,7 +583,7 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               v-if="loading || rows.length"
               :data="rows"
               :columns="columns"
@@ -611,7 +611,7 @@
               <template #cell-method="{ row }">
                 <span class="font-mono text-body-sm">{{ row.method }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
             <EmptyState
               v-else
               size="small"

@@ -4,6 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
@@ -24,8 +26,6 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -720,7 +720,7 @@
           </SectionHeader>
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 :data="versions"
                 :columns="versionColumns"
                 row-key="id"
@@ -756,7 +756,7 @@
                     description="Every deploy creates a version of this application."
                   />
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
           </Card>
         </section>
@@ -771,7 +771,7 @@
           />
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 :data="deployments"
                 :columns="deploymentColumns"
                 row-key="id"
@@ -794,7 +794,7 @@
                     description="Deploy this application and each run lands here."
                   />
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
           </Card>
         </section>

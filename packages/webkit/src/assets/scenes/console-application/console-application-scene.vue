@@ -9,7 +9,7 @@
   import ItemList from '../../../components/content/item/item-list.vue'
   import ShellMockup from '../../../components/content/shell-mockup/shell-mockup.vue'
   import Tag from '../../../components/content/tag/tag.vue'
-  import Table from '../../../components/data/table/table.vue'
+  import DataTable from '../../../components/data/data-table/data-table.vue'
   import TableCellStatus from '../../../components/data/table/table-cell-status/table-cell-status.vue'
   import Field from '../../../components/inputs/field/field.vue'
   import FieldLabel from '../../../components/inputs/field/field-label/field-label.vue'
@@ -230,7 +230,7 @@
             />
           </div>
 
-          <Table
+          <DataTable
             :data="rows"
             :columns="columns"
             :reorderable="Boolean(step.table.reorderable)"
@@ -249,7 +249,7 @@
                 :severity="severityOf(String(value))"
               />
             </template>
-          </Table>
+          </DataTable>
         </template>
 
         <div

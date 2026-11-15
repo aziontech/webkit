@@ -89,7 +89,7 @@ no timeline component). At risk lists each task with its reason and a `Tag`.
 Every card says what will appear: `No tasks yet` / `Progress appears here once the project has tasks.`,
 `Nothing to burn down`, `No milestones yet`, `Nothing at risk`, `No owners yet`.
 
-### P. Owners — `TableRoot` (required)
+### P. Owners — `DataTable` (required)
 
 Each owner with open and done counts and overdue as a danger `Tag`, in tabular figures.
 

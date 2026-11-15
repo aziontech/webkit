@@ -1,11 +1,11 @@
 # FunnelCohortDashboard (`platform/dashboard/funnel-cohort-dashboard`)
 
-> A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `TableRoot` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `TableRoot` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A funnel and cohort dashboard: how people move through the steps from a first visit to a paid plan, and how well each weekly sign-up cohort is retained. The page opens with a heading and one global filter bar, a period and a segment `Select`, so every region renders the same slice. Below it, a row of five `StatTile`s (visitors, sign-ups, activated, paid and overall conversion, each against the previous period with a sparkline) sits over a 12-column grid of `ChartCard`s. The conversion funnel spans the grid: a horizontal, labeled `Chart.Bar` of the steps beside a `DataTable` that states each step’s users, its share of visitors and the drop-off from the step before. Cohort retention shares the next row: a multi-series `Chart.Line` of retention by week since sign-up, one series per weekly cohort, and a cohort `DataTable` with each cohort’s size and its week 1 to week 6 retention in tabular figures, where a dash marks a week that has not ended. There is no heatmap: the retention matrix is a plain table, not colored cells. Each card header carries a title with a `Hint` and a menu with Export CSV. Built from `PageHeader`, `Select`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `EmptyState`, `Hint`, `DropdownMenu`, `IconButton` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/funnel-cohort-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Toast](../../../components/toast.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [Toast](../../../components/toast.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -76,7 +76,7 @@ Retention is a multi-series `Chart.Line` by week since sign-up, one series per w
 In each chart's and table's empty actions, `Clear filters` resets the period and the segment. It is the
 only recovery when the filters match nothing.
 
-### J. Step and cohort tables — `TableRoot` (required)
+### J. Step and cohort tables — `DataTable` (required)
 
 Beside the funnel, a table states each step's users, share of visitors and drop-off from the step
 before. The cohort table lists each cohort's size and its week 1 to week 6 retention in tabular
@@ -147,6 +147,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -154,7 +155,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PageHeader from '@aziontech/webkit/page-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { toast } from '@aziontech/webkit/toast'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
@@ -799,7 +799,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </template>
             </Chart>
 
-            <TableRoot
+            <DataTable
               v-if="loading || view.steps.length"
               :data="view.steps"
               :columns="stepColumns"
@@ -826,7 +826,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   >{{ formatters.drop(row.dropoff) }} from {{ row.from }}</span
                 >
               </template>
-            </TableRoot>
+            </DataTable>
           </div>
         </ChartCard.Content>
       </ChartCard>
@@ -924,7 +924,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
-          <TableRoot
+          <DataTable
             :data="view.cohorts"
             :columns="cohortColumns"
             row-key="id"
@@ -964,7 +964,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 {{ formatters.percent(row[week.key]) }}
               </span>
             </template>
-          </TableRoot>
+          </DataTable>
         </ChartCard.Content>
       </ChartCard>
     </div>

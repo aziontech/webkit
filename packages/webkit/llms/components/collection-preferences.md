@@ -1,6 +1,6 @@
 # Collection Preferences
 
-> The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`.
+> The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`. It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot with no `columns`, it reads the table through context: the columns are the table's hideable leaf columns (a column with `hideable: false` is listed locked), the draft starts from the table's column visibility and order, and Confirm writes both back to the table (`update:columnVisibility`) besides emitting `confirm` and `update:preferences`. Bound to `useCollection`, `preferencesProps` supplies `columns` and the context is not read.
 
 - Import: `import CollectionPreferences from '@aziontech/webkit/collection-preferences'`
 - Category: data · Surface: product · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use CollectionPreferences for every 'how this list looks' setting: page size, visible and ordered columns, density, wrap.
 - A table or card collection whose people choose how many items a page shows and which fields they see.
 - Any collection driven by `useCollection`, which saves the result per collection.
 
@@ -19,14 +20,13 @@
 
 ## Don’t
 
-- A single column-visibility toggle inside a table toolbar → use `table-column-selector` (it applies each switch at once; this panel drafts every preference and commits on Confirm). Offer one of the two for columns on a screen, not both; both edit the same `{ id, visible }` column shape that `useCollection` saves.
 - Settings of the resource itself (not of how the list shows it) → use a form page or `dialog`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - use-collection` — saves the preferences; `preferencesProps` is the binding.
-- [table](table.md) — takes `density`, `wrapLines`, `striped`, the visible columns and their order.
+- [data-table](data-table.md) — takes `density`, `wrapLines`, `striped`, the visible columns and their order; inside its toolbar this panel edits its columns with no wiring.
 - cards` — takes the page size and the visible fields.
 - [property-filter](property-filter.md) — sits beside it in the controls row.
 
@@ -34,7 +34,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `columns` | `CollectionPreferencesColumn[]` | `[]` | false | Columns to show, hide and order. Empty hides the columns section. |
+| `columns` | `CollectionPreferencesColumn[]` | `[]` | false | Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one. |
 | `pageSizeOptions` | `number[]` | `[]` | false | Page sizes offered. Empty hides the page size section. |
 | `sections` | `CollectionPreferencesSection[]` | `['page-size', 'columns', 'wrap-lines', 'striped', 'density']` | false | Sections the panel shows, in this order. |
 | `container` | `'dialog' \| 'drawer'` | `'dialog'` | false | Opens in a centered dialog or a side drawer. |

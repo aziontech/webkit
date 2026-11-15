@@ -2,7 +2,7 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import TableRoot from '../../../data/table/table.vue'
+  import DataTable from '../../../data/data-table/data-table.vue'
   import Input from '../../../inputs/input/input.vue'
   import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -152,7 +152,7 @@
       <ShellMockupPart :order="1">
         <Card :padded="false">
           <template #content>
-            <TableRoot
+            <DataTable
               :data="rows"
               :columns="COLUMNS"
               row-key="id"
@@ -177,7 +177,7 @@
                   size="medium"
                 />
               </template>
-            </TableRoot>
+            </DataTable>
           </template>
         </Card>
       </ShellMockupPart>

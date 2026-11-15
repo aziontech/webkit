@@ -32,7 +32,7 @@ export type FilterOperator =
 /** A filterable value; arrays back the `in` / `not-in` (multi-select) operators. */
 export type FilterValue = string | number | boolean | Array<string | number>
 
-/** One field the built-in `Table.Filter` builder can filter on. */
+/** One field `Table.Filter` offers: a facet in the menu, a property in the property filter. */
 export interface FilterField {
   /** Matches a column id / accessorKey so client-side filtering can target the column. */
   id: string
@@ -44,8 +44,8 @@ export interface FilterField {
   options?: { label: string; value: string | number | boolean }[]
 }
 
-/** How Table.Filter and Table.AppliedFilters render: the field/operator/value builder, or the drill-in filter menu. */
-export type TableFilterKind = 'builder' | 'menu'
+/** What Table.Filter hosts: the FilterMenu (facets) or the PropertyFilter (typed conditions). */
+export type TableFilterKind = 'menu' | 'property'
 
 /** One committed filter condition (a chip). */
 export interface AppliedFilter {
@@ -110,7 +110,7 @@ export interface TableContext {
   live?: ComputedRef<boolean>
   /** Turns the live tail on or off (Table.LiveButton). */
   setLive?: (value: boolean) => void
-  /** Field catalog the built-in filter builder offers (falls back to Table.Filter's own `fields`). */
+  /** Fields Table.Filter offers when it has no `fields` of its own. */
   filterFields: ComputedRef<FilterField[]>
   /** Committed structured filters (backs the `filters` model). */
   appliedFilters: ComputedRef<AppliedFilter[]>
@@ -120,7 +120,7 @@ export interface TableContext {
   removeFilter: (event: Event, filter: AppliedFilter) => void
   /** Clear structured filters and the global search text. */
   clearFilters: () => void
-  /** Filter the user asked to edit; Table.Filter watches this to re-open pre-filled. */
+  /** Filter the user asked to edit; Table.Filter watches this to reopen the menu at its field. */
   editingFilter: Ref<AppliedFilter | null>
   /** Request editing a committed filter (sets `editingFilter`). */
   editFilter: (filter: AppliedFilter) => void
@@ -174,9 +174,9 @@ export interface TableColumn {
   kind?: 'default' | 'action'
   /** Allow drag-to-resize on this column's header (ignored for frozen/action columns). */
   resizable?: boolean
-  /** Column-selector label when `header` is not a string. */
+  /** Column label in CollectionPreferences and the stacked layout when `header` is not a string. */
   label?: string
-  /** Exclude from Table.ColumnSelector (defaults true; action columns default false). */
+  /** Lists the column as hideable in CollectionPreferences (defaults true; action columns default false). */
   hideable?: boolean
   /** Opt this column into columnOrder serialization. */
   orderable?: boolean

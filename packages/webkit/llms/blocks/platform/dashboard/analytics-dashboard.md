@@ -1,11 +1,11 @@
 # AnalyticsDashboard (`platform/dashboard/analytics-dashboard`)
 
-> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated TableRoot of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/analytics-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -108,7 +108,7 @@ order; reserve the status role for a series whose color means a state.
 Searches `Top hosts` (`Search hosts or services`). It filters this table only, so it sits inside the
 card, not in the page header.
 
-### L. Top hosts — `TableRoot` (required)
+### L. Top hosts — `DataTable` (required)
 
 A searchable, paginated table of hosts with tabular figures, right-aligned numbers.
 
@@ -122,13 +122,13 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 
 In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Item`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
 
-### O. Sub-dashboards and breakdowns — `ToggleGroup`, `Input`, `TableRoot`, `EmptyState` (optional)
+### O. Sub-dashboards and breakdowns — `ToggleGroup`, `Input`, `DataTable`, `EmptyState` (optional)
 
 In the Metrics variant a product with more than one dashboard shows a medium `ToggleGroup` under the
 product tabs, named `<Product> dashboards`. Applications offers `Overview`, `Status codes` and
 `Request breakdown`; Firewall offers `Overview` and `Denied sources`. A dashboard picks which cards
 it shows and adds breakdown cards: a full-width `ChartCard` with a search `Input` and a paginated
-`TableRoot` (five rows, sorted columns). The status breakdown adds a second `ToggleGroup` that
+`DataTable` (five rows, sorted columns). The status breakdown adds a second `ToggleGroup` that
 filters by status class (`All`, `2xx`, `3xx`, `4xx`, `5xx`). Changing the product returns to its
 Overview; the period stays.
 
@@ -220,6 +220,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -234,7 +235,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
@@ -1055,7 +1055,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 </div>
               </div>
 
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="hosts"
                 :columns="hostColumns"
@@ -1090,7 +1090,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <template #cell-requests="{ row }">
                   <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </ChartCard.Content>
         </ChartCard>
@@ -1178,7 +1178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Chart.Bar labeled />
               <Chart.Tooltip />
             </Chart>
-            <TableRoot
+            <DataTable
               v-else
               :data="hosts"
               :columns="hostColumns"
@@ -1201,7 +1201,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-requests="{ row }">
                 <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
           </div>
         </PanelContent>
       </DialogContent>

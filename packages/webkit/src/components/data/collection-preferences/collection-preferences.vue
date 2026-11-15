@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
+  import { computed, inject, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import type {
     CollectionColumnPreference,
@@ -22,6 +22,7 @@
   import PanelContent from '../../overlay/panel/panel-content.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
+  import { TableInjectionKey } from '../table/injection-key'
 
   export type {
     CollectionColumnPreference,
@@ -49,7 +50,7 @@
   export type CollectionPreferencesContainer = 'dialog' | 'drawer'
 
   interface Props {
-    /** Columns to show, hide and order. Empty hides the columns section. */
+    /** Columns to show, hide and order. Empty reads the enclosing DataTable's columns, or hides the columns section outside one. */
     columns?: CollectionPreferencesColumn[]
     /** Page sizes offered. Empty hides the page size section. */
     pageSizeOptions?: number[]
@@ -110,10 +111,43 @@
   )
   const heading = computed<string>(() => props.title || t('collectionPreferences.title'))
 
+  const ctx = inject(TableInjectionKey, null)
+  const table = computed(() => (props.columns.length ? null : (ctx?.table.value ?? null)))
+  type ColumnMeta = { kind?: string; label?: string }
+  const columns = computed<CollectionPreferencesColumn[]>(() => {
+    if (!table.value) return props.columns
+    return table.value
+      .getAllLeafColumns()
+      .filter((column) => (column.columnDef.meta as ColumnMeta | undefined)?.kind !== 'action')
+      .map((column) => {
+        const header = column.columnDef.header
+        return {
+          id: column.id,
+          label:
+            (column.columnDef.meta as ColumnMeta | undefined)?.label ??
+            (typeof header === 'string' ? header : column.id),
+          locked: !column.getCanHide()
+        }
+      })
+  })
+  const fromTable = (): CollectionColumnPreference[] | null => {
+    if (!table.value) return null
+    const ids = new Set(columns.value.map((c) => c.id))
+    return table.value
+      .getAllLeafColumns()
+      .filter((column) => ids.has(column.id))
+      .sort(
+        (a, b) =>
+          (table.value?.getState().columnOrder.indexOf(a.id) ?? -1) -
+          (table.value?.getState().columnOrder.indexOf(b.id) ?? -1)
+      )
+      .map((column) => ({ id: column.id, visible: column.getIsVisible() }))
+  }
+
   const shown = (section: CollectionPreferencesSection): boolean => {
     if (!props.sections.includes(section)) return false
     if (section === 'page-size') return props.pageSizeOptions.length > 0
-    if (section === 'columns') return props.columns.length > 0
+    if (section === 'columns') return columns.value.length > 0
     return true
   }
   const ordered = computed<CollectionPreferencesSection[]>(() => props.sections.filter(shown))
@@ -125,13 +159,15 @@
   const draftDensity = ref<CollectionDensity>('comfortable')
 
   const seedColumns = (): CollectionColumnPreference[] => {
+    const linked = fromTable()
+    if (linked) return linked
     const saved = preferences.value.columns ?? []
-    const known = new Set(props.columns.map((c) => c.id))
+    const known = new Set(columns.value.map((c) => c.id))
     const kept = saved.filter((c) => known.has(c.id))
     const seen = new Set(kept.map((c) => c.id))
     return [
       ...kept,
-      ...props.columns.filter((c) => !seen.has(c.id)).map((c) => ({ id: c.id, visible: true }))
+      ...columns.value.filter((c) => !seen.has(c.id)).map((c) => ({ id: c.id, visible: true }))
     ]
   }
 
@@ -163,8 +199,8 @@
     { immediate: true }
   )
 
-  const columnLabel = (id: string): string => props.columns.find((c) => c.id === id)?.label ?? id
-  const locked = (id: string): boolean => props.columns.find((c) => c.id === id)?.locked === true
+  const columnLabel = (id: string): string => columns.value.find((c) => c.id === id)?.label ?? id
+  const locked = (id: string): boolean => columns.value.find((c) => c.id === id)?.locked === true
 
   const setVisible = (id: string, visible: boolean): void => {
     draftColumns.value = draftColumns.value.map((c) => (c.id === id ? { ...c, visible } : c))
@@ -203,6 +239,12 @@
     if (shown('striped')) value.striped = draftStriped.value
     if (shown('density')) value.density = draftDensity.value
     preferences.value = value
+    if (table.value && value.columns) {
+      table.value.setColumnVisibility(
+        Object.fromEntries(value.columns.map((c) => [c.id, c.visible]))
+      )
+      table.value.setColumnOrder(value.columns.map((c) => c.id))
+    }
     emit('confirm', event, value)
     open.value = false
   }

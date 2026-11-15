@@ -1,11 +1,12 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, within } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
-import { nextTick } from 'vue'
+import { describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick } from 'vue'
 
 import Default from '../../../../examples/collection-preferences/default.vue'
 import InADrawer from '../../../../examples/collection-preferences/in-a-drawer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import DataTable from '../data-table/data-table.vue'
 import CollectionPreferences from './collection-preferences.vue'
 
 const settle = async () => {
@@ -236,5 +237,42 @@ describe('CollectionPreferences', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Preferences' }))
     await settle()
     await expectNoA11yViolations(dialog())
+  })
+})
+
+describe('CollectionPreferences inside a DataTable', () => {
+  it('reads the table columns when it has none and writes visibility and order on Confirm', async () => {
+    const view = render(
+      defineComponent({
+        setup: () => () =>
+          h(
+            DataTable,
+            {
+              data: [{ id: '1', name: 'storefront', status: 'Active', region: 'us-east' }],
+              columns: [
+                { accessorKey: 'name', header: 'Name', hideable: false },
+                { accessorKey: 'status', header: 'Status' },
+                { accessorKey: 'region', header: 'Region' }
+              ],
+              rowKey: 'id',
+              'aria-label': 'Workloads'
+            },
+            { toolbar: () => h(CollectionPreferences, { sections: ['columns'] }) }
+          )
+      })
+    )
+    const headers = () =>
+      [...view.container.querySelectorAll('[role="columnheader"]')].map((c) =>
+        c.textContent?.trim()
+      )
+    await fireEvent.click(view.getByTestId('data-collection-preferences__trigger'))
+    const columns = await within(document.body).findByTestId('data-collection-preferences__columns')
+    const rows = within(columns).getAllByTestId('data-collection-preferences__column')
+    expect(rows.map((row) => row.textContent?.includes('Name'))).toContain(true)
+    expect(columns.querySelector('[data-locked]')?.textContent).toContain('Name')
+    const region = rows.find((row) => row.textContent?.includes('Region')) as HTMLElement
+    await userEvent.click(within(region).getByRole('switch'))
+    await userEvent.click(within(document.body).getByTestId('data-collection-preferences__confirm'))
+    await vi.waitFor(() => expect(headers()).toEqual(['Name', 'Status']))
   })
 })

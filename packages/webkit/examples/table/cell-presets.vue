@@ -1,4 +1,5 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Table from '@aziontech/webkit/table'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
@@ -58,7 +59,7 @@
 
 <template>
   <WebkitProvider :now="NOW">
-    <Table
+    <DataTable
       :data="rows"
       :columns="columns"
       row-key="id"
@@ -140,6 +141,6 @@
           </DropdownMenu.Group>
         </Table.CellActions>
       </template>
-    </Table>
+    </DataTable>
   </WebkitProvider>
 </template>

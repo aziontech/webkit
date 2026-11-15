@@ -4,6 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
@@ -29,8 +31,6 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -780,7 +780,7 @@ legacy  IN HINFO "PC" "Linux"`
             </header>
             <Card :padded="false">
               <template #content>
-                <TableRoot
+                <DataTable
                   ref="tableRef"
                   v-bind="tableProps"
                   :loading="loading || fetching"
@@ -892,7 +892,7 @@ legacy  IN HINFO "PC" "Linux"`
                       </template>
                     </EmptyState>
                   </template>
-                </TableRoot>
+                </DataTable>
               </template>
             </Card>
           </section>
@@ -1004,7 +1004,7 @@ legacy  IN HINFO "PC" "Linux"`
               </Alert>
               <Card :padded="false">
                 <template #content>
-                  <TableRoot
+                  <DataTable
                     :data="parsed.lines"
                     :columns="previewColumns"
                     row-key="line"
@@ -1042,7 +1042,7 @@ legacy  IN HINFO "PC" "Linux"`
                         size="small"
                       />
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </template>
               </Card>
             </section>

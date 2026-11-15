@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -15,7 +16,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -733,7 +733,7 @@
                 </div>
               </div>
 
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="rows"
                 :columns="columns"
@@ -768,7 +768,7 @@
                 <template #cell-requests="{ row }">
                   <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </ChartCard.Content>
         </ChartCard>
@@ -835,7 +835,7 @@
               <Chart.Bar labeled />
               <Chart.Tooltip />
             </Chart>
-            <TableRoot
+            <DataTable
               v-else
               :data="rows"
               :columns="columns"
@@ -858,7 +858,7 @@
               <template #cell-requests="{ row }">
                 <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
           </div>
         </PanelContent>
       </DialogContent>

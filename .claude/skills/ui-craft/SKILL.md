@@ -121,7 +121,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 | Structure  | Accessible forms: fieldset/legend, submit-time required/invalid                                                                           | `/webkit-form`              |
 | Structure  | Where a create lives: page vs drawer, the Advanced band, the commit bar                                                                   | `/webkit-create-surface`    |
 | Structure  | Where a failure goes: the field, a section Alert, a toast, the auth card                                                                  | `/webkit-errors`            |
-| Structure  | Data tables: data-driven `<Table :data :columns>`, toolbar, internal scroll, cell recipes — and the cross-resource link every screen uses | `/webkit-tables`            |
+| Structure  | Data tables: data-driven `<DataTable :data :columns>`, toolbar, internal scroll, cell recipes — the cross-resource link every screen uses | `/webkit-tables`            |
 | Structure  | The index page around the table: one band, search vs filters, the chip filter bar                                                         | `/webkit-lists`             |
 | Structure  | The two console shells; one GlobalHeader; user always visible; one navigation per level                                                   | `/webkit-navigation`        |
 | Structure  | Every string: punctuation, sentence case, label vs message, one word per concept                                                          | `/webkit-microcopy`         |

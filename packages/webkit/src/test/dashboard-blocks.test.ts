@@ -206,7 +206,7 @@ describe('platform/dashboard exports', () => {
 describe('platform/dashboard/activity-outcomes-dashboard', () => {
   it('narrows the log by destination and offers Clear filters when nothing matches', async () => {
     const view = render(Activity)
-    const table = () => byTestId('data-table', view.container)
+    const table = () => byTestId('data-data-table', view.container)
     expect(table()?.textContent).toContain('storage.example.com')
     const input = view.getByRole('textbox', { name: 'Destination host' })
     await userEvent.fill(input, 'storage.example.com')

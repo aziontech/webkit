@@ -1,11 +1,11 @@
 # DataDashboard (`platform/dashboard/data-dashboard`)
 
-> The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated TableRoot lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `TableRoot`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The data dashboard pattern: KPI tiles with sparklines and period-over-period deltas, followed by the breakdowns that explain them, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. Six StatTiles carry each metric’s period total, a sparkline and the change against the previous 24 hours, each with a Hint that defines the metric. Under them, a ChartCard draws data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranks the projects by data transferred, and a searchable, paginated DataTable lists requests and data transferred per project. Every card keeps its Sum and change Tags, an Expand IconButton and a DropdownMenu with Copy query and Export CSV. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/data-dashboard/data-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/data-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -94,7 +94,7 @@ horizontal bar chart, largest first.
 
 `Search projects`, inside the `Usage by project` card.
 
-### L. Usage by project — `TableRoot` (required)
+### L. Usage by project — `DataTable` (required)
 
 Searchable, paginated; requests and data transferred per project in tabular, right-aligned figures.
 
@@ -175,6 +175,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
@@ -189,7 +190,6 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -907,7 +907,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 </div>
               </div>
 
-              <TableRoot
+              <DataTable
                 v-model:global-filter="search"
                 :data="rows"
                 :columns="columns"
@@ -942,7 +942,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <template #cell-requests="{ row }">
                   <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </ChartCard.Content>
         </ChartCard>
@@ -1009,7 +1009,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Chart.Bar labeled />
               <Chart.Tooltip />
             </Chart>
-            <TableRoot
+            <DataTable
               v-else
               :data="rows"
               :columns="columns"
@@ -1032,7 +1032,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-requests="{ row }">
                 <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
           </div>
         </PanelContent>
       </DialogContent>

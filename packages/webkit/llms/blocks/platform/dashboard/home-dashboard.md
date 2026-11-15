@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/home-dashboard/home-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/home-dashboard")`
-- Components: [Alert](../../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../../components/button.md), [Card](../../../components/card.md), `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [Logo](../../../components/logo.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [Table](../../../components/table.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-console-layout`
+- Components: [Alert](../../../components/alert.md), `claudeMark`, `codexMark`, `cursorMark`, `geminiMark`, [Button](../../../components/button.md), [Card](../../../components/card.md), [DataTable](../../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Illustration](../../../components/illustration.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [Logo](../../../components/logo.md), [Popover](../../../components/popover.md), [SearchTrigger](../../../components/search-trigger.md), [Spinner](../../../components/spinner.md), [StatTile](../../../components/stat-tile.md), [StatTileGroup](../../../components/stat-tile-group.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-console-layout`
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -76,17 +76,17 @@ of their content; the greeting and the agent card stay.
 
 ### G. Classic summary — `StatTile`, `Card`, `IconButton`, `Tooltip` (optional)
 
-Variant Summary only; it adds `Hint`, `TableRoot`, `Table`, `Tag` and `Link` to the page: the classic overview for readers who want figures and tables on Home instead of
+Variant Summary only; it adds `Hint`, `DataTable`, `Table`, `Tag` and `Link` to the page: the classic overview for readers who want figures and tables on Home instead of
 resource panels. A main column and, from `xl`, an aside rail of `--container-xs` beside it (below
 `xl` the aside follows the main column).
 
 - **Metrics**: an `h2` with a `Hint` on what the figures cover, four `StatTile`s with a `Hint` in the
   aside (label, figure, unit; no delta and no sparkline), and the window they cover as a muted caption
   aligned to the end (`Jul 14, 2026, 6:56 PM – Jul 14, 2026, 7:56 PM UTC`).
-- **Resources**: an `h2` with a `Hint`, then an unpadded `Card` around a compact `TableRoot` of the
+- **Resources**: an `h2` with a `Hint`, then an unpadded `Card` around a compact `DataTable` of the
   resources changed last (name, domain as `Table.CellLink`, status as a small `Tag`, `Table.CellTime`
   with the author, `Table.CellActions`), and a `View all DNS zones` `Link` in the card footer.
-- **Recent activity**: an unpadded `Card` around a compact `TableRoot` of the last five operations
+- **Recent activity**: an unpadded `Card` around a compact `DataTable` of the last five operations
   (date, operation, type, resource, author email); `Created` and `Deleted` read as small success and
   danger `Tag`s, any other operation as plain text. `View all activity` in the footer.
 - **Aside**: a `Monthly usage` `Card` with a key and value list and `View all usage`, then a
@@ -151,7 +151,7 @@ resource panels. A main column and, from `xl`, an aside rail of `--container-xs`
 - `Default` — primary (the code below)
 - `Empty` — Home for a brand-new account: the first-access screen. Inside ConsoleLayout, clicking the prompt (or pressing Enter on it) opens the layout's command palette; type a domain such as example.com (taken) or acme.example.com (available) into the second door to run the availability check.
 - `Failed` — Populated Home whose data could not load: the usage band and every resource panel show a danger `Alert` with Retry in place of their content; the greeting and the agent card stay.
-- `Summary` — The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources TableRoot card and a Recent activity TableRoot card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.
+- `Summary` — The classic overview: four metric StatTiles with a Hint on each label and the window they cover in a caption, a resources DataTable card and a Recent activity DataTable card, each with a View all footer Link, beside an aside of a Monthly usage list card and a Marketplace trends card that pages through featured templates with Previous and Next.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/home-dashboard", { variant })`, or the file under `blocks/platform/dashboard/home-dashboard/variants/`.
 

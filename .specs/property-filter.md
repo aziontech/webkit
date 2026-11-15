@@ -3,9 +3,9 @@ name: property-filter
 category: data
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: a6048352c684c23bc7ecb74f9c4ea289ff946088cef2ea04cd318941db60eff3
+checksum: 214caf7ef624b02ae328a0172209153afadd6169a79f83acf038e0780c10231d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ One field that filters a collection by properties and free text, after Cloudscap
 
 ## When to use
 
+- Use PropertyFilter when people type queries with operators (Status = Active, Requests > 100) or free text they want to keep.
 - A list or table that people narrow by several fields at once (status, region, owner) and by text.
 - Any collection driven by `useCollection`, client or server mode.
 - Filters that must survive a reload or a shared link: the query serializes into the URL through `useCollection`.
@@ -27,7 +28,7 @@ One field that filters a collection by properties and free text, after Cloudscap
 
 - A single text search over a short list → use `input` bound to `filterProps`.
 - A few fixed choices always on screen → use `toggle-group` or `chip` filters.
-- A structured filter builder with its own panel inside a table toolbar → use `table-filter`.
+- Inside a DataTable toolbar, `Table.Filter kind="property"` renders this field wired to the table's filters; bind PropertyFilter to `useCollection` yourself only for OR queries or free text.
 - Faceted picks from a known set of values per field (status, region, owner), shown as chips → use `filter-menu`. PropertyFilter is for expression search: typed tokens, operators, free text and a query people keep as text.
 
 ## Related
@@ -124,19 +125,20 @@ Query mode:
 
 ## Props
 
-| Prop          | Type                                                               | Default    | Required | JSDoc                                                                                                                       |
-| ------------- | ------------------------------------------------------------------ | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `properties`  | `FilteringProperty[]`                                              | `[]`       | false    | Properties the suggestions offer, with their operators and values.                                                          |
-| `totalCount`  | `number`                                                           | undefined  | false    | Items that match the query, announced next to the tokens. Hidden when unset.                                                |
-| `placeholder` | `string`                                                           | `''`       | false    | Placeholder of the field. Empty uses the locale catalog.                                                                    |
-| `ariaLabel`   | `string`                                                           | `''`       | false    | Accessible name of the field. Empty uses the locale catalog.                                                                |
-| `freeText`    | `boolean`                                                          | `true`     | false    | Accepts typed text with no property as a free-text token.                                                                   |
-| `disabled`    | `boolean`                                                          | `false`    | false    | Disables the field and the tokens.                                                                                          |
-| `mode`        | `'tokens' \| 'query'`                                              | `'tokens'` | false    | `tokens` turns each choice into a token; `query` edits one query string.                                                    |
-| `validate`    | `(text: string) => string`                                         | undefined  | false    | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check.  |
-| `suggest`     | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]` | undefined  | false    | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions. |
-| `grouped`     | `boolean`                                                                        | `false`    | false    | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one.                     |
-| `loadValues`  | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.         |
+| Prop             | Type                                                                             | Default    | Required | JSDoc                                                                                                                                              |
+| ---------------- | -------------------------------------------------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `properties`     | `FilteringProperty[]`                                                            | `[]`       | false    | Properties the suggestions offer, with their operators and values.                                                                                 |
+| `totalCount`     | `number`                                                                         | undefined  | false    | Items that match the query, announced next to the tokens. Hidden when unset.                                                                       |
+| `placeholder`    | `string`                                                                         | `''`       | false    | Placeholder of the field. Empty uses the locale catalog.                                                                                           |
+| `ariaLabel`      | `string`                                                                         | `''`       | false    | Accessible name of the field. Empty uses the locale catalog.                                                                                       |
+| `freeText`       | `boolean`                                                                        | `true`     | false    | Accepts typed text with no property as a free-text token.                                                                                          |
+| `disabled`       | `boolean`                                                                        | `false`    | false    | Disables the field and the tokens.                                                                                                                 |
+| `mode`           | `'tokens' \| 'query'`                                                            | `'tokens'` | false    | `tokens` turns each choice into a token; `query` edits one query string.                                                                           |
+| `validate`       | `(text: string) => string`                                                       | undefined  | false    | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check.                         |
+| `suggest`        | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]`               | undefined  | false    | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions.                        |
+| `grouped`        | `boolean`                                                                        | `false`    | false    | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one.                                            |
+| `hideOperations` | `boolean`                                                                        | `false`    | false    | Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters). |
+| `loadValues`     | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.                                |
 
 Types (from `@aziontech/webkit/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: PropertyFilterOption[]; type?: 'text' | 'number' | 'date'; customValue?: boolean }`; `PropertyFilterOption = { value: string; label?: string; count?: number }`. Since v4, `PropertyFilterQuery` may carry `groups?: PropertyFilterTokenGroup[]` (`{ tokens, operation }`): each group is one condition next to the tokens, combined with the query's `operation`; `useCollection` matches it, sends it to `fetch` and keeps it in the URL (`groups` key). From `@aziontech/webkit/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.
 

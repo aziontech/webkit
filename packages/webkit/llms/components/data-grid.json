@@ -1,0 +1,153 @@
+{
+ "name": "data-grid",
+ "binding": "DataGrid",
+ "import": "@aziontech/webkit/data-grid",
+ "treeShakeableImport": "@aziontech/webkit/data-grid",
+ "category": "data",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "An editable, spreadsheet-like grid: rows of records and typed columns where people move a cell cursor with the keyboard, edit cells in place, select ranges and copy them, the way an SQL editor's results and a database table editor work. It shares the table's visual language (header band, row dividers, row selection, a pinned first column, the same tokens) but renders the WAI-ARIA **grid** pattern (`role=\"grid\"`, `gridcell`, a roving tab stop), not a read-only table. The rows are a two-way model (`v-model`); every committed edit writes the new rows and emits `change` with the cell, the new value and the previous one. Adding and deleting rows are hooks: the grid emits `row-add` and `row-delete` and the app changes the rows. It loads no table engine and no virtualization library: thousands of rows scroll natively inside `maxHeight`, and each row is laid out lazily with CSS `content-visibility: auto`.",
+ "setup": null,
+ "useWhen": [
+  "Use DataGrid only when people edit many cells of many records in place, spreadsheet-style; for a short list of rows in a form use AttributeEditor, for read-and-act lists use Table.",
+  "A database table editor or the editable results of a query: typed cells (text, number, boolean, a choice), keyboard-first editing, copy of a cell range.",
+  "Bulk corrections across rows, where opening a drawer per record would be slower than editing the cells."
+ ],
+ "avoidWhen": [
+  "People read, sort, filter, select and act on records but do not edit cells → use `data-table` (or a hand-composed `table`).",
+  "A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.",
+  "One record edited field by field → use a form with `field` controls.",
+  "Key and value pairs shown for reading → use `key-value-list`."
+ ],
+ "related": [
+  "data-table` — the read-and-act table (sorting, filters, paging, toolbar parts); DataGrid is its editable counterpart.",
+  "table` — the parts and tokens DataGrid shares its look with.",
+  "attribute-editor` — a few rows of the same fields inside a form.",
+  "collection-preferences` — the display preferences of a list; DataGrid's column widths are dragged in place instead."
+ ],
+ "bestPractices": [
+  "Give every row a stable id under `row-key` (default `'id'`): the cursor, the selection and the edits follow it.",
+  "Type each column (`text`, `number`, `boolean`, `select`) so the editor matches the value; mark computed or key columns `editable: false`.",
+  "Freeze the first column (`frozen-first-column`) when it names the row and the grid scrolls sideways.",
+  "Keep adding and deleting in the app: handle `row-add` and `row-delete`, then write the new rows to the `v-model`. Confirm a delete of more than a few rows in a `confirm-dialog`.",
+  "Use `readonly` while saving or for people who may not edit; the cursor, selection and copy still work."
+ ],
+ "props": [
+  {
+   "name": "columns",
+   "type": "DataGridColumn[]",
+   "default": "[]",
+   "required": "false",
+   "doc": "Columns in order: `{ id, header, type?, options?, editable?, width?, minWidth?, align? }`; `type` picks the editor (default text)."
+  },
+  {
+   "name": "rowKey",
+   "type": "string",
+   "default": "'id'",
+   "required": "false",
+   "doc": "Field used as the stable row id (cursor, selection and edits follow it)."
+  },
+  {
+   "name": "enableRowSelection",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Adds a leading checkbox column with Select all."
+  },
+  {
+   "name": "frozenFirstColumn",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Pins the first data column to the inline start edge while the grid scrolls sideways."
+  },
+  {
+   "name": "readonly",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "No cell can be edited; the cursor, range selection and copy still work."
+  },
+  {
+   "name": "maxHeight",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Max height (CSS length) of the scrolling viewport; the header stays on top."
+  },
+  {
+   "name": "ariaLabel",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "Accessible name of the grid when no visible heading names it."
+  },
+  {
+   "name": "modelValue",
+   "type": "TRow[]",
+   "default": "() => []",
+   "required": "false",
+   "doc": "Two-way value (`v-model`)."
+  },
+  {
+   "name": "rowSelection",
+   "type": "Record<string, boolean>",
+   "default": "—",
+   "required": "false",
+   "doc": "Two-way value (`v-model:rowSelection`)."
+  }
+ ],
+ "events": [
+  {
+   "name": "change",
+   "payload": "(event: Event, edit: DataGridCellEdit)",
+   "notes": "A cell edit was committed (Enter, Tab, blur, a toggle); `edit` is `{ row, columnId, value, previous }`."
+  },
+  {
+   "name": "row-add",
+   "payload": "(event: Event)",
+   "notes": "The `add` function of the toolbar slot ran; the app appends a row to the `v-model`."
+  },
+  {
+   "name": "row-delete",
+   "payload": "(event: Event, rows: TRow[])",
+   "notes": "The `remove` function of the toolbar slot ran with rows selected; the app removes them from the `v-model`."
+  },
+  {
+   "name": "copy",
+   "payload": "(event: ClipboardEvent, text: string)",
+   "notes": "Ctrl+C or Cmd+C copied the selected cell range as tab-separated text (rows by line), also written to the clipboard."
+  }
+ ],
+ "slots": [
+  {
+   "name": "toolbar",
+   "scope": "{ selectedRows: TRow[]; selectedCount: number; add: (event: Event) => void; remove: (event: Event) => void }",
+   "notes": "Action band above the grid (add and delete buttons); `add` and `remove` emit the row hooks."
+  },
+  {
+   "name": "empty",
+   "scope": "—",
+   "notes": "Shown in place of the rows when there are none. Defaults to a small `EmptyState`."
+  }
+ ],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import DataGrid from '@aziontech/webkit/data-grid'\n  import { ref } from 'vue'\n\n  const rows = ref([\n    { id: '1', name: 'Acme Inc.', plan: 'business', seats: 12, active: true },\n    { id: '2', name: 'Jane Doe', plan: 'free', seats: 1, active: true },\n    { id: '3', name: 'John Smith', plan: 'pro', seats: 3, active: false },\n    { id: '4', name: 'Priya Patel', plan: 'pro', seats: 5, active: true },\n    { id: '5', name: 'Sam Lee', plan: 'free', seats: 1, active: false }\n  ])\n\n  const columns = [\n    { id: 'name', header: 'Name', type: 'text', width: 200 },\n    {\n      id: 'plan',\n      header: 'Plan',\n      type: 'select',\n      options: [\n        { label: 'Free', value: 'free' },\n        { label: 'Pro', value: 'pro' },\n        { label: 'Business', value: 'business' }\n      ]\n    },\n    { id: 'seats', header: 'Seats', type: 'number', align: 'end', width: 120 },\n    { id: 'active', header: 'Active', type: 'boolean', width: 120 },\n    { id: 'id', header: 'ID', editable: false, width: 96 }\n  ]\n</script>\n\n<template>\n  <DataGrid\n    v-model=\"rows\"\n    :columns=\"columns\"\n    aria-label=\"Customers\"\n    frozen-first-column\n  />\n</template>"
+  },
+  {
+   "name": "RowSelection",
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import DataGrid from '@aziontech/webkit/data-grid'\n  import { ref } from 'vue'\n\n  const rows = ref([\n    { id: 'r1', host: 'app.example.com', ttl: 3600, proxied: true },\n    { id: 'r2', host: 'api.example.com', ttl: 300, proxied: true },\n    { id: 'r3', host: 'docs.example.com', ttl: 3600, proxied: false }\n  ])\n  const selection = ref({})\n  let next = 4\n\n  const columns = [\n    { id: 'host', header: 'Host', width: 220 },\n    { id: 'ttl', header: 'TTL (seconds)', type: 'number', align: 'end', width: 140 },\n    { id: 'proxied', header: 'Proxied', type: 'boolean', width: 120 }\n  ]\n\n  const addRow = () => {\n    rows.value = [...rows.value, { id: `r${next++}`, host: '', ttl: 3600, proxied: false }]\n  }\n  const deleteRows = (event, removed) => {\n    const ids = new Set(removed.map((row) => row.id))\n    rows.value = rows.value.filter((row) => !ids.has(row.id))\n    selection.value = {}\n  }\n</script>\n\n<template>\n  <DataGrid\n    v-model=\"rows\"\n    v-model:row-selection=\"selection\"\n    :columns=\"columns\"\n    aria-label=\"DNS records\"\n    enable-row-selection\n    @row-add=\"addRow\"\n    @row-delete=\"deleteRows\"\n  >\n    <template #toolbar=\"{ add, remove, selectedCount }\">\n      <Button\n        label=\"Add row\"\n        icon=\"pi pi-plus\"\n        kind=\"outlined\"\n        size=\"small\"\n        @click=\"add\"\n      />\n      <Button\n        label=\"Delete rows\"\n        kind=\"outlined\"\n        size=\"small\"\n        :disabled=\"selectedCount === 0\"\n        @click=\"remove\"\n      />\n    </template>\n  </DataGrid>\n</template>"
+  },
+  {
+   "name": "Readonly",
+   "sfc": "<script setup>\n  import DataGrid from '@aziontech/webkit/data-grid'\n  import { ref } from 'vue'\n\n  const rows = ref([\n    { id: '1', path: '/assets/logo.svg', size: 4096, cached: true },\n    { id: '2', path: '/index.html', size: 18230, cached: false },\n    { id: '3', path: '/app.js', size: 254880, cached: true }\n  ])\n\n  const columns = [\n    { id: 'path', header: 'Path', width: 220 },\n    { id: 'size', header: 'Size (bytes)', type: 'number', align: 'end', width: 140 },\n    { id: 'cached', header: 'Cached', type: 'boolean', width: 120 }\n  ]\n</script>\n\n<template>\n  <DataGrid\n    v-model=\"rows\"\n    :columns=\"columns\"\n    aria-label=\"Objects\"\n    readonly\n  />\n</template>"
+  }
+ ],
+ "docs": "components/data-grid.md"
+}

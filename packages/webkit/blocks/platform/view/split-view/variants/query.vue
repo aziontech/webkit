@@ -8,6 +8,7 @@
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import DateRangePicker, {
     type DateRangeUnit,
     type DateRangeValue,
@@ -31,7 +32,6 @@
   } from '@aziontech/webkit/property-filter'
   import Resizable from '@aziontech/webkit/resizable'
   import Sidebar from '@aziontech/webkit/sidebar-root'
-  import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { matchesQuery } from '@aziontech/webkit/use-collection'
@@ -1639,7 +1639,7 @@
 
               <section class="flex min-h-0 min-w-0 flex-1 flex-col">
                 <div class="flex min-h-0 flex-1">
-                  <TableRoot
+                  <DataTable
                     ref="tableRef"
                     v-model:pagination="pagination"
                     :data="matchedEvents"
@@ -1739,7 +1739,7 @@
                         description="Widen the time range to see more of the log."
                       />
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </div>
               </section>
             </div>

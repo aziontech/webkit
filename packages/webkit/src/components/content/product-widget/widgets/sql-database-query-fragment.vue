@@ -5,7 +5,7 @@
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
-  import TableRoot from '../../../data/table/table.vue'
+  import DataTable from '../../../data/data-table/data-table.vue'
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
   import Input from '../../../inputs/input/input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
@@ -214,7 +214,7 @@
                   v-if="frame.results"
                   key="rows"
                 >
-                  <TableRoot
+                  <DataTable
                     :data="ROWS"
                     :columns="COLUMNS"
                     row-key="id"

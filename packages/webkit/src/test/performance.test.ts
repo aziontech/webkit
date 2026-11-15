@@ -32,10 +32,10 @@ import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs
 import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
 import Timestamp from '../components/content/timestamp/timestamp.vue'
 import CardList from '../components/data/card-list/card-list.vue'
+import DataTable from '../components/data/data-table/data-table.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
 import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
 import PropertyFilter from '../components/data/property-filter/property-filter.vue'
-import Table from '../components/data/table/table.vue'
 import TableCellLink from '../components/data/table/table-cell-link/table-cell-link.vue'
 import TableCellTags from '../components/data/table/table-cell-tags/table-cell-tags.vue'
 import Tree from '../components/data/tree/tree.vue'
@@ -562,7 +562,7 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter' | 'sel
       collection = current
       return () =>
         h('div', { style: 'width:1024px' }, [
-          h(Table, {
+          h(DataTable, {
             ...current.tableProps.value,
             virtual,
             maxHeight: virtual ? '640px' : '',
@@ -1275,7 +1275,7 @@ function tablePresetsCase(): Case {
       render: () =>
         h('div', { style: 'width:1024px' }, [
           h(
-            Table,
+            DataTable,
             {
               data,
               columns,
