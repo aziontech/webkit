@@ -319,6 +319,66 @@ for (const [rule, fixture] of Object.entries(FIXTURES)) {
   })
 }
 
+test('false positives the checker skips: test artifacts, element ids, kept tokens, migration tooling', () => {
+  assert.deepEqual(
+    checkFile(
+      'packages/webkit/src/components/action/button/__screenshots__/Button Default 1.png',
+      '',
+      ctx
+    ),
+    []
+  )
+  assert.deepEqual(
+    hits(
+      `${C}/action/button/button.vue`,
+      sfc('', `<input :aria-describedby="error ? 'data-stream-apiKey-message' : undefined" />`),
+      'data-attribute'
+    ),
+    []
+  )
+  assert.equal(
+    hits(`${C}/action/button/button.vue`, sfc('', '<div :data-hasIcon="x" />'), 'data-attribute')
+      .length,
+    1
+  )
+  assert.deepEqual(
+    hits(
+      `${C}/overlay/tooltip/tooltip.vue`,
+      sfc('', '<div class="bg-(--bg-contrast) text-(--text-contrast)" />'),
+      'token-name'
+    ),
+    []
+  )
+  const legacy = "const help = 'pi pi-times becomes ai ai-x; ai-cor becomes ai-color'\n"
+  for (const rel of [
+    'packages/webkit/src/cli/cli.js',
+    'packages/webkit/src/cli/migrate.js',
+    'packages/webkit/src/cli/migrations/v6-icons.js'
+  ])
+    assert.deepEqual(hits(rel, legacy, 'icon-name'), [], rel)
+  assert.ok(hits('packages/webkit/src/cli/add.js', legacy, 'icon-name').length > 0)
+})
+
+test('css-variable: a component may set a variable another component or the theme owns', () => {
+  const owned = {
+    ...ctx,
+    cssVarReaders: new Map([
+      ['texture-pool-a', new Set(['texture'])],
+      ['cols', new Set(['card-grid'])]
+    ]),
+    themeVars: new Set(['bg-canvas', 'popup-origin', 'text-label-lg-font-weight'])
+  }
+  const rel = `${C}/section/hero-section/hero-section.vue`
+  const text = sfc(
+    '',
+    '<div class="[--texture-pool-a:1%] [--bg-canvas:red] [--popup-origin:top] [--text-label-lg-font-weight:500] [--cols:2]" />'
+  )
+  const found = checkFile(rel, text, owned)
+    .filter((x) => x.rule === 'css-variable')
+    .map((x) => x.message.match(/"--([a-z0-9-]+)"/)[1])
+  assert.deepEqual([...new Set(found)], ['cols'])
+})
+
 test('every rule in the registry has a fixture, and no fixture names an unknown rule', () => {
   assert.deepEqual(Object.keys(FIXTURES).sort(), Object.keys(RULES).sort())
 })

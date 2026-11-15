@@ -465,7 +465,9 @@ function componentPath(rel) {
 }
 
 const isTest = (rel) =>
-  /\.(test|spec)\.[cm]?[jt]s$|(^|\/)(test|__tests__|fixtures|__snapshots__)\//.test(rel)
+  /\.(test|spec)\.[cm]?[jt]s$|(^|\/)(test|__tests__|fixtures|__snapshots__|__screenshots__)\//.test(
+    rel
+  )
 
 export function checkComponentPath(rel, ctx = {}) {
   const cp = componentPath(rel)
@@ -584,9 +586,10 @@ export function checkFileName(rel) {
       seg === 'node_modules' ||
       seg === '__tests__' ||
       seg === '__snapshots__' ||
+      seg === '__screenshots__' ||
       seg === '__mocks__'
     )
-      continue
+      return out
     const stem = seg.replace(/^_/, '').replace(/(\.[a-z0-9]+)+$/i, '')
     if (!stem) continue
     if (LOCALE_TAG.test(stem)) continue
@@ -787,7 +790,24 @@ export function checkComposableFile(rel, text) {
   return out
 }
 
-export function checkCssVariables(rel, text, root) {
+const TYPOGRAPHY_SUFFIXES = [
+  'font-size',
+  'font-weight',
+  'line-height',
+  'letter-spacing',
+  'font-family',
+  'color'
+]
+
+export function ownedElsewhere(name, root, ctx = {}) {
+  if (ctx.themeVars?.has(name)) return true
+  const readers = ctx.cssVarReaders?.get(name)
+  if (!readers) return false
+  for (const owner of readers) if (owner !== root && name.startsWith(`${owner}-`)) return true
+  return false
+}
+
+export function checkCssVariables(rel, text, root, ctx = {}) {
   const out = []
   if (!root) return out
   const seen = new Set()
@@ -797,6 +817,7 @@ export function checkCssVariables(rel, text, root) {
     const name = m[1] || m[2] || m[3] || m[4] || m[5]
     if (!name || name.startsWith('tw-') || seen.has(name)) continue
     seen.add(name)
+    if (ownedElsewhere(name, root, ctx)) continue
     const line = lineOf(text, m.index)
     if (!name.startsWith(`${root}-`))
       out.push(
@@ -822,7 +843,7 @@ const TOKEN_BAD = [
   },
   { re: /\bsintax\b/g, fix: () => 'syntax' },
   {
-    re: /--[a-z0-9-]+-contrast\b|(?<![\w-])(?:bg|text|border|fill|stroke|ring)-\(--[a-z0-9-]+-contrast\)/g,
+    re: /--(?!(?:bg|text)-contrast\b)[a-z0-9-]+-contrast\b|(?<![\w-])(?:bg|text|border|fill|stroke|ring)-\(--(?!(?:bg|text)-contrast\))[a-z0-9-]+-contrast\)/g,
     fix: () => '-foreground'
   }
 ]
@@ -957,7 +978,7 @@ export function checkDataAttributeUsage(rel, text) {
   const out = []
   const names = new Set()
   for (const m of text.matchAll(/(?<![\w-]):?(data-[A-Za-z0-9-]+)\s*=/g)) names.add(m[1])
-  for (const m of text.matchAll(/['"](data-[A-Za-z0-9-]+)['"]\s*:/g)) names.add(m[1])
+  for (const m of text.matchAll(/[{,]\s*['"](data-[A-Za-z0-9-]+)['"]\s*:/g)) names.add(m[1])
   for (const x of checkDataAttributes([...names].filter((n) => n !== 'data-testid'))) {
     const at = text.indexOf(x.attribute)
     out.push(v(x.rule, rel, lineOf(text, at), x.message))
@@ -1679,7 +1700,7 @@ export function checkFile(rel, text, ctx = {}) {
   if (cp) out.push(...checkComponentPath(rel, ctx))
   if (ext !== 'css') {
     out.push(...checkHandlers(rel, text))
-    out.push(...checkIconUsage(rel, text, ctx))
+    if (!MIGRATION_TOOLING.test(rel)) out.push(...checkIconUsage(rel, text, ctx))
   }
   out.push(...checkTokenNames(rel, text))
   if (
@@ -1698,9 +1719,12 @@ export function checkFile(rel, text, ctx = {}) {
       out.push(...checkTypeNames(rel, text, cp.root))
     }
   }
-  if (cp && cp.root) out.push(...checkCssVariables(rel, text, cp.root))
+  if (cp && cp.root) out.push(...checkCssVariables(rel, text, cp.root, ctx))
   return out
 }
+
+export const MIGRATION_TOOLING =
+  /^packages\/webkit\/src\/cli\/(migrate[\w-]*\.js|cli\.js|migrations\/.+)$/
 
 const SKIP_DIRS = new Set([
   'node_modules',
@@ -1818,6 +1842,27 @@ export function loadContext(root) {
     if (cp.category === 'marketing' && stem === cp.root) marketingPrimitives.add(stem)
     if (stem !== cp.root && cp.segs.length >= 4) parts.push({ name: stem, rel, root: cp.root })
   }
+  const cssVarReaders = new Map()
+  for (const rel of walk(compRoot, root, [])) {
+    const cp = componentPath(rel)
+    if (!cp || !cp.root || !/\.(vue|ts|js|css)$/.test(rel) || isTest(rel)) continue
+    const text = readFileSync(join(root, rel), 'utf8')
+    for (const m of text.matchAll(/(?:var\(|\()--([a-z0-9-]+)/g)) {
+      if (!cssVarReaders.has(m[1])) cssVarReaders.set(m[1], new Set())
+      cssVarReaders.get(m[1]).add(cp.root)
+    }
+  }
+  const themeVars = new Set()
+  for (const rel of walk(join(root, 'packages/theme/src'), root, [])) {
+    if (!/\.(js|mjs|css)$/.test(rel)) continue
+    const text = readFileSync(join(root, rel), 'utf8')
+    for (const m of text.matchAll(/^\s*'?([a-z][a-z0-9-]*)'?\s*:/gm)) {
+      themeVars.add(m[1])
+      if (m[1].startsWith('text-'))
+        for (const suffix of TYPOGRAPHY_SUFFIXES) themeVars.add(`${m[1]}-${suffix}`)
+    }
+    for (const m of text.matchAll(/var\(--([a-z0-9-]+)/g)) themeVars.add(m[1])
+  }
   const tokenKeys = []
   const themeDir = join(root, 'packages/theme/src/tokens/theme')
   for (const rel of walk(themeDir, root, [])) {
@@ -1834,7 +1879,9 @@ export function loadContext(root) {
     componentNames,
     marketingPrimitives,
     tokenKeys,
-    specProps
+    specProps,
+    cssVarReaders,
+    themeVars
   }
 }
 
