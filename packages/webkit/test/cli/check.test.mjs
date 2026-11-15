@@ -162,13 +162,13 @@ test('check passes a wired project and enforces --max-warnings', () => {
 test('check warns when a copied block drifted from the canonical one', () => {
   const dir = initialised({ 'src/main.ts': "import './webkit.css'\n" })
   try {
-    assert.equal(cli(dir, 'add', 'headers/auth-header').code, 0)
+    assert.equal(cli(dir, 'add', 'top-bars/auth-bar').code, 0)
     const manifestPath = join(dir, 'webkit.blocks.json')
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
-    manifest.blocks['headers/auth-header'].files[0].checksum = 'sha256:old'
-    manifest.blocks['headers/auth-header'].files.push({
+    manifest.blocks['top-bars/auth-bar'].files[0].checksum = 'sha256:old'
+    manifest.blocks['top-bars/auth-bar'].files.push({
       path: 'src/views/Gone.vue',
-      source: 'blocks/headers/auth-header/auth-header.vue',
+      source: 'blocks/top-bars/auth-bar/auth-bar.vue',
       variant: 'Default',
       checksum: 'sha256:x'
     })

@@ -2,10 +2,6 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import CreationHeader from '../../blocks/headers/creation-header/creation-header.vue'
-import DocsHeader from '../../blocks/headers/docs-header/docs-header.vue'
-import ResourceHeader from '../../blocks/headers/resource-header/resource-header.vue'
-import SecondLevel from '../../blocks/headers/resource-header/variants/second-level.vue'
 import ApprovalFailed from '../../blocks/platform/ai/ai-action-approval/variants/failed.vue'
 import AiChatDrawer from '../../blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue'
 import Login from '../../blocks/platform/auth/auth.vue'
@@ -26,6 +22,8 @@ import UploadFailed from '../../blocks/platform/states/project-intake/variants/u
 import ConsoleShell from '../../blocks/shells/console/console.vue'
 import AccountSwitch from '../../blocks/shells/console/variants/account-switch.vue'
 import Notifications from '../../blocks/shells/console/variants/notifications.vue'
+import AuthBar from '../../blocks/top-bars/auth-bar/auth-bar.vue'
+import CreationBar from '../../blocks/top-bars/creation-bar/creation-bar.vue'
 
 afterEach(() => cleanup())
 
@@ -34,40 +32,19 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
 
-describe('headers/resource-header', () => {
-  it.each([
-    ['FirstLevel', ResourceHeader],
-    ['SecondLevel', SecondLevel]
-  ])('%s: the search trigger opens the Command palette', async (_name, block) => {
-    const view = render(block)
-    expect(document.querySelector('[role="dialog"]')).toBeNull()
-    await fireEvent.click(view.getByRole('button', { name: /Search/ }))
-    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
-    expect(document.body.textContent).toContain('Applications')
-  })
-
-  it('opens the account menu from the avatar', async () => {
-    const view = render(ResourceHeader)
-    await fireEvent.click(view.getByRole('button', { name: 'Account menu' }))
-    await waitFor(() =>
-      expect(document.body.querySelector('[role="menu"]')?.textContent).toContain('Log out')
-    )
-  })
-})
-
-describe('headers/creation-header', () => {
+describe('top-bars/creation-bar', () => {
   it('makes the back control a link to the list it came from', () => {
-    const view = render(CreationHeader)
+    const view = render(CreationBar)
     const back = view.getByRole('link', { name: 'Back to Resources' })
     expect(back.getAttribute('href')).toBe('/resources')
   })
 })
 
-describe('headers/docs-header', () => {
-  it('renders the section links as links with a route', () => {
-    const view = render(DocsHeader)
-    expect(view.getByRole('link', { name: 'Guides' }).getAttribute('href')).toBe('/docs/guides')
-    expect(view.getByRole('link', { name: 'Azion Docs home' }).getAttribute('href')).toBe('/docs')
+describe('top-bars/auth-bar', () => {
+  it('offers Documentation and no account control', () => {
+    const view = render(AuthBar)
+    expect(view.getByRole('link', { name: 'Azion home' })).toBeTruthy()
+    expect(view.queryByRole('button', { name: 'Account menu' })).toBeNull()
   })
 })
 
@@ -76,6 +53,13 @@ describe('shells/console', () => {
     const view = render(ConsoleShell)
     expect(view.queryByRole('button', { name: 'Download CSV' })).toBeNull()
     expect(buttonByText('Filter', view.container as HTMLElement)).toBeUndefined()
+  })
+
+  it('renders the console bar: the search trigger opens the Command palette', async () => {
+    const view = render(ConsoleShell)
+    expect(document.querySelector('[role="dialog"]')).toBeNull()
+    await fireEvent.click(view.getByRole('button', { name: /Search/ }))
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).not.toBeNull())
   })
 
   it('Notifications: Clear all can be undone from the toast', async () => {

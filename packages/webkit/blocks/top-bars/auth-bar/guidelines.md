@@ -1,16 +1,17 @@
-# Auth header
+# Auth bar
 
 The top bar of every signed-out and first-run screen: sign in, sign up, password recovery and the onboarding steps. The user has no session yet, so the bar has one job: say where they are (Azion) and offer the one way out that needs no account, the documentation. Everything a signed-in bar carries (navigation, search, Create, the account avatar) is left out because there is nothing to act on.
 
 ## When to use
 
+- Use auth-bar on signed-out and onboarding screens (brand + Documentation, no navigation).
 - Above the auth card on sign in, sign up, reset password and MFA screens (`platform/auth`).
 - Above the onboarding steps that run before the organization exists (`platform/account/onboarding-form`).
 
 ## When not to use
 
-- Any page with a session: use `headers/resource-header` inside the console shell (`shells/console`), or `headers/creation-header` for a create, edit or deploy flow.
-- Documentation pages: use `headers/docs-header`. Marketing pages: use `headers/site-header`.
+- Any page with a session: `ConsoleLayout` already renders the console bar (`shells/console`); a create, edit or deploy flow uses `top-bars/creation-bar`.
+- Documentation pages: `DocLayout` renders their bar (`shells/documentation`). Marketing pages: `SiteLayout` and `SiteNav` render theirs (`shells/website`).
 
 ## Building blocks
 
@@ -55,4 +56,5 @@ One outlined, medium button with the book icon and an `href` to the docs. It is 
 
 - `platform/auth` — the sign-in and sign-up card this bar sits above.
 - `platform/account/onboarding-form` — the first-run steps render the same bar.
-- `headers/resource-header` — the bar once the user is signed in.
+- `shells/console` — the bar once the user is signed in, rendered by `ConsoleLayout`.
+- `top-bars/creation-bar` — the bar of a signed-in focused flow.

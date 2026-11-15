@@ -20,7 +20,7 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The creation header from `headers/creation-header`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
+The creation header from `top-bars/creation-bar`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -92,5 +92,5 @@ Beside the Start from template heading, a medium search `Input` that filters the
 - `platform/create/deploy-template` — where a template card or Import leads.
 - `platform/states/project-intake` — the drop target and upload overlay for a dropped folder.
 - `platform/create/source-wizard` — the guided flow once a source is chosen.
-- `headers/creation-header` — the header this page uses.
+- `top-bars/creation-bar` — the header this page uses.
 - `platform/dashboard/home-dashboard` — Home, where the back control returns.

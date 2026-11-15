@@ -8,8 +8,8 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ## When not to use
 
-- Create, edit and deploy flows: use the focused shell headed by `headers/creation-header`, with no rail.
-- Signed-out screens: `platform/auth` with `headers/auth-header`.
+- Create, edit and deploy flows: use the focused shell headed by `top-bars/creation-bar`, with no rail.
+- Signed-out screens: `platform/auth` with `top-bars/auth-bar`.
 - Documentation and marketing: `shells/documentation`, `shells/website`.
 - A page needing the resizable split panel: compose `AppLayout` directly for that page.
 
@@ -105,6 +105,5 @@ Flush (`:padded="false"`), standing in for the page body; the list page's contro
 
 ## Related
 
-- `headers/resource-header` — this shell's header on its own.
-- `headers/creation-header` — the focused shell for create, edit and deploy.
+- `top-bars/creation-bar` — the focused shell for create, edit and deploy.
 - `platform/view/table-view`, `platform/detail/details-page`, `platform/dashboard/home-dashboard` — the page bodies rendered in the slot.

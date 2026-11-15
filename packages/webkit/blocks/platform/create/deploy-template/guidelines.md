@@ -19,7 +19,7 @@ A focused page, outside the console shell, where the user turns a template into 
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The creation header from `headers/creation-header`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
+The creation header from `top-bars/creation-bar`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
 
 ### B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 
@@ -90,5 +90,5 @@ An outlined medium `Button` under the step that returns to the template list. It
 - `platform/create/create-hub` — where the user picks the template.
 - `platform/create/deployment-flow` — the build card the column shows after Deploy.
 - `platform/create/deploy-success` — the outcome the column ends on.
-- `headers/creation-header` — the header this page uses.
+- `top-bars/creation-bar` — the header this page uses.
 - `platform/states/project-intake` — the upload path that reaches this page with files instead of a template.

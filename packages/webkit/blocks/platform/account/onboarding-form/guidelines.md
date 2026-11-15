@@ -17,7 +17,7 @@ The `/signup/onboarding` screen, frame included. A new user has an account but n
 
 ### A. Bar — `GlobalHeader` (required)
 
-The signed-out bar (`headers/auth-header`): brand at the start, Documentation at the end.
+The signed-out bar (`top-bars/auth-bar`): brand at the start, Documentation at the end.
 
 ### B. Brand — `Brand` (required)
 
@@ -93,7 +93,7 @@ Under the picker: `Generated from the organization's name. Select its color.`
 
 ## Related
 
-- `headers/auth-header` — the bar this screen renders.
+- `top-bars/auth-bar` — the bar this screen renders.
 - `platform/auth` — the screen before it.
 - `platform/account/change-plan-drawer` — the upgrade drawer the Plan step opens.
 - `platform/states/first-use` — what the new organization lands on.

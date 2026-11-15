@@ -89,4 +89,3 @@ A row of headline figures inside a `FrameBox`.
 
 - `shells/console` — the signed-in counterpart, on `ConsoleLayout`.
 - `shells/documentation` — the docs counterpart, shares the footer anatomy in its `content` placement.
-- `headers/site-header` — the bar on its own.

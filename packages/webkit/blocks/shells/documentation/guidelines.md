@@ -111,5 +111,4 @@ In the footer's language slot, trigger labelled `Language`.
 ## Related
 
 - `DocLayout` — the component this block shows.
-- `headers/docs-header` — the header on its own.
 - `shells/console` (`ConsoleLayout`) and `shells/website` (`SiteLayout`) — the console and marketing counterparts.

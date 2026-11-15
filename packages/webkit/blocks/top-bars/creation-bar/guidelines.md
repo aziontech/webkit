@@ -1,17 +1,18 @@
-# Creation header
+# Creation bar
 
 The top bar of the focused creation shell: create, edit and deploy flows that run without the navigation rail. The user is doing one task with a start and an end, so the bar gives them a linear way out (the back button and the breadcrumb to the list the flow started from) and keeps their identity visible (the avatar), and nothing else. No search, no Create, no Agent: the flow is the only thing on screen.
 
 ## When to use
 
-- Every one-screen create page (`platform/create/single-page-create`) and stepped one (`platform/create/multipage-create`).
-- The creation wizards (`platform/create/source-wizard`, `platform/create/provision-wizard`), the deploy flows and the Creation Center (`platform/create/create-hub`).
+- Use creation-bar on focused create, edit and deploy pages that run without the navigation rail.
+- Every one-screen create page (`platform/create/single-page-create`) and stepped one (`platform/create/multipage-create`, including its CreateAndDeploy wizard).
+- The deploy flows (`platform/create/deploy-template`) and the Creation Center (`platform/create/create-hub`).
 
 ## When not to use
 
-- Browse pages (lists, dashboards, details, settings): use `headers/resource-header` inside `shells/console`.
+- Browse pages (lists, dashboards, details, settings): `ConsoleLayout` renders their bar (`shells/console`).
 - A create form that should keep the list visible behind it: use `platform/create/create-in-drawer` and keep the console header.
-- Signed-out screens: use `headers/auth-header`.
+- Signed-out screens: use `top-bars/auth-bar`.
 
 ## Building blocks
 
@@ -72,5 +73,5 @@ Names the icon-only back link with the same text as its `aria-label` (`Back to R
 ## Related
 
 - `shells/console` — the persistent shell the flow returns to.
-- `headers/resource-header` — the bar on browse pages.
-- `platform/create/create-hub`, `platform/create/provision-wizard` — render the CreateHub and Terminal states.
+- `top-bars/auth-bar` — the bar of signed-out screens.
+- `platform/create/create-hub`, `platform/create/multipage-create` — render the CreateHub and Terminal states.
