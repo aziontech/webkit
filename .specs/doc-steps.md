@@ -3,10 +3,10 @@ name: doc-steps
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 030f9b01e3dc9096d8fdb4e922da9283347cd913f2e0c10133f293a9d5c247a7
+spec_version: 2
+checksum: 9a4cdc681e3486a93cdbcdba607aa7a2f532df8c79a25a04236c1ee5cf587c8c
 created: 2026-08-22
-last_updated: 2026-09-25
+last_updated: 2026-11-15
 ---
 
 # DocSteps — Component Spec
@@ -17,18 +17,20 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 
 ## When to use
 
+- Use DocSteps only inside documentation prose for numbered instructions read top to bottom.
 - A procedure the reader performs in order: install, link, deploy.
 - Any "follow these steps" band in documentation prose, however short.
 
 ## When NOT to use
 
-- For a wizard or form flow inside the application — that is the console's own stepper surface, not documentation chrome.
+- For a wizard or form flow inside the application — that is `Stepper` (or `Wizard`), not documentation chrome.
 - For an unordered list of options or features — order is the whole claim this component makes; a list that has none is a plain list or `DocItem` rows.
 - For a single instruction — one step is a sentence, not a walkthrough.
 
 ## Related
 
 - `DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
+- `Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
 - `DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
 
 ## Best practices
@@ -71,7 +73,7 @@ The ordered walkthrough from the docs frame: a column of `DocStep` children join
 ## States
 
 - Visual states: `default` (the column is not interactive and holds no visual state of its own)
-- Provides the numbering context: each `DocStep` registers on mount and deregisters on unmount; `index` is the 1-based document order and `last` marks the final registration, which suppresses that step's connector
+- Provides the numbering context (the shared step registry): each `DocStep` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
 - `data-doc-block` is the `DocProse` contract (the column takes the block rung of the ladder)
 
 ## Motion & Animations

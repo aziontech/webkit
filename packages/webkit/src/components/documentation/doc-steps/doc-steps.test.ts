@@ -68,6 +68,24 @@ describe('DocSteps', () => {
       // Renumbering works because an unmount happens outside the parent's render pass.
       expect(steps.map(circleText)).toEqual(['1', '2'])
     })
+
+    it('numbers a step inserted between two others by its place on the page', async () => {
+      const Dynamic = defineComponent({
+        components: { DocStep, DocSteps },
+        props: { titles: { type: Array, required: true } },
+        template: `<DocSteps><DocStep v-for="t in titles" :key="t" :title="t" /></DocSteps>`
+      })
+      const view = render(Dynamic, { props: { titles: ['First', 'Third'] } })
+      await view.rerender({ titles: ['First', 'Second', 'Third'] })
+
+      const steps = view.getAllByTestId('documentation-doc-step')
+      expect(steps.map((step) => step.textContent?.replace(/\d/g, '').trim())).toEqual([
+        'First',
+        'Second',
+        'Third'
+      ])
+      expect(steps.map(circleText)).toEqual(['1', '2', '3'])
+    })
   })
 
   describe('the last step suppresses the connector', () => {
