@@ -803,7 +803,7 @@ const FieldHarness = defineComponent({
     chipLimit: { type: Number, default: 0 },
     loading: { type: Boolean, default: false },
     error: { type: String, default: '' },
-    emptyText: { type: String, default: '' },
+    emptyTitle: { type: String, default: '' },
     disabled: { type: Boolean, default: false },
     count: { type: Number, default: 4 },
     initial: { type: Array as () => string[], default: () => ['a', 'b'] }
@@ -838,7 +838,7 @@ const FieldHarness = defineComponent({
         chipLimit: this.chipLimit,
         loading: this.loading,
         error: this.error,
-        emptyText: this.emptyText,
+        emptyTitle: this.emptyTitle,
         disabled: this.disabled,
         placeholder: 'Pick',
         'aria-label': 'Letters',
@@ -927,7 +927,7 @@ describe('MultiSelect chips, typed filter and list states (spec v4)', () => {
 
   it('shows the empty row and announces it when nothing matches', async () => {
     const { getByRole } = render(FieldHarness, {
-      props: { searchable: true, emptyText: 'Nothing' }
+      props: { searchable: true, emptyTitle: 'Nothing' }
     })
     await userEvent.type(getByRole('combobox'), 'zzz')
     await nextTick()

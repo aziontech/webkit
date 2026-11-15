@@ -28,7 +28,7 @@
       searchable
       :loading="state === 'loading'"
       :error="error"
-      empty-text="No domains yet"
+      empty-title="No domains yet"
       placeholder="Select domains"
       aria-label="Domains"
       default-open

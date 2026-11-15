@@ -39,7 +39,7 @@
       /** Label of the Add group button in grouped mode. Empty uses the locale catalog. */
       addGroupLabel?: string
       /** Text shown when there are no rows. Empty uses the locale catalog. */
-      empty?: string
+      emptyTitle?: string
       /** Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. */
       limit?: number
       /** Most groups allowed in grouped mode. */
@@ -67,7 +67,7 @@
       addButtonLabel: '',
       removeButtonLabel: '',
       addGroupLabel: '',
-      empty: '',
+      emptyTitle: '',
       limit: undefined,
       groupLimit: undefined,
       minItems: 0,
@@ -143,7 +143,7 @@
 
   const addLabel = computed(() => props.addButtonLabel || t('attributeEditor.add'))
   const groupAddLabel = computed(() => props.addGroupLabel || t('attributeEditor.addGroup'))
-  const emptyText = computed(() => props.empty || t('attributeEditor.empty'))
+  const emptyText = computed(() => props.emptyTitle || t('attributeEditor.empty'))
   const removeLabel = (position: number) =>
     t('attributeEditor.rowAction', {
       label: props.removeButtonLabel || t('attributeEditor.remove'),

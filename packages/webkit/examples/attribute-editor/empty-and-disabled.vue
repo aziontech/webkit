@@ -16,7 +16,7 @@
     <AttributeEditor
       v-model:items="draft"
       :definition="definition"
-      empty="No environment variables yet."
+      empty-title="No environment variables yet."
       add-button-label="Add variable"
       aria-label="New variables"
     />
