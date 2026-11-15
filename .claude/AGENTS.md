@@ -57,7 +57,7 @@ pnpm build:icons
 - Docs site, demos, visual suite: `apps/docs`, `apps/demos`, `apps/visual`
 
 When changing UI components in `packages/webkit`, update or add examples in the same branch. An
-example is enough: the docs page (`/components/<name>`, `/example?path=<name>/<file>`) and the styled
+example is enough: the docs page (`/components/<name>`, `/frame/example/<name>/<file>`) and the styled
 visual test of the first example follow from the files; refresh baselines with `/baselines-regenerate`.
 
 Changed a block in `packages/webkit/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/webkit/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/webkit build:catalog`, then commit `catalog.json` and `catalog/` (`check:catalog` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `adapters/claude/agents/`); `.claude/` is for people who maintain WebKit. The full table is in CONTRIBUTING, "What to update when WebKit changes".

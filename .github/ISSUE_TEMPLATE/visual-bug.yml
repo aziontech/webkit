@@ -21,7 +21,7 @@ body:
     id: url
     attributes:
       label: Example or page URL
-      description: The docs page or example where you see it (`/components/<name>`, `/example?path=<name>/<file>`), or the product screen.
+      description: The docs page or example where you see it (`/components/<name>`, `/frame/example/<name>/<file>`), or the product screen.
     validations:
       required: true
   - type: dropdown
