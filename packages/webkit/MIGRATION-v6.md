@@ -148,15 +148,19 @@ types this guide names elsewhere are left out):
 
 | v5 type                                | v6 type                                 |
 | -------------------------------------- | --------------------------------------- |
+| `AppliedFilter`                        | `TableAppliedFilter`                    |
+| `ArchitectureTabsAction`               | `SectionTitleAction`                    |
+| `ArticleBodyCrumb`                     | `BreadcrumbItemData`                    |
+| `ArticleCardsMark`                     | `LogoMark`                              |
 | `ArticleIndexBlogAuthor`               | `ArticleIndexAuthor`                    |
 | `ArticleIndexBlogEmpty`                | `ArticleIndexEmpty`                     |
-| `ArticleIndexBlogMark`                 | `ArticleIndexMark`                      |
+| `ArticleIndexBlogMark`                 | `LogoMark`                              |
 | `ArticleIndexBlogRowKind`              | `ArticleIndexRowKind`                   |
 | `ArticleIndexBlogSearch`               | `ArticleIndexSearch`                    |
 | `ArticleIndexResourceHubEmpty`         | `ArticleIndexEmpty`                     |
 | `ArticleIndexResourceHubFacet`         | `ArticleIndexFacet`                     |
 | `ArticleIndexResourceHubItem`          | `ArticleIndexItem`                      |
-| `ArticleIndexResourceHubMark`          | `ArticleIndexMark`                      |
+| `ArticleIndexResourceHubMark`          | `LogoMark`                              |
 | `ArticleIndexResourceHubRowKind`       | `ArticleIndexRowKind`                   |
 | `BoxGridSelectionItem`                 | `RadioGroupOption`                      |
 | `CalendarMonth`                        | `DatePickerMonth`                       |
@@ -166,11 +170,16 @@ types this guide names elsewhere are left out):
 | `CalendarValue`                        | `DatePickerValue`                       |
 | `CardsItemSlotProps`                   | `CardListItemSlotProps`                 |
 | `CardsSelectionMode`                   | `CardListSelectionMode`                 |
+| `ClientMosaicColumnsLogoTreatment`     | `LogoTreatment`                         |
+| `ClientMosaicLogoTreatment`            | `LogoTreatment`                         |
+| `ClientQuotesAction`                   | `SectionTitleAction`                    |
+| `CliTerminalAction`                    | `SectionTitleAction`                    |
+| `ClosingCallToActionAction`            | `SectionTitleAction`                    |
 | `ClosingCallToActionAgentsAction`      | `ClosingCallToActionAudienceAction`     |
 | `ClosingCallToActionAgentsActionKind`  | `ClosingCallToActionAudienceActionKind` |
 | `ClosingCallToActionAgentsAudience`    | `ClosingCallToActionAudience`           |
 | `ClosingCallToActionAgentsCopy`        | `ClosingCallToActionAudienceCopy`       |
-| `ClosingCallToActionTemplatesAction`   | `TemplateGalleryAction`                 |
+| `ClosingCallToActionTemplatesAction`   | `SectionTitleAction`                    |
 | `ClosingCallToActionTemplatesTemplate` | `TemplateGalleryTemplate`               |
 | `CodeSplitAction`                      | `MediaSplitBandAction`                  |
 | `CodeSplitActionKind`                  | `MediaSplitBandActionKind`              |
@@ -178,34 +187,60 @@ types this guide names elsewhere are left out):
 | `CommandMenuContext`                   | `CommandContext`                        |
 | `CommandMenuItemValue`                 | `CommandItemValue`                      |
 | `CommandMenuRegisteredItem`            | `CommandRegisteredItem`                 |
-| `CompareSupportTiersAction`            | `ComparePlansAction`                    |
+| `ComparePlansAction`                   | `SectionTitleAction`                    |
+| `CompareSupportTiersAction`            | `SectionTitleAction`                    |
 | `CompareSupportTiersRow`               | `ComparePlansRow`                       |
 | `CompareSupportTiersSection`           | `ComparePlansSection`                   |
 | `CompareSupportTiersTier`              | `ComparePlansPlan`                      |
 | `CompareSupportTiersValue`             | `ComparePlansValue`                     |
+| `ComplianceBadgesAction`               | `SectionTitleAction`                    |
+| `ContactHubAction`                     | `SectionTitleAction`                    |
 | `ContentColumnsItem`                   | `CapabilityGridItem`                    |
+| `Country`                              | `PhoneInputCountry`                     |
 | `DocCardGroupCols`                     | `DocCardGroupColumns`                   |
+| `DocCrumb`                             | `BreadcrumbItemData`                    |
+| `DocPageAction`                        | `DocPageHeaderAction`                   |
+| `DocPageLink`                          | `DocPrevNextLink`                       |
+| `DocTocGroup`                          | `DocOnThisPageGroup`                    |
+| `DocTocItem`                           | `DocOnThisPageItem`                     |
+| `DocTocLink`                           | `DocOnThisPageLink`                     |
 | `DropdownContext`                      | `DropdownMenuContext`                   |
 | `DropdownOptionValue`                  | `DropdownMenuOptionValue`               |
 | `DropdownPlacement`                    | `DropdownMenuPlacement`                 |
-| `DropdownPlacementInput`               | `DropdownMenuPlacementInput`            |
-| `HeroCopyOnTopArtAction`               | `HeroBandAction`                        |
+| `DropdownPlacementInput`               | `DropdownMenuPlacement`                 |
+| `FeatureTabsAction`                    | `SectionTitleAction`                    |
+| `FeatureWidgetsAction`                 | `SectionTitleAction`                    |
+| `FilterField`                          | `TableFilterField`                      |
+| `FilterOperator`                       | `TableFilterOperator`                   |
+| `FilterValue`                          | `TableFilterValue`                      |
+| `HeroBandAction`                       | `SectionTitleAction`                    |
+| `HeroCopyOnTopArtAction`               | `SectionTitleAction`                    |
 | `HeroCopyOnTopArtLevel`                | `HeroBandLevel`                         |
 | `HeroCopyOnTopArtNode`                 | `HeroBandNode`                          |
-| `HeroWithOpeningAction`                | `HeroBandAction`                        |
+| `HeroWithOpeningAction`                | `SectionTitleAction`                    |
 | `HeroWithOpeningItem`                  | `HeroBandItem`                          |
 | `HeroWithOpeningTitleLength`           | `HeroBandTitleLength`                   |
 | `InputNumberSize`                      | `NumberInputSize`                       |
 | `InputPasswordAutocomplete`            | `PasswordInputAutocomplete`             |
 | `InputTextSize`                        | `InputSize`                             |
 | `InputTextType`                        | `InputType`                             |
+| `ListingTableAction`                   | `SectionTitleAction`                    |
+| `LogoWallQuoteAction`                  | `SectionTitleAction`                    |
+| `LogoWallQuoteLogoTreatment`           | `LogoTreatment`                         |
+| `MediaSplitStackAction`                | `SectionTitleAction`                    |
 | `MessageSeverity`                      | `AlertSeverity`                         |
 | `MessageSize`                          | `AlertSize`                             |
+| `MoveDirection`                        | `TransferListMoveDirection`             |
+| `NetworkSectionLogoTreatment`          | `LogoTreatment`                         |
 | `PaginatorContext`                     | `PaginationContext`                     |
+| `PasswordRequirement`                  | `PasswordRequirementsRule`              |
+| `PhoneNumber`                          | `PhoneInputValue`                       |
 | `PickListContext`                      | `TransferListContext`                   |
 | `PickListItems`                        | `TransferListItems`                     |
 | `PickListSide`                         | `TransferListSide`                      |
 | `PickListValue`                        | `TransferListValue`                     |
+| `PopoverPlacementInput`                | `PopoverPlacement`                      |
+| `PricingPlansAction`                   | `SectionTitleAction`                    |
 | `ProgressBarShape`                     | `ProgressKind`                          |
 | `ProgressBarSize`                      | `ProgressSize`                          |
 | `ResizablePanelContext`                | `ResizableContext`                      |
@@ -214,15 +249,34 @@ types this guide names elsewhere are left out):
 | `ResourceGridAction`                   | `CapabilityGridAction`                  |
 | `ResourceGridItem`                     | `CapabilityGridItem`                    |
 | `SegmentedButtonSize`                  | `ToggleGroupSize`                       |
+| `SortDirection`                        | `TableSortDirection`                    |
 | `StickyScrollCodeAction`               | `FeatureScrollAction`                   |
 | `StickyScrollCodeActionKind`           | `FeatureScrollActionKind`               |
 | `StickyScrollCodeItem`                 | `FeatureScrollItem`                     |
 | `StickyScrollCodeSample`               | `FeatureScrollCode`                     |
+| `StoryLibraryClient`                   | `LogoMark`                              |
+| `SubjectLibraryAction`                 | `SectionTitleAction`                    |
 | `TabViewContext`                       | `TabsContext`                           |
 | `TabViewSlideDirection`                | `TabsSlideDirection`                    |
 | `TabViewTabRegistration`               | `TabsTabRegistration`                   |
 | `TabViewValue`                         | `TabsValue`                             |
+| `TemplateGalleryAction`                | `SectionTitleAction`                    |
+| `TooltipPlacementInput`                | `TooltipPlacement`                      |
 | `UseCaseLinksItem`                     | `CapabilityGridItem`                    |
+| `UseCasesAction`                       | `SectionTitleAction`                    |
+
+Every exported type starts with its component's name, and a shape several components shared is one
+type now, exported by the component that owns it: a section's `primaryAction` / `secondaryAction`
+is `SectionTitleAction` (`@aziontech/webkit/section-title`), a breadcrumb entry is
+`BreadcrumbItemData`, a client mark `{ name, logo }` is `LogoMark` and a mark's ink is
+`LogoTreatment` (`@aziontech/webkit/logo`). Each section still re-exports the shared type, so an
+import the codemod rewrote keeps its path. `LogoTreatment` uses the `Logo` words: `as-is` is
+`color`, and `logoTreatment: 'invert-light'` on a `LogoWallQuote` mark is `artwork: 'light'`
+(change those values by hand). The placement types follow the prop: `TooltipPlacement`,
+`PopoverPlacement`, `HoverCardPlacement` and `DropdownMenuPlacement` are the prop's union (with
+`'auto'`), and `*PlacementSide` is the narrower side union. Every root and public part exports its
+props as `<Component>Props` (`ButtonProps`, `TableSearchProps`), re-exported by its compound entry;
+there is no bare `Props` export.
 
 ### Old illustration names
 
@@ -1325,6 +1379,13 @@ catalog, so an empty string no longer removes the label; `HelpPanel.Links` `titl
 `undefined` and still hides its heading when you pass `''`. The pagination line formats its numbers
 (`1,200`, `1.200` in Portuguese). `useLocale()` from `@aziontech/webkit/use-locale` gives your own
 components the same locale, `t()` and `Intl` helpers.
+
+`messages` overrides use the catalog's `group.key`: the group is the component's camelCase name
+(`sidebarMenu`, `feedbackReasonDialog`, `dataTable`), a part's keys carry the part (`promptInput.menuResults`,
+`copyButton.fallbackTitle`), and strings several components share are in `common` (`common.copy`,
+`common.copied`, `common.newTab`, the autoplay pause and resume labels). A search miss is `noMatch`
+and a no-data title `emptyTitle` in every group. The catalogs live in `src/locales/<bcp47>.ts`, the
+files behind `@aziontech/webkit/locales/pt-BR` and `/locales/es`.
 
 ### Layout: one name for the rail and the pane state
 
