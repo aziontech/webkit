@@ -716,6 +716,7 @@ test('the ranges init writes for webkit, theme and icons are satisfied by the wo
       caretSatisfies(own.peerDependencies['@aziontech/theme'], theme.version),
       'theme peer range must accept the workspace theme'
     )
+    assert.equal(v('@aziontech/icons'), own.peerDependencies['@aziontech/icons'])
     assert.ok(
       caretSatisfies(v('@aziontech/icons'), icons.version),
       'icons range must accept the workspace icons'

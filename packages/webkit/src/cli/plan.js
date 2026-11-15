@@ -12,7 +12,7 @@ const OWN = JSON.parse(readFileSync(new URL('../../package.json', import.meta.ur
 const DEP_VERSIONS = {
   '@aziontech/webkit': `^${OWN.version}`,
   '@aziontech/theme': OWN.peerDependencies['@aziontech/theme'],
-  '@aziontech/icons': '^4.4.0',
+  '@aziontech/icons': OWN.peerDependencies['@aziontech/icons'],
   eslint: '^9.39.3',
   stylelint: '^17.7.0',
   'vue-eslint-parser': '^10.4.0',
