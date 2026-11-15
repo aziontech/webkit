@@ -20,7 +20,11 @@
     "detalhe da invocação",
     "execução da função",
     "caminho da requisição",
-    "rastreamento"
+    "rastreamento",
+    "one invocation",
+    "invocation summary",
+    "function invocation",
+    "invocação de função"
   ],
   "skills": ["webkit-layout", "webkit-ui-states", "webkit-data-viz"],
   "primary": {

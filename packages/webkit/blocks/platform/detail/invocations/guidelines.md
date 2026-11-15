@@ -4,6 +4,7 @@ The page a user opens to understand one run of a function: did it work, how long
 
 ## When to use
 
+- Use invocations for one function run end to end (summary, trace, logs).
 - A function has run and the user needs one invocation end to end: its status, duration, request and outcome.
 - The user arrives from a function's list of runs, from an alert, or from a failed request in an event log.
 - Several services touch the request and the user must see which hop spent the time or failed.
@@ -79,6 +80,6 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 ## Related
 
 - `platform/edit/function-editor` — its TestRun variant runs the function before it ships, with the same trace and logs.
-- `platform/detail/details-page` — its Invocation variant is the summary card on its own.
+- `platform/detail/details-page` — the overview of the function; this page owns the invocation summary card.
 - `platform/detail/deployment-logs` — the step logs of a deployment.
 - `shells/console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
