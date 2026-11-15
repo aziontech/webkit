@@ -39,22 +39,26 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 
 ## 2. Renamed components
 
-| v5 import                              | v6 import                          | v5 component       | v6 component    |
-| -------------------------------------- | ---------------------------------- | ------------------ | --------------- |
-| `@aziontech/webkit/paginator`          | `@aziontech/webkit/pagination`     | `Paginator`        | `Pagination`    |
-| `@aziontech/webkit/tab-view`           | `@aziontech/webkit/tabs`           | `TabView`          | `Tabs`          |
-| `@aziontech/webkit/card-box`           | `@aziontech/webkit/card`           | `CardBox`          | `Card`          |
-| `@aziontech/webkit/message`            | `@aziontech/webkit/alert`          | `Message`          | `Alert`         |
-| `@aziontech/webkit/divider`            | `@aziontech/webkit/separator`      | `Divider`          | `Separator`     |
-| `@aziontech/webkit/progress-bar`       | `@aziontech/webkit/progress`       | `ProgressBar`      | `Progress`      |
-| `@aziontech/webkit/command-menu`       | `@aziontech/webkit/command`        | `CommandMenu`      | `Command`       |
-| `@aziontech/webkit/dropdown`           | `@aziontech/webkit/dropdown-menu`  | `Dropdown`         | `DropdownMenu`  |
-| `@aziontech/webkit/input-text`         | `@aziontech/webkit/input`          | `InputText`        | `Input`         |
-| `@aziontech/webkit/input-number`       | `@aziontech/webkit/number-input`   | `InputNumber`      | `NumberInput`   |
-| `@aziontech/webkit/input-password`     | `@aziontech/webkit/password-input` | `InputPassword`    | `PasswordInput` |
-| `@aziontech/webkit/box-grid-selection` | `@aziontech/webkit/radio-cards`    | `BoxGridSelection` | `RadioCards`    |
-| `@aziontech/webkit/resizable-panel`    | `@aziontech/webkit/resizable`      | `ResizablePanel`   | `Resizable`     |
-| `@aziontech/webkit/segmented-button`   | `@aziontech/webkit/toggle-group`   | `SegmentedButton`  | `ToggleGroup`   |
+| v5 import                              | v6 import                            | v5 component       | v6 component      |
+| -------------------------------------- | ------------------------------------ | ------------------ | ----------------- |
+| `@aziontech/webkit/paginator`          | `@aziontech/webkit/pagination`       | `Paginator`        | `Pagination`      |
+| `@aziontech/webkit/tab-view`           | `@aziontech/webkit/tabs`             | `TabView`          | `Tabs`            |
+| `@aziontech/webkit/card-box`           | `@aziontech/webkit/card`             | `CardBox`          | `Card`            |
+| `@aziontech/webkit/message`            | `@aziontech/webkit/alert`            | `Message`          | `Alert`           |
+| `@aziontech/webkit/divider`            | `@aziontech/webkit/separator`        | `Divider`          | `Separator`       |
+| `@aziontech/webkit/progress-bar`       | `@aziontech/webkit/progress`         | `ProgressBar`      | `Progress`        |
+| `@aziontech/webkit/command-menu`       | `@aziontech/webkit/command`          | `CommandMenu`      | `Command`         |
+| `@aziontech/webkit/dropdown`           | `@aziontech/webkit/dropdown-menu`    | `Dropdown`         | `DropdownMenu`    |
+| `@aziontech/webkit/input-text`         | `@aziontech/webkit/input`            | `InputText`        | `Input`           |
+| `@aziontech/webkit/input-number`       | `@aziontech/webkit/number-input`     | `InputNumber`      | `NumberInput`     |
+| `@aziontech/webkit/input-password`     | `@aziontech/webkit/password-input`   | `InputPassword`    | `PasswordInput`   |
+| `@aziontech/webkit/box-grid-selection` | `@aziontech/webkit/radio-group`      | `BoxGridSelection` | `RadioGroup`      |
+| `@aziontech/webkit/calendar`           | `@aziontech/webkit/date-picker`      | `Calendar`         | `DatePicker`      |
+| `@aziontech/webkit/pick-list`          | `@aziontech/webkit/transfer-list`    | `PickList`         | `TransferList`    |
+| `@aziontech/webkit/radio-cards`        | `@aziontech/webkit/radio-group`      | `RadioCards`       | `RadioGroup`      |
+| `@aziontech/webkit/radio-button`       | `@aziontech/webkit/radio-group-item` | `RadioButton`      | `RadioGroup.Item` |
+| `@aziontech/webkit/resizable-panel`    | `@aziontech/webkit/resizable`        | `ResizablePanel`   | `Resizable`       |
+| `@aziontech/webkit/segmented-button`   | `@aziontech/webkit/toggle-group`     | `SegmentedButton`  | `ToggleGroup`     |
 
 The AI tooling knows the old names too: the MCP and `catalog.json#aliases` resolve a retired or
 market name (`paginator`, `message`, `modal`, `sheet`, `tiles`, `segmented-control`, …) to the v6
@@ -68,9 +72,6 @@ component.
 | `alert`           | `severity="error"` | `severity="danger"`  |
 | `badge`           | `severity=default` | `severity=neutral`   |
 | `button`          | `kind="text"`      | `kind="transparent"` |
-| `calendar`        | `showTimezone`     | `showTimeZone`       |
-| `calendar`        | `timezone`         | `timeZone`           |
-| `calendar`        | `timezones`        | `timeZones`          |
 | `card-pricing`    | `planTitle`        | `title`              |
 | `checkbox`        | `inputId`          | `id`                 |
 | `code-block`      | `border`           | `bordered`           |
@@ -92,7 +93,6 @@ component.
 | `progress`        | `shape`            | `kind`               |
 | `quote-tabs`      | `autoPlayInterval` | `autoplayInterval`   |
 | `quote-tabs`      | `autoPlay`         | `autoplay`           |
-| `radio-button`    | `inputId`          | `id`                 |
 | `severity-tag`    | `level`            | `severity`           |
 | `shell-mockup`    | `still="false"`    | `animated="true"`    |
 | `shell-mockup`    | `still="true"`     | `animated="false"`   |
@@ -114,7 +114,6 @@ rewrites the prop renames, the rest are listed here so you can move at your own 
 | `flow-anchor`  | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
 | `log-view`     | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
 | `log-view`     | line `type: 'warning'`        | line `level: 'warn'`                           |
-| `pick-list`    | `dataKey`                     | `trackBy` (the name `cards` uses)              |
 | `table`        | `headerKind`                  | `density` (now sets the header and the rows)   |
 | `table`        | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
 | `table-header` | `kind`                        | `density`                                      |
@@ -232,27 +231,27 @@ state on its own.
 </Field>
 ```
 
-| Removed                                  | Use instead                                                                                                   |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `@aziontech/webkit/field-text`           | Field + FieldLabel + Input + FieldDescription                                                                 |
-| `@aziontech/webkit/field-textarea`       | Field + FieldLabel + Textarea + FieldDescription                                                              |
-| `@aziontech/webkit/field-select`         | Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription                                       |
-| `@aziontech/webkit/field-password`       | Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)              |
-| `@aziontech/webkit/field-phone-number`   | Field + FieldLabel + PhoneInput + FieldDescription                                                            |
-| `@aziontech/webkit/field-time`           | Field + FieldLabel + Input + FieldDescription                                                                 |
-| `@aziontech/webkit/field-file-upload`    | Field + FieldLabel + FileDropzone + FieldDescription                                                          |
-| `@aziontech/webkit/field-input-group`    | Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription                                  |
-| `@aziontech/webkit/field-text-switch`    | Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription                      |
-| `@aziontech/webkit/field-checkbox`       | Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)                        |
-| `@aziontech/webkit/field-radio`          | Field orientation=horizontal + RadioButton + FieldContent (FieldLabel + FieldDescription)                     |
-| `@aziontech/webkit/field-switch`         | Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)                          |
-| `@aziontech/webkit/field-checkbox-block` | FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)    |
-| `@aziontech/webkit/field-radio-block`    | FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription) |
-| `@aziontech/webkit/field-switch-block`   | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)      |
+| Removed                                  | Use instead                                                                                                |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `@aziontech/webkit/field-text`           | Field + FieldLabel + Input + FieldDescription                                                              |
+| `@aziontech/webkit/field-textarea`       | Field + FieldLabel + Textarea + FieldDescription                                                           |
+| `@aziontech/webkit/field-select`         | Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription                                    |
+| `@aziontech/webkit/field-password`       | Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)           |
+| `@aziontech/webkit/field-phone-number`   | Field + FieldLabel + PhoneInput + FieldDescription                                                         |
+| `@aziontech/webkit/field-time`           | Field + FieldLabel + Input + FieldDescription                                                              |
+| `@aziontech/webkit/field-file-upload`    | Field + FieldLabel + FileDropzone + FieldDescription                                                       |
+| `@aziontech/webkit/field-input-group`    | Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription                               |
+| `@aziontech/webkit/field-text-switch`    | Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription                   |
+| `@aziontech/webkit/field-checkbox`       | Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)                     |
+| `@aziontech/webkit/field-radio`          | RadioGroup v-model with a RadioGroup.Item per option (description on the item)                             |
+| `@aziontech/webkit/field-switch`         | Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)                       |
+| `@aziontech/webkit/field-checkbox-block` | FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription) |
+| `@aziontech/webkit/field-radio-block`    | RadioGroup kind="card" with a RadioGroup.Item per option (description on the item)                         |
+| `@aziontech/webkit/field-switch-block`   | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)   |
 
 New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/phone-input`),
 `PasswordRequirements` (`@aziontech/webkit/password-requirements`) and `InputGroup.Input`
-(`@aziontech/webkit/input-group-input`). `HelperText`, `Label` and `Hint` remain.
+(`@aziontech/webkit/input-group-input`). `HelperText` and `Hint` remain; `Label` is removed (use `Field.Label`, or `FieldLabel` with `for` and `required` beside its control).
 
 ### Page fragments are components now
 
@@ -316,7 +315,7 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `AttributeEditor`       | `add`               | `({ index, groupIndex? })`       | `(event, { index, groupIndex? })`                   |
 | `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`             |
 | `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                    |
-| `Calendar`              | `apply`             | `(value)`                        | `(event, value)`                                    |
+| `DatePicker`            | `apply`             | `(value)`                        | `(event, value)`                                    |
 | `CopyButton`            | `copy`              | `(value)`                        | `(event, value)`                                    |
 | `CopyPromptButton`      | `copy`              | `(value)`                        | `(event, value)`                                    |
 | `CodeBlock`             | `copy`              | `(code)`                         | `(event, code)`                                     |
@@ -424,7 +423,7 @@ overlay, traps focus and locks page scroll. `dialog-portal`, `dialog-overlay`, `
 
 Test ids follow the component name: `feedback-message` → `feedback-alert`, `layout-divider` →
 `layout-separator`, `navigation-dropdown` → `navigation-dropdown-menu`, `input-box-grid-selection` →
-`input-radio-cards`, and so on for every renamed component. Update end-to-end selectors that use
+`input-radio-group`, `input-calendar` → `input-date-picker`, `data-pick-list` → `data-transfer-list`, and so on for every renamed component. Update end-to-end selectors that use
 `data-testid`. `NavigationMenu` moves from `navigation-menu` (the id `Menu` also uses) to
 `navigation-navigation-menu`, and its parts from `navigation-menu__*` to
 `navigation-navigation-menu__*`.
@@ -576,8 +575,8 @@ copy them again to get the mirrored version.
   the centering pair.
 - **`useDirection`.** `import { useDirection, logicalArrowKey } from '@aziontech/webkit/use-direction'`
   returns a reactive `'ltr' | 'rtl'` read from the closest `[dir]` ancestor (or `<html dir>`), and
-  follows changes. Tabs, ToggleGroup, RadioCards, Slider, Pagination, NavigationMenu, Menu
-  submenus, Tree, Calendar, Resizable, Carousel, QuoteTabs, Tracker and CodeBlock tabs already use
+  follows changes. Tabs, ToggleGroup, Slider, Pagination, NavigationMenu, Menu
+  submenus, Tree, DatePicker, Resizable, Carousel, QuoteTabs, Tracker and CodeBlock tabs already use
   it: under `rtl`, ArrowLeft moves to the next item.
 - **Icons.** Arrows, chevrons, carets and sign-in/sign-out glyphs mirror under `rtl`
   (`@aziontech/webkit/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
@@ -649,13 +648,13 @@ split view or a card these change:
 - **Sheets.** Below `sm` a `Dialog` or `Drawer` is a full-height, full-width sheet (it was an
   80 dvh bottom sheet, which it still is between `sm` and `md`). `PanelFooter` stretches its direct
   children to equal widths and keeps the safe-area inset clear on phones.
-- **Touch and hover.** `Button`, `IconButton`, `Checkbox`, `RadioButton` and `Switch` keep their
+- **Touch and hover.** `Button`, `IconButton`, `Checkbox`, `RadioGroup.Item` and `Switch` keep their
   drawn size but get a 24 px hit area, 44 px on a coarse pointer; `Pagination` buttons grow to
   44 px on a coarse pointer. `Button` and `IconButton` render one more child, an empty
   `[data-slot=touch-target]` span; update DOM snapshots. The copy-link of `SectionHeader` and
   `SettingsSection`, the `Card` header action and the `Table` sort affordance stay visible on
   devices without hover.
-- **Reflow.** `ToggleGroup`, `Calendar`, `RadioCards`, `Overline`, the `Accordion` trigger and
+- **Reflow.** `ToggleGroup`, `DatePicker`, `RadioGroup` cards, `Overline`, the `Accordion` trigger and
   `Resizable` no longer overflow a 320 px box (they truncate, wrap or clip instead). A
   `singleLine` `Overline` wraps below `sm`.
 
@@ -695,7 +694,7 @@ Dates, numbers and relative times follow the person's device by default: with no
 provider with no `locale`, they format for `navigator.language` (and read its catalog when you
 registered one). The server render and hydration use `en-US`, and the device locale applies right
 after mount. Pass `locale="en"` to keep v5's English output, or the user's saved choice. Only what
-people read changes: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO
+people read changes: send the `v-model` value to your server (DatePicker a `Date`, DateRangePicker ISO
 8601 instants, TagEditor `key`/`value` pairs), never a printed label. Label props you already pass
 still win. Props whose default was an English string (`ariaLabel: 'Close'`, `confirmLabel: 'Confirm'`,
 `emptyTitle: 'No data available'`, `placeholder: 'Search'`…) now default to `''` and fall back to the
@@ -733,9 +732,6 @@ Optional text props that defaulted to `undefined` now default to `''`, and an em
 - `Kbd`: `keyName` defaults to `''`; an empty `keyName` draws no named key, only the modifiers and the slot.
 - `OverflowCount`: `noun` defaults to `''`; an empty `noun` uses the catalog (`item` / `items`).
 - `Tag`: `icon` defaults to `''`; an empty `icon` draws no glyph.
-- `RadioButton`: `value`, `name` and `inputId` default to `''`. A radio with no `value` now writes
-  `''` to its `v-model` when picked (was `undefined`), and an unset `v-model` no longer matches it.
-  Give every radio a `value`.
 - `FileDropzone`: `icon` defaults to `''` and still draws `pi pi-cloud-upload`; pass a PrimeIcons
   class to change it, as before.
 - `StatTile`: `trend` accepts `null` entries (`(number | null)[]`) for gaps in the sparkline. Arrays
@@ -744,19 +740,48 @@ Optional text props that defaulted to `undefined` now default to `''`, and an em
 These old names keep working in v6, marked `@deprecated`, and go in 7.0. The codemod rewrites the
 props in section 3; move the rest by hand:
 
-- `Calendar`: `v-model:timezone` → `v-model:time-zone`, `horizontal` → `orientation="horizontal"`
-  (the same names `DateRangePicker` uses).
-- `Checkbox`: a boolean `v-model` needs no `binary` (leave `value` unset); `tabindex` is an
-  attribute, not a prop.
 - `DocCardGroup`: the `DocCardGroupCols` type → `DocCardGroupColumns`.
-- `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
-  `#prefix`, `#iconRight` → `#suffix`.
 - `MiniButton`: `:show-icon="false"` → `icon=""`.
-- `Select`: `multiple` → `MultiSelect`.
 - `SplitButton`: read or restore the mirrored action with `v-model:selected`.
-- `Switch`: `focused` → `autofocus`; `SwitchType` → `SwitchKind`.
 - `ToggleGroup`: a disabled option without `locked` still shows the lock; set `locked: true` on
   the options that need it, since 7.0 draws the lock only for `locked`.
+
+### Input controls: one name per job
+
+6.0 removes the second names the input controls carried. The codemod rewrites the imports and
+bindings and prints `MANUAL` for everything below that it cannot rewrite.
+
+- **Removed aliases.** `Checkbox` drops `binary`, `inputId` and the `tabindex` prop (a boolean
+  `v-model` needs no flag; pass `id` and `tabindex` as attributes). `Input`, `PasswordInput`,
+  `Select.Trigger` and `MultiSelect.Trigger` drop the `#iconLeft` / `#iconRight` slots (use
+  `#prefix` / `#suffix`). `Switch` drops `focused` (use `autofocus`) and the `SwitchType` type (use
+  `SwitchKind`). `Textarea` drops `resizable` (use `resize`).
+- **`Select` picks one value.** `multiple` is gone: `<Select multiple v-model="arr">` becomes
+  `<MultiSelect v-model="arr">` with the same options. `Select` no longer sets `data-mode`.
+- **`Label` is removed.** Wrap the control in `Field` and use `Field.Label`; for a label set apart
+  from its control, use `FieldLabel` with `for`, and its new `required` prop for the Required marker.
+- **`Calendar` → `DatePicker`, for one date.** `DatePicker` (`@aziontech/webkit/date-picker`,
+  `-root`, `DatePicker.Clear`) picks one date, optionally with a time. `mode`, `period`,
+  `presets` (and `Calendar.Preset`, the `#presets` slot), `showTimeZone`, `timeZones` and the
+  `showTimezone` / `timezones` / `v-model:timezone` / `horizontal` aliases are gone; the
+  `CalendarRange`, `CalendarMode` and `CalendarPresetItem` types too. A `mode="range"` or `period`
+  picker becomes `DateRangePicker`, which owns every range: relative or absolute, and whole days
+  with `range-selector-mode="absolute-only" :show-time="false"`. Its `v-model` is
+  `{ type: 'absolute', start, end }` with ISO instants instead of `{ start, end }` Dates.
+  `DateRangePicker` now formats in `WebkitProvider`'s `time-zone` when its own is unbound. The
+  locale catalog group `calendar` is renamed `datePicker`, and its placeholder reads "Select a date".
+- **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
+  `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
+  `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.
+  A hand-built `Field.Label` choice card with a radio becomes `kind="card"` with `description` on
+  the item. `<RadioCards v-model :items>` becomes
+  `<RadioGroup v-model kind="card" orientation="horizontal" :options>` (the codemod renames
+  `items`); its `#default="{ item }"` slot is `#option="{ option }"` and `#tag="{ item }"` is
+  `#tag="{ option }"`. `RadioCardsItem` → `RadioGroupOption`.
+- **`PickList` → `TransferList`.** `@aziontech/webkit/pick-list` and its parts become
+  `transfer-list` (`TransferList.Source`, `.Target`, `.Controls`), the test id
+  `data-transfer-list`, the catalog group `transferList`; the deprecated `dataKey` is gone (the
+  codemod writes `trackBy`).
 
 ## 5. Field report: Azion Console
 

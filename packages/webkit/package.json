@@ -816,25 +816,25 @@
       "types": "./types/components/data/flow/flow-anchor/flow-anchor.vue.d.ts",
       "default": "./src/components/data/flow/flow-anchor/flow-anchor.vue"
     },
-    "./pick-list": {
-      "types": "./types/components/data/pick-list/index.d.ts",
-      "default": "./src/components/data/pick-list/index.ts"
+    "./transfer-list": {
+      "types": "./types/components/data/transfer-list/index.d.ts",
+      "default": "./src/components/data/transfer-list/index.ts"
     },
-    "./pick-list-root": {
-      "types": "./types/components/data/pick-list/pick-list.vue.d.ts",
-      "default": "./src/components/data/pick-list/pick-list.vue"
+    "./transfer-list-root": {
+      "types": "./types/components/data/transfer-list/transfer-list.vue.d.ts",
+      "default": "./src/components/data/transfer-list/transfer-list.vue"
     },
-    "./pick-list-source": {
-      "types": "./types/components/data/pick-list/pick-list-source/pick-list-source.vue.d.ts",
-      "default": "./src/components/data/pick-list/pick-list-source/pick-list-source.vue"
+    "./transfer-list-source": {
+      "types": "./types/components/data/transfer-list/transfer-list-source/transfer-list-source.vue.d.ts",
+      "default": "./src/components/data/transfer-list/transfer-list-source/transfer-list-source.vue"
     },
-    "./pick-list-target": {
-      "types": "./types/components/data/pick-list/pick-list-target/pick-list-target.vue.d.ts",
-      "default": "./src/components/data/pick-list/pick-list-target/pick-list-target.vue"
+    "./transfer-list-target": {
+      "types": "./types/components/data/transfer-list/transfer-list-target/transfer-list-target.vue.d.ts",
+      "default": "./src/components/data/transfer-list/transfer-list-target/transfer-list-target.vue"
     },
-    "./pick-list-controls": {
-      "types": "./types/components/data/pick-list/pick-list-controls/pick-list-controls.vue.d.ts",
-      "default": "./src/components/data/pick-list/pick-list-controls/pick-list-controls.vue"
+    "./transfer-list-controls": {
+      "types": "./types/components/data/transfer-list/transfer-list-controls/transfer-list-controls.vue.d.ts",
+      "default": "./src/components/data/transfer-list/transfer-list-controls/transfer-list-controls.vue"
     },
     "./tree": {
       "types": "./types/components/data/tree/tree.vue.d.ts",
@@ -1004,21 +1004,17 @@
       "types": "./types/components/inputs/date-range-picker/date-range-picker.vue.d.ts",
       "default": "./src/components/inputs/date-range-picker/date-range-picker.vue"
     },
-    "./calendar": {
-      "types": "./types/components/inputs/calendar/index.d.ts",
-      "default": "./src/components/inputs/calendar/index.ts"
+    "./date-picker": {
+      "types": "./types/components/inputs/date-picker/index.d.ts",
+      "default": "./src/components/inputs/date-picker/index.ts"
     },
-    "./calendar-root": {
-      "types": "./types/components/inputs/calendar/calendar.vue.d.ts",
-      "default": "./src/components/inputs/calendar/calendar.vue"
+    "./date-picker-root": {
+      "types": "./types/components/inputs/date-picker/date-picker.vue.d.ts",
+      "default": "./src/components/inputs/date-picker/date-picker.vue"
     },
-    "./calendar-preset": {
-      "types": "./types/components/inputs/calendar/calendar-preset/calendar-preset.vue.d.ts",
-      "default": "./src/components/inputs/calendar/calendar-preset/calendar-preset.vue"
-    },
-    "./calendar-clear": {
-      "types": "./types/components/inputs/calendar/calendar-clear/calendar-clear.vue.d.ts",
-      "default": "./src/components/inputs/calendar/calendar-clear/calendar-clear.vue"
+    "./date-picker-clear": {
+      "types": "./types/components/inputs/date-picker/date-picker-clear/date-picker-clear.vue.d.ts",
+      "default": "./src/components/inputs/date-picker/date-picker-clear/date-picker-clear.vue"
     },
     "./input": {
       "types": "./types/components/inputs/input/input.vue.d.ts",
@@ -1100,10 +1096,6 @@
       "types": "./types/components/inputs/hint/hint.vue.d.ts",
       "default": "./src/components/inputs/hint/hint.vue"
     },
-    "./label": {
-      "types": "./types/components/inputs/label/label.vue.d.ts",
-      "default": "./src/components/inputs/label/label.vue"
-    },
     "./otp-input": {
       "types": "./types/components/inputs/otp-input/otp-input.vue.d.ts",
       "default": "./src/components/inputs/otp-input/otp-input.vue"
@@ -1148,10 +1140,6 @@
       "types": "./types/components/inputs/radio-group/radio-group.vue.d.ts",
       "default": "./src/components/inputs/radio-group/radio-group.vue"
     },
-    "./radio-cards": {
-      "types": "./types/components/inputs/radio-cards/radio-cards.vue.d.ts",
-      "default": "./src/components/inputs/radio-cards/radio-cards.vue"
-    },
     "./chip": {
       "types": "./types/components/inputs/chip/chip.vue.d.ts",
       "default": "./src/components/inputs/chip/chip.vue"
@@ -1159,10 +1147,6 @@
     "./checkbox": {
       "types": "./types/components/inputs/checkbox/checkbox.vue.d.ts",
       "default": "./src/components/inputs/checkbox/checkbox.vue"
-    },
-    "./radio-button": {
-      "types": "./types/components/inputs/radio-button/radio-button.vue.d.ts",
-      "default": "./src/components/inputs/radio-button/radio-button.vue"
     },
     "./switch": {
       "types": "./types/components/inputs/switch/switch.vue.d.ts",
@@ -3071,20 +3055,20 @@
       "flow-anchor": [
         "./types/components/data/flow/flow-anchor/flow-anchor.vue.d.ts"
       ],
-      "pick-list": [
-        "./types/components/data/pick-list/index.d.ts"
+      "transfer-list": [
+        "./types/components/data/transfer-list/index.d.ts"
       ],
-      "pick-list-root": [
-        "./types/components/data/pick-list/pick-list.vue.d.ts"
+      "transfer-list-root": [
+        "./types/components/data/transfer-list/transfer-list.vue.d.ts"
       ],
-      "pick-list-source": [
-        "./types/components/data/pick-list/pick-list-source/pick-list-source.vue.d.ts"
+      "transfer-list-source": [
+        "./types/components/data/transfer-list/transfer-list-source/transfer-list-source.vue.d.ts"
       ],
-      "pick-list-target": [
-        "./types/components/data/pick-list/pick-list-target/pick-list-target.vue.d.ts"
+      "transfer-list-target": [
+        "./types/components/data/transfer-list/transfer-list-target/transfer-list-target.vue.d.ts"
       ],
-      "pick-list-controls": [
-        "./types/components/data/pick-list/pick-list-controls/pick-list-controls.vue.d.ts"
+      "transfer-list-controls": [
+        "./types/components/data/transfer-list/transfer-list-controls/transfer-list-controls.vue.d.ts"
       ],
       "tree": [
         "./types/components/data/tree/tree.vue.d.ts"
@@ -3212,17 +3196,14 @@
       "date-range-picker": [
         "./types/components/inputs/date-range-picker/date-range-picker.vue.d.ts"
       ],
-      "calendar": [
-        "./types/components/inputs/calendar/index.d.ts"
+      "date-picker": [
+        "./types/components/inputs/date-picker/index.d.ts"
       ],
-      "calendar-root": [
-        "./types/components/inputs/calendar/calendar.vue.d.ts"
+      "date-picker-root": [
+        "./types/components/inputs/date-picker/date-picker.vue.d.ts"
       ],
-      "calendar-preset": [
-        "./types/components/inputs/calendar/calendar-preset/calendar-preset.vue.d.ts"
-      ],
-      "calendar-clear": [
-        "./types/components/inputs/calendar/calendar-clear/calendar-clear.vue.d.ts"
+      "date-picker-clear": [
+        "./types/components/inputs/date-picker/date-picker-clear/date-picker-clear.vue.d.ts"
       ],
       "input": [
         "./types/components/inputs/input/input.vue.d.ts"
@@ -3284,9 +3265,6 @@
       "hint": [
         "./types/components/inputs/hint/hint.vue.d.ts"
       ],
-      "label": [
-        "./types/components/inputs/label/label.vue.d.ts"
-      ],
       "otp-input": [
         "./types/components/inputs/otp-input/otp-input.vue.d.ts"
       ],
@@ -3320,17 +3298,11 @@
       "radio-group-root": [
         "./types/components/inputs/radio-group/radio-group.vue.d.ts"
       ],
-      "radio-cards": [
-        "./types/components/inputs/radio-cards/radio-cards.vue.d.ts"
-      ],
       "chip": [
         "./types/components/inputs/chip/chip.vue.d.ts"
       ],
       "checkbox": [
         "./types/components/inputs/checkbox/checkbox.vue.d.ts"
-      ],
-      "radio-button": [
-        "./types/components/inputs/radio-button/radio-button.vue.d.ts"
       ],
       "switch": [
         "./types/components/inputs/switch/switch.vue.d.ts"

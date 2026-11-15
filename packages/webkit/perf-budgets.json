@@ -226,7 +226,7 @@
       "update": 30,
       "update_is": "open the menu, open the 1k-option field, then search it"
     },
-    "pick-list-1k": {
+    "transfer-list-1k": {
       "mount": 130,
       "update": 110,
       "update_is": "move every source item to the target"

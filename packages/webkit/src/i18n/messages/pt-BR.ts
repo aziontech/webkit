@@ -173,34 +173,6 @@ export const ptBR: Messages = {
     moreActions: 'Mais ações',
     pressed: 'Ativado'
   },
-  calendar: {
-    placeholder: 'Selecione um período',
-    period: 'Período',
-    selectPeriod: 'Selecionar período',
-    clear: 'Limpar seleção',
-    open: 'Abrir calendário',
-    chooseDate: 'Escolher data',
-    apply: 'Aplicar período',
-    presets: 'Atalhos',
-    previousMonth: 'Mês anterior',
-    nextMonth: 'Próximo mês',
-    start: 'Início',
-    end: 'Fim',
-    date: 'Data',
-    time: 'Hora',
-    startTime: 'Hora de início',
-    endTime: 'Hora de término',
-    last3Days: 'Últimos 3 dias',
-    lastWeek: 'Última semana',
-    lastMonth: 'Último mês',
-    lastQuarter: 'Último trimestre',
-    lastYear: 'Último ano',
-    relativeHints: 'Digite tempos relativos',
-    fixedHints: 'Digite datas fixas',
-    rangeSeparators: 'a|até',
-    timezone: 'Fuso horário',
-    localTimezone: 'Local'
-  },
   card: {
     byVendor: 'por {vendor}',
     installed: 'Instalado'
@@ -383,6 +355,23 @@ export const ptBR: Messages = {
     title: 'Copie manualmente',
     field: 'Valor para copiar',
     hint: 'Pressione {keys} para copiar.'
+  },
+  datePicker: {
+    placeholder: 'Selecione uma data',
+    clear: 'Limpar seleção',
+    open: 'Abrir calendário',
+    chooseDate: 'Escolher data',
+    apply: 'Aplicar',
+    previousMonth: 'Mês anterior',
+    nextMonth: 'Próximo mês',
+    start: 'Início',
+    end: 'Fim',
+    date: 'Data',
+    time: 'Hora',
+    startTime: 'Hora de início',
+    endTime: 'Hora de término',
+    timezone: 'Fuso horário',
+    localTimezone: 'Local'
   },
   dateRangePicker: {
     label: 'Intervalo de tempo',
@@ -661,9 +650,6 @@ export const ptBR: Messages = {
     'arrow-left': '←',
     'arrow-right': '→'
   },
-  label: {
-    required: '(Obrigatório)'
-  },
   link: {
     label: 'Saiba mais'
   },
@@ -771,7 +757,7 @@ export const ptBR: Messages = {
     search: 'Buscar país',
     empty: 'Nenhum país encontrado.'
   },
-  pickList: {
+  transferList: {
     moveSelectedToTarget: 'Mover selecionados para o destino',
     moveAllToTarget: 'Mover todos para o destino',
     moveSelectedToSource: 'Mover selecionados para a origem',

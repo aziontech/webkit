@@ -32,13 +32,78 @@
       }
     }
   },
+  "calendar-root": {
+    "showTimezone": "showTimeZone",
+    "timezones": "timeZones",
+    "timezone": "timeZone"
+  },
   "card-pricing": {
     "planTitle": "title"
+  },
+  "checkbox": {
+    "inputId": "id",
+    "binary": {
+      "removed": "leave value unset for a boolean v-model"
+    }
   },
   "code-block": {
     "border": "bordered",
     "value": "modelValue",
     "showLineNumbers": "lineNumbers"
+  },
+  "date-picker": {
+    "mode": {
+      "removed": "DatePicker picks one date; for a range (relative or absolute, with or without times) use DateRangePicker"
+    },
+    "period": {
+      "removed": "use DateRangePicker, whose Relative tab lists the quick ranges"
+    },
+    "presets": {
+      "removed": "use DateRangePicker with relative-options for preset ranges"
+    },
+    "showTimeZone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "showTimezone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "timeZones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezone": "timeZone",
+    "horizontal": {
+      "removed": "set orientation=\"horizontal\""
+    }
+  },
+  "date-picker-root": {
+    "mode": {
+      "removed": "DatePicker picks one date; for a range (relative or absolute, with or without times) use DateRangePicker"
+    },
+    "period": {
+      "removed": "use DateRangePicker, whose Relative tab lists the quick ranges"
+    },
+    "presets": {
+      "removed": "use DateRangePicker with relative-options for preset ranges"
+    },
+    "showTimeZone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "showTimezone": {
+      "removed": "the time zone selector is DateRangePicker's; set WebkitProvider time-zone for the app's zone"
+    },
+    "timeZones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezones": {
+      "removed": "the time zone selector is DateRangePicker's"
+    },
+    "timezone": "timeZone",
+    "horizontal": {
+      "removed": "set orientation=\"horizontal\""
+    }
   },
   "doc-card": {
     "overline": "eyebrow",
@@ -54,6 +119,9 @@
   },
   "feature-tabs": {
     "interval": "autoplayInterval"
+  },
+  "flow-anchor": {
+    "type": "side"
   },
   "hero": {
     "carousel": "ticker",
@@ -98,6 +166,14 @@
     "autoPlay": "autoplay",
     "autoPlayInterval": "autoplayInterval"
   },
+  "menu-item": {
+    "tagSeverity": {
+      "to": "tagSeverity",
+      "values": {
+        "secondary": "neutral"
+      }
+    }
+  },
   "navigation-menu": {
     "value": "modelValue",
     "as": {
@@ -121,6 +197,19 @@
   "quote-tabs": {
     "autoPlay": "autoplay",
     "autoPlayInterval": "autoplayInterval"
+  },
+  "radio-group": {
+    "items": "options"
+  },
+  "select": {
+    "multiple": {
+      "removed": "use MultiSelect (same options, same array v-model)"
+    }
+  },
+  "select-root": {
+    "multiple": {
+      "removed": "use MultiSelect (same options, same array v-model)"
+    }
   },
   "severity-tag": {
     "level": "severity"
@@ -151,50 +240,25 @@
       }
     }
   },
-  "table": {
-    "border": "bordered",
-    "rowsPerPageOptions": "pageSizeOptions"
-  },
-  "table-root": {
-    "border": "bordered",
-    "rowsPerPageOptions": "pageSizeOptions"
-  },
-  "tabs": {
-    "value": "modelValue"
-  },
-  "theme-switcher": {
-    "value": "modelValue"
-  },
-  "calendar": {
-    "showTimezone": "showTimeZone",
-    "timezones": "timeZones",
-    "timezone": "timeZone"
-  },
-  "calendar-root": {
-    "showTimezone": "showTimeZone",
-    "timezones": "timeZones",
-    "timezone": "timeZone"
-  },
-  "checkbox": {
-    "inputId": "id"
-  },
-  "radio-button": {
-    "inputId": "id"
-  },
   "split-button": {
     "model": "items"
   },
-  "textarea": {
-    "resizable": "resize"
+  "status-indicator": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "alt": "neutral"
+      }
+    }
   },
-  "flow-anchor": {
-    "type": "side"
+  "switch": {
+    "focused": {
+      "removed": "use autofocus to focus it on mount"
+    }
   },
-  "pick-list": {
-    "dataKey": "trackBy"
-  },
-  "pick-list-root": {
-    "dataKey": "trackBy"
+  "table": {
+    "border": "bordered",
+    "rowsPerPageOptions": "pageSizeOptions"
   },
   "table-header": {
     "kind": {
@@ -205,6 +269,13 @@
       }
     }
   },
+  "table-root": {
+    "border": "bordered",
+    "rowsPerPageOptions": "pageSizeOptions"
+  },
+  "tabs": {
+    "value": "modelValue"
+  },
   "tag": {
     "severity": {
       "to": "severity",
@@ -213,20 +284,16 @@
       }
     }
   },
-  "status-indicator": {
-    "severity": {
-      "to": "severity",
-      "values": {
-        "alt": "neutral"
-      }
-    }
+  "textarea": {
+    "resizable": "resize"
   },
-  "menu-item": {
-    "tagSeverity": {
-      "to": "tagSeverity",
-      "values": {
-        "secondary": "neutral"
-      }
-    }
+  "theme-switcher": {
+    "value": "modelValue"
+  },
+  "transfer-list": {
+    "dataKey": "trackBy"
+  },
+  "transfer-list-root": {
+    "dataKey": "trackBy"
   }
 }

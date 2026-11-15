@@ -173,34 +173,6 @@ export const es: Messages = {
     moreActions: 'Más acciones',
     pressed: 'Activado'
   },
-  calendar: {
-    placeholder: 'Selecciona un rango de fechas',
-    period: 'Período',
-    selectPeriod: 'Seleccionar período',
-    clear: 'Borrar selección',
-    open: 'Abrir calendario',
-    chooseDate: 'Elegir fecha',
-    apply: 'Aplicar rango',
-    presets: 'Atajos',
-    previousMonth: 'Mes anterior',
-    nextMonth: 'Mes siguiente',
-    start: 'Inicio',
-    end: 'Fin',
-    date: 'Fecha',
-    time: 'Hora',
-    startTime: 'Hora de inicio',
-    endTime: 'Hora de fin',
-    last3Days: 'Últimos 3 días',
-    lastWeek: 'Última semana',
-    lastMonth: 'Último mes',
-    lastQuarter: 'Último trimestre',
-    lastYear: 'Último año',
-    relativeHints: 'Escribe tiempos relativos',
-    fixedHints: 'Escribe fechas fijas',
-    rangeSeparators: 'a|hasta',
-    timezone: 'Zona horaria',
-    localTimezone: 'Local'
-  },
   card: {
     byVendor: 'por {vendor}',
     installed: 'Instalado'
@@ -383,6 +355,23 @@ export const es: Messages = {
     title: 'Copia manualmente',
     field: 'Valor para copiar',
     hint: 'Pulsa {keys} para copiar.'
+  },
+  datePicker: {
+    placeholder: 'Selecciona una fecha',
+    clear: 'Borrar selección',
+    open: 'Abrir calendario',
+    chooseDate: 'Elegir fecha',
+    apply: 'Aplicar',
+    previousMonth: 'Mes anterior',
+    nextMonth: 'Mes siguiente',
+    start: 'Inicio',
+    end: 'Fin',
+    date: 'Fecha',
+    time: 'Hora',
+    startTime: 'Hora de inicio',
+    endTime: 'Hora de fin',
+    timezone: 'Zona horaria',
+    localTimezone: 'Local'
   },
   dateRangePicker: {
     label: 'Intervalo de tiempo',
@@ -661,9 +650,6 @@ export const es: Messages = {
     'arrow-left': '←',
     'arrow-right': '→'
   },
-  label: {
-    required: '(Obligatorio)'
-  },
   link: {
     label: 'Más información'
   },
@@ -771,7 +757,7 @@ export const es: Messages = {
     search: 'Buscar país',
     empty: 'No se encontró ningún país.'
   },
-  pickList: {
+  transferList: {
     moveSelectedToTarget: 'Mover seleccionados al destino',
     moveAllToTarget: 'Mover todos al destino',
     moveSelectedToSource: 'Mover seleccionados al origen',

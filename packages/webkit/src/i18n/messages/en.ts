@@ -97,35 +97,6 @@ export const buttonGroup = {
   pressed: 'On'
 } as const
 
-export const calendar = {
-  placeholder: 'Select a date range',
-  period: 'Period',
-  selectPeriod: 'Select period',
-  clear: 'Clear selection',
-  open: 'Open calendar',
-  chooseDate: 'Choose date',
-  apply: 'Apply range',
-  presets: 'Presets',
-  previousMonth: 'Previous month',
-  nextMonth: 'Next month',
-  start: 'Start',
-  end: 'End',
-  date: 'Date',
-  time: 'Time',
-  startTime: 'Start time',
-  endTime: 'End time',
-  last3Days: 'Last 3 days',
-  lastWeek: 'Last week',
-  lastMonth: 'Last month',
-  lastQuarter: 'Last quarter',
-  lastYear: 'Last year',
-  relativeHints: 'Type relative times',
-  fixedHints: 'Type fixed times',
-  rangeSeparators: 'to|through',
-  timezone: 'Timezone',
-  localTimezone: 'Local'
-} as const
-
 export const card = {
   byVendor: 'by {vendor}',
   installed: 'Installed'
@@ -318,6 +289,24 @@ export const copyFallback = {
   title: 'Copy manually',
   field: 'Value to copy',
   hint: 'Press {keys} to copy.'
+} as const
+
+export const datePicker = {
+  placeholder: 'Select a date',
+  clear: 'Clear selection',
+  open: 'Open calendar',
+  chooseDate: 'Choose date',
+  apply: 'Apply',
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  start: 'Start',
+  end: 'End',
+  date: 'Date',
+  time: 'Time',
+  startTime: 'Start time',
+  endTime: 'End time',
+  timezone: 'Timezone',
+  localTimezone: 'Local'
 } as const
 
 export const dateRangePicker = {
@@ -610,10 +599,6 @@ export const kbd = {
   'arrow-right': '→'
 } as const
 
-export const label = {
-  required: '(Required)'
-} as const
-
 export const link = {
   label: 'Learn more'
 } as const
@@ -736,7 +721,7 @@ export const phoneInput = {
   empty: 'No country found.'
 } as const
 
-export const pickList = {
+export const transferList = {
   moveSelectedToTarget: 'Move selected to target',
   moveAllToTarget: 'Move all to target',
   moveSelectedToSource: 'Move selected to source',
@@ -1405,7 +1390,6 @@ export const en = {
   breadcrumb,
   browserFrame,
   buttonGroup,
-  calendar,
   card,
   cards,
   carousel,
@@ -1431,6 +1415,7 @@ export const en = {
   conversationHistory,
   feedbackReason,
   responseBranches,
+  datePicker,
   dateRangePicker,
   dialog,
   docFrame,
@@ -1458,7 +1443,6 @@ export const en = {
   hotspot,
   keyValuePairs,
   kbd,
-  label,
   link,
   listingBrowser,
   logoWall,
@@ -1475,7 +1459,7 @@ export const en = {
   passwordInput,
   passwordRequirements,
   phoneInput,
-  pickList,
+  transferList,
   popover,
   progress,
   promptInput,
