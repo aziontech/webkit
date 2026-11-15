@@ -53,16 +53,16 @@
   const areaEl = ref<globalThis.HTMLElement | null>(null)
   const panelEl = ref<globalThis.HTMLElement | null>(null)
   const panelBodyEl = ref<globalThis.HTMLElement | null>(null)
-  const bodyTarget = ref<globalThis.HTMLElement | null>(null)
+  const bodyTargetEl = ref<globalThis.HTMLElement | null>(null)
   const point = ref<{ x: number; y: number } | null>(null)
   let returnFocus: globalThis.Element | null = null
 
   watch(panelBodyEl, (el) => {
-    if (el) bodyTarget.value = el
+    if (el) bodyTargetEl.value = el
   })
 
   function onPanelAfterLeave() {
-    bodyTarget.value = null
+    bodyTargetEl.value = null
   }
 
   const testId = computed(
@@ -146,7 +146,7 @@
     panelId: `${uid}-panel`,
     triggerEl: anchorEl,
     panelEl,
-    panelBodyEl: bodyTarget,
+    panelBodyEl: bodyTargetEl,
     setOpen,
     onSelect: (event, value) => emit('select', event, value),
     focusTrigger

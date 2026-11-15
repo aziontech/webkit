@@ -100,8 +100,8 @@
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
 
-  const stage = ref<globalThis.HTMLElement | null>(null)
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   const fields = computed(() => FIELDS.slice(0, frame.value.fields))
 
@@ -146,7 +146,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative"
     >
       <div class="flex flex-col py-(--spacing-xs)">

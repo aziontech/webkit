@@ -68,7 +68,7 @@
   const turns = ref<Turn[]>([])
   const state = ref<PromptInputState>('ready')
   const prompt = ref('')
-  const composer = ref<InstanceType<typeof PromptInput> | null>(null)
+  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const assistantOpen = ref(true)
 
   const knowledge: Record<'cache' | 'errors', Answer> = {
@@ -168,7 +168,7 @@
     turn.state = 'complete'
     turn.thinking = false
     state.value = 'ready'
-    composer.value?.focus()
+    composerEl.value?.focus()
   }
 
   function respond(turn: AssistantTurn) {
@@ -398,7 +398,7 @@
           </div>
           <div class="border-t border-(--border-default) p-(--spacing-sm)">
             <PromptInput
-              ref="composer"
+              ref="composerEl"
               v-model="prompt"
               :state="state"
               :max-rows="4"

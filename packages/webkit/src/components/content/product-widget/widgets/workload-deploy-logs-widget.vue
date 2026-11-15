@@ -64,8 +64,8 @@
 
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
-  const shell = ref<InstanceType<typeof ShellMockup> | null>(null)
-  const visible = useElementVisibility(shell, { threshold: 0.35 })
+  const shellEl = ref<InstanceType<typeof ShellMockup> | null>(null)
+  const visible = useElementVisibility(shellEl, { threshold: 0.35 })
 
   const run = ref(0)
   const deployed = ref(false)
@@ -99,7 +99,7 @@
 
 <template>
   <ShellMockup
-    ref="shell"
+    ref="shellEl"
     :kind="kind"
     :chrome="chrome"
     :width="width"

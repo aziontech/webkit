@@ -106,7 +106,7 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-prompt-input'
   )
-  const textarea = ref<HTMLTextAreaElement | null>(null)
+  const textareaEl = ref<HTMLTextAreaElement | null>(null)
   const composing = ref<boolean>(false)
 
   const length = computed<number>(() => model.value.length)
@@ -123,7 +123,7 @@
   }
 
   function resize(): void {
-    const el = textarea.value
+    const el = textareaEl.value
     if (!el || typeof window === 'undefined') return
     const style = window.getComputedStyle(el)
     const line = Number.parseFloat(style.lineHeight) || 20
@@ -163,7 +163,7 @@
   })
 
   function readQuery(): void {
-    const el = textarea.value
+    const el = textareaEl.value
     if (!el || !props.menus.length) {
       query.value = null
       return
@@ -185,7 +185,7 @@
 
   function choose(option: PromptInputMenuOption): void {
     const current = query.value
-    const el = textarea.value
+    const el = textareaEl.value
     if (!current || !el) return
     const text = el.value
     const caret = el.selectionStart ?? text.length
@@ -263,7 +263,7 @@
   }
 
   function focus(): void {
-    textarea.value?.focus()
+    textareaEl.value?.focus()
   }
 
   watch(
@@ -343,7 +343,7 @@
         </li>
       </ul>
       <textarea
-        ref="textarea"
+        ref="textareaEl"
         :value="model"
         :rows="minRows"
         :placeholder="placeholder || t('promptInput.placeholder')"

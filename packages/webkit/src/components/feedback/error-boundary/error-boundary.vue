@@ -68,11 +68,11 @@
 
   const failure = shallowRef<{ error: unknown } | null>(null)
   const generation = shallowRef(0)
-  const root = useTemplateRef<HTMLElement>('root')
+  const rootEl = useTemplateRef<HTMLElement>('rootEl')
 
   const focusWasInside = () => {
     const active = globalThis.document?.activeElement
-    return !active || active === globalThis.document.body || Boolean(root.value?.contains(active))
+    return !active || active === globalThis.document.body || Boolean(rootEl.value?.contains(active))
   }
 
   onErrorCaptured((error, _instance, info) => {
@@ -82,7 +82,7 @@
     emit('error', { error, info })
     if (moveFocus) {
       void nextTick(() => {
-        root.value
+        rootEl.value
           ?.querySelector<HTMLElement>(`[data-testid="${testId.value}__fallback"]`)
           ?.focus({ preventScroll: true })
       })
@@ -97,7 +97,7 @@
     generation.value += 1
     if (event) emit('retry', event)
     else emit('retry')
-    if (moveFocus) void nextTick(() => root.value?.focus({ preventScroll: true }))
+    if (moveFocus) void nextTick(() => rootEl.value?.focus({ preventScroll: true }))
   }
 
   watch(
@@ -111,7 +111,7 @@
 <template>
   <div
     v-bind="$attrs"
-    ref="root"
+    ref="rootEl"
     tabindex="-1"
     :data-testid="testId"
     :data-error="failure ? '' : null"

@@ -205,7 +205,7 @@
   const deploying = ref(false)
   const outcome = ref<Outcome>('')
   const failNext = ref(SCENARIO.failFirstRun)
-  const resourcesHeading = ref<HTMLElement | null>(null)
+  const resourcesHeadingEl = ref<HTMLElement | null>(null)
 
   let impactTimer = 0
   let runTimer = 0
@@ -286,7 +286,7 @@
     toast.dismiss(RUN_TOAST)
     outcome.value = ''
     await nextTick()
-    resourcesHeading.value?.focus()
+    resourcesHeadingEl.value?.focus()
   }
 
   const finishRun = () => {
@@ -404,7 +404,7 @@
           >
             <h2
               id="release-impact-resources"
-              ref="resourcesHeading"
+              ref="resourcesHeadingEl"
               tabindex="-1"
               class="text-heading-xs text-(--text-default) focus-visible:outline-none"
             >

@@ -76,7 +76,7 @@
   const attrs = useAttrs()
   const { t, dir, locale, optionsOf, summaryText } = useFilterMenuLabels()
   const { request } = useFilterMenuChannel(() => props.fields, { listen: true })
-  const { region, height: regionHeight, animateHeight } = useAnimatedHeight()
+  const { regionEl, height: regionHeight, animateHeight } = useAnimatedHeight()
 
   const activeId = ref<string | null>(null)
   const customId = ref<string | null>(null)
@@ -85,7 +85,7 @@
   const query = ref<string>('')
   const direction = ref<'forward' | 'back'>('forward')
   const panelEl = ref<HTMLElement | null>(null)
-  const returnFocus = ref<HTMLElement | null>(null)
+  const returnFocusEl = ref<HTMLElement | null>(null)
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-filter-menu'
@@ -223,7 +223,7 @@
   }
 
   const show = (fieldId?: string, origin?: HTMLElement | null): void => {
-    returnFocus.value = origin ?? null
+    returnFocusEl.value = origin ?? null
     const field = fieldId ? props.fields.find((entry) => entry.id === fieldId) : undefined
     if (field) enter(field.id)
     else open.value = true
@@ -243,14 +243,14 @@
     const hadFocus = Boolean(
       active && (panelEl.value?.contains(active) || triggerEl()?.contains(active))
     )
-    const origin = returnFocus.value
+    const origin = returnFocusEl.value
     activeId.value = null
     customId.value = null
     calendarOpen.value = false
     customRange.value = null
     query.value = ''
     direction.value = 'forward'
-    returnFocus.value = null
+    returnFocusEl.value = null
     if (!hadFocus) return
     void nextTick(() => {
       const trigger = triggerEl()
@@ -262,7 +262,7 @@
   })
 
   const setRegion = (el: Element | ComponentPublicInstance | null): void => {
-    region.value = el instanceof HTMLElement ? el : null
+    regionEl.value = el instanceof HTMLElement ? el : null
   }
 
   const levelRows = (): HTMLElement[] => [

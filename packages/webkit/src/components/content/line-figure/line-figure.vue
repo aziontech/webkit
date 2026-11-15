@@ -30,10 +30,10 @@
   }>()
 
   const attrs = useAttrs()
-  const stage = ref<HTMLElement | null>(null)
-  const svg = ref<SVGSVGElement | null>(null)
+  const stageEl = ref<HTMLElement | null>(null)
+  const svgEl = ref<SVGSVGElement | null>(null)
 
-  const { definition } = useLineFigure(stage, svg, {
+  const { definition } = useLineFigure(stageEl, svgEl, {
     name: () => props.name,
     intensity: () => props.intensity,
     play: () => props.play,
@@ -48,7 +48,7 @@
 
 <template>
   <div
-    ref="stage"
+    ref="stageEl"
     v-bind="$attrs"
     :role="label ? 'img' : undefined"
     :aria-label="label || undefined"
@@ -58,7 +58,7 @@
     class="relative block w-full touch-pan-y select-none [&_:is(path,ellipse,line,polygon)]:fill-[var(--line-figure-plate,var(--illustration-ground))] [&_:is(path,ellipse,line,polygon)]:stroke-(--illustration-highlight) [&_:is(path,ellipse,line,polygon)]:stroke-1 [&_:is(path,ellipse,line,polygon)]:transition-colors [&_:is(path,ellipse,line,polygon)]:duration-moderate-02 [&_:is(path,ellipse,line,polygon)]:ease-productive-entrance [&_:is(path,ellipse,line,polygon)]:[stroke-linecap:round] [&_:is(path,ellipse,line,polygon)]:[stroke-linejoin:round] [&_:is(path,ellipse,line,polygon)]:[vector-effect:non-scaling-stroke] motion-reduce:[&_:is(path,ellipse,line,polygon)]:transition-none [&_.dash]:[stroke-dasharray:1_3] [&_.dot]:fill-(--illustration-primary) [&_.dot]:stroke-none [&_.dot.m]:fill-(--illustration-line-strong) [&_.dot.off]:fill-(--illustration-line) [&_.fo]:stroke-none [&_.halo]:stroke-2 [&_.hi]:stroke-(--illustration-primary) [&_.lo]:stroke-(--illustration-line) [&_.nf]:fill-none [&_.sil]:stroke-(--illustration-line-strong) [&_.sil.hi]:stroke-(--illustration-primary) [&_svg]:block [&_svg]:h-auto [&_svg]:w-full"
   >
     <svg
-      ref="svg"
+      ref="svgEl"
       viewBox="0 0 400 320"
       width="400"
       height="320"

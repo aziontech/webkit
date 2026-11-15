@@ -46,9 +46,9 @@
 
   const id = Symbol('StepperStep')
   const { index, isLast } = context.register(id)
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  onMounted(() => context.attach(id, root.value))
+  onMounted(() => context.attach(id, rootEl.value))
   onBeforeUnmount(() => context.unregister(id))
 
   const testId = computed(
@@ -76,7 +76,7 @@
 
 <template>
   <li
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-state="dataState"

@@ -29,7 +29,7 @@
   })
   const advancedOpen = ref(false)
   const submitting = ref(false)
-  const nameInput = ref<InstanceType<typeof Input> | null>(null)
+  const nameInputEl = ref<InstanceType<typeof Input> | null>(null)
 
   const NAME_PATTERN = /^[A-Za-z0-9-]{6,50}$/
   const TAKEN = ['acme-store', 'feature-flags']
@@ -50,7 +50,7 @@
 
   const focusName = async () => {
     await nextTick()
-    nameInput.value?.focus()
+    nameInputEl.value?.focus()
   }
 
   const CREATE_TOAST = 'create-database'
@@ -181,7 +181,7 @@
                         description="Identifies the database wherever it is queried from. It cannot be changed later. Between 6 and 50 characters: letters, numbers and hyphens."
                       >
                         <Input
-                          ref="nameInput"
+                          ref="nameInputEl"
                           v-model="form.name"
                           size="large"
                           class="w-full"

@@ -161,7 +161,7 @@
 
   const TRIP_LINE = 120
 
-  const prose = ref<HTMLElement | null>(null)
+  const proseEl = ref<HTMLElement | null>(null)
 
   const spiedId = ref('')
 
@@ -336,7 +336,7 @@
   }
 
   const spy = (): void => {
-    const nodes = prose.value?.querySelectorAll<HTMLElement>('h2[id], h3[id]') ?? []
+    const nodes = proseEl.value?.querySelectorAll<HTMLElement>('h2[id], h3[id]') ?? []
     let current = ''
     for (const node of nodes) {
       if (node.getBoundingClientRect().top <= TRIP_LINE) current = node.id
@@ -346,7 +346,7 @@
   }
 
   const goToHeading = (event: MouseEvent, item: { id: string }): void => {
-    const target = prose.value?.querySelector<HTMLElement>(`#${CSS.escape(item.id)}`)
+    const target = proseEl.value?.querySelector<HTMLElement>(`#${CSS.escape(item.id)}`)
     if (!target) return
     event.preventDefault()
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
@@ -451,7 +451,7 @@
             <Separator class="lg:col-start-2" />
 
             <article
-              ref="prose"
+              ref="proseEl"
               class="min-w-0 lg:col-start-2 [&_h2]:scroll-mt-(--spacing-xxl) [&_h3]:scroll-mt-(--spacing-xxl)"
             >
               <DocProse>

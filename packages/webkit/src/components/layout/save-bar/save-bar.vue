@@ -29,8 +29,8 @@
 
   const attrs = useAttrs()
 
-  const root = ref<HTMLElement | null>(null)
-  const shell = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
+  const shellEl = ref<HTMLElement | null>(null)
   const reserved = ref(0)
   let observer: ResizeObserver | null = null
   let measured = -1
@@ -57,7 +57,7 @@
   }
 
   function reachableScroll() {
-    const element = root.value
+    const element = rootEl.value
     if (!element) return 0
     let total = 0
     let node = element.parentElement
@@ -100,7 +100,7 @@
   }
 
   watch(
-    [shell, () => props.kind],
+    [shellEl, () => props.kind],
     ([element, kind]) => {
       release()
       if (!element || kind !== 'floating' || typeof ResizeObserver === 'undefined') return
@@ -116,7 +116,7 @@
 
 <template>
   <footer
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-kind="kind"
@@ -124,7 +124,7 @@
     class="group/save-bar @container/save-bar sticky bottom-0 z-10 shrink-0 data-[kind=floating]:h-0 data-[kind=plain]:border-t-(length:--border-width-default) data-[kind=plain]:border-(--border-muted) data-[kind=plain]:bg-(--bg-surface) data-[kind=fade]:bg-linear-to-b data-[kind=fade]:from-transparent data-[kind=fade]:to-(--bg-canvas) data-[kind=centered]:pointer-events-none"
   >
     <div
-      ref="shell"
+      ref="shellEl"
       class="group-data-[kind=docked]/save-bar:border-t group-data-[kind=docked]/save-bar:border-(--border-default) group-data-[kind=docked]/save-bar:bg-(--bg-canvas) group-data-[kind=docked]/save-bar:@xl/save-bar:h-14 group-data-[kind=floating]/save-bar:absolute group-data-[kind=floating]/save-bar:inset-x-0 group-data-[kind=floating]/save-bar:bottom-0 group-data-[kind=floating]/save-bar:border-t group-data-[kind=floating]/save-bar:border-(--border-default) group-data-[kind=floating]/save-bar:bg-(--bg-canvas) group-data-[kind=floating]/save-bar:@xl/save-bar:h-14"
     >
       <div

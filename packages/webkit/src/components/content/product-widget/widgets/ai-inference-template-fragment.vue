@@ -106,15 +106,15 @@
   const wanted = () => props.active && (props.hover || !canHover.value)
 
   const step = ref(0)
-  const stage = ref<globalThis.HTMLElement | null>(null)
-  const column = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const columnEl = ref<globalThis.HTMLElement | null>(null)
   const offset = ref(0)
 
   const frame = computed(() => FRAMES[step.value])
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   const measure = () => {
-    const anchors = column.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
+    const anchors = columnEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
     const anchor = anchors?.[frame.value.anchor]
     offset.value = anchor ? anchor.offsetTop : 0
   }
@@ -146,7 +146,7 @@
   }
 
   watch(wanted, advance, { immediate: true })
-  watch(column, measure)
+  watch(columnEl, measure)
 
   onScopeDispose(halt)
 </script>
@@ -162,7 +162,7 @@
     :mobile-width="460"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative flex h-full flex-col gap-(--layout-group-gap) py-(--spacing-xs)"
     >
       <ShellMockupPart :order="0">
@@ -212,7 +212,7 @@
           class="h-full overflow-hidden"
         >
           <div
-            ref="column"
+            ref="columnEl"
             :style="{ translate: `0 ${-offset}px` }"
             class="relative flex flex-col gap-(--layout-section-gap) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
           >

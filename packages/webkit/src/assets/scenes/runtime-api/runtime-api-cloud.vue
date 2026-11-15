@@ -28,9 +28,9 @@
   const DRIFT = 72
   const REST = 26
 
-  const field = ref<globalThis.HTMLElement | null>(null)
+  const fieldEl = ref<globalThis.HTMLElement | null>(null)
   const lit = ref(RUNTIME_APIS.map((api) => Boolean(api.lit || api.azion)))
-  const { progress } = useScrollProgress(() => (props.animated ? field.value : null))
+  const { progress } = useScrollProgress(() => (props.animated ? fieldEl.value : null))
 
   const shufflable = RUNTIME_APIS.flatMap((api, index) => (api.pinned || api.azion ? [] : [index]))
 
@@ -97,7 +97,7 @@
 
 <template>
   <div
-    ref="field"
+    ref="fieldEl"
     v-bind="$attrs"
     :data-testid="testId"
     role="list"

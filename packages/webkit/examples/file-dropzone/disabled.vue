@@ -3,8 +3,8 @@
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import { ref } from 'vue'
 
-  const input = ref(null)
-  const browse = () => input.value?.click()
+  const inputEl = ref(null)
+  const browse = () => inputEl.value?.click()
 </script>
 
 <template>
@@ -22,7 +22,7 @@
       />
     </FileDropzone>
     <input
-      ref="input"
+      ref="inputEl"
       type="file"
       multiple
       class="hidden"

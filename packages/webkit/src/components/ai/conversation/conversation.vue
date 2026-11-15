@@ -38,15 +38,15 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-conversation'
   )
 
-  const viewport = ref<HTMLElement | null>(null)
-  const content = ref<HTMLElement | null>(null)
+  const viewportEl = ref<HTMLElement | null>(null)
+  const contentEl = ref<HTMLElement | null>(null)
   const pinned = ref<boolean>(true)
   const ready = ref<boolean>(false)
   const announcement = ref<string>('')
   const THRESHOLD = 32
 
   function distanceFromEnd(): number {
-    const el = viewport.value
+    const el = viewportEl.value
     if (!el) return 0
     return el.scrollHeight - el.scrollTop - el.clientHeight
   }
@@ -65,7 +65,7 @@
   let smoothTimer: ReturnType<typeof setTimeout> | undefined
 
   function scrollToBottom(smooth = false): void {
-    const el = viewport.value
+    const el = viewportEl.value
     if (!el) return
     pinned.value = true
     const animate = smooth && !reducedMotion()
@@ -105,12 +105,12 @@
   onMounted(() => {
     scrollToBottom()
     ready.value = true
-    if (typeof ResizeObserver === 'undefined' || !content.value || !viewport.value) return
+    if (typeof ResizeObserver === 'undefined' || !contentEl.value || !viewportEl.value) return
     observer = new ResizeObserver(() => {
       if (pinned.value) scrollToBottom()
     })
-    observer.observe(content.value)
-    observer.observe(viewport.value)
+    observer.observe(contentEl.value)
+    observer.observe(viewportEl.value)
   })
 
   onBeforeUnmount(() => {
@@ -137,7 +137,7 @@
     class="relative flex min-h-0 w-full flex-1 flex-col"
   >
     <div
-      ref="viewport"
+      ref="viewportEl"
       role="log"
       aria-live="off"
       tabindex="0"
@@ -151,7 +151,7 @@
       @keydown="markIntent"
     >
       <div
-        ref="content"
+        ref="contentEl"
         class="mx-auto flex w-full max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) p-(--spacing-md)"
       >
         <slot />

@@ -67,7 +67,7 @@
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'ai-tool-approval'
   )
-  const heading = ref<HTMLElement | null>(null)
+  const headingEl = ref<HTMLElement | null>(null)
   const typed = ref<string>('')
   const titleNodes = computed(() => parseInline(props.title))
   const descriptionNodes = computed(() => parseInline(props.description))
@@ -104,7 +104,7 @@
   }
 
   function focus(): void {
-    heading.value?.focus()
+    headingEl.value?.focus()
   }
 
   defineExpose({ focus })
@@ -130,7 +130,7 @@
       <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
         <h3
           :id="titleId"
-          ref="heading"
+          ref="headingEl"
           tabindex="-1"
           :data-testid="`${testId}__title`"
           class="m-0 text-heading-xxs text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"

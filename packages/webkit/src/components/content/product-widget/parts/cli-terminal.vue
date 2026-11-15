@@ -56,7 +56,7 @@
 
   const lines = computed(() => TERMINAL_SCRIPTS[props.script] ?? TERMINAL_SCRIPTS.start)
 
-  const root = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
   const shown = shallowRef<TerminalLine[]>([])
   const capacity = ref(MAX_LINES)
 
@@ -85,7 +85,7 @@
   }))
 
   const measure = () => {
-    const element = root.value
+    const element = rootEl.value
     if (!props.fit || !element?.clientHeight) return
     const inset = Number.parseFloat(globalThis.getComputedStyle(element).paddingTop) * 2
     const usable = element.clientHeight * (props.flush ? FLUSH_VISIBLE : 1)
@@ -96,7 +96,7 @@
   onMounted(() => {
     if (typeof globalThis.ResizeObserver !== 'function') return
     observer = new globalThis.ResizeObserver(measure)
-    if (root.value) observer.observe(root.value)
+    if (rootEl.value) observer.observe(rootEl.value)
     measure()
   })
 
@@ -120,7 +120,7 @@
     shown.value = [...shown.value.slice(0, -1), line]
   }
 
-  useSceneScript(root, {
+  useSceneScript(rootEl, {
     hold: 6000 / props.speed,
     lead: 0,
     active: () => props.active,
@@ -173,7 +173,7 @@
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     :data-flush="flush || null"
     class="relative flex h-full w-full min-w-0 flex-col justify-start overflow-hidden p-(--spacing-xl) data-flush:p-0"
   >

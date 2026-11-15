@@ -70,8 +70,8 @@
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
 
-  const stage = ref<globalThis.HTMLElement | null>(null)
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   const checked = (key: string) => (key === 'post' ? frame.value.post : frame.value.options)
 
@@ -123,7 +123,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative"
     >
       <div class="flex flex-col gap-(--spacing-md) py-(--spacing-xs)">

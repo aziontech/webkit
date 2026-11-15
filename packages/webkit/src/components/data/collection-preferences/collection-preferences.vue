@@ -180,7 +180,7 @@
     draftDensity.value = preferences.value.density ?? 'comfortable'
   }
 
-  const triggerHost = ref<HTMLElement | null>(null)
+  const triggerHostEl = ref<HTMLElement | null>(null)
   const openPanel = (): void => {
     if (props.disabled) return
     open.value = true
@@ -195,7 +195,7 @@
       }
       if (!before) return
       await nextTick()
-      triggerHost.value?.querySelector<HTMLElement>('button, [tabindex]')?.focus()
+      triggerHostEl.value?.querySelector<HTMLElement>('button, [tabindex]')?.focus()
     },
     { immediate: true }
   )
@@ -262,7 +262,7 @@
 
 <template>
   <span
-    ref="triggerHost"
+    ref="triggerHostEl"
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-state="open ? 'open' : 'closed'"

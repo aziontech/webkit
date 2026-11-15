@@ -53,9 +53,9 @@
   const heading = computed<string>(() => props.title || t('tutorialPanel.title'))
   const lede = computed<string>(() => props.description || t('tutorialPanel.description'))
 
-  const listHeading = ref<globalThis.HTMLElement | null>(null)
-  const doneHeading = ref<globalThis.HTMLElement | null>(null)
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const listHeadingEl = ref<globalThis.HTMLElement | null>(null)
+  const doneHeadingEl = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const taskRanges = computed(() => {
     const ranges: { first: number; last: number }[] = []
@@ -82,7 +82,7 @@
     tutorial.tasks.reduce((sum, task) => sum + task.steps.length, 0)
 
   const focusCurrentStep = () => {
-    root.value
+    rootEl.value
       ?.querySelector<globalThis.HTMLElement>('[data-tutorial-step][aria-current="step"]')
       ?.focus({ preventScroll: true })
   }
@@ -103,7 +103,7 @@
     async (finished) => {
       if (!finished) return
       await nextTick()
-      doneHeading.value?.focus({ preventScroll: true })
+      doneHeadingEl.value?.focus({ preventScroll: true })
     },
     { flush: 'post' }
   )
@@ -111,13 +111,13 @@
   const exit = async () => {
     context.exit()
     await nextTick()
-    listHeading.value?.focus({ preventScroll: true })
+    listHeadingEl.value?.focus({ preventScroll: true })
   }
 </script>
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-view="context.active.value ? (context.finished.value ? 'complete' : 'running') : 'list'"
@@ -135,7 +135,7 @@
 
       <template v-if="!context.active.value">
         <h3
-          ref="listHeading"
+          ref="listHeadingEl"
           tabindex="-1"
           class="sr-only"
         >
@@ -206,7 +206,7 @@
         >
           <h3
             :id="`${uid}-done`"
-            ref="doneHeading"
+            ref="doneHeadingEl"
             tabindex="-1"
             class="flex items-center gap-(--spacing-xxs) text-heading-xxs text-(--text-default) outline-none"
           >

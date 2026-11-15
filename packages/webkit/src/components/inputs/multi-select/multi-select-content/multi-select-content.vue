@@ -62,12 +62,12 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'multi-select-content'
   )
 
-  const root = ref<globalThis.HTMLDivElement | null>(null)
+  const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
   const { panelStyle } = usePlacement({
     triggerRef: ctx.triggerEl,
-    panelRef: root,
+    panelRef: rootEl,
     isOpen: ctx.open,
     placement: 'bottom-start',
     offset: 4,
@@ -77,7 +77,7 @@
   const focusTarget = computed(() => ctx.controlEl.value ?? ctx.triggerEl.value)
 
   const { onKeydown, navigate } = useListboxContent({
-    root,
+    root: rootEl,
     lazy,
     open: ctx.open,
     setOpen: ctx.setOpen,
@@ -149,7 +149,7 @@
         v-if="ctx.open.value"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
-        ref="root"
+        ref="rootEl"
         v-bind="$attrs"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"

@@ -80,7 +80,7 @@
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -407,10 +407,10 @@
                     icon="ai ai-upload"
                     kind="outlined"
                     size="medium"
-                    @click="fileInput?.click()"
+                    @click="fileInputEl?.click()"
                   />
                   <input
-                    ref="fileInput"
+                    ref="fileInputEl"
                     type="file"
                     accept=".env,.txt,text/plain"
                     class="sr-only"

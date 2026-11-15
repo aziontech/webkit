@@ -67,11 +67,11 @@
   const wanted = () => props.active && (props.hover || !canHover.value)
 
   const step = ref(0)
-  const stage = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
 
   const frame = computed(() => FRAMES[step.value])
   const model = computed(() => MODEL.slice(0, frame.value.typed))
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   let timer: ReturnType<typeof globalThis.setTimeout> | null = null
 
@@ -115,7 +115,7 @@
     :mobile-width="420"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative"
     >
       <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">

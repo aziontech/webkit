@@ -6,7 +6,7 @@
 
   const props = defineProps<{ dir: string; file: string }>()
 
-  const stage = ref<HTMLElement | null>(null)
+  const stageEl = ref<HTMLElement | null>(null)
   const live = shallowRef<Component | null>(null)
   let observer: IntersectionObserver | null = null
 
@@ -18,14 +18,14 @@
   }
 
   onMounted(() => {
-    if (!stage.value) return
+    if (!stageEl.value) return
     observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) load()
       },
       { rootMargin: '400px 0px' }
     )
-    observer.observe(stage.value)
+    observer.observe(stageEl.value)
   })
 
   onScopeDispose(() => observer?.disconnect())
@@ -33,7 +33,7 @@
 
 <template>
   <div
-    ref="stage"
+    ref="stageEl"
     :data-example="`${dir}/${file}`"
     class="flex h-full w-full items-center justify-center"
   >

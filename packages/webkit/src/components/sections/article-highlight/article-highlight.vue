@@ -72,7 +72,7 @@
 
   const baseId = useId()
 
-  const wall = ref<HTMLElement | null>(null)
+  const wallEl = ref<HTMLElement | null>(null)
 
   const TICK_MS = 100
 
@@ -172,7 +172,7 @@
     const next = ((index % count) + count) % count
     select(next)
     await nextTick()
-    wall.value?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus()
+    wallEl.value?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus()
   }
 
   const onKeydown = (event: KeyboardEvent, index: number): void => {
@@ -332,7 +332,7 @@
             />
           </FrameBox>
 
-          <div ref="wall">
+          <div ref="wallEl">
             <CardGrid
               kind="frame"
               flush

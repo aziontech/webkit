@@ -86,12 +86,12 @@
       (attrs['data-testid'] as string | undefined) ?? 'sections-closing-call-to-action-newsletter'
   )
 
-  const outcome = ref<HTMLElement | null>(null)
+  const outcomeEl = ref<HTMLElement | null>(null)
 
   watch(
     () => props.submitted,
     (submitted) => {
-      if (!submitted || !outcome.value?.contains(document.activeElement)) return
+      if (!submitted || !outcomeEl.value?.contains(document.activeElement)) return
       nextTick(() => document.getElementById(`${inputId}-success`)?.focus())
     }
   )
@@ -152,7 +152,7 @@
           </div>
 
           <div
-            ref="outcome"
+            ref="outcomeEl"
             class="flex flex-col gap-(--spacing-md)"
           >
             <template v-if="submitted">

@@ -58,8 +58,8 @@
 
   const attrs = useAttrs()
 
-  const track = ref<globalThis.HTMLElement | null>(null)
-  const frame = ref<globalThis.HTMLElement | null>(null)
+  const trackEl = ref<globalThis.HTMLElement | null>(null)
+  const frameEl = ref<globalThis.HTMLElement | null>(null)
   const activeIndex = ref(0)
   const sliceProgress = ref(0)
   let pending: number | null = null
@@ -105,9 +105,9 @@
   }
 
   function pinnedMetrics(): { total: number; scrolled: number } | null {
-    if (!track.value || !frame.value) return null
-    const trackRect = track.value.getBoundingClientRect()
-    const frameRect = frame.value.getBoundingClientRect()
+    if (!trackEl.value || !frameEl.value) return null
+    const trackRect = trackEl.value.getBoundingClientRect()
+    const frameRect = frameEl.value.getBoundingClientRect()
     const total = trackRect.height - frameRect.height
     if (total <= 1) return null
     return { total, scrolled: frameRect.top - trackRect.top }
@@ -138,7 +138,7 @@
 
   function goTo(index: number): void {
     if (!pinnedMetrics()) return
-    const anchor = track.value?.querySelectorAll('[data-sticky-stack-anchor]')[index]
+    const anchor = trackEl.value?.querySelectorAll('[data-sticky-stack-anchor]')[index]
     if (!(anchor instanceof globalThis.HTMLElement)) return
     anchor.scrollIntoView({ block: 'start' })
   }
@@ -147,7 +147,7 @@
 <template>
   <div
     v-if="hasItems"
-    ref="track"
+    ref="trackEl"
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
@@ -165,7 +165,7 @@
     />
 
     <div
-      ref="frame"
+      ref="frameEl"
       class="lg:sticky lg:top-[var(--sticky-stack-top,0)] lg:h-[calc(100dvh-var(--sticky-stack-top,0rem))] lg:flex lg:flex-col lg:overflow-hidden"
     >
       <div

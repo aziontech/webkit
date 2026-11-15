@@ -93,7 +93,7 @@
     return kept.slice(0, size.value)
   }
 
-  const input = ref<HTMLInputElement | null>(null)
+  const inputEl = ref<HTMLInputElement | null>(null)
   const focused = ref<boolean>(false)
   const value = computed<string>(() => clean(model.value ?? ''))
 
@@ -108,7 +108,7 @@
   const activeIndex = computed<number>(() => Math.min(value.value.length, size.value - 1))
 
   const caretToEnd = () => {
-    const element = input.value
+    const element = inputEl.value
     if (!element || typeof element.setSelectionRange !== 'function') return
     const end = element.value.length
     if (element.selectionStart !== end || element.selectionEnd !== end) {
@@ -119,7 +119,7 @@
   let lastComplete = ''
 
   const commit = (next: string) => {
-    if (input.value && input.value.value !== next) input.value.value = next
+    if (inputEl.value && inputEl.value.value !== next) inputEl.value.value = next
     if (next !== model.value) model.value = next
     if (next.length === size.value && next !== lastComplete) {
       lastComplete = next
@@ -156,16 +156,16 @@
   }
 
   watch(value, (next) => {
-    if (input.value && input.value.value !== next) input.value.value = next
+    if (inputEl.value && inputEl.value.value !== next) inputEl.value.value = next
     if (next.length < size.value) lastComplete = ''
   })
 
   onMounted(() => {
-    if (props.autofocus && !isDisabled.value) input.value?.focus()
+    if (props.autofocus && !isDisabled.value) inputEl.value?.focus()
   })
 
   defineExpose({
-    focus: () => input.value?.focus()
+    focus: () => inputEl.value?.focus()
   })
 </script>
 
@@ -199,7 +199,7 @@
       >
     </template>
     <input
-      ref="input"
+      ref="inputEl"
       type="text"
       :id="controlId"
       :aria-describedby="describedBy"

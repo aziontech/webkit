@@ -95,7 +95,7 @@
   const story = computed(() => props.linkLabel || t('customerSpotlight.story'))
 
   const active = ref(-1)
-  const panels = ref<HTMLElement[]>([])
+  const panelEls = ref<HTMLElement[]>([])
   const panelHeights = ref<number[]>([])
 
   const glowOf = (color: string, at: string, radius: string) =>
@@ -127,11 +127,11 @@
 
   let observer: ResizeObserver | undefined
   onMounted(() => {
-    if (!panels.value.length) return
+    if (!panelEls.value.length) return
     observer = new ResizeObserver(() => {
-      panelHeights.value = panels.value.map((panel) => panel.offsetHeight)
+      panelHeights.value = panelEls.value.map((panel) => panel.offsetHeight)
     })
-    panels.value.forEach((panel) => observer?.observe(panel))
+    panelEls.value.forEach((panel) => observer?.observe(panel))
   })
   onScopeDispose(() => observer?.disconnect())
 </script>
@@ -198,7 +198,7 @@
                 </div>
 
                 <div
-                  ref="panels"
+                  ref="panelEls"
                   class="absolute inset-x-0 bottom-0 bg-(--bg-canvas) px-[5.625cqw] py-[6cqw] transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none lg:group-data-[state=closed]/spot:translate-y-full lg:group-data-[state=closed]/spot:opacity-0"
                 >
                   <p class="m-0 text-body-lg text-balance text-(--text-default)">

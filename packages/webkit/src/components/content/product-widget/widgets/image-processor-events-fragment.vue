@@ -85,12 +85,12 @@
 
   const step = ref(0)
   const goingBack = ref(false)
-  const stage = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
 
   const frame = computed(() => FRAMES[step.value])
   const pressed = computed(() => frame.value.pressed && !goingBack.value)
   const records = computed(() => EVENTS.length + (frame.value.added ? 1 : 0))
-  const { position } = useMockupCursor(stage, () => frame.value.cursor)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
 
   let timer: ReturnType<typeof globalThis.setTimeout> | null = null
 
@@ -134,7 +134,7 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative flex h-full flex-col gap-(--spacing-sm) py-(--spacing-xs)"
     >
       <ShellMockupPart :order="0">

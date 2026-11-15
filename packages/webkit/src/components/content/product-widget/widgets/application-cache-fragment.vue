@@ -64,11 +64,11 @@
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
 
-  const column = ref<globalThis.HTMLElement | null>(null)
+  const columnEl = ref<globalThis.HTMLElement | null>(null)
   const offsets = ref<number[]>([0, 0, 0, 0])
 
   const measure = () => {
-    const anchors = column.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
+    const anchors = columnEl.value?.querySelectorAll<globalThis.HTMLElement>('[data-anchor]')
     if (!anchors?.length) return
     offsets.value = [...anchors].map((anchor) => anchor.offsetTop)
   }
@@ -109,7 +109,7 @@
 
   onMounted(() => {
     observer = new globalThis.ResizeObserver(measure)
-    if (column.value) observer.observe(column.value)
+    if (columnEl.value) observer.observe(columnEl.value)
     measure()
   })
 
@@ -131,7 +131,7 @@
     :mobile-width="380"
   >
     <div
-      ref="column"
+      ref="columnEl"
       :style="scrollStyle"
       class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
     >

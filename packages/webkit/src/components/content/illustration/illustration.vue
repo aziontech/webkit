@@ -23,7 +23,7 @@
 
   const attrs = useAttrs()
   const scope = useId()
-  const root = useTemplateRef<globalThis.SVGSVGElement>('root')
+  const rootEl = useTemplateRef<globalThis.SVGSVGElement>('rootEl')
 
   const scene = shallowRef<IllustrationScene | null>(null)
   const placeheld = shallowRef(false)
@@ -62,7 +62,7 @@
   )
 
   watch(
-    [root, scene],
+    [rootEl, scene],
     ([element, painted]) => {
       if (element && painted) {
         element.replaceChildren(...painted.draw(scope))
@@ -96,7 +96,7 @@
 <template>
   <svg
     v-if="scene"
-    ref="root"
+    ref="rootEl"
     :viewBox="viewBox"
     :role="decorative ? undefined : 'img'"
     :aria-label="decorative ? undefined : ariaLabel"

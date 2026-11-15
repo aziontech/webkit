@@ -15,7 +15,7 @@
   const { t } = useTranslate({ docProse: en.docProse, kbd: en.kbd })
 
   const proseEl = ref<HTMLElement | null>(null)
-  const tipFor = ref<HTMLElement | null>(null)
+  const tipForEl = ref<HTMLElement | null>(null)
   const tipState = ref<'copy' | 'copied' | 'manual'>('copy')
   const copyShortcut = (): string =>
     typeof navigator !== 'undefined' && /mac/i.test(navigator.platform || navigator.userAgent || '')
@@ -56,19 +56,19 @@
 
   const onOver = (event: globalThis.PointerEvent): void => {
     const chip = chipFrom(event.target)
-    if (!chip || chip === tipFor.value) return
+    if (!chip || chip === tipForEl.value) return
     clearReset()
     tipState.value = 'copy'
-    tipFor.value = chip
+    tipForEl.value = chip
     anchorTip(chip)
   }
 
   const onOut = (event: globalThis.PointerEvent): void => {
     const chip = chipFrom(event.target)
-    if (!chip || chip !== tipFor.value) return
+    if (!chip || chip !== tipForEl.value) return
     if (chipFrom(event.relatedTarget) === chip) return
     clearReset()
-    tipFor.value = null
+    tipForEl.value = null
   }
 
   const onClick = async (event: globalThis.MouseEvent): Promise<void> => {
@@ -76,7 +76,7 @@
     if (!chip || chip.closest('a')) return
     const text = chip.textContent ?? ''
     if (!text) return
-    tipFor.value = chip
+    tipForEl.value = chip
     anchorTip(chip)
     try {
       await globalThis.navigator.clipboard.writeText(text)
@@ -93,7 +93,7 @@
   }
 
   const reanchor = (): void => {
-    if (tipFor.value) anchorTip(tipFor.value)
+    if (tipForEl.value) anchorTip(tipForEl.value)
   }
 
   onMounted(() => {
@@ -134,7 +134,7 @@
         leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
       >
         <span
-          v-if="tipFor"
+          v-if="tipForEl"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           role="tooltip"

@@ -356,7 +356,7 @@ legacy  IN HINFO "PC" "Linux"`
   const importOpen = ref(true)
   const zoneText = ref(SAMPLE_ZONE)
   const zoneSource = ref('the pasted zone file')
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
   const dropError = ref('')
   const parsedText = ref(SAMPLE_ZONE)
   let parseTimer: ReturnType<typeof setTimeout> | undefined
@@ -940,11 +940,11 @@ legacy  IN HINFO "PC" "Linux"`
                   label="Browse files"
                   kind="secondary"
                   size="medium"
-                  @click="fileInput?.click()"
+                  @click="fileInputEl?.click()"
                 />
               </FileDropzone>
               <input
-                ref="fileInput"
+                ref="fileInputEl"
                 type="file"
                 accept=".zone,.txt,.db,text/plain"
                 class="hidden"

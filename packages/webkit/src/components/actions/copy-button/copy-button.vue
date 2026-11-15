@@ -44,7 +44,7 @@
 
   const CopyButtonFallback = defineAsyncComponent(() => import('./copy-button-fallback.vue'))
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const fallbackRequested = ref(false)
   const fallbackOpen = ref(false)
 
@@ -99,7 +99,7 @@
 <template>
   <span
     v-bind="$attrs"
-    ref="root"
+    ref="rootEl"
     class="inline-flex"
     :data-state="copied ? 'copied' : 'default'"
     :data-disabled="disabled ? '' : undefined"
@@ -130,7 +130,7 @@
       v-if="fallbackRequested"
       v-model:open="fallbackOpen"
       :value="value"
-      :anchor="root?.querySelector('button') ?? root"
+      :anchor="rootEl?.querySelector('button') ?? rootEl"
       :test-id="testId"
     />
   </span>

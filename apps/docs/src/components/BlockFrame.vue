@@ -10,7 +10,7 @@
 
   const t = messages
   const viewport = ref('full')
-  const frame = ref<HTMLIFrameElement | null>(null)
+  const frameEl = ref<HTMLIFrameElement | null>(null)
 
   const VIEWPORTS = [
     { value: '375', label: 'Mobile 375' },
@@ -29,7 +29,7 @@
   const initialSrc = ref(props.src)
 
   function post() {
-    frame.value?.contentWindow?.postMessage(
+    frameEl.value?.contentWindow?.postMessage(
       {
         source: 'webkit-docs',
         theme: resolvedTheme(settings.theme),
@@ -75,7 +75,7 @@
         :style="{ width }"
       >
         <iframe
-          ref="frame"
+          ref="frameEl"
           :src="initialSrc"
           :title="title"
           loading="lazy"

@@ -44,7 +44,7 @@
   const query = ref('')
   const creating = ref(false)
   const newName = ref('')
-  const nameField = ref<InstanceType<typeof Input> | null>(null)
+  const nameFieldEl = ref<InstanceType<typeof Input> | null>(null)
 
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
@@ -76,7 +76,7 @@
   const startCreating = () => {
     newName.value = query.value.trim()
     creating.value = true
-    nextTick(() => nameField.value?.focus())
+    nextTick(() => nameFieldEl.value?.focus())
   }
 
   const cancelCreating = () => {
@@ -239,7 +239,7 @@
                     <Field>
                       <Field.Label>New service</Field.Label>
                       <Input
-                        ref="nameField"
+                        ref="nameFieldEl"
                         v-model="newName"
                         size="large"
                         placeholder="my-service"

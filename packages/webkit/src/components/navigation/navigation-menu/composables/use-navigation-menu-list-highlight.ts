@@ -31,7 +31,7 @@ export function useNavigationMenuListHighlight(
   container: MaybeRefOrGetter<NavigationMenuHighlightTarget>,
   root: HighlightRoot
 ): UseNavigationMenuListHighlightReturn {
-  const activeTarget = shallowRef<HTMLElement | null>(null)
+  const activeTargetEl = shallowRef<HTMLElement | null>(null)
   const isVisible = ref(false)
 
   const metrics = ref({
@@ -76,7 +76,7 @@ export function useNavigationMenuListHighlight(
 
   const hide = () => {
     isVisible.value = false
-    activeTarget.value = null
+    activeTargetEl.value = null
   }
 
   const setTarget = (target: NavigationMenuHighlightTarget) => {
@@ -86,7 +86,7 @@ export function useNavigationMenuListHighlight(
       return
     }
 
-    activeTarget.value = element
+    activeTargetEl.value = element
     measureTarget(element)
   }
 
@@ -111,7 +111,7 @@ export function useNavigationMenuListHighlight(
       return
     }
 
-    if (resolveHostElement(target) === activeTarget.value) {
+    if (resolveHostElement(target) === activeTargetEl.value) {
       hide()
     }
   }
@@ -130,8 +130,8 @@ export function useNavigationMenuListHighlight(
   }
 
   const remeasure = () => {
-    if (activeTarget.value) {
-      measureTarget(activeTarget.value)
+    if (activeTargetEl.value) {
+      measureTarget(activeTargetEl.value)
     }
   }
 

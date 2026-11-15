@@ -108,7 +108,7 @@
   const attrs = useAttrs()
   const stack = inject(BandStackInjectionKey, null)
 
-  const root = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const EYEBROW_PREFIX = '//' as const
 
@@ -133,8 +133,8 @@
     framesCells.value ? { borders: 'none', marks: 'all' } : {}
   )
 
-  onMounted(() => root.value?.addEventListener('click', followBand))
-  onScopeDispose(() => root.value?.removeEventListener('click', followBand))
+  onMounted(() => rootEl.value?.addEventListener('click', followBand))
+  onScopeDispose(() => rootEl.value?.removeEventListener('click', followBand))
 
   function followBand(event: MouseEvent) {
     if (!isMediaLink.value || event.defaultPrevented) return
@@ -151,7 +151,7 @@
 
 <template>
   <section
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     class="group/split data-[media-href]:cursor-pointer"
     :data-testid="testId"

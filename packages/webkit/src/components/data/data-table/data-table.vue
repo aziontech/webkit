@@ -1132,7 +1132,7 @@
     lazyActive.value ? (rowTotal.value - windowEnd.value) * rowHeight.value : 0
   )
   const windowed = computed<boolean>(() => virtualActive.value || lazyActive.value)
-  const lazySentinel = ref<HTMLElement | null>(null)
+  const lazySentinelEl = ref<HTMLElement | null>(null)
   let lazyObserver: IntersectionObserver | null = null
   const onLazyIntersect = (entries: IntersectionObserverEntry[]): void => {
     const entry = entries[entries.length - 1]
@@ -1145,7 +1145,7 @@
   const observeSentinel = (): void => {
     lazyObserver?.disconnect()
     lazyObserver = null
-    const el = lazySentinel.value
+    const el = lazySentinelEl.value
     if (!el || !lazyActive.value || typeof IntersectionObserver === 'undefined') return
     lazyObserver = new IntersectionObserver(onLazyIntersect, {
       root: scrollParent(el),
@@ -1153,7 +1153,7 @@
     })
     lazyObserver.observe(el)
   }
-  watch([lazySentinel, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
+  watch([lazySentinelEl, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
   const rowsInReach = (): number => {
     const el = viewportElement()
     if (!el || typeof el.getBoundingClientRect !== 'function') return LAZY_CHUNK
@@ -1194,12 +1194,12 @@
   const moreArmed = computed<boolean>(
     () => moreShown.value && props.moreRows && !props.loadingMore && !lazyActive.value
   )
-  const moreSentinel = ref<HTMLElement | null>(null)
+  const moreSentinelEl = ref<HTMLElement | null>(null)
   let moreObserver: IntersectionObserver | null = null
   const observeMore = (): void => {
     moreObserver?.disconnect()
     moreObserver = null
-    const el = moreSentinel.value
+    const el = moreSentinelEl.value
     if (!el || !moreArmed.value || typeof IntersectionObserver === 'undefined') return
     moreObserver = new IntersectionObserver(
       (entries) => {
@@ -1209,7 +1209,7 @@
     )
     moreObserver.observe(el)
   }
-  watch([moreSentinel, moreArmed, rowTotal], observeMore, { flush: 'post' })
+  watch([moreSentinelEl, moreArmed, rowTotal], observeMore, { flush: 'post' })
 
   const liveStartId = ref<string | null>(null)
   const liveBoundaryId = computed<string | null>(() => {
@@ -2035,7 +2035,7 @@
                 </TableRow>
                 <div
                   v-if="lazyActive"
-                  ref="lazySentinel"
+                  ref="lazySentinelEl"
                   role="presentation"
                   aria-hidden="true"
                   :data-testid="`${testId}__lazy-rows`"
@@ -2053,7 +2053,7 @@
       >
         <div
           v-if="moreArmed"
-          ref="moreSentinel"
+          ref="moreSentinelEl"
           aria-hidden="true"
           :data-testid="`${testId}__more-sentinel`"
           class="h-px w-full"

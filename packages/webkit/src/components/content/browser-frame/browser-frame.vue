@@ -61,7 +61,7 @@
   const sizerEl = ref<globalThis.HTMLElement | null>(null)
   const iframeEl = ref<globalThis.HTMLIFrameElement | null>(null)
   const { width: containerWidth } = useElementSize(sizerEl)
-  const { body: frameBody } = useFrameDocument(iframeEl)
+  const { bodyEl: frameBodyEl } = useFrameDocument(iframeEl)
   const viewportId = useId()
 
   const dragAxis = ref<ResizeAxis | null>(null)
@@ -331,8 +331,8 @@
       </div>
     </div>
     <Teleport
-      v-if="frameBody"
-      :to="frameBody"
+      v-if="frameBodyEl"
+      :to="frameBodyEl"
     >
       <slot />
     </Teleport>

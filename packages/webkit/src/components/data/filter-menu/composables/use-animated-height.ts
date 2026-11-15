@@ -1,7 +1,7 @@
 import { nextTick, onScopeDispose, readonly, type Ref, ref } from 'vue'
 
 export interface UseAnimatedHeightReturn {
-  region: Ref<HTMLElement | null>
+  regionEl: Ref<HTMLElement | null>
   height: Readonly<Ref<string>>
   animateHeight: (mutate: () => void) => Promise<void>
 }
@@ -13,13 +13,13 @@ const prefersReducedMotion = (): boolean =>
   globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 export function useAnimatedHeight(): UseAnimatedHeightReturn {
-  const region = ref<HTMLElement | null>(null)
+  const regionEl = ref<HTMLElement | null>(null)
   const height = ref<string>('')
   let release: (() => void) | null = null
   let frame = 0
 
   const animateHeight = async (mutate: () => void): Promise<void> => {
-    const node = region.value
+    const node = regionEl.value
     if (!node || prefersReducedMotion()) {
       mutate()
       return
@@ -54,5 +54,5 @@ export function useAnimatedHeight(): UseAnimatedHeightReturn {
 
   onScopeDispose(() => release?.())
 
-  return { region, height: readonly(height), animateHeight }
+  return { regionEl, height: readonly(height), animateHeight }
 }

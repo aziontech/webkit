@@ -64,8 +64,8 @@
     return context?.active.value?.tasks[entry.value.taskIndex]?.title ?? ''
   })
 
-  const marker = ref<globalThis.HTMLElement | null>(null)
-  const body = ref<globalThis.HTMLElement | null>(null)
+  const markerEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyEl = ref<globalThis.HTMLElement | null>(null)
 
   const setOpen = (value: boolean) => {
     if (!context || !entry.value) return
@@ -76,8 +76,8 @@
   const reveal = async () => {
     await nextTick()
     const reduce = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    marker.value?.scrollIntoView?.({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' })
-    body.value?.closest<globalThis.HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true })
+    markerEl.value?.scrollIntoView?.({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' })
+    bodyEl.value?.closest<globalThis.HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true })
   }
 
   watch(
@@ -113,7 +113,7 @@
     >
       <PopoverTrigger :data-testid="`${testId}__trigger`">
         <button
-          ref="marker"
+          ref="markerEl"
           type="button"
           :aria-label="t('hotspot.label', { title: entry.title })"
           :data-testid="`${testId}__marker`"
@@ -133,7 +133,7 @@
       </PopoverTrigger>
       <PopoverContent>
         <div
-          ref="body"
+          ref="bodyEl"
           :data-testid="`${testId}__step`"
           class="flex flex-col"
         >

@@ -164,7 +164,7 @@
   const editingId = ref('')
   const submitting = ref(false)
   const view = ref('fields')
-  const schemaForm = ref<InstanceType<typeof SchemaForm> | null>(null)
+  const schemaFormEl = ref<InstanceType<typeof SchemaForm> | null>(null)
 
   const form = reactive({ name: '', functionId: '', args: {} as Record<string, unknown> })
   const errors = reactive({ name: '', functionId: '' })
@@ -192,7 +192,7 @@
     view.value = 'fields'
     submitting.value = false
     open.value = true
-    nextTick(() => schemaForm.value?.clearValidation())
+    nextTick(() => schemaFormEl.value?.clearValidation())
   }
 
   const onFunction = (value: string) => {
@@ -246,7 +246,7 @@
     if (argsValid && selected.value) {
       view.value = 'fields'
       await nextTick()
-      argsValid = (await schemaForm.value?.validate())?.valid ?? true
+      argsValid = (await schemaFormEl.value?.validate())?.valid ?? true
     }
     if (errors.name || errors.functionId || !argsValid) return
     submitting.value = true
@@ -417,7 +417,7 @@
                 </div>
                 <div v-show="view === 'fields'">
                   <SchemaForm
-                    ref="schemaForm"
+                    ref="schemaFormEl"
                     v-model="form.args"
                     :schema="selected.schema"
                     validate-on="submit"

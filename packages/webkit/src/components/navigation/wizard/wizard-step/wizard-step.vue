@@ -44,8 +44,8 @@
     invalid: () => props.invalid
   })
 
-  const root = ref<globalThis.HTMLElement | null>(null)
-  const heading = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const headingEl = ref<globalThis.HTMLElement | null>(null)
   const headingId = useId()
   const counterId = useId()
   let settled = false
@@ -57,13 +57,13 @@
   watch(
     active,
     (now) => {
-      if (now && settled) heading.value?.focus()
+      if (now && settled) headingEl.value?.focus()
     },
     { flush: 'post' }
   )
 
   onMounted(() => {
-    context.attach(id, root.value)
+    context.attach(id, rootEl.value)
     void nextTick(() => {
       settled = true
     })
@@ -74,7 +74,7 @@
 
 <template>
   <div
-    ref="root"
+    ref="rootEl"
     v-bind="$attrs"
     role="group"
     :aria-labelledby="active ? headingId : undefined"
@@ -95,7 +95,7 @@
         <div class="flex items-baseline gap-(--spacing-xs)">
           <h2
             :id="headingId"
-            ref="heading"
+            ref="headingEl"
             tabindex="-1"
             :aria-describedby="counterId"
             class="text-heading-sm text-(--text-default) outline-none"

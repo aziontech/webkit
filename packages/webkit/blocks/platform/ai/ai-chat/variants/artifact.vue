@@ -73,11 +73,11 @@
   const canvasOpen = ref(true)
   const drawerOpen = ref(false)
   const width = ref(440)
-  const paneCanvas = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
-  const drawerCanvas = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
+  const paneCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
+  const drawerCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
   const state = ref<PromptInputState>('ready')
-  const composer = ref<InstanceType<typeof PromptInput> | null>(null)
+  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
 
   const turns = ref<Turn[]>(
     drafts.slice(0, 2).flatMap((draft, index): Turn[] => [
@@ -124,12 +124,12 @@
     if (narrow.value) {
       drawerOpen.value = true
       await nextTick()
-      drawerCanvas.value?.focus()
+      drawerCanvasEl.value?.focus()
       return
     }
     canvasOpen.value = true
     await nextTick()
-    paneCanvas.value?.focus()
+    paneCanvasEl.value?.focus()
   }
   const closeCanvas = async () => {
     canvasOpen.value = false
@@ -185,7 +185,7 @@
           turn.state = 'complete'
           state.value = 'ready'
           generating.value = false
-          composer.value?.focus()
+          composerEl.value?.focus()
         }
       }, 40)
     }, 900)
@@ -300,7 +300,7 @@
           </div>
           <footer class="layout-boundary-inline pb-(--spacing-md)">
             <PromptInput
-              ref="composer"
+              ref="composerEl"
               v-model="prompt"
               :state="state"
               :max-length="4000"
@@ -326,7 +326,7 @@
           aria-label="Artifact"
         >
           <ArtifactCanvas
-            ref="paneCanvas"
+            ref="paneCanvasEl"
             v-model:version="version"
             :title="ARTIFACT"
             :meta="`SQL · ${lines} lines`"
@@ -358,7 +358,7 @@
           <DrawerTitle>Artifact</DrawerTitle>
         </div>
         <ArtifactCanvas
-          ref="drawerCanvas"
+          ref="drawerCanvasEl"
           v-model:version="version"
           :title="ARTIFACT"
           :meta="`SQL · ${lines} lines`"

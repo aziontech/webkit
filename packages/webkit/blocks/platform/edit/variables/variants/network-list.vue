@@ -152,7 +152,7 @@
   const pasteOpen = ref(false)
   const pasteText = ref('')
   const status = ref('')
-  const pasteToggle = ref<{ $el?: HTMLElement } | null>(null)
+  const pasteToggleEl = ref<{ $el?: HTMLElement } | null>(null)
 
   const pasteReport = computed(() => {
     const kind = type.value
@@ -198,12 +198,12 @@
     pasteOpen.value = false
     pasteText.value = ''
     await nextTick()
-    pasteToggle.value?.$el?.focus()
+    pasteToggleEl.value?.$el?.focus()
   }
   const cancelPaste = async () => {
     pasteOpen.value = false
     await nextTick()
-    pasteToggle.value?.$el?.focus()
+    pasteToggleEl.value?.$el?.focus()
   }
 
   watch(drawerOpen, (isOpen) => {
@@ -331,7 +331,7 @@
                   />
                   <Button
                     v-if="copy"
-                    ref="pasteToggle"
+                    ref="pasteToggleEl"
                     label="Paste list"
                     icon="ai ai-clipboard"
                     kind="outlined"

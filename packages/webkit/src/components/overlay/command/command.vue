@@ -87,7 +87,7 @@
     void registryVersion.value
     return Array.from(registry)
   })
-  const previousActiveElement = ref<HTMLElement | null>(null)
+  const previousActiveEl = ref<HTMLElement | null>(null)
   const pageStack = ref<string[]>([])
   const pageHeadings = shallowRef(new Map<string, Ref<string>>())
   let pageChangedWhileClosed = false
@@ -359,7 +359,7 @@
     () => isOpen.value,
     (open, wasOpen) => {
       if (open) {
-        previousActiveElement.value =
+        previousActiveEl.value =
           typeof document !== 'undefined' ? (document.activeElement as HTMLElement | null) : null
         query.value = ''
         if (!pageChangedWhileClosed) pageModel.value = ''
@@ -367,7 +367,7 @@
         pageStack.value = []
         nextTick(() => resetActive())
       } else if (wasOpen) {
-        nextTick(() => previousActiveElement.value?.focus?.())
+        nextTick(() => previousActiveEl.value?.focus?.())
       }
     }
   )

@@ -95,16 +95,16 @@
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
 
-  const stage = ref<globalThis.HTMLElement | null>(null)
-  const column = ref<globalThis.HTMLElement | null>(null)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const columnEl = ref<globalThis.HTMLElement | null>(null)
   const anchorTop = ref(0)
 
   const measure = () => {
     anchorTop.value =
-      column.value?.querySelector<globalThis.HTMLElement>('[data-anchor]')?.offsetTop ?? 0
+      columnEl.value?.querySelector<globalThis.HTMLElement>('[data-anchor]')?.offsetTop ?? 0
   }
 
-  const { position } = useMockupCursor(stage, () => frame.value.cursor, column)
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor, columnEl)
 
   const scrollStyle = computed(() => ({
     translate: `0 ${frame.value.lifted ? LEAD - anchorTop.value : 0}px`
@@ -153,11 +153,11 @@
     :mobile-width="380"
   >
     <div
-      ref="stage"
+      ref="stageEl"
       class="relative"
     >
       <div
-        ref="column"
+        ref="columnEl"
         :style="scrollStyle"
         class="relative py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
       >
