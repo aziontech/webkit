@@ -30,8 +30,8 @@
 ## Don’t
 
 - The surface sits above the page as a modal or a side sheet → use `dialog` or `drawer`.
-- It is one tier of a pricing comparison → use `card-pricing`.
-- It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
+- It is one tier of a pricing comparison → use `pricing-card`.
+- It is a framed cell or band of a marketing page → use `registration-frame` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
 - It is a template tile in a gallery with no vendor, badge or install state → keep `variant="default"` with the default slot (see `view/template-browser`).
@@ -40,7 +40,7 @@
 ## Related
 
 - [item](item.md) — rows inside the card; with `padded` set to false, an `Item` list runs its dividers to the card edges.
-- [card-pricing](card-pricing.md) — pricing tier card with its own price hierarchy and action.
+- [pricing-card](pricing-card.md) — pricing tier card with its own price hierarchy and action.
 - [card-grid](card-grid.md) — responsive grid of cells for marketing pages.
 - [panel](panel.md) — the layered shell behind overlays, not an in-page card.
 - [empty-state](empty-state.md) — goes in the default slot when the card has no data yet.

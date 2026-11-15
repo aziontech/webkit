@@ -6,7 +6,7 @@ Pass the name to `Diagram` (`name`) or to a section that shows one; the label is
 
 28 names. These are the only values the components accept. An unknown name draws nothing. The MCP tool `list_assets({ kind: "diagrams" })` returns the same list (with a `query` to filter), and `catalog.json#assets.diagrams` points at it as data.
 
-Used by: [ArchitectureTabs](../components/architecture-tabs.md), [Diagram](../components/diagram.md), [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../components/feature-tabs.md), [FeatureWidgets](../components/feature-widgets.md), [MediaSplitBand](../components/media-split-band.md), [MediaSplitStack](../components/media-split-stack.md), [SitePage](../components/site-page.md).
+Used by: [ArchitectureTabs](../components/architecture-tabs.md), [Diagram](../components/diagram.md), [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../components/feature-tabs.md), [FeatureWidgets](../components/feature-widgets.md), [MediaSplitSection](../components/media-split-section.md), [MediaSplitStackSection](../components/media-split-stack-section.md), [SitePage](../components/site-page.md).
 
 ## Usage
 

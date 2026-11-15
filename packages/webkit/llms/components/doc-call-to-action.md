@@ -1,9 +1,9 @@
 # Doc Call To Action
 
-> The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline. It is a docs card built like every other card on the page: a `FrameBox` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. Its actions are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.
+> The closing offer of a documentation page, parked at the foot of the "On this page" rail after the outline. It is a docs card built like every other card on the page: a `RegistrationFrame` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. Its actions are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.
 
 - Import: `import DocCallToAction from '@aziontech/webkit/doc-call-to-action'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-call-to-action.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-call-to-action.json)
 
 ## When to use
@@ -25,7 +25,7 @@
 ## Related
 
 - DocOnThisPage` — the rail it closes.
-- FrameBox` — the frame.
+- RegistrationFrame` — the frame.
 - CallToAction` — the marketing closing band.
 
 ## Props

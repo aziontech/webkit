@@ -12,11 +12,11 @@
  "related": [
   "DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.",
   "Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.",
-  "FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
+  "RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
  ],
  "bestPractices": [
   "Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.",
   "Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.",
-  "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
+  "Compose rows inside a `RegistrationFrame` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
  ]
 }

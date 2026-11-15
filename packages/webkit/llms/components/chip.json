@@ -3,7 +3,7 @@
  "binding": "Chip",
  "import": "@aziontech/webkit/chip",
  "treeShakeableImport": "@aziontech/webkit/chip",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

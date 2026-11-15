@@ -3,7 +3,7 @@
  "binding": "MultiSelect",
  "import": "@aziontech/webkit/multi-select",
  "treeShakeableImport": "@aziontech/webkit/multi-select-root",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,

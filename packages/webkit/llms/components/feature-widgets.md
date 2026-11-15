@@ -1,9 +1,9 @@
 # Feature Widgets
 
-> The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration`, `button-highlight` and the webkit scene assets.
+> The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.
 
 - Import: `import FeatureWidgets from '@aziontech/webkit/feature-widgets'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-widgets.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-widgets.json)
 
 ## When to use
@@ -14,7 +14,7 @@
 ## Do
 
 - Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.
-- On a product page give each item a `scene` naming a `ProductWidget` fragment (`{ component: 'ProductWidget', props: { name } }`); keep `illustration` for cells with no console to show.
+- On a product page give each item a `scene` naming a `ConsoleMockup` fragment (`{ component: 'ConsoleMockup', props: { name } }`); keep `illustration` for cells with no console to show.
 - Keep `copy.text` self-contained; it is what the reader pastes into their agent.
 - Set `anchor` when a hero button scrolls to this band.
 
@@ -27,14 +27,14 @@
 ## Related
 
 - [bento-grid](bento-grid.md) — the grid the cells are laid in.
-- [button-highlight](button-highlight.md) — the copy affordance a cell renders when it carries `copy`.
+- [highlight-button](highlight-button.md) — the copy affordance a cell renders when it carries `copy`.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
@@ -60,12 +60,12 @@
 
 ## Accessibility
 
-- Visible focus: owned by the composed `button` and `button-highlight`, which carry the `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
+- Visible focus: owned by the composed `button` and `highlight-button`, which carry the `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: `Tab` moves between the header actions and each cell's buttons; `Enter` / `Space` activates. The scene's hover beat is decorative, so keyboard users lose nothing without it.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is an unnamed `bento-grid` inside that landmark, so the name is not duplicated; the cell lead is a `strong` inside the sentence, not a heading, so the outline stays the band's `h2`; the action row is a polite live region, so the copy button's "Copied" is announced.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lead `var(--text-default)`, copy `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the buttons' motion carries its own fallback; this band adds no motion.
-- Touch target ≥40×40 px — the cell buttons are medium `button` / `button-highlight`.
+- Touch target ≥40×40 px — the cell buttons are medium `button` / `highlight-button`.
 
 ## Examples
 
@@ -128,21 +128,21 @@
       title: 'Cache settings you reuse.',
       description:
         'Set the CDN TTL, stale cache and large file optimization once, then reuse the setting wherever the application needs it.',
-      scene: { component: 'ProductWidget', props: { name: 'application-cache' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'application-cache' } },
       action: { label: 'Docs', href: docs }
     },
     {
       title: 'Rules that decide what is cached.',
       description:
         'Match a path, a method or a header, and attach a cache setting to just that traffic.',
-      scene: { component: 'ProductWidget', props: { name: 'application-rule' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'application-rule' } },
       action: { label: 'Docs', href: docs }
     },
     {
       title: 'Functions for the cases rules miss.',
       description:
         'Rewrite cache headers on the response in a few lines of JavaScript, running in every data center before the response leaves.',
-      scene: { component: 'ProductWidget', props: { name: 'application-function' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'application-function' } },
       action: { label: 'Docs', href: docs },
       copy: {
         label: 'Copy prompt',

@@ -75,7 +75,7 @@ field. That is the one applied-filters row of a table.
   - v-model: `Record<string, FilterMenuValue[]>` (default `{}`); removing a chip deletes the field's key.
   - Events: `edit: [event: MouseEvent | KeyboardEvent, field: FilterMenuField]` (a chip was activated; the linked menu opens at the field), `remove: [event: MouseEvent, field: FilterMenuField]` (a chip's remove button was pressed; the model loses the field).
   - Slots: none.
-  - `data-testid` fallback: `data-filter-menu-chip-group`; each chip `<testid>__chip-<fieldId>`.
+  - `data-testid` fallback: `filter-menu-chip-group`; each chip `<testid>__chip-<fieldId>`.
 
 Resulting layout:
 

@@ -4,7 +4,7 @@
 
 - Import: `import RadioGroupRoot from '@aziontech/webkit/radio-group-root'`
 - Compound import (dot notation, not tree-shakeable): `import RadioGroup from '@aziontech/webkit/radio-group'`
-- Category: inputs · Surface: app · Structure: composition
+- Category: input · Surface: app · Structure: composition
 - API as JSON: [radio-group.json](https://github.com/aziontech/webkit/blob/main/.specs/radio-group.json)
 
 ## When to use
@@ -72,7 +72,7 @@
 Layout:
 
 ```
-packages/webkit/src/components/inputs/radio-group/
+packages/webkit/src/components/input/radio-group/
 ├── radio-group.vue
 ├── index.ts
 ├── injection-key.ts
@@ -84,8 +84,8 @@ packages/webkit/src/components/inputs/radio-group/
 
 ## v-model
 
-| Model     | Type                  | Default     | Emits               | Notes                                                                                                                               |
-| --------- | --------------------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type                            | Default     | Emits               | Notes                                                                                                                               |
+| --------- | ------------------------------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `TOption['value'] \| undefined` | `undefined` | `update:modelValue` | Selected value via `defineModel` on the root. Unbound, the group keeps its own selection, starting empty. Emits the item's `value`. |
 
 ## States

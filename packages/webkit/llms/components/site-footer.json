@@ -3,7 +3,7 @@
  "binding": "SiteFooter",
  "import": "@aziontech/webkit/site-footer",
  "treeShakeableImport": "@aziontech/webkit/site-footer",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,

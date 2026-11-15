@@ -36,7 +36,7 @@
 
 - [illustration](illustration.md) — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.
 - [media-tabs](media-tabs.md) — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.
-- [frame-box](frame-box.md) — the registration frame a diagram's groups and tiles are drawn in.
+- [registration-frame](registration-frame.md) — the registration frame a diagram's groups and tiles are drawn in.
 - [tag](tag.md) — the status chip a card or item node carries.
 
 ## Props
@@ -62,7 +62,7 @@
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
 - **Groups.** A `group` draws its content inside a registration frame with a small label above it; `variant: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
 - **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
-- **Test ids.** Root fallback `marketing-diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
+- **Test ids.** Root fallback `diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
 
 ## Accessibility
 

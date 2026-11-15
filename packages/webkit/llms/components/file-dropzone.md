@@ -3,7 +3,7 @@
 > A FileDropzone is the target a user drags files from the operating system onto. It owns the drag lifecycle (only drags carrying `Files` count), the `accept` / `multiple` filtering, and the idle/active look, and it hands the result back as two activation events: `drop` with the accepted files, `reject` with the files it filtered out. It holds no value and renders no file list. The list, upload progress and validation messages belong to the consumer (typically a `Field` around this component, whose `Field.Description` / `Field.Error` carry the messages). `variant` covers the two places a drop target lives: - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the "Browse files" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages "Upload assets" shape. - **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel "drag and drop a folder to deploy" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the project intake block (`Blocks/State/ProjectIntake`). The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).
 
 - Import: `import FileDropzone from '@aziontech/webkit/file-dropzone'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [file-dropzone.json](https://github.com/aziontech/webkit/blob/main/.specs/file-dropzone.json)
 
 ## When to use
@@ -26,7 +26,7 @@
 ## Don’t
 
 - Picking files by keyboard or click only, with no drag affordance → a `button` that opens a native file input is enough.
-- Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `helper-text`. The dropzone renders none of these.
+- Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `field-error`. The dropzone renders none of these.
 - Dragging items inside the page (reordering rows, moving cards) → this component only reacts to OS drags that carry `Files`. In-page drag and drop is out of scope.
 - A static "nothing here yet" panel with no drop behavior → use `empty-state`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

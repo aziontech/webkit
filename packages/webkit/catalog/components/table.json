@@ -11,7 +11,7 @@
   "People edit many cells of many records in place, spreadsheet-style → use `data-grid`.",
   "A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.",
   "A short titled preview of a longer listing on a marketing page → use `listing-table`.",
-  "A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.",
+  "A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison`.",
   "Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.",
   "A grid of selectable cards or options → use `radio-group` with `type=\"card\"`.",
   "The same records as a grid of cards → use `card-list` (same collection, card layout)."

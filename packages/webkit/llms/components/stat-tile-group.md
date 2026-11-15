@@ -22,7 +22,7 @@
 ## Don’t
 
 - Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.
-- Marketing figures on a site band → use `big-numbers`.
+- Marketing figures on a site band → use `stats`.
 - Label/value details of one resource → use `key-value-list`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

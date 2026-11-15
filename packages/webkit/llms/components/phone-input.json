@@ -3,7 +3,7 @@
  "binding": "PhoneInput",
  "import": "@aziontech/webkit/phone-input",
  "treeShakeableImport": "@aziontech/webkit/phone-input",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

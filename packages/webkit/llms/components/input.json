@@ -3,7 +3,7 @@
  "binding": "Input",
  "import": "@aziontech/webkit/input",
  "treeShakeableImport": "@aziontech/webkit/input",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

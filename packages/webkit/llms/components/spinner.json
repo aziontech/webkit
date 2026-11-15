@@ -3,7 +3,7 @@
  "binding": "Spinner",
  "import": "@aziontech/webkit/spinner",
  "treeShakeableImport": "@aziontech/webkit/spinner",
- "category": "utils",
+ "category": "feedback",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -15,7 +15,7 @@
   "A small in-progress indicator next to text in a toast or status row."
  ],
  "avoidWhen": [
-  "A button waiting on its action → set `loading` on `button`, `icon-button` or `button-highlight`.",
+  "A button waiting on its action → set `loading` on `button`, `icon-button` or `highlight-button`.",
   "Content that is still loading → use `skeleton`.",
   "Progress you can measure → use `progress`.",
   "A status with a color and a label → use `status-indicator`."

@@ -1,11 +1,11 @@
 # DeploymentSettings (`account/deployment-settings`)
 
-> The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `Table` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `Table.CellStatus`, `Table.CellTime` for Last modified, `Table.CellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a large `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioGroup`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.
+> The account's Build and deployment settings. A `PageHeader` with Documentation and the primary Create Deployment Setting, a closable info `Alert` that explains what a Deployment Setting is, then three `SettingsSection`s. New service defaults: a flush `Card` of `SettingsRow`s in an `Item.List` with a binding policy `Select`, a deployment policy `Select` and an Apply to existing `Switch`, saved through a `SaveBar` that appears only with unsaved changes (Discard, Save). All services: a collapsible `Accordion` whose trigger counts the services and tags how many share a setting; inside, a search `Input` (a small `EmptyState` with Clear search when nothing matches) and, ten services per page with `Pagination`, one row per environment with environment and policy `Tag`s, a `Select` that rebinds it to a matching Deployment Setting (inactive ones disabled), and Linked automatically and Shared `Tag`s; a rebind ends in a toast that warns when the setting now reaches several services. Deployment Settings: the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s with a `Tooltip`, `CollectionPreferences`) over a `Table` on one `useCollection` (Name with a System `Tag` for Default, Services with a Shared `Tag` and the service names on a `Tooltip`, Type hidden by default, Binding policy, Deployment policy, `Table.CellStatus`, `Table.CellTime` for Last modified, `Table.CellActions` with Edit, Clone and Delete behind a `ConfirmDialog`). Create and Edit open a large `Drawer` form (Name, Description, Active `Switch`, binding and deployment policy `RadioGroup`s). Loading draws `Skeleton`s; no services draws an `EmptyState`. Its toasts go through `toast` into the app's one toast region. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/deployment-settings/deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/deployment-settings")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -36,9 +36,9 @@ Title `Build and deployment` and one sentence that says every environment is lin
 
 A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session.
 
-### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Select`, `Switch`, `SaveBar` (required)
+### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 
-A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
+A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
 ### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 
@@ -149,7 +149,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
@@ -191,7 +191,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     environments: Environment[]
   }
 
-  type SettingRowData = DeploymentSetting & {
+  type SettingsRowData = DeploymentSetting & {
     type: string
     reach: Reach
     services: string[]
@@ -468,7 +468,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     toast.success(title, { description: 'It reaches this service only.' })
   }
 
-  const rows = computed<SettingRowData[]>(() =>
+  const rows = computed<SettingsRowData[]>(() =>
     settings.value.map((setting) => {
       const bound = boundTo(setting.id).map((service) => service.name)
       return {
@@ -525,7 +525,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
       }
     })
 
-  const settingsTableEl = ref<TableExposed<SettingRowData> | null>(null)
+  const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
   const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
 
   const refreshing = ref(false)
@@ -617,7 +617,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     }, 600)
   }
 
-  const pending = ref<SettingRowData | null>(null)
+  const pending = ref<SettingsRowData | null>(null)
   const deleteOpen = ref(false)
   const deleteDescription = computed(() => {
     const count = pending.value?.services.length ?? 0
@@ -642,7 +642,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     toast.success(`${row.name} deleted.`)
   }
 
-  const onAction = (value: DropdownMenuItemValue, row: SettingRowData) => {
+  const onAction = (value: DropdownMenuItemValue, row: SettingsRowData) => {
     if (value === 'edit') {
       openEdit(row)
       return
@@ -717,7 +717,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
             <Card :padded="false">
               <template #default>
                 <Item.List>
-                  <SettingRow
+                  <SettingsRow
                     title="Binding policy"
                     description="Whether a version locks the resource IDs it shipped with. Changing it does not touch the settings that already exist."
                   >
@@ -744,8 +744,8 @@ Each variant is the same screen in another state: `get_block("account/deployment
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     title="Deployment policy"
                     description="Single serves one version and a deploy replaces it; Versioned gives each version its own URL. An environment can only use a setting that matches its own."
                   >
@@ -772,8 +772,8 @@ Each variant is the same screen in another state: `get_block("account/deployment
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     title="Apply to existing Deployment Settings"
                     description="Give every setting this account already holds the binding policy above when you save. Default is never changed."
                     variant="compact"
@@ -783,7 +783,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                       :disabled="saving || loading"
                       aria-label="Apply to existing Deployment Settings"
                     />
-                  </SettingRow>
+                  </SettingsRow>
                 </Item.List>
               </template>
             </Card>

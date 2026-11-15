@@ -3,12 +3,12 @@
  "binding": "RecognitionMarquee",
  "import": "@aziontech/webkit/recognition-marquee",
  "treeShakeableImport": "@aziontech/webkit/recognition-marquee",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.",
+ "purpose": "The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `quote`.",
  "setup": null,
  "useWhen": [
   "Use RecognitionMarquee only for a looping row of analyst or press quotes.",
@@ -32,7 +32,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Overline above the section title."
+   "doc": "Eyebrow above the section title."
   },
   {
    "name": "title",

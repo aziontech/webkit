@@ -4,12 +4,12 @@
 
 - Import: `import FieldRoot from '@aziontech/webkit/field-root'`
 - Compound import (dot notation, not tree-shakeable): `import Field from '@aziontech/webkit/field'`
-- Category: inputs · Surface: app · Structure: composition
+- Category: input · Surface: app · Structure: composition
 - API as JSON: [field.json](https://github.com/aziontech/webkit/blob/main/.specs/field.json)
 
 ## When to use
 
-- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.
+- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for a one-sentence explanation beside a label use Hint.
 - Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
 - A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
 - A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant="card"`, never a radio inside a `Field.Label`.
@@ -32,7 +32,6 @@
 
 ## Related
 
-- [helper-text](helper-text.md) — the tone-aware helper line that `Field.Description` and `Field.Error` render.
 - [input-group](input-group.md) — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.
 - [phone-input](phone-input.md), `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`.
 
@@ -71,9 +70,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
-- `field-description/field-description.vue` — guidance line rendered through `HelperText`; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
+- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-error/field-error.vue` — validation message rendered through `HelperText type="invalid"` with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
+- `field-error/field-error.vue` — validation message in the danger tone with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.

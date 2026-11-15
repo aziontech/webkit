@@ -3,12 +3,12 @@
  "binding": "FeatureTabs",
  "import": "@aziontech/webkit/feature-tabs",
  "treeShakeableImport": "@aziontech/webkit/feature-tabs",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
+ "purpose": "The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.",
  "setup": null,
  "useWhen": [
   "Use FeatureTabs for up to three tabs beside a media on a product page.",
@@ -27,7 +27,7 @@
   "Keep to three tabs; tabs past the limit are not rendered.",
   "Give every tab an `illustrationLabel` saying what its picture shows.",
   "Use tab `code` when the feature is an API a developer reads; keep each file short enough to read in the stage. Set `copyAriaLabel` to say what the copy button copies.",
-  "Use the band `scene` when one console widget plays a different beat per tab (`{ component: 'ProductWidget', props: { name: 'functions-start' } }` with tab `value`s naming its tabs); give every tab a `value` then."
+  "Use the band `scene` when one console widget plays a different beat per tab (`{ component: 'ConsoleMockup', props: { name: 'functions-start' } }` with tab `value`s naming its tabs); give every tab a `value` then."
  ],
  "props": [
   {
@@ -42,7 +42,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Overline above the section title."
+   "doc": "Eyebrow above the section title."
   },
   {
    "name": "title",
@@ -125,7 +125,7 @@
   },
   {
    "name": "Live scene",
-   "sfc": "<script setup>\n  import FeatureTabs from '@aziontech/webkit/feature-tabs'\n\n  const tabs = [\n    {\n      value: 'agents',\n      title: 'Ask your coding agent',\n      description:\n        'Describe the function and let the agent write it, run it locally and deploy it from the editor you already use.'\n    },\n    {\n      value: 'console',\n      title: 'Start from the console',\n      description:\n        'Pick a template, edit the code in the browser and publish it without installing anything.'\n    },\n    {\n      value: 'cli',\n      title: 'Ship from the terminal',\n      description:\n        'Link a project, build it on your machine and deploy it with one command that hands back the domain.'\n    }\n  ]\n</script>\n\n<template>\n  <FeatureTabs\n    eyebrow=\"Functions\"\n    title=\"Three ways to ship your first function\"\n    description=\"The same function, written and deployed from wherever you already work.\"\n    :tabs=\"tabs\"\n    :scene=\"{ component: 'ProductWidget', props: { name: 'functions-start' } }\"\n    :autoplay-interval=\"6000\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import FeatureTabs from '@aziontech/webkit/feature-tabs'\n\n  const tabs = [\n    {\n      value: 'agents',\n      title: 'Ask your coding agent',\n      description:\n        'Describe the function and let the agent write it, run it locally and deploy it from the editor you already use.'\n    },\n    {\n      value: 'console',\n      title: 'Start from the console',\n      description:\n        'Pick a template, edit the code in the browser and publish it without installing anything.'\n    },\n    {\n      value: 'cli',\n      title: 'Ship from the terminal',\n      description:\n        'Link a project, build it on your machine and deploy it with one command that hands back the domain.'\n    }\n  ]\n</script>\n\n<template>\n  <FeatureTabs\n    eyebrow=\"Functions\"\n    title=\"Three ways to ship your first function\"\n    description=\"The same function, written and deployed from wherever you already work.\"\n    :tabs=\"tabs\"\n    :scene=\"{ component: 'ConsoleMockup', props: { name: 'functions-start' } }\"\n    :autoplay-interval=\"6000\"\n  />\n</template>"
   }
  ],
  "docs": "components/feature-tabs.md"

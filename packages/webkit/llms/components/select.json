@@ -3,7 +3,7 @@
  "binding": "Select",
  "import": "@aziontech/webkit/select",
  "treeShakeableImport": "@aziontech/webkit/select-root",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,

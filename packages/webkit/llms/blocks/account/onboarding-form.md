@@ -1,11 +1,11 @@
 # OnboardingForm (`account/onboarding-form`)
 
-> The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant="card"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
+> The /signup/onboarding screen, frame included: the signed-out `AppHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant="card"` in a `fieldset` under a `Field.Legend` with a `FieldError`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/onboarding-form")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [FeatureList](../../components/feature-list.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [Field](../../components/field.md), `FieldDescription`, `FieldError`, [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [PlanFeatureList](../../components/plan-feature-list.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -27,7 +27,7 @@ The `/signup/onboarding` screen, frame included. A new user has an account but n
 
 ## Building blocks
 
-### A. Bar — `GlobalHeader` (required)
+### A. Bar — `AppHeader` (required)
 
 The signed-out bar (`top-bar/auth-bar`): brand at the start, Documentation at the end.
 
@@ -67,13 +67,13 @@ Seven colors, `aria-label="Organization mark"`, each card showing the generated 
 
 Square avatars: `pattern="marble"` seeded by the organization name with the card's `colors` in each radio card, the same marble in the selected colors for the organization in the wireframe, and initials for the workspace. Never hand-build the SVG or pass it as `src`.
 
-### K. Picker hint — `HelperText` (required)
+### K. Picker hint — `FieldDescription`, `FieldError` (required)
 
 Under the picker: `Generated from the organization's name. Select its color.`
 
-### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
+### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `PlanFeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
 
-The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `account/change-plan-drawer` (What's included as a `FeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
+The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `account/change-plan-drawer` (What's included as a `PlanFeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
 
 ### M. Work step — `Switch`, `Alert` (required)
 
@@ -108,7 +108,7 @@ The usage and role questions as `RadioGroup` cards, a `Field.Label` choice card 
 ## States
 
 - Organization: step 1 of 3, name fields and the organization mark.
-- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `account/change-plan-drawer` (What's included as a `FeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
+- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `account/change-plan-drawer` (What's included as a `PlanFeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
 - Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization, which locks the step while the request runs and answers in one `Alert` in the card: `Organization created.`, or, when the request fails (offline), `The organization wasn't created. Check your connection, then retry. Your answers are kept.` with Retry.
 
 ## Related
@@ -127,7 +127,7 @@ The usage and role questions as `RadioGroup` cards, a `Field.Label` choice card 
 ## Variants
 
 - `Organization` — primary (the code below)
-- `Plan` — Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `account/change-plan-drawer#Checkout` form, What's included as a `FeatureList`) and only selects once Upgrade is pressed.
+- `Plan` — Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `account/change-plan-drawer#Checkout` form, What's included as a `PlanFeatureList`) and only selects once Upgrade is pressed.
 - `Profile` — Step 3 of 3: the usage and role questions, the onboarding-session switch and the Create Organization action, which asks for both answers first.
 
 Each variant is the same screen in another state: `get_block("account/onboarding-form", { variant })`, or the file under `blocks/account/onboarding-form/variants/`.
@@ -137,6 +137,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
 ```vue
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -145,16 +146,16 @@ Each variant is the same screen in another state: `get_block("account/onboarding
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import FeatureList, { type FeatureListItem } from '@aziontech/webkit/feature-list'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import PlanFeatureList, { type PlanFeatureListItem } from '@aziontech/webkit/plan-feature-list'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
@@ -448,7 +449,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
   const address = reactive({ useAccountInformation: true, ...accountAddress })
 
   const upgrade = computed(() => upgrades[pendingPlanId.value])
-  const upgradeFeatures = computed<FeatureListItem[]>(() =>
+  const upgradeFeatures = computed<PlanFeatureListItem[]>(() =>
     (upgrade.value?.features ?? []).map((feature) => ({
       label: feature.title,
       description: feature.detail
@@ -564,11 +565,11 @@ Each variant is the same screen in another state: `get_block("account/onboarding
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/"
           aria-label="Azion home"
@@ -579,9 +580,9 @@ Each variant is the same screen in another state: `get_block("account/onboarding
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -589,8 +590,8 @@ Each variant is the same screen in another state: `get_block("account/onboarding
           icon="ai ai-book"
           href="https://example.com/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
@@ -681,9 +682,10 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                 </span>
                               </template>
                             </RadioGroup>
-                            <HelperText
-                              label="Generated from the organization's name. Select its color."
-                            />
+                            <FieldDescription
+                              >Generated from the organization's name. Select its
+                              color.</FieldDescription
+                            >
                           </fieldset>
                         </div>
                       </div>
@@ -734,11 +736,9 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                             </template>
                           </RadioGroup>
 
-                          <HelperText
-                            v-if="planSubmitted && !plan"
-                            type="required"
-                            label="Select a plan to continue."
-                          />
+                          <FieldError v-if="planSubmitted && !plan"
+                            >Select a plan to continue.</FieldError
+                          >
 
                           <Drawer
                             :open="upgradeOpen"
@@ -773,7 +773,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                         </h3>
 
                                         <div class="px-(--spacing-xs)">
-                                          <FeatureList :items="upgradeFeatures" />
+                                          <PlanFeatureList :items="upgradeFeatures" />
                                         </div>
                                       </div>
 
@@ -1214,11 +1214,9 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                               :options="usageOptions"
                               aria-label="How are you planning to use the platform?"
                             />
-                            <HelperText
-                              v-if="profileSubmitted && !usage"
-                              type="required"
-                              label="Select one to continue."
-                            />
+                            <FieldError v-if="profileSubmitted && !usage"
+                              >Select one to continue.</FieldError
+                            >
                           </fieldset>
 
                           <fieldset
@@ -1232,11 +1230,9 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                               :options="roleOptions"
                               aria-label="What best describes your role?"
                             />
-                            <HelperText
-                              v-if="profileSubmitted && !role"
-                              type="required"
-                              label="Select one to continue."
-                            />
+                            <FieldError v-if="profileSubmitted && !role"
+                              >Select one to continue.</FieldError
+                            >
                           </fieldset>
 
                           <Field.Label>

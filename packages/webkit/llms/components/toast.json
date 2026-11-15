@@ -25,7 +25,7 @@
  "avoidWhen": [
   "The message must stay visible next to the content it concerns → use `alert`.",
   "The user must decide something before continuing → use `dialog`.",
-  "Validation feedback for a single field → use `helper-text`."
+  "Validation feedback for a single field → use `field-error`."
  ],
  "related": [
   "alert` — inline severity banner placed in the page flow; it stays until it is closed.",

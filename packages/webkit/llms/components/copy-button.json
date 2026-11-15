@@ -3,7 +3,7 @@
  "binding": "CopyButton",
  "import": "@aziontech/webkit/copy-button",
  "treeShakeableImport": "@aziontech/webkit/copy-button",
- "category": "actions",
+ "category": "action",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -210,8 +210,8 @@ allowed outside the frame, and it says so in a token of its own — which is wha
 reviewable in both directions. Nobody widens the bar by retuning the page, and nobody widens the page
 by retuning the bar.
 
-The bar is **`--layout-header-height`** tall (56px, the `GlobalHeader` height). A band that fills the
-first screen under it takes that token out of the screen: `HeroBand` does by default (`headerOffset`),
+The bar is **`--layout-header-height`** tall (56px, the `AppHeader` height). A band that fills the
+first screen under it takes that token out of the screen: `HeroSection` does by default (`headerOffset`),
 and a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section

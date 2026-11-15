@@ -1,11 +1,11 @@
 # MfaSettings (`account/mfa-settings`)
 
-> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, the `view/table-view` controls row (`PropertyFilter` over name, email, MFA status and method, Refresh and Download CSV as `IconButton`s in a `Tooltip`, `CollectionPreferences`) and a paginated `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder; a filter with no match shows a small `EmptyState` with Clear filters. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingRow`, `Switch`, `Alert`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Table`, `EmptyState`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> Multi-factor authentication across an account. A `PageHeader` with Documentation over a flush `Card` holding a Require MFA `SettingsRow` with a `Switch` (turning it on asks in a `ConfirmDialog` that names who has no second factor yet), a warning `Alert` counting the people who sign in with a password only while MFA is optional, the `view/table-view` controls row (`PropertyFilter` over name, email, MFA status and method, Refresh and Download CSV as `IconButton`s in a `Tooltip`, `CollectionPreferences`) and a paginated `Table` of people on one `useCollection`: Name (square `Avatar`, name and email), MFA as `Table.CellStatus` (Enabled, Not set up), Method, Set up as `Table.CellTime`, and `Table.CellActions` with Reset MFA (behind a `ConfirmDialog`, for a lost device) or Send setup reminder; a filter with no match shows a small `EmptyState` with Clear filters. Built from `PageHeader`, `Button`, `Card`, `Item`, `SettingsRow`, `Switch`, `Alert`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Table`, `EmptyState`, `Avatar`, `DropdownMenu`, `ConfirmDialog`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/mfa-settings/mfa-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/mfa-settings")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingRow](../../components/setting-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [SettingsRow](../../components/settings-row.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -31,9 +31,9 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 
 Title `Multi-factor authentication` and one sentence on what the page holds. Action: Documentation.
 
-### B. Require MFA — `Card`, `Item`, `SettingRow`, `Switch`, `ConfirmDialog` (required)
+### B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 
-One compact `SettingRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 
@@ -120,7 +120,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import { toast } from '@aziontech/webkit/toast'
@@ -324,7 +324,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
         <Card :padded="false">
           <template #default>
             <Item.List>
-              <SettingRow
+              <SettingsRow
                 title="Require MFA"
                 variant="compact"
                 description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
@@ -335,7 +335,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
                   :disabled="loading || loadFailed"
                   @update:model-value="onRequire"
                 />
-              </SettingRow>
+              </SettingsRow>
             </Item.List>
           </template>
         </Card>

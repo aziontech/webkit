@@ -16,7 +16,7 @@
  ],
  "avoidWhen": [
   "Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.",
-  "Marketing figures on a site band → use `big-numbers`.",
+  "Marketing figures on a site band → use `stats`.",
   "Label/value details of one resource → use `key-value-list`."
  ],
  "related": [

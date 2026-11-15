@@ -3,7 +3,7 @@
  "binding": "Button",
  "import": "@aziontech/webkit/button",
  "treeShakeableImport": "@aziontech/webkit/button",
- "category": "actions",
+ "category": "action",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -24,12 +24,12 @@
   "A standalone navigation link with a trailing icon and a ghost hover → use `link`.",
   "Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `variant=\"link\"` Button is for an action with no destination.",
   "A hand-written `<button class=\"text-(--text-link) …\">` → use `variant=\"link\"`.",
-  "The single AI or highlight entry point that must stand out from every other action → use `button-highlight`."
+  "The single AI or highlight entry point that must stand out from every other action → use `highlight-button`."
  ],
  "related": [
   "icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `ghost` variant matches this one.",
   "split-button` — joins a Button to a chevron menu of related actions.",
-  "button-highlight` — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.",
+  "highlight-button` — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.",
   "link` — a text link that navigates to a page, resource or URL.",
   "toggle-group` — a group of mutually exclusive options, not a single action."
  ],

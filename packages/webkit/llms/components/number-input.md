@@ -3,7 +3,7 @@
 > Numeric input field with optional increment/decrement spinner buttons. Use when the value is strictly numeric (counts, quantities, ports, thresholds, currency without formatting). Distinct from `input` because it enforces numeric type, supports `min`/`max`/`step`, and renders chevron-up/chevron-down controls on the trailing edge.
 
 - Import: `import NumberInput from '@aziontech/webkit/number-input'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [number-input.json](https://github.com/aziontech/webkit/blob/main/.specs/number-input.json)
 
 ## When to use

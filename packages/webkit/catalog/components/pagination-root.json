@@ -8,12 +8,12 @@
  ],
  "avoidWhen": [
   "The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.",
-  "It is the previous / next pair at the end of a documentation page → use `doc-prev-next`.",
+  "It is the previous / next pair at the end of a documentation page → use `doc-previous-next`.",
   "The content loads more as the reader scrolls or clicks \"Load more\" → use a `button` at the end of the list."
  ],
  "related": [
   "table` — renders a wired pagination in its footer when `paginated` is set.",
-  "doc-prev-next` — previous / next links between documentation pages, not numbered pages of a list."
+  "doc-previous-next` — previous / next links between documentation pages, not numbered pages of a list."
  ],
  "bestPractices": [
   "Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `active` / `disabled` state and every click.",

@@ -1,9 +1,9 @@
 # Contact Hub
 
-> The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
+> The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
 
 - Import: `import ContactHub from '@aziontech/webkit/contact-hub'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [contact-hub.json](https://github.com/aziontech/webkit/blob/main/.specs/contact-hub.json)
 
 ## When to use
@@ -22,13 +22,13 @@
 ## Don’t
 
 - For a closing ask at the end of a page → use `closing-call-to-action`.
-- For a grid of product use cases → use `use-cases`.
+- For a grid of product use cases → use `customer-use-cases`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [topic](topic.md) — each self-serve channel is a linked topic.
-- [use-cases](use-cases.md) — the sibling band of icon-led topics.
+- [feature-item](feature-item.md) — each self-serve channel is a linked topic.
+- [customer-use-cases](customer-use-cases.md) — the sibling band of icon-led topics.
 
 ## Props
 

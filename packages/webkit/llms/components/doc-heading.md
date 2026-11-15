@@ -1,9 +1,9 @@
 # Doc Heading
 
-> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
+> A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
 
 - Import: `import DocHeading from '@aziontech/webkit/doc-heading'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-heading.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-heading.json)
 
 ## When to use
@@ -26,7 +26,7 @@
 ## Related
 
 - DocOnThisPage` — the rail that points at the ids.
-- useHeadingNav` — the page-provided scroll handler.
+- useHeadingNavigation` — the page-provided scroll handler.
 - DocProse` — skips `[data-doc-anchor]` in its link rules.
 
 ## Props

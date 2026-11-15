@@ -3,7 +3,7 @@
 > Icon-only control that copies a string to the clipboard and briefly confirms success. Composes `IconButton` for visuals and interaction tokens, and `Tooltip` for its name: an icon-only button is silent to a pointer user until hovered, so the glyph is always labelled on hover/focus. The tooltip text is the same string as the accessible name — `ariaLabel` while idle, `copiedLabel` for the two seconds after a write — so the confirmation is seen as well as announced. It is suppressed with `disabled`.
 
 - Import: `import CopyButton from '@aziontech/webkit/copy-button'`
-- Category: actions · Surface: app · Structure: monolithic
+- Category: action · Surface: app · Structure: monolithic
 - API as JSON: [copy-button.json](https://github.com/aziontech/webkit/blob/main/.specs/copy-button.json)
 
 ## When to use

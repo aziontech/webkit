@@ -17,7 +17,7 @@
  "avoidWhen": [
   "A permanent tip on a control → use `hint` or `popover`.",
   "A new feature announcement with no tutorial behind it → use `popover` or an `alert`.",
-  "Help text for a form field → use the field's `helper-text`."
+  "Help text for a form field → use the field's `field-description`."
  ],
  "related": [
   "tutorial-panel` — the provider holds the steps a hotspot shows; the panel lists and runs the tutorials.",

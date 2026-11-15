@@ -4,7 +4,7 @@
 
 - Import: `import SelectRoot from '@aziontech/webkit/select-root'`
 - Compound import (dot notation, not tree-shakeable): `import Select from '@aziontech/webkit/select'`
-- Category: inputs · Surface: app · Structure: composition
+- Category: input · Surface: app · Structure: composition
 - API as JSON: [select.json](https://github.com/aziontech/webkit/blob/main/.specs/select.json)
 
 ## When to use

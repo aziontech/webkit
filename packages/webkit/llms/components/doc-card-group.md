@@ -1,9 +1,9 @@
 # Doc Card Group
 
-> The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `columns` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
+> The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `RegistrationFrame` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `columns` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
 
 - Import: `import DocCardGroup from '@aziontech/webkit/doc-card-group'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-card-group.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-card-group.json)
 
 ## When to use
@@ -26,7 +26,7 @@
 ## Related
 
 - DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.
-- FrameBox` — the layout primitive that draws the frame and the corner registration marks.
+- RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.
 - DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder.
 
 ## Props

@@ -3,7 +3,7 @@
  "binding": "DocTabs",
  "import": "@aziontech/webkit/doc-tabs",
  "treeShakeableImport": "@aziontech/webkit/doc-tabs",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

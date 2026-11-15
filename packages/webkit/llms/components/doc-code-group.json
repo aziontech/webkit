@@ -3,7 +3,7 @@
  "binding": "DocCodeGroup",
  "import": "@aziontech/webkit/doc-code-group",
  "treeShakeableImport": "@aziontech/webkit/doc-code-group",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

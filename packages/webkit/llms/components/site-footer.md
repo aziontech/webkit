@@ -3,7 +3,7 @@
 > The footer under every marketing page: the link columns, then the social row beside the status indicator and the language select. It is a page section — the site places it from a `{ _id: 'site-footer', props }` entry and binds `props` straight onto it — and it composes `footer`, `brand`, `icon-button`, `status-indicator` and `select`. From `lg` the Azion mark leads the social row of small icon buttons; below `lg` it moves into the footer's signature band, centred under the social row, as the design sample draws it. The status indicator fills the footer's `status` slot and the language select its `language` slot, so the bottom bar lays them out as `footer` does. The layout is CSS only, so the server HTML and the hydrated page are the same tree. The language select keeps its own value unless the page binds `v-model:language`; its options are the labels the reader sees.
 
 - Import: `import SiteFooter from '@aziontech/webkit/site-footer'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [site-footer.json](https://github.com/aziontech/webkit/blob/main/.specs/site-footer.json)
 
 ## When to use

@@ -1,22 +1,22 @@
 # ConfigurableDashboard (`dashboard/configurable-dashboard`)
 
-> A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a Board with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `Board`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A configurable dashboard: the reader arranges the cards. The page binds its layout, an array of id, span and height in order, to a DashboardGrid with v-model:layout; an Edit layout Button turns on the board's editing, which shows the ChartCard drag handle and resize corner on every card. A card snaps to whole columns between 3 and 12 and to a height between 280 and 720 pixels; the board is twelve columns wide from a 48rem container and one column below it. Each card keeps its title with a Hint and nothing else in its header, and shows a Tag with its span while editing. Drop a card on another or press the arrow keys on its handle to move it; the board puts focus back on the moved handle and announces every move and resize in a polite live region. Reset layout appears once the layout differs from the default. Keep the layout wherever the product stores preferences. Built from `PageHeader`, `Button`, `DashboardGrid`, `ChartCard` (with its drag handle and resize corner), `Hint`, `Tag`, `DonutChart`, `BarList` and `Chart`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/dashboard/configurable-dashboard/configurable-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/configurable-dashboard")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Board](../../components/board.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DonutChart](../../components/donut-chart.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DashboardGrid](../../components/dashboard-grid.md), [DonutChart](../../components/donut-chart.md), [Hint](../../components/hint.md), [PageHeader](../../components/page-header.md), [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-layout`, `webkit-ui-states`
 
 ## Asked as
 
-configurable dashboard; custom dashboard; drag and drop dashboard; resizable cards; edit layout; board; dashboard grid; dashboard builder; painel configurável; painel personalizado; reorganizar cards; rearrange cards; resize dashboard cards
+configurable dashboard; custom dashboard; drag and drop dashboard; resizable cards; edit layout; dashboard-grid; dashboard grid; dashboard builder; painel configurável; painel personalizado; reorganizar cards; rearrange cards; resize dashboard cards
 
 A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it
 is, and keep that layout. It serves readers who come back to the same page every day and care about
 different cards than the default puts first. The page owns the layout (an array of id, span and
-height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the
-`ChartCard` inside each `Board.Item` provides the drag handle and the resize corner.
+height, in order) and binds it to `DashboardGrid`, which moves, resizes, clamps and announces; the
+`ChartCard` inside each `DashboardGrid.Item` provides the drag handle and the resize corner.
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shell/console`), which owns the rail, the header and the `main`.
 
@@ -49,17 +49,17 @@ Title `Traffic overview` and one sentence on what the page shows, over the rest 
 the mode. `Reset layout` (transparent) appears only once the layout differs from the default. While
 editing, one line of help sits beside the buttons: how to drag, resize and use the keyboard.
 
-### C. Grid — `Board` (required)
+### C. Grid — `DashboardGrid` (required)
 
 `v-model:layout` binds the page's layout; `editing` follows the mode button. The bounds are set once
-on the board: whole columns between 3 and 12, a height between 280 and 720 pixels. One `Board.Item`
+on the board: whole columns between 3 and 12, a height between 280 and 720 pixels. One `DashboardGrid.Item`
 per layout entry, keyed and labelled by the card title, so the board announces `Requests over time
 moved to position 2 of 6.` and `… resized to 6 of 12 columns.` and puts focus back on the moved
 handle. The board is twelve columns from a 48rem container and one column below it.
 
 ### D. Cards — `ChartCard` (required)
 
-Inside a `Board.Item` the card takes its span, height and bounds from the board and shows its handles
+Inside a `DashboardGrid.Item` the card takes its span, height and bounds from the board and shows its handles
 only while the board is editing, so it carries no size props or drag events of its own. The header
 holds `ChartCard.DragHandle` and the card `ChartCard.ResizeHandle`, each with an `aria-label` naming
 the card (`Move Requests over time`, `Resize Requests over time`). The header keeps only the title and
@@ -90,9 +90,9 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## Do
 
-- Keep the layout as data (id, span, height, order) owned by the page, bind it to `Board`, and persist
+- Keep the layout as data (id, span, height, order) owned by the page, bind it to `DashboardGrid`, and persist
   it wherever the product stores preferences.
-- Give every `Board.Item` the card title as its `label`; it is what moves and resizes announce.
+- Give every `DashboardGrid.Item` the card title as its `label`; it is what moves and resizes announce.
 - Announce a reset yourself in a polite live region (`Layout reset to the default.`); the board
   announces only what it did.
 - Keep every card at its place and size in loading and empty states, so the reader can arrange it
@@ -117,9 +117,9 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## Accessibility
 
-- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down (`Board` handles both and mirrors them under right-to-left).
+- The drag handle moves a card with the arrow keys; the resize corner changes span with Left and Right and height with Up and Down (`DashboardGrid` handles both and mirrors them under right-to-left).
 - Focus returns to the moved card's handle after a reorder.
-- `Board` announces every move and resize in its own polite live region; the page announces the reset in an `aria-live="polite"` `sr-only` region.
+- `DashboardGrid` announces every move and resize in its own polite live region; the page announces the reset in an `aria-live="polite"` `sr-only` region.
 - The board is a list named `Traffic overview cards`, one item per card.
 - `Edit layout` exposes its mode with `aria-pressed`.
 - Charts carry an `aria-label` equal to the card title.
@@ -136,7 +136,7 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 - `dashboard/analytics-dashboard` — the static version of the same cards.
 - `dashboard/analytics-dashboard` — a fixed dashboard when the order tells the story.
-- `Board` — the grid component: layout model, bounds, reorder, resize and announcements.
+- `DashboardGrid` — the grid component: layout model, bounds, reorder, resize and announcements.
 - `ChartCard` — the card inside each item, with the drag handle and resize corner.
 
 ## Variants
@@ -154,10 +154,10 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
 ```vue
 <script setup lang="ts">
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Board, { type BoardLayoutItem } from '@aziontech/webkit/board'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -337,7 +337,7 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
     }
   }
 
-  const defaultLayout: BoardLayoutItem[] = [
+  const defaultLayout: DashboardGridLayoutItem[] = [
     {
       id: 'requests',
       span: 8
@@ -382,7 +382,7 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
   }
 
   const editing = ref(false)
-  const layout = ref<BoardLayoutItem[]>(defaultLayout.map((card) => ({ ...card })))
+  const layout = ref<DashboardGridLayoutItem[]>(defaultLayout.map((card) => ({ ...card })))
   const activeIndex = ref<number | null>(null)
   const announcement = ref('')
 
@@ -429,7 +429,7 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
         </div>
       </div>
 
-      <Board
+      <DashboardGrid
         v-model:layout="layout"
         :editing="editing"
         aria-label="Traffic overview cards"
@@ -438,7 +438,7 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
         :min-height="280"
         :max-height="720"
       >
-        <Board.Item
+        <DashboardGrid.Item
           v-for="card in layout"
           :key="card.id"
           :item-id="card.id"
@@ -508,8 +508,8 @@ Each variant is the same screen in another state: `get_block("dashboard/configur
             </ChartCard.Content>
             <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />
           </ChartCard>
-        </Board.Item>
-      </Board>
+        </DashboardGrid.Item>
+      </DashboardGrid>
 
       <p
         class="sr-only"

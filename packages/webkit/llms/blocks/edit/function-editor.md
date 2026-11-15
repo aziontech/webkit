@@ -1,11 +1,11 @@
 # FunctionEditor (`edit/function-editor`)
 
-> The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`.
+> The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingsRow` and `SaveBar`.
 
 - Surface: app
 - Source: `blocks/edit/function-editor/function-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/function-editor")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewContent`, [LogView](../../components/log-view.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -39,13 +39,13 @@ A full-bleed `PageTabs` with Code and Settings as `Tabs.Trigger`s. Each tab keep
 
 A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code. In TestRun a secondary medium Run test `Button` with a play icon sits at the inline end; it shows its loading state while the run is in flight and reopens the Test run pane if the user collapsed it.
 
-### C. Code document — `CodeEditor`, `HelperText` (required)
+### C. Code document — `CodeEditor`, `FieldError` (required)
 
-A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/webkit/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/webkit/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `FieldError` under the editor, cleared on the next keystroke.
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
-Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogView` and `LogViewContent` to the page.
+Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
 
 In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
 
@@ -53,7 +53,7 @@ In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is t
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
 3. A four-column `KeyValueList` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
 4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
-5. Logs: a `LogView` with `LogViewContent` on the same clock as the trace, `copyable`, and its loading state while running.
+5. Logs: a `LogViewer` with `LogViewerContent` on the same clock as the trace, `copyable`, and its loading state while running.
 
 ### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
 
@@ -67,11 +67,11 @@ When the form has no fields, the right pane shows an `EmptyState` with one sente
 
 A flush `Card` with one small `Item` per field: a Move up and a Move down `IconButton` (transparent, small, disabled at the ends of the list), the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings. A move keeps focus on the button that moved the field (or its sibling once the field reaches an end) and is announced in a polite live region ("quality moved to position 1 of 2.").
 
-### H. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
+### H. Field settings — `SettingsRow`, `Input`, `Select`, `Switch`, `Textarea`, `FieldError` (required)
 
-Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `HelperText` once the field was touched.
+Inside an expanded field, `SettingsRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `FieldError` once the field was touched.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `RadioGroup`, `Switch`, `HelperText` (required)
+### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 
 The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`variant="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
@@ -149,7 +149,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `Arguments` — The Arguments document of image-optimizer: its form schema in the left pane and its two fields on the right, defaultFormat expanded into its settings and Choices and quality collapsed. The handle resizes the editor and collapses it past its minimum.
 - `NoArguments` — The Arguments document of auth-handler, a service with no form: the empty schema on the left and the This form has no fields empty state on the right.
 - `Settings` — The Settings tab of image-optimizer: the General, Runtime, Execution environment and Status sections in the form column, the runtime locked; editing anything raises the unsaved-changes bar.
-- `TestRun` — The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes.
+- `TestRun` — The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogViewer`. Run test again shows the running state until the run finishes.
 - `Saving` — The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, Discard and the fields are disabled and the editors are read-only until the request ends.
 
 Each variant is the same screen in another state: `get_block("edit/function-editor", { variant })`, or the file under `blocks/edit/function-editor/variants/`.
@@ -163,7 +163,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -175,7 +175,7 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
   import ResizableRoot from '@aziontech/webkit/resizable-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -560,10 +560,7 @@ export async function handleRequest(request, args = {}) {
                       v-if="codeError"
                       class="px-(--spacing-sm) py-(--spacing-xs)"
                     >
-                      <HelperText
-                        type="invalid"
-                        :label="codeError"
-                      />
+                      <FieldError>{{ codeError }}</FieldError>
                     </div>
                   </div>
                 </div>
@@ -789,7 +786,7 @@ export async function handleRequest(request, args = {}) {
                                                 class="mt-(--spacing-xs) border-t border-(--border-muted)"
                                               >
                                                 <Item.List>
-                                                  <SettingRow
+                                                  <SettingsRow
                                                     title="Name"
                                                     description="The key in the arguments object, and what the service reads."
                                                   >
@@ -812,14 +809,13 @@ export async function handleRequest(request, args = {}) {
                                                         @blur="touch(field.id)"
                                                       />
                                                     </div>
-                                                    <HelperText
+                                                    <FieldError
                                                       v-if="keyError(field)"
                                                       :id="formId + '-message-' + field.id"
-                                                      type="required"
-                                                      :label="keyError(field)"
-                                                    />
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                      >{{ keyError(field) }}</FieldError
+                                                    >
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Type"
                                                     description="What the field accepts, and the control the form renders."
                                                   >
@@ -841,8 +837,8 @@ export async function handleRequest(request, args = {}) {
                                                         </Select.Item>
                                                       </Select.Content>
                                                     </Select>
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Label"
                                                     description="How the field is named in the form. Falls back to the key."
                                                   >
@@ -856,8 +852,8 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Label"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Description"
                                                     description="The guidance under the field."
                                                   >
@@ -869,8 +865,8 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Description"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Required"
                                                     description="The form refuses to save without it."
                                                     variant="compact"
@@ -879,7 +875,7 @@ export async function handleRequest(request, args = {}) {
                                                       v-model="field.required"
                                                       aria-label="Required"
                                                     />
-                                                  </SettingRow>
+                                                  </SettingsRow>
                                                   <Item size="small">
                                                     <div
                                                       class="flex w-full gap-(--spacing-sm)"
@@ -979,7 +975,7 @@ export async function handleRequest(request, args = {}) {
                                                       </div>
                                                     </div>
                                                   </Item>
-                                                  <SettingRow
+                                                  <SettingsRow
                                                     v-if="field.type === 'string'"
                                                     title="Minimum length"
                                                   >
@@ -991,9 +987,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Minimum length"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-2"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-2"
                                                     v-if="field.type === 'string'"
                                                     title="Maximum length"
                                                   >
@@ -1005,9 +1001,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Maximum length"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-3"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-3"
                                                     v-if="field.type === 'string'"
                                                     title="Pattern"
                                                     description="A regular expression the value has to match."
@@ -1024,9 +1020,9 @@ export async function handleRequest(request, args = {}) {
                                                         aria-label="Pattern"
                                                       />
                                                     </div>
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-4"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-4"
                                                     v-if="
                                                       field.type === 'integer' ||
                                                       field.type === 'number'
@@ -1041,9 +1037,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Minimum"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-5"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-5"
                                                     v-if="
                                                       field.type === 'integer' ||
                                                       field.type === 'number'
@@ -1058,9 +1054,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Maximum"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-6"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-6"
                                                     v-if="field.type === 'select'"
                                                     title="Choices"
                                                     description="One per line. These are the values the form offers."
@@ -1078,9 +1074,9 @@ export async function handleRequest(request, args = {}) {
                                                         "
                                                       />
                                                     </div>
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-7"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-7"
                                                     v-if="field.type === 'array'"
                                                     title="List of"
                                                     description="The type of every value in the list."
@@ -1102,7 +1098,7 @@ export async function handleRequest(request, args = {}) {
                                                         </Select.Item>
                                                       </Select.Content>
                                                     </Select>
-                                                  </SettingRow>
+                                                  </SettingsRow>
                                                 </Item.List>
                                               </div>
                                             </div>
@@ -1135,7 +1131,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify your service."
                       >
@@ -1150,13 +1146,12 @@ export async function handleRequest(request, args = {}) {
                           :aria-describedby="nameError ? nameMessageId : undefined"
                           @update:model-value="nameError = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="nameError"
                           :id="nameMessageId"
-                          type="required"
-                          :label="nameError"
-                        />
-                      </SettingRow>
+                          >{{ nameError }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -1166,7 +1161,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Runtime"
                         description="The runtime isn't editable after the service is created."
                       >
@@ -1185,7 +1180,7 @@ export async function handleRequest(request, args = {}) {
                             />
                           </template>
                         </Input>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -1198,7 +1193,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Runs on"
                         variant="stacked"
                       >
@@ -1219,7 +1214,7 @@ export async function handleRequest(request, args = {}) {
                             >At the gateway</RadioGroup.Item
                           >
                         </RadioGroup>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -1229,7 +1224,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="An inactive service keeps its code and stops running."
                         variant="compact"
@@ -1238,7 +1233,7 @@ export async function handleRequest(request, args = {}) {
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

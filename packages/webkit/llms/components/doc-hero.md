@@ -3,12 +3,12 @@
 > The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-2xl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
 
 - Import: `import DocHero from '@aziontech/webkit/doc-hero'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-hero.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-hero.json)
 
 ## When to use
 
-- Use DocHero only on the documentation home; marketing page openings use HeroBand.
+- Use DocHero only on the documentation home; marketing page openings use HeroSection.
 - The top of a documentation home or a docs section landing (`shell/docs`, variant `Landing`).
 
 ## Do

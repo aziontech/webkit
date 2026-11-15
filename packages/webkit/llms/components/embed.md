@@ -15,7 +15,7 @@
 
 ## Do
 
-- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 - Always write a `title` that says what the embedded thing is. It is the frame's accessible name, and a screen-reader user meets it before the content.
 - Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.
 - Prefer `loading="lazy"` behaviour for anything below the fold — it is the default here, and an embed is usually the heaviest thing on a marketing page.
@@ -24,14 +24,14 @@
 ## Don’t
 
 - For a screenshot or a clip hosted by us inside documentation → use `doc-frame`, which frames stills and clips and opens them full screen.
-- For an image → use a plain `img` inside `frame-box`; an `iframe` for a picture costs a document load.
+- For an image → use a plain `img` inside `registration-frame`; an `iframe` for a picture costs a document load.
 - For content we own and could render directly — an embed is a last resort, not a layout tool.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [doc-frame](doc-frame.md) — the documentation frame for stills and clips, not third-party documents.
-- [frame-box](frame-box.md) — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.
+- [registration-frame](registration-frame.md) — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.
 - [media-split](media-split.md) — when the embed is one half of a copy-and-media band.
 
 ## Props

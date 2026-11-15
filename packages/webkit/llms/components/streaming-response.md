@@ -31,7 +31,7 @@
 - [chat-message](chat-message.md) — the host of a response.
 - [citation](citation.md), `sources` — inline references and the list they point at.
 - [code-block](code-block.md) — what fenced code renders as.
-- [ai-loading](ai-loading.md) — the loading text before the first token, or a bar where a table is coming.
+- [response-loading](response-loading.md) — the loading text before the first token, or a bar where a table is coming.
 
 ## Props
 

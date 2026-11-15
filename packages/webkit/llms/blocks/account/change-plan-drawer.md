@@ -1,11 +1,11 @@
 # ChangePlanDrawer (`account/change-plan-drawer`)
 
-> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelBody`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.
+> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `PricingCard` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `PlanFeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelBody`, `ToggleGroup`, `PricingCard`, `PlanFeatureList` and `Button`.
 
 - Surface: app
 - Source: `blocks/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/change-plan-drawer")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CardPricing](../../components/card-pricing.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [FeatureList](../../components/feature-list.md), [Field](../../components/field.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [Field](../../components/field.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [PlanFeatureList](../../components/plan-feature-list.md), [PricingCard](../../components/pricing-card.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
 - Skills: `webkit-navigation`, `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -59,9 +59,9 @@ Says why the user is here before the cards: `Compare what each tier includes bef
 
 `Monthly` or `Yearly`, `aria-label="Billing period"`, defaulting to Yearly. In the plan drawer it reprices the cards; in the upgrade drawer it sits in the Charged card's header and switches the charge rows.
 
-### I. Plan — `CardPricing` (required)
+### I. Plan — `PricingCard` (required)
 
-One per tier, `variant="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
+One per tier, `variant="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `PlanFeatureList` headed by what it builds on (`All Free features, plus:`).
 
 ### J. Divider — `Separator` (required)
 
@@ -103,9 +103,9 @@ Cancel and Upgrade, side by side from `md`, full width below.
 
 The plate before the card on file in the Payment method section, named after the brand.
 
-### T. Included features — `FeatureList` (required)
+### T. Included features — `PlanFeatureList` (required)
 
-What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `FeatureList` in their slot, so every feature list in the flow reads the same.
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `PlanFeatureList` in their slot, so every feature list in the flow reads the same.
 
 ### Toasts — through `toast`
 
@@ -166,13 +166,11 @@ Each variant is the same screen in another state: `get_block("account/change-pla
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CardPricing from '@aziontech/webkit/card-pricing'
   import Checkbox from '@aziontech/webkit/checkbox'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import FeatureList from '@aziontech/webkit/feature-list'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
@@ -180,6 +178,8 @@ Each variant is the same screen in another state: `get_block("account/change-pla
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
+  import PricingCard from '@aziontech/webkit/pricing-card'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
   import { toast } from '@aziontech/webkit/toast'
@@ -564,7 +564,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
               :key="plan.id"
               class="flex max-w-none min-w-0 flex-1"
             >
-              <CardPricing
+              <PricingCard
                 equal-height
                 class="w-full"
                 :title="plan.name"
@@ -587,7 +587,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                   >
                     {{ plan.featuresTitle }}
                   </p>
-                  <FeatureList :items="plan.features" />
+                  <PlanFeatureList :items="plan.features" />
                 </div>
                 <template #actions>
                   <Button
@@ -599,7 +599,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                     @click="choosePlan(plan)"
                   />
                 </template>
-              </CardPricing>
+              </PricingCard>
             </div>
           </div>
         </div>
@@ -634,7 +634,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                   What's included
                 </h3>
                 <div class="px-(--spacing-xs)">
-                  <FeatureList :items="upgradeFeatures" />
+                  <PlanFeatureList :items="upgradeFeatures" />
                 </div>
               </div>
               <div class="flex flex-col gap-(--spacing-xs)">

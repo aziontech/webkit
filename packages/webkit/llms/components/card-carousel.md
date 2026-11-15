@@ -1,9 +1,9 @@
 # Card Carousel
 
-> The titled card-carousel band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row. It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `overline`, and owns only the card's inner layout.
+> The titled card-carousel band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row. It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `eyebrow`, and owns only the card's inner layout.
 
 - Import: `import CardCarousel from '@aziontech/webkit/card-carousel'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [card-carousel.json](https://github.com/aziontech/webkit/blob/main/.specs/card-carousel.json)
 
 ## When to use
@@ -22,7 +22,7 @@
 
 ## Don’t
 
-- When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `use-cases` (grid with one action).
+- When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `customer-use-cases` (grid with one action).
 - For a quote or testimonial row → use `client-quotes`.
 - For numbered principles pinned while the page scrolls → use `process-scroll` with `pinned`.
 - For articles with images → use `article-cards`.
@@ -39,7 +39,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `eyebrow` | `string` | `''` | false | Overline above the band title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the band title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` at the start of the row the step controls end; the band renders no title when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `items` | `CardCarouselItem[]` | `[]` | false | The cards, in order; each is `{ eyebrow?, title, description, href?, linkLabel? }`, and a card with `href` links to it. |

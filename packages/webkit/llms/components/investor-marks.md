@@ -1,9 +1,9 @@
 # Investor Marks
 
-> The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `bento-grid`.
+> The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `bento-grid`.
 
 - Import: `import InvestorMarks from '@aziontech/webkit/investor-marks'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [investor-marks.json](https://github.com/aziontech/webkit/blob/main/.specs/investor-marks.json)
 
 ## When to use
@@ -17,7 +17,7 @@
 
 ## Don’t
 
-- For client marks → use `client-mosaic` or `logo-wall-quote`.
+- For client marks → use `client-mosaic` or `logo-wall-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -28,7 +28,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `linkLabel` | `string` | `''` | false | Line revealed under a mark on hover, and the start of each link's accessible name. |
 | `items` | `InvestorMarksItem[]` | `[]` | false | The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme. |

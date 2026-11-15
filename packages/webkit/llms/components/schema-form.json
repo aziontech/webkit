@@ -3,7 +3,7 @@
  "binding": "SchemaForm",
  "import": "@aziontech/webkit/schema-form",
  "treeShakeableImport": "@aziontech/webkit/schema-form",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

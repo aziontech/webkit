@@ -1,9 +1,9 @@
 # Feature Tabs
 
-> The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+> The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 - Import: `import FeatureTabs from '@aziontech/webkit/feature-tabs'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-tabs.json)
 
 ## When to use
@@ -16,7 +16,7 @@
 - Keep to three tabs; tabs past the limit are not rendered.
 - Give every tab an `illustrationLabel` saying what its picture shows.
 - Use tab `code` when the feature is an API a developer reads; keep each file short enough to read in the stage. Set `copyAriaLabel` to say what the copy button copies.
-- Use the band `scene` when one console widget plays a different beat per tab (`{ component: 'ProductWidget', props: { name: 'functions-start' } }` with tab `value`s naming its tabs); give every tab a `value` then.
+- Use the band `scene` when one console widget plays a different beat per tab (`{ component: 'ConsoleMockup', props: { name: 'functions-start' } }` with tab `value`s naming its tabs); give every tab a `value` then.
 
 ## Don’t
 
@@ -35,7 +35,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `tabs` | `FeatureTabsTab[]` | `[]` | false | The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. |
@@ -246,7 +246,7 @@
     title="Three ways to ship your first function"
     description="The same function, written and deployed from wherever you already work."
     :tabs="tabs"
-    :scene="{ component: 'ProductWidget', props: { name: 'functions-start' } }"
+    :scene="{ component: 'ConsoleMockup', props: { name: 'functions-start' } }"
     :autoplay-interval="6000"
   />
 </template>

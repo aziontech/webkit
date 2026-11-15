@@ -1,18 +1,18 @@
 # Site (`shell/site`)
 
-> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.
+> The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeader data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width="site"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeader.
 
 - Surface: site
 - Source: `blocks/shell/site/site.vue` in `@aziontech/webkit`
 - MCP: `get_block("shell/site")`
-- Components: [BigNumbers](../../components/big-numbers.md), [Button](../../components/button.md), [FrameBox](../../components/frame-box.md), [Hero](../../components/hero.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [SiteLayout](../../components/site-layout.md), [TextureMaterial](../../components/texture-material.md)
+- Components: [Button](../../components/button.md), [Hero](../../components/hero.md), [RegistrationFrame](../../components/registration-frame.md), [SectionContainer](../../components/section-container.md), [SectionGap](../../components/section-gap.md), [SectionModule](../../components/section-module.md), [SiteLayout](../../components/site-layout.md), [Stats](../../components/stats.md), [Texture](../../components/texture.md)
 - Skills: `webkit-layout`
 
 ## Asked as
 
-site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteNav
+site shell; marketing site layout; landing page layout; website layout; marketing page frame; layout do site; estrutura do site; página de marketing; website shell; marketing site shell; site layout component; SiteLayout; layout do site com SiteHeader
 
-The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteNav` and `SiteFooter` data; each page is only its sections, in the layout's slot.
+The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeader` and `SiteFooter` data; each page is only its sections, in the layout's slot.
 
 ## When to use
 
@@ -27,7 +27,7 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 
 ### A. Site chrome — `SiteLayout` (required)
 
-Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
+Composed once in the app's root around `RouterView`. `navigation` is the `SiteHeader` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 
 ### B. Opening band — `Hero` (required)
 
@@ -49,15 +49,15 @@ The hero's primary and outlined large buttons, worded like the bar's actions.
 
 One per section; here unpadded and undivided around a framed figure row.
 
-### G. Framed area — `FrameBox` (required)
+### G. Framed area — `RegistrationFrame` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToAction`, `ClosingCallToActionNewsletter`, or `TemplateGallery` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToAction`, `NewsletterSection`, or `TemplateGallery` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
 
-### H. Figures — `BigNumbers` (optional)
+### H. Figures — `Stats` (optional)
 
-A row of headline figures inside a `FrameBox`.
+A row of headline figures inside a `RegistrationFrame`.
 
-### I. Texture — `TextureMaterial` (optional)
+### I. Texture — `Texture` (optional)
 
 `variant="lines"`, the decorative fill of the closing frame.
 
@@ -72,11 +72,11 @@ A row of headline figures inside a `FrameBox`.
 
 ## Don't
 
-- Never add `SiteNav`, `SiteFooter`, `GlobalHeader` or `Footer` to a page; the layout already renders them.
+- Never add `SiteHeader`, `SiteFooter`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
 - Don't nest a second `SectionContainer`.
-- Don't put interactive content inside `TextureMaterial`; it is decoration.
+- Don't put interactive content inside `Texture`; it is decoration.
 
 ## Copy
 
@@ -112,10 +112,9 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
 
 ```vue
 <script setup lang="ts">
-  import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -123,7 +122,8 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
     type SiteLayoutFooter,
     type SiteLayoutNavigation
   } from '@aziontech/webkit/site-layout'
-  import TextureMaterial from '@aziontech/webkit/texture-material'
+  import Stats from '@aziontech/webkit/stats'
+  import Texture from '@aziontech/webkit/texture'
 
   const navigation: SiteLayoutNavigation = {
     home: '/en/',
@@ -601,25 +601,25 @@ Each variant is the same screen in another state: `get_block("shell/site", { var
         :divided="false"
         :padded="false"
       >
-        <FrameBox
+        <RegistrationFrame
           flush
           borders="y"
           marks="bottom"
         >
-          <BigNumbers :items="figures" />
-        </FrameBox>
+          <Stats :items="figures" />
+        </RegistrationFrame>
       </SectionModule>
 
       <SectionGap hatch />
 
-      <FrameBox
+      <RegistrationFrame
         borders="none"
         marks="all"
         data-hatch="true"
         class="h-[calc(var(--spacing-2xl)*2)]"
       >
-        <TextureMaterial variant="lines" />
-      </FrameBox>
+        <Texture variant="lines" />
+      </RegistrationFrame>
     </SectionContainer>
   </SiteLayout>
 </template>

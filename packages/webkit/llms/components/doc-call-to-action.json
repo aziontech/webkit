@@ -3,12 +3,12 @@
  "binding": "DocCallToAction",
  "import": "@aziontech/webkit/doc-call-to-action",
  "treeShakeableImport": "@aziontech/webkit/doc-call-to-action",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The closing offer of a documentation page, parked at the foot of the \"On this page\" rail after the outline. It is a docs card built like every other card on the page: a `FrameBox` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. Its actions are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.",
+ "purpose": "The closing offer of a documentation page, parked at the foot of the \"On this page\" rail after the outline. It is a docs card built like every other card on the page: a `RegistrationFrame` with corner marks, a flat `--bg-surface` face, the wordmark at its small size, a headline, a subtitle and full-width stacked actions. Set on the rail scale (14 px headline, 12 px copy) so it never out-shouts the page outline. Every string is content passed by the page. Its actions are `{ label, href }` objects, the same shape as the marketing bands' `primaryAction` / `secondaryAction`.",
  "setup": null,
  "useWhen": [
   "Use DocCallToAction only in the docs 'On this page' rail; marketing bands use CallToAction.",
@@ -20,7 +20,7 @@
  ],
  "related": [
   "DocOnThisPage` — the rail it closes.",
-  "FrameBox` — the frame.",
+  "RegistrationFrame` — the frame.",
   "CallToAction` — the marketing closing band."
  ],
  "bestPractices": [

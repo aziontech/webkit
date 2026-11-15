@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body.",
+   "sfc": "<script setup>\n  import LogViewer from '@aziontech/webkit/log-viewer'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    {\n      id: '4',\n      time: '13:47:43',\n      type: 'text',\n      level: 'warn',\n      message: 'Bundle larger than recommended'\n    }\n  ]\n  const search = ref('')\n  const level = ref('')\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogViewer\n      :lines=\"lines\"\n      v-model:search=\"search\"\n      v-model:level=\"level\"\n      class=\"h-full\"\n    >\n      <LogViewer.Header />\n      <LogViewer.Content />\n    </LogViewer>\n  </div>\n</template>"
+  },
+  {
+   "name": "Borderless",
+   "summary": "With `:bordered=\"false\"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.",
+   "sfc": "<script setup>\n  import LogViewer from '@aziontech/webkit/log-viewer'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    {\n      id: '4',\n      time: '13:47:43',\n      type: 'text',\n      level: 'warn',\n      message: 'Bundle larger than recommended'\n    }\n  ]\n  const search = ref('')\n  const level = ref('')\n</script>\n\n<template>\n  <div\n    class=\"rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n  >\n    <span class=\"text-label-sm text-(--text-muted)\">Deploy output</span>\n    <div class=\"mt-(--spacing-sm) h-[420px]\">\n      <LogViewer\n        :lines=\"lines\"\n        :bordered=\"false\"\n        v-model:search=\"search\"\n        v-model:level=\"level\"\n        class=\"h-full\"\n      >\n        <LogViewer.Header />\n        <LogViewer.Content />\n      </LogViewer>\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Loading",
+   "summary": "While `loading` is set, `LogViewer.Content` replaces the log body with a centered spinner and the `loadingLabel` text.",
+   "sfc": "<script setup>\n  import LogViewer from '@aziontech/webkit/log-viewer'\n  import { ref } from 'vue'\n\n  const lines = [\n    { id: '1', time: '13:47:33', type: 'text', message: 'Deploy started successfully!' },\n    { id: '2', time: '13:47:41', type: 'success', message: 'Build finished' },\n    {\n      id: '3',\n      time: '13:47:42',\n      type: 'folder',\n      message: 'dist/index.js',\n      folderType: 'asset',\n      size: '12.4 kB',\n      gzipSize: '4.1 kB'\n    },\n    {\n      id: '4',\n      time: '13:47:43',\n      type: 'text',\n      level: 'warn',\n      message: 'Bundle larger than recommended'\n    }\n  ]\n  const search = ref('')\n  const level = ref('')\n</script>\n\n<template>\n  <div class=\"h-[640px]\">\n    <LogViewer\n      :lines=\"lines\"\n      loading\n      v-model:search=\"search\"\n      v-model:level=\"level\"\n      class=\"h-full\"\n    >\n      <LogViewer.Header />\n      <LogViewer.Content />\n    </LogViewer>\n  </div>\n</template>"
+  }
+ ]
+}

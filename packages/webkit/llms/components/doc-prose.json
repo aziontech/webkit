@@ -3,7 +3,7 @@
  "binding": "DocProse",
  "import": "@aziontech/webkit/doc-prose",
  "treeShakeableImport": "@aziontech/webkit/doc-prose",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -25,7 +25,7 @@
  "related": [
   "illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.",
   "media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.",
-  "frame-box` — the registration frame a diagram's groups and tiles are drawn in.",
+  "registration-frame` — the registration frame a diagram's groups and tiles are drawn in.",
   "tag` — the status chip a card or item node carries."
  ],
  "bestPractices": [

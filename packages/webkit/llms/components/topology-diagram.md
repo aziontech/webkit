@@ -1,6 +1,6 @@
 # Topology Diagram
 
-> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 - Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
 - Category: data · Surface: app · Structure: monolithic
@@ -22,14 +22,14 @@
 
 ## Don’t
 
-- A sequence of steps or a pipeline without data cards → use `flow`.
+- A sequence of steps or a pipeline without data cards → use `flow-diagram`.
 - A nested list of items with no flow between them → use `tree`.
 - A marketing architecture picture → use `diagram`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [flow](flow.md) — the connector engine and anchors this component reuses.
+- [flow-diagram](flow-diagram.md) — the connector engine and anchors this component reuses.
 - [tree](tree.md) — hierarchical data without connectors.
 - [dropdown-menu](dropdown-menu.md) — the bind control's menu.
 - detail/resource-detail` — the page whose topology tab holds it.

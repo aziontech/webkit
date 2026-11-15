@@ -3,7 +3,7 @@
 > One panel inside `DocTabs`. It carries its title and its body only; `DocTabs` reads the title to build the strip. Rendered on its own it is a `display: contents` wrapper around its body.
 
 - Import: `import DocTab from '@aziontech/webkit/doc-tab'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-tab.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-tab.json)
 
 ## When to use

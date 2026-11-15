@@ -20,7 +20,7 @@
 
 ## Do
 
-- framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- framed` decides who draws the rule. On, the band draws its own registration frame — vertical rules handed back to the column, a tick at its floor. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep `title` to one line and one ask. A panel that poses two questions gets neither answered.
 - Put the controls in the `actions` slot; the panel lays them out as a row beside the copy from `md` up and stacks them full-width below it.
 - Lead with the primary action and keep secondary ones `outline` or `text`, so the panel has one obvious target.
@@ -28,11 +28,11 @@
 - In `split`, `title` states the claim and `title-muted` states its consequence — one sentence in two tones, not two headlines. The band renders them as two spans of a single `h2`, so a screen reader reads one heading.
 - In `split`, put the primary control in `actions` and the secondary one in `aside`; each cell floors its own control, which is what gives the two a shared baseline. `actions` stretches its child full-width below `md`; `aside` stretches its child at every width, so a control drawn to size to its own content goes in a wrapper there.
 - In `lead`, every control goes in `actions` — they lay out as one row from `md` up and stack full-width below it. The copy column is capped at `--container-2xl` so the headline keeps a readable measure however wide the band runs.
-- lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-2xl` the other two use. In `split` that larger number is the *floor* of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-2xl` stops reading as a floor and starts reading as a hole.
+- lead` sets the copy-to-actions gap at `--spacing-xl`, not the `--spacing-2xl` the other two use. In `split` that larger number is the _floor_ of a stretched cell — what pushes the control onto the band's bottom edge — and in `panel` the controls sit beside the copy from `md` up. In `lead` nothing stretches and nothing sits beside, so `--spacing-2xl` stops reading as a floor and starts reading as a hole.
 - In `primary`, the band is centred and carries `title` and `description` only; `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
-- In `primary`, compose one `texture-material` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `ticker` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
-- In `primary`, give the ticker enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.
-- Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `frame-box` — two frames draw two hairlines on the same edge.
+- In `primary`, compose one `texture` into `background` — `pixelate` at `small` with `fade="bottom"` — and a `marquee` into `bottom`. The band moves the pixelate's resting pools out of frame and runs its two waves at triple gain and double pace, so the travelling bands carry the light instead of a still glow; keep the headline clear of the densest cells by leaving the band's own padding alone.
+- In `primary`, give the marquee enough claims that the loop never repeats inside one screen, and let the pass derive itself: an item pass runs three times slower per claim than a mark pass, because a claim is read.
+- Leave `framed` on when the band stands in a section column of its own, and off when the page already wraps it in a `registration-frame` — two frames draw two hairlines on the same edge.
 
 ## Don’t
 
@@ -40,18 +40,18 @@
 - For the page's leading statement and primary CTAs → use `hero`, whose `Hero.Title` owns the `h1`.
 - For a dismissible or time-bound notice inside the product → use `alert`.
 - For a close that sits quietly in the column → use `split` or `panel`; `primary` fills a whole brand-coloured band and should appear once per page.
-- For a plan's call to action inside pricing → use `card-pricing`, which owns its own action row.
+- For a plan's call to action inside pricing → use `pricing-card`, which owns its own action row.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [section-title](section-title.md) — opens a section with a header rule; this closes one with a panel.
 - [hero](hero.md) — the page's leading band; its `Hero.Title` owns the statement and the `h1`.
-- [frame-box](frame-box.md) — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.
+- [registration-frame](registration-frame.md) — the registration frame the band draws when `framed` is on, and the one the page supplies around it when off.
 - [button](button.md) — the controls composed into the `actions` and `aside-actions` slots.
-- [overline](overline.md) — the `//`-prefixed eyebrow the band renders above the headline.
-- [texture-material](texture-material.md) — the pixelated, waving texture composed into `background` in `primary`.
-- [ticker](ticker.md) — the strip of benefits composed into `bottom` in `primary`.
+- [eyebrow](eyebrow.md) — the `//`-prefixed eyebrow the band renders above the headline.
+- [texture](texture.md) — the pixelated, waving texture composed into `background` in `primary`.
+- [marquee](marquee.md) — the strip of benefits composed into `bottom` in `primary`.
 
 ## Props
 
@@ -71,8 +71,8 @@
 | `default` | — | Description body; replaces the `description` prop when provided. |
 | `actions` | — | The controls the band exists to offer; in `split`, the lead cell's primary control. |
 | `aside` | — | The aside cell's control in `split`; ignored in `panel`, `lead`, `primary` and `announcement`, where every control belongs in `actions`. |
-| `background` | — | Decoration drawn behind the copy in `primary`, such as a `texture-material`; ignored in the other registers. |
-| `bottom` | — | The strip that floors the band in `primary`, such as a `ticker`, under a hairline; ignored in the other registers. |
+| `background` | — | Decoration drawn behind the copy in `primary`, such as a `texture`; ignored in the other registers. |
+| `bottom` | — | The strip that floors the band in `primary`, such as a `marquee`, under a hairline; ignored in the other registers. |
 
 ## States
 
@@ -85,7 +85,7 @@
 - Visible focus: not applicable to the panel itself; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches only the controls placed in the `actions` slot, in DOM order.
 - ARIA: the headline is a real `h2` — rendered by the composed `section-title` in `panel`, and by the band itself in `split` and `lead`, where `title` and `title-muted` are two spans of that one heading so it is announced as a single string. The band is a `<section>` named by its `title`, reachable as a landmark with a name; no `role` is added.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): in `primary` the copy is ordinary ink on `var(--bg-canvas)`, so the pair is the same as `panel`'s. The headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): in `primary` the copy is ordinary ink on `var(--bg-canvas)`, so the pair is the same as `panel`'s. The headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the panel is static.
 - Touch target ≥40×40 px — both action slots stretch their children to full width below the breakpoint, so slotted buttons keep their own target size.
 

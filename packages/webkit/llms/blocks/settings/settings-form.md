@@ -1,11 +1,11 @@
 # SettingsForm (`settings/settings-form`)
 
-> A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `SectionHeader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsSection`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Saving one group or card disables just its own fieldset; the others stay editable, and each save confirms with a toast. Built from `PageHeader`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `HelperText`, `ConfirmDialog`, `Skeleton` and `Button`.
+> A settings form and its save strategy, one variant per strategy. SaveAll, the default (a form that is one logical unit has one save): account-level settings as `Item` rows saved as one unit, a page body for ConsoleLayout (the layout owns the shell and the main landmark): the form column opening with a small page heading, topic sections each a `SectionHeader` (an h2) over a flush `Card` of rows, and one full-bleed sticky footer with Discard and Save, both disabled until the form differs from what was saved (dirty tracking through `useUnsavedChanges`); a successful save confirms with a `Profile saved.` toast and a rejected one shows an error toast with Retry, the entries kept (SaveError); Profile is the example, with General (Full name, Email), Preferences (Timezone, Language) and Notifications (Product updates), and Full name and Email flag only after Save is pressed. SavePerGroup splits the page into topic groups whose `Card` footers each carry a secondary Save for that group only. SavePerCard splits a long configuration page into titled cards, each with an info `Alert`, its stacked fields and its own Save beside an optional docs `Link`. Profile is the full profile page of a signed-in account, and the layout every account settings page follows: seven `SettingsSection`s of flush `Card`s of rows with the unsaved-changes `SaveBar`, MFA linked to `account/mfa-settings`, and Delete account behind a type-to-confirm `ConfirmDialog`; ProfileLoading and ProfileError are its first load and its load failure. Saving one group or card disables just its own fieldset; the others stay editable, and each save confirms with a toast. Built from `PageHeader`, `SectionHeader`, `SettingsSection`, `SettingsRow`, `SaveBar`, `Card`, `Item`, `Alert`, `Field`, `Input`, `Textarea`, `Select`, `Switch`, `Tag`, `Link`, `FieldError`, `ConfirmDialog`, `Skeleton` and `Button`.
 
 - Surface: app
 - Source: `blocks/settings/settings-form/settings-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("settings/settings-form")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [SaveBar](../../components/save-bar.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), `use-unsaved-changes`
 - Skills: `webkit-form`, `webkit-errors`, `webkit-ux-heuristics`
 
 ## Asked as
@@ -36,19 +36,19 @@ The place the user goes to change how an account or a project behaves. They scan
 
 A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) with the page name and one sentence of purpose. Its `title-id` names the `form` through `aria-labelledby`. No actions in the heading: saving lives at the bottom.
 
-### B. Topic sections — `SectionHeader`, `Card`, `Item` (required)
+### B. FeatureItem sections — `SectionHeader`, `Card`, `Item` (required)
 
 Each topic is a section with a `SectionHeader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
-### C. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
+### C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 
-One `SettingRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `HelperText` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
+One `SettingsRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `FieldError` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
 
 ### D. Save — `SaveBar`, `Button` (required)
 
 SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
 
-### E. Profile sections — `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
+### E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
 
 The Profile variant adds `SettingsSection`, `Textarea`, `Tag`, `ConfirmDialog`, `Skeleton` and `Alert` to these parts.
 
@@ -66,7 +66,7 @@ The Profile variant stacks one `SettingsSection` per group (General, Company inf
 
 ## Don't
 
-- Don't render a `Sidebar`, `GlobalHeader`, `Command` palette or `<main>` in the page; `ConsoleLayout` owns them.
+- Don't render a `Sidebar`, `AppHeader`, `Command` palette or `<main>` in the page; `ConsoleLayout` owns them.
 - Don't mix a page-level `SaveBar` with per-card Save buttons on the same page.
 - Don't put Save in the page heading or float it beside a single field.
 - Don't flag empty required fields before the user presses Save.
@@ -115,14 +115,14 @@ The Profile variant stacks one `SettingsSection` per group (General, Company inf
 - `state/form-validation` — every outcome of a submit.
 - `state/async-submit` — a save that runs long and reports back later.
 - `edit/delete-dialog` — the delete row a settings page can end with.
-- `SettingRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.
+- `SettingsRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.
 
 ## Variants
 
 - `SaveAll` — primary (the code below)
 - `Saving` — While the save is in flight: the whole fieldset is disabled, Discard is disabled and Save shows its loading state.
 - `SaveError` — The server rejects the save: Save stops loading, an error toast says the profile was not saved and that the changes are kept, with Retry; the form stays dirty with every entry in place.
-- `SavePerGroup` — A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `SectionHeader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SectionHeader`, `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.
+- `SavePerGroup` — A settings page split into topic groups that each save on their own: a page heading, then one section per topic, each a `SectionHeader` over a flush `Card` of `Item` rows whose footer carries a secondary Save for that group only. Saving one group disables just its own fieldset; the other stays editable. Preferences is the example, with General (Full name, Language) and Notifications (Product updates, Security alerts). Built from `PageHeader`, `SectionHeader`, `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch` and `Button`.
 - `SavingOneGroup` — General is saving: its Save shows the loading state and its rows are disabled, while Notifications stays editable and can be saved on its own.
 - `SavePerCard` — A long configuration page split into titled cards that each own their save: a page heading, then one `Card` per topic with an info `Alert`, stacked label-and-control fields inside a fieldset, and a footer whose secondary Save commits that card alone, beside an optional docs `Link`. Project settings is the example, with Preview Toolbar and Deployment Protection. Built from `PageHeader`, `Card`, `Alert`, `Field`, `Select`, `Switch`, `Link` and `Button`.
 - `SavingOneCard` — Preview Toolbar is saving: its Save shows the loading state and its selects are disabled, while Deployment Protection stays editable.
@@ -138,14 +138,14 @@ Each variant is the same screen in another state: `get_block("settings/settings-
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { useUnsavedChanges } from '@aziontech/webkit/use-unsaved-changes'
@@ -255,7 +255,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
           <Card :padded="false">
             <template #default>
               <Item.List>
-                <SettingRow
+                <SettingsRow
                   title="Full name"
                   description="The name shown across your account."
                 >
@@ -271,16 +271,15 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                         :required="submitted && nameEmpty"
                         :aria-describedby="submitted && nameEmpty ? 'full-name-error' : undefined"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="submitted && nameEmpty"
                         id="full-name-error"
-                        type="required"
-                        label="This field is required."
-                      />
+                        >This field is required.</FieldError
+                      >
                     </div>
                   </div>
-                </SettingRow>
-                <SettingRow
+                </SettingsRow>
+                <SettingsRow
                   title="Email"
                   description="Used for sign-in and notifications."
                 >
@@ -298,17 +297,16 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                         :invalid="submitted && !emailEmpty && emailInvalid"
                         :aria-describedby="submitted && emailInvalid ? 'email-error' : undefined"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="submitted && emailInvalid"
                         id="email-error"
-                        :type="emailEmpty ? 'required' : 'invalid'"
-                        :label="
+                        >{{
                           emailEmpty ? 'This field is required.' : 'Enter a valid email address.'
-                        "
-                      />
+                        }}</FieldError
+                      >
                     </div>
                   </div>
-                </SettingRow>
+                </SettingsRow>
               </Item.List>
             </template>
           </Card>
@@ -322,7 +320,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
           <Card :padded="false">
             <template #default>
               <Item.List>
-                <SettingRow
+                <SettingsRow
                   title="Timezone"
                   description="Times across the app are shown in this zone."
                 >
@@ -349,8 +347,8 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                       </Select.Content>
                     </Select>
                   </div>
-                </SettingRow>
-                <SettingRow
+                </SettingsRow>
+                <SettingsRow
                   title="Language"
                   description="The interface language."
                 >
@@ -377,7 +375,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                       </Select.Content>
                     </Select>
                   </div>
-                </SettingRow>
+                </SettingsRow>
               </Item.List>
             </template>
           </Card>
@@ -391,7 +389,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
           <Card :padded="false">
             <template #default>
               <Item.List>
-                <SettingRow
+                <SettingsRow
                   title="Product updates"
                   description="Occasional emails about new features and changes."
                   variant="compact"
@@ -401,7 +399,7 @@ Each variant is the same screen in another state: `get_block("settings/settings-
                     aria-label="Product updates"
                     :disabled="submitting"
                   />
-                </SettingRow>
+                </SettingsRow>
               </Item.List>
             </template>
           </Card>

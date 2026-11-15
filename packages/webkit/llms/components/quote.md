@@ -27,7 +27,7 @@
 
 ## Don’t
 
-- For a measured figure rather than a statement → use `big-numbers`.
+- For a measured figure rather than a statement → use `stats`.
 - For an inline aside or callout inside documentation → use `doc-callout`.
 - For a dismissible or status message → use `alert`.
 - For a logo row with no quotation → compose the marks directly; a `quote` without `text` is not a logo wall.
@@ -35,7 +35,7 @@
 
 ## Related
 
-- [big-numbers](big-numbers.md) — the numeric form of the same proof band.
+- [stats](stats.md) — the numeric form of the same proof band.
 - [card-grid](card-grid.md) — the uniform grid a row of peer quotes is laid out on; `bento-grid` when one quote is given more weight than its neighbours.
 - [avatar](avatar.md) — the person's likeness, composed by the `highlight` register when a `photo` is given.
 
@@ -77,7 +77,7 @@
 - Visible focus: not applicable — the quote is static copy and holds no interactive control.
 - Keyboard map: none of its own; the block contains no focusable element and is skipped by `Tab`.
 - ARIA: the quotation is a real `blockquote` inside a `figure`, and the attribution is its `figcaption`, so the statement and its source are announced as one unit; the mark carries `logoAlt`, falling back to `jobTitle`, and is never left with an empty accessible name while it conveys the company.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the quotation is `var(--text-default)` — or, with `highlights`, `var(--text-muted)` around phrases in `var(--text-default)`; the attribution uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the block is static.
 - Touch target ≥40×40 px — not applicable, no interactive target.
 

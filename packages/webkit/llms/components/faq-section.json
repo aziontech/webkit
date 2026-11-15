@@ -3,7 +3,7 @@
  "binding": "FaqSection",
  "import": "@aziontech/webkit/faq-section",
  "treeShakeableImport": "@aziontech/webkit/faq-section",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,

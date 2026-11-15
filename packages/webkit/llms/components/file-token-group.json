@@ -3,7 +3,7 @@
  "binding": "FileTokenGroup",
  "import": "@aziontech/webkit/file-token-group",
  "treeShakeableImport": "@aziontech/webkit/file-token-group",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -3,7 +3,7 @@
  "binding": "DocPrompt",
  "import": "@aziontech/webkit/doc-prompt",
  "treeShakeableImport": "@aziontech/webkit/doc-prompt",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -28,14 +28,14 @@
 - For third-party content loaded from another origin → use `embed`.
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
-- For a framed page section or grid cell → use `frame-box`.
+- For a framed page section or grid cell → use `registration-frame`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [doc-frame](doc-frame.md) — the documentation figure frame for stills and clips; no live viewport.
 - [embed](embed.md) — a titled `iframe` for another origin's document; `browser-frame` renders our own components.
-- [frame-box](frame-box.md) — the page's registration frame (hairlines + corner marks), not a window.
+- [registration-frame](registration-frame.md) — the page's registration frame (hairlines + corner marks), not a window.
 - [copy-button](copy-button.md) — the clipboard control the address bar composes; reach for it directly to copy any other value.
 
 ## Props
@@ -84,7 +84,7 @@ The frame is static apart from its resize handles.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
 - **Copy.** The address bar's trailing end composes the package's `CopyButton` (`variant="ghost"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
-- **Test ids.** Root fallback `content-browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
+- **Test ids.** Root fallback `browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
 - **Composable.** The document mirroring and teleport target live in a co-located lifecycle composable, `composables/use-frame-document.ts`, that disconnects every observer on scope dispose.
 
 ## Accessibility
@@ -123,12 +123,12 @@ The frame is static apart from its resize handles.
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import FeatureItem from '@aziontech/webkit/feature-item'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -160,7 +160,7 @@ The frame is static apart from its resize handles.
             </template>
           </SectionTitle>
         </template>
-        <FrameBox
+        <RegistrationFrame
           flush
           borders="y"
           marks="all"
@@ -172,7 +172,7 @@ The frame is static apart from its resize handles.
             :mobile-columns="1"
           >
             <CardGrid.Cell variant="canvas">
-              <Topic
+              <FeatureItem
                 :heading-level="3"
                 icon="ai ai-edge-application"
                 title="Applications"
@@ -180,7 +180,7 @@ The frame is static apart from its resize handles.
               />
             </CardGrid.Cell>
             <CardGrid.Cell variant="canvas">
-              <Topic
+              <FeatureItem
                 :heading-level="3"
                 icon="ai ai-edge-firewall"
                 title="Firewall"
@@ -188,7 +188,7 @@ The frame is static apart from its resize handles.
               />
             </CardGrid.Cell>
             <CardGrid.Cell variant="canvas">
-              <Topic
+              <FeatureItem
                 :heading-level="3"
                 icon="ai ai-tiered-cache"
                 title="Tiered Cache"
@@ -196,7 +196,7 @@ The frame is static apart from its resize handles.
               />
             </CardGrid.Cell>
           </CardGrid>
-        </FrameBox>
+        </RegistrationFrame>
       </SectionModule>
       <SectionGap
         size="small"
@@ -245,12 +245,12 @@ The frame is static apart from its resize handles.
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import FeatureItem from '@aziontech/webkit/feature-item'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -283,7 +283,7 @@ The frame is static apart from its resize handles.
               </template>
             </SectionTitle>
           </template>
-          <FrameBox
+          <RegistrationFrame
             flush
             borders="y"
             marks="all"
@@ -295,7 +295,7 @@ The frame is static apart from its resize handles.
               :mobile-columns="1"
             >
               <CardGrid.Cell variant="canvas">
-                <Topic
+                <FeatureItem
                   :heading-level="3"
                   icon="ai ai-edge-application"
                   title="Applications"
@@ -303,7 +303,7 @@ The frame is static apart from its resize handles.
                 />
               </CardGrid.Cell>
               <CardGrid.Cell variant="canvas">
-                <Topic
+                <FeatureItem
                   :heading-level="3"
                   icon="ai ai-edge-firewall"
                   title="Firewall"
@@ -311,7 +311,7 @@ The frame is static apart from its resize handles.
                 />
               </CardGrid.Cell>
               <CardGrid.Cell variant="canvas">
-                <Topic
+                <FeatureItem
                   :heading-level="3"
                   icon="ai ai-tiered-cache"
                   title="Tiered Cache"
@@ -319,7 +319,7 @@ The frame is static apart from its resize handles.
                 />
               </CardGrid.Cell>
             </CardGrid>
-          </FrameBox>
+          </RegistrationFrame>
         </SectionModule>
         <SectionGap
           size="small"

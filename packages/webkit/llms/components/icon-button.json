@@ -3,7 +3,7 @@
  "binding": "IconButton",
  "import": "@aziontech/webkit/icon-button",
  "treeShakeableImport": "@aziontech/webkit/icon-button",
- "category": "actions",
+ "category": "action",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -19,7 +19,7 @@
 - Give every item a `logo` in the client's own colours; it is drawn as-is on its card and in the featured quotation, so pick artwork that carries its own contrast on both themes. Without one, `mark` names a one-ink mark from the brand registry instead.
 - Let `clientName` default to the registry's label for `mark`; set it when the item has only a `logo`, or a client the registry does not carry. It is the card's accessible name, so it is never optional in practice.
 - Keep each quotation to one or two sentences, verbatim, without typed quotation marks — `quote` draws its own glyph. The panel holds the tallest quotation's height for all of them and floors the attribution and the `actions` control, so one much longer quotation opens a wide gap under every shorter one.
-- Every card is a tab that features its client's quotation, so every item carries `text`. When the page has a quotation for only some clients, list only those: a logo with nothing to feature is not a tab. For a strip of client logos without quotations, use `logo-wall` (or `logo-wall-quote` for one quotation beside the logos).
+- Every card is a tab that features its client's quotation, so every item carries `text`. When the page has a quotation for only some clients, list only those: a logo with nothing to feature is not a tab. For a strip of client logos without quotations, use `logo-wall` (or `logo-wall-section` for one quotation beside the logos).
 - Keep each quotation readable inside `autoplayInterval`; raise the interval before shortening a verbatim quotation, and turn `autoplay` off when the band sits beside other moving content.
 
 ## Don’t
@@ -27,7 +27,7 @@
 - For one quotation on its own → use `quote` with `variant="highlight"`.
 - For a band of customer quotes the reader browses by client → use `client-quotes`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
-- For a moving strip of marks with no links → use `ticker`.
+- For a moving strip of marks with no links → use `marquee`.
 - For switching a page's content between views → use `tabs`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -36,7 +36,7 @@
 - [quote](quote.md) — the `highlight` register this band renders for the selected client.
 - [logo-wall](logo-wall.md) — the same framed client cells, as links out rather than as a selector.
 - [card-grid](card-grid.md) — the framed grid the cards are laid out on.
-- [frame-box](frame-box.md) — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.
+- [registration-frame](registration-frame.md) — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.
 - [client-quotes](client-quotes.md) — the page-section band of customer quotes browsed by client.
 - [media-tabs](media-tabs.md) — the same timer and progress hairline, for claims paired with a medium.
 
@@ -59,7 +59,7 @@
 
 ## Assets
 
-- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark.
 
 ## v-model
 
@@ -70,7 +70,7 @@
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible` on each card
-- The band is two regions: the quotation panel on top, drawn as a `frame-box` with all four corner marks and only its bottom rule — the seam it shares with the wall of client cards below it. The band draws no outer frame of its own, exactly like `logo-wall`: the wall's flush grid pulls its right and bottom rules onto whatever frames the band, so a page places it inside its framed column (a `frame-box` with `borders="y"`, the column supplying the sides) and every edge is a single hairline, never doubled against the page's own rules
+- The band is two regions: the quotation panel on top, drawn as a `registration-frame` with all four corner marks and only its bottom rule — the seam it shares with the wall of client cards below it. The band draws no outer frame of its own, exactly like `logo-wall`: the wall's flush grid pulls its right and bottom rules onto whatever frames the band, so a page places it inside its framed column (a `registration-frame` with `borders="y"`, the column supplying the sides) and every edge is a single hairline, never doubled against the page's own rules
 - The wall is a `card-grid` of framed cells at 3:2, three columns below `lg` and six from `lg`, drawn from `--border-default`; each cell is one card
 - `data-active` marks the selected card; it sits on `--bg-selected` while the others rest on the plain surface
 - Hover paints `--bg-hover` as a `::before` ghost layer over a resting card; the selected card shows no ghost. A card reveals no link label — clicking it selects, it never navigates
@@ -127,12 +127,12 @@
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import Button from '@aziontech/webkit/button'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import QuoteTabs from '@aziontech/webkit/quote-tabs'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox>
+  <RegistrationFrame>
     <QuoteTabs
       aria-label="Client stories"
       :items="[
@@ -194,7 +194,7 @@
         />
       </template>
     </QuoteTabs>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```
 
@@ -203,12 +203,12 @@
 ```vue
 <script setup>
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import QuoteTabs from '@aziontech/webkit/quote-tabs'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox>
+  <RegistrationFrame>
     <QuoteTabs
       aria-label="Client stories"
       :items="[
@@ -227,6 +227,6 @@
         }
       ]"
     />
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```

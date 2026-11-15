@@ -28,7 +28,7 @@
 
 ## Related
 
-- [site-nav](site-nav.md) and `site-footer` — compose Brand for the site chrome.
+- [site-header](site-header.md) and `site-footer` — compose Brand for the site chrome.
 - [avatar](avatar.md) — the picture or initials of a user, not the product mark.
 - [logo-wall](logo-wall.md) — third-party company marks.
 

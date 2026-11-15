@@ -3,7 +3,7 @@
 > One or more code samples of the same thing in different languages or package managers, rendered on `CodeBlock` so the docs inherit its header, copy control and syntax surface. One sample renders a block titled by a label header (the sample label, else the language's readable name: Shell, JavaScript, JSON); several render the joined tab strip. A sample's `output` — what its command prints — renders as a separate muted "Output" block under it, with no copy control, so the command block holds only what the reader runs.
 
 - Import: `import DocCodeGroup from '@aziontech/webkit/doc-code-group'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-code-group.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-code-group.json)
 
 ## When to use

@@ -31,7 +31,7 @@
 - Navigation between views of the app → use `sidebar-menu` inside `sidebar`.
 - Flat records with several attributes each → use `table`.
 - A few sections of free content that open and close → use `accordion`.
-- A two- or three-level directory of destinations on a marketing page → use `column-navigation`.
+- A two- or three-level directory of destinations on a marketing page → use `link-directory`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -75,11 +75,11 @@
 
 ## v-model
 
-| Model                  | Type       | Default | Emits                | Notes                                                                                                                                                                                                                                                                                                                               |
-| ---------------------- | ---------- | ------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open-keys`     | `string[]` | `[]`    | `update:openKeys`    | Ids of the open parents, via `defineModel<string[]>('openKeys', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.              |
-| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Ids of the selected nodes while `selectable="multiple"`, via `defineModel<string[]>('selectedKeys', { default: () => [] })`. Ordered by selection (range and select-all in visible order), without duplicates; emits only when the set changes. Disabled nodes are never added.                                                      |
-| `v-model:selected`     | `string`   | `''`    | `update:selected`    | Id of the selected node, via `defineModel<string>('selected', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
+| Model                   | Type       | Default | Emits                 | Notes                                                                                                                                                                                                                                                                                                                               |
+| ----------------------- | ---------- | ------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open-keys`     | `string[]` | `[]`    | `update:openKeys`     | Ids of the open parents, via `defineModel<string[]>('openKeys', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.                  |
+| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Ids of the selected nodes while `selectable="multiple"`, via `defineModel<string[]>('selectedKeys', { default: () => [] })`. Ordered by selection (range and select-all in visible order), without duplicates; emits only when the set changes. Disabled nodes are never added.                                                     |
+| `v-model:selected`      | `string`   | `''`    | `update:selected`     | Id of the selected node, via `defineModel<string>('selected', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
 
 ## States
 

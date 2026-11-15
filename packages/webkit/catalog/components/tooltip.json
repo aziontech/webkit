@@ -10,7 +10,7 @@
   "The content has links, buttons or more than one line of structure → use `popover`.",
   "An info glyph beside a field label or column header → use `hint`.",
   "A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.",
-  "Guidance or errors the user needs to complete a field → use `helper-text`."
+  "Guidance or errors the user needs to complete a field → use `field-error`."
  ],
  "related": [
   "popover` — click-opened, interactive, with a header, body and footer.",

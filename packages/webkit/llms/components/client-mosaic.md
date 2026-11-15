@@ -1,9 +1,9 @@
 # Client Mosaic
 
-> The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid`, `logo` and `link`.
+> The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `bento-grid`, `logo` and `link`.
 
 - Import: `import ClientMosaic from '@aziontech/webkit/client-mosaic'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [client-mosaic.json](https://github.com/aziontech/webkit/blob/main/.specs/client-mosaic.json)
 
 ## When to use
@@ -20,14 +20,14 @@
 
 ## Don’t
 
-- For three equal story columns → use `client-mosaic-columns`.
-- For a plain wall with one quote → use `logo-wall-quote`.
+- For three equal story columns → use `client-story-columns`.
+- For a plain wall with one quote → use `logo-wall-section`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [bento-grid](bento-grid.md) — the grid the cells are laid in.
-- [client-mosaic-columns](client-mosaic-columns.md) — the three-column sibling with brand-coloured faces.
+- [client-story-columns](client-story-columns.md) — the three-column sibling with brand-coloured faces.
 - [logo](logo.md) — draws every client mark in the ink its fill needs.
 
 ## Props

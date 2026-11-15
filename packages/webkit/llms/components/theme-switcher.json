@@ -3,7 +3,7 @@
  "binding": "ThemeSwitcher",
  "import": "@aziontech/webkit/theme-switcher",
  "treeShakeableImport": "@aziontech/webkit/theme-switcher",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

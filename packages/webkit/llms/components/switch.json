@@ -3,7 +3,7 @@
  "binding": "Switch",
  "import": "@aziontech/webkit/switch",
  "treeShakeableImport": "@aziontech/webkit/switch",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

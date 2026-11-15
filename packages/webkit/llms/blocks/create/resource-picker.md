@@ -1,11 +1,11 @@
 # ResourcePicker (`create/resource-picker`)
 
-> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. The CreateAndDeploy variant of MultipageCreate binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
+> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. The CreateAndDeploy variant of MultipageCreate binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingsRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `FieldError`, `Item`, `Skeleton` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/resource-picker/resource-picker.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/resource-picker")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Item](../../components/item.md), [SettingRow](../../components/setting-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [Field](../../components/field.md), `FieldError`, [Input](../../components/input.md), [Item](../../components/item.md), [SettingsRow](../../components/settings-row.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [ToggleGroup](../../components/toggle-group.md)
 - Skills: `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -35,7 +35,7 @@ The band a create flow uses when the resource being created needs another resour
 
 `Card :padded="false"` titled with the bound noun ("Project"), opening with one muted sentence on what the binding does. The card is flush so the list rows run edge to edge; text and controls carry their own padding. It sits in the form column (`layout-column-form`) like any other band.
 
-For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch`, and its row description ends with why ("Always on."); a disabled control takes no focus, so a tooltip on it would never reach keyboard or screen-reader users.
+For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingsRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingsRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch`, and its row description ends with why ("Always on."); a disabled control takes no focus, so a tooltip on it would never reach keyboard or screen-reader users.
 
 ### B. Existing / New choice — `ToggleGroup` (required when something exists)
 
@@ -45,9 +45,9 @@ A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` 
 
 New swaps the list for the fields that create the resource, usually one Name `Field` with a large `Input` and a placeholder in the resource's own format. The `Field.Description` carries the allowed characters and becomes the required message once Next is pressed with it empty (`Field :required`). Nothing is judged while the user types.
 
-### D. Search and required message — `Input`, `HelperText` (optional)
+### D. Search and required message — `Input`, `FieldError` (optional)
 
-A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `HelperText type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
+A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `FieldError type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 
@@ -134,7 +134,7 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -353,11 +353,7 @@ Each variant is the same screen in another state: `get_block("create/resource-pi
               </template>
             </Input>
 
-            <HelperText
-              v-if="projectPicker.message"
-              type="required"
-              >{{ projectPicker.message }}</HelperText
-            >
+            <FieldError v-if="projectPicker.message">{{ projectPicker.message }}</FieldError>
           </div>
 
           <div class="border-t border-(--border-default)">

@@ -1,11 +1,11 @@
 # DnsZoneDetail (`detail/dns-zone-detail`)
 
-> A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `HelperText` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `HelperText`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.
+> A DNS zone detail page, opened from its index: a full-bleed tab bar with Main settings and Records over a scrolling tab panel. Main settings is a settings form in the form column: four stacked sections (General, Configure your nameserver, DNSSEC, Status), each an anchored heading with a hint glyph over a flush `Card` of `ItemList` rows. Name and Domain Name are required `Input`s that show a required `FieldError` only after a failed save; the three nameservers and, while DNSSEC is on, the key tag, algorithm, digest type and digest are read-only code `Input`s in an `InputGroupRoot` with a transparent `CopyButton`; DNSSEC and Active are `Switch`es; editing anything raises the save bar at the bottom. Records is a small-heading list inside the tab (Documentation and Add Record actions) with the TableView controls row (`PropertyFilter` over Name, Type, Policy and Value, Refresh, Download CSV and `CollectionPreferences`, all driven by `useCollection`) and a records table paginated at 10: the value cell pins a copy button, Weight and Description stay blank when they do not apply, the row menu carries Edit and Delete, and the empty slot separates no records (Add Record, Import zone file) from no match (Clear filters). Built from `PageHeader`, `PageTabs`, `SettingsSection`, `SettingsRow`, `SaveBar`, `Tabs`, `Card`, `ItemList`, `Input`, `InputGroupRoot`, `CopyButton`, `Switch`, `FieldError`, `Button`, `PropertyFilter`, `CollectionPreferences`, `DataTable` and `EmptyState`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/detail/dns-zone-detail/dns-zone-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/dns-zone-detail")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldDescription`, `FieldError`, [FileDropzone](../../components/file-dropzone.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -33,9 +33,9 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
 
-### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingRow`, `Input`, `HelperText` (required)
+### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldDescription`, `FieldError` (required)
 
-Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `HelperText` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
@@ -43,7 +43,7 @@ Values the user copies elsewhere (the three nameservers, and the key tag, algori
 
 ### D. Toggles — `Switch` (required)
 
-Enable DNSSEC and Active are compact `SettingRow`s whose control is a `Switch`. The DNSSEC key rows appear only while DNSSEC is on.
+Enable DNSSEC and Active are compact `SettingsRow`s whose control is a `Switch`. The DNSSEC key rows appear only while DNSSEC is on.
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 
@@ -102,7 +102,7 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 ## Accessibility
 
 - The form is labeled "Zone settings" and its fieldset has a visually hidden legend with the same words.
-- Each `Input` has an `aria-label` matching its row title; an `Input` with an error points to its `HelperText` through `aria-describedby`.
+- Each `Input` has an `aria-label` matching its row title; an `Input` with an error points to its `FieldError` through `aria-describedby`.
 - Every icon-only control has an `aria-label` and a `Tooltip` with the same words; decorative icons carry `aria-hidden="true"`.
 - The property filter has an `aria-label` that matches its placeholder, "Filter records".
 - Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
@@ -112,7 +112,7 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 - MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
-- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
 
 ## Importing a zone file
 
@@ -150,7 +150,8 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
@@ -159,7 +160,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
@@ -362,7 +363,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify your zone."
                       >
@@ -377,15 +378,14 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                           :disabled="saving"
                           @update:model-value="errors.name = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           :id="nameMessageId"
-                          type="required"
-                          :label="errors.name"
-                        />
-                      </SettingRow>
+                          >{{ errors.name }}</FieldError
+                        >
+                      </SettingsRow>
 
-                      <SettingRow
+                      <SettingsRow
                         title="Domain name"
                         description="Provide the domain name you want to host. Example: example.com."
                       >
@@ -400,13 +400,12 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                           :disabled="saving"
                           @update:model-value="errors.domain = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.domain"
                           :id="domainMessageId"
-                          type="required"
-                          :label="errors.domain"
-                        />
-                      </SettingRow>
+                          >{{ errors.domain }}</FieldError
+                        >
+                      </SettingsRow>
                     </ItemList>
                   </template>
                 </Card>
@@ -420,7 +419,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Nameservers"
                         description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
                         stackable
@@ -448,12 +447,10 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                             />
                           </InputGroupRoot>
                         </div>
-                        <HelperText
-                          :id="nameserverMessageId"
-                          type="helper"
-                          label="Add the nameservers in your domain provider."
-                        />
-                      </SettingRow>
+                        <FieldDescription :id="nameserverMessageId"
+                          >Add the nameservers in your domain provider.</FieldDescription
+                        >
+                      </SettingsRow>
                     </ItemList>
                   </template>
                 </Card>
@@ -467,7 +464,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Enable DNSSEC"
                         description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
                         variant="compact"
@@ -477,10 +474,10 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                           aria-label="Enable DNSSEC"
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
 
                       <template v-if="settings.dnssec">
-                        <SettingRow
+                        <SettingsRow
                           v-for="key in dnssecKeys"
                           :key="key.label"
                           :title="key.label"
@@ -505,7 +502,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                               size="small"
                             />
                           </InputGroupRoot>
-                        </SettingRow>
+                        </SettingsRow>
                       </template>
                     </ItemList>
                   </template>
@@ -520,7 +517,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="When active, the zone answers authoritative DNS queries for the domain."
                         variant="compact"
@@ -530,7 +527,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                           aria-label="Active"
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </ItemList>
                   </template>
                 </Card>

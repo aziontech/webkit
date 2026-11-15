@@ -10,13 +10,13 @@
   "Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.",
   "Progress with no discrete, nameable steps (a percentage, an upload) → use `progress`.",
   "Switching between peer views that are not ordered and have no completion → use `tabs`.",
-  "A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow`."
+  "A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow-diagram`."
  ],
  "related": [
   "doc-steps` — the same numbered-dot shape for prose; static, never current, never navigable.",
   "tabs` — peer views with no order and no completion.",
   "progress` — continuous progress with no named steps.",
-  "flow` — a machine's stages, reported rather than navigated."
+  "flow-diagram` — a machine's stages, reported rather than navigated."
  ],
  "bestPractices": [
   "Give every step a title that names the decision (`Where it runs`), not the control (`Select`).",

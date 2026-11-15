@@ -25,7 +25,7 @@
 - A KPI figure → use `stat-tile`, which is its own surface.
 - A general content card with no chart → use `card`.
 - A chart inline in a page section with its own heading → render `chart` alone.
-- A table, a log or a form panel on a dashboard that is not a chart → use `card` (composed in a `board` item for span and height); a grid of draggable, resizable cards → let `board` / `board-item` own the span, the height and their bounds.
+- A table, a log or a form panel on a dashboard that is not a chart → use `card` (composed in a `dashboard-grid` item for span and height); a grid of draggable, resizable cards → let `dashboard-grid` / `dashboard-grid-item` own the span, the height and their bounds.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

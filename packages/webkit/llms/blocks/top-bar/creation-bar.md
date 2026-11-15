@@ -1,11 +1,11 @@
 # CreationBar (`top-bar/creation-bar`)
 
-> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the CreateHub render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
+> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `AppHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the CreateHub render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `AppHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
 
 - Surface: app
 - Source: `blocks/top-bar/creation-bar/creation-bar.vue` in `@aziontech/webkit`
 - MCP: `get_block("top-bar/creation-bar")`
-- Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
+- Components: [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -28,9 +28,9 @@ The top bar of the focused creation shell: create, edit and deploy flows that ru
 
 ## Building blocks
 
-### A. Bar — `GlobalHeader` (required)
+### A. Bar — `AppHeader` (required)
 
-Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `GlobalHeader.Start`, the avatar in `GlobalHeader.End`; `GlobalHeader.Center` stays empty. Exactly one header per page.
+Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `AppHeader.Start`, the avatar in `AppHeader.End`; `AppHeader.Center` stays empty. Exactly one header per page.
 
 ### B. Back — `IconButton` (required until the flow is terminal)
 
@@ -38,7 +38,7 @@ Small, outlined, chevron icon, a link (`href`) to the list the flow started from
 
 ### C. Brand — `Brand` (required)
 
-Inside `GlobalHeader.Brand`, linked to the home route with `aria-label="Azion home"`.
+Inside `AppHeader.Brand`, linked to the home route with `aria-label="Azion home"`.
 
 ### D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
 
@@ -100,11 +100,11 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
 
 ```vue
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 
@@ -115,8 +115,8 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
 
 <template>
   <div class="w-full bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <Tooltip
           content="Back to Resources"
           placement="bottom"
@@ -129,7 +129,7 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
             href="/resources"
           />
         </Tooltip>
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -140,11 +140,11 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -203,8 +203,8 @@ Each variant is the same screen in another state: `get_block("top-bar/creation-b
             </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
   </div>
 </template>
 ```

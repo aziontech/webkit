@@ -32,7 +32,7 @@
 - [section-container](section-container.md) — the framed column this module stacks inside.
 - [section-title](section-title.md) — the header row this module renders by default.
 - [card-grid](card-grid.md) — the edge-to-edge cell grid a module's body commonly holds.
-- [frame-box](frame-box.md) — the registration frame a body wraps itself in.
+- [registration-frame](registration-frame.md) — the registration frame a body wraps itself in.
 
 ## Props
 

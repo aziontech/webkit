@@ -1,6 +1,6 @@
 # Skeleton
 
-> Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use AiLoading. A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
+> Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use ResponseLoading. A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
 
 - Import: `import Skeleton from '@aziontech/webkit/skeleton'`
 - Category: feedback · Surface: app · Structure: monolithic

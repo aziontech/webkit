@@ -1,9 +1,9 @@
 # Article Index
 
-> Every article or resource of a blog or a resource hub as one ruled list, with the controls to narrow it on one row. `filters` picks the filter bar: `category-search` draws a category picker and a search field (the blog), `facets` draws one dropdown per facet — content type, category, industry — that wraps when it runs out of room (a resource hub). Each entry is a row — its cover on the left, and on the right its overline, headline, a deck and, when it has them, its writers with the byline; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The filters combine; a facet dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `select`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term, the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.
+> Every article or resource of a blog or a resource hub as one ruled list, with the controls to narrow it on one row. `filters` picks the filter bar: `category-search` draws a category picker and a search field (the blog), `facets` draws one dropdown per facet — content type, category, industry — that wraps when it runs out of room (a resource hub). Each entry is a row — its cover on the left, and on the right its overline, headline, a deck and, when it has them, its writers with the byline; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The filters combine; a facet dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `toggle-group`, `select`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term, the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.
 
 - Import: `import ArticleIndex from '@aziontech/webkit/article-index'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [article-index.json](https://github.com/aziontech/webkit/blob/main/.specs/article-index.json)
 
 ## When to use
@@ -20,16 +20,16 @@
 
 ## Don’t
 
-- For a card grid of customer stories with search and facets → use `story-library`.
-- For a filterable list of non-article rows (jobs) → use `listing-browser`.
+- For a card grid of customer stories with search and facets → use `story-index`.
+- For a filterable list of non-article rows (jobs) → use `listing-index`.
 - For a closing row of related articles → use `article-cards`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [article-highlight](article-highlight.md) — the band that opens the blog above this list.
-- [story-library](story-library.md) — the card-grid library with search and facets.
-- [listing-browser](listing-browser.md) — the filterable list of job rows.
+- [story-index](story-index.md) — the card-grid library with search and facets.
+- [listing-index](listing-index.md) — the filterable list of job rows.
 
 ## Props
 

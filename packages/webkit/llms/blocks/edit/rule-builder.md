@@ -1,11 +1,11 @@
 # RuleBuilder (`edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingsRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `FieldDescription`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
 - Source: `blocks/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/rule-builder")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), `FieldDescription`, [Input](../../components/input.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
@@ -37,21 +37,21 @@ A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined m
 
 A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name, which shows "Name is required." only after Save is pressed with it empty, and an optional Description. Fields are disabled while saving.
 
-### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `HelperText` (optional)
+### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `FieldDescription` (optional)
 
-Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `variant="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
+Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `variant="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `FieldDescription` explains why.
 
 ### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 
 An `AttributeEditor` in grouped mode (`v-model:groups`), large, named "Criteria": each group is an AND group of condition rows, groups are joined by an "or" `Separator`, and the editor draws the labels, Add condition under each group, Add OR group at the end, Remove condition per row, the limits (10 conditions per group, 5 groups), focus after add and remove, and the polite "Item n added" and "Item n removed" announcements. Its cells are replaced through `cell-<key>` slots: the variable is a `Combobox` of the variables of the chosen phase that also takes a typed one, the operator a `Select`, and the argument an `Input` that turns into a disabled "No argument" field for exists and does not exist. `min-items="1"` keeps one condition. A missing variable shows "Enter the variable to compare." under it, only after Save, through the editor's `errors`. `reorderable` lets conditions and whole OR groups move by their grip, with Move up and Move down, or with Alt+Arrow Up and Alt+Arrow Down inside a row; the editor announces each move. Conditions are evaluated in the order shown, so the cheapest or most selective one goes first.
 
-### E. Behaviors — `SettingsSection`, `Card`, `AttributeEditor`, `Select`, `Input`, `HelperText` (required)
+### E. Behaviors — `SettingsSection`, `Card`, `AttributeEditor`, `Select`, `Input`, `FieldDescription` (required)
 
-A Then list run top to bottom, drawn by a second `AttributeEditor` in list mode (`v-model:items`, large, `reorderable`, `limit` 10, `min-items` 1) named "Behaviors" with Behavior and Argument columns. The `cell-type` slot is a behavior `Select` with its own search `Input`, listing only behaviors valid in the chosen phase; the `cell-argument` slot is the `Input`, `Select` or group of `Input`s that the behavior takes (a disabled "No argument" field when it takes none), with a `HelperText` where the argument needs one. The editor owns the grip, Move up and Move down, Alt+Arrow keys, Remove behavior, the limit text, focus and announcements; Add behavior is disabled while the last behavior ends the rule, and the `info` slot says so ("Deliver ends the rule. Nothing after it runs.").
+A Then list run top to bottom, drawn by a second `AttributeEditor` in list mode (`v-model:items`, large, `reorderable`, `limit` 10, `min-items` 1) named "Behaviors" with Behavior and Argument columns. The `cell-type` slot is a behavior `Select` with its own search `Input`, listing only behaviors valid in the chosen phase; the `cell-argument` slot is the `Input`, `Select` or group of `Input`s that the behavior takes (a disabled "No argument" field when it takes none), with a `FieldDescription` where the argument needs one. The editor owns the grip, Move up and Move down, Alt+Arrow keys, Remove behavior, the limit text, focus and announcements; Add behavior is disabled while the last behavior ends the rule, and the `info` slot says so ("Deliver ends the rule. Nothing after it runs.").
 
-### F. Status — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Switch` (required)
+### F. Status — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Switch` (required)
 
-A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a `Switch`. The hint says an inactive rule keeps its place in the order and is skipped at runtime.
+A flush `Card` with an `Item.List` holding one `SettingsRow` titled Active with a `Switch`. The hint says an inactive rule keeps its place in the order and is skipped at runtime.
 
 ### G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
@@ -129,7 +129,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -137,7 +137,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
@@ -742,11 +742,10 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                           >{{ phase.label }}</RadioGroup.Item
                         >
                       </RadioGroup>
-                      <HelperText
-                        v-if="editing"
-                        type="disabled"
-                        label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
-                      />
+                      <FieldDescription v-if="editing"
+                        >A rule’s phase is set when it is created. Create a rule in the other phase
+                        to run these behaviors there.</FieldDescription
+                      >
                     </div>
                   </div>
                 </template>
@@ -948,9 +947,11 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                                   </Select.Item>
                                 </Select.Content>
                               </Select>
-                              <HelperText v-if="behaviorArgumentNote(argument.source, form.phase)">
+                              <FieldDescription
+                                v-if="behaviorArgumentNote(argument.source, form.phase)"
+                              >
                                 {{ behaviorArgumentNote(argument.source, form.phase) }}
-                              </HelperText>
+                              </FieldDescription>
                             </div>
                             <div
                               v-else-if="argument?.kind === 'group'"
@@ -1000,7 +1001,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Active"
                       description="Turn the rule on right after it is created."
                       variant="compact"
@@ -1010,7 +1011,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                         aria-label="Active"
                         :disabled="submitting"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>

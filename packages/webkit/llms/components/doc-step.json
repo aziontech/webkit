@@ -3,7 +3,7 @@
  "binding": "DocStep",
  "import": "@aziontech/webkit/doc-step",
  "treeShakeableImport": "@aziontech/webkit/doc-step",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

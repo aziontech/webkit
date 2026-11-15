@@ -24,7 +24,7 @@
 - For the full-bleed band at the top of a page → use `hero`, which is the hero rule.
 - For one band inside the column → use `section-module`, the brick this container stacks.
 - For a hairline grid of cells → use `card-grid`, which draws its rules as gaps.
-- For a bordered box around arbitrary content → use `frame-box`.
+- For a bordered box around arbitrary content → use `registration-frame`.
 - Built to be personalized (style seam): any class is accepted on the tag.
 
 ## Related
@@ -32,7 +32,7 @@
 - [hero](hero.md) — the full-bleed opening band above this column; its `border-b` is this column's top edge.
 - [section-module](section-module.md) — the brick stacked inside this column.
 - [card-grid](card-grid.md) — the hairline cell grid a module's body holds.
-- [frame-box](frame-box.md) — the registration frame a module wraps its body in.
+- [registration-frame](registration-frame.md) — the registration frame a module wraps its body in.
 
 ## Props
 
@@ -70,22 +70,22 @@
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
 </script>
 
 <template>
   <SectionContainer max-width="7xl">
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">First band</div>
-    </FrameBox>
-    <FrameBox
+    </RegistrationFrame>
+    <RegistrationFrame
       flush
       borders="y"
       marks="bottom"
     >
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Second band</div>
-    </FrameBox>
+    </RegistrationFrame>
   </SectionContainer>
 </template>
 ```
@@ -94,31 +94,31 @@
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <SectionContainer max-width="4xl">
-      <FrameBox borders="y"
+      <RegistrationFrame borders="y"
         ><div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
           4xl
-        </div></FrameBox
+        </div></RegistrationFrame
       >
     </SectionContainer>
     <SectionContainer max-width="6xl">
-      <FrameBox borders="y"
+      <RegistrationFrame borders="y"
         ><div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
           6xl
-        </div></FrameBox
+        </div></RegistrationFrame
       >
     </SectionContainer>
     <SectionContainer max-width="site">
-      <FrameBox borders="y"
+      <RegistrationFrame borders="y"
         ><div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
           site
-        </div></FrameBox
+        </div></RegistrationFrame
       >
     </SectionContainer>
   </div>
@@ -129,17 +129,17 @@
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
 </script>
 
 <template>
   <SectionContainer :bordered="false">
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">
         A column inside another frame draws no sides
       </div>
-    </FrameBox>
+    </RegistrationFrame>
   </SectionContainer>
 </template>
 ```

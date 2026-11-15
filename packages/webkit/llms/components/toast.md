@@ -32,7 +32,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 - The message must stay visible next to the content it concerns → use `alert`.
 - The user must decide something before continuing → use `dialog`.
-- Validation feedback for a single field → use `helper-text`.
+- Validation feedback for a single field → use `field-error`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

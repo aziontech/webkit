@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogView. An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.",
+ "purpose": "Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogViewer. An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.",
  "setup": null,
  "useWhen": [
   "Editing a function, a script, a SQL query, a JSON or YAML document inside the product.",
@@ -22,7 +22,7 @@
   "Showing a read-only change between two versions (what a release or a revert changes, a configuration before and after) → use `code-block` with the tab's `original`; diff mode is for editing beside the original, not for reviewing a change nobody edits.",
   "A one-line value such as a header, a regex or a path → use `input` inside a `field`.",
   "Free prose or a description → use `textarea`.",
-  "A stream of log lines → use `log-view`.",
+  "A stream of log lines → use `log-viewer`.",
   "A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both)."
  ],
  "related": [
@@ -30,7 +30,7 @@
   "textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.",
   "field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.",
   "toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.",
-  "log-view` — output of a run next to the editor."
+  "log-viewer` — output of a run next to the editor."
  ],
  "bestPractices": [
   "Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.",

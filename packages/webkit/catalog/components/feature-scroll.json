@@ -1,5 +1,5 @@
 {
- "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).",
+ "purpose": "The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).",
  "useWhen": [
   "Use FeatureScroll for the product-page walkthrough, one pinned screen (scene or code) per feature.",
   "To walk through four to six capabilities of one product, each with a picture of its own.",
@@ -7,7 +7,7 @@
  ],
  "avoidWhen": [
   "For three reasons with no scroll story → use `feature-tiles`.",
-  "For one claim beside one code sample → use `media-split-band` with `codeTabs`.",
+  "For one claim beside one code sample → use `media-split-section` with `codeTabs`.",
   "In a hand-built SFC that needs its own media slot → use `sticky-stack` directly."
  ],
  "related": [
@@ -16,7 +16,7 @@
  ],
  "bestPractices": [
   "Four to six items; the stack needs enough steps to earn the scroll.",
-  "Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ProductWidget` (`{ component: 'ProductWidget', props: { name } }`): it shows the console itself.",
+  "Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.",
   "Keep `action` to a short label such as \"Docs\" — it sits under the step copy at the small size."
  ]
 }

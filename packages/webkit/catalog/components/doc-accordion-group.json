@@ -1,5 +1,5 @@
 {
- "purpose": "The FAQ and \"expand for detail\" block of a documentation page. It reads the `title` of each `DocAccordionItem` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size=\"large\"`.",
+ "purpose": "The FAQ and \"expand for detail\" block of a documentation page. It reads the `title` of each `DocAccordion` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size=\"large\"`.",
  "useWhen": [
   "Use DocAccordionGroup only inside documentation pages (Markdown AccordionGroup); product UI uses Accordion.",
   "A list of questions with answers at the end of a guide.",
@@ -11,7 +11,7 @@
   "Inside an application screen — use `Accordion` directly."
  ],
  "related": [
-  "DocAccordionItem` — the entry it reads.",
+  "DocAccordion` — the entry it reads.",
   "Accordion` — the design-system surface it renders on.",
   "Faq` — the marketing FAQ band."
  ],

@@ -1,9 +1,9 @@
 # Feature Scroll
 
-> The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).
+> The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
 
 - Import: `import FeatureScroll from '@aziontech/webkit/feature-scroll'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-scroll.json)
 
 ## When to use
@@ -15,13 +15,13 @@
 ## Do
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ProductWidget` (`{ component: 'ProductWidget', props: { name } }`): it shows the console itself.
+- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Don’t
 
 - For three reasons with no scroll story → use `feature-tiles`.
-- For one claim beside one code sample → use `media-split-band` with `codeTabs`.
+- For one claim beside one code sample → use `media-split-section` with `codeTabs`.
 - In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -35,7 +35,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. |
@@ -56,7 +56,7 @@
 
 - Visible focus: owned by the composed `button`.
 - Keyboard map: `Tab` reaches each step's action and a code sample's copy button; `Enter` follows it; the stack's own progression is scroll-driven and never traps focus.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ProductWidget` is a decorative console picture).
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ConsoleMockup` is a decorative console picture).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the step transition belongs to `sticky-stack`, which carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the per-step action is a small `button` on the large layout only, where pointer precision is available.
@@ -153,7 +153,7 @@
         title: 'Every workload on one list',
         description:
           'See each workload with its domain, status and last deployment, so what is live is never a question.',
-        scene: { component: 'ProductWidget', props: { name: 'workloads-list' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workloads-list' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -164,7 +164,7 @@
         title: 'Read the deployment topology',
         description:
           'The domains, the application and the firewall a workload serves, drawn as one chain.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-topology' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-topology' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -175,7 +175,7 @@
         title: 'Domains and TLS, handled',
         description:
           'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-domains' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-domains' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -186,7 +186,7 @@
         title: 'Ship a version in seconds',
         description:
           'Build, upload, propagate and warm the cache, every step streamed as it happens until the version is live everywhere.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-deploy' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-deploy' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -197,7 +197,7 @@
         title: 'Gradual rollouts and instant rollback',
         description:
           'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-rollout-rows' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-rollout-rows' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',

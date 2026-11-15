@@ -10,13 +10,13 @@
   "For the full-bleed band at the top of a page → use `hero`, which is the hero rule.",
   "For one band inside the column → use `section-module`, the brick this container stacks.",
   "For a hairline grid of cells → use `card-grid`, which draws its rules as gaps.",
-  "For a bordered box around arbitrary content → use `frame-box`."
+  "For a bordered box around arbitrary content → use `registration-frame`."
  ],
  "related": [
   "hero` — the full-bleed opening band above this column; its `border-b` is this column's top edge.",
   "section-module` — the brick stacked inside this column.",
   "card-grid` — the hairline cell grid a module's body holds.",
-  "frame-box` — the registration frame a module wraps its body in."
+  "registration-frame` — the registration frame a module wraps its body in."
  ],
  "bestPractices": [
   "Leave `padded` off for a stack of modules: each brick owns its own padding, and column padding would double it and pull the bricks off the frame.",

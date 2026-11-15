@@ -3,7 +3,7 @@
 > Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress. The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress bar while it uploads and its own error or warning line when it cannot be sent. It pairs with `file-dropzone` (which receives the files) and with a Browse files button: the product keeps the list, the group renders it and reports which token was removed. Taken from Cloudscape's file token group; the Console Kit and the design sample list files by hand.
 
 - Import: `import FileTokenGroup from '@aziontech/webkit/file-token-group'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [file-token-group.json](https://github.com/aziontech/webkit/blob/main/.specs/file-token-group.json)
 
 ## When to use

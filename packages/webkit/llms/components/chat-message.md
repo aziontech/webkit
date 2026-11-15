@@ -32,7 +32,7 @@
 - [streaming-response](streaming-response.md) — the safe Markdown renderer for assistant content.
 - [reasoning](reasoning.md), `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.
 - [copy-button](copy-button.md), `icon-button` — the actions composed into `ChatMessage.Actions`.
-- [ai-loading](ai-loading.md) — what `pending` renders.
+- [response-loading](response-loading.md) — what `pending` renders.
 
 ## Props
 
@@ -44,7 +44,7 @@
 | `status` | `'pending' \| 'streaming' \| 'success' \| 'error'` | `'success'` | false | Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again. |
 | `grouped` | `boolean` | `false` | false | Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn. |
 | `errorMessage` | `string` | `''` | false | Error text shown while `status` is `error`. Empty uses the locale catalog. |
-| `loadingLabel` | `string` | `''` | false | Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`). |
+| `loadingLabel` | `string` | `''` | false | Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`). |
 
 ## Events
 
@@ -74,14 +74,14 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
 - `chat-message-actions/chat-message-actions.vue` — `role="group"` row of inline actions; renders nothing unless the message `status` is `success`.
   - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`).
   - Slot: `default` — the icon actions.
-  - `data-testid` fallback: `ai-chat-message-actions`.
+  - `data-testid` fallback: `chat-message-actions`.
 - `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="status"` line reads `Submitting feedback` (while `loading`) then `Feedback submitted`. A choice is final.
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
-  - `data-testid` fallback: `ai-chat-message-feedback`.
+  - `data-testid` fallback: `chat-message-feedback`.
 
 Exported types: `ChatMessageFrom`, `ChatMessageStatus`, `ChatMessageFeedbackValue`. Composed DS
-components: `avatar`, `button`, `ai-loading`, `icon-button`, `tooltip`.
+components: `avatar`, `button`, `response-loading`, `icon-button`, `tooltip`.
 
 ```
 packages/webkit/src/components/ai/chat-message/
@@ -98,7 +98,7 @@ packages/webkit/src/components/ai/chat-message/
 
 - `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
 - `aria-busy="true"` while `pending` or `streaming`.
-- `pending`: `AiLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
+- `pending`: `ResponseLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
 - `success`: the `actions` slot renders.
 
@@ -120,20 +120,20 @@ packages/webkit/src/components/ai/chat-message/
 
 ## Internationalization
 
-| Key                              | English source                           | Override prop  |
-| -------------------------------- | ---------------------------------------- | -------------- |
-| `chatMessage.user`               | `You`                                    | `author`       |
-| `chatMessage.assistant`          | `AI assistant`                           | `author`       |
-| `chatMessage.system`             | `System`                                 | `author`       |
-| `chatMessage.labelWithTime`      | `{author} at {time}`                     | —              |
-| `chatMessage.error`              | `The response could not be generated.`   | `errorMessage` |
-| `chatMessage.retry`              | `Try again`                              | —              |
-| `chatMessage.actions`            | `Message actions`                        | `ariaLabel` (Actions) |
-| `chatMessage.helpful`            | `Helpful`                                | —              |
-| `chatMessage.notHelpful`         | `Not helpful`                            | —              |
-| `chatMessage.feedback`           | `Response feedback`                      | —              |
-| `chatMessage.feedbackSubmitting` | `Submitting feedback`                    | —              |
-| `chatMessage.feedbackSubmitted`  | `Feedback submitted`                     | —              |
+| Key                              | English source                         | Override prop         |
+| -------------------------------- | -------------------------------------- | --------------------- |
+| `chatMessage.user`               | `You`                                  | `author`              |
+| `chatMessage.assistant`          | `AI assistant`                         | `author`              |
+| `chatMessage.system`             | `System`                               | `author`              |
+| `chatMessage.labelWithTime`      | `{author} at {time}`                   | —                     |
+| `chatMessage.error`              | `The response could not be generated.` | `errorMessage`        |
+| `chatMessage.retry`              | `Try again`                            | —                     |
+| `chatMessage.actions`            | `Message actions`                      | `ariaLabel` (Actions) |
+| `chatMessage.helpful`            | `Helpful`                              | —                     |
+| `chatMessage.notHelpful`         | `Not helpful`                          | —                     |
+| `chatMessage.feedback`           | `Response feedback`                    | —                     |
+| `chatMessage.feedbackSubmitting` | `Submitting feedback`                  | —                     |
+| `chatMessage.feedbackSubmitted`  | `Feedback submitted`                   | —                     |
 
 - Formatting: the owner formats `timestamp` (`Intl.DateTimeFormat` with the provider locale).
 

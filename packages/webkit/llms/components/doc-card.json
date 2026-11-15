@@ -3,7 +3,7 @@
  "binding": "DocCard",
  "import": "@aziontech/webkit/doc-card",
  "treeShakeableImport": "@aziontech/webkit/doc-card",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

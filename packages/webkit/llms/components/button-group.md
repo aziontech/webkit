@@ -3,7 +3,7 @@
 > A toolbar of icon actions that belong to one surface (a code panel, a table header, a preview), after Cloudscape's button group. Each item is an icon button that names itself in a tooltip: a plain action, an on / off toggle, or a menu of options. Items past `visibleCount` collapse into one More actions menu. The toolbar is one tab stop with roving focus, so a row of six icons costs the keyboard user one Tab, not six.
 
 - Import: `import ButtonGroup from '@aziontech/webkit/button-group'`
-- Category: actions · Surface: app · Structure: monolithic
+- Category: action · Surface: app · Structure: monolithic
 - API as JSON: [button-group.json](https://github.com/aziontech/webkit/blob/main/.specs/button-group.json)
 
 ## When to use

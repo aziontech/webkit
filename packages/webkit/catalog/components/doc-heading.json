@@ -1,5 +1,5 @@
 {
- "purpose": "A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.",
+ "purpose": "A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.",
  "useWhen": [
   "Use DocHeading only for h2/h3 inside documentation pages; a console page band uses SectionHeader.",
   "Every `h2`–`h4` on a docs page that the page rail lists.",
@@ -11,7 +11,7 @@
  ],
  "related": [
   "DocOnThisPage` — the rail that points at the ids.",
-  "useHeadingNav` — the page-provided scroll handler.",
+  "useHeadingNavigation` — the page-provided scroll handler.",
   "DocProse` — skips `[data-doc-anchor]` in its link rules."
  ],
  "bestPractices": [

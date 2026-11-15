@@ -3,7 +3,7 @@
  "binding": "NumberInput",
  "import": "@aziontech/webkit/number-input",
  "treeShakeableImport": "@aziontech/webkit/number-input",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

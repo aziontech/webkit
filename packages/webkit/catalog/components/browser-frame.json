@@ -12,12 +12,12 @@
   "For third-party content loaded from another origin → use `embed`.",
   "For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.",
   "For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.",
-  "For a framed page section or grid cell → use `frame-box`."
+  "For a framed page section or grid cell → use `registration-frame`."
  ],
  "related": [
   "doc-frame` — the documentation figure frame for stills and clips; no live viewport.",
   "embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.",
-  "frame-box` — the page's registration frame (hairlines + corner marks), not a window.",
+  "registration-frame` — the page's registration frame (hairlines + corner marks), not a window.",
   "copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value."
  ],
  "bestPractices": [

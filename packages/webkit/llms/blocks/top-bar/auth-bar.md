@@ -1,11 +1,11 @@
 # AuthBar (`top-bar/auth-bar`)
 
-> The console bar for the signed-out and onboarding screens: sign in, sign up, password recovery and the first-run steps. A `GlobalHeader` in its default `content` placement with the brand at the start and one outlined Documentation button at the end. There is no navigation, no search and no account control, because there is no session to act on yet. Built from `GlobalHeader`, `Button` and `Brand`.
+> The console bar for the signed-out and onboarding screens: sign in, sign up, password recovery and the first-run steps. A `AppHeader` in its default `content` placement with the brand at the start and one outlined Documentation button at the end. There is no navigation, no search and no account control, because there is no session to act on yet. Built from `AppHeader`, `Button` and `Brand`.
 
 - Surface: app
 - Source: `blocks/top-bar/auth-bar/auth-bar.vue` in `@aziontech/webkit`
 - MCP: `get_block("top-bar/auth-bar")`
-- Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [GlobalHeader](../../components/global-header.md)
+- Components: [AppHeader](../../components/app-header.md), [Brand](../../components/brand.md), [Button](../../components/button.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
@@ -23,13 +23,13 @@ The top bar of every signed-out and first-run screen: sign in, sign up, password
 ## When not to use
 
 - Any page with a session: `ConsoleLayout` already renders the console bar (`shell/console`); a create, edit or deploy flow uses `top-bar/creation-bar`.
-- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteNav` render theirs (`shell/site`).
+- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteHeader` render theirs (`shell/site`).
 
 ## Building blocks
 
-### A. Bar — `GlobalHeader` (required)
+### A. Bar — `AppHeader` (required)
 
-The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `GlobalHeader.Brand` and `GlobalHeader.End`; keep `GlobalHeader.Center` empty. Never a bare `<header>`.
+The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `AppHeader.Brand` and `AppHeader.End`; keep `AppHeader.Center` empty. Never a bare `<header>`.
 
 ### B. Brand — `Brand` (required)
 
@@ -56,7 +56,7 @@ One outlined, medium button with the book icon and an `href` to the docs. It is 
 
 ## Accessibility
 
-- The `GlobalHeader` is a landmark with its own label (`Console`); keep one per page.
+- The `AppHeader` is a landmark with its own label (`Console`); keep one per page.
 - The brand is a link with an accessible name, not a decorative image.
 - Tab order is brand, then Documentation; nothing else in the bar takes focus.
 
@@ -81,18 +81,18 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
 
 ```vue
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import GlobalHeader from '@aziontech/webkit/global-header'
 </script>
 
 <template>
   <div class="w-full bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/home"
           aria-label="Azion home"
@@ -103,9 +103,9 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -113,8 +113,8 @@ Each variant is the same screen in another state: `get_block("top-bar/auth-bar",
           icon="ai ai-book"
           href="/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
   </div>
 </template>
 ```
