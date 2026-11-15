@@ -20,7 +20,8 @@ export {
   keepIds,
   normalizeSeries,
   OTHER_SERIES_ID,
-  seriesTotal
+  seriesTotal,
+  thresholdToken
 } from './series'
 export type { StackLayer } from './stack'
 export { stackedMax, stackValues } from './stack'
@@ -37,5 +38,7 @@ export type {
   ChartSeverity,
   ChartSlot,
   ChartStatus,
+  ChartThreshold,
+  ChartThresholdSeverity,
   NormalizedSeries
 } from './types'

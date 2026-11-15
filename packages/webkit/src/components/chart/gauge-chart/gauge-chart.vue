@@ -8,27 +8,14 @@
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import {
-    type ChartSeverity,
-    type ChartStatus,
-    colorToken,
-    formatCompact,
-    isFiniteNumber
-  } from '../_lib'
+  import { type ChartThreshold, formatCompact, isFiniteNumber, thresholdToken } from '../_lib'
   import { ChartCardInjectionKey } from '../chart-card/injection-key'
 
   defineOptions({ name: 'GaugeChart', inheritAttrs: false })
 
   export type GaugeChartSize = 'small' | 'medium' | 'large'
 
-  export interface GaugeChartThreshold {
-    /** The value from which this band applies, up to the next threshold. */
-    value: number
-    /** Status or severity color the arc takes inside this band. */
-    color: ChartStatus | ChartSeverity
-    /** Name of the band, read after the value (for example `Critical`). */
-    label?: string
-  }
+  export type { ChartThreshold, ChartThresholdSeverity } from '../_lib'
 
   interface Props {
     /** The reading. Null or absent renders the empty state. */
@@ -40,7 +27,7 @@
     /** Caption under the reading: what is measured, or the unit. */
     label?: string
     /** Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track. */
-    thresholds?: GaugeChartThreshold[]
+    thresholds?: ChartThreshold[]
     /** Formats the reading and the scale ends. */
     formatValue?: (value: number) => string
     /** Width of the dial: 160, 224 or 288 pixels. */
@@ -117,12 +104,12 @@
       .sort((a, b) => a.value - b.value)
   )
   const band = computed(() => {
-    let current: GaugeChartThreshold | null = null
+    let current: ChartThreshold | null = null
     for (const entry of bands.value) if (reading.value >= entry.value) current = entry
     return current
   })
   const color = computed(() =>
-    band.value ? colorToken(band.value.color) : 'var(--chart-series-1)'
+    band.value ? thresholdToken(band.value.severity) : 'var(--chart-series-1)'
   )
   const filled = computed(() => share(reading.value))
   const ticks = computed(() =>
@@ -263,7 +250,7 @@
       :aria-labelledby="labelledBy"
       :aria-describedby="rangeId"
       :data-size="size"
-      :data-status="band ? band.color : null"
+      :data-severity="band ? band.severity : null"
       :data-testid="`${testId}__meter`"
       class="relative flex w-full flex-col items-center data-[size=large]:max-w-72 data-[size=medium]:max-w-56 data-[size=small]:max-w-40"
     >

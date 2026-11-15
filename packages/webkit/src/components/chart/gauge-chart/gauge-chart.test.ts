@@ -6,9 +6,9 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import GaugeChart from './gauge-chart.vue'
 
 const thresholds = [
-  { value: 0, color: 'success' as const, label: 'Healthy' },
-  { value: 70, color: 'warning' as const, label: 'Busy' },
-  { value: 90, color: 'danger' as const, label: 'Critical' }
+  { value: 0, severity: 'success' as const, label: 'Healthy' },
+  { value: 70, severity: 'warning' as const, label: 'Busy' },
+  { value: 90, severity: 'danger' as const, label: 'Critical' }
 ]
 
 const mount = (props: Record<string, unknown> = {}, dir: 'ltr' | 'rtl' = 'ltr') =>
@@ -40,10 +40,32 @@ describe('GaugeChart', () => {
     expect(meter.getAttribute('aria-valuetext')).toBe('62%')
   })
 
+  it('reads the shared ChartThreshold severity map: findings levels and neutral', () => {
+    const view = mount({
+      value: 50,
+      thresholds: [
+        { value: 0, severity: 'neutral', label: 'Idle' },
+        { value: 40, severity: 'severity-high', label: 'High' }
+      ]
+    })
+    expect(view.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
+      'var(--severity-high)'
+    )
+    view.unmount()
+    const idle = mount({
+      value: 10,
+      thresholds: [{ value: 0, severity: 'neutral', label: 'Idle' }]
+    })
+    expect(idle.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
+      'var(--chart-label)'
+    )
+  })
+
   it('takes the color and name of the band the value falls in', () => {
     const view = mount({ value: 93, thresholds })
     const meter = view.getByRole('meter')
-    expect(meter.getAttribute('data-status')).toBe('danger')
+    expect(meter.getAttribute('data-severity')).toBe('danger')
+    expect(meter.hasAttribute('data-status')).toBe(false)
     expect(meter.getAttribute('aria-valuetext')).toBe('93%, Critical')
     expect(view.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
       'var(--chart-status-danger)'

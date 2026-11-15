@@ -1,13 +1,10 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { type ChartStatus, isFiniteNumber } from '../../_lib'
+  import { type ChartThresholdSeverity, isFiniteNumber, thresholdToken } from '../../_lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartReference', inheritAttrs: false })
-
-  /** Tone of a reference: neutral, or the status that crossing it means. */
-  export type ChartReferenceSeverity = 'neutral' | ChartStatus
 
   interface Props {
     /** Value the reference line is drawn at. Leave unset and set `from` and `to` for a band. */
@@ -18,8 +15,8 @@
     to?: number
     /** Name of the reference, drawn at the end of the line or inside the band and read in the chart summary. */
     label?: string
-    /** Colour of the line, band and label: neutral, or the status that crossing the reference means. */
-    severity?: ChartReferenceSeverity
+    /** Colour of the line, band and label: neutral, the status that crossing it means, or a findings level; the same tone as a GaugeChart band. */
+    severity?: ChartThresholdSeverity
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -56,9 +53,7 @@
   )
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const plot = computed(() => ctx.plot.value)
-  const tone = computed(() =>
-    props.severity === 'neutral' ? 'var(--chart-label)' : `var(--chart-status-${props.severity})`
-  )
+  const tone = computed(() => thresholdToken(props.severity))
 
   const shape = computed(() => {
     const entry = bounds.value

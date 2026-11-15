@@ -259,6 +259,14 @@ describe('Chart.Reference', () => {
     return document.getElementById(id)?.textContent ?? ''
   }
 
+  it('takes the same severity map as a GaugeChart band, findings levels included', () => {
+    const view = mount({}, () => [
+      h(ChartReference, { value: 2000, label: 'High', severity: 'severity-high' })
+    ])
+    const reference = view.getByTestId('chart-chart__reference')
+    expect(reference.querySelector('g')?.getAttribute('stroke')).toBe('var(--severity-high)')
+  })
+
   it('attaches Reference to the root for dot notation', () => {
     expect(Chart.Reference).toBe(ChartReference)
   })
