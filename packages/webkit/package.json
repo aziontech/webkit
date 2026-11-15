@@ -53,7 +53,7 @@
     "types:build": "node scripts/build-types.mjs",
     "migrations:check": "node scripts/check-migrations.mjs",
     "api-diff": "node scripts/check-api-diff.mjs",
-    "hooks:test": "node ../../.claude/hooks/__tests__/run.mjs",
+    "hooks:test": "node ../../.claude/hooks/test/run.mjs",
     "cited-names": "node scripts/check-cited-names.mjs",
     "smoke:consume": "node scripts/smoke-consume.mjs",
     "consumer:types": "node scripts/check-consumer-types.mjs",
@@ -2344,7 +2344,7 @@
     },
     "./utils/cn": {
       "types": "./types/utils/cn.d.ts",
-      "default": "./src/utils/cn.js"
+      "default": "./src/utils/cn.ts"
     },
     "./utils/csv": {
       "types": "./types/utils/csv.d.ts",

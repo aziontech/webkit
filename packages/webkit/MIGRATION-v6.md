@@ -1055,6 +1055,12 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `data-transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `trackBy`).
 
+### Component CSS variables carry the component name
+
+A CSS variable a component reads is named `--<component>-<part>-<property>`. The one you may set
+yourself changed: a sticky bar above a `Hero` declares its height as `--hero-banner-offset`
+(was `--banner-offset`), so a `kind="screen"` band still measures one screen beneath it.
+
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
