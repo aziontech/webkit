@@ -124,7 +124,7 @@ test('every mechanized check maps to a standard enforced write-time by validate-
 })
 
 test('hook, CI ratchet, and consumer lint all share the single authoring-checks engine', () => {
-  const ENGINE = 'packages/webkit/src/eslint-plugin/authoring-checks.js'
+  const ENGINE = 'packages/webkit/src/eslint-plugin/lib/authoring-checks.js'
   assert.ok(existsSync(join(ROOT, ENGINE)), 'canonical engine missing from the package')
 
   // write-time hook → the _lib shim → the package engine
@@ -133,7 +133,7 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
   const shim = readFileSync(join(ROOT, '.claude/hooks/_lib/authoring-checks.mjs'), 'utf-8')
   assert.match(
     shim,
-    /packages\/webkit\/src\/eslint-plugin\/authoring-checks\.js/,
+    /packages\/webkit\/src\/eslint-plugin\/lib\/authoring-checks\.js/,
     'shim does not re-export the package engine'
   )
 
@@ -146,16 +146,20 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
     join(ROOT, 'packages/webkit/src/eslint-plugin/rules/authoring-standards.js'),
     'utf-8'
   )
-  assert.match(rule, /\.\.\/authoring-checks\.js/, 'consumer lint rule does not import the engine')
+  assert.match(
+    rule,
+    /\.\.\/lib\/authoring-checks\.js/,
+    'consumer lint rule does not import the engine'
+  )
 })
 
 test('the token and spec-compliance engines are shared by hook AND ratchet', () => {
   const ratchet = readFileSync(join(ROOT, 'packages/webkit/scripts/check-authoring.mjs'), 'utf-8')
 
   // token engine: package canonical, hook via shim, ratchet direct
-  assert.ok(existsSync(join(ROOT, 'packages/webkit/src/eslint-plugin/token-checks.js')))
+  assert.ok(existsSync(join(ROOT, 'packages/webkit/src/eslint-plugin/lib/token-checks.js')))
   const tokenShim = readFileSync(join(ROOT, '.claude/hooks/_lib/token-checks.mjs'), 'utf-8')
-  assert.match(tokenShim, /eslint-plugin\/token-checks\.js/, 'token shim does not re-export')
+  assert.match(tokenShim, /eslint-plugin\/lib\/token-checks\.js/, 'token shim does not re-export')
   const tokenHook = readFileSync(join(ROOT, '.claude/hooks/validate-tokens.mjs'), 'utf-8')
   assert.match(tokenHook, /_lib\/token-checks\.mjs/, 'validate-tokens does not import the shim')
   assert.match(ratchet, /token-checks\.js/, 'ratchet does not import the token engine')

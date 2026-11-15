@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { exampleDataApplies, scanExampleData } from '../../src/eslint-plugin/example-data.js'
+import { exampleDataApplies, scanExampleData } from '../../src/eslint-plugin/lib/example-data.js'
 
 const ids = (content) => scanExampleData(content)
 

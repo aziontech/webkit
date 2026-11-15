@@ -650,7 +650,7 @@ visual suite (`apps/visual`, CI).
 ## 22. Enforcement map
 
 One definition, three surfaces — the same engine
-(`packages/webkit/src/eslint-plugin/authoring-checks.js`) runs in the design system's
+(`packages/webkit/src/eslint-plugin/lib/authoring-checks.js`) runs in the design system's
 write-time hook, its CI ratchet, and the consumer's lint; an invariant test fails CI if a
 standard loses its gate.
 

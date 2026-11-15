@@ -1,4 +1,4 @@
-import { namesFromDefine } from '../define-macros.js'
+import { namesFromDefine } from '../lib/define-macros.js'
 
 const POLYMORPHIC = ['as', 'asChild', 'as-child']
 

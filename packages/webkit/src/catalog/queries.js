@@ -1,4 +1,4 @@
-import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/layout-classes.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/lib/layout-classes.js'
 import {
   COMPONENT_TERMS,
   MARKETING_PAGE_FRAME,

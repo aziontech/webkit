@@ -1,4 +1,4 @@
-import { templateBodyVisitorFactory } from '../util.js'
+import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const CHROME = new Map([
   ['site-footer', 'SiteFooter'],

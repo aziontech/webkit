@@ -1,5 +1,5 @@
-import { physicalDirectionClasses, toLogicalClassString } from '../direction-classes.js'
-import { templateBodyVisitorFactory } from '../util.js'
+import { physicalDirectionClasses, toLogicalClassString } from '../lib/direction-classes.js'
+import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const CLASS_HELPERS = new Set(['cn', 'clsx', 'classNames', 'cva', 'tv', 'twMerge', 'twJoin'])
 const CLASS_ATTRS = new Set(['class', 'className', 'class:list'])

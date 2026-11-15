@@ -1,4 +1,4 @@
-import { calleeName, isComposableFile, isTsFile } from '../composable-file.js'
+import { calleeName, isComposableFile, isTsFile } from '../lib/composable-file.js'
 
 const COMPOSABLE_NAME = /^use[A-Z0-9]/
 const MUTABLE_REF = new Set(['ref', 'shallowRef'])

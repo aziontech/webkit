@@ -6,7 +6,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { scanTokens, tokenChecksApply } from '../../src/eslint-plugin/token-checks.js'
+import { scanTokens, tokenChecksApply } from '../../src/eslint-plugin/lib/token-checks.js'
 
 /** All violated check ids for a snippet. */
 const ids = (content) => scanTokens(content)

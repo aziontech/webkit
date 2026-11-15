@@ -4,7 +4,7 @@ import { RuleTester } from 'eslint'
 import * as vueParser from 'vue-eslint-parser'
 import tsParser from '@typescript-eslint/parser'
 
-import { findComments } from '../../src/eslint-plugin/comment-scan.js'
+import { findComments } from '../../src/eslint-plugin/lib/comment-scan.js'
 
 const rule = (await import('../../src/eslint-plugin/rules/no-page-navigation-menu.js')).default
 

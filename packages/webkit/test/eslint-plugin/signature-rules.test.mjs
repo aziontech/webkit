@@ -13,7 +13,7 @@ import {
   SIGNATURE_MESSAGES,
   SIGNATURE_RULES,
   STANDARD_BY_SIGNATURE
-} from '../../scripts/lib/signature-checks.mjs'
+} from '../../src/eslint-plugin/lib/signature-checks.js'
 import { STANDARDS_BY_ID } from '../../../../.claude/hooks/_lib/standards.mjs'
 
 const ts = new RuleTester({

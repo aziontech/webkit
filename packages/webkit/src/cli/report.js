@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
-import { loadCatalog } from '../eslint-plugin/catalog.js'
+import { loadCatalog } from '../eslint-plugin/lib/catalog.js'
 
 export const UI_EXTENSIONS = ['vue', 'astro']
 

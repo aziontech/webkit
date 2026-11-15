@@ -1,4 +1,4 @@
-import { templateBodyVisitorFactory } from '../util.js'
+import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const HEADER = new Set(['GlobalHeader', 'global-header'])
 const TRIGGER = new Set(['SearchTrigger', 'search-trigger'])

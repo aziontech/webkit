@@ -1,5 +1,5 @@
-import { loadCatalog } from '../catalog.js'
-import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
+import { loadCatalog } from '../lib/catalog.js'
+import { ctxCwd, templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const ARBITRARY_TIMING = /\b(?:duration|delay|ease|animate)-\[[^\]]*\]/
 const STYLE_SIGNAL = /[:;]/

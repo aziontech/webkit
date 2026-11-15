@@ -1,4 +1,4 @@
-import { calleeName, isComposableFile } from '../composable-file.js'
+import { calleeName, isComposableFile } from '../lib/composable-file.js'
 
 const ALWAYS = new Set(['addEventListener', 'setInterval', 'requestAnimationFrame'])
 const OBSERVERS = new Set(['ResizeObserver', 'IntersectionObserver', 'MutationObserver'])

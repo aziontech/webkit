@@ -23,7 +23,7 @@ const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardco
 const noPhysicalDirection = (await import('../../src/eslint-plugin/rules/no-physical-direction.js'))
   .default
 const { logicalClass, mirroredGradient, physicalDirectionClasses } =
-  await import('../../src/eslint-plugin/direction-classes.js')
+  await import('../../src/eslint-plugin/lib/direction-classes.js')
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
 ).default
@@ -35,7 +35,7 @@ const preferWebkitComponent = (
 ).default
 const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
 const { LAYOUT_CLASS_FAMILIES: ALLOWED_LAYOUT } =
-  await import('../../src/eslint-plugin/layout-classes.js')
+  await import('../../src/eslint-plugin/lib/layout-classes.js')
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
 const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))

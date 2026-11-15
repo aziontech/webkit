@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/layout-classes.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/lib/layout-classes.js'
 import { PKG_ROOT } from './_helpers/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')

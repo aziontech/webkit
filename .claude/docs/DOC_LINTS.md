@@ -1557,7 +1557,7 @@ import { cn } from '@aziontech/webkit/utils/cn'
 
 ### `validate-authoring.mjs` — construction standards at write time
 
-Blocks introduced construction anti-patterns ([`props`](../rules/props.md) / [`v-model`](../rules/v-model.md) / [`emits`](../rules/emits.md) / [`slots`](../rules/slots.md) / [`composables`](../rules/composables.md) / [`deprecation`](../rules/deprecation.md)). Engine: [`src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer `authoring-standards` ESLint rule run.
+Blocks introduced construction anti-patterns ([`props`](../rules/props.md) / [`v-model`](../rules/v-model.md) / [`emits`](../rules/emits.md) / [`slots`](../rules/slots.md) / [`composables`](../rules/composables.md) / [`deprecation`](../rules/deprecation.md)). Engine: [`src/eslint-plugin/lib/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/lib/authoring-checks.js) — the same module the CI ratchet and the consumer `authoring-standards` ESLint rule run.
 
 ```vue
 <!-- ❌ blocked — hand-rolled v-model + runtime props -->

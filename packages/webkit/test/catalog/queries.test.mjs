@@ -274,7 +274,7 @@ test('validateUsage passes clean semantic-token classes', () => {
 })
 
 test('getComponent tells which classes may go on the tag (shared layout list)', async () => {
-  const { LAYOUT_CLASS_FAMILIES } = await import('../../src/eslint-plugin/layout-classes.js')
+  const { LAYOUT_CLASS_FAMILIES } = await import('../../src/eslint-plugin/lib/layout-classes.js')
   const button = getComponent(catalog, 'button')
   assert.equal(button.allowedClasses.any, false)
   assert.deepEqual(button.allowedClasses.families, [...LAYOUT_CLASS_FAMILIES])

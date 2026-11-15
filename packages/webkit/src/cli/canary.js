@@ -3,7 +3,7 @@ import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
 
-import { loadCatalog } from '../eslint-plugin/catalog.js'
+import { loadCatalog } from '../eslint-plugin/lib/catalog.js'
 import { resolveEslintBin } from './report.js'
 
 export const CANARY_DIR = '.webkit-canary'

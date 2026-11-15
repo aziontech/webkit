@@ -1,11 +1,9 @@
-import tsParser from '@typescript-eslint/parser'
-import { Linter } from 'eslint'
-import * as vueParser from 'vue-eslint-parser'
+import { createRequire } from 'node:module'
 
-import { isComposableFile } from '../../src/eslint-plugin/composable-file.js'
-import composableReadonlyReturn from '../../src/eslint-plugin/rules/composable-readonly-return.js'
-import composableScopeCleanup from '../../src/eslint-plugin/rules/composable-scope-cleanup.js'
-import noPolymorphicAsProp from '../../src/eslint-plugin/rules/no-polymorphic-as-prop.js'
+import composableReadonlyReturn from '../rules/composable-readonly-return.js'
+import composableScopeCleanup from '../rules/composable-scope-cleanup.js'
+import noPolymorphicAsProp from '../rules/no-polymorphic-as-prop.js'
+import { isComposableFile } from './composable-file.js'
 
 export const SIGNATURE_RULES = {
   'composable-readonly-return': composableReadonlyReturn,
@@ -33,26 +31,37 @@ const POLYMORPHIC_HINT = /\bas(Child)?\s*\??\s*:|['"]as(-child)?['"]/
 export const signatureChecksApply = (filename) =>
   isComposableFile(filename) || /\.vue$/.test(filename)
 
-const CONFIG = [
-  {
-    files: ['**/*.vue', '**/*.ts', '**/*.js'],
-    languageOptions: {
-      parser: vueParser,
-      parserOptions: { parser: tsParser, ecmaVersion: 'latest', sourceType: 'module' }
-    },
-    plugins: { webkit: { rules: SIGNATURE_RULES } },
-    rules: Object.fromEntries(Object.keys(SIGNATURE_RULES).map((id) => [`webkit/${id}`, 'error']))
-  }
-]
+const require = createRequire(import.meta.url)
 
 let linter = null
+let config = null
+
+function setup() {
+  const { Linter } = require('eslint')
+  linter = new Linter({ configType: 'flat', cwd: '/' })
+  config = [
+    {
+      files: ['**/*.vue', '**/*.ts', '**/*.js'],
+      languageOptions: {
+        parser: require('vue-eslint-parser'),
+        parserOptions: {
+          parser: require('@typescript-eslint/parser'),
+          ecmaVersion: 'latest',
+          sourceType: 'module'
+        }
+      },
+      plugins: { webkit: { rules: SIGNATURE_RULES } },
+      rules: Object.fromEntries(Object.keys(SIGNATURE_RULES).map((id) => [`webkit/${id}`, 'error']))
+    }
+  ]
+}
 
 export function scanSignatures(filename, text) {
   if (!signatureChecksApply(filename)) return []
   if (/\.vue$/.test(filename) && !POLYMORPHIC_HINT.test(text)) return []
-  linter ??= new Linter({ configType: 'flat', cwd: '/' })
+  if (!linter) setup()
   const found = []
-  for (const m of linter.verify(text, CONFIG, { filename })) {
+  for (const m of linter.verify(text, config, { filename })) {
     if (!m.ruleId?.startsWith('webkit/')) continue
     found.push({ id: m.ruleId.slice('webkit/'.length), line: m.line, message: m.message })
   }
