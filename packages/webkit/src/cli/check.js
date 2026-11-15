@@ -69,7 +69,7 @@ function migrationFindings(rel, source, migration) {
       .filter((w) => !/is not an export of v\d/.test(w))
       .map((w) => ({
         source: 'migration',
-        severity: 'error',
+        severity: w.startsWith('PrimeIcons class') ? 'warn' : 'error',
         file: rel,
         message: `v5 API to replace by hand: ${w} (MIGRATION-v6.md).`
       }))

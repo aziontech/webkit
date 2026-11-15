@@ -137,6 +137,30 @@ test('check gathers doctor, v5 names, unknown imports and the built-in style sca
   }
 })
 
+test('check reports PrimeIcons classes: a mapped pair is an error, a mark with no Azion glyph a warning', () => {
+  const dir = makeProject({
+    'src/views/Icons.vue':
+      '<template>\n  <i class="pi pi-cog" aria-hidden="true" />\n  <i class="pi pi-amazon" aria-hidden="true" />\n</template>\n'
+  })
+  try {
+    const r = cliJson(dir, 'check', '--no-lint')
+    const migration = by(r.json, 'migration')
+    assert.ok(
+      migration.some(
+        (f) =>
+          f.severity === 'error' &&
+          /pi pi-cog → ai ai-cog/.test(f.message) &&
+          /migrate v6/.test(f.message)
+      )
+    )
+    assert.ok(
+      migration.some((f) => f.severity === 'warn' && /pi-amazon has no Azion icon/.test(f.message))
+    )
+  } finally {
+    cleanup(dir)
+  }
+})
+
 test('check passes a wired project and enforces --max-warnings', () => {
   const dir = initialised({
     'src/main.ts': "import './webkit.css'\n",

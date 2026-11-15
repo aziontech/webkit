@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
@@ -10,6 +10,7 @@ import {
   declaredMajor,
   legacyMarkers,
   loadMigration,
+  migrateIcons,
   migrateSource,
   planMigrate,
   renameSubpath
@@ -117,6 +118,58 @@ test('migrateSource flags a removed prop as manual work and leaves the tag alone
     warnings[0],
     /^@aziontech\/webkit\/item: <Item> prop asChild was removed in v6: set href/
   )
+})
+
+test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it cannot', () => {
+  const { icons } = loadMigration(6)
+  const sfc = [
+    '<template>',
+    '  <Button icon="pi pi-check" label="Save" />',
+    '  <i class="pi pi-minus-circle text-(--text-muted)" aria-hidden="true" />',
+    "  <i :class=\"open ? 'pi pi-chevron-up' : 'pi  pi-chevron-down'\" />",
+    '  <i class="pi pi-amazon" />',
+    '</template>',
+    '<script setup>',
+    "const items = [{ icon: 'pi pi-twitter' }, { icon: 'pi-cog' }]",
+    "const pip = 'api-pi-check'",
+    '</script>'
+  ].join('\n')
+  const { source, changes, warnings } = migrateIcons(sfc, icons)
+  assert.match(source, /icon="ai ai-check"/)
+  assert.match(source, /class="ai ai-circle-minus text-\(--text-muted\)"/)
+  assert.match(source, /'ai ai-chevron-up' : 'ai {2}ai-chevron-down'/)
+  assert.match(source, /icon: 'ai ai-x'/)
+  assert.match(source, /class="pi pi-amazon"/)
+  assert.match(source, /'api-pi-check'/)
+  assert.ok(changes.includes('pi pi-check → ai ai-check'))
+  assert.deepEqual(warnings, [
+    'PrimeIcons class pi-amazon has no Azion icon: third-party mark with no Azion glyph: draw your own SVG or keep importing @aziontech/icons/primeicons',
+    'PrimeIcons class pi-cog outside a "pi pi-cog" pair: rewrite it to ai ai-cog by hand'
+  ])
+  assert.equal(migrateIcons(source, icons).source, source)
+})
+
+test('the icon map covers every PrimeIcons glyph and points at real Azion glyphs', () => {
+  const { icons } = loadMigration(6)
+  const svgRaw = join(PKG, '../icons/src/svg-raw')
+  const pi = readdirSync(join(svgRaw, 'pi'))
+    .filter((f) => f.startsWith('pi-'))
+    .map((f) => f.slice(0, -4))
+  const ai = new Set(readdirSync(join(svgRaw, 'ai')).map((f) => f.slice(0, -4)))
+  assert.deepEqual(Object.keys(icons).sort(), pi.sort())
+  for (const [from, to] of Object.entries(icons)) {
+    if (typeof to === 'string') assert.ok(ai.has(to), `${from} → ${to} is not an Azion glyph`)
+    else assert.ok(to.removed, `${from} needs a target or a removed note`)
+  }
+})
+
+test('migrateSource rewrites icons in a file that imports no WebKit component', () => {
+  const { source, changes } = migrateSource(
+    "export const nav = [{ label: 'Home', icon: 'pi pi-home' }]\n",
+    loadMigration(6)
+  )
+  assert.equal(source, "export const nav = [{ label: 'Home', icon: 'ai ai-home' }]\n")
+  assert.deepEqual(changes, ['pi pi-home → ai ai-home'])
 })
 
 test('planMigrate rewrites files under the project and honours --dry-run', () => {
