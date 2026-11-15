@@ -32,6 +32,7 @@ import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs
 import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
 import Timestamp from '../components/content/timestamp/timestamp.vue'
 import Cards from '../components/data/cards/cards.vue'
+import DataGrid from '../components/data/data-grid/data-grid.vue'
 import DataTable from '../components/data/data-table/data-table.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
 import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
@@ -533,6 +534,46 @@ function timestampCase(): Case {
     }),
     update: () => {
       zone.value = 'America/New_York'
+    }
+  }
+}
+
+function dataGridCase(): Case {
+  const columns = Array.from({ length: 8 }, (_, i) => ({
+    id: `c${i}`,
+    header: `Column ${i}`,
+    type: i % 2 ? ('number' as const) : ('text' as const)
+  }))
+  const rows = ref(
+    Array.from({ length: 1000 }, (_, r) => ({
+      id: String(r),
+      ...Object.fromEntries(columns.map((c, i) => [c.id, i % 2 ? r * i : `Row ${r} ${i}`]))
+    }))
+  )
+  return {
+    mount: () => ({
+      render: () =>
+        h(DataGrid, {
+          columns,
+          modelValue: rows.value,
+          'onUpdate:modelValue': (next: typeof rows.value) => (rows.value = next),
+          ariaLabel: 'Grid',
+          maxHeight: '480px'
+        })
+    }),
+    update: async () => {
+      for (let i = 0; i < 40; i++) {
+        const cell = document.activeElement?.closest('[role="gridcell"]')
+          ? (document.activeElement as HTMLElement)
+          : document.body.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')
+        cell?.dispatchEvent(
+          new KeyboardEvent('keydown', {
+            key: i % 4 === 3 ? 'ArrowRight' : 'ArrowDown',
+            bubbles: true
+          })
+        )
+        await nextTick()
+      }
     }
   }
 }
@@ -1438,6 +1479,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('PropertyFilter with 1k values: open and search', async () => {
     check('property-filter-1k', await measure(propertyFilterCase))
+  })
+  it('DataGrid with 1k rows x 8 columns: mount and 40 cursor moves', async () => {
+    check('data-grid-1k', await measure(dataGridCase))
   })
   it('FilterMenu field with 1k options: open and search', async () => {
     check('filter-menu-1k', await measure(filterMenuCase))

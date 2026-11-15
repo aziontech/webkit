@@ -945,8 +945,9 @@ export const ptBR: Messages = {
   },
   dataGrid: {
     selectAll: 'Selecionar todas as linhas',
-    selectRow: 'Selecionar linha',
+    selectRow: 'Selecionar a linha {row}',
     resize: 'Redimensionar {column}',
+    invalidNumber: 'Digite um número',
     emptyTitle: 'Nenhuma linha ainda',
     emptyDescription: 'Adicione uma linha para começar a editar.',
     true: 'Sim',
