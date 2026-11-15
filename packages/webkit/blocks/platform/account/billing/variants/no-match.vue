@@ -735,6 +735,7 @@
       title="Remove payment method"
       :description="`${pendingRemoval ? methodLabel(pendingRemoval) : ''} is removed from the account. Paid invoices keep showing it.`"
       confirm-label="Remove"
+      size="small"
       @confirm="removeMethod"
     />
   </div>

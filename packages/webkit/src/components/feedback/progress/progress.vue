@@ -40,7 +40,7 @@
     max: 100,
     kind: undefined,
     shape: undefined,
-    size: 'small',
+    size: 'medium',
     indeterminate: false
   })
 

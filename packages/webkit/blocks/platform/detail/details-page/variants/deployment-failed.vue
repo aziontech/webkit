@@ -544,6 +544,7 @@
                   value="web-app-mh2saq.example.com"
                   aria-label="Copy domain name"
                   class="shrink-0"
+                  size="small"
                 />
               </div>
             </div>

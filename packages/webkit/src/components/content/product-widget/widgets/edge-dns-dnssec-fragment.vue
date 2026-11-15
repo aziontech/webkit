@@ -197,6 +197,7 @@
                         kind="transparent"
                         :value="key.value"
                         :aria-label="`Copy ${key.label}`"
+                        size="small"
                       />
                     </InputGroupRoot>
                   </Item.Actions>

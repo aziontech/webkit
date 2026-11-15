@@ -1203,6 +1203,7 @@
       title="Delete Deployment Setting"
       :description="deleteDescription"
       confirm-label="Delete"
+      size="small"
       @confirm="remove"
     />
   </div>

@@ -59,7 +59,7 @@
   const level = defineModel<LogViewLineLevel | ''>('level', { default: '' })
 
   const emit = defineEmits<{
-    copy: [value: string]
+    copy: [event: MouseEvent, value: string]
   }>()
 
   defineSlots<{
@@ -178,8 +178,8 @@
     level.value = level.value === next ? '' : next
   }
 
-  const emitCopy = (value: string) => {
-    emit('copy', value)
+  const emitCopy = (event: MouseEvent, value: string) => {
+    emit('copy', event, value)
   }
 
   provide(LogViewInjectionKey, {

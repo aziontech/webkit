@@ -64,10 +64,10 @@ describe('HeroTitle', () => {
     expect(root).not.toHaveAttribute('data-centered')
   })
 
-  it('sets the headline size to large by default', () => {
+  it('sets the headline size to medium by default, the house default', () => {
     const { container } = render(HeroTitle, { props })
 
-    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'large')
+    expect(container.querySelector('h1')).toHaveAttribute('data-size', 'medium')
   })
 
   it('sets the headline size to the given size', () => {

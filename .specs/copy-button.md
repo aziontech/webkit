@@ -3,7 +3,7 @@ name: copy-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 checksum: dcfa61fd52ec9f78c8c1f9a5991005671603510ce966887bd3c93dc4f5cf43f6
 created: 2026-06-02
@@ -39,7 +39,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 - Localize `ariaLabel` and `copiedLabel`: each is both the accessible name and the tooltip text.
 - Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
 - The click stops propagation, so it is safe inside clickable rows and cards.
-- Keep the `transparent` / `small` defaults in dense rows.
+- Set `size="small"` in dense rows; the default is `large`, the house size of an action.
 
 ## Props
 
@@ -49,14 +49,14 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 | `ariaLabel`   | `string`                                                              | `''`            | false    | Accessible name while idle. Empty uses the locale catalog (`Copy`).                        |
 | `copiedLabel` | `string`                                                              | `''`            | false    | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
 | `kind`        | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false    | Visual variant forwarded to `IconButton`.                                                  |
-| `size`        | `'small' \| 'medium' \| 'large'`                                      | `'small'`       | false    | Size token forwarded to `IconButton`.                                                      |
+| `size`        | `'small' \| 'medium' \| 'large'`                                      | `'large'`       | false    | Size token forwarded to `IconButton`.                                                      |
 | `disabled`    | `boolean`                                                             | `false`         | false    | Disables interaction and applies disabled tokens.                                          |
 
 ## Events
 
-| Event  | Payload  | Notes                                                             |
-| ------ | -------- | ----------------------------------------------------------------- |
-| `copy` | `string` | Emitted after a successful clipboard write with the copied value. |
+| Event  | Payload                              | Notes                                                                   |
+| ------ | ------------------------------------ | ----------------------------------------------------------------------- |
+| `copy` | `(event: MouseEvent, value: string)` | Emitted after a successful clipboard write; `value` is the copied text. |
 
 ## Slots
 

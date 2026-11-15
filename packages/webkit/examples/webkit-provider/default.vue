@@ -24,6 +24,7 @@
         v-model:open="open"
         title="Remover domínio"
         description="shop.example.com deixa de responder por este recurso."
+        size="small"
         @confirm="open = false"
       >
         <template #trigger>

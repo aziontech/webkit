@@ -61,6 +61,7 @@
       :aria-label="copyLabel"
       :data-testid="`${testId}__copy`"
       class="ms-auto shrink-0"
+      size="small"
     />
   </div>
 </template>

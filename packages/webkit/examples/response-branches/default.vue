@@ -42,7 +42,10 @@
       </ResponseBranches>
       <template #actions>
         <ChatMessage.Actions>
-          <CopyButton :value="versions[active]" />
+          <CopyButton
+            size="small"
+            :value="versions[active]"
+          />
           <IconButton
             icon="pi pi-refresh"
             aria-label="Regenerate response"

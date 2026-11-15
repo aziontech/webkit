@@ -3,7 +3,7 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
@@ -176,9 +176,9 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 
 ## Events
 
-| Event  | Payload  | Notes                                                       |
-| ------ | -------- | ----------------------------------------------------------- |
-| `copy` | `string` | Fires after the active tab code is copied to the clipboard. |
+| Event  | Payload                             | Notes                                                       |
+| ------ | ----------------------------------- | ----------------------------------------------------------- |
+| `copy` | `(event: MouseEvent, code: string)` | Fires after the active tab code is copied to the clipboard. |
 
 ## Slots
 

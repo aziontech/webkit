@@ -147,6 +147,11 @@ describe('ButtonGroup', () => {
     ])
   })
 
+  it('defaults to the large action size', () => {
+    const view = render(ButtonGroup, { props: { items, ariaLabel: 'Actions' } })
+    expect(view.getByRole('toolbar').getAttribute('data-size')).toBe('large')
+  })
+
   it('maps kind and size onto the buttons', () => {
     const view = render(ButtonGroup, {
       props: { items, ariaLabel: 'Actions', kind: 'outlined', size: 'small' }

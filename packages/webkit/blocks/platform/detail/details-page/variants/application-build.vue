@@ -453,6 +453,7 @@
                           kind="transparent"
                           :value="`${APP.name} build token`"
                           aria-label="Copy API token"
+                          size="small"
                         />
                       </InputGroupRoot>
                     </SettingRow>

@@ -410,6 +410,7 @@
             confirm-label="Overwrite and save"
             cancel-label="Go back"
             kind="primary"
+            size="small"
             @confirm="overwrite"
           />
         </div>

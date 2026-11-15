@@ -98,6 +98,7 @@
                       value="azion deploy"
                       aria-label="Copy the Via CLI command"
                       copied-label="Command copied"
+                      size="small"
                     />
                   </InputGroupRoot>
                 </Item.Actions>

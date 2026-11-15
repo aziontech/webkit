@@ -109,6 +109,11 @@ describe('Progress', () => {
     expect(both.getByRole('progressbar').getAttribute('data-kind')).toBe('flat')
   })
 
+  it('defaults to the medium bar', () => {
+    const { getByRole } = render(Progress)
+    expect(getByRole('progressbar').getAttribute('data-size')).toBe('medium')
+  })
+
   it.each(['small', 'medium', 'large'] as const)('reflects size=%s on data-size', (size) => {
     const { getByRole } = render(Progress, { props: { size } })
     expect(getByRole('progressbar').getAttribute('data-size')).toBe(size)

@@ -24,7 +24,7 @@
     value: '',
     prefix: '$',
     suffix: '',
-    size: 'small'
+    size: 'medium'
   })
 
   const attrs = useAttrs()

@@ -98,6 +98,7 @@
           :value="name"
           :aria-label="`Copy ${name}`"
           copied-label="Copied"
+          size="small"
         />
         <span>to confirm.</span>
       </p>

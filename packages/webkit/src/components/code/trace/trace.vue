@@ -557,6 +557,7 @@
           :aria-label="t('trace.copyName')"
           kind="outlined"
           class="shrink-0"
+          size="small"
         />
         <span class="ms-auto flex">
           <Button

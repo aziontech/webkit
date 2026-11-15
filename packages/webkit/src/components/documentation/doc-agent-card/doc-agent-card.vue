@@ -38,7 +38,7 @@
   })
 
   const emit = defineEmits<{
-    copy: [value: string]
+    copy: [event: MouseEvent, value: string]
     action: [event: MouseEvent]
   }>()
 
@@ -85,7 +85,7 @@
                 :value="prompt"
                 v-bind="copyAgents"
                 :data-testid="`${testId}__copy`"
-                @copy="emit('copy', $event)"
+                @copy="(event, value) => emit('copy', event, value)"
               />
             </slot>
           </div>

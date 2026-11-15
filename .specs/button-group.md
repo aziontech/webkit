@@ -3,7 +3,7 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: b7a3d4629c590cc8c8474b09effe9ec342416d22d82249ebe745625021b5b6b6
 created: 2026-11-11
@@ -102,7 +102,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `items`         | `ButtonGroupItem[]`              | `[]`            | false    | Actions, toggles and menus, in reading order.                                                                                                             |
 | `ariaLabel`     | `string`                         | `''`            | false    | Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders. |
 | `kind`          | `'transparent' \| 'outlined'`    | `'transparent'` | false    | Visual variant of every button.                                                                                                                           |
-| `size`          | `'small' \| 'medium' \| 'large'` | `'medium'`      | false    | Size token of every button.                                                                                                                               |
+| `size`          | `'small' \| 'medium' \| 'large'` | `'large'`       | false    | Size token of every button.                                                                                                                               |
 | `visibleCount`  | `number`                         | `undefined`     | false    | Items shown as buttons; the rest go into the More actions menu. Unset shows every item.                                                                   |
 | `overflowLabel` | `string`                         | `''`            | false    | Label of the overflow button. Empty uses the locale catalog (`More actions`).                                                                             |
 
@@ -110,10 +110,10 @@ Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted 
 
 ## Events
 
-| Event    | Payload                            | Notes                                                                 |
-| -------- | ---------------------------------- | --------------------------------------------------------------------- |
+| Event    | Payload                                            | Notes                                                                 |
+| -------- | -------------------------------------------------- | --------------------------------------------------------------------- |
 | `click`  | `(event: MouseEvent \| KeyboardEvent, id: string)` | An action or a menu option was chosen (from the bar or the overflow). |
-| `toggle` | `{ id: string; pressed: boolean }` | A toggle was activated; `pressed` is the new state to store.          |
+| `toggle` | `{ id: string; pressed: boolean }`                 | A toggle was activated; `pressed` is the new state to store.          |
 
 ## Slots
 

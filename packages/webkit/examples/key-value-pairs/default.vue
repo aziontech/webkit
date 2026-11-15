@@ -12,6 +12,7 @@
       <CopyButton
         value="1752167890"
         aria-label="Copy workload ID"
+        size="small"
       />
     </KeyValuePairs.Item>
     <KeyValuePairs.Item label="Status">

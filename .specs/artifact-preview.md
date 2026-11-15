@@ -3,7 +3,7 @@ name: artifact-preview
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 checksum: 237361a9873589e00a9aaaa07937c455547fbcf749cb4651e0f6da2d94b2d9c5
 created: 2026-11-11
@@ -55,8 +55,19 @@ preview (Cloudscape's inline preview): the first lines of code, the first rows o
 </script>
 
 <template>
-  <ArtifactPreview title="cache-rules.json" meta="1 KB · JSON" icon="pi pi-code" :copy-value="rules" openable @open="showInDrawer">
-    <CodeBlock :tabs="[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]" :line-numbers="false" :bordered="false" />
+  <ArtifactPreview
+    title="cache-rules.json"
+    meta="1 KB · JSON"
+    icon="pi pi-code"
+    :copy-value="rules"
+    openable
+    @open="showInDrawer"
+  >
+    <CodeBlock
+      :tabs="[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]"
+      :line-numbers="false"
+      :bordered="false"
+    />
   </ArtifactPreview>
 </template>
 ```
@@ -68,29 +79,29 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 
 ## Props
 
-| Prop           | Type      | Default       | Required | JSDoc                                                                                                          |
-| -------------- | --------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------- |
-| `title`        | `string`  | —             | true     | File name or title of what was generated (`cache-rules.json`).                                                 |
-| `description`  | `string`  | `''`          | false    | One line on what it is or does.                                                                                |
-| `meta`         | `string`  | `''`          | false    | Facts that help recognize it: size, rows, language (`2.4 KB · JSON`).                                          |
-| `icon`         | `string`  | `'pi pi-file'`| false    | Icon class for the file type.                                                                                  |
-| `copyValue`    | `string`  | `''`          | false    | Text the Copy control puts on the clipboard. Empty hides Copy.                                                 |
-| `downloadHref` | `string`  | `''`          | false    | URL of the file for the Download control. Empty hides Download.                                                |
-| `openable`     | `boolean` | `false`       | false    | Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). |
+| Prop           | Type      | Default        | Required | JSDoc                                                                                                           |
+| -------------- | --------- | -------------- | -------- | --------------------------------------------------------------------------------------------------------------- |
+| `title`        | `string`  | —              | true     | File name or title of what was generated (`cache-rules.json`).                                                  |
+| `description`  | `string`  | `''`           | false    | One line on what it is or does.                                                                                 |
+| `meta`         | `string`  | `''`           | false    | Facts that help recognize it: size, rows, language (`2.4 KB · JSON`).                                           |
+| `icon`         | `string`  | `'pi pi-file'` | false    | Icon class for the file type.                                                                                   |
+| `copyValue`    | `string`  | `''`           | false    | Text the Copy control puts on the clipboard. Empty hides Copy.                                                  |
+| `downloadHref` | `string`  | `''`           | false    | URL of the file for the Download control. Empty hides Download.                                                 |
+| `openable`     | `boolean` | `false`        | false    | Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). |
 
 ## Events
 
-| Event  | Payload               | When                    |
-| ------ | --------------------- | ----------------------- |
-| `open` | `(event: MouseEvent)` | Open pressed.           |
-| `copy` | `string`              | The content was copied. |
+| Event  | Payload                              | When                    |
+| ------ | ------------------------------------ | ----------------------- |
+| `open` | `(event: MouseEvent)`                | Open pressed.           |
+| `copy` | `(event: MouseEvent, value: string)` | The content was copied. |
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                 |
-| --------- | ----- | --------------------------------------------------------------------- |
-| `default` | —     | The inline preview; scrolls inside a 20 rem body.                      |
-| `actions` | —     | Extra icon actions, placed before Copy and Download.                  |
+| Slot      | Scope | Notes                                                |
+| --------- | ----- | ---------------------------------------------------- |
+| `default` | —     | The inline preview; scrolls inside a 20 rem body.    |
+| `actions` | —     | Extra icon actions, placed before Copy and Download. |
 
 ## States
 
@@ -102,13 +113,13 @@ _No motion of its own._
 
 ## Tokens
 
-| Region       | Token                                                          |
-| ------------ | -------------------------------------------------------------- |
-| frame        | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)` |
-| icon tile    | `var(--bg-surface-raised)`, `var(--shape-elements)`, `var(--text-muted)` |
-| title        | `.text-label-md`, `var(--text-default)`                         |
-| description  | `.text-body-xs`, `var(--text-muted)`                            |
-| padding      | `var(--spacing-sm)`, `var(--spacing-xs)`                        |
+| Region      | Token                                                                    |
+| ----------- | ------------------------------------------------------------------------ |
+| frame       | `var(--bg-surface)`, `var(--border-default)`, `var(--shape-card)`        |
+| icon tile   | `var(--bg-surface-raised)`, `var(--shape-elements)`, `var(--text-muted)` |
+| title       | `.text-label-md`, `var(--text-default)`                                  |
+| description | `.text-body-xs`, `var(--text-muted)`                                     |
+| padding     | `var(--spacing-sm)`, `var(--spacing-xs)`                                 |
 
 ## Theme gaps
 

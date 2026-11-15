@@ -703,6 +703,7 @@
       :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
       confirm-label="Revoke token"
       :loading="working"
+      size="small"
       @confirm="revoke"
     />
 
@@ -711,6 +712,7 @@
       title="Delete token"
       :description="`“${pending?.name ?? ''}” no longer works; deleting removes it from this list.`"
       confirm-label="Delete token"
+      size="small"
       @confirm="remove"
     />
   </div>

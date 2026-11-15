@@ -3,7 +3,7 @@ name: copy-prompt-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 checksum: 019955d56a7c5390b5a0f1b26d8ac3b0ef59983464bd504e9f9b479ce0c04616
 created: 2026-11-12
@@ -80,16 +80,16 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 ## v-model
 
-| Model          | Type      | Default | Emits         | Notes                                                                                                                                 |
-| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type      | Default | Emits         | Notes                                                                                                                                                                             |
+| -------------- | --------- | ------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean` | `true`  | `update:open` | Whether the chip is shown, via `defineModel('open')`. The dismiss button sets it to `false`; set it back to `true` to show the chip again. Unbound, the chip keeps its own state. |
 
 ## Events
 
-| Event   | Payload      | Notes                                                                                                                                 |
-| ------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `copy`  | `string`     | Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead.            |
-| `close` | `MouseEvent` | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision. |
+| Event   | Payload                              | Notes                                                                                                                                    |
+| ------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `copy`  | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
+| `close` | `MouseEvent`                         | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision.    |
 
 ## Slots
 
@@ -107,7 +107,7 @@ _none_
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------- |
 | idle (always)        | the glow layer rotates once every 8 s: `animate-spin [animation-duration:8s] [animation-timing-function:linear]`                                                              | semantic `spin`, as `ButtonHighlight`             | `motion-reduce:animate-none` (the glow holds still) |
 | hover state change   | the gradient and scrim layers' `transition-opacity duration-300 ease-out`, and the chip's `transition-colors duration-fast-02 ease-productive-entrance`, as `ButtonHighlight` | semantic (fast-02 · productive entrance)          | `motion-reduce:transition-none` on every layer      |
-| tooltip open / close | owned by `Tooltip` (its popup scale-in and scale-out) | semantic                                          | `motion-reduce:animate-none` (in `Tooltip`)         |
+| tooltip open / close | owned by `Tooltip` (its popup scale-in and scale-out)                                                                                                                         | semantic                                          | `motion-reduce:animate-none` (in `Tooltip`)         |
 
 ## Tokens
 

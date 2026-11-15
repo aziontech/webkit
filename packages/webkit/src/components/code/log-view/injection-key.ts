@@ -40,7 +40,7 @@ export interface LogViewContext {
   setSearch: (value: string) => void
   toggleWarningsOnly: () => void
   toggleLevel: (level: LogViewLineLevel) => void
-  emitCopy: (value: string) => void
+  emitCopy: (event: MouseEvent, value: string) => void
 }
 
 export const LogViewInjectionKey: InjectionKey<LogViewContext> = Symbol('LogView')

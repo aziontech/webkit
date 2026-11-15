@@ -268,6 +268,7 @@
               value="1020655"
               aria-label="Copy service ID"
               class="shrink-0"
+              size="small"
             />
           </div>
         </div>

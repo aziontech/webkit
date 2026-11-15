@@ -16,6 +16,18 @@ const settle = async () => {
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
 describe('ConfirmDialog', () => {
+  it('opens at the medium width by default', async () => {
+    const { getByTestId } = within(render(Default).container)
+
+    await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
+    await settle()
+
+    expect(document.body.querySelector('[role="alertdialog"] [data-size]')).toHaveAttribute(
+      'data-size',
+      'medium'
+    )
+  })
+
   it('stays closed until the trigger is activated, then teleports the dialog to body', async () => {
     const { getByTestId } = within(render(Default).container)
 

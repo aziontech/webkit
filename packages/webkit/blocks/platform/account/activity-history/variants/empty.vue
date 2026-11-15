@@ -388,6 +388,7 @@
                     kind="outlined"
                     :value="value"
                     aria-label="Copy IP address"
+                    size="small"
                   />
                 </div>
               </template>

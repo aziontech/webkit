@@ -52,6 +52,7 @@
               :value="reference"
               aria-label="Copy the error reference"
               copied-label="Error reference copied"
+              size="small"
             />
           </p>
         </template>

@@ -845,6 +845,7 @@
           : `${pending ? displayName(pending) : ''} can no longer sign in to this account. Their teams and the resources they created stay.`
       "
       :confirm-label="pending?.status === 'Invited' ? 'Cancel invitation' : 'Remove user'"
+      size="small"
       @confirm="remove"
     />
   </div>

@@ -85,6 +85,7 @@
                   kind="transparent"
                   :value="nameserver"
                   :aria-label="`Copy nameserver ${index + 1}`"
+                  size="small"
                 />
               </InputGroupRoot>
               <HelperText label="Add the nameservers in your domain provider." />

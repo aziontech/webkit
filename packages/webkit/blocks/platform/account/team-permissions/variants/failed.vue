@@ -426,6 +426,7 @@
           : `“${pending?.name ?? ''}” has no members. Deleting it removes it from this list.`
       "
       confirm-label="Delete team"
+      size="small"
       @confirm="remove"
     />
   </div>

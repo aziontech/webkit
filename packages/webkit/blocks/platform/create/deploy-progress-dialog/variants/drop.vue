@@ -427,6 +427,7 @@
                 <Progress
                   :value="percent"
                   aria-label="Deploy progress"
+                  size="small"
                 />
                 <p
                   v-if="activeName"

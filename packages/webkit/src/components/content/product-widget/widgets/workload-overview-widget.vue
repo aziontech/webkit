@@ -287,6 +287,7 @@
                         kind="outlined"
                         :value="FACTS.id"
                         aria-label="Copy workload ID"
+                        size="small"
                       />
                     </div>
                   </div>

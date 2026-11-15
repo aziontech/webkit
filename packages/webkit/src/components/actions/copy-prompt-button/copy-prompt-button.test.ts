@@ -125,7 +125,7 @@ describe('CopyPromptButton', () => {
       props: { value: PROMPT }
     })
     await fireEvent.click(getByRole('button'))
-    await waitFor(() => expect(emitted('copy')).toEqual([[PROMPT]]))
+    await waitFor(() => expect(emitted('copy')).toEqual([[expect.any(MouseEvent), PROMPT]]))
     expect(spy).toHaveBeenCalledWith(PROMPT)
     const button = getByRole('button', { name: 'Copied' })
     expect(button).toHaveAttribute('data-state', 'copied')

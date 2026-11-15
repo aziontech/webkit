@@ -313,7 +313,10 @@
             #actions
           >
             <ChatMessage.Actions>
-              <CopyButton :value="turn.content" />
+              <CopyButton
+                size="small"
+                :value="turn.content"
+              />
               <IconButton
                 icon="pi pi-refresh"
                 aria-label="Regenerate response"

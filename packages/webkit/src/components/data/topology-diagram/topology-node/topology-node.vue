@@ -244,6 +244,7 @@
                 kind="outlined"
                 :value="field.value"
                 :ariaLabel="t('topologyDiagram.copy', { field: `${resourceType} ${field.label}` })"
+                size="small"
               />
             </div>
           </div>

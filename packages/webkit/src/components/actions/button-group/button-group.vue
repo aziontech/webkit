@@ -86,7 +86,7 @@
     items: () => [],
     ariaLabel: '',
     kind: 'transparent',
-    size: 'medium',
+    size: 'large',
     visibleCount: undefined,
     overflowLabel: ''
   })

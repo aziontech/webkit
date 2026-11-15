@@ -997,6 +997,7 @@
           : 'It stays in Resources pending deletion for 30 days, then is removed with its data.'
       "
       confirm-label="Delete"
+      size="small"
       @confirm="confirmDelete"
     />
   </div>

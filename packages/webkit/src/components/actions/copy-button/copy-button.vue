@@ -31,12 +31,12 @@
     ariaLabel: '',
     copiedLabel: '',
     kind: 'transparent',
-    size: 'small',
+    size: 'large',
     disabled: false
   })
 
   const emit = defineEmits<{
-    copy: [value: string]
+    copy: [event: MouseEvent, value: string]
   }>()
 
   const attrs = useAttrs()
@@ -77,7 +77,7 @@
     }
 
     copied.value = true
-    emit('copy', props.value)
+    emit('copy', event, props.value)
 
     if (copiedTimeoutId) {
       clearTimeout(copiedTimeoutId)
