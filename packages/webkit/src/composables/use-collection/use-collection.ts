@@ -189,7 +189,7 @@ export interface CollectionPreferencesProps {
   'onUpdate:preferences': (value: CollectionPreferencesValue) => void
 }
 
-export interface CollectionCardsProps<T> {
+export interface CollectionCardListProps<T> {
   items: T[]
   trackBy: string
   loading: boolean
@@ -237,7 +237,7 @@ export interface UseCollectionReturn<T, C> {
   filterProps: ComputedRef<CollectionTextFilterProps>
   propertyFilterProps: ComputedRef<CollectionPropertyFilterProps>
   preferencesProps: ComputedRef<CollectionPreferencesProps>
-  cardsProps: ComputedRef<CollectionCardsProps<T>>
+  cardListProps: ComputedRef<CollectionCardListProps<T>>
 }
 
 const DEFAULT_PAGE_SIZE = 10
@@ -767,7 +767,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     'onUpdate:preferences': setPreferences
   }))
 
-  const cardsProps = computed<CollectionCardsProps<T>>(() => ({
+  const cardListProps = computed<CollectionCardListProps<T>>(() => ({
     items: items.value,
     trackBy,
     loading: loading.value,
@@ -815,6 +815,6 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     filterProps,
     propertyFilterProps,
     preferencesProps,
-    cardsProps
+    cardListProps
   }
 }

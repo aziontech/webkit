@@ -1,6 +1,6 @@
 {
-  "component": "cards",
-  "title": "Components/Primitives/Data/Cards",
+  "component": "card-list",
+  "title": "Components/Primitives/Data/CardList",
   "examples": [
     {
       "name": "Default",

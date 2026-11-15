@@ -17,7 +17,7 @@ export { matchesQuery, matchesText, parseFilterText, tokenText } from './propert
 export type { CollectionUrlAdapter, RouterLike } from './url'
 export { historyAdapter, routerAdapter } from './url'
 export type {
-  CollectionCardsProps,
+  CollectionCardListProps,
   CollectionColumn,
   CollectionExportParams,
   CollectionExportScope,

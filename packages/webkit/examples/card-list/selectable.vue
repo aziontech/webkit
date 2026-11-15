@@ -1,5 +1,5 @@
 <script setup>
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import Pagination from '@aziontech/webkit/pagination-root'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
@@ -9,7 +9,7 @@
     region: ['sa-east', 'us-east', 'eu-west'][i % 3]
   }))
 
-  const { cardsProps, paginationProps, selectedCount } = useCollection({
+  const { cardListProps, paginationProps, selectedCount } = useCollection({
     items: edges,
     pagination: { pageSize: 6 },
     selection: { mode: 'multi' }
@@ -24,12 +24,12 @@
     >
       {{ selectedCount }} selected
     </p>
-    <Cards v-bind="cardsProps">
+    <CardList v-bind="cardListProps">
       <template #header="{ item }">{{ item.name }}</template>
       <template #default="{ item }">
         <span class="text-(--text-muted)">{{ item.region }}</span>
       </template>
-    </Cards>
+    </CardList>
     <Pagination v-bind="paginationProps" />
   </div>
 </template>

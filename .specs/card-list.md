@@ -1,20 +1,22 @@
 ---
-name: cards
+name: card-list
 category: data
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: d3468896a0d8135620786254ce6162721b20875a36a3686490146a6ce163d43d
+checksum: a5f3105160cf4bf6b1f913bd2c8a1620070edbe770d232a9befe2301cfb990ab
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
-# Cards — Component Spec
+# CardList — Component Spec
 
 ## Purpose
 
-A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardsProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
+Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard.
+
+A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
 ## When to use
 
@@ -29,7 +31,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 ## Related
 
-- `use-collection` — filters, pages and selects; `cardsProps` is the binding.
+- `use-collection` — filters, pages and selects; `cardListProps` is the binding.
 - `table` — the same collection as rows; same item and selection model.
 - `property-filter`, `collection-preferences`, `pagination` — the controls around it.
 - `card` — one standalone card.
@@ -45,7 +47,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 ```vue
 <script setup>
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
 
   const items = [
     { id: 'a', name: 'storefront', domain: 'shop.example.com' },
@@ -54,10 +56,10 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 </script>
 
 <template>
-  <Cards :items="items">
+  <CardList :items="items">
     <template #header="{ item }">{{ item.name }}</template>
     <template #default="{ item }">{{ item.domain }}</template>
-  </Cards>
+  </CardList>
 </template>
 ```
 
@@ -71,7 +73,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 | `loading`       | `boolean`                       | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
 | `ariaLabel`     | `string`                        | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
 
-The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/cards`): `CardsSelectionMode = 'none' | 'single' | 'multi'`; `CardsItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
+The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/card-list`): `CardListSelectionMode = 'none' | 'single' | 'multi'`; `CardListItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
 
 ## v-model
 
@@ -85,8 +87,8 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 | Slot      | Scope                       | Notes                                                 |
 | --------- | --------------------------- | ----------------------------------------------------- |
-| `header`  | `CardsItemSlotProps<TItem>` | Card title; names the card and its selection control. |
-| `default` | `CardsItemSlotProps<TItem>` | Card body: the item's fields.                         |
+| `header`  | `CardListItemSlotProps<TItem>` | Card title; names the card and its selection control. |
+| `default` | `CardListItemSlotProps<TItem>` | Card body: the item's fields.                         |
 | `empty`   | —                           | Shown when there are no items.                        |
 
 ## States
@@ -131,10 +133,10 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 | Key                      | English source              | Override prop |
 | ------------------------ | --------------------------- | ------------- |
-| `cards.label`            | Items                       | `ariaLabel`   |
-| `cards.selectAll`        | Select all items            | —             |
-| `cards.emptyTitle`       | No items yet                | `empty` slot  |
-| `cards.emptyDescription` | Items you create show here. | `empty` slot  |
+| `cardList.label`            | Items                       | `ariaLabel`   |
+| `cardList.selectAll`        | Select all items            | —             |
+| `cardList.emptyTitle`       | No items yet                | `empty` slot  |
+| `cardList.emptyDescription` | Items you create show here. | `empty` slot  |
 
 - Formatting: none; the slots format the item's fields.
 
@@ -147,15 +149,15 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Responsive
 
-- Container queries: `@container/cards`; one column below `@xl` (644 px), two from `@xl`, three from `@4xl` (1024 px), four from `@6xl` (1388 px), so a card is never narrower than about 310 px.
+- Container queries: `@container/card-list`; one column below `@xl` (644 px), two from `@xl`, three from `@4xl` (1024 px), four from `@6xl` (1388 px), so a card is never narrower than about 310 px.
 - Narrow (≤ 640 px or a narrow container): one card a row at full width.
 - Touch: the checkbox and radio grow their hit area on `pointer: coarse` (from the inputs); nothing depends on hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Performance
 
-- Bundle budget: 19 KB gzip for `./cards` (it carries `checkbox`, `radio-button`, `skeleton` and `empty-state`) in `.size-limit.json`.
-- Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more. Above 120 items the cards mount in chunks of 60 as the list scrolls near them (`useLazyChunks`; a full-row placeholder holds the place of each chunk not yet mounted). Selection is looked up in a `Set` built once per change, so select-all and each card's selected state cost O(1) per card. The `Cards with 1k items: mount and select all` scenario of `performance.test.ts` holds an unpaged list to its budget in `perf-budgets.json`.
+- Bundle budget: 19 KB gzip for `./card-list` (it carries `checkbox`, `radio-button`, `skeleton` and `empty-state`) in `.size-limit.json`.
+- Runtime budget: a page of cards (≤ 100) renders in one frame; paging is the answer to more. Above 120 items the cards mount in chunks of 60 as the list scrolls near them (`useLazyChunks`; a full-row placeholder holds the place of each chunk not yet mounted). Selection is looked up in a `Set` built once per change, so select-all and each card's selected state cost O(1) per card. The `CardList with 1k items: mount and select all` scenario of `performance.test.ts` holds an unpaged list to its budget in `perf-budgets.json`.
 - Heavy parts: none.
 
 ## Examples

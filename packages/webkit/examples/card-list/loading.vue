@@ -1,9 +1,9 @@
 <script setup>
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
 </script>
 
 <template>
-  <Cards
+  <CardList
     :items="[]"
     loading
   />

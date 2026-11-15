@@ -1,11 +1,11 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import EmptyState from '@aziontech/webkit/empty-state'
 </script>
 
 <template>
-  <Cards :items="[]">
+  <CardList :items="[]">
     <template #empty>
       <EmptyState
         size="small"
@@ -22,5 +22,5 @@
         </template>
       </EmptyState>
     </template>
-  </Cards>
+  </CardList>
 </template>

@@ -3,15 +3,17 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 8709d9d51fde4eea80cacd5c2d32194407650a9a9b632249fd4e6a8099b6aca6
-spec_version: 3
+checksum: d1288c42a3e10c6181ee67d89aa7fc94c97f818500e79c395868cbbc0bcb7f98
+spec_version: 4
 created: 2026-10-20
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ChartCard — Component Spec
 
 ## Purpose
+
+Use ChartCard as the frame of a chart on a dashboard; for one box of other content use Card, and for a collection of records as cards use CardList.
 
 The box a dashboard chart lives in: a header with the title, the description and a controls zone, a content area padded or flush, an optional footer, and two optional handles that let the person move the card and resize it on a dashboard grid. The span (grid columns) and height are two-way models applied through custom properties, so the consumer's grid lays cards out with no script, and the reorder state stays with the page that owns the grid.
 

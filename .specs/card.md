@@ -3,19 +3,21 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: edcbd6f7bf3c44612acbe270f45eca44f6996aa86c6a6f8054cde1ffea30b3a3
+checksum: bcf59e023f7a001a06a9aa6ce8832ec36ceeb848a1aaa8137ba4211cec51de4e
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Card Box — Component Spec
 
 ## Purpose
+
+Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard.
 
 A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
 

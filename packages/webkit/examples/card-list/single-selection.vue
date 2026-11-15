@@ -1,5 +1,5 @@
 <script setup>
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import { ref } from 'vue'
 
   const plans = [
@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <Cards
+  <CardList
     v-model:selected-keys="selected"
     :items="plans"
     selection-mode="single"
@@ -21,5 +21,5 @@
       <p class="text-body-sm text-(--text-default)">{{ item.price }}</p>
       <p class="text-body-sm text-(--text-muted)">{{ item.requests }}</p>
     </template>
-  </Cards>
+  </CardList>
 </template>

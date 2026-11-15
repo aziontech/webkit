@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -21,7 +21,7 @@
     { key: 'requests', label: 'Requests in 24h', type: 'number' }
   ]
 
-  const { cardsProps, propertyFilterProps, preferencesProps } = useCollection({
+  const { cardListProps, propertyFilterProps, preferencesProps } = useCollection({
     items: [],
     columns: [
       { id: 'status', header: 'Status' },
@@ -89,8 +89,8 @@
               />
             </div>
           </header>
-          <Cards
-            v-bind="cardsProps"
+          <CardList
+            v-bind="cardListProps"
             loading
             aria-label="Applications"
           />

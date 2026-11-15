@@ -2,7 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -60,7 +60,7 @@
   const items = ref<Application[]>([...applications])
 
   const {
-    cardsProps,
+    cardListProps,
     paginationProps,
     propertyFilterProps,
     preferencesProps,
@@ -254,8 +254,8 @@
           />
 
           <template v-else>
-            <Cards
-              v-bind="cardsProps"
+            <CardList
+              v-bind="cardListProps"
               aria-label="Applications"
             >
               <template #header="{ item }">
@@ -309,7 +309,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </Cards>
+            </CardList>
             <Pagination
               v-if="totalCount > 0"
               v-bind="paginationProps"
