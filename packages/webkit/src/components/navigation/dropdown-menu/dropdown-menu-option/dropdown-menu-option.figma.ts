@@ -39,12 +39,12 @@ const option =
     ? figma.code`<DropdownMenu.Option${attrs}>${
         showIcon
           ? figma.code`
-  <template #left><i class="pi pi-box" aria-hidden="true" /></template>`
+  <template #leading><i class="pi pi-box" aria-hidden="true" /></template>`
           : ''
       }${
         showRight
           ? figma.code`
-  <template #right>${right}</template>`
+  <template #trailing>${right}</template>`
           : ''
       }
 </DropdownMenu.Option>`

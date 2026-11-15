@@ -19,18 +19,12 @@
     active?: boolean
     /** Closes the menu when the link is clicked. */
     closeOnClick?: boolean
-    /**
-     * Uses a native button element when not a link.
-     * @deprecated since 6.0 — the trigger is always a button or an anchor; omit this prop. Removed in 7.0.
-     */
-    nativeButton?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     href: '',
     active: false,
-    closeOnClick: false,
-    nativeButton: true
+    closeOnClick: false
   })
 
   defineSlots<{ default(): unknown }>()
@@ -51,7 +45,6 @@
   const controlRef = ref<HTMLElement | null>(null)
 
   const isLink = computed(() => props.href !== '')
-  const isNativeControl = computed(() => isLink.value || props.nativeButton)
 
   const itemOpen = computed(() => itemContext?.open.value ?? false)
   const itemValueResolved = computed(() => itemContext?.itemValue.value ?? '')
@@ -59,13 +52,7 @@
     !isLink.value && itemOpen.value ? itemContext?.contentId : undefined
   )
 
-  const componentTag = computed(() => {
-    if (isLink.value) {
-      return 'a'
-    }
-
-    return props.nativeButton ? 'button' : 'div'
-  })
+  const componentTag = computed(() => (isLink.value ? 'a' : 'button'))
 
   const ROOT_CLASS =
     'relative z-1 inline-flex cursor-pointer items-center gap-(--spacing-xs) ' +
@@ -138,12 +125,6 @@
       return
     }
 
-    if (!isNativeControl.value && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault()
-      ;(event.currentTarget as HTMLElement | null)?.click()
-      return
-    }
-
     root.onTriggerKeydown(event)
   }
 
@@ -174,12 +155,6 @@
   }
 
   onMounted(() => {
-    const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
-    if (dev && !props.nativeButton) {
-      console.warn(
-        '[webkit] <NavigationMenu.Trigger>: `native-button` is deprecated since 6.0 and removed in 7.0; the trigger is always a button or an anchor.'
-      )
-    }
     syncTriggerRegistration()
     syncHighlight()
   })
@@ -206,11 +181,9 @@
     ref="controlRef"
     v-bind="passthroughAttrs"
     :href="isLink ? href : undefined"
-    :type="!isLink && nativeButton ? 'button' : undefined"
+    :type="isLink ? undefined : 'button'"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :data-testid="testId"
-    :role="isNativeControl ? undefined : 'button'"
-    :tabindex="isNativeControl ? undefined : 0"
     :aria-expanded="!isLink ? itemOpen : undefined"
     :aria-controls="controlsId"
     :aria-current="isLink && active ? 'page' : undefined"

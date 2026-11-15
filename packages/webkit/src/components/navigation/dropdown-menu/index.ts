@@ -10,8 +10,6 @@ interface DropdownMenuStatic {
   Trigger: typeof DropdownMenuTrigger
   Group: typeof DropdownMenuGroup
   Item: typeof DropdownMenuOption
-  /** @deprecated since 6.0 — use DropdownMenu.Item. Removed in 7.0. */
-  Option: typeof DropdownMenuOption
   Sub: typeof DropdownMenuSub
   SubTrigger: typeof DropdownMenuSubTrigger
   SubContent: typeof DropdownMenuSubContent
@@ -21,7 +19,6 @@ const DropdownMenu = DropdownMenuRoot as typeof DropdownMenuRoot & DropdownMenuS
 DropdownMenu.Trigger = DropdownMenuTrigger
 DropdownMenu.Group = DropdownMenuGroup
 DropdownMenu.Item = DropdownMenuOption
-DropdownMenu.Option = DropdownMenuOption
 DropdownMenu.Sub = DropdownMenuSub
 DropdownMenu.SubTrigger = DropdownMenuSubTrigger
 DropdownMenu.SubContent = DropdownMenuSubContent

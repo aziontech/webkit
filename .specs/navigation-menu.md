@@ -3,11 +3,11 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: c452fa9ecf236b215aac59646fd3b5fb031cf2bcdb1b9994af445bf4ecad12fe
+checksum: 34807e6c50fd466306963164e06e785818003143f9971a400b19da6d8cc6cb75
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -20,6 +20,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
 
 ## When to use
 
+- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteNav, and app navigation uses SidebarMenu.
 - A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).
 - A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.
 - Panel entries need a title plus a muted description line, a leading icon, or a featured "see all" link.
@@ -49,7 +50,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
 - Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__content`, `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`, `__icon`), and a consumer `data-testid` wins on every part.
 - Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.
 - `Portal`, `Backdrop`, `Positioner`, `Popup`, `Viewport` and `Arrow` are the overlay chain that hosts every panel. They stay public so a page can place, pad and decorate the one shared popup; most pages copy the chain from the Usage block unchanged.
-- `NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`). Its `native-button` prop is deprecated since 6.0 and removed in 7.0: with `:native-button="false"` the trigger is still keyboard reachable (`role="button"`, `tabindex="0"`, `Enter`/`Space` toggle).
+- `NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop.
 
 ## Usage
 

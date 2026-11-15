@@ -769,13 +769,12 @@ describe('NavigationMenu audit fixes', () => {
     )
   })
 
-  it('keeps a deprecated native-button=false trigger keyboard reachable', async () => {
+  it('always renders the trigger as a button, even with a removed native-button attribute', async () => {
     const { getByRole } = renderTree(
       COMPOSED.replace('<NavigationMenuTrigger>', '<NavigationMenuTrigger :native-button="false">')
     )
     const trigger = getByRole('button', { name: /Solutions/ })
-    expect(trigger.tagName).toBe('DIV')
-    expect(trigger).toHaveAttribute('tabindex', '0')
+    expect(trigger.tagName).toBe('BUTTON')
     trigger.focus()
     await keyboardUser.keyboard('{Enter}')
     await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {

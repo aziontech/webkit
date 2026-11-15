@@ -107,7 +107,7 @@ describe('DropdownMenu (compound / overlay)', () => {
   it('attaches every sub-component to the compound root for dot-notation', () => {
     expect(DropdownMenu.Trigger).toBe(DropdownMenuTrigger)
     expect(DropdownMenu.Group).toBe(DropdownMenuGroup)
-    expect(DropdownMenu.Option).toBe(DropdownMenuOption)
+    expect(DropdownMenu.Item).toBe(DropdownMenuOption)
   })
 
   // ---- Root renders + reflects state via data-* -----------------------------
@@ -574,7 +574,7 @@ describe('DropdownMenu audit fixes', () => {
   it('exposes DropdownMenu.Item and the DropdownMenuItem export as the row', () => {
     expect(DropdownMenu.Item).toBe(DropdownMenuOption)
     expect(DropdownMenuItem).toBe(DropdownMenuOption)
-    expect(DropdownMenu.Option).toBe(DropdownMenuOption)
+    expect('Option' in DropdownMenu).toBe(false)
   })
 
   it('renders items placed directly in the root inside the panel, not next to the trigger', async () => {
@@ -596,7 +596,7 @@ describe('DropdownMenu audit fixes', () => {
     getOptions().forEach((option) => expect(option.getAttribute('tabindex')).toBe('-1'))
   })
 
-  it('renders the leading and trailing slots, and the deprecated left and right aliases', async () => {
+  it('renders the leading and trailing slots; the removed left and right slots render nothing', async () => {
     render(
       menu(() => [
         h(DropdownMenuGroup, null, () => [
@@ -622,8 +622,8 @@ describe('DropdownMenu audit fixes', () => {
       document.body.querySelector('[data-testid="navigation-dropdown-menu__option__trailing"]')
         ?.textContent
     ).toBe('T')
-    expect(document.body.querySelector('[data-testid="old__leading"]')?.textContent).toBe('l')
-    expect(document.body.querySelector('[data-testid="old__trailing"]')?.textContent).toBe('r')
+    expect(document.body.querySelector('[data-testid="old__leading"]')).toBeNull()
+    expect(document.body.querySelector('[data-testid="old__trailing"]')).toBeNull()
   })
 
   it('jumps to the first item that starts with a typed letter', async () => {
