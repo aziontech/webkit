@@ -94,7 +94,7 @@
   src: url('https://fonts.azion.com/roboto-mono/roboto-mono-light.ttf') format('truetype');
 }
 
-/* Rubik (OFL), variable 300–900. fonts.azion.com serves apps/fonts/rubik/; the jsDelivr copy of
+/* Rubik (OFL), variable 300–900. fonts.azion.com serves assets/fonts/rubik/; the jsDelivr copy of
    google/fonts is the fallback while a new upload propagates. */
 @font-face {
   font-display: swap;
