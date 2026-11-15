@@ -30,7 +30,7 @@
   export type HeroMediaAlign = 'center' | 'end'
 
   interface Props {
-    /** Height of the band; `screen` fills one viewport minus `--banner-offset`. */
+    /** Height of the band; `screen` fills one viewport minus `--hero-banner-offset`. */
     kind?: HeroKind
     /** Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset. */
     maxWidth?: HeroWidth
@@ -120,10 +120,10 @@
     :data-media-align="hasMedia() ? mediaAlign : null"
     :data-align="align"
     :style="{
-      '--banner-offset': offset || undefined,
+      '--hero-banner-offset': offset || undefined,
       '--banner-bottom-height': bottomHeight || undefined
     }"
-    class="relative isolate w-full overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[kind=screen]:flex data-[kind=screen]:min-h-[calc(100dvh-var(--banner-offset,0rem))] data-[kind=screen]:flex-col"
+    class="relative isolate w-full overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[kind=screen]:flex data-[kind=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))] data-[kind=screen]:flex-col"
   >
     <div
       v-if="hasBackdrop()"

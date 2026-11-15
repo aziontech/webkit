@@ -86,8 +86,9 @@
   const faceStyle = (cell: ClientMosaicColumnsCell): Record<string, string> => {
     const brand = cell.brand ?? clientBrand(cell.name) ?? NO_BRAND
     return {
-      '--wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`,
-      '--wall-ink': brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
+      '--client-mosaic-columns-wall-face': `radial-gradient(354px 354px at -15% -15%, ${brand.glow}, transparent 70%), radial-gradient(354px 354px at 45% 115%, ${brand.glow}, transparent 70%), ${brand.base}`,
+      '--client-mosaic-columns-wall-ink':
+        brand.ink === 'dark' ? 'var(--color-base-black)' : 'var(--color-base-white)'
     }
   }
 
@@ -185,8 +186,10 @@
                 />
 
                 <div
-                  :style="{ '--panel-h': `${panelHeights[index] ?? 0}px` }"
-                  class="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center transition-[translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none max-lg:-translate-y-[calc(50%+var(--panel-h)/2)] lg:group-data-[state=open]/spot:-translate-y-[calc(50%+var(--panel-h)/2)]"
+                  :style="{
+                    '--client-mosaic-columns-panel-height': `${panelHeights[index] ?? 0}px`
+                  }"
+                  class="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center transition-[translate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none max-lg:-translate-y-[calc(50%+var(--client-mosaic-columns-panel-height)/2)] lg:group-data-[state=open]/spot:-translate-y-[calc(50%+var(--client-mosaic-columns-panel-height)/2)]"
                 >
                   <img
                     :src="cell.logo"
@@ -248,7 +251,7 @@
                 :link-label="linkLabel"
                 :items="[{ src: cell.logo, alt: cell.name, href: cell.href }]"
                 :style="faceStyle(cell)"
-                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--wall-face)] [&_a]:[--text-default:var(--wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
+                class="[&_[role=list]]:grid-cols-1! [&_a]:[background:var(--client-mosaic-columns-wall-face)] [&_a]:[--text-default:var(--client-mosaic-columns-wall-ink)] group-hover/card:[&_a]:before:opacity-100 group-hover/card:[&_a>span:first-child]:-translate-y-(--spacing-sm) group-hover/card:[&_a>span:last-child]:translate-y-0 group-hover/card:[&_a>span:last-child]:opacity-100"
               >
                 <template #mark>
                   <img

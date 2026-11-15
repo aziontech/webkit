@@ -3,11 +3,11 @@ name: card-grid
 category: marketing
 structure: composition
 status: implemented
-spec_version: 2
-checksum: a4bd77330ba107713eff09567b991cb8f6948a7a8a6c5c7eb477d3e3e5928ddf
+spec_version: 3
+checksum: 46529203de79dd80134d93431d71d3ae8dd8823c4f6b6c92d422537939378a2f
 style_seam: true
 created: 2026-09-23
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # Card Grid — Component Spec
@@ -138,7 +138,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-divider-color` carries the hairline weight
 - `data-flush` mirrors `flush`, and is what withholds the `frame` grid's own outer rules
 - `data-layout` mirrors `layout`; `data-count` carries how many cells render (comments and empty text are not cells)
-- The root is a CSS grid of equal tracks; it sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
+- The root is a CSS grid of equal tracks; it sets `--card-grid-columns-base`, `--card-grid-columns-sm` and `--card-grid-columns-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
 - `data-fill-trailing` marks a `balanced` `divider` grid: its `::after` fills the trailing empty tracks of a short last row with `--bg-canvas` (spanning `--card-grid-rest`, hidden when the row is full), so the rule colour the gaps show through never shows as a block
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
 - `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding

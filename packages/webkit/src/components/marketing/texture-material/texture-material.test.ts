@@ -69,11 +69,12 @@ describe('TextureMaterial', () => {
 
     expect(planes).toHaveLength(16)
 
-    const ranks = planes.map((plane) => plane.style.getPropertyValue('--rank'))
+    const ranks = planes.map((plane) => plane.style.getPropertyValue('--texture-material-rank'))
     expect(new Set(ranks).size).toBe(16)
 
     const cells = planes.map(
-      (plane) => `${plane.style.getPropertyValue('--col')},${plane.style.getPropertyValue('--row')}`
+      (plane) =>
+        `${plane.style.getPropertyValue('--texture-material-column')},${plane.style.getPropertyValue('--texture-material-row')}`
     )
     expect(new Set(cells).size).toBe(16)
   })

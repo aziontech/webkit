@@ -198,7 +198,7 @@
     <div
       :data-titled="title ? '' : undefined"
       :data-single-line="singleLine ? '' : undefined"
-      class="flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--prompt-bg:var(--bg-surface)] data-[single-line]:items-center data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--prompt-bg:var(--bg-canvas)]"
+      class="flex items-start gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm) [--doc-prompt-background:var(--bg-surface)] data-[single-line]:items-center data-[titled]:border-t data-[titled]:border-(--border-default) data-[titled]:bg-(--bg-canvas) data-[titled]:[--doc-prompt-background:var(--bg-canvas)]"
     >
       <div class="min-w-0 flex-1">
         <div class="relative">
@@ -218,17 +218,17 @@
           <div
             v-if="kind === 'block' && capped"
             :data-hidden="expanded ? '' : undefined"
-            class="pointer-events-none absolute inset-x-0 bottom-0 h-(--spacing-lg) bg-gradient-to-b from-transparent to-(--prompt-bg) transition-opacity duration-moderate-01 ease-productive-exit data-[hidden]:opacity-0 motion-reduce:transition-none"
+            class="pointer-events-none absolute inset-x-0 bottom-0 h-(--spacing-lg) bg-gradient-to-b from-transparent to-(--doc-prompt-background) transition-opacity duration-moderate-01 ease-productive-exit data-[hidden]:opacity-0 motion-reduce:transition-none"
             aria-hidden="true"
           />
           <div
             v-if="kind === 'line' && (overflow === 'start' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg) bg-gradient-to-r from-(--prompt-bg) to-transparent rtl:bg-gradient-to-l"
+            class="pointer-events-none absolute inset-y-0 start-0 w-(--spacing-lg) bg-gradient-to-r from-(--doc-prompt-background) to-transparent rtl:bg-gradient-to-l"
             aria-hidden="true"
           />
           <div
             v-if="kind === 'line' && (overflow === 'end' || overflow === 'both')"
-            class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg) bg-gradient-to-l from-(--prompt-bg) to-transparent rtl:bg-gradient-to-r"
+            class="pointer-events-none absolute inset-y-0 end-0 w-(--spacing-lg) bg-gradient-to-l from-(--doc-prompt-background) to-transparent rtl:bg-gradient-to-r"
             aria-hidden="true"
           />
         </div>

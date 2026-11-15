@@ -107,7 +107,9 @@ describe('ClientMosaicColumns', () => {
 
     const wall = getByAltText('Magalu').closest('section') as HTMLElement
 
-    expect(wall.style.getPropertyValue('--wall-face')).toContain(cells[0].brand.base)
+    expect(wall.style.getPropertyValue('--client-mosaic-columns-wall-face')).toContain(
+      cells[0].brand.base
+    )
   })
 
   it('reads the face from the client registry by name when brand is left out', () => {
@@ -116,8 +118,12 @@ describe('ClientMosaicColumns', () => {
     })
 
     const face = (name: string) => (getByAltText(name).closest('section') as HTMLElement).style
-    expect(face('Magalu').getPropertyValue('--wall-face')).toContain(CLIENT_BRANDS['magalu']?.base)
-    expect(face('Dafiti').getPropertyValue('--wall-ink')).toBe('var(--color-base-black)')
+    expect(face('Magalu').getPropertyValue('--client-mosaic-columns-wall-face')).toContain(
+      CLIENT_BRANDS['magalu']?.base
+    )
+    expect(face('Dafiti').getPropertyValue('--client-mosaic-columns-wall-ink')).toBe(
+      'var(--color-base-black)'
+    )
   })
 
   it('paints a black face for a client the registry does not know and no brand', () => {
@@ -128,8 +134,12 @@ describe('ClientMosaicColumns', () => {
     })
 
     const style = (getByAltText('Northwind').closest('section') as HTMLElement).style
-    expect(style.getPropertyValue('--wall-face')).toContain('var(--color-base-black)')
-    expect(style.getPropertyValue('--wall-ink')).toBe('var(--color-base-white)')
+    expect(style.getPropertyValue('--client-mosaic-columns-wall-face')).toContain(
+      'var(--color-base-black)'
+    )
+    expect(style.getPropertyValue('--client-mosaic-columns-wall-ink')).toBe(
+      'var(--color-base-white)'
+    )
   })
 
   it('renders only the section when cells is empty', () => {

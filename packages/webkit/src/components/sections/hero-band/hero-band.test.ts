@@ -132,15 +132,15 @@ describe('HeroBand', () => {
     const { getByTestId, rerender } = band({ kind: 'centered' })
 
     expect(getByTestId(HERO_TESTID).getAttribute('data-kind')).toBe('screen')
-    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe(
+    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe(
       'var(--layout-header-height)'
     )
 
     await rerender({ headerOffset: '' })
-    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe('')
+    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe('')
 
     await rerender({ kind: 'title-band', headerOffset: 'var(--layout-header-height)' })
-    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--banner-offset')).toBe('')
+    expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe('')
   })
 
   it('sets a short headline on the narrow measure in the centered layouts only', () => {

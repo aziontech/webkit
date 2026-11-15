@@ -195,7 +195,7 @@ describe('ContactHub', () => {
 
     expect(grid).toHaveAttribute('data-layout', 'balanced')
     expect(grid).toHaveAttribute('data-count', String(count))
-    expect(grid?.style.getPropertyValue('--card-grid-cols-lg')).toBe(perRow)
+    expect(grid?.style.getPropertyValue('--card-grid-columns-lg')).toBe(perRow)
   })
 
   it('has no a11y violations', async () => {

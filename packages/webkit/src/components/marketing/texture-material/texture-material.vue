@@ -63,8 +63,12 @@
     <span
       v-for="plane in isDither ? ditherPlanes : []"
       :key="plane.rank"
-      :style="{ '--col': plane.x, '--row': plane.y, '--rank': plane.rank }"
-      class="absolute inset-0 [--texture-span:calc(var(--texture-to,0.92)-var(--texture-from,0.06))] [--texture-at:calc(((var(--rank)+0.5)/16-var(--texture-from,0.06))/var(--texture-span)*100%)] [--texture-soft:calc(100%/32/var(--texture-span))] [background-image:conic-gradient(at_var(--texture-cell)_var(--texture-cell),transparent_0_75%,var(--texture-ink,color-mix(in_srgb,var(--text-default)_85%,transparent))_75%_100%)] [background-position:calc(var(--col)*var(--texture-pitch))_calc(var(--row)*var(--texture-pitch))] [background-size:calc(4*var(--texture-pitch))_calc(4*var(--texture-pitch))] [mask-image:linear-gradient(var(--texture-direction,to_bottom),transparent_calc(var(--texture-at)-var(--texture-soft)),black_calc(var(--texture-at)+var(--texture-soft)))] [mask-mode:alpha]"
+      :style="{
+        '--texture-material-column': plane.x,
+        '--texture-material-row': plane.y,
+        '--texture-material-rank': plane.rank
+      }"
+      class="absolute inset-0 [--texture-span:calc(var(--texture-to,0.92)-var(--texture-from,0.06))] [--texture-material-at:calc(((var(--texture-material-rank)+0.5)/16-var(--texture-from,0.06))/var(--texture-span)*100%)] [--texture-soft:calc(100%/32/var(--texture-span))] [background-image:conic-gradient(at_var(--texture-cell)_var(--texture-cell),transparent_0_75%,var(--texture-ink,color-mix(in_srgb,var(--text-default)_85%,transparent))_75%_100%)] [background-position:calc(var(--texture-material-column)*var(--texture-pitch))_calc(var(--texture-material-row)*var(--texture-pitch))] [background-size:calc(4*var(--texture-pitch))_calc(4*var(--texture-pitch))] [mask-image:linear-gradient(var(--texture-direction,to_bottom),transparent_calc(var(--texture-material-at)-var(--texture-soft)),black_calc(var(--texture-material-at)+var(--texture-soft)))] [mask-mode:alpha]"
     />
 
     <div

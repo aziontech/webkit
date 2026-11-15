@@ -302,18 +302,18 @@
         id: span.id,
         tone,
         style: {
-          '--line-offset': String(span.start / total.value),
-          '--line-width': String(span.duration / total.value),
-          '--line-top': String((index + 0.2) / count),
-          '--line-height': String(0.6 / count)
+          '--trace-line-offset': String(span.start / total.value),
+          '--trace-line-width': String(span.duration / total.value),
+          '--trace-line-top': String((index + 0.2) / count),
+          '--trace-line-height': String(0.6 / count)
         }
       }
     })
   })
 
   const windowStyle = computed(() => ({
-    '--window-start': String(view.value[0] / total.value),
-    '--window-size': String((view.value[1] - view.value[0]) / total.value)
+    '--trace-window-start': String(view.value[0] / total.value),
+    '--trace-window-size': String((view.value[1] - view.value[0]) / total.value)
   }))
 
   const setWindow = (a: number, b: number): void => {
@@ -566,8 +566,8 @@
             v-for="tick in ticks"
             :key="tick.at"
             :data-edge="tick.edge"
-            :style="{ '--tick-at': `${tick.at * 100}%` }"
-            class="absolute inset-y-0 start-(--tick-at) flex w-0 items-center justify-center data-[edge=end]:justify-end data-[edge=start]:justify-start"
+            :style="{ '--trace-tick-at': `${tick.at * 100}%` }"
+            class="absolute inset-y-0 start-(--trace-tick-at) flex w-0 items-center justify-center data-[edge=end]:justify-end data-[edge=start]:justify-start"
           >
             <span class="text-label-sm whitespace-nowrap text-(--text-muted) tabular-nums">{{
               tick.label
@@ -613,12 +613,12 @@
             :data-tone="line.tone"
             :style="line.style"
             aria-hidden="true"
-            class="pointer-events-none absolute start-[calc(var(--line-offset)*100%)] top-[calc(var(--line-top)*100%)] h-[max(1px,calc(var(--line-height)*100%))] w-[max(1px,calc(var(--line-width)*100%))] rounded-full data-[tone=error]:bg-(--danger-border) data-[tone=ok]:bg-(--success-border) data-[tone=root]:bg-(--info-border) data-[tone=running]:bg-(--warning-border)"
+            class="pointer-events-none absolute start-[calc(var(--trace-line-offset)*100%)] top-[calc(var(--trace-line-top)*100%)] h-[max(1px,calc(var(--trace-line-height)*100%))] w-[max(1px,calc(var(--trace-line-width)*100%))] rounded-full data-[tone=error]:bg-(--danger-border) data-[tone=ok]:bg-(--success-border) data-[tone=root]:bg-(--info-border) data-[tone=running]:bg-(--warning-border)"
           />
           <span
             :style="windowStyle"
             :data-testid="`${testId}__window`"
-            class="pointer-events-none absolute inset-y-0 start-[calc(var(--window-start)*100%)] w-[calc(var(--window-size)*100%)] rounded-(--shape-button) border border-(--border-selected) bg-(--bg-selected)/40"
+            class="pointer-events-none absolute inset-y-0 start-[calc(var(--trace-window-start)*100%)] w-[calc(var(--trace-window-size)*100%)] rounded-(--shape-button) border border-(--border-selected) bg-(--bg-selected)/40"
           >
             <span
               v-for="thumb in thumbs"
@@ -702,9 +702,9 @@
           :data-slowest="row.span.id === slowestId || null"
           :data-testid="`${testId}__row`"
           :style="{
-            '--span-offset': String(row.offset),
-            '--span-width': String(row.width),
-            '--span-depth': String(row.depth)
+            '--trace-span-offset': String(row.offset),
+            '--trace-span-width': String(row.width),
+            '--trace-span-depth': String(row.depth)
           }"
           class="[--trace-name:9rem] @xl/trace:[--trace-name:13rem] @3xl/trace:[--trace-name:16rem] @5xl/trace:[--trace-name:20rem] grid min-h-9 w-full cursor-pointer grid-cols-[var(--trace-name)_minmax(0,1fr)] items-stretch border-b border-(--border-muted) text-start transition-colors duration-150 ease-out last:border-b-0 hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:outline-none focus-visible:ring-inset data-selected:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
           @click="select(row)"
@@ -713,7 +713,7 @@
         >
           <span
             role="gridcell"
-            class="flex min-w-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--span-depth)*var(--spacing-md))] pe-(--spacing-sm)"
+            class="flex min-w-0 items-center gap-(--spacing-xxs) border-e border-(--border-muted) py-(--spacing-xs) ps-[calc(var(--spacing-xs)+var(--trace-span-depth)*var(--spacing-md))] pe-(--spacing-sm)"
           >
             <span
               v-if="row.hasChildren"
@@ -773,7 +773,7 @@
                 :data-tone="row.tone"
                 :data-outside="row.outside || null"
                 :data-testid="`${testId}__bar`"
-                class="absolute inset-y-0 start-[calc(var(--span-offset)*100%)] w-[calc(var(--span-width)*100%)] rounded-(--shape-button) border data-outside:hidden data-[tone=error]:border-(--danger-border) data-[tone=error]:bg-(--danger) data-[tone=ok]:border-(--success-border) data-[tone=ok]:bg-(--success) data-[tone=root]:border-(--info-border) data-[tone=root]:bg-(--info) data-[tone=running]:border-(--warning-border) data-[tone=running]:bg-(--warning)"
+                class="absolute inset-y-0 start-[calc(var(--trace-span-offset)*100%)] w-[calc(var(--trace-span-width)*100%)] rounded-(--shape-button) border data-outside:hidden data-[tone=error]:border-(--danger-border) data-[tone=error]:bg-(--danger) data-[tone=ok]:border-(--success-border) data-[tone=ok]:bg-(--success) data-[tone=root]:border-(--info-border) data-[tone=root]:bg-(--info) data-[tone=running]:border-(--warning-border) data-[tone=running]:bg-(--warning)"
               >
                 <span
                   :data-tone="row.tone"
@@ -787,10 +787,10 @@
               <span
                 v-for="mark in row.marks"
                 :key="mark.key"
-                :style="{ '--event-at': String(mark.at) }"
+                :style="{ '--trace-event-at': String(mark.at) }"
                 :data-testid="`${testId}__event`"
                 aria-hidden="true"
-                class="pointer-events-none absolute -inset-y-0.5 start-[calc(var(--event-at)*100%)] -ms-px w-0.5 rounded-full bg-(--text-default) ring-1 ring-(--bg-surface)"
+                class="pointer-events-none absolute -inset-y-0.5 start-[calc(var(--trace-event-at)*100%)] -ms-px w-0.5 rounded-full bg-(--text-default) ring-1 ring-(--bg-surface)"
               />
             </span>
           </span>

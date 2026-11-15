@@ -186,7 +186,7 @@ describe('NetworkSection', () => {
 
     const floor = container.querySelector<HTMLElement>('[data-columns]')
     expect(floor?.getAttribute('data-layout')).toBe('balanced')
-    expect(floor?.style.getPropertyValue('--card-grid-cols-lg')).toBe(perRow)
+    expect(floor?.style.getPropertyValue('--card-grid-columns-lg')).toBe(perRow)
   })
 
   it('renders a benefit without an icon as a topic with its h3', () => {

@@ -86,7 +86,7 @@
 
   function rowStyle(row: number): Record<string, string> {
     const direction = row % 2 === 0 ? 1 : -1
-    return { '--row-drift': `${(REST + progress.value * DRIFT) * direction}px` }
+    return { '--runtime-api-cloud-row-drift': `${(REST + progress.value * DRIFT) * direction}px` }
   }
 
   function toneOf(pill: { azion: boolean; index: number }): 'azion' | 'lit' | 'muted' {
@@ -109,7 +109,7 @@
       :key="rowIndex"
       role="none"
       :style="rowStyle(rowIndex)"
-      class="flex w-max shrink-0 translate-x-(--row-drift) items-center gap-(--spacing-xs) will-change-[translate] rtl:-translate-x-(--row-drift)"
+      class="flex w-max shrink-0 translate-x-(--runtime-api-cloud-row-drift) items-center gap-(--spacing-xs) will-change-[translate] rtl:-translate-x-(--runtime-api-cloud-row-drift)"
     >
       <span
         v-for="pill in row"

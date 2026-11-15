@@ -3,8 +3,8 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 5
-checksum: 56d5e8b6e84000bb4d317559700a9947960b83d525ef2b7802e74a9f6a2f4f74
+spec_version: 6
+checksum: 0879f1f0477ec5b1cd3e1a7b712509fba85f5c63c0ca3b34311139e06e0ec7e2
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -44,7 +44,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 ## Best practices
 
 - One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.
-- Pass `kind="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.
+- Pass `kind="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
 - Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.
 - Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
@@ -94,7 +94,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 
 | Prop               | Type                  | Default    | Required | JSDoc                                                                                                                                                                  |
 | ------------------ | --------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`             | `HeroKind`            | `'band'`   | false    | Height of the band; `screen` fills one viewport minus `--banner-offset`.                                                                                               |
+| `kind`             | `HeroKind`            | `'band'`   | false    | Height of the band; `screen` fills one viewport minus `--hero-banner-offset`.                                                                                               |
 | `maxWidth`         | `HeroWidth`           | `'7xl'`    | false    | Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset.                                                                     |
 | `bordered`         | `boolean`             | `true`     | false    | Draw the band's bottom rule, which is the top edge of whatever follows it.                                                                                             |
 | `padded`           | `boolean`             | `true`     | false    | Apply the band's own vertical rhythm. The inline inset is always applied.                                                                                              |

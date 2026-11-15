@@ -230,10 +230,11 @@
   }
 
   function beatStyle(order: number): Record<string, string> {
-    if (reduced.value || !props.animated) return { '--part-duration': '0ms', '--part-delay': '0ms' }
+    if (reduced.value || !props.animated)
+      return { '--shell-mockup-part-duration': '0ms', '--shell-mockup-part-delay': '0ms' }
     return {
-      '--part-duration': duration[props.travel],
-      '--part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
+      '--shell-mockup-part-duration': duration[props.travel],
+      '--shell-mockup-part-delay': `${Math.round(globalThis.parseFloat(duration[props.beat]) * order)}ms`
     }
   }
 

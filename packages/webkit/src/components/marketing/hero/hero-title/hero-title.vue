@@ -74,7 +74,7 @@
     :data-mobile-centered="mobileCentered || null"
     :data-width="maxWidth"
     :data-sticky="sticky || null"
-    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--banner-offset,0rem)+var(--spacing-xl))] data-[centered]:mx-auto data-[centered]:items-center data-[centered]:text-center max-md:data-[mobile-centered]:mx-auto max-md:data-[mobile-centered]:items-center max-md:data-[mobile-centered]:text-center"
+    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--hero-banner-offset,0rem)+var(--spacing-xl))] data-[centered]:mx-auto data-[centered]:items-center data-[centered]:text-center max-md:data-[mobile-centered]:mx-auto max-md:data-[mobile-centered]:items-center max-md:data-[mobile-centered]:text-center"
   >
     <Overline
       v-if="eyebrow"

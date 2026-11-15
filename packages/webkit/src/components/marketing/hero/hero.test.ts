@@ -50,7 +50,7 @@ describe('Hero', () => {
     const { getByTestId } = render(Hero, { props: { offset: '3.5rem', bottomHeight: '8rem' } })
     const root = getByTestId(TESTID)
 
-    expect(root.style.getPropertyValue('--banner-offset')).toBe('3.5rem')
+    expect(root.style.getPropertyValue('--hero-banner-offset')).toBe('3.5rem')
     expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('8rem')
   })
 
@@ -58,7 +58,7 @@ describe('Hero', () => {
     const { getByTestId } = render(Hero)
     const root = getByTestId(TESTID)
 
-    expect(root.style.getPropertyValue('--banner-offset')).toBe('')
+    expect(root.style.getPropertyValue('--hero-banner-offset')).toBe('')
     expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('')
   })
 
