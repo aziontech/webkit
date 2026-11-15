@@ -51,7 +51,7 @@
       <Button
         size="small"
         kind="secondary"
-        icon="pi pi-filter"
+        icon="ai ai-filter"
         label="Filter"
       />
     </PopoverTrigger>

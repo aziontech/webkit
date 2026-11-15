@@ -22,7 +22,7 @@
       title="cache-rules.json"
       description="Cache settings for storefront"
       meta="1 KB · JSON"
-      icon="pi pi-code"
+      icon="ai ai-code"
       :copy-value="rules"
       openable
       @open="opened = true"

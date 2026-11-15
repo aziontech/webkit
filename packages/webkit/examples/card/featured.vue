@@ -9,7 +9,7 @@
       id: 'split-testing',
       name: 'Split Testing',
       vendor: 'Acme Inc.',
-      logo: 'pi pi-percentage',
+      logo: 'ai ai-percentage',
       context: 'Application',
       description: 'Send a share of the traffic to a second version and compare the results.'
     },
@@ -17,7 +17,7 @@
       id: 'bot-shield',
       name: 'Bot Shield',
       vendor: 'Acme Inc.',
-      logo: 'pi pi-shield',
+      logo: 'ai ai-shield',
       context: 'Firewall',
       description:
         'Score every request and block the automated traffic before it reaches the origin.'
@@ -26,7 +26,7 @@
       id: 'request-signer',
       name: 'Request Signer',
       vendor: 'Acme Inc.',
-      logo: 'pi pi-key',
+      logo: 'ai ai-key',
       context: 'Firewall',
       description:
         'Sign every request with a rotating key, so the origin only answers signed traffic.'

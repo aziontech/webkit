@@ -50,7 +50,7 @@
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
-                  icon="pi pi-bars"
+                  icon="ai ai-bars"
                   aria-label="Open navigation"
                   kind="outlined"
                   size="medium"
@@ -65,7 +65,7 @@
                 @open="searchOpen = true"
               />
               <IconButton
-                icon="pi pi-question-circle"
+                icon="ai ai-question-circle"
                 aria-label="Help"
                 kind="outlined"
                 size="medium"

@@ -6,19 +6,19 @@
   const plans = [
     {
       value: 'hobby',
-      icon: 'pi pi-sparkles',
+      icon: 'ai ai-sparkles',
       label: 'Hobby',
       description: 'For learning and small personal projects.'
     },
     {
       value: 'pro',
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       label: 'Pro',
       description: 'For professional or commercial applications.'
     },
     {
       value: 'scale',
-      icon: 'pi pi-file-check',
+      icon: 'ai ai-file-check',
       label: 'Scale',
       description: 'For businesses that need advanced security and compliance.'
     }

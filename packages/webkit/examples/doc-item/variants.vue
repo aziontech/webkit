@@ -9,7 +9,7 @@
     <ItemList>
       <DocItem
         title="Community templates"
-        icon="pi pi-github"
+        icon="ai ai-github"
         href="https://github.com/aziontech"
         target="_blank"
       >
@@ -17,7 +17,7 @@
       </DocItem>
       <DocItem
         title="Rule"
-        icon="pi pi-filter"
+        icon="ai ai-filter"
       >
         With no href the row is inert — no hover, no anchor, no trailing arrow.
       </DocItem>

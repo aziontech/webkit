@@ -22,7 +22,7 @@
       return () =>
         h(Button, {
           label: 'Find a workload',
-          icon: 'pi pi-search',
+          icon: 'ai ai-search',
           kind: 'outlined',
           size: 'medium',
           onClick: openSearch

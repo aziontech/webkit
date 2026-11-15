@@ -9,7 +9,7 @@
     <ItemList>
       <DocItem
         title="Edge Functions"
-        icon="pi pi-code"
+        icon="ai ai-code"
         href="#edge-functions"
       >
         Build serverless applications on Azion's global network. Workloads integrate with functions
@@ -17,7 +17,7 @@
       </DocItem>
       <DocItem
         title="Edge SQL"
-        icon="pi pi-database"
+        icon="ai ai-database"
         href="#edge-sql"
       >
         Store relational data across the network. A workload reads it from the location that served
@@ -25,7 +25,7 @@
       </DocItem>
       <DocItem
         title="Edge Cache"
-        icon="pi pi-bolt"
+        icon="ai ai-bolt"
         href="#edge-cache"
       >
         Decide what is cached, for how long, and by which key.

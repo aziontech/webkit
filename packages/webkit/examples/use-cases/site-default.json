@@ -11,22 +11,22 @@
     },
     "items": [
       {
-        "icon": "pi pi-comments",
+        "icon": "ai ai-comments",
         "title": "RAG Applications",
         "description": "Build topic-specific chatbots with the topic data stored in SQL Database."
       },
       {
-        "icon": "pi pi-search",
+        "icon": "ai ai-search",
         "title": "Search Applications",
         "description": "Power search with vector similarity queries on stored embeddings."
       },
       {
-        "icon": "pi pi-sync",
+        "icon": "ai ai-sync",
         "title": "AI Context Injection",
         "description": "Give AI applications relevant context from vector embeddings."
       },
       {
-        "icon": "pi pi-globe",
+        "icon": "ai ai-globe",
         "title": "AI Workflows",
         "description": "Pair stored embeddings with AI Inference to run RAG applications on Azion."
       }

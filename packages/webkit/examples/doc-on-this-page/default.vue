@@ -15,7 +15,7 @@
       {
         label: 'Repository',
         links: [
-          { label: 'View source', href: 'https://github.com/aziontech', icon: 'pi pi-github' }
+          { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }
         ]
       }
     ]"

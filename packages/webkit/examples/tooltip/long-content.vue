@@ -9,7 +9,7 @@
     placement="top"
   >
     <IconButton
-      icon="pi pi-info-circle"
+      icon="ai ai-info-circle"
       aria-label="More information"
       kind="transparent"
       size="small"

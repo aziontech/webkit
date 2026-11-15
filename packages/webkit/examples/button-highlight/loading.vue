@@ -5,7 +5,7 @@
 <template>
   <ButtonHighlight
     label="Ask Azion"
-    icon="pi pi-sparkles"
+    icon="ai ai-sparkles"
     loading
   />
 </template>

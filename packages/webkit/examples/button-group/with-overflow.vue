@@ -5,23 +5,23 @@
   const pinned = ref(true)
 
   const items = computed(() => [
-    { id: 'refresh', label: 'Refresh', icon: 'pi pi-refresh' },
+    { id: 'refresh', label: 'Refresh', icon: 'ai ai-refresh' },
     {
       id: 'pin',
       type: 'toggle',
       label: 'Pin to home',
-      icon: 'pi pi-star',
-      pressedIcon: 'pi pi-star-fill',
+      icon: 'ai ai-star',
+      pressedIcon: 'ai ai-star-fill',
       pressed: pinned.value
     },
-    { id: 'share', label: 'Share', icon: 'pi pi-share-alt' },
-    { id: 'duplicate', label: 'Duplicate', icon: 'pi pi-clone' },
-    { id: 'archive', label: 'Archive', icon: 'pi pi-inbox', disabled: true },
+    { id: 'share', label: 'Share', icon: 'ai ai-share-alt' },
+    { id: 'duplicate', label: 'Duplicate', icon: 'ai ai-clone' },
+    { id: 'archive', label: 'Archive', icon: 'ai ai-inbox', disabled: true },
     {
       id: 'export',
       type: 'menu',
       label: 'Export',
-      icon: 'pi pi-file-export',
+      icon: 'ai ai-file-export',
       options: [
         { id: 'export-csv', label: 'Export as CSV' },
         { id: 'export-json', label: 'Export as JSON' }

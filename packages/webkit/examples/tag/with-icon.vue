@@ -7,42 +7,42 @@
     <Tag
       label="Label"
       severity="primary"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="neutral"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="accent"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="success"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="warning"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="danger"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="info"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
     <Tag
       label="Label"
       severity="contrast"
-      icon="pi pi-box"
+      icon="ai ai-box"
     />
   </div>
 </template>

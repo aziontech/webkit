@@ -25,7 +25,7 @@
           label="Try again"
           kind="secondary"
           size="small"
-          icon="pi pi-refresh"
+          icon="ai ai-refresh"
         />
       </div>
     </template>

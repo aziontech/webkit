@@ -8,7 +8,7 @@
     <DropdownMenu.Trigger>
       <Button
         kind="secondary"
-        icon="pi pi-ellipsis-h"
+        icon="ai ai-ellipsis-h"
         label="Actions"
       />
     </DropdownMenu.Trigger>
@@ -26,7 +26,7 @@
         <DropdownMenu.SubTrigger label="Move to">
           <template #leading>
             <i
-              class="pi pi-folder"
+              class="ai ai-folder"
               aria-hidden="true"
             />
           </template>

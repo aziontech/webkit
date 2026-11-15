@@ -77,7 +77,7 @@
                   <CommandItem value="cmd:settings">
                     <template #prefix
                       ><i
-                        class="pi pi-cog"
+                        class="ai ai-cog"
                         aria-hidden="true"
                     /></template>
                     Account Settings
@@ -150,7 +150,7 @@
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
                 label="Settings"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 kind="drill"
               />
               <SidebarMenuSubContent>
@@ -190,7 +190,7 @@
               >
                 <DropdownMenuTrigger>
                   <IconButton
-                    icon="pi pi-ellipsis-v"
+                    icon="ai ai-ellipsis-v"
                     aria-label="Account menu"
                     kind="outlined"
                     size="small"
@@ -221,7 +221,7 @@
                   >
                     <template #trailing
                       ><i
-                        class="pi pi-sign-out"
+                        class="ai ai-sign-out"
                         aria-hidden="true"
                     /></template>
                   </DropdownMenuOption>

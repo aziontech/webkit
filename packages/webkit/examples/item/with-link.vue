@@ -26,7 +26,7 @@
     >
       <Item.Media kind="icon">
         <i
-          class="pi pi-verified text-[length:inherit] leading-none"
+          class="ai ai-verified text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Media>

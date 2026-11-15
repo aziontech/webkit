@@ -19,7 +19,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="pi pi-arrow-up"
+          icon="ai ai-arrow-up"
           aria-label="top-edge trigger"
           kind="outlined"
           size="medium"
@@ -34,7 +34,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="pi pi-arrow-down"
+          icon="ai ai-arrow-down"
           aria-label="bottom-edge trigger"
           kind="outlined"
           size="medium"
@@ -49,7 +49,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="pi pi-arrow-left"
+          icon="ai ai-arrow-left"
           aria-label="left-edge trigger"
           kind="outlined"
           size="medium"
@@ -64,7 +64,7 @@
         :default-open="true"
       >
         <IconButton
-          icon="pi pi-arrow-right"
+          icon="ai ai-arrow-right"
           aria-label="right-edge trigger"
           kind="outlined"
           size="medium"

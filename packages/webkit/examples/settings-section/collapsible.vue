@@ -15,7 +15,7 @@
     <SettingsSection
       v-model:open="open"
       title="Advanced"
-      icon="pi pi-cog"
+      icon="ai ai-cog"
       collapsible
     >
       <Card :padded="false">

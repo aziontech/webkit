@@ -6,6 +6,6 @@
   <ButtonHighlight
     size="large"
     label="Ask Azion"
-    icon="pi pi-sparkles"
+    icon="ai ai-sparkles"
   />
 </template>

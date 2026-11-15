@@ -38,7 +38,7 @@
             <EmptyState
               title="This chart failed to load"
               description="The rest of the dashboard still works."
-              icon="pi pi-exclamation-triangle"
+              icon="ai ai-exclamation-triangle"
               size="small"
             >
               <template #actions>
@@ -46,7 +46,7 @@
                   label="Try again"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   @click="retry"
                 />
               </template>

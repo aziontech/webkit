@@ -19,7 +19,7 @@
     },
     {
       "name": "Icon",
-      "summary": "Icon + label via the `icon` prop (PrimeIcons class) paired with `label`. `label` is required — for icon-only controls use `IconButton`.",
+      "summary": "Icon + label via the `icon` prop (Azion icon class) paired with `label`. `label` is required — for icon-only controls use `IconButton`.",
       "file": "icon.vue"
     },
     {

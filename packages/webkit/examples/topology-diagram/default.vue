@@ -18,7 +18,7 @@
         {
           key: 'domains',
           type: 'Domains',
-          icon: 'pi pi-globe',
+          icon: 'ai ai-globe',
           name: 'shop.example.com',
           status: '2 domains',
           severity: 'info',
@@ -46,7 +46,7 @@
         {
           key: 'project',
           type: 'Project',
-          icon: 'pi pi-folder',
+          icon: 'ai ai-folder',
           name: 'web-app',
           status: 'Live',
           severity: 'success',
@@ -65,7 +65,7 @@
         {
           key: 'policy',
           type: 'Policy',
-          icon: 'pi pi-shield',
+          icon: 'ai ai-shield',
           name: 'edge-guard',
           status: 'Active',
           severity: 'success',
@@ -85,7 +85,7 @@
         {
           key: 'service',
           type: 'Service',
-          icon: 'pi pi-server',
+          icon: 'ai ai-server',
           name: 'web-app',
           status: 'Active',
           severity: 'success',
@@ -95,7 +95,7 @@
         {
           key: 'error-page',
           type: 'Error page',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           terminal: true,
           bindable: true,
           bindOptions: errorPages,
@@ -110,7 +110,7 @@
         {
           key: 'cache-static',
           type: 'Cache rule',
-          icon: 'pi pi-bolt',
+          icon: 'ai ai-bolt',
           name: 'static-assets',
           status: 'Active',
           severity: 'success',
@@ -119,7 +119,7 @@
         {
           key: 'cache-api',
           type: 'Cache rule',
-          icon: 'pi pi-bolt',
+          icon: 'ai ai-bolt',
           name: 'api-bypass',
           status: 'Active',
           severity: 'success',
@@ -134,7 +134,7 @@
         {
           key: 'integration',
           type: 'Integration',
-          icon: 'pi pi-link',
+          icon: 'ai ai-link',
           name: 'web-app-origin',
           status: 'Active',
           severity: 'success',
@@ -151,7 +151,7 @@
         {
           key: 'storage',
           type: 'Storage',
-          icon: 'pi pi-inbox',
+          icon: 'ai ai-inbox',
           name: 'web-app-assets',
           status: 'Private',
           severity: 'neutral',
@@ -182,7 +182,7 @@
             text="Add domain"
           >
             <IconButton
-              icon="pi pi-plus"
+              icon="ai ai-plus"
               kind="outlined"
               size="small"
               aria-label="Add domain"

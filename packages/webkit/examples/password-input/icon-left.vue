@@ -12,7 +12,7 @@
       placeholder="Enter your password"
     >
       <template #prefix>
-        <i class="pi pi-lock" />
+        <i class="ai ai-lock" />
       </template>
     </PasswordInput>
   </div>

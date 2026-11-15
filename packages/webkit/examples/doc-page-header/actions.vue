@@ -13,20 +13,20 @@
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'pi pi-copy',
+        icon: 'ai ai-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'agent-setup',
         label: 'Agent setup',
-        icon: 'pi pi-microchip-ai',
+        icon: 'ai ai-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       },
       {
         value: 'source',
         label: 'Edit this page',
-        icon: 'pi pi-pencil',
+        icon: 'ai ai-pencil',
         href: 'https://github.com/aziontech/azion-docs',
         target: '_blank',
         tip: 'Open this page in the repository and propose a change.'

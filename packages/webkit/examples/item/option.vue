@@ -40,7 +40,7 @@
         </Item.Content>
         <Item.Actions v-if="selected === name">
           <i
-            class="pi pi-check text-body-sm leading-none text-(--text-default)"
+            class="ai ai-check text-body-sm leading-none text-(--text-default)"
             aria-hidden="true"
           />
         </Item.Actions>

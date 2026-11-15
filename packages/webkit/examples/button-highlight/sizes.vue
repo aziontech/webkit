@@ -7,17 +7,17 @@
     <ButtonHighlight
       size="small"
       label="Ask Azion"
-      icon="pi pi-sparkles"
+      icon="ai ai-sparkles"
     />
     <ButtonHighlight
       size="medium"
       label="Ask Azion"
-      icon="pi pi-sparkles"
+      icon="ai ai-sparkles"
     />
     <ButtonHighlight
       size="large"
       label="Ask Azion"
-      icon="pi pi-sparkles"
+      icon="ai ai-sparkles"
     />
   </div>
 </template>

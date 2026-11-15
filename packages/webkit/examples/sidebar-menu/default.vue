@@ -10,7 +10,7 @@
       <SidebarMenuGroup label="User agents">
         <SidebarMenuItem
           label="End User"
-          icon="pi pi-user"
+          icon="ai ai-user"
           href="/end-user"
           selected
         />
@@ -21,25 +21,25 @@
         />
         <SidebarMenuItem
           label="Device Groups"
-          icon="pi pi-mobile"
+          icon="ai ai-mobile"
           href="/device-groups"
         />
       </SidebarMenuGroup>
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="pi pi-th-large"
+          icon="ai ai-th-large"
           href="/applications"
         />
         <SidebarMenuItem
           label="Edge Firewall"
-          icon="pi pi-shield"
+          icon="ai ai-shield"
           href="/edge-firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem
           label="Real-Time Metrics"
-          icon="pi pi-chart-bar"
+          icon="ai ai-chart-bar"
           href="/metrics"
         />
       </SidebarMenuGroup>

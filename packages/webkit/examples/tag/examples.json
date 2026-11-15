@@ -19,7 +19,7 @@
     },
     {
       "name": "WithIcon",
-      "summary": "Leading icon via the `icon` prop (PrimeIcons class) across severity variants.",
+      "summary": "Leading icon via the `icon` prop (Azion icon class) across severity variants.",
       "file": "with-icon.vue"
     }
   ]

@@ -8,52 +8,52 @@
       <Button
         kind="primary"
         label="Button"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
       />
       <Button
         kind="secondary"
         label="Button"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
       />
       <Button
         kind="outlined"
         label="Button"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
       />
       <Button
         kind="transparent"
         label="Button"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
       />
       <Button
         kind="danger"
         label="Button"
-        icon="pi pi-trash"
+        icon="ai ai-trash"
       />
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <Button
         kind="primary"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
       />
       <Button
         kind="secondary"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
       />
       <Button
         kind="outlined"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
       />
       <Button
         kind="transparent"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
       />
     </div>
@@ -61,28 +61,28 @@
       <Button
         kind="primary"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
       <Button
         kind="secondary"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
       <Button
         kind="outlined"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
       <Button
         kind="transparent"
         label="Read the guide"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
@@ -92,7 +92,7 @@
         kind="outlined"
         size="medium"
         label="Deploy now"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
         #prefix

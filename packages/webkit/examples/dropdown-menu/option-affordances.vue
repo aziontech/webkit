@@ -12,7 +12,7 @@
     <DropdownMenuTrigger>
       <IconButton
         kind="outlined"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>
@@ -29,7 +29,7 @@
       <DropdownMenuOption value="leading">
         <template #leading>
           <i
-            class="pi pi-user"
+            class="ai ai-user"
             aria-hidden="true"
           />
         </template>

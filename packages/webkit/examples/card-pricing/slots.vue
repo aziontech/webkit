@@ -18,28 +18,28 @@
     <ul class="m-0 flex list-none flex-col gap-2 p-0 text-body-sm text-(--text-default)">
       <li class="flex items-center gap-2">
         <i
-          class="pi pi-check text-(--primary)"
+          class="ai ai-check text-(--primary)"
           aria-hidden="true"
         />
         Unlimited rules engine
       </li>
       <li class="flex items-center gap-2">
         <i
-          class="pi pi-check text-(--primary)"
+          class="ai ai-check text-(--primary)"
           aria-hidden="true"
         />
         Global edge deployment
       </li>
       <li class="flex items-center gap-2">
         <i
-          class="pi pi-check text-(--primary)"
+          class="ai ai-check text-(--primary)"
           aria-hidden="true"
         />
         Advanced observability
       </li>
       <li class="flex items-center gap-2">
         <i
-          class="pi pi-check text-(--primary)"
+          class="ai ai-check text-(--primary)"
           aria-hidden="true"
         />
         24/7 support

@@ -22,7 +22,7 @@
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
           <i
-            class="pi pi-arrow-right text-(--text-muted)"
+            class="ai ai-arrow-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>
@@ -38,7 +38,7 @@
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
           <i
-            class="pi pi-arrow-right text-(--text-muted)"
+            class="ai ai-arrow-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>
@@ -54,7 +54,7 @@
             <Item.Description>A simple item with title and description.</Item.Description>
           </Item.Content>
           <i
-            class="pi pi-arrow-right text-(--text-muted)"
+            class="ai ai-arrow-right text-(--text-muted)"
             aria-hidden="true"
           />
         </Item>

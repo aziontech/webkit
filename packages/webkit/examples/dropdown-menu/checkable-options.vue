@@ -20,7 +20,7 @@
     <DropdownMenu.Trigger>
       <Button
         kind="secondary"
-        icon="pi pi-sliders-h"
+        icon="ai ai-sliders-h"
         label="View"
       />
     </DropdownMenu.Trigger>

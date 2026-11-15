@@ -39,7 +39,7 @@
           organization
         }}</span>
         <i
-          class="pi pi-sort shrink-0 text-body-xs text-(--text-muted)"
+          class="ai ai-sort shrink-0 text-body-xs text-(--text-muted)"
           aria-hidden="true"
         />
       </button>
@@ -60,7 +60,7 @@
           kind="square"
         />
         <i
-          class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted)"
+          class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted)"
           aria-hidden="true"
         />
       </button>

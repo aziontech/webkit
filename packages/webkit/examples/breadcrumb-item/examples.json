@@ -14,7 +14,7 @@
     },
     {
       "name": "WithIcon",
-      "summary": "Segment with a leading PrimeIcons icon before the label.",
+      "summary": "Segment with a leading icon before the label.",
       "file": "with-icon.vue"
     },
     {

@@ -10,7 +10,7 @@
       placement="top"
     >
       <IconButton
-        icon="pi pi-arrow-up"
+        icon="ai ai-arrow-up"
         aria-label="top placement"
         kind="outlined"
         size="medium"
@@ -21,7 +21,7 @@
       placement="right"
     >
       <IconButton
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
         aria-label="right placement"
         kind="outlined"
         size="medium"
@@ -32,7 +32,7 @@
       placement="bottom"
     >
       <IconButton
-        icon="pi pi-arrow-down"
+        icon="ai ai-arrow-down"
         aria-label="bottom placement"
         kind="outlined"
         size="medium"
@@ -43,7 +43,7 @@
       placement="left"
     >
       <IconButton
-        icon="pi pi-arrow-left"
+        icon="ai ai-arrow-left"
         aria-label="left placement"
         kind="outlined"
         size="medium"

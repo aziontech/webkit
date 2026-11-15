@@ -33,7 +33,7 @@
         <Command.Item value="action:sidebar">
           <template #prefix>
             <i
-              :class="navigationOpen ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
+              :class="navigationOpen ? 'ai ai-angle-double-left' : 'ai ai-angle-double-right'"
               aria-hidden="true"
             />
           </template>

@@ -20,13 +20,13 @@
         label="Label"
         severity="primary"
         size="medium"
-        icon="pi pi-box"
+        icon="ai ai-box"
       />
       <Tag
         label="Label"
         severity="primary"
         size="medium"
-        icon="pi pi-box"
+        icon="ai ai-box"
         rounded
       />
     </div>
@@ -46,13 +46,13 @@
         label="Label"
         severity="primary"
         size="small"
-        icon="pi pi-box"
+        icon="ai ai-box"
       />
       <Tag
         label="Label"
         severity="primary"
         size="small"
-        icon="pi pi-box"
+        icon="ai ai-box"
         rounded
       />
     </div>

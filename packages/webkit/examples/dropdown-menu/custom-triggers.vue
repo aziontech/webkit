@@ -12,7 +12,7 @@
     <DropdownMenuRoot>
       <DropdownMenuTrigger>
         <IconButton
-          icon="pi pi-ellipsis-h"
+          icon="ai ai-ellipsis-h"
           aria-label="More actions"
         />
       </DropdownMenuTrigger>

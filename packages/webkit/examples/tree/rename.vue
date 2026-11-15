@@ -7,14 +7,14 @@
     {
       id: 'src',
       label: 'src',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       children: [
-        { id: 'src/index.js', label: 'index.js', icon: 'pi pi-file', description: '1.1 KB' },
-        { id: 'src/router.js', label: 'router.js', icon: 'pi pi-file', description: '2.6 KB' }
+        { id: 'src/index.js', label: 'index.js', icon: 'ai ai-file', description: '1.1 KB' },
+        { id: 'src/router.js', label: 'router.js', icon: 'ai ai-file', description: '2.6 KB' }
       ]
     },
-    { id: 'package.json', label: 'package.json', icon: 'pi pi-file', description: '812 B' },
-    { id: 'README.md', label: 'README.md', icon: 'pi pi-file', description: '3.4 KB' }
+    { id: 'package.json', label: 'package.json', icon: 'ai ai-file', description: '812 B' },
+    { id: 'README.md', label: 'README.md', icon: 'ai ai-file', description: '3.4 KB' }
   ])
   const expanded = ref(['src'])
   const opened = ref('')
@@ -50,7 +50,7 @@
     >
       <template #actions="{ item }">
         <IconButton
-          icon="pi pi-pencil"
+          icon="ai ai-pencil"
           kind="transparent"
           size="small"
           :aria-label="`Rename ${item.label}`"

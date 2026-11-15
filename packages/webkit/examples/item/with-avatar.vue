@@ -22,7 +22,7 @@
         label="Invite"
         kind="outlined"
         size="small"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
       />
     </Item.Actions>
   </Item>

@@ -23,7 +23,7 @@
           label="Add"
           kind="transparent"
           size="small"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
         />
       </Item.Actions>
     </Item>
@@ -44,7 +44,7 @@
           label="Add"
           kind="transparent"
           size="small"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
         />
       </Item.Actions>
     </Item>
@@ -65,7 +65,7 @@
           label="Add"
           kind="transparent"
           size="small"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
         />
       </Item.Actions>
     </Item>

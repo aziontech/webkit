@@ -12,7 +12,7 @@
       :size="size"
       title="No resource yet"
       description="Get started by creating your first resource."
-      icon="pi pi-inbox"
+      icon="ai ai-inbox"
     >
       <template #actions>
         <div class="flex gap-(--spacing-3)">
@@ -27,7 +27,7 @@
         </div>
         <Link
           label="Docs"
-          icon="pi pi-arrow-right"
+          icon="ai ai-arrow-right"
           size="medium"
           href="#"
         />

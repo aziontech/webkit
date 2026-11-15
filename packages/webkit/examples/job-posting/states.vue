@@ -61,7 +61,7 @@
       area="Engineering"
       title="Senior Platform Engineer"
       apply-label="Apply for this position"
-      :facets="[{ label: 'Engineering', icon: 'pi pi-sitemap' }]"
+      :facets="[{ label: 'Engineering', icon: 'ai ai-sitemap' }]"
       :sections="[
         {
           title: 'About the role',

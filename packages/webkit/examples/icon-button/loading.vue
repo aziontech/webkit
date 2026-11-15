@@ -4,7 +4,7 @@
 
 <template>
   <IconButton
-    icon="pi pi-plus"
+    icon="ai ai-plus"
     aria-label="Add"
     loading
   />

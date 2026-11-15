@@ -9,7 +9,7 @@
       <div class="flex items-center justify-between w-full">
         <h2 class="text-label-md text-(--text-default)">Card Title</h2>
         <IconButton
-          icon="pi pi-chevron-right"
+          icon="ai ai-chevron-right"
           aria-label="Expand"
           kind="outlined"
           size="small"

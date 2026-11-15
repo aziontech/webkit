@@ -39,7 +39,7 @@
           label="Browse folder"
           kind="secondary"
           size="medium"
-          icon="pi pi-folder-open"
+          icon="ai ai-folder-open"
           @click="folderInput?.click()"
         />
       </div>
