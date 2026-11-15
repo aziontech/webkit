@@ -18,3 +18,4 @@ const Sidebar = Object.assign(SidebarRoot, {
 export default Sidebar
 
 export { SidebarFooter, SidebarGroup, SidebarHeader }
+export type { SidebarCollapsible } from './sidebar.vue'

@@ -19,6 +19,6 @@ MultiSelect.Option = MultiSelectOption
 
 export default MultiSelect
 export { MultiSelectContent, MultiSelectGroup, MultiSelectOption, MultiSelectTrigger }
-export type { MultiSelectSize } from './injection-key'
+export type { MultiSelectKind, MultiSelectSize } from './injection-key'
 export type { MultiSelectGroupProps } from './multi-select-group/multi-select-group.vue'
 export type { MultiSelectOptionProps } from './multi-select-option/multi-select-option.vue'
