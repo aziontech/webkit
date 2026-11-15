@@ -154,6 +154,17 @@ describe('DocMarkdown', () => {
     )
   })
 
+  it('maps the Markdown CardGroup cols attribute to DocCardGroup columns', () => {
+    const { getByTestId } = mount(
+      [
+        '<CardGroup cols={3}>',
+        '  <Card title="Domains">Point a domain.</Card>',
+        '</CardGroup>'
+      ].join('\n')
+    )
+    expect(getByTestId('documentation-doc-card-group').getAttribute('data-columns')).toBe('3')
+  })
+
   it('keeps unknown tags and unsafe links as text', () => {
     const { container, queryByRole, getByText } = mount(
       '<Banner>Hi</Banner>\n\nA [bad link](javascript:alert(1)) here.'

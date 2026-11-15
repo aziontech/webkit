@@ -223,6 +223,10 @@
     if (!component) return null
     const kind = !override ? CALLOUT_KINDS[node.name] : undefined
     const values: Record<string, unknown> = kind ? { kind, ...node.props } : { ...node.props }
+    if (!override && node.name === 'CardGroup' && 'cols' in values) {
+      values['columns'] ??= values['cols']
+      delete values['cols']
+    }
     const slots: Record<string, () => VNodeChild> = {}
     if (!override && node.name === 'Frame' && typeof values['caption'] === 'string') {
       const caption = values['caption']
