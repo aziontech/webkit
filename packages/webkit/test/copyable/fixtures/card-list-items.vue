@@ -13,7 +13,7 @@
   }
 
   const domains = ref<Domain[]>([{ id: 'd1', name: 'storefront', hits: 3 }])
-  const mode: CardListSelectionMode = 'multi'
+  const mode: CardListSelectionMode = 'multiple'
   const selected = ref<string[]>([])
   const collection = useCollection<Domain>({ items: domains.value })
   const titleOf = (scope: CardListItemSlotProps<Domain>): string =>

@@ -427,7 +427,7 @@ test('primaryComponents leaves out type-only imports, which are no building bloc
     '<script setup lang="ts">',
     "  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'",
     "  import type { TableColumn } from '@aziontech/webkit/table-root'",
-    "  import type { StepperStepState } from '@aziontech/webkit/stepper-step'",
+    "  import type { StepperStepStatus } from '@aziontech/webkit/stepper-step'",
     "  import { toast, Toaster } from '@aziontech/webkit/toast'",
     '</script>'
   ].join('\n')

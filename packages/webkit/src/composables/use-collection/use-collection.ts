@@ -149,10 +149,10 @@ export interface CollectionTableProps<T, C> {
   striped: boolean
   density: CollectionDensity
   exportRows: (scope: CollectionExportScope) => Promise<T[]> | T[]
-  'onUpdate:sorting': (value: CollectionSort[]) => void
-  'onUpdate:pagination': (value: { pageIndex: number; pageSize: number }) => void
-  'onUpdate:rowSelection': (value: Record<string, boolean>) => void
-  'onUpdate:columnVisibility': (value: Record<string, boolean>) => void
+  'onUpdate:sorting': (value: CollectionSort[] | undefined) => void
+  'onUpdate:pagination': (value: { pageIndex: number; pageSize: number } | undefined) => void
+  'onUpdate:rowSelection': (value: Record<string, boolean> | undefined) => void
+  'onUpdate:columnVisibility': (value: Record<string, boolean> | undefined) => void
 }
 
 export interface CollectionPaginationProps {
@@ -719,14 +719,15 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     striped: preferences.value.striped,
     density: preferences.value.density,
     exportRows,
-    'onUpdate:sorting': setSorting,
+    'onUpdate:sorting': (value) => setSorting(value ?? []),
     'onUpdate:pagination': (value) => {
+      if (!value) return
       if (value.pageSize !== pageSize.value && paginated) setPageSize(value.pageSize)
       else setPage(value.pageIndex + 1)
     },
-    'onUpdate:rowSelection': (value) =>
+    'onUpdate:rowSelection': (value = {}) =>
       applyPageSelection(new Set(Object.keys(value).filter((key) => value[key]))),
-    'onUpdate:columnVisibility': (value) =>
+    'onUpdate:columnVisibility': (value = {}) =>
       setPreferences({
         columns: preferences.value.columns.map((c) => ({
           id: c.id,

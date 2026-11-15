@@ -1070,7 +1070,7 @@
                 >
                   <template #actions="{ node }">
                     <Tooltip
-                      v-if="node.key === 'domains'"
+                      v-if="node.id === 'domains'"
                       content="Add domain"
                     >
                       <IconButton

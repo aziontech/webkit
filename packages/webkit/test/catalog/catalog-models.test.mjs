@@ -15,7 +15,7 @@ test('modelProps reads every defineModel of a root, named and default', () => {
     menu.map((m) => [m.name, m.type]),
     [
       ['path', 'string[]'],
-      ['expanded', 'string[]']
+      ['openKeys', 'string[]']
     ]
   )
   assert.match(menu[0].doc, /v-model:path/)
@@ -37,7 +37,7 @@ test('the catalog lists v-model values as props, so webkit view shows them', asy
   const find = (name) => imports[name]
   for (const [name, model] of [
     ['sidebar-menu', 'path'],
-    ['sidebar-menu', 'expanded'],
+    ['sidebar-menu', 'openKeys'],
     ['settings-section', 'open'],
     ['sidebar', 'open'],
     ['tree', 'selected']
