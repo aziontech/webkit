@@ -33,7 +33,7 @@
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the badge list. |
 | `certifications` | `ComplianceBadgesCertification[]` | `[]` | false | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction` | `ComplianceBadgesAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States

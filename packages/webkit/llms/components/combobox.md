@@ -116,7 +116,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 | Key                    | English source                                | Override prop |
 | ---------------------- | --------------------------------------------- | ------------- |
-| `combobox.empty`       | `No matches`                                  | `emptyTitle`  |
+| `combobox.noMatch`     | `No matches`                                  | `emptyTitle`  |
 | `combobox.loading`     | `Loading options`                             | —             |
 | `combobox.useValue`    | `Use "{value}"`                               | —             |
 | `combobox.clear`       | `Clear`                                       | —             |

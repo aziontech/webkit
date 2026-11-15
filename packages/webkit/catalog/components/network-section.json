@@ -19,6 +19,6 @@
   "Four `stats` on the `stats` floor, each a `value` and a `label`, with an optional `prefix` and `suffix`.",
   "Give the band an `anchor` when a page links to it with a `#hash`.",
   "Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.",
-  "Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark."
+  "Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `color` for a colour mark."
  ]
 }

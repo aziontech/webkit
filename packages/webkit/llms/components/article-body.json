@@ -42,7 +42,7 @@
   },
   {
    "name": "trail",
-   "type": "ArticleBodyCrumb[]",
+   "type": "BreadcrumbItemData[]",
    "default": "[]",
    "required": "false",
    "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`."

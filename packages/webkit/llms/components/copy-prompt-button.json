@@ -60,7 +60,7 @@
   },
   {
    "name": "agents",
-   "type": "CopyPromptAgent[]",
+   "type": "CopyPromptButtonAgent[]",
    "default": "Claude, ChatGPT, Gemini, Cursor",
    "required": "false",
    "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks."

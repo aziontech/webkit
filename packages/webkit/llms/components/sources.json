@@ -30,7 +30,7 @@
  "props": [
   {
    "name": "items",
-   "type": "AiSource[]",
+   "type": "SourcesItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."

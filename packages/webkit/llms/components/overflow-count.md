@@ -77,7 +77,7 @@
 | `overflowCount.search`   | `Search`                    | —             |
 | `overflowCount.noMatch`  | `Nothing matches “{query}”` | —             |
 | `overflowCount.loadMore` | `Load {count} more`         | —             |
-| `overflowCount.newTab`   | `(opens in a new tab)`      | —             |
+| `common.newTab`          | `(opens in a new tab)`      | —             |
 
 - Formatting: counts go through the locale's number format.
 

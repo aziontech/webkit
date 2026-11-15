@@ -34,7 +34,7 @@
  "props": [
   {
    "name": "items",
-   "type": "SuggestionItem[]",
+   "type": "SuggestionGroupItem[]",
    "default": "[]",
    "required": "false",
    "doc": "Up to five prompts, most likely first."
@@ -64,7 +64,7 @@
  "events": [
   {
    "name": "select",
-   "payload": "(event: MouseEvent, item: SuggestionItem)",
+   "payload": "(event: MouseEvent, item: SuggestionGroupItem)",
    "notes": ""
   }
  ],

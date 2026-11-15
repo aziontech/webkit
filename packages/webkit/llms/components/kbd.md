@@ -40,8 +40,8 @@
 | `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
 | `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
-| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrow-up' \| 'arrow-down' \| 'arrow-left' \| 'arrow-right'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
-| `keys` | `string[]` | `[]` | false | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written. |
+| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrowUp' \| 'arrowDown' \| 'arrowLeft' \| 'arrowRight'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
+| `keys` | `string[]` | `[]` | false | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog (matched without case or hyphens, so `arrowUp`, `arrow-up` and the DOM's `ArrowUp` are one key), a single character is upper-cased, anything else prints as written. |
 | `variant` | `'combined' \| 'separate'` | `'combined'` | false | Visual variant: one keycap holding every key, or one keycap per key. |
 
 ## Slots
@@ -70,7 +70,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: modifier symbols (`⌘`, `⌥`, `⇧`) never mirror.
-- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrow-left` stays `←` under `dir="rtl"`.
+- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrowLeft` stays `←` under `dir="rtl"`.
 - Isolation: the keycap renders `dir="ltr"`, so a shortcut such as `Ctrl` `K` keeps its order inside right-to-left text; key names come from the locale catalog (`kbd.*`).
 
 ## Internationalization
@@ -80,7 +80,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 | `kbd.ctrl` / `kbd.alt` / `kbd.shift` | `Ctrl` / `Alt` / `Shift`                           | —             |
 | `kbd.escape` … `kbd.delete`          | `Esc`, `Enter`, `Space`, `Tab`, `Backspace`, `Del` | —             |
 | `kbd.return`                         | `↵`                                                | —             |
-| `kbd.arrow-up` … `kbd.arrow-right`   | `↑` `↓` `←` `→`                                    | —             |
+| `kbd.arrowUp` … `kbd.arrowRight`     | `↑` `↓` `←` `→`                                    | —             |
 
 - The glyph entries (`return`, arrows) are the same in every locale; they live in the catalog so a consumer can rename them with `messages` like any key name.
 - Literal `keys` entries and the slot are consumer copy.

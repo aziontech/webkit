@@ -41,8 +41,8 @@
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region. |
 | `description` | `string` | `''` | false | Paragraph under the headline. |
-| `primaryAction` | `TemplateGalleryAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `secondaryAction` | `TemplateGalleryAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `templates` | `TemplateGalleryTemplate[]` | `[]` | false | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
 | `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |

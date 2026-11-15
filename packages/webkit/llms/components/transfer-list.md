@@ -81,7 +81,7 @@
 - `data-loading` on a list (`transfer-list-source` / `transfer-list-target`) mirrors that list's `loading` prop
 - A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
-- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.empty`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
+- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.emptyTitle`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
 - Server render and hydration: the options are the direct `v-for` children of the `TransitionGroup` list (an empty list while loading) and the spinner a sibling `v-if`, so the server renders no fragment markers inside the list and the HTML hydrates as is.
 
 ## Accessibility

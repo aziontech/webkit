@@ -89,7 +89,7 @@
 | `tagEditor.undo`             | Undo                                                   | —                                |
 | `tagEditor.undoLabel`        | Undo removal of tag {index}                            | —                                |
 | `tagEditor.markedForRemoval` | This tag will be removed when you save.                | —                                |
-| `tagEditor.empty`            | No tags associated with the resource.                  | —                                |
+| `tagEditor.emptyTitle`       | No tags associated with the resource.                  | —                                |
 | `tagEditor.remaining`        | You can add {count} more tag(s) (plural)               | —                                |
 | `tagEditor.limitReached`     | You have reached the limit of {limit} tags.            | —                                |
 | `tagEditor.keyRequired`      | Enter a key.                                           | —                                |

@@ -38,7 +38,7 @@
 | `prompt` | `string` | `—` | true | The prompt `CopyPromptButton` copies. |
 | `title` | `string` | `''` | false | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`. |
 | `description` | `string` | `''` | false | One or two sentences on what the prompt gives the agent; empty uses the catalog's. |
-| `agents` | `CopyPromptAgent[]` | `undefined` | false | The agents whose marks the copy button shows; unset keeps the button's default list. |
+| `agents` | `CopyPromptButtonAgent[]` | `undefined` | false | The agents whose marks the copy button shows; unset keeps the button's default list. |
 | `asideTitle` | `string` | `''` | false | Question over the guided action; empty uses the catalog's `Prefer the guided route?`. |
 | `actionLabel` | `string` | `''` | false | Label of the guided action; empty uses the catalog's `Agent setup`. |
 | `actionHref` | `string` | `''` | false | Destination of the guided action; empty renders it as a button that only emits `action`. |

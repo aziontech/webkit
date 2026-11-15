@@ -31,14 +31,14 @@
  "props": [
   {
    "name": "previous",
-   "type": "DocPageLink | null",
+   "type": "DocPrevNextLink | null",
    "default": "null",
    "required": "false",
    "doc": "The page before this one."
   },
   {
    "name": "next",
-   "type": "DocPageLink | null",
+   "type": "DocPrevNextLink | null",
    "default": "null",
    "required": "false",
    "doc": "The page after this one."
@@ -61,7 +61,7 @@
  "events": [
   {
    "name": "navigate",
-   "payload": "(event: MouseEvent, page: DocPageLink)",
+   "payload": "(event: MouseEvent, page: DocPrevNextLink)",
    "notes": "Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`."
   }
  ],

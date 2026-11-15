@@ -94,7 +94,7 @@
 | `trace.search`                                       | Search spans                                     | —             |
 | `trace.noMatch`                                      | No span matches “{query}”.                       | —             |
 | `trace.clearSearch`                                  | Clear search                                     | —             |
-| `trace.empty`                                        | No spans in this trace.                          | —             |
+| `trace.emptyTitle`                                   | No spans in this trace.                          | —             |
 | `trace.loading`                                      | Loading spans                                    | —             |
 | `trace.details`                                      | Details of {name}                                | —             |
 | `trace.close`                                        | Close                                            | —             |

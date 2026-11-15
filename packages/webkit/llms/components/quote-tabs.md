@@ -108,10 +108,10 @@
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other string is copy passed through `items`.
 

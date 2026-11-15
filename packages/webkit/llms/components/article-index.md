@@ -89,12 +89,12 @@
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `articleIndex.search` | `Search` | — |
-| `articleIndex.searchFacet` | `Search {facet}` | — |
-| `articleIndex.empty` | `No results found.` | — |
-| `articleIndex.newTab` | `(opens in a new tab)` | — |
+| Key                        | English source         | Override prop |
+| -------------------------- | ---------------------- | ------------- |
+| `articleIndex.search`      | `Search`               | —             |
+| `articleIndex.searchFacet` | `Search {facet}`       | —             |
+| `articleIndex.noMatch`     | `No results found.`    | —             |
+| `common.newTab`            | `(opens in a new tab)` | —             |
 
 - Every other string (labels, placeholders, facet labels, the empty state's copy) arrives through props.
 - Formatting: none; dates arrive pre-formatted in `meta`.

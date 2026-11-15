@@ -32,7 +32,7 @@
  "props": [
   {
    "name": "items",
-   "type": "DocTocItem[]",
+   "type": "DocOnThisPageItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The headings, in document order."
@@ -53,7 +53,7 @@
   },
   {
    "name": "groups",
-   "type": "DocTocGroup[]",
+   "type": "DocOnThisPageGroup[]",
    "default": "[]",
    "required": "false",
    "doc": "Complementary groups rendered below the outline, in order."
@@ -62,7 +62,7 @@
  "events": [
   {
    "name": "select",
-   "payload": "(event: MouseEvent, item: DocTocItem)",
+   "payload": "(event: MouseEvent, item: DocOnThisPageItem)",
    "notes": "Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`."
   }
  ],

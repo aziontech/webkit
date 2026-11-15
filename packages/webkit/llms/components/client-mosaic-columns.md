@@ -35,7 +35,7 @@
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
 | `linkLabel` | `string` | `''` | false | Label the mark face reveals on hover and the link's accessible name. |
-| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`, and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
+| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
 | `reveal` | `ClientMosaicColumnsReveal` | `'always'` | false | When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint. |
 
 ## States
@@ -57,10 +57,10 @@
 
 ## Internationalization
 
-| Key                       | English source     | Override prop                          |
-| ------------------------- | ------------------ | -------------------------------------- |
-| `customerSpotlight.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
-| `customerSpotlight.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
+| Key                         | English source     | Override prop                          |
+| --------------------------- | ------------------ | -------------------------------------- |
+| `clientMosaicColumns.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
+| `clientMosaicColumns.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
 
 ## Examples
 

@@ -66,14 +66,14 @@
   },
   {
    "name": "outline",
-   "type": "DocTocItem[]",
+   "type": "DocOnThisPageItem[]",
    "default": "[]",
    "required": "false",
    "doc": "The article's headings for the \"On this page\" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused."
   },
   {
    "name": "outlineGroups",
-   "type": "DocTocGroup[]",
+   "type": "DocOnThisPageGroup[]",
    "default": "[]",
    "required": "false",
    "doc": "Complementary link groups under the outline (GitHub, Community)."

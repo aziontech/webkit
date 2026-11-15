@@ -35,7 +35,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `countries` | `Country[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
+| `countries` | `PhoneInputCountry[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
 | `placeholder` | `string` | `''` | false | Placeholder of the tel input. Falls back to the selected country's mask when empty. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
@@ -52,7 +52,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `phone-change` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
+| `phone-change` | `[value: PhoneInputValue]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneInputValue` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## v-model
 
@@ -73,7 +73,7 @@
 
 - Visible focus: the `InputGroup` focus-within ring.
 - Keyboard map: `Tab` moves from the dial-code `Select` to the tel input; inside the `Select`, arrows navigate, typing filters, `Enter` picks and returns focus to the input, `Esc` closes.
-- ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="Country dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
+- ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
 - Direction: the tel input, each option's dial code and the closed trigger's dial code (`SelectTrigger` `value-dir="ltr"`, a `<bdi dir="ltr">`) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).

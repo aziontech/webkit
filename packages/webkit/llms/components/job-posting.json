@@ -89,7 +89,7 @@
   },
   {
    "name": "secondaryAction",
-   "type": "JobPostingAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent."

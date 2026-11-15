@@ -81,14 +81,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "ClosingCallToActionAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
   },
   {
    "name": "secondaryAction",
-   "type": "ClosingCallToActionAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent."

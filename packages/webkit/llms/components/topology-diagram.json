@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.",
+ "purpose": "The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.",
  "setup": null,
  "useWhen": [
   "The topology tab of a project, service or workload: what serves its traffic, in order, and what is still unbound.",
@@ -36,7 +36,7 @@
  "props": [
   {
    "name": "levels",
-   "type": "TopologyLevel[]",
+   "type": "TopologyDiagramLevel[]",
    "default": "[]",
    "required": "false",
    "doc": "Columns of the diagram, from the entry point to the last dependency."
@@ -83,13 +83,13 @@
  "slots": [
   {
    "name": "actions",
-   "scope": "{ node: TopologyNode }",
+   "scope": "{ node: TopologyDiagramNodeData }",
    "notes": "Extra controls in a node's identity row, before the bind control."
   },
   {
    "name": "empty",
    "scope": "—",
-   "notes": "Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels."
+   "notes": "Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels."
   }
  ],
  "styleSeam": false,

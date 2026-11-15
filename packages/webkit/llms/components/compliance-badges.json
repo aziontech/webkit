@@ -61,7 +61,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "ComplianceBadgesAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "The closing \"see more\" cell; `{ label, href }`. Omitted when absent."

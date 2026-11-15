@@ -44,8 +44,8 @@
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `HeroBandAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `tickerLabel` | `string` | `''` | false | Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`). |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |

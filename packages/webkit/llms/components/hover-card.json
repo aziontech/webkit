@@ -37,7 +37,7 @@
  "props": [
   {
    "name": "placement",
-   "type": "HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`)",
+   "type": "HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
    "default": "'bottom'",
    "required": "false",
    "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."

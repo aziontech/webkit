@@ -68,7 +68,7 @@
   },
   {
    "name": "keyName",
-   "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete' | 'return' | 'arrow-up' | 'arrow-down' | 'arrow-left' | 'arrow-right'",
+   "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete' | 'return' | 'arrowUp' | 'arrowDown' | 'arrowLeft' | 'arrowRight'",
    "default": "''",
    "required": "false",
    "doc": "Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it."
@@ -78,7 +78,7 @@
    "type": "string[]",
    "default": "[]",
    "required": "false",
-   "doc": "A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written."
+   "doc": "A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog (matched without case or hyphens, so `arrowUp`, `arrow-up` and the DOM's `ArrowUp` are one key), a single character is upper-cased, anything else prints as written."
   },
   {
    "name": "variant",

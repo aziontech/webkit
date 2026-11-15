@@ -41,8 +41,8 @@
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `descriptionLink` | `HeroFormLink` | `undefined` | false | A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent. |
 | `descriptionAfter` | `string` | `''` | false | Copy after the inline link, closing the description's sentence. |
-| `primaryAction` | `HeroFormAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroFormAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `items` | `HeroFormItem[]` | `[]` | false | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
 | `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |

@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `samples` | `DocCodeSample[]` | `[]` | false | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
+| `samples` | `DocCodeGroupSample[]` | `[]` | false | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
 | `showLineNumbers` | `boolean` | `false` | false | Shows the line-number gutter. |
 | `showLabel` | `boolean` | `true` | false | Shows the label header (the sample label or the language name) on a single sample. |
 | `type` | `'code' \| 'output'` | `'code'` | false | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control. |

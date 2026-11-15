@@ -54,7 +54,7 @@
   },
   {
    "name": "agents",
-   "type": "CopyPromptAgent[]",
+   "type": "CopyPromptButtonAgent[]",
    "default": "undefined",
    "required": "false",
    "doc": "The agents whose marks the copy button shows; unset keeps the button's default list."

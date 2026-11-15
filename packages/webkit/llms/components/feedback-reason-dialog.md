@@ -73,17 +73,17 @@
 
 ## Internationalization
 
-| Key                                                                            | English source                                                                                    | Override prop |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
-| `feedbackReason.title`                                                         | `What went wrong?`                                                                                | `title`       |
-| `feedbackReason.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
-| `feedbackReason.reason`                                                        | `Reason`                                                                                          | —             |
-| `feedbackReason.details`                                                       | `Details (optional)`                                                                              | —             |
-| `feedbackReason.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
-| `feedbackReason.required`                                                      | `Choose a reason.`                                                                                | —             |
-| `feedbackReason.cancel`                                                        | `Cancel`                                                                                          | —             |
-| `feedbackReason.send`                                                          | `Send feedback`                                                                                   | —             |
-| `feedbackReason.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
+| Key                                                                                  | English source                                                                                    | Override prop |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
+| `feedbackReasonDialog.title`                                                         | `What went wrong?`                                                                                | `title`       |
+| `feedbackReasonDialog.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
+| `feedbackReasonDialog.reason`                                                        | `Reason`                                                                                          | —             |
+| `feedbackReasonDialog.details`                                                       | `Details (optional)`                                                                              | —             |
+| `feedbackReasonDialog.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
+| `feedbackReasonDialog.required`                                                      | `Choose a reason.`                                                                                | —             |
+| `feedbackReasonDialog.cancel`                                                        | `Cancel`                                                                                          | —             |
+| `feedbackReasonDialog.send`                                                          | `Send feedback`                                                                                   | —             |
+| `feedbackReasonDialog.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
 
 ## Responsive
 

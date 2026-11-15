@@ -39,7 +39,7 @@
 | `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `6000` | false | Milliseconds each tab holds before the next one opens. |
-| `primaryAction` | `ArchitectureTabsAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## Assets
 

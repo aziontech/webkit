@@ -43,7 +43,7 @@
 | `facets` | `JobPostingFacet[]` | `[]` | false | Facts about the posting listed in the rail, in order; each is `{ label, icon? }`. |
 | `applyLabel` | `string` | `''` | false | Label of the rail button that links to the application form; the button is left out when empty. |
 | `sections` | `JobPostingSection[]` | `[]` | false | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ variant: 'text', text }` or `{ type: 'list', items }`. |
-| `secondaryAction` | `JobPostingAction` | `undefined` | false | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. |
 | `loading` | `boolean` | `false` | false | The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the application: the confirmation dialog opens. |
 | `failed` | `boolean` | `false` | false | The site could not send the application: `messages.error` shows under the submit button. |

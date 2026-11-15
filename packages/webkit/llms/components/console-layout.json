@@ -63,7 +63,7 @@
   },
   {
    "name": "breadcrumbs",
-   "type": "ConsoleLayoutCrumb[]",
+   "type": "BreadcrumbItemData[]",
    "default": "[]",
    "required": "false",
    "doc": "The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page."

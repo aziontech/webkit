@@ -48,7 +48,7 @@
   },
   {
    "name": "breadcrumbs",
-   "type": "DocCrumb[]",
+   "type": "BreadcrumbItemData[]",
    "default": "[]",
    "required": "false",
    "doc": "Ancestor trail, current page last."
@@ -62,7 +62,7 @@
   },
   {
    "name": "metaActions",
-   "type": "DocPageAction[]",
+   "type": "DocPageHeaderAction[]",
    "default": "[]",
    "required": "false",
    "doc": "The controls on the meta line, in reading order."
@@ -71,7 +71,7 @@
  "events": [
   {
    "name": "action-click",
-   "payload": "(event: MouseEvent, item: DocPageAction)",
+   "payload": "(event: MouseEvent, item: DocPageHeaderAction)",
    "notes": "Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent."
   }
  ],

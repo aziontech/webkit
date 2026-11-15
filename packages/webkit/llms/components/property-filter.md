@@ -133,11 +133,11 @@
 | `propertyFilter.groupOperation`                        | Combine filters in group {index}                                                              | —             |
 | `propertyFilter.loadingValues` / `valuesError`         | Loading values / Could not load values                                                        | —             |
 | `propertyFilter.valueEditor`                           | Value of {property}                                                                           | —             |
-| `propertyFilterQuery.label`                            | Query                                                                                         | `ariaLabel`   |
-| `propertyFilterQuery.placeholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
-| `propertyFilterQuery.fields`                           | Fields                                                                                        | —             |
-| `propertyFilterQuery.all` / `any`                      | Every condition matches / Any condition matches (AND / OR)                                    | —             |
-| `propertyFilterQuery.unknownField` … `unclosedQuote`   | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
+| `propertyFilter.queryLabel`                            | Query                                                                                         | `ariaLabel`   |
+| `propertyFilter.queryPlaceholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
+| `propertyFilter.queryFields`                           | Fields                                                                                        | —             |
+| `propertyFilter.queryAll` / `queryAny`                 | Every condition matches / Any condition matches (AND / OR)                                    | —             |
+| `propertyFilter.unknownField` … `unclosedQuote`        | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
 
 - Formatting: value counts use `Intl.NumberFormat` of the active locale; the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
 

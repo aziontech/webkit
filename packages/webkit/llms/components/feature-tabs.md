@@ -43,7 +43,7 @@
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `5200` | false | Milliseconds each tab holds before the next one opens. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the copy button on each tab's code file; empty keeps the code block's own. |
-| `primaryAction` | `FeatureTabsAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## Assets
 

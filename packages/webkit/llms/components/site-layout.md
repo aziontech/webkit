@@ -88,7 +88,7 @@
 | Key                            | English source                 | Override prop       |
 | ------------------------------ | ------------------------------ | ------------------- |
 | `siteLayout.searchPlaceholder` | `Search the site`              | `searchPlaceholder` |
-| `siteLayout.searchEmpty`       | `No page matches your search.` | —                   |
+| `siteLayout.noMatch`           | `No page matches your search.` | —                   |
 | `siteLayout.pages`             | `Pages`                        | —                   |
 
 - Formatting: none. Navigation and footer text is consumer data.

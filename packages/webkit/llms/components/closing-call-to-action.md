@@ -47,8 +47,8 @@
 | `title` | `string` | `''` | false | Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty. |
 | `titleMuted` | `string` | `''` | false | Second line of the headline in muted ink; drawn in `split` only. |
 | `description` | `string` | `''` | false | Supporting sentence: in the aside cell in `split`, under the headline in `panel`. |
-| `primaryAction` | `ClosingCallToActionAction` | `undefined` | false | The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `secondaryAction` | `ClosingCallToActionAction` | `undefined` | false | The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. |
 | `command` | `string` | `''` | false | Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`. |
 | `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 | `audiences` | `ClosingCallToActionAudience[]` | `[]` | false | The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. |

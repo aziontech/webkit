@@ -15,7 +15,7 @@
 
 - Eight or nine logos fill the rectangle wall beside the aside.
 - Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `Logo`.
-- Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing.
+- Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
 - Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
 
@@ -40,16 +40,16 @@
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the logo wall. |
-| `logos` | `LogoWallQuoteLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'` and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
+| `logos` | `LogoWallQuoteLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `LogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `Logo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
 | `quote` | `LogoWallQuoteQuote` | `undefined` | false | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent. |
-| `primaryAction` | `LogoWallQuoteAction` | `undefined` | false | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `secondaryAction` | `LogoWallQuoteAction` | `undefined` | false | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## States
 
 - Visual states: `default`
 - Empty: when `logos` is empty the band renders nothing
-- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `as-is`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
+- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `color`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
 ## Accessibility
@@ -136,7 +136,7 @@ No built-in strings: the title, the quote, the client names and the action label
       {
         name: 'Crefisa',
         logo: crefisaExtendedReversed,
-        logoTreatment: 'invert-light',
+        artwork: 'light',
         href: 'https://www.azion.com/en/success-case/crefisa/'
       },
       {
@@ -147,7 +147,7 @@ No built-in strings: the title, the quote, the client names and the action label
       {
         name: 'Fourbank',
         logo: fourbankExtendedReversed,
-        logoTreatment: 'invert-light',
+        artwork: 'light',
         href: 'https://www.azion.com/en/success-case/fourbank/'
       },
       {

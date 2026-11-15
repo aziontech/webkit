@@ -121,7 +121,7 @@
 | `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`         | No items yet.                                  | `emptyTitle`        |
+| `attributeEditor.emptyTitle`    | No items yet.                                  | `emptyTitle`        |
 | `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
 | `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |

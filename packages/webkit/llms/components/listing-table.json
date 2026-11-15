@@ -57,7 +57,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "ListingTableAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."

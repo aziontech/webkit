@@ -78,14 +78,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "HeroBandAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
   },
   {
    "name": "secondaryAction",
-   "type": "HeroBandAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."

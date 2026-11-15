@@ -87,7 +87,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "ComparePlansAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."

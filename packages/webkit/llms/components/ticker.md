@@ -83,10 +83,10 @@
 
 ## Internationalization
 
-| Key                               | English source     | Override prop |
-| --------------------------------- | ------------------ | ------------- |
-| `autoplayControl.pauseScrolling`  | `Pause scrolling`  | —             |
-| `autoplayControl.resumeScrolling` | `Resume scrolling` | —             |
+| Key                      | English source     | Override prop |
+| ------------------------ | ------------------ | ------------- |
+| `common.pauseScrolling`  | `Pause scrolling`  | —             |
+| `common.resumeScrolling` | `Resume scrolling` | —             |
 
 - Marks and item labels are content passed through props.
 

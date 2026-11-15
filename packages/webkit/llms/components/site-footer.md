@@ -87,7 +87,7 @@
 | `siteFooter.label`    | Footer               | `ariaLabel`         |
 | `siteFooter.home`     | Azion home           | `homeAriaLabel`     |
 | `siteFooter.language` | Language             | `languageAriaLabel` |
-| `siteFooter.newTab`   | (opens in a new tab) | —                   |
+| `common.newTab`       | (opens in a new tab) | —                   |
 
 - Formatting: none; link labels, the status line and the language options are the page's own text.
 

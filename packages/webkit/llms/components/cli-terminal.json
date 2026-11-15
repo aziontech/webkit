@@ -80,7 +80,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "CliTerminalAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."

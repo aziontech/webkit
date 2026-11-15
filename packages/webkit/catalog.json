@@ -3331,7 +3331,7 @@
    "props": [
     {
      "name": "items",
-     "type": "AiSource[]",
+     "type": "SourcesItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The sources behind the response, in citation order; item `n` is what `[n]` points at."
@@ -3393,7 +3393,7 @@
     },
     {
      "name": "sources",
-     "type": "AiSource[]",
+     "type": "SourcesItem[]",
      "default": "[]",
      "required": "false",
      "doc": "Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name)."
@@ -3420,7 +3420,7 @@
    "props": [
     {
      "name": "items",
-     "type": "SuggestionItem[]",
+     "type": "SuggestionGroupItem[]",
      "default": "[]",
      "required": "false",
      "doc": "Up to five prompts, most likely first."
@@ -3450,7 +3450,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent, item: SuggestionItem)",
+     "payload": "(event: MouseEvent, item: SuggestionGroupItem)",
      "notes": ""
     }
    ],
@@ -3843,7 +3843,7 @@
     },
     {
      "name": "agents",
-     "type": "CopyPromptAgent[]",
+     "type": "CopyPromptButtonAgent[]",
      "default": "Claude, ChatGPT, Gemini, Cursor",
      "required": "false",
      "doc": "The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks."
@@ -6734,7 +6734,7 @@
    "slots": [
     {
      "name": "completion",
-     "scope": "{ tutorial: Tutorial }",
+     "scope": "{ tutorial: TutorialPanelTutorial }",
      "notes": "Extra content on the completion screen, such as a feedback link."
     }
    ],
@@ -6783,7 +6783,7 @@
    "slots": [
     {
      "name": "completion",
-     "scope": "{ tutorial: Tutorial }",
+     "scope": "{ tutorial: TutorialPanelTutorial }",
      "notes": "Extra content on the completion screen, such as a feedback link."
     }
    ],
@@ -7401,7 +7401,7 @@
     },
     {
      "name": "keyName",
-     "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete' | 'return' | 'arrow-up' | 'arrow-down' | 'arrow-left' | 'arrow-right'",
+     "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete' | 'return' | 'arrowUp' | 'arrowDown' | 'arrowLeft' | 'arrowRight'",
      "default": "''",
      "required": "false",
      "doc": "Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it."
@@ -7411,7 +7411,7 @@
      "type": "string[]",
      "default": "[]",
      "required": "false",
-     "doc": "A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written."
+     "doc": "A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog (matched without case or hyphens, so `arrowUp`, `arrow-up` and the DOM's `ArrowUp` are one key), a single character is upper-cased, anything else prints as written."
     },
     {
      "name": "variant",
@@ -8498,7 +8498,7 @@
     },
     {
      "name": "filterFields",
-     "type": "FilterField[]",
+     "type": "TableFilterField[]",
      "default": "[]",
      "required": "false",
      "doc": "Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu type, properties for the property type."
@@ -8645,7 +8645,7 @@
     },
     {
      "name": "filters",
-     "type": "AppliedFilter[]",
+     "type": "TableAppliedFilter[]",
      "default": "undefined",
      "required": "false",
      "doc": "Two-way value (`v-model:filters`)."
@@ -8680,12 +8680,12 @@
     },
     {
      "name": "filter-apply",
-     "payload": "(event: Event, filters: AppliedFilter[])",
+     "payload": "(event: Event, filters: TableAppliedFilter[])",
      "notes": "Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`."
     },
     {
      "name": "filter-remove",
-     "payload": "(event: Event, filter: AppliedFilter)",
+     "payload": "(event: Event, filter: TableAppliedFilter)",
      "notes": "One applied filter was removed (a `FilterMenu.ChipGroup` chip)."
     },
     {
@@ -9593,7 +9593,7 @@
    "props": [
     {
      "name": "levels",
-     "type": "TopologyLevel[]",
+     "type": "TopologyDiagramLevel[]",
      "default": "[]",
      "required": "false",
      "doc": "Columns of the diagram, from the entry point to the last dependency."
@@ -9640,13 +9640,13 @@
    "slots": [
     {
      "name": "actions",
-     "scope": "{ node: TopologyNode }",
+     "scope": "{ node: TopologyDiagramNodeData }",
      "notes": "Extra controls in a node's identity row, before the bind control."
     },
     {
      "name": "empty",
      "scope": "—",
-     "notes": "Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels."
+     "notes": "Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels."
     }
    ],
    "surface": "app",
@@ -10006,14 +10006,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "DocCallToActionAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "The primary action, `{ label, href }`; unset or an empty label renders none."
     },
     {
      "name": "secondaryAction",
-     "type": "DocCallToActionAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "The outlined secondary action, `{ label, href }`; unset renders none."
@@ -10335,14 +10335,14 @@
     },
     {
      "name": "outline",
-     "type": "DocTocItem[]",
+     "type": "DocOnThisPageItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The article's headings for the \"On this page\" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused."
     },
     {
      "name": "outlineGroups",
-     "type": "DocTocGroup[]",
+     "type": "DocOnThisPageGroup[]",
      "default": "[]",
      "required": "false",
      "doc": "Complementary link groups under the outline (GitHub, Community)."
@@ -10468,7 +10468,7 @@
    "props": [
     {
      "name": "items",
-     "type": "DocTocItem[]",
+     "type": "DocOnThisPageItem[]",
      "default": "[]",
      "required": "false",
      "doc": "The headings, in document order."
@@ -10489,7 +10489,7 @@
     },
     {
      "name": "groups",
-     "type": "DocTocGroup[]",
+     "type": "DocOnThisPageGroup[]",
      "default": "[]",
      "required": "false",
      "doc": "Complementary groups rendered below the outline, in order."
@@ -10498,7 +10498,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent, item: DocTocItem)",
+     "payload": "(event: MouseEvent, item: DocOnThisPageItem)",
      "notes": "Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`."
     }
    ],
@@ -10530,7 +10530,7 @@
     },
     {
      "name": "breadcrumbs",
-     "type": "DocCrumb[]",
+     "type": "BreadcrumbItemData[]",
      "default": "[]",
      "required": "false",
      "doc": "Ancestor trail, current page last."
@@ -10544,7 +10544,7 @@
     },
     {
      "name": "metaActions",
-     "type": "DocPageAction[]",
+     "type": "DocPageHeaderAction[]",
      "default": "[]",
      "required": "false",
      "doc": "The controls on the meta line, in reading order."
@@ -10553,7 +10553,7 @@
    "events": [
     {
      "name": "action-click",
-     "payload": "(event: MouseEvent, item: DocPageAction)",
+     "payload": "(event: MouseEvent, item: DocPageHeaderAction)",
      "notes": "Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent."
     }
    ],
@@ -10593,14 +10593,14 @@
    "props": [
     {
      "name": "previous",
-     "type": "DocPageLink | null",
+     "type": "DocPrevNextLink | null",
      "default": "null",
      "required": "false",
      "doc": "The page before this one."
     },
     {
      "name": "next",
-     "type": "DocPageLink | null",
+     "type": "DocPrevNextLink | null",
      "default": "null",
      "required": "false",
      "doc": "The page after this one."
@@ -10623,7 +10623,7 @@
    "events": [
     {
      "name": "navigate",
-     "payload": "(event: MouseEvent, page: DocPageLink)",
+     "payload": "(event: MouseEvent, page: DocPrevNextLink)",
      "notes": "Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`."
     }
    ],
@@ -10759,7 +10759,7 @@
     },
     {
      "name": "agents",
-     "type": "CopyPromptAgent[]",
+     "type": "CopyPromptButtonAgent[]",
      "default": "undefined",
      "required": "false",
      "doc": "The agents whose marks the copy button shows; unset keeps the button's default list."
@@ -10998,7 +10998,7 @@
    "props": [
     {
      "name": "samples",
-     "type": "DocCodeSample[]",
+     "type": "DocCodeGroupSample[]",
      "default": "[]",
      "required": "false",
      "doc": "The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing."
@@ -12769,7 +12769,7 @@
    "props": [
     {
      "name": "countries",
-     "type": "Country[]",
+     "type": "PhoneInputCountry[]",
      "default": "(built-in list — see Notes)",
      "required": "false",
      "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in curated list."
@@ -12855,8 +12855,8 @@
    "events": [
     {
      "name": "phone-change",
-     "payload": "[value: PhoneNumber]",
-     "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
+     "payload": "[value: PhoneInputValue]",
+     "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneInputValue` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
     }
    ],
    "surface": "app",
@@ -13425,7 +13425,7 @@
    "props": [
     {
      "name": "requirements",
-     "type": "PasswordRequirement[]",
+     "type": "PasswordRequirementsRule[]",
      "default": "DEFAULT_PASSWORD_REQUIREMENTS",
      "required": "false",
      "doc": "Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption."
@@ -15493,7 +15493,7 @@
     },
     {
      "name": "breadcrumbs",
-     "type": "ConsoleLayoutCrumb[]",
+     "type": "BreadcrumbItemData[]",
      "default": "[]",
      "required": "false",
      "doc": "The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page."
@@ -15653,7 +15653,7 @@
     },
     {
      "name": "breadcrumbs",
-     "type": "ConsoleLayoutCrumb[]",
+     "type": "BreadcrumbItemData[]",
      "default": "[]",
      "required": "false",
      "doc": "The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page."
@@ -20232,7 +20232,7 @@
    "props": [
     {
      "name": "placement",
-     "type": "HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`)",
+     "type": "HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
      "default": "'bottom'",
      "required": "false",
      "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
@@ -20305,7 +20305,7 @@
    "props": [
     {
      "name": "placement",
-     "type": "HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`)",
+     "type": "HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)",
      "default": "'bottom'",
      "required": "false",
      "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
@@ -20402,7 +20402,7 @@
    "props": [
     {
      "name": "placement",
-     "type": "PopoverPlacementInput",
+     "type": "PopoverPlacement",
      "default": "'bottom-start'",
      "required": "false",
      "doc": "Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment."
@@ -20475,7 +20475,7 @@
    "props": [
     {
      "name": "placement",
-     "type": "PopoverPlacementInput",
+     "type": "PopoverPlacement",
      "default": "'bottom-start'",
      "required": "false",
      "doc": "Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment."
@@ -23344,7 +23344,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "ArchitectureTabsAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
@@ -23378,7 +23378,7 @@
     },
     {
      "name": "trail",
-     "type": "ArticleBodyCrumb[]",
+     "type": "BreadcrumbItemData[]",
      "default": "[]",
      "required": "false",
      "doc": "The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`."
@@ -23776,7 +23776,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "CliTerminalAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."
@@ -23827,7 +23827,7 @@
      "type": "ClientMosaicLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`."
+     "doc": "The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`)."
     },
     {
      "name": "cells",
@@ -23875,7 +23875,7 @@
      "type": "ClientMosaicColumnsCell[]",
      "default": "[]",
      "required": "false",
-     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`, and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
+     "doc": "The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal=\"hover\"`) sizes the mark as a share of the card."
     },
     {
      "name": "reveal",
@@ -23923,7 +23923,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "ClientQuotesAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Button under the quotes; `{ label, href, trailing? }`. Omitted when absent."
@@ -24006,14 +24006,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "ClosingCallToActionAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
     },
     {
      "name": "secondaryAction",
-     "type": "ClosingCallToActionAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent."
@@ -24221,7 +24221,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "ComparePlansAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent."
@@ -24359,7 +24359,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "ComplianceBadgesAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "The closing \"see more\" cell; `{ label, href }`. Omitted when absent."
@@ -24565,7 +24565,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "FeatureTabsAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."
@@ -24668,14 +24668,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "FeatureWidgetsAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "First button under the headline; `{ label, href, trailing? }`. Omitted when absent."
     },
     {
      "name": "secondaryAction",
-     "type": "FeatureWidgetsAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
@@ -24765,14 +24765,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "HeroBandAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
     },
     {
      "name": "secondaryAction",
-     "type": "HeroBandAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
@@ -25248,14 +25248,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "HeroFormAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
     },
     {
      "name": "secondaryAction",
-     "type": "HeroFormAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
@@ -25456,7 +25456,7 @@
     },
     {
      "name": "secondaryAction",
-     "type": "JobPostingAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent."
@@ -25650,7 +25650,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "ListingTableAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."
@@ -25715,7 +25715,7 @@
      "type": "LogoWallQuoteLogo[]",
      "default": "[]",
      "required": "false",
-     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'` and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
+     "doc": "The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `LogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `Logo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`."
     },
     {
      "name": "quote",
@@ -25726,14 +25726,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "LogoWallQuoteAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
     },
     {
      "name": "secondaryAction",
-     "type": "LogoWallQuoteAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent."
@@ -25999,7 +25999,7 @@
      "type": "NetworkSectionOutcome[]",
      "default": "[]",
      "required": "false",
-     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent."
+     "doc": "Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent."
     },
     {
      "name": "benefits",
@@ -26611,14 +26611,14 @@
     },
     {
      "name": "primaryAction",
-     "type": "TemplateGalleryAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent."
     },
     {
      "name": "secondaryAction",
-     "type": "TemplateGalleryAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent."
@@ -26708,7 +26708,7 @@
     },
     {
      "name": "primaryAction",
-     "type": "UseCasesAction",
+     "type": "SectionTitleAction",
      "default": "undefined",
      "required": "false",
      "doc": "Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."

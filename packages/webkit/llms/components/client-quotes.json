@@ -53,7 +53,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "ClientQuotesAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Button under the quotes; `{ label, href, trailing? }`. Omitted when absent."

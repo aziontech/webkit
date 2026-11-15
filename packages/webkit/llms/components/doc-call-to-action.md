@@ -34,8 +34,8 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | The offer's headline; names the complementary landmark. |
 | `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
-| `primaryAction` | `DocCallToActionAction` | `undefined` | false | The primary action, `{ label, href }`; unset or an empty label renders none. |
-| `secondaryAction` | `DocCallToActionAction` | `undefined` | false | The outlined secondary action, `{ label, href }`; unset renders none. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | The primary action, `{ label, href }`; unset or an empty label renders none. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | The outlined secondary action, `{ label, href }`; unset renders none. |
 
 ## Slots
 

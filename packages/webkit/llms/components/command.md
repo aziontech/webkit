@@ -164,7 +164,7 @@ packages/webkit/src/components/overlay/command/
 | --------------------- | ------------------- | --------------------- |
 | `command.title`       | `Command menu`      | —                     |
 | `command.placeholder` | `Search everything` | `placeholder` (Input) |
-| `command.empty`       | `No results found.` | default slot (Empty)  |
+| `command.noMatch`     | `No results found.` | default slot (Empty)  |
 | `command.back`        | `Back from {page}`  | —                     |
 
 - Item labels, keywords, group and page headings are consumer copy.

@@ -49,7 +49,7 @@
   },
   {
    "name": "sources",
-   "type": "AiSource[]",
+   "type": "SourcesItem[]",
    "default": "[]",
    "required": "false",
    "doc": "Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name)."

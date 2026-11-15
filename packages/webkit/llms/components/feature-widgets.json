@@ -59,14 +59,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "FeatureWidgetsAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "First button under the headline; `{ label, href, trailing? }`. Omitted when absent."
   },
   {
    "name": "secondaryAction",
-   "type": "FeatureWidgetsAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent."

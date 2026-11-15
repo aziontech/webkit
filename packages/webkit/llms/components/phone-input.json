@@ -33,7 +33,7 @@
  "props": [
   {
    "name": "countries",
-   "type": "Country[]",
+   "type": "PhoneInputCountry[]",
    "default": "(built-in list — see Notes)",
    "required": "false",
    "doc": "Countries offered by the dial-code Select. When omitted, uses the built-in curated list."
@@ -119,8 +119,8 @@
  "events": [
   {
    "name": "phone-change",
-   "payload": "[value: PhoneNumber]",
-   "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
+   "payload": "[value: PhoneInputValue]",
+   "notes": "One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneInputValue` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back."
   }
  ],
  "slots": [],

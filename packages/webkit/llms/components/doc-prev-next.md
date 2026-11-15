@@ -33,8 +33,8 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `previous` | `DocPageLink \| null` | `null` | false | The page before this one. |
-| `next` | `DocPageLink \| null` | `null` | false | The page after this one. |
+| `previous` | `DocPrevNextLink \| null` | `null` | false | The page before this one. |
+| `next` | `DocPrevNextLink \| null` | `null` | false | The page after this one. |
 | `previousLabel` | `string` | `''` | false | Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). |
 | `nextLabel` | `string` | `''` | false | Eyebrow over the next link. Empty uses the locale catalog (`Next`). |
 
@@ -42,7 +42,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `navigate` | `(event: MouseEvent, page: DocPageLink)` | Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`. |
+| `navigate` | `(event: MouseEvent, page: DocPrevNextLink)` | Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`. |
 
 ## States
 

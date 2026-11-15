@@ -56,7 +56,7 @@
 - `data-state` mirrors `idle` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
-- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.
+- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from `copyButton.fallbackTitle`, `fallbackField` and `fallbackHint`.
 
 ## Accessibility
 
@@ -77,10 +77,10 @@
 
 ## Internationalization
 
-| Key                 | English source | Override prop |
-| ------------------- | -------------- | ------------- |
-| `copyButton.copy`   | `Copy`         | `ariaLabel`   |
-| `copyButton.copied` | `Copied`       | `copiedLabel` |
+| Key             | English source | Override prop |
+| --------------- | -------------- | ------------- |
+| `common.copy`   | `Copy`         | `ariaLabel`   |
+| `common.copied` | `Copied`       | `copiedLabel` |
 
 ## Responsive
 

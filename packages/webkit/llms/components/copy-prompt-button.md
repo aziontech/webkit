@@ -44,7 +44,7 @@
 | `value` | `string` | `—` | true | The prompt copied to the clipboard on activation. |
 | `label` | `string` | `''` | false | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. |
 | `copiedLabel` | `string` | `''` | false | Visible text announced after a copy; empty uses the catalog's `Copied`. |
-| `agents` | `CopyPromptAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
+| `agents` | `CopyPromptButtonAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
 | `disabled` | `boolean` | `false` | false | Disables the button; `copy` is not emitted. |
 | `closable` | `boolean` | `false` | false | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. |
 | `open` | `boolean` | `true` | false | Two-way value (`v-model:open`). |

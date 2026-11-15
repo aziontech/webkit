@@ -44,14 +44,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "DocCallToActionAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "The primary action, `{ label, href }`; unset or an empty label renders none."
   },
   {
    "name": "secondaryAction",
-   "type": "DocCallToActionAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "The outlined secondary action, `{ label, href }`; unset renders none."

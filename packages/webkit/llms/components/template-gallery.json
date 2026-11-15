@@ -63,14 +63,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "TemplateGalleryAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent."
   },
   {
    "name": "secondaryAction",
-   "type": "TemplateGalleryAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent."

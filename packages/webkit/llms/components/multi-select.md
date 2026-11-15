@@ -97,10 +97,10 @@
 
 ## v-model
 
-| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                   |
-| -------------- | ---------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
+| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectItem>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
-| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                              |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
 
 ## States
 
@@ -145,7 +145,7 @@
 
 | Key                   | English source                                | Override prop |
 | --------------------- | --------------------------------------------- | ------------- |
-| `multiSelect.empty`   | `No matches`                                  | `emptyTitle`  |
+| `multiSelect.noMatch` | `No matches`                                  | `emptyTitle`  |
 | `multiSelect.loading` | `Loading options`                             | —             |
 | `multiSelect.add`     | `Add "{value}"`                               | —             |
 | `multiSelect.more`    | `+{count} more`                               | —             |

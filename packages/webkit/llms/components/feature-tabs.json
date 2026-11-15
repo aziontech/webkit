@@ -95,7 +95,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "FeatureTabsAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent."

@@ -81,14 +81,14 @@
   },
   {
    "name": "primaryAction",
-   "type": "HeroFormAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link."
   },
   {
    "name": "secondaryAction",
-   "type": "HeroFormAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link."

@@ -34,16 +34,16 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `DocTocItem[]` | `[]` | false | The headings, in document order. |
+| `items` | `DocOnThisPageItem[]` | `[]` | false | The headings, in document order. |
 | `activeId` | `string` | `''` | false | The id of the heading currently in view. |
 | `title` | `string` | `''` | false | The rail's own heading. Empty uses the locale catalog (`On this page`). |
-| `groups` | `DocTocGroup[]` | `[]` | false | Complementary groups rendered below the outline, in order. |
+| `groups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary groups rendered below the outline, in order. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent, item: DocTocItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
+| `select` | `(event: MouseEvent, item: DocOnThisPageItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
 
 ## States
 

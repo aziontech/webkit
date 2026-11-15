@@ -74,9 +74,9 @@
 
 ## Internationalization
 
-| Key                  | English source         | Override prop |
-| -------------------- | ---------------------- | ------------- |
-| `docMarkdown.newTab` | `(opens in a new tab)` | —             |
+| Key             | English source         | Override prop |
+| --------------- | ---------------------- | ------------- |
+| `common.newTab` | `(opens in a new tab)` | —             |
 
 - Formatting: none. All visible text is the source's; code sample labels fall back to `DocCodeGroup`'s language names.
 

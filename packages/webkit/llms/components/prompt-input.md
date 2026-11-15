@@ -109,9 +109,9 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 | `promptInput.stop`           | `Stop generating`                   | —             |
 | `promptInput.count`          | `{count}/{max}`                     | —             |
 | `promptInput.overLimit`      | `{count} characters over the limit` | —             |
-| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
-| `promptInputMenu.noMatches`  | `No matches`                        | —             |
-| `promptInputMenu.references` | `References`                        | —             |
+| `promptInput.menuResults`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInput.noMatch`        | `No matches`                        | —             |
+| `promptInput.menuReferences` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 

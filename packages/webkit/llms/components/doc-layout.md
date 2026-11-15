@@ -44,8 +44,8 @@
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
 | `sections` | `DocLayoutSection[]` | `[]` | false | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`. |
 | `home` | `string` | `'/'` | false | Where the Azion Docs mark links. |
-| `outline` | `DocTocItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
-| `outlineGroups` | `DocTocGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
+| `outline` | `DocOnThisPageItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
+| `outlineGroups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
@@ -109,7 +109,7 @@
 | `docLayout.badge`              | `Docs`                          | —             |
 | `docLayout.openNavigation`     | `Open documentation navigation` | —             |
 | `docLayout.search`             | `Search docs`                   | —             |
-| `docLayout.searchEmpty`        | `No page matches your search.`  | —             |
+| `docLayout.noMatch`            | `No page matches your search.`  | —             |
 | `docLayout.pages`              | `Pages`                         | —             |
 | `docLayout.root`               | `Docs`                          | `rootLabel`   |
 | `docLayout.collapseNavigation` | `Collapse navigation`           | —             |

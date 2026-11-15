@@ -154,9 +154,9 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   import IconButton from '@aziontech/webkit/icon-button'
   import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import Reasoning from '@aziontech/webkit/reasoning'
-  import Sources, { type AiSource } from '@aziontech/webkit/sources'
+  import Sources, { type SourcesItem } from '@aziontech/webkit/sources'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
@@ -164,8 +164,8 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   interface Answer {
     reasoning: string
     content: string
-    sources: AiSource[]
-    followUps: SuggestionItem[]
+    sources: SourcesItem[]
+    followUps: SuggestionGroupItem[]
   }
 
   interface UserTurn {
@@ -191,7 +191,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
 
   type Turn = UserTurn | AssistantTurn
 
-  const supportPrompts: SuggestionItem[] = [
+  const supportPrompts: SuggestionGroupItem[] = [
     { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
     {
       id: 'errors',

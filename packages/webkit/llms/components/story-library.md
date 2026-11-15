@@ -80,14 +80,14 @@
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `storyLibrary.search` | `Search` | — |
-| `storyLibrary.searchFacet` | `Search {facet}` | — |
-| `storyLibrary.empty` | `No results found.` | — |
-| `storyLibrary.filters` | `Filters` | `filterLabel` |
-| `storyLibrary.filtersApplied` | `{label} ({count})` | — |
-| `storyLibrary.newTab` | `(opens in a new tab)` | — |
+| Key                           | English source         | Override prop |
+| ----------------------------- | ---------------------- | ------------- |
+| `storyLibrary.search`         | `Search`               | —             |
+| `storyLibrary.searchFacet`    | `Search {facet}`       | —             |
+| `storyLibrary.noMatch`        | `No results found.`    | —             |
+| `storyLibrary.filters`        | `Filters`              | `filterLabel` |
+| `storyLibrary.filtersApplied` | `{label} ({count})`    | —             |
+| `common.newTab`               | `(opens in a new tab)` | —             |
 
 - Every other string arrives through props.
 - Formatting: none.

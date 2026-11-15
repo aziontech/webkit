@@ -84,8 +84,8 @@
 | `conversationHistory.previous7`  | `Previous 7 days`       | —             |
 | `conversationHistory.previous30` | `Previous 30 days`      | —             |
 | `conversationHistory.older`      | `Older`                 | —             |
-| `conversationHistory.empty`      | `No conversations yet.` | —             |
-| `conversationHistory.remove`     | `Delete {title}`        | —             |
+| `conversationHistory.emptyTitle` | `No conversations yet.` | —             |
+| `conversationHistory.delete`     | `Delete {title}`        | —             |
 
 - Groups use calendar days in the browser's time zone, not 24-hour windows.
 

@@ -35,7 +35,7 @@
  "props": [
   {
    "name": "samples",
-   "type": "DocCodeSample[]",
+   "type": "DocCodeGroupSample[]",
    "default": "[]",
    "required": "false",
    "doc": "The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing."

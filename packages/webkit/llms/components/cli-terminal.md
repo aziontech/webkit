@@ -40,7 +40,7 @@
 | `script` | `CliTerminalScript` | `undefined` | false | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`. |
 | `session` | `string` | `''` | false | The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the session's copy button; empty keeps the code block's own. |
-| `primaryAction` | `CliTerminalAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## States
 

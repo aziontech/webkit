@@ -81,7 +81,7 @@
 | `fileTokenGroup.uploading` | Uploading {name}                                              | —             |
 | `fileTokenGroup.modified`  | Modified {date}                                               | —             |
 | `fileTokenGroup.showMore`  | `Show {count} more file` / `Show {count} more files` (plural) | —             |
-| `fileTokenGroup.showFewer` | Show fewer files                                              | —             |
+| `fileTokenGroup.showLess`  | Show fewer files                                              | —             |
 
 - Formatting: sizes with `formatFileSize`, dates with `formatDate` (`dateStyle: 'medium'`), both from `useLocale`.
 

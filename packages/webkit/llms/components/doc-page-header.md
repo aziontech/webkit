@@ -38,15 +38,15 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | The page title. |
 | `description` | `string` | `''` | false | The deck under the title. |
-| `breadcrumbs` | `DocCrumb[]` | `[]` | false | Ancestor trail, current page last. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | Ancestor trail, current page last. |
 | `lastUpdated` | `string` | `''` | false | When the page's content last changed. ISO date, or a ready-made string. |
-| `metaActions` | `DocPageAction[]` | `[]` | false | The controls on the meta line, in reading order. |
+| `metaActions` | `DocPageHeaderAction[]` | `[]` | false | The controls on the meta line, in reading order. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `action-click` | `(event: MouseEvent, item: DocPageAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
+| `action-click` | `(event: MouseEvent, item: DocPageHeaderAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
 
 ## Slots
 

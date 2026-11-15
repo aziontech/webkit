@@ -927,7 +927,9 @@ default, is stuck in one language and drifts from the rest of the product.
   locale).
 - Rename a built-in string for the whole app with `messages` on `WebkitProvider`:
   `:messages="{ wizard: { submit: 'Deploy' }, kbd: { ctrl: 'Strg' } }"`. The keys are the
-  catalog's (`group.key`); anything you leave out keeps the built-in text.
+  catalog's (`group.key`): `group` is the component's camelCase name (`sidebarMenu`,
+  `feedbackReasonDialog`) and strings several components share are in `common` (`common.copy`,
+  `common.newTab`); anything you leave out keeps the built-in text.
 - Pass a prop only when the text is product copy specific to that screen (a dialog title, a field
   label, the action of this form), and write it by the `webkit-microcopy` skill: sentence case, one
   word per concept, no em dash.
@@ -982,7 +984,7 @@ default, is stuck in one language and drifts from the rest of the product.
   webkit's own components.
 - Inside the package the same check runs at write time (the authoring hook) and in CI
   (`scripts/check-authoring.mjs`): a literal UI string in a component template attribute, or an
-  English prop default, is blocked; the text goes to `src/i18n/messages/*.ts`.
+  English prop default, is blocked; the text goes to `src/locales/*.ts`.
 - Product copy, the text no component ships, follows the `webkit-microcopy` skill.
 
 ---
@@ -9857,7 +9859,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 - `data-state` mirrors `idle` or `copied`
 - `data-disabled` mirrors the `disabled` prop
 - The composed `Tooltip` carries its own `data-state` (`open` | `closed`) and is disabled with the button
-- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from the `copyFallback` catalog group.
+- Fallback: when `navigator.clipboard.writeText` rejects (permission denied, insecure context, unfocused document), the button loads a small `Popover` anchored to itself (lazily, through `defineAsyncComponent`, so entries that copy do not grow): the title `Copy manually`, the value in a read-only small `Input` labelled `Value to copy`, focused and selected, and `Press Ctrl+C to copy.` (`⌘C` on macOS). `copy` is not emitted and the state stays `default`. `Esc` or a click outside closes it and returns focus to the button. Strings come from `copyButton.fallbackTitle`, `fallbackField` and `fallbackHint`.
 
 ## Accessibility
 
@@ -9878,10 +9880,10 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Internationalization
 
-| Key                 | English source | Override prop |
-| ------------------- | -------------- | ------------- |
-| `copyButton.copy`   | `Copy`         | `ariaLabel`   |
-| `copyButton.copied` | `Copied`       | `copiedLabel` |
+| Key             | English source | Override prop |
+| --------------- | -------------- | ------------- |
+| `common.copy`   | `Copy`         | `ariaLabel`   |
+| `common.copied` | `Copied`       | `copiedLabel` |
 
 ## Responsive
 
@@ -9955,7 +9957,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 | `value` | `string` | `—` | true | The prompt copied to the clipboard on activation. |
 | `label` | `string` | `''` | false | Visible text and accessible name while idle; empty uses the catalog's `Copy prompt`. |
 | `copiedLabel` | `string` | `''` | false | Visible text announced after a copy; empty uses the catalog's `Copied`. |
-| `agents` | `CopyPromptAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
+| `agents` | `CopyPromptButtonAgent[]` | `Claude, ChatGPT, Gemini, Cursor` | false | The agents whose marks follow the label, in order; each is `{ name, icon?, logo? }`, drawn from `logo` through `Logo` when set and from the `icon` glyph otherwise; an empty list draws no marks. |
 | `disabled` | `boolean` | `false` | false | Disables the button; `copy` is not emitted. |
 | `closable` | `boolean` | `false` | false | Shows a dismiss button beside the chip; activating it removes both from the layout and emits `close`. |
 | `open` | `boolean` | `true` | false | Two-way value (`v-model:open`). |
@@ -11576,8 +11578,8 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 | `conversationHistory.previous7`  | `Previous 7 days`       | —             |
 | `conversationHistory.previous30` | `Previous 30 days`      | —             |
 | `conversationHistory.older`      | `Older`                 | —             |
-| `conversationHistory.empty`      | `No conversations yet.` | —             |
-| `conversationHistory.remove`     | `Delete {title}`        | —             |
+| `conversationHistory.emptyTitle` | `No conversations yet.` | —             |
+| `conversationHistory.delete`     | `Delete {title}`        | —             |
 
 - Groups use calendar days in the browser's time zone, not 24-hour windows.
 
@@ -11710,17 +11712,17 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 
 ## Internationalization
 
-| Key                                                                            | English source                                                                                    | Override prop |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
-| `feedbackReason.title`                                                         | `What went wrong?`                                                                                | `title`       |
-| `feedbackReason.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
-| `feedbackReason.reason`                                                        | `Reason`                                                                                          | —             |
-| `feedbackReason.details`                                                       | `Details (optional)`                                                                              | —             |
-| `feedbackReason.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
-| `feedbackReason.required`                                                      | `Choose a reason.`                                                                                | —             |
-| `feedbackReason.cancel`                                                        | `Cancel`                                                                                          | —             |
-| `feedbackReason.send`                                                          | `Send feedback`                                                                                   | —             |
-| `feedbackReason.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
+| Key                                                                                  | English source                                                                                    | Override prop |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
+| `feedbackReasonDialog.title`                                                         | `What went wrong?`                                                                                | `title`       |
+| `feedbackReasonDialog.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
+| `feedbackReasonDialog.reason`                                                        | `Reason`                                                                                          | —             |
+| `feedbackReasonDialog.details`                                                       | `Details (optional)`                                                                              | —             |
+| `feedbackReasonDialog.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
+| `feedbackReasonDialog.required`                                                      | `Choose a reason.`                                                                                | —             |
+| `feedbackReasonDialog.cancel`                                                        | `Cancel`                                                                                          | —             |
+| `feedbackReasonDialog.send`                                                          | `Send feedback`                                                                                   | —             |
+| `feedbackReasonDialog.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
 
 ## Responsive
 
@@ -11895,9 +11897,9 @@ Exported type: `PromptInputStatus = 'ready' | 'pending' | 'streaming'`. Composed
 | `promptInput.stop`           | `Stop generating`                   | —             |
 | `promptInput.count`          | `{count}/{max}`                     | —             |
 | `promptInput.overLimit`      | `{count} characters over the limit` | —             |
-| `promptInputMenu.results`    | `{count} suggestion(s)` (plural)    | —             |
-| `promptInputMenu.noMatches`  | `No matches`                        | —             |
-| `promptInputMenu.references` | `References`                        | —             |
+| `promptInput.menuResults`    | `{count} suggestion(s)` (plural)    | —             |
+| `promptInput.noMatch`        | `No matches`                        | —             |
+| `promptInput.menuReferences` | `References`                        | —             |
 
 - Formatting: counts go through `Intl.NumberFormat` (the `t()` number formatting).
 
@@ -12271,7 +12273,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `AiSource[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
+| `items` | `SourcesItem[]` | `[]` | false | The sources behind the response, in citation order; item `n` is what `[n]` points at. |
 | `anchor` | `string` | `''` | false | Id prefix of the list items (`<anchor>-source-<n>`); pass the same value to `StreamingResponse` so its citations link here. |
 | `title` | `string` | `''` | false | Heading of the disclosure. Empty uses the locale catalog (`3 sources`). |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
@@ -12280,7 +12282,7 @@ _None. Exports: `"./reasoning"`. Composed DS components: `button` (Skip thinking
 ## Sub-components
 
 _None. Data-driven: a source list is a record set the response already holds, like table rows.
-Exports: `"./sources"`; exported type `AiSource` (`title`, `href?`, `description?`) from `sources/types.ts`,
+Exports: `"./sources"`; exported type `SourcesItem` (`title`, `href?`, `description?`) from `sources/types.ts`,
 shared with `StreamingResponse`._
 
 ## v-model
@@ -12406,7 +12408,7 @@ shared with `StreamingResponse`._
 | --- | --- | --- | --- | --- |
 | `content` | `string` | `''` | false | The model's Markdown so far. Parsed into elements, never injected as HTML: raw tags render as text and only http(s), mailto, relative and hash links survive. |
 | `streaming` | `boolean` | `false` | false | Tokens are still arriving: shows the caret, marks the region busy and keeps an unclosed code fence as plain text until it closes. |
-| `sources` | `AiSource[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). |
+| `sources` | `SourcesItem[]` | `[]` | false | Sources the `[n]` citations in the content resolve against (title in the tooltip and the accessible name). |
 | `anchor` | `string` | `''` | false | The `anchor` of the `Sources` list under the response; citations link to its items. Empty renders unlinked numbers. |
 
 ## Sub-components
@@ -12529,7 +12531,7 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `SuggestionItem[]` | `[]` | false | Up to five prompts, most likely first. |
+| `items` | `SuggestionGroupItem[]` | `[]` | false | Up to five prompts, most likely first. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`). |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). |
 | `disabled` | `boolean` | `false` | false | Disables every prompt, while a response is being generated. |
@@ -12538,12 +12540,12 @@ No built-in strings (the content is the model's; `Citation` and `CodeBlock` carr
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent, item: SuggestionItem)` |  |
+| `select` | `(event: MouseEvent, item: SuggestionGroupItem)` |  |
 
 ## Sub-components
 
 _None. Data-driven (`items`), like Cloudscape's support prompt group. Exports: `"./suggestion-group"`;
-types `SuggestionItem`, `SuggestionGroupOrientation`._
+types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 ## States
 
@@ -15088,7 +15090,7 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | `trace.search`                                       | Search spans                                     | —             |
 | `trace.noMatch`                                      | No span matches “{query}”.                       | —             |
 | `trace.clearSearch`                                  | Clear search                                     | —             |
-| `trace.empty`                                        | No spans in this trace.                          | —             |
+| `trace.emptyTitle`                                   | No spans in this trace.                          | —             |
 | `trace.loading`                                      | Loading spans                                    | —             |
 | `trace.details`                                      | Details of {name}                                | —             |
 | `trace.close`                                        | Close                                            | —             |
@@ -16920,8 +16922,8 @@ name.
 | `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
 | `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
-| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrow-up' \| 'arrow-down' \| 'arrow-left' \| 'arrow-right'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
-| `keys` | `string[]` | `[]` | false | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written. |
+| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrowUp' \| 'arrowDown' \| 'arrowLeft' \| 'arrowRight'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
+| `keys` | `string[]` | `[]` | false | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog (matched without case or hyphens, so `arrowUp`, `arrow-up` and the DOM's `ArrowUp` are one key), a single character is upper-cased, anything else prints as written. |
 | `variant` | `'combined' \| 'separate'` | `'combined'` | false | Visual variant: one keycap holding every key, or one keycap per key. |
 
 ## Slots
@@ -16950,7 +16952,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: modifier symbols (`⌘`, `⌥`, `⇧`) never mirror.
-- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrow-left` stays `←` under `dir="rtl"`.
+- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrowLeft` stays `←` under `dir="rtl"`.
 - Isolation: the keycap renders `dir="ltr"`, so a shortcut such as `Ctrl` `K` keeps its order inside right-to-left text; key names come from the locale catalog (`kbd.*`).
 
 ## Internationalization
@@ -16960,7 +16962,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 | `kbd.ctrl` / `kbd.alt` / `kbd.shift` | `Ctrl` / `Alt` / `Shift`                           | —             |
 | `kbd.escape` … `kbd.delete`          | `Esc`, `Enter`, `Space`, `Tab`, `Backspace`, `Del` | —             |
 | `kbd.return`                         | `↵`                                                | —             |
-| `kbd.arrow-up` … `kbd.arrow-right`   | `↑` `↓` `←` `→`                                    | —             |
+| `kbd.arrowUp` … `kbd.arrowRight`     | `↑` `↓` `←` `→`                                    | —             |
 
 - The glyph entries (`return`, arrows) are the same in every locale; they live in the catalog so a consumer can rename them with `messages` like any key name.
 - Literal `keys` entries and the slot are consumer copy.
@@ -17543,7 +17545,7 @@ No built-in strings: the accessible name and the wordmark are the `name` the con
 | `overflowCount.search`   | `Search`                    | —             |
 | `overflowCount.noMatch`  | `Nothing matches “{query}”` | —             |
 | `overflowCount.loadMore` | `Load {count} more`         | —             |
-| `overflowCount.newTab`   | `(opens in a new tab)`      | —             |
+| `common.newTab`          | `(opens in a new tab)`      | —             |
 
 - Formatting: counts go through the locale's number format.
 
@@ -18444,7 +18446,7 @@ _none_ — the method and the code are data and are never translated; the compon
 
 # Tutorial Panel
 
-> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.Tutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
+> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.TutorialPanelTutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
 
 - Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
@@ -18460,7 +18462,7 @@ _none_ — the method and the code are data and are never translated; the compon
 ## Do
 
 - Wrap the whole page in `TutorialPanel.Provider`, so the panel and every hotspot share one state.
-- Keep tutorials as data (`Tutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
+- Keep tutorials as data (`TutorialPanelTutorial[]`): the panel lists them and the hotspots on the page read the same steps. This is the one place a config array is right — the step content is shown away from where it is declared.
 - One step, one control. Write the step title as the action (`Name the service`) and the content as one or two sentences.
 - Place every `Hotspot` a tutorial names on the page that runs it. A step whose hotspot is missing still shows in the panel, and focus moves to it there.
 - Set `completed` on a tutorial from what the product recorded (the `complete` event), not from a click.
@@ -18495,7 +18497,7 @@ _none_ — the method and the code are data and are never translated; the compon
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `completion` | { tutorial: Tutorial } | Extra content on the completion screen, such as a feedback link. |
+| `completion` | { tutorial: TutorialPanelTutorial } | Extra content on the completion screen, such as a feedback link. |
 
 ## Sub-component imports
 
@@ -18511,7 +18513,7 @@ that hosts it owns that), so there is no `Trigger` / `Content`. State flows thro
 the optional variant, which returns null so a hotspot outside a provider renders only its content.
 
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step…
-  - Props: `tutorials?: Tutorial[]` (default `[]`).
+  - Props: `tutorials?: TutorialPanelTutorial[]` (default `[]`).
   - Models (`defineModel`): `v-model:active` (`string \| null`, default `null` — the parent owns it when bound, the provider keeps it locally when not), `v-model:step` (`number`, default `0`, same rule; equals the step count once the tutorial is finished).
   - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
@@ -18519,7 +18521,7 @@ the optional variant, which returns null so a hotspot outside a provider renders
 - `parts/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an a…
 - `parts/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps.
 
-Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
+Exported types: `TutorialPanelTutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialPanelTaskData` (`title`, `steps`), `TutorialPanelStep` (`title`, `content`, `hotspotId`).
 
 ```
 packages/webkit/src/components/content/tutorial-panel/
@@ -18532,9 +18534,10 @@ packages/webkit/src/components/content/tutorial-panel/
 │   └── use-tutorial-panel-tasks-context.ts     (task registry; throws outside the task list)
 ├── tutorial-panel-provider/
 │   └── tutorial-panel-provider.vue
-└── parts/                                (internal, not exported)
-    ├── tutorial-panel-tasks.vue
-    └── tutorial-panel-task.vue
+├── tutorial-panel-tasks/
+│   └── tutorial-panel-tasks.vue          (internal)
+└── tutorial-panel-task/
+    └── tutorial-panel-task.vue           (internal)
 ```
 
 Exports:
@@ -18549,16 +18552,16 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## States
 
-- Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.empty`), `loading`
+- Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.emptyTitle`), `loading`
 - `data-view` on the root: `list` | `running` | `complete`
 - `data-completed` on each list item mirrors the tutorial's `completed`
 - In `running`, each task's status is derived from the current step: `success` when every step of the task is behind it, `pending` otherwise; the task that holds the current step is `active`. The current step's row carries `aria-current="step"`.
-- `complete` shows a completion section (check icon, `Tutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
+- `complete` shows a completion section (check icon, `TutorialPanelTutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
 
 ## Accessibility
 
 - Visible focus: the composed `Button`s carry the standard ring; focus targets that are not controls (the list heading, the completion heading, the current step row) take `tabindex="-1"` and `outline-none` because they receive focus only programmatically.
-- Keyboard map: `Tab` moves through Start / Restart, Exit, Restart and Back. Focus management: Start moves focus to the current step's popover (through its hotspot) or, when that hotspot is not on the page, to the step's row in the panel; Finish moves focus to the `Tutorial complete` heading; Exit and Back move focus to the list's heading.
+- Keyboard map: `Tab` moves through Start / Restart, Exit, Restart and Back. Focus management: Start moves focus to the current step's popover (through its hotspot) or, when that hotspot is not on the page, to the step's row in the panel; Finish moves focus to the `TutorialPanelTutorial complete` heading; Exit and Back move focus to the list's heading.
 - ARIA: the panel is a `HelpPanel` complementary landmark named by `ariaLabel` or the title. Each list item's Start button is described by its tutorial's heading (`aria-describedby`), so repeated buttons are distinct. The task progress line is `aria-live="polite"`. The current step row carries `aria-current="step"`.
 - Contrast ≥4.5:1 on muted ink over `--bg-surface` in both themes.
 - Touch target: the composed `Button`s (small) meet 24 px; the panel adds no other control.
@@ -18577,13 +18580,13 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `tutorialPanel.title`                | `Tutorials`                                                   | `title`       |
 | `tutorialPanel.description`          | `Learn the product by doing a real task, one step at a time.` | `description` |
 | `tutorialPanel.listLabel`            | `Available tutorials`                                         | —             |
-| `tutorialPanel.empty`                | `No tutorials yet.`                                           | —             |
+| `tutorialPanel.emptyTitle`           | `No tutorials yet.`                                           | —             |
 | `tutorialPanel.start`                | `Start tutorial`                                              | —             |
 | `tutorialPanel.restart`              | `Restart tutorial`                                            | —             |
 | `tutorialPanel.exit`                 | `Exit tutorial`                                               | —             |
 | `tutorialPanel.back`                 | `Back to tutorials`                                           | —             |
 | `tutorialPanel.completed`            | `Completed`                                                   | —             |
-| `tutorialPanel.completedTitle`       | `Tutorial complete`                                           | —             |
+| `tutorialPanel.completedTitle`       | `TutorialPanelTutorial complete`                              | —             |
 | `tutorialPanel.completedDescription` | `You finished {title}.`                                       | —             |
 | `tutorialPanel.taskCount`            | `{count} task` / `{count} tasks`                              | —             |
 | `tutorialPanel.stepCount`            | `{count} step` / `{count} steps`                              | —             |
@@ -19231,7 +19234,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 # Data Table
 
-> The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`), so its markup, tokens and accessibility are those of `table`. The headless **`@tanstack/vue-table`** engine lives here and only here: a hand-composed `Table` never loads it. A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport for a title, the context-aware `Table.*` toolbar parts (search, filter, export, refresh, live) and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance so the consumer can drive filtering, global search and column visibility through the table's own methods. Pairs with `Pagination` (rendered automatically in the footer when `paginated`). **Engine.** DataTable is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to the table family (this component and the editable `data-grid` that builds on it) per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (the slot that hosts `FilterMenu` with `type="menu"`, or `PropertyFilter` with `type="property"`, over `filterFields`), `FilterMenu.ChipGroup` with no `fields` in the `filters` slot (the applied fields of the menu type), `CollectionPreferences` with no `columns` (visible columns and their order, written back on Confirm), `Table.Search` (the global text filter), `Table.Export` (CSV download), `Table.RefreshButton` and `Table.LiveButton`. Structured filters are a first-class model (`v-model:filters`, an `AppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `FilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty' | 'within' | 'between'` (`within` holds a period id — `24h`, `7d`, `30d`, `3m` — and matches dates inside that window ending now; `between` holds `[start, end]` epoch milliseconds, either one `''` for an open bound; both read the cell as a `Date`, a timestamp or a parseable date string); `TableFilterType` = `'menu' | 'property'`; `FilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: FilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `AppliedFilter` = `{ field: string; operator: FilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: AppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `pageSizeOptions`, `selectable`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** The six `Table.Cell*` presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
+> The data-driven table: pass `data` + `columns` and it renders the header, rows, selection, sorting, paging, empty / loading / error states and the footer `Pagination` itself, through the same `Table` parts (`Table.Header`, `Table.Row`, `Table.HeadCell`, `Table.Cell`), so its markup, tokens and accessibility are those of `table`. The headless **`@tanstack/vue-table`** engine lives here and only here: a hand-composed `Table` never loads it. A top **toolbar band** (`title` / `toolbar` / `filters` slots) sits above the scroll viewport for a title, the context-aware `Table.*` toolbar parts (search, filter, export, refresh, live) and removable filter chips; the `toolbar` and `filters` slots are scoped with the TanStack `table` instance so the consumer can drive filtering, global search and column visibility through the table's own methods. Pairs with `Pagination` (rendered automatically in the footer when `paginated`). **Engine.** DataTable is driven by **`@tanstack/vue-table`** (`useVueTable` + `getCoreRowModel` / `getSortedRowModel` / `getFilteredRowModel` / `getPaginationRowModel`), covering sorting, pagination, row selection, column visibility, and global filtering — client- and server-side (`manualSorting` / `manualPagination` / `manualFiltering`). It is a pure-logic library (no markup/styles/positioning/animation), granted narrowly to the table family (this component and the editable `data-grid` that builds on it) per [`.claude/rules/dependencies.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/dependencies.md) § Exceptions; rendering stays 100% in our primitives. State is exposed via v-model (`sorting`, `rowSelection`, `columnVisibility`, `globalFilter`, `pagination`, plus the structured `filters` model and the aggregate `state` snapshot below). `@tanstack/virtual` remains forbidden: the opt-in `virtual` mode windows the rows itself (spacer padding above and below the rendered slice, sized from a height index: each rendered row is measured with a `ResizeObserver`, rows not yet rendered take the average of the first rows measured, and when a row above the rows in view changes height the scroll position moves by the same amount so the rows in view stay still). Without `virtual`, a list of more than 200 rows renders its first 50 rows and mounts the rest as a spacer below them nears the viewport (an `IntersectionObserver`), so a long page costs what is on screen. **Toolbar & imperative API.** The toolbar band composes context-aware controls that drive the table through the injected context with no wiring: `Table.Filter` (the slot that hosts `FilterMenu` with `type="menu"`, or `PropertyFilter` with `type="property"`, over `filterFields`), `FilterMenu.ChipGroup` with no `fields` in the `filters` slot (the applied fields of the menu type), `CollectionPreferences` with no `columns` (visible columns and their order, written back on Confirm), `Table.Search` (the global text filter), `Table.Export` (CSV download), `Table.RefreshButton` and `Table.LiveButton`. Structured filters are a first-class model (`v-model:filters`, an `TableAppliedFilter[]` distinct from the free-text `globalFilter`) mapped to the TanStack column filters client-side, or emitted for a server refetch under `manualFiltering`. A `loading` prop renders skeleton rows for dynamic (server-side) data. The root exposes a **curated imperative API** via `defineExpose` (`reload`, `clearFilters`, `exportCsv`, `getState`, `setState`) so controls or logic outside the table can drive it through a template ref, and a serializable `TableStateSnapshot` (`sorting` / `pagination` / `columnVisibility` / `columnOrder` / `globalFilter` / `filters`) is exposed via `v-model:state` + `getState()` / `setState()` + an `initialState` seed — the component stays router-agnostic, so the consuming app owns any URL / localStorage persistence. CSV serialization lives in a pure util at [`@aziontech/webkit/utils/csv`](https://github.com/aziontech/webkit/blob/main/packages/webkit/src/utils/csv.ts) (`toCsv` + `downloadCsv`). **Types** (declared in `injection-key.ts`, re-exported for consumers): `TableFilterOperator` = `'eq' | 'neq' | 'contains' | 'not-contains' | 'starts-with' | 'ends-with' | 'gt' | 'gte' | 'lt' | 'lte' | 'in' | 'not-in' | 'is-empty' | 'is-not-empty' | 'within' | 'between'` (`within` holds a period id — `24h`, `7d`, `30d`, `3m` — and matches dates inside that window ending now; `between` holds `[start, end]` epoch milliseconds, either one `''` for an open bound; both read the cell as a `Date`, a timestamp or a parseable date string); `TableFilterType` = `'menu' | 'property'`; `TableFilterField` = `{ id: string; label: string; type: 'text' | 'number' | 'select' | 'multi-select' | 'boolean' | 'date'; operators?: TableFilterOperator[]; options?: { label: string; value: string | number | boolean }[] }`; `TableAppliedFilter` = `{ field: string; operator: TableFilterOperator; value: string | number | boolean | Array<string | number>; label?: string }`; `TableStateSnapshot` = `{ sorting?: SortingState; pagination?: PaginationState; columnVisibility?: VisibilityState; columnOrder?: string[]; globalFilter?: string; filters?: TableAppliedFilter[] }` (every field optional so `setState` / `initialState` accept a partial; JSON-serializable). **Collections.** `useCollection` (`@aziontech/webkit/use-collection`) drives DataTable in both client and server modes: `tableProps` binds `data` (one page), `columns` (ordered by the saved preferences), `rowKey`, `loading`, `sorting`, `manualSorting` / `manualFiltering` / `manualPagination`, `paginated`, `pagination`, `rowCount`, `pageSizeOptions`, `selectable`, `rowSelection`, `columnVisibility` and the three display preferences (`density`, `wrapLines`, `striped`) together with their update handlers, and `exportRows`, in one `v-bind`. The table keeps rendering one page; the composable owns filtering, sorting, paging and selection across pages, so `exportRows` hands `Table.Export` and `exportCsv()` every match rather than the page: in client mode the matching items (or every item for the `all` scope), in server mode what the collection's `exportAll` callback loads (the loaded page when there is none). **Cell presets and reordering.** The six `Table.Cell*` presets render the cells every list repeats, each inside a `#cell-<id>` slot: `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). `reorderable` adds a leading grip column: drag a grip with the pointer, or focus it and press Arrow Up, Arrow Down, Home or End; the table emits `update:data` with the reordered records and `reorder` with `{ from, to, row }`, announces every move in a polite status region and locks while a sort is applied; `rowReorderable` keeps chosen rows (a pinned default) in place.
 
 - Import: `import DataTable from '@aziontech/webkit/data-table'`
 - Category: data · Surface: app · Structure: monolithic
@@ -19298,7 +19301,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `pageSizeOptions` | `number[]` | `[10, 25, 50, 100]` | false | Page-size options shown in the footer selector, the same name as `pagination`. `rowCount` keeps its TanStack name (the total for manual pagination). |
 | `loading` | `boolean` | `false` | false | render skeleton rows in the body (aligned to the visible columns) and set `aria-busy`; `Table.RefreshButton` disables/spins while true. Precedence: `loading` → skeleton, else rows, else `empty`. |
 | `error` | `string` | `''` | false | message of a failed load, shown in place of the rows in an `alert` region (an `EmptyState` with the error mark and `table.errorTitle`, the message as its description); the `error` slot replaces it. `loading` wins over it. Empty shows the rows. |
-| `filterFields` | `FilterField[]` | `[]` | false | Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu type, properties for the property type. |
+| `filterFields` | `TableFilterField[]` | `[]` | false | Fields `Table.Filter` offers (id, label, value type, allowed operators, select options): facets for the menu type, properties for the property type. |
 | `initialState` | `Partial<TableStateSnapshot>` | `undefined` | false | Uncontrolled seed applied once on mount; seeds only concerns that are not bound to their own v-model. |
 | `exportRows` | `(scope: 'filtered' \| 'all') => TRow[] \| Promise<TRow[]>` | `undefined` | false | Rows `Table.Export` and `exportCsv()` write for the `filtered` and `all` scopes in place of the rows the table holds (the `page` scope always writes the rendered page). `useCollection` binds it so an export covers every match, not only the page; a promise is awaited before the `export` event and the download. |
 | `exportFilename` | `string` | `'export.csv'` | false | Default filename for `Table.Export` and `exportCsv()` when no per-call filename is given. |
@@ -19319,7 +19322,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | `columnVisibility` | `VisibilityState` | `undefined` | false | Two-way value (`v-model:columnVisibility`). |
 | `globalFilter` | `string` | `undefined` | false | Two-way value (`v-model:globalFilter`). |
 | `pagination` | `PaginationState` | `undefined` | false | Two-way value (`v-model:pagination`). |
-| `filters` | `AppliedFilter[]` | `undefined` | false | Two-way value (`v-model:filters`). |
+| `filters` | `TableAppliedFilter[]` | `undefined` | false | Two-way value (`v-model:filters`). |
 | `state` | `TableStateSnapshot` | `undefined` | false | Two-way value (`v-model:state`). |
 | `expanded` | `ExpandedState` | `undefined` | false | Two-way value (`v-model:expanded`). |
 | `live` | `boolean` | `false` | false | Two-way value (`v-model:live`). |
@@ -19329,8 +19332,8 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `row-click` | `(event: MouseEvent, row: TRow)` | Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record. |
-| `filter-apply` | `(event: Event, filters: AppliedFilter[])` | Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`. |
-| `filter-remove` | `(event: Event, filter: AppliedFilter)` | One applied filter was removed (a `FilterMenu.ChipGroup` chip). |
+| `filter-apply` | `(event: Event, filters: TableAppliedFilter[])` | Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`. |
+| `filter-remove` | `(event: Event, filter: TableAppliedFilter)` | One applied filter was removed (a `FilterMenu.ChipGroup` chip). |
 | `refresh` | `(event: Event)` | Refresh requested; the app refetches. `event` is the click of `Table.RefreshButton`, or `new Event('refresh')` when `reload()` is called. |
 | `export` | `(event: Event, rows: TRow[])` | Export requested with the resolved rows; `event` is the click of `Table.Export`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads). |
 | `reorder` | `(event: KeyboardEvent \| PointerEvent, payload: { from: number; to: number; row: TRow })` | reorderable`: a row moved from index `from` to index `to` of `data`. |
@@ -19349,18 +19352,18 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## v-model
 
-| Model          | Type      | Default | Emits         | Notes                                                                                                                                                                                                                                           |
-| -------------- | --------- | ------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:live` | `boolean` | `false` | `update:live` | Live tail (`defineModel`): while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. `Table.LiveButton` toggles it; the app starts and stops its stream on `update:live`. |
-| `v-model:data` | `TRow[]` | `[]` | `update:data` | Row records (`defineModel`, default `[]`). One-way `:data` is the common case; `reorderable` writes the records in their new order back, so bind `v-model:data` to keep the order. |
-| `v-model:sorting` | `SortingState` | `undefined` | `update:sorting` | TanStack `SortingState` (`defineModel`). Uncontrolled it starts from `state` / `initialState`, else unsorted. |
-| `v-model:row-selection` | `RowSelectionState` | `undefined` | `update:rowSelection` | TanStack `RowSelectionState` record (`defineModel`), the documented exception to `selectedKeys` because it is the engine's own shape. |
-| `v-model:column-visibility` | `VisibilityState` | `undefined` | `update:columnVisibility` | TanStack `VisibilityState` (`defineModel`). |
-| `v-model:global-filter` | `string` | `undefined` | `update:globalFilter` | Search text across every column (`defineModel`). |
-| `v-model:pagination` | `PaginationState` | `undefined` | `update:pagination` | TanStack `PaginationState` (`defineModel`). Uncontrolled it resets to the first page when `pageSize` changes. |
-| `v-model:filters` | `AppliedFilter[]` | `undefined` | `update:filters` | Structured applied conditions committed by `Table.Filter` (`defineModel`), distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are only emitted. |
-| `v-model:state` | `TableStateSnapshot` | `undefined` | `update:state` | Aggregate serializable snapshot layered over the per-concern models (`defineModel`); `update:state` is debounced so bursts coalesce. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern. |
-| `v-model:expanded` | `ExpandedState` | `undefined` | `update:expanded` | Tree rows: TanStack `ExpandedState` (`defineModel`): `true` for every row, or `{ [rowId]: true }`. Uncontrolled it starts collapsed; written after a toggle by pointer or keyboard. |
+| Model                       | Type                   | Default     | Emits                     | Notes                                                                                                                                                                                                                                           |
+| --------------------------- | ---------------------- | ----------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:live`              | `boolean`              | `false`     | `update:live`             | Live tail (`defineModel`): while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. `Table.LiveButton` toggles it; the app starts and stops its stream on `update:live`. |
+| `v-model:data`              | `TRow[]`               | `[]`        | `update:data`             | Row records (`defineModel`, default `[]`). One-way `:data` is the common case; `reorderable` writes the records in their new order back, so bind `v-model:data` to keep the order.                                                              |
+| `v-model:sorting`           | `SortingState`         | `undefined` | `update:sorting`          | TanStack `SortingState` (`defineModel`). Uncontrolled it starts from `state` / `initialState`, else unsorted.                                                                                                                                   |
+| `v-model:row-selection`     | `RowSelectionState`    | `undefined` | `update:rowSelection`     | TanStack `RowSelectionState` record (`defineModel`), the documented exception to `selectedKeys` because it is the engine's own shape.                                                                                                           |
+| `v-model:column-visibility` | `VisibilityState`      | `undefined` | `update:columnVisibility` | TanStack `VisibilityState` (`defineModel`).                                                                                                                                                                                                     |
+| `v-model:global-filter`     | `string`               | `undefined` | `update:globalFilter`     | Search text across every column (`defineModel`).                                                                                                                                                                                                |
+| `v-model:pagination`        | `PaginationState`      | `undefined` | `update:pagination`       | TanStack `PaginationState` (`defineModel`). Uncontrolled it resets to the first page when `pageSize` changes.                                                                                                                                   |
+| `v-model:filters`           | `TableAppliedFilter[]` | `undefined` | `update:filters`          | Structured applied conditions committed by `Table.Filter` (`defineModel`), distinct from `globalFilter`. Client-side they map to TanStack column filters; under `manualFiltering` they are only emitted.                                        |
+| `v-model:state`             | `TableStateSnapshot`   | `undefined` | `update:state`            | Aggregate serializable snapshot layered over the per-concern models (`defineModel`); `update:state` is debounced so bursts coalesce. A bound per-concern v-model (e.g. `v-model:sorting`) wins over `state` for that concern.                   |
+| `v-model:expanded`          | `ExpandedState`        | `undefined` | `update:expanded`         | Tree rows: TanStack `ExpandedState` (`defineModel`): `true` for every row, or `{ [rowId]: true }`. Uncontrolled it starts collapsed; written after a toggle by pointer or keyboard.                                                             |
 
 ## States
 
@@ -19410,17 +19413,17 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 
 ## Internationalization
 
-| Key                                                                                      | English source                                                               | Override prop |
-| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
-| `table.selectAll`                                                                        | `Select all rows`                                                            | —             |
-| `table.selectRow`                                                                        | `Select row`                                                                 | —             |
-| `table.emptyTitle`                                                                       | `No results yet`                                                             | `empty` slot  |
-| `table.emptyDescription`                                                                 | `Get started by creating your first resource.`                               | `empty` slot  |
-| `table.errorTitle`                                                                       | `Could not load the data`                                                    | `error` slot  |
-| `tableReorder.column` / `handle` / `hint` / `locked` / `moved` / `dropped` / `cancelled` | `Order`, the grip name, the hint, the lock reason and the move announcements | —             |
-| `tableLoadMore.action` / `tableLoadMore.loading` / `tableLoadMore.end`                   | `Load more` · `Loading more rows` · `No more rows`                           | —             |
+| Key                                                                                                                                    | English source                                                               | Override prop |
+| -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------- |
+| `table.selectAll`                                                                                                                      | `Select all rows`                                                            | —             |
+| `table.selectRow`                                                                                                                      | `Select row`                                                                 | —             |
+| `table.emptyTitle`                                                                                                                     | `No results yet`                                                             | `empty` slot  |
+| `table.emptyDescription`                                                                                                               | `Get started by creating your first resource.`                               | `empty` slot  |
+| `table.errorTitle`                                                                                                                     | `Could not load the data`                                                    | `error` slot  |
+| `dataTable.reorderColumn` / `reorderHandle` / `reorderHint` / `reorderLocked` / `reorderMoved` / `reorderDropped` / `reorderCancelled` | `Order`, the grip name, the hint, the lock reason and the move announcements | —             |
+| `dataTable.loadMore` / `dataTable.loadingMore` / `dataTable.noMoreRows`                                                                | `Load more` · `Loading more rows` · `No more rows`                           | —             |
 
-- The strings come from the locale catalog through `useTranslate` (`table`, `tableReorder`, `tableLoadMore` groups) with the locale of the nearest `WebkitProvider`; the footer `Pagination` and the toolbar parts carry their own keys.
+- The strings come from the locale catalog through `useTranslate` (`table` and `dataTable` groups) with the locale of the nearest `WebkitProvider`; the footer `Pagination` and the toolbar parts carry their own keys.
 - Formatting: none in the root; cell values render as the app formats them (`Table.CellTime` formats dates with `Intl.DateTimeFormat` / `Intl.RelativeTimeFormat`).
 
 ## Responsive
@@ -20316,11 +20319,11 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | `propertyFilter.groupOperation`                        | Combine filters in group {index}                                                              | —             |
 | `propertyFilter.loadingValues` / `valuesError`         | Loading values / Could not load values                                                        | —             |
 | `propertyFilter.valueEditor`                           | Value of {property}                                                                           | —             |
-| `propertyFilterQuery.label`                            | Query                                                                                         | `ariaLabel`   |
-| `propertyFilterQuery.placeholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
-| `propertyFilterQuery.fields`                           | Fields                                                                                        | —             |
-| `propertyFilterQuery.all` / `any`                      | Every condition matches / Any condition matches (AND / OR)                                    | —             |
-| `propertyFilterQuery.unknownField` … `unclosedQuote`   | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
+| `propertyFilter.queryLabel`                            | Query                                                                                         | `ariaLabel`   |
+| `propertyFilter.queryPlaceholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
+| `propertyFilter.queryFields`                           | Fields                                                                                        | —             |
+| `propertyFilter.queryAll` / `queryAny`                 | Every condition matches / Any condition matches (AND / OR)                                    | —             |
+| `propertyFilter.unknownField` … `unclosedQuote`        | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
 
 - Formatting: value counts use `Intl.NumberFormat` of the active locale; the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
 
@@ -20378,7 +20381,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 # Table
 
-> The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to `data-table` instead: DataTable renders through these same parts, and the context-aware toolbar parts (`Table.Search`, `Table.Filter`, `Table.Export`, `Table.RefreshButton`, `Table.LiveButton`) and the cell presets (`Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTags`, `Table.CellTime`, `Table.CellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on. **Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `AppliedFilter`, `FilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in `data-table`.
+> The table's parts and its markup-only root. Compose the anatomy by hand (`Table.Header` / `Table.Body` / `Table.Row` / `Table.HeadCell` / `Table.Cell`): the component owns markup, tokens, accessibility, column sizing (an emphasized principal column), sortable headers, selectable rows and a **freeze system** for sticky columns (an actions column) and a sticky header. The root is light: it frames the scroll viewport, the toolbar band (`title` / `toolbar` slots) and the `footer`, and loads no table engine. For repeated records pass `data` + `columns` to `data-table` instead: DataTable renders through these same parts, and the context-aware toolbar parts (`Table.Search`, `Table.Filter`, `Table.Export`, `Table.RefreshButton`, `Table.LiveButton`) and the cell presets (`Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTags`, `Table.CellTime`, `Table.CellActions`) go in its slots. Inside a hand-composed `Table` the toolbar parts have no rows to act on. **Cell presets.** Six presets render the cells every list repeats, each inside a cell (or a DataTable `#cell-<id>` slot): `Table.CellLink` (a name that leaves the screen: an optional muted leading glyph (`icon`) for the provider or resource type, a 12 px external mark, a tooltip naming the destination, underline on hover, no mark without a destination; optional `+N` overflow through `OverflowCount` and a copy button pinned to the end edge), `Table.CellId` (an identifier with its copy button), `Table.CellStatus` (one semantic `Tag`), `Table.CellTags` (as many tags as fit, the rest behind `+N`), `Table.CellTime` (avatar of the author plus a relative time that updates every minute, or counts from the nearest `WebkitProvider`'s `now`, the absolute time on the tooltip and for screen readers) and `Table.CellActions` (the row menu named after the row). **Types** (declared in `injection-key.ts`, re-exported by `./table`): the column and slot types DataTable takes (`TableColumn`, `TableCellSlotProps`, `TableHeaderSlotProps`, `TableToolbarSlotProps`, `TableStateSnapshot`, `TableExposed`, `TableAppliedFilter`, `TableFilterField`, `TableDensity`), so a page can type its columns from the compound it already imports. Their shapes are documented in `data-table`.
 
 - Import: `import TableRoot from '@aziontech/webkit/table-root'`
 - Compound import (dot notation, not tree-shakeable): `import Table from '@aziontech/webkit/table'`
@@ -20563,7 +20566,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 # Topology Diagram
 
-> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+> The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 - Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
 - Category: data · Surface: app · Structure: monolithic
@@ -20599,7 +20602,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `levels` | `TopologyLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
+| `levels` | `TopologyDiagramLevel[]` | `[]` | false | Columns of the diagram, from the entry point to the last dependency. |
 | `loading` | `boolean` | `false` | false | Shows placeholder cards while the topology loads. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the diagram. Empty uses the locale catalog (`Deployment topology`). |
 | `openKeys` | `string[]` | `() => []` | false | Two-way value (`v-model:openKeys`). |
@@ -20616,8 +20619,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `actions` | { node: TopologyNode } | Extra controls in a node's identity row, before the bind control. |
-| `empty` | — | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels. |
+| `actions` | { node: TopologyDiagramNodeData } | Extra controls in a node's identity row, before the bind control. |
+| `empty` | — | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels. |
 
 ## v-model
 
@@ -20654,7 +20657,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | `topologyDiagram.existing`                              | Existing                                                    | —             |
 | `topologyDiagram.noOptions`                             | No options yet.                                             | —             |
 | `topologyDiagram.copy`                                  | Copy {field}                                                | —             |
-| `topologyDiagram.empty`                                 | Nothing is connected yet.                                   | `empty` slot  |
+| `topologyDiagram.emptyTitle`                            | Nothing is connected yet.                                   | `empty` slot  |
 | `topologyDiagram.loading`                               | Loading the topology                                        | —             |
 
 - Formatting: none; kinds, names, statuses and fields are data.
@@ -20962,7 +20965,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - `data-loading` on a list (`transfer-list-source` / `transfer-list-target`) mirrors that list's `loading` prop
 - A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
-- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.empty`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
+- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.emptyTitle`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
 - Server render and hydration: the options are the direct `v-for` children of the `TransitionGroup` list (an empty list while loading) and the spinner a sibling `v-if`, so the server renders no fragment markers inside the list and the HTML hydrates as is.
 
 ## Accessibility
@@ -21500,7 +21503,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | `prompt` | `string` | `—` | true | The prompt `CopyPromptButton` copies. |
 | `title` | `string` | `''` | false | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`. |
 | `description` | `string` | `''` | false | One or two sentences on what the prompt gives the agent; empty uses the catalog's. |
-| `agents` | `CopyPromptAgent[]` | `undefined` | false | The agents whose marks the copy button shows; unset keeps the button's default list. |
+| `agents` | `CopyPromptButtonAgent[]` | `undefined` | false | The agents whose marks the copy button shows; unset keeps the button's default list. |
 | `asideTitle` | `string` | `''` | false | Question over the guided action; empty uses the catalog's `Prefer the guided route?`. |
 | `actionLabel` | `string` | `''` | false | Label of the guided action; empty uses the catalog's `Agent setup`. |
 | `actionHref` | `string` | `''` | false | Destination of the guided action; empty renders it as a button that only emits `action`. |
@@ -21608,8 +21611,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | The offer's headline; names the complementary landmark. |
 | `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
-| `primaryAction` | `DocCallToActionAction` | `undefined` | false | The primary action, `{ label, href }`; unset or an empty label renders none. |
-| `secondaryAction` | `DocCallToActionAction` | `undefined` | false | The outlined secondary action, `{ label, href }`; unset renders none. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | The primary action, `{ label, href }`; unset or an empty label renders none. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | The outlined secondary action, `{ label, href }`; unset renders none. |
 
 ## Slots
 
@@ -21980,7 +21983,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `samples` | `DocCodeSample[]` | `[]` | false | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
+| `samples` | `DocCodeGroupSample[]` | `[]` | false | The samples, in tab order: `{ label?, language?, fileName?, code, output? }`. One renders a plain block, several render a joined tab strip; none renders nothing. |
 | `showLineNumbers` | `boolean` | `false` | false | Shows the line-number gutter. |
 | `showLabel` | `boolean` | `true` | false | Shows the label header (the sample label or the language name) on a single sample. |
 | `type` | `'code' \| 'output'` | `'code'` | false | What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control. |
@@ -22500,8 +22503,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
 | `sections` | `DocLayoutSection[]` | `[]` | false | The header's section links (`Reference`, `Guides`), each `{ label, href? }`; shown from `lg`. |
 | `home` | `string` | `'/'` | false | Where the Azion Docs mark links. |
-| `outline` | `DocTocItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
-| `outlineGroups` | `DocTocGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
+| `outline` | `DocOnThisPageItem[]` | `[]` | false | The article's headings for the "On this page" rail, each `{ id, text, depth }`; the rail is not rendered when empty and the `aside` slot is unused. |
+| `outlineGroups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary link groups under the outline (GitHub, Community). |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Documentation`). |
 | `rootLabel` | `string` | `''` | false | Names the top of the docs tree in the rail's Back button on the first drill level (`Back to Docs`); deeper levels name their parent row. Empty uses the locale catalog (`Docs`). |
 | `searchOpen` | `boolean` | `false` | false | Two-way value (`v-model:searchOpen`). |
@@ -22565,7 +22568,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | `docLayout.badge`              | `Docs`                          | —             |
 | `docLayout.openNavigation`     | `Open documentation navigation` | —             |
 | `docLayout.search`             | `Search docs`                   | —             |
-| `docLayout.searchEmpty`        | `No page matches your search.`  | —             |
+| `docLayout.noMatch`            | `No page matches your search.`  | —             |
 | `docLayout.pages`              | `Pages`                         | —             |
 | `docLayout.root`               | `Docs`                          | `rootLabel`   |
 | `docLayout.collapseNavigation` | `Collapse navigation`           | —             |
@@ -22773,9 +22776,9 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Internationalization
 
-| Key                  | English source         | Override prop |
-| -------------------- | ---------------------- | ------------- |
-| `docMarkdown.newTab` | `(opens in a new tab)` | —             |
+| Key             | English source         | Override prop |
+| --------------- | ---------------------- | ------------- |
+| `common.newTab` | `(opens in a new tab)` | —             |
 
 - Formatting: none. All visible text is the source's; code sample labels fall back to `DocCodeGroup`'s language names.
 
@@ -22889,16 +22892,16 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `DocTocItem[]` | `[]` | false | The headings, in document order. |
+| `items` | `DocOnThisPageItem[]` | `[]` | false | The headings, in document order. |
 | `activeId` | `string` | `''` | false | The id of the heading currently in view. |
 | `title` | `string` | `''` | false | The rail's own heading. Empty uses the locale catalog (`On this page`). |
-| `groups` | `DocTocGroup[]` | `[]` | false | Complementary groups rendered below the outline, in order. |
+| `groups` | `DocOnThisPageGroup[]` | `[]` | false | Complementary groups rendered below the outline, in order. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent, item: DocTocItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
+| `select` | `(event: MouseEvent, item: DocOnThisPageItem)` | Fired when a rail entry is activated; the page decides what scrolling means. Event first, per `event-payloads.md`. |
 
 ## States
 
@@ -22990,15 +22993,15 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | The page title. |
 | `description` | `string` | `''` | false | The deck under the title. |
-| `breadcrumbs` | `DocCrumb[]` | `[]` | false | Ancestor trail, current page last. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | Ancestor trail, current page last. |
 | `lastUpdated` | `string` | `''` | false | When the page's content last changed. ISO date, or a ready-made string. |
-| `metaActions` | `DocPageAction[]` | `[]` | false | The controls on the meta line, in reading order. |
+| `metaActions` | `DocPageHeaderAction[]` | `[]` | false | The controls on the meta line, in reading order. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `action-click` | `(event: MouseEvent, item: DocPageAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
+| `action-click` | `(event: MouseEvent, item: DocPageHeaderAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
 
 ## Slots
 
@@ -23105,8 +23108,8 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `previous` | `DocPageLink \| null` | `null` | false | The page before this one. |
-| `next` | `DocPageLink \| null` | `null` | false | The page after this one. |
+| `previous` | `DocPrevNextLink \| null` | `null` | false | The page before this one. |
+| `next` | `DocPrevNextLink \| null` | `null` | false | The page after this one. |
 | `previousLabel` | `string` | `''` | false | Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). |
 | `nextLabel` | `string` | `''` | false | Eyebrow over the next link. Empty uses the locale catalog (`Next`). |
 
@@ -23114,7 +23117,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `navigate` | `(event: MouseEvent, page: DocPageLink)` | Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`. |
+| `navigate` | `(event: MouseEvent, page: DocPrevNextLink)` | Fired when either neighbour is activated; `page` is the side that was clicked. Event first, per `event-payloads.md`. |
 
 ## States
 
@@ -25029,7 +25032,7 @@ The imperative API is backed by a small reactive store composable, declared here
 | `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`         | No items yet.                                  | `emptyTitle`        |
+| `attributeEditor.emptyTitle`    | No items yet.                                  | `emptyTitle`        |
 | `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
 | `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |
@@ -25437,7 +25440,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 
 | Key                    | English source                                | Override prop |
 | ---------------------- | --------------------------------------------- | ------------- |
-| `combobox.empty`       | `No matches`                                  | `emptyTitle`  |
+| `combobox.noMatch`     | `No matches`                                  | `emptyTitle`  |
 | `combobox.loading`     | `Loading options`                             | —             |
 | `combobox.useValue`    | `Use "{value}"`                               | —             |
 | `combobox.clear`       | `Clear`                                       | —             |
@@ -26165,7 +26168,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 | `fileTokenGroup.uploading` | Uploading {name}                                              | —             |
 | `fileTokenGroup.modified`  | Modified {date}                                               | —             |
 | `fileTokenGroup.showMore`  | `Show {count} more file` / `Show {count} more files` (plural) | —             |
-| `fileTokenGroup.showFewer` | Show fewer files                                              | —             |
+| `fileTokenGroup.showLess`  | Show fewer files                                              | —             |
 
 - Formatting: sizes with `formatFileSize`, dates with `formatDate` (`dateStyle: 'medium'`), both from `useLocale`.
 
@@ -26756,10 +26759,10 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 ## v-model
 
-| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                   |
-| -------------- | ---------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
+| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectItem>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
-| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                              |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
 
 ## States
 
@@ -26804,7 +26807,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Key                   | English source                                | Override prop |
 | --------------------- | --------------------------------------------- | ------------- |
-| `multiSelect.empty`   | `No matches`                                  | `emptyTitle`  |
+| `multiSelect.noMatch` | `No matches`                                  | `emptyTitle`  |
 | `multiSelect.loading` | `Loading options`                             | —             |
 | `multiSelect.add`     | `Add "{value}"`                               | —             |
 | `multiSelect.more`    | `+{count} more`                               | —             |
@@ -27240,7 +27243,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 # Password Requirements
 
-> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `@aziontech/webkit/password-requirements` resolves to the `index.ts` that adds those exports. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
+> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirementsRule` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirementsRule[]`, whose `test` may be a predicate.
 
 - Import: `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
 - Category: inputs · Surface: app · Structure: monolithic
@@ -27269,7 +27272,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `requirements` | `PasswordRequirement[]` | `DEFAULT_PASSWORD_REQUIREMENTS` | false | Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. |
+| `requirements` | `PasswordRequirementsRule[]` | `DEFAULT_PASSWORD_REQUIREMENTS` | false | Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption. |
 | `title` | `string` | `''` | false | Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`). |
 | `value` | `string` | `''` | false | Password every rule is evaluated against; pass the PasswordInput value. |
 
@@ -27355,7 +27358,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `countries` | `Country[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
+| `countries` | `PhoneInputCountry[]` | `(built-in list — see Notes)` | false | Countries offered by the dial-code Select. When omitted, uses the built-in curated list. |
 | `placeholder` | `string` | `''` | false | Placeholder of the tel input. Falls back to the selected country's mask when empty. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size forwarded to the InputGroup and the dial-code Select trigger. Heights: small=28px, medium=32px, large=40px. |
 | `disabled` | `boolean` | `false` | false | Disables both the dial-code Select and the internal input. |
@@ -27372,7 +27375,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `phone-change` | `[value: PhoneNumber]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneNumber` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
+| `phone-change` | `[value: PhoneInputValue]` | One-way snapshot of the number, emitted once on mount and again whenever the digits or the country change. `PhoneInputValue` (exported from the component) is `{ country: string; dialCode: string; digits: string; number: string; complete: boolean }`: `number` is the full E.164 number (`dialCode + digits`, e.g. `'+14155550100'`; `''` while empty) and `complete` is true when the digit count is one the selected country allows. Not a v-model — the field never reads it back. |
 
 ## v-model
 
@@ -27393,7 +27396,7 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 - Visible focus: the `InputGroup` focus-within ring.
 - Keyboard map: `Tab` moves from the dial-code `Select` to the tel input; inside the `Select`, arrows navigate, typing filters, `Enter` picks and returns focus to the input, `Esc` closes.
-- ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="Country dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
+- ARIA: the tel input has `type="tel"`, `inputmode="tel"`, `autocomplete="tel-national"`, `aria-invalid`, `aria-required`, and the `id` / `aria-describedby` of the enclosing `Field`; the dial-code trigger has `aria-label="PhoneInputCountry dial code"`. The control provides an empty Field context below it so the inner search input never takes the field id.
 - Contrast ≥4.5:1 for input and dial-code text.
 - Touch target follows the `size` (40px at `large`).
 - Direction: the tel input, each option's dial code and the closed trigger's dial code (`SelectTrigger` `value-dir="ltr"`, a `<bdi dir="ltr">`) render left-to-right, so a number and its `+` keep their order on a right-to-left page; the typed number still aligns to the inline start of the page (`rtl:text-end`, which resolves against the input's own `ltr` direction).
@@ -28271,7 +28274,7 @@ No built-in strings: every visible text comes from the item slots, the `options`
 | `tagEditor.undo`             | Undo                                                   | —                                |
 | `tagEditor.undoLabel`        | Undo removal of tag {index}                            | —                                |
 | `tagEditor.markedForRemoval` | This tag will be removed when you save.                | —                                |
-| `tagEditor.empty`            | No tags associated with the resource.                  | —                                |
+| `tagEditor.emptyTitle`       | No tags associated with the resource.                  | —                                |
 | `tagEditor.remaining`        | You can add {count} more tag(s) (plural)               | —                                |
 | `tagEditor.limitReached`     | You have reached the limit of {limit} tags.            | —                                |
 | `tagEditor.keyRequired`      | Enter a key.                                           | —                                |
@@ -29148,7 +29151,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 | --- | --- | --- | --- | --- |
 | `navigation` | `ConsoleLayoutNavGroup[]` | `[]` | false | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
-| `breadcrumbs` | `ConsoleLayoutCrumb[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
 | `home` | `string` | `'/'` | false | Where the brand mark links. |
 | `account` | `ConsoleLayoutAccount` | `undefined` | false | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`). |
@@ -29186,7 +29189,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 ## Sub-components
 
-The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `ConsoleLayoutCrumb`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
+The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `BreadcrumbItemData`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
 
 ```
 packages/webkit/src/components/layout/console-layout/
@@ -29199,7 +29202,7 @@ packages/webkit/src/components/layout/console-layout/
 ```
 
 - `console-layout-breadcrumb/console-layout-breadcrumb.vue` — a page's own trail.
-  - Props: `items: ConsoleLayoutCrumb[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
+  - Props: `items: BreadcrumbItemData[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
   - Events: _none_ (crumb clicks are followed by the layout).
   - Slots: `default` — one or more controls that end the trail (a `Select` with `variant="ghost"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
 
@@ -29250,7 +29253,7 @@ packages/webkit/src/components/layout/console-layout/
 | `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
 | `consoleLayout.accountMenuFor`    | `{initials}, account menu`                | —                   |
 | `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
-| `consoleLayout.searchEmpty`       | `No page or command matches your search.` | —                   |
+| `consoleLayout.noMatch`           | `No page or command matches your search.` | —                   |
 | `consoleLayout.pages`             | `Pages`                                   | —                   |
 
 - Formatting: none. Navigation, breadcrumb and account text is consumer data.
@@ -31393,7 +31396,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 | Key                            | English source                 | Override prop       |
 | ------------------------------ | ------------------------------ | ------------------- |
 | `siteLayout.searchPlaceholder` | `Search the site`              | `searchPlaceholder` |
-| `siteLayout.searchEmpty`       | `No page matches your search.` | —                   |
+| `siteLayout.noMatch`           | `No page matches your search.` | —                   |
 | `siteLayout.pages`             | `Pages`                        | —                   |
 
 - Formatting: none. Navigation and footer text is consumer data.
@@ -33402,10 +33405,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other string is copy passed through `items`.
 
@@ -33780,10 +33783,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other string is copy passed through `items`.
 
@@ -34758,10 +34761,10 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 
 ## Internationalization
 
-| Key                               | English source     | Override prop |
-| --------------------------------- | ------------------ | ------------- |
-| `autoplayControl.pauseScrolling`  | `Pause scrolling`  | —             |
-| `autoplayControl.resumeScrolling` | `Resume scrolling` | —             |
+| Key                      | English source     | Override prop |
+| ------------------------ | ------------------ | ------------- |
+| `common.pauseScrolling`  | `Pause scrolling`  | —             |
+| `common.resumeScrolling` | `Resume scrolling` | —             |
 
 - Marks and item labels are content passed through props.
 
@@ -37238,7 +37241,7 @@ packages/webkit/src/components/overlay/command/
 | --------------------- | ------------------- | --------------------- |
 | `command.title`       | `Command menu`      | —                     |
 | `command.placeholder` | `Search everything` | `placeholder` (Input) |
-| `command.empty`       | `No results found.` | default slot (Empty)  |
+| `command.noMatch`     | `No results found.` | default slot (Empty)  |
 | `command.back`        | `Back from {page}`  | —                     |
 
 - Item labels, keywords, group and page headings are consumer copy.
@@ -37783,7 +37786,7 @@ packages/webkit/src/components/overlay/command/
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `placement` | `HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`)` | `'bottom'` | false | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
+| `placement` | `HoverCardPlacement` (a side with optional `-start` / `-end`, or `'auto'`)` | `'bottom'` | false | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
 | `offset` | `number` | `8` | false | Pixel gap between the trigger and the card. |
 | `openDelay` | `number` | `500` | false | Milliseconds the pointer or focus must stay on the trigger before the card opens. |
 | `closeDelay` | `number` | `300` | false | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes. |
@@ -38041,7 +38044,7 @@ No built-in strings: the card shows only consumer content.
 - Include a `Popover.Title`. The panel takes its accessible name from it through `aria-labelledby`.
 - Set `size` for forms and filter builders so the panel doesn't resize as content changes. Without it, the panel sizes fluidly between the `--container-3xs` and `--container-xs` tokens.
 - Use `placement="auto"` for triggers that can sit near a viewport edge.
-- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (or `PopoverPlacementInput` when it can be `'auto'`), never a cast.
+- Use a side placement (`right-start`, `left-start`, …) for a trigger in a narrow column or a sidebar, where the panel should open beside the trigger instead of covering the content below it. Type a placement held in a variable with the exported `PopoverPlacement` (`PopoverPlacementSide` when it cannot be `'auto'`), never a cast.
 - Bind the open state with `v-model:open` (or `:open` + `@update:open`, whose handler receives a `boolean`).
 - Set `dismissible` to `false` only when an outside click would discard input. Then give the user a way out: `Popover.Close` or a footer action.
 
@@ -38064,7 +38067,7 @@ No built-in strings: the card shows only consumer content.
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `placement` | `PopoverPlacementInput` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
+| `placement` | `PopoverPlacement` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
 | `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `size` | `PopoverSize` (`'small' \| 'medium' \| 'large'`)` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
@@ -38135,7 +38138,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
 - `data-size` on the floating panel mirrors `size`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
-- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
+- `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacementSide`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Accessibility
 
@@ -38349,7 +38352,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `tabs` | `ArchitectureTabsTab[]` | `[]` | false | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `6000` | false | Milliseconds each tab holds before the next one opens. |
-| `primaryAction` | `ArchitectureTabsAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## Assets
 
@@ -38472,7 +38475,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `article` | `ArticleBodyArticle` | `—` | true | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL). |
-| `trail` | `ArticleBodyCrumb[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. |
+| `trail` | `BreadcrumbItemData[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. |
 | `body` | `string` | `''` | false | The article as markdown; its `##` and `###` headings feed the outline. |
 | `banner` | `string` | `''` | false | URL of the image over the masthead; the banner frame is omitted when empty. |
 | `share` | `ArticleBodyShare` | `undefined` | false | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |
@@ -38513,7 +38516,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 | Key                           | English source                                | Override prop      |
 | ----------------------------- | --------------------------------------------- | ------------------ |
-| `articleBody.copiedLink`      | `Link copied`                                 | `share.copiedLink` |
+| `articleBody.linkCopied`      | `Link copied`                                 | `share.copiedLink` |
 | `articleBody.copiedFeed`      | `Feed link copied`                            | `share.copiedFeed` |
 | `articleBody.copiedPage`      | `Page copied as markdown`                     | `share.copiedPage` |
 | `articleBody.copyFailed`      | `Could not copy`                              | —                  |
@@ -38803,10 +38806,10 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other visible string arrives through props.
 - Formatting: none; dates and read times arrive pre-formatted.
@@ -38977,12 +38980,12 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `articleIndex.search` | `Search` | — |
-| `articleIndex.searchFacet` | `Search {facet}` | — |
-| `articleIndex.empty` | `No results found.` | — |
-| `articleIndex.newTab` | `(opens in a new tab)` | — |
+| Key                        | English source         | Override prop |
+| -------------------------- | ---------------------- | ------------- |
+| `articleIndex.search`      | `Search`               | —             |
+| `articleIndex.searchFacet` | `Search {facet}`       | —             |
+| `articleIndex.noMatch`     | `No results found.`    | —             |
+| `common.newTab`            | `(opens in a new tab)` | —             |
 
 - Every other string (labels, placeholders, facet labels, the empty state's copy) arrives through props.
 - Formatting: none; dates arrive pre-formatted in `meta`.
@@ -39379,7 +39382,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `script` | `CliTerminalScript` | `undefined` | false | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`. |
 | `session` | `string` | `''` | false | The terminal session shown under the header when no `script` is set, commands and their output verbatim, highlighted as bash; the band renders nothing when neither is set. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the session's copy button; empty keeps the code block's own. |
-| `primaryAction` | `CliTerminalAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## States
 
@@ -39471,7 +39474,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 | `linkLabel` | `string` | `''` | false | Label of the link under every story. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `stories` | `ClientMosaicStory[]` | `[]` | false | The story cells, in order; each is `{ logo, logoAlt, photo?, text, href, fill?, logoTreatment? }`. The first spans two columns and two rows, the rest one column and two rows. |
-| `logos` | `ClientMosaicLogo[]` | `[]` | false | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`. |
+| `logos` | `ClientMosaicLogo[]` | `[]` | false | The mark cells, in order; each is `{ logo, logoAlt, href, fill?, logoTreatment? }` where `fill` is `'canvas'`, `'surface'`, `'white'` or `'primary'` and `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`). |
 | `cells` | `ClientMosaicCell[]` | `[]` | false | The cells in placement order, story and mark cells interleaved; each is `{ logo, logoAlt, href, text?, photo?, span?, rows?, fill?, logoTreatment?, stacked? }` where a cell with `text` is a story cell, `span` and `rows` are `'1'` (default) or `'2'`, and `fill` defaults to `canvas`. When set it replaces `stories` and `logos`. |
 
 ## States
@@ -39642,7 +39645,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the list of stories. |
 | `linkLabel` | `string` | `''` | false | Label the mark face reveals on hover and the link's accessible name. |
-| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'monochrome'`, `'knockout'` or `'as-is'`, and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
+| `cells` | `ClientMosaicColumnsCell[]` | `[]` | false | The stories, in order; each is `{ name, logo, href, story, brand?, logoTreatment?, logoWidth? }` where `brand` is `{ base, glow, ink? }` (CSS colours painting the face, `ink` `'dark'` or `'light'`) and defaults to the client registry's colours for `name`, `logoTreatment` is `'color'`, `'monochrome'` or `'knockout'` (the shared `LogoTreatment`), and `logoWidth` (read by `reveal="hover"`) sizes the mark as a share of the card. |
 | `reveal` | `ClientMosaicColumnsReveal` | `'always'` | false | When the story shows: `always` under each face, or `hover`, where each card opens to reveal it while hovered or focused and stays open below the large breakpoint. |
 
 ## States
@@ -39664,10 +39667,10 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 ## Internationalization
 
-| Key                       | English source     | Override prop                          |
-| ------------------------- | ------------------ | -------------------------------------- |
-| `customerSpotlight.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
-| `customerSpotlight.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
+| Key                         | English source     | Override prop                          |
+| --------------------------- | ------------------ | -------------------------------------- |
+| `clientMosaicColumns.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
+| `clientMosaicColumns.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
 
 ## Examples
 
@@ -39758,7 +39761,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the quote carousel. |
 | `items` | `ClientQuotesItem[]` | `[]` | false | The quotes, in order; each is `{ text, name?, jobTitle?, mark?, logo?, clientName?, photo? }` where `mark` is a registry mark name and `logo` a mark URL named by `clientName`. |
-| `primaryAction` | `ClientQuotesAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button under the quotes; `{ label, href, trailing? }`. Omitted when absent. |
 | `autoplay` | `boolean` | `true` | false | Advances to the next quote on a timer, as `quote-tabs` does, with its visible pause control; pauses under the pointer or keyboard focus and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each quote is held before the band advances. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
@@ -39905,8 +39908,8 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 | `title` | `string` | `''` | false | Headline of the band, rendered by the call to action as its `h2`; the band renders nothing when empty. |
 | `titleMuted` | `string` | `''` | false | Second line of the headline in muted ink; drawn in `split` only. |
 | `description` | `string` | `''` | false | Supporting sentence: in the aside cell in `split`, under the headline in `panel`. |
-| `primaryAction` | `ClosingCallToActionAction` | `undefined` | false | The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `secondaryAction` | `ClosingCallToActionAction` | `undefined` | false | The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | The white button of the band, under the headline in `split`; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | The outlined button of the band, in the aside cell in `split` and beside the primary one in `panel` and `primary`; `{ label, href, trailing? }`. Omitted when absent. |
 | `command` | `string` | `''` | false | Shell command on a copyable line before the actions, copied as written; drawn in `split`, `panel` and `primary`. |
 | `hatch` | `boolean` | `true` | false | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 | `audiences` | `ClosingCallToActionAudience[]` | `[]` | false | The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. |
@@ -40173,7 +40176,7 @@ The ask, the button label and every message are props from the page JSON (`title
 | `excludedLabel` | `string` | `''` | false | Tooltip and screen-reader text of a not-included cell; empty uses the locale catalog (`Not included`). |
 | `plans` | `ComparePlansPlan[]` | `[]` | false | The plan columns, in order; each is `{ id, name, description?, highlighted?, action }` with `action` as `{ label, href }`; a plan without a name is dropped. |
 | `sections` | `ComparePlansSection[]` | `[]` | false | The product bands, in order; each is `{ eyebrow, title, description, rows, action? }` (`action` closes the band, `{ label, href }`) and a row is `{ label, values, group?, hint?, tag? }` with one value per plan: `true` or `✓` is included, `—` is not included, other text shows as written, empty is blank; `hint` defines the label in a popover. |
-| `primaryAction` | `ComparePlansAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Closing link under the table, opened in a new tab; `{ label, href }`. Omitted when absent. |
 
 ## States
 
@@ -40593,7 +40596,7 @@ The ask, the button label and every message are props from the page JSON (`title
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the badge list. |
 | `certifications` | `ComplianceBadgesCertification[]` | `[]` | false | The badges, in order; each is `{ label, badge, alt }` where `badge` is the picture URL and `label` the pill text. |
-| `primaryAction` | `ComplianceBadgesAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | The closing "see more" cell; `{ label, href }`. Omitted when absent. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 
 ## States
@@ -41210,7 +41213,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `autoplay` | `boolean` | `true` | false | Opens the next tab on a timer, with the composed tabs' visible pause control. |
 | `autoplayInterval` | `number` | `5200` | false | Milliseconds each tab holds before the next one opens. |
 | `copyAriaLabel` | `string` | `''` | false | Accessible name of the copy button on each tab's code file; empty keeps the code block's own. |
-| `primaryAction` | `FeatureTabsAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button in the section title, beside the headline (under the frame when the band has no title); `{ label, href, trailing?, target? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## Assets
 
@@ -41427,8 +41430,8 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `primaryAction` | `FeatureWidgetsAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
-| `secondaryAction` | `FeatureWidgetsAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `titleVariant` | `SectionTitleVariant` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
@@ -41555,8 +41558,8 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `titleHighlight` | `string` | `''` | false | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. |
 | `title` | `string` | `''` | false | Page headline, rendered as the page `h1`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Sentence under the headline. |
-| `primaryAction` | `HeroBandAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroBandAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `tickerLabel` | `string` | `''` | false | Overline above the client ticker; empty uses the locale catalog (`Proven on mission-critical workloads`). |
 | `tickerMarks` | `string[]` | `[]` | false | Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. |
 | `illustration` | `string` | `''` | false | Registry name of the illustration set beside the copy in the `copy-beside-art` layout. |
@@ -41698,8 +41701,8 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `description` | `string` | `''` | false | Sentence under the headline. |
 | `descriptionLink` | `HeroFormLink` | `undefined` | false | A link continuing the description inline, such as a phone line; `{ label, href }`. Omitted when absent. |
 | `descriptionAfter` | `string` | `''` | false | Copy after the inline link, closing the description's sentence. |
-| `primaryAction` | `HeroFormAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
-| `secondaryAction` | `HeroFormAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the copy; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button beside the first; `{ label, href, trailing?, target? }`. Shown only with a label and a link. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `items` | `HeroFormItem[]` | `[]` | false | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items. |
 | `formAriaLabel` | `string` | `''` | false | Accessible name of the field group, read as its legend. |
@@ -42092,7 +42095,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
 | `facets` | `JobPostingFacet[]` | `[]` | false | Facts about the posting listed in the rail, in order; each is `{ label, icon? }`. |
 | `applyLabel` | `string` | `''` | false | Label of the rail button that links to the application form; the button is left out when empty. |
 | `sections` | `JobPostingSection[]` | `[]` | false | The description, one row per section in order; each is `{ title, blocks }` where a block is `{ variant: 'text', text }` or `{ type: 'list', items }`. |
-| `secondaryAction` | `JobPostingAction` | `undefined` | false | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Link in the confirmation dialog back to the open positions; `{ label, href }`. Omitted when absent. |
 | `loading` | `boolean` | `false` | false | The site is sending the application: the submit button shows its loading state, every control is disabled and a submit is ignored. |
 | `submitted` | `boolean` | `false` | false | The site sent the application: the confirmation dialog opens. |
 | `failed` | `boolean` | `false` | false | The site could not send the application: `messages.error` shows under the submit button. |
@@ -42536,7 +42539,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `columns` | `ListingTableColumn[]` | `[]` | false | The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. |
 | `data` | `ListingTableRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
-| `primaryAction` | `ListingTableAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## States
 
@@ -42667,7 +42670,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 
 - Eight or nine logos fill the rectangle wall beside the aside.
 - Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `Logo`.
-- Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing.
+- Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `knockout` for a black mark on a coloured fill, `color` for a colour mark, and `artwork: 'light'` for a reversed mark that must flip on the light theme; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
 - Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
 
@@ -42691,16 +42694,16 @@ No built-in strings: every visible string and accessible name comes from the pro
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the logo wall. |
-| `logos` | `LogoWallQuoteLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'` and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
+| `logos` | `LogoWallQuoteLogo[]` | `[]` | false | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is the shared `LogoTreatment` (`'color'`, `'monochrome'` or `'knockout'`, the `Logo` looks) and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
 | `quote` | `LogoWallQuoteQuote` | `undefined` | false | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent. |
-| `primaryAction` | `LogoWallQuoteAction` | `undefined` | false | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `secondaryAction` | `LogoWallQuoteAction` | `undefined` | false | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent. |
 
 ## States
 
 - Visual states: `default`
 - Empty: when `logos` is empty the band renders nothing
-- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `as-is`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
+- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `color`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
 ## Accessibility
@@ -42787,7 +42790,7 @@ No built-in strings: the title, the quote, the client names and the action label
       {
         name: 'Crefisa',
         logo: crefisaExtendedReversed,
-        logoTreatment: 'invert-light',
+        artwork: 'light',
         href: 'https://www.azion.com/en/success-case/crefisa/'
       },
       {
@@ -42798,7 +42801,7 @@ No built-in strings: the title, the quote, the client names and the action label
       {
         name: 'Fourbank',
         logo: fourbankExtendedReversed,
-        logoTreatment: 'invert-light',
+        artwork: 'light',
         href: 'https://www.azion.com/en/success-case/fourbank/'
       },
       {
@@ -43151,7 +43154,7 @@ No built-in strings: the title, the quote, the client names and the action label
 - Four `stats` on the `stats` floor, each a `value` and a `label`, with an optional `prefix` and `suffix`.
 - Give the band an `anchor` when a page links to it with a `#hash`.
 - Leave `logo` out of an outcome when the site shows the figure alone; the cell then renders no mark row.
-- Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `as-is` for a colour mark.
+- Use `logoTreatment: 'monochrome'` for a dark mark that must invert in the dark theme; leave `color` for a colour mark.
 
 ## Don’t
 
@@ -43174,7 +43177,7 @@ No built-in strings: the title, the quote, the client names and the action label
 | `title` | `string` | `''` | false | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. |
 | `claimsEyebrow` | `string` | `''` | false | Overline-set line above the claims. |
 | `claims` | `(string \| NetworkSectionClaim)[]` | `[]` | false | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. |
-| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. |
+| `outcomes` | `NetworkSectionOutcome[]` | `[]` | false | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent. |
 | `benefits` | `NetworkSectionBenefit[]` | `[]` | false | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`. |
 | `stats` | `NetworkSectionStat[]` | `[]` | false | Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`. |
 
@@ -43251,14 +43254,14 @@ No built-in strings: the title, the quote, the client names and the action label
       {
         logo: madeiramadeiraExtendedReversed,
         logoAlt: 'MadeiraMadeira',
-        logoTreatment: 'as-is',
+        logoTreatment: 'color',
         text: '90% lower cloud costs and faster applications at scale.',
         highlights: ['90% lower cloud costs']
       },
       {
         logo: rennerExtendedColor,
         logoAlt: 'Renner',
-        logoTreatment: 'as-is',
+        logoTreatment: 'color',
         text: '67% saved on data transfer, even during massive traffic spikes.',
         highlights: ['67% saved']
       },
@@ -44228,7 +44231,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `siteFooter.label`    | Footer               | `ariaLabel`         |
 | `siteFooter.home`     | Azion home           | `homeAriaLabel`     |
 | `siteFooter.language` | Language             | `languageAriaLabel` |
-| `siteFooter.newTab`   | (opens in a new tab) | —                   |
+| `common.newTab`       | (opens in a new tab) | —                   |
 
 - Formatting: none; link labels, the status line and the language options are the page's own text.
 
@@ -44749,14 +44752,14 @@ No built-in strings: every visible and announced text is a prop from the page JS
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `storyLibrary.search` | `Search` | — |
-| `storyLibrary.searchFacet` | `Search {facet}` | — |
-| `storyLibrary.empty` | `No results found.` | — |
-| `storyLibrary.filters` | `Filters` | `filterLabel` |
-| `storyLibrary.filtersApplied` | `{label} ({count})` | — |
-| `storyLibrary.newTab` | `(opens in a new tab)` | — |
+| Key                           | English source         | Override prop |
+| ----------------------------- | ---------------------- | ------------- |
+| `storyLibrary.search`         | `Search`               | —             |
+| `storyLibrary.searchFacet`    | `Search {facet}`       | —             |
+| `storyLibrary.noMatch`        | `No results found.`    | —             |
+| `storyLibrary.filters`        | `Filters`              | `filterLabel` |
+| `storyLibrary.filtersApplied` | `{label} ({count})`    | —             |
+| `common.newTab`               | `(opens in a new tab)` | —             |
 
 - Every other string arrives through props.
 - Formatting: none.
@@ -45020,8 +45023,8 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the media split as its `h2` and naming its region. |
 | `description` | `string` | `''` | false | Paragraph under the headline. |
-| `primaryAction` | `TemplateGalleryAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
-| `secondaryAction` | `TemplateGalleryAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the copy, drawn as the large secondary button; `{ label, href, trailing?, target? }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second button under the copy, drawn as the large outlined button; `{ label, href, trailing?, target? }`. Omitted when absent. |
 | `templates` | `TemplateGalleryTemplate[]` | `[]` | false | The template cards of the scrolling wall, in order; each is `{ title, description?, icon?, invertInDark?, href? }` where `href` makes the whole card a link to the template. Templates without a title are skipped. |
 | `deployLabel` | `string` | `''` | false | Label of the deploy button on each card; a card renders its button only when both this and its `href` are set. |
 | `templatesAriaLabel` | `string` | `''` | false | Accessible name of the scrolling wall of templates. |
@@ -45162,7 +45165,7 @@ No built-in strings: every visible and announced text is a prop from the page JS
 | `eyebrow` | `string` | `''` | false | Overline above the headline in the title cell, closed by the blinking cursor. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` in the title cell. |
 | `description` | `string` | `''` | false | One-line lead under the headline. |
-| `primaryAction` | `UseCasesAction` | `undefined` | false | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | Button pinned to the foot of the title cell; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `items` | `UseCasesItem[]` | `[]` | false | The use cases rendered as frame cells, in order; each item is `{ icon, title, description }`. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
 

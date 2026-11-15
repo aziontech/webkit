@@ -36,7 +36,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `SuggestionItem[]` | `[]` | false | Up to five prompts, most likely first. |
+| `items` | `SuggestionGroupItem[]` | `[]` | false | Up to five prompts, most likely first. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the group. Empty uses the locale catalog (`Suggested prompts`). |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | false | horizontal` wraps chips in a row (follow-up questions under a response); `vertical` stacks them (support prompts on an empty conversation). |
 | `disabled` | `boolean` | `false` | false | Disables every prompt, while a response is being generated. |
@@ -45,12 +45,12 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent, item: SuggestionItem)` |  |
+| `select` | `(event: MouseEvent, item: SuggestionGroupItem)` |  |
 
 ## Sub-components
 
 _None. Data-driven (`items`), like Cloudscape's support prompt group. Exports: `"./suggestion-group"`;
-types `SuggestionItem`, `SuggestionGroupOrientation`._
+types `SuggestionGroupItem`, `SuggestionGroupOrientation`._
 
 ## States
 

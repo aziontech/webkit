@@ -37,8 +37,8 @@
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `primaryAction` | `FeatureWidgetsAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
-| `secondaryAction` | `FeatureWidgetsAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
+| `primaryAction` | `SectionTitleAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
+| `secondaryAction` | `SectionTitleAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 | `titleVariant` | `SectionTitleVariant` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |

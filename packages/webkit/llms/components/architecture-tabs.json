@@ -85,7 +85,7 @@
   },
   {
    "name": "primaryAction",
-   "type": "ArchitectureTabsAction",
+   "type": "SectionTitleAction",
    "default": "undefined",
    "required": "false",
    "doc": "Large button in the section title; `{ label, href, trailing?, target? }`. Omitted when absent."

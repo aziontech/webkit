@@ -52,7 +52,7 @@
 | --- | --- | --- | --- | --- |
 | `navigation` | `ConsoleLayoutNavGroup[]` | `[]` | false | The navigation tree: groups of rows, each `{ id, label, icon?, href?, tagValue?, disabled?, kind?, children?, groups? }`; an in-app `href` is followed with the app's router. |
 | `activeId` | `string` | `''` | false | Id of the current row. Empty matches the current route against each row's `href`. |
-| `breadcrumbs` | `ConsoleLayoutCrumb[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
+| `breadcrumbs` | `BreadcrumbItemData[]` | `[]` | false | The trail shown in the header on wide layouts; each is `{ label, href? }` and the last one is the current page. |
 | `home` | `string` | `'/'` | false | Where the brand mark links. |
 | `account` | `ConsoleLayoutAccount` | `undefined` | false | The signed-in account, `{ name, email?, src? }`, shown at the foot of the rail and as the header avatar; nothing is rendered when absent. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the navigation landmark. Empty uses the locale catalog (`Main navigation`). |
@@ -90,7 +90,7 @@
 
 ## Sub-components
 
-The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `ConsoleLayoutCrumb`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
+The root ships a compound API via `index.ts` (`Object.assign` attaches the part; vue-tsc emits `index.d.ts`), and `index.ts` re-exports the root's types (`ConsoleLayoutNavGroup`, `ConsoleLayoutNavItem`, `BreadcrumbItemData`, `ConsoleLayoutAccount`). Root binding is PascalCase `ConsoleLayout`.
 
 ```
 packages/webkit/src/components/layout/console-layout/
@@ -103,7 +103,7 @@ packages/webkit/src/components/layout/console-layout/
 ```
 
 - `console-layout-breadcrumb/console-layout-breadcrumb.vue` — a page's own trail. Renders nothing in place; registers with the layout on mount and `KeepAlive` activation, unregisters on unmount and deactivation; the latest wins and replaces the layout's `breadcrumbs` prop and slot. Does nothing outside a `ConsoleLayout`. Crumbs are followed with the app's router.
-  - Props: `items: ConsoleLayoutCrumb[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
+  - Props: `items: BreadcrumbItemData[]` default `[]` — the page's crumbs, each `{ label, href? }`; without a control crumb the last one is the current page.
   - Events: _none_ (crumb clicks are followed by the layout).
   - Slots: `default` — one or more controls that end the trail (a `Select` with `variant="ghost"`, `size="small"` and an `aria-label`); each top-level element is its own crumb (environment then version: two `Select`s); they keep the page's reactivity.
 
@@ -154,7 +154,7 @@ packages/webkit/src/components/layout/console-layout/
 | `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
 | `consoleLayout.accountMenuFor`    | `{initials}, account menu`                | —                   |
 | `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
-| `consoleLayout.searchEmpty`       | `No page or command matches your search.` | —                   |
+| `consoleLayout.noMatch`           | `No page or command matches your search.` | —                   |
 | `consoleLayout.pages`             | `Pages`                                   | —                   |
 
 - Formatting: none. Navigation, breadcrumb and account text is consumer data.

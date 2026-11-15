@@ -32,7 +32,7 @@
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `string` | `''` | false | Overline above the headline. |
 | `article` | `ArticleBodyArticle` | `—` | true | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL). |
-| `trail` | `ArticleBodyCrumb[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. |
+| `trail` | `BreadcrumbItemData[]` | `[]` | false | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. |
 | `body` | `string` | `''` | false | The article as markdown; its `##` and `###` headings feed the outline. |
 | `banner` | `string` | `''` | false | URL of the image over the masthead; the banner frame is omitted when empty. |
 | `share` | `ArticleBodyShare` | `undefined` | false | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |
@@ -73,7 +73,7 @@
 
 | Key                           | English source                                | Override prop      |
 | ----------------------------- | --------------------------------------------- | ------------------ |
-| `articleBody.copiedLink`      | `Link copied`                                 | `share.copiedLink` |
+| `articleBody.linkCopied`      | `Link copied`                                 | `share.copiedLink` |
 | `articleBody.copiedFeed`      | `Feed link copied`                            | `share.copiedFeed` |
 | `articleBody.copiedPage`      | `Page copied as markdown`                     | `share.copiedPage` |
 | `articleBody.copyFailed`      | `Could not copy`                              | —                  |
