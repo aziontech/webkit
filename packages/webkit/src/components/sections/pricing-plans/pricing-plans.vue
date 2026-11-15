@@ -151,9 +151,9 @@
           <CardPricing
             v-for="plan in visiblePlans"
             :key="plan.name"
-            aligned
+            equal-height
             animated
-            slot-position="middle"
+            actions-position="middle"
             kind="transparent"
             :data-highlighted="plan.highlighted || null"
             class="bg-(--bg-canvas) data-[highlighted]:bg-(--bg-surface)"

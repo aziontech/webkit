@@ -10,11 +10,11 @@
     />
     <Tag
       label="Label"
-      severity="primary"
+      variant="primary"
     />
     <Tag
       label="Label"
-      severity="accent"
+      variant="accent"
     />
     <Tag
       label="Label"
@@ -34,11 +34,11 @@
     />
     <Tag
       label="Label"
-      severity="contrast"
+      variant="contrast"
     />
     <Tag
       label="Label"
-      severity="highlight"
+      variant="highlight"
     />
   </div>
 </template>

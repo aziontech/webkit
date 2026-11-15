@@ -942,10 +942,9 @@ export function checkSfcVocabulary(rel, text, component) {
     component,
     resolveTypeUnion: (t) => resolveTypeUnion(sfc.raw ?? text, t)
   }
-  for (const x of checkPropVocabulary(sfc.props, opts))
-    if (x.staged) out.push(v(x.rule, rel, 1, x.message))
+  for (const x of checkPropVocabulary(sfc.props, opts)) out.push(v(x.rule, rel, 1, x.message))
   for (const x of checkEventVocabulary(sfc.emits, { stage: 'all' }))
-    if (x.staged) out.push(v(x.rule, rel, 1, x.message))
+    out.push(v(x.rule, rel, 1, x.message))
   for (const x of checkSlotVocabulary(sfc.slots)) out.push(v(x.rule, rel, 1, x.message))
   return out
 }
@@ -1015,12 +1014,12 @@ export function checkSpecVocabulary(rel, text) {
     .filter((p) => p.name && /^[A-Za-z][\w]*$/.test(p.name))
   const at = (n) => lineOf(text, text.indexOf(`\`${n}\``))
   for (const x of checkPropVocabulary(props, { stage: 'all', component: name }))
-    if (x.staged) out.push(v(x.rule, rel, at(x.prop), x.message))
+    out.push(v(x.rule, rel, at(x.prop), x.message))
   const emits = parseTable(getSection(body, 'Events'))
     .map((r) => ({ name: clean(r.event) }))
     .filter((e) => e.name && /^[\w:-]+$/.test(e.name))
   for (const x of checkEventVocabulary(emits, { stage: 'all' }))
-    if (x.staged) out.push(v(x.rule, rel, at(x.event), x.message))
+    out.push(v(x.rule, rel, at(x.event), x.message))
   const slots = parseTable(getSection(body, 'Slots'))
     .map((r) => clean(r.slot))
     .filter((s) => s && /^[\w-]+$/.test(s))

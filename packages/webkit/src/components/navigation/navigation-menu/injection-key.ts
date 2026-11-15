@@ -1,6 +1,6 @@
 import type { ComputedRef, CSSProperties, InjectionKey } from 'vue'
 
-import type { Align, Side } from '../../../composables/use-placement'
+import type { Align } from '../../../composables/use-placement'
 import type {
   NavigationMenuItemValue,
   UseNavigationMenuRootReturn
@@ -22,7 +22,7 @@ export interface NavigationMenuListHighlightContext {
 export interface NavigationMenuPositionerContext {
   arrowStyles: ComputedRef<CSSProperties>
   setArrowEl: (element: HTMLElement | null) => void
-  resolvedSide: ComputedRef<Side>
+  resolvedSide: ComputedRef<'top' | 'end' | 'bottom' | 'start'>
   resolvedAlign: ComputedRef<Align>
 }
 

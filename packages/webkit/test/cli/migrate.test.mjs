@@ -130,6 +130,76 @@ test('migrateSource flags a removed prop as manual work and leaves the tag alone
   )
 })
 
+test('migrateSource renames slots, events and sub-component props from # and @ keys', () => {
+  const rules = {
+    props: {
+      button: { '#prefix': 'leading' },
+      input: { '#prefix': 'leading', '#suffix': 'trailing' },
+      tree: { '@item-dblclick': 'item-double-click', selectedIds: 'selectedKeys' },
+      'select-option': { '#left': 'leading' },
+      stepper: { state: { to: 'status', values: { complete: 'success' } } }
+    }
+  }
+  const sfc = [
+    '<script setup>',
+    "import Button from '@aziontech/webkit/button'",
+    "import Input from '@aziontech/webkit/input'",
+    "import Tree from '@aziontech/webkit/tree'",
+    "import Select from '@aziontech/webkit/select'",
+    '</script>',
+    '<template>',
+    '  <Button label="Save">',
+    '    <template #prefix><Input><template #prefix>$</template></Input></template>',
+    '  </Button>',
+    '  <Input>',
+    '    <div><template #prefix>nested</template></div>',
+    '    <template v-slot:suffix="{ value }">{{ value }}</template>',
+    '  </Input>',
+    '  <Tree v-model:selected-ids="ids" @item-dblclick.stop="open" @item-dblclick-x="x" />',
+    '  <Select><Select.Option value="a"><template #left>A</template></Select.Option></Select>',
+    '  <div><template #prefix>untouched</template></div>',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, { ...migration, ...rules })
+  assert.match(source, /<Button label="Save">\n {4}<template #leading><Input><template #leading>\$/)
+  assert.match(source, /<div><template #prefix>nested<\/template><\/div>/)
+  assert.match(source, /<template v-slot:trailing="\{ value \}">/)
+  assert.match(
+    source,
+    /<Tree v-model:selected-keys="ids" @item-double-click\.stop="open" @item-dblclick-x="x" \/>/
+  )
+  assert.match(source, /<Select\.Option value="a"><template #leading>A<\/template>/)
+  assert.match(source, /<div><template #prefix>untouched<\/template><\/div>\n<\/template>$/)
+  assert.equal(migrateSource(source, { ...migration, ...rules }).source, source)
+})
+
+test('migrateSource moves a static value to another prop from a moves map', () => {
+  const rules = {
+    props: {
+      tag: {
+        severity: { to: 'severity', values: { default: 'neutral' }, moves: { accent: 'variant' } }
+      }
+    }
+  }
+  const sfc = [
+    '<script setup>',
+    "import Tag from '@aziontech/webkit/tag'",
+    '</script>',
+    '<template>',
+    '  <Tag severity="accent" label="New" />',
+    '  <Tag severity="default" />',
+    '  <Tag :severity="level" />',
+    `  <Tag :severity="t('x')" severity="accent" />`,
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, { ...migration, ...rules })
+  assert.match(source, /<Tag variant="accent" label="New" \/>/)
+  assert.match(source, /<Tag severity="neutral" \/>/)
+  assert.match(source, /<Tag :severity="level" \/>/)
+  assert.match(source, /<Tag :severity="t\('x'\)" variant="accent" \/>/)
+  assert.equal(migrateSource(source, { ...migration, ...rules }).source, source)
+})
+
 test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it cannot', () => {
   const { icons } = loadMigration(6)
   const sfc = [
@@ -398,19 +468,19 @@ test('renamed exported types are rewritten where the consumer imports them', () 
   const v6 = loadMigration(6)
   const sfc = [
     '<script setup lang="ts">',
-    "import SeverityTag, { type SeverityTagLevel } from '@aziontech/webkit/severity-tag'",
+    "import Accordion, { type AccordionArrowPosition } from '@aziontech/webkit/accordion'",
     "import type { DocCardGroupMobileCols } from '@aziontech/webkit/doc-card-group'",
     "import type { MessageSeverity as Tone } from '@aziontech/webkit/message'",
     "import type { TabViewValue } from '@aziontech/webkit/tab-view'",
-    'const level: SeverityTagLevel = "high"',
+    'const place: AccordionArrowPosition = "leading"',
     'const cols: DocCardGroupMobileCols = 2',
     'const tone: Tone = "info"',
     'const tab: TabViewValue = 1',
     '</script>'
   ].join('\n')
   const { source } = migrateSource(sfc, v6)
-  assert.match(source, /import SeverityTag, \{ type SeverityTagSeverity \}/)
-  assert.match(source, /const level: SeverityTagSeverity/)
+  assert.match(source, /import Accordion, \{ type AccordionIconPosition \}/)
+  assert.match(source, /const place: AccordionIconPosition/)
   assert.match(source, /import type \{ DocCardGroupMobileColumns \} from/)
   assert.match(source, /const cols: DocCardGroupMobileColumns/)
   assert.match(source, /import type \{ AlertSeverity as Tone \} from '@aziontech\/webkit\/alert'/)

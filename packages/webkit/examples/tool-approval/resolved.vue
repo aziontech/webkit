@@ -7,17 +7,17 @@
     <ToolApproval
       title="Allow `purge_urls`?"
       description="Purges https://www.example.com/styles.css from every edge location."
-      state="approved"
+      status="approved"
     />
     <ToolApproval
       title="Approve deployment to production?"
       description="Deploys the current build of storefront to production."
-      state="denied"
+      status="denied"
     />
     <ToolApproval
       title="Allow `delete_cache_rule`?"
       description="Removes the rule that caches images for one day."
-      state="expired"
+      status="expired"
     />
   </div>
 </template>

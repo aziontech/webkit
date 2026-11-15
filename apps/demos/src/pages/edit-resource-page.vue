@@ -176,7 +176,7 @@
                   anchor="general"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           title="Name"
@@ -223,7 +223,7 @@
                   anchor="modules"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           v-for="mod in defaultModules"
@@ -249,7 +249,7 @@
                   anchor="subscription-modules"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           v-for="mod in subscriptionModules"
@@ -272,7 +272,7 @@
                               />
                             </a>
                           </template>
-                          <Tooltip text="Contact sales to activate this module.">
+                          <Tooltip content="Contact sales to activate this module.">
                             <Switch
                               v-model="form.modules[mod.key]"
                               disabled

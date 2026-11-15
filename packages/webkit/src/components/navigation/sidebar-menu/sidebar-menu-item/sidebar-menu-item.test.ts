@@ -82,22 +82,22 @@ describe('SidebarMenuItem', () => {
     expect(getByTestId('navigation-sidebar-menu-item__button')).toBeTruthy()
   })
 
-  it('reflects data-selected and aria-current when selected', () => {
+  it('reflects data-active and aria-current when active', () => {
     const { getByTestId } = render(SidebarMenuItem, {
-      props: { label: 'Home', selected: true }
+      props: { label: 'Home', active: true }
     })
 
     const root = getByTestId('navigation-sidebar-menu-item')
-    expect(root.hasAttribute('data-selected')).toBe(true)
+    expect(root.hasAttribute('data-active')).toBe(true)
 
     const button = getByTestId('navigation-sidebar-menu-item__button')
     expect(button.getAttribute('aria-current')).toBe('page')
   })
 
-  it('omits data-selected and aria-current when not selected', () => {
+  it('omits data-active and aria-current when not active', () => {
     const { getByTestId } = render(SidebarMenuItem, { props: { label: 'Home' } })
 
-    expect(getByTestId('navigation-sidebar-menu-item').getAttribute('data-selected')).toBeNull()
+    expect(getByTestId('navigation-sidebar-menu-item').getAttribute('data-active')).toBeNull()
     expect(
       getByTestId('navigation-sidebar-menu-item__button').getAttribute('aria-current')
     ).toBeNull()
@@ -201,6 +201,23 @@ describe('SidebarMenuItem', () => {
     expect(tag.textContent).toContain('Beta')
   })
 
+  it('colours the trailing tag info by default, by tagSeverity, or by tagVariant', () => {
+    const look = (props: Record<string, unknown>) => {
+      const { getByTestId, unmount } = render(SidebarMenuItem, {
+        props: { label: 'Home', tagValue: 'Beta', ...props }
+      })
+      const tag = getByTestId('navigation-sidebar-menu-item__tag').querySelector(
+        '[data-testid="content-tag"]'
+      )
+      const out = [tag?.getAttribute('data-severity'), tag?.getAttribute('data-variant')]
+      unmount()
+      return out
+    }
+    expect(look({})).toEqual(['info', null])
+    expect(look({ tagSeverity: 'warning' })).toEqual(['warning', null])
+    expect(look({ tagVariant: 'primary' })).toEqual([null, 'primary'])
+  })
+
   it('renders custom tag slot content in place of the default tag', () => {
     const { getByTestId } = render(SidebarMenuItem, {
       props: { label: 'Home' },
@@ -235,7 +252,7 @@ describe('SidebarMenuItem', () => {
 
   it('has no a11y violations for an anchor option with a trailing tag', async () => {
     const { container } = render(
-      InList({ label: 'Docs', href: 'https://azion.com', tagValue: 'New', selected: true })
+      InList({ label: 'Docs', href: 'https://azion.com', tagValue: 'New', active: true })
     )
 
     await expectNoA11yViolations(container)
@@ -246,7 +263,7 @@ describe('SidebarMenuItem', () => {
   // rendering is covered directly above, so nothing is lost with the fixture.
   it('renders cleanly in the shape the SidebarMenu compound puts it in', async () => {
     const { getByTestId, container } = render(
-      InList({ label: 'Home', icon: 'ai ai-home', href: '/', selected: true })
+      InList({ label: 'Home', icon: 'ai ai-home', href: '/', active: true })
     )
 
     expect(getByTestId('navigation-sidebar-menu-item')).toBeTruthy()

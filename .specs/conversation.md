@@ -3,11 +3,11 @@ name: conversation
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 627aa144ce93f2f1c6af633bd604b761d5953677609d6d29669e3eb0b3d9a23f
+checksum: 42a8b2be80fd18b57ac19aaa7f396f6a7c0d9f2e6606fccb057f26c077bcf8ed
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Conversation — Component Spec
@@ -21,7 +21,7 @@ older message — a "Scroll to the latest message" button brings them back. It i
 own live behavior is off, so streamed tokens are never read one by one; instead each `ChatMessage`
 that finishes (or fails) hands its text to the conversation's polite live region, once.
 
-It also sets where messages sit for the whole thread (`alignment`): `split` for a full chat page,
+It also sets where messages sit for the whole thread (`layout`): `split` for a full chat page,
 `start` for a dense side panel or drawer (Cloudscape's rule for embedded surfaces).
 
 ## When to use
@@ -47,7 +47,7 @@ It also sets where messages sit for the whole thread (`alignment`): `split` for 
 
 - Pin the prompt input under the conversation; only the log scrolls.
 - Never auto-scroll while the reader is reading an older message: the component already stops following when they scroll up.
-- Use `alignment="start"` in drawers and side panels, `split` on a full page.
+- Use `layout="start"` in drawers and side panels, `split` on a full page.
 - Keep one conversation per surface; a second thread is a second page or a history list.
 
 ## Usage
@@ -72,18 +72,18 @@ It also sets where messages sit for the whole thread (`alignment`): `split` for 
 ## Sub-components
 
 _None — a single root. Messages reach it through `provide`/`inject` (`injection-key.ts`): the
-conversation provides `alignment`, a `ready` flag (true after mount, so only messages added later are
+conversation provides its layout (context member `alignment`), a `ready` flag (true after mount, so only messages added later are
 announced) and `announce(author, text)`._
 
 Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`. Exported type:
-`ConversationAlignment = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest).
+`ConversationLayout = 'split' | 'start'`. Composed DS components: `icon-button` (scroll to latest).
 
 ## Props
 
 | Prop        | Type                 | Default   | Required | JSDoc                                                                                                                                           |
 | ----------- | -------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ariaLabel` | `string`             | `''`      | false    | Accessible name of the message log. Empty uses the locale catalog (`Conversation`).                                                             |
-| `alignment` | `'split' \| 'start'` | `'split'` | false    | `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
+| `layout`    | `'split' \| 'start'` | `'split'` | false    | `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
 
 ## Events
 
@@ -98,7 +98,7 @@ _No events. `scrollToBottom()` is exposed for owners that need to jump to the en
 ## States
 
 - `data-pinned` on the root while the log follows the newest message; absent once the reader scrolled up (the Scroll to latest button shows). Only the reader's own scrolling unpins it (wheel, touch, pointer on the scrollbar, keys): a scroll the browser causes — a host moving the log in the DOM, a drawer opening — is corrected back to the end while pinned.
-- `data-alignment` mirrors `alignment`.
+- `data-layout` mirrors `layout`; each message carries it as `data-alignment`.
 - No `data-state` — nothing opens or closes.
 
 ## Motion & Animations
@@ -151,7 +151,7 @@ _None._
 ## Responsive
 
 - Container queries: none; the thread centers at `--layout-measure-content` and fills narrower hosts.
-- Narrow (≤ 640 px or a drawer): full width; the owner should pass `alignment="start"`.
+- Narrow (≤ 640 px or a drawer): full width; the owner should pass `layout="start"`.
 - Touch: scroll button meets 44 px on coarse pointers.
 - Reflow: no horizontal scroll at 320 px; wide code and tables scroll inside their own blocks.
 
@@ -163,7 +163,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer alignment (`start`), Long thread (scroll to latest)._
+_Examples in `packages/webkit/examples/conversation/`: Default (a short thread), Drawer layout (`start`), Long thread (scroll to latest)._
 
 ## Constraints — DO NOT
 

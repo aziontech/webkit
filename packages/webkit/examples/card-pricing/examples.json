@@ -9,7 +9,7 @@
     },
     {
       "name": "Aligned",
-      "summary": "Three tiers whose copy is deliberately uneven: Hobby has no billing caveat, Pro has one line and Enterprise two. With `aligned` every region sits on the same line in all three cards, so the row reads as one comparison. Drop the prop and each card sizes to its own copy, staggering the feature lists and the buttons.",
+      "summary": "Three tiers whose copy is deliberately uneven: Hobby has no billing caveat, Pro has one line and Enterprise two. With `equal-height` every region sits on the same line in all three cards, so the row reads as one comparison. Drop the prop and each card sizes to its own copy, staggering the feature lists and the buttons.",
       "file": "aligned.vue"
     },
     {

@@ -63,9 +63,9 @@
 
   defineSlots<{
     /** Leading adornment at the inline start of the field (an icon, a unit). */
-    prefix(): unknown
+    leading(): unknown
     /** Trailing adornment at the inline end of the field. */
-    suffix(): unknown
+    trailing(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -104,8 +104,8 @@
     })
   )
 
-  const hasIconLeft = () => Boolean(slots['prefix'])
-  const hasIconRight = () => Boolean(slots['suffix'])
+  const hasLeading = () => Boolean(slots['leading'])
+  const hasTrailing = () => Boolean(slots['trailing'])
 
   const onInput = (event: globalThis.Event) => {
     const target = event.target as globalThis.HTMLInputElement
@@ -133,18 +133,18 @@
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-monospace="monospace || null"
-    :data-has-icon-left="hasIconLeft() || null"
-    :data-has-icon-right="hasIconRight() || null"
+    :data-leading="hasLeading() || null"
+    :data-trailing="hasTrailing() || null"
     class="group/input relative inline-flex items-center w-full cursor-text gap-(--spacing-xs) px-(--spacing-sm) rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none [&:not(:focus-within):not([data-disabled]):not([data-readonly])]:hover:border-(--border-strong) focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-[var(--input-ring-offset,var(--bg-canvas))] data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[invalid]:border-(--danger-border) data-[required]:border-(--warning-border) data-[readonly]:cursor-default data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0"
     :class="attrs.class"
     @mousedown="onChromeMousedown"
   >
     <span
-      v-if="hasIconLeft()"
+      v-if="hasLeading()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="prefix" />
+      <slot name="leading" />
     </span>
 
     <input
@@ -170,11 +170,11 @@
     />
 
     <span
-      v-if="hasIconRight()"
+      v-if="hasTrailing()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="suffix" />
+      <slot name="trailing" />
     </span>
   </span>
 </template>

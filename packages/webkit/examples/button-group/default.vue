@@ -25,7 +25,7 @@
     items.map((item) => (item.type === 'toggle' ? { ...item, pressed: wrap.value } : item))
   )
 
-  const onToggle = ({ id, pressed }) => {
+  const onToggle = (event, { id, pressed }) => {
     if (id === 'wrap') wrap.value = pressed
     last.value = `${id}: ${pressed ? 'on' : 'off'}`
   }

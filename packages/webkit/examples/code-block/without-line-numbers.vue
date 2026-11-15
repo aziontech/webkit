@@ -24,7 +24,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </div>
 </template>

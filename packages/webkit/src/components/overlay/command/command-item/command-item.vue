@@ -30,8 +30,8 @@
 
   defineSlots<{
     default(): unknown
-    prefix(): unknown
-    suffix(): unknown
+    leading(): unknown
+    trailing(): unknown
   }>()
 
   const props = withDefaults(
@@ -182,11 +182,11 @@
     @mouseenter="!disabled && ctx.setActive(value)"
   >
     <span
-      v-if="$slots['prefix']"
-      :data-testid="`${testId}__prefix`"
+      v-if="$slots['leading']"
+      :data-testid="`${testId}__leading`"
       class="flex size-4 shrink-0 items-center justify-center overflow-hidden"
     >
-      <slot name="prefix" />
+      <slot name="leading" />
     </span>
 
     <span
@@ -226,10 +226,10 @@
       >{{ shortcutHint.key }}</Kbd
     >
     <span
-      v-else-if="$slots['suffix']"
+      v-else-if="$slots['trailing']"
       class="flex shrink-0 items-center"
     >
-      <slot name="suffix" />
+      <slot name="trailing" />
     </span>
     <i
       v-else-if="page"

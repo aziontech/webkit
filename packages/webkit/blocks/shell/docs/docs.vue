@@ -157,7 +157,7 @@
       <DocPageHeader
         title="Getting started"
         description="Create a function, instantiate it in an application, and verify the response from the edge."
-        :breadcrumb="crumbs"
+        :breadcrumbs="crumbs"
       />
       <DocProse>
         <DocHeading
@@ -289,7 +289,7 @@
                 placeholder="Language"
               >
                 <Select.Trigger aria-label="Language">
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-globe text-(--text-muted)"
                       aria-hidden="true"

@@ -15,7 +15,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the modules scroll to Network Shield, which is switched on beside the always-on DDoS module while it is, and back off after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -79,7 +79,7 @@
   const LAST = FRAMES.length - 1
   const LEAD = 28
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -174,9 +174,9 @@
           data-anchor
         >
           <div
-            :data-enabled="enabled(module.key) || null"
+            :data-on="enabled(module.key) || null"
             :data-locked="module.locked || null"
-            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-enabled:border-(--primary) data-locked:border-[color-mix(in_srgb,var(--primary)_40%,transparent)] motion-reduce:transition-none"
+            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-on:border-(--primary) data-locked:border-[color-mix(in_srgb,var(--primary)_40%,transparent)] motion-reduce:transition-none"
           >
             <LegacySwitch
               :checked="enabled(module.key)"

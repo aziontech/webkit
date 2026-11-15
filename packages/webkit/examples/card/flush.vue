@@ -8,7 +8,7 @@
     :padded="false"
     class="w-full max-w-[512px]"
   >
-    <template #content>
+    <template #default>
       <p class="text-body-sm text-(--text-muted) p-(--spacing-md)">
         With padded=false the content sits flush to the card edges; the content owns its own padding
         (or renders an ItemList with full-width dividers).

@@ -20,7 +20,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `eyebrow` is the short overline above the headline.
 - `title` is the headline over the map.
-- `lead` is the overline sentence above the claims.
+- `claimsEyebrow` is the overline sentence above the claims.
 - `claims` are the network figures drawn as pills. A claim given as `{ label, mobile: false }` stays off phones.
 - `anchor` sets the band's id, so a page can link to it with a `#hash`.
 - With `kind` set to `stats`, `stats[]` fill the floor with headline figures, each a `value`, a `label` and an optional `prefix` and `suffix`.

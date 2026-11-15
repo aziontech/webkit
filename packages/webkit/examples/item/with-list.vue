@@ -9,7 +9,7 @@
     :padded="false"
     class="w-full"
   >
-    <template #content>
+    <template #default>
       <Item.List>
         <Item>
           <Item.Media kind="icon">

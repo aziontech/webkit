@@ -110,7 +110,7 @@
         >
           <ProductWidget
             :name="name"
-            :hover="hovered === name"
+            :hovered="hovered === name"
           />
         </div>
       </div>

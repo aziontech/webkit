@@ -3,10 +3,10 @@
 
   const steps: LogViewStep[] = [
     {
-      key: 'token',
+      id: 'token',
       title: 'Access token',
       description: 'Deploy token created and added to the CLI',
-      status: 'done',
+      status: 'success',
       duration: '3s',
       lines: [
         { id: '0', time: '13:47:33', type: 'success', message: 'Deploy started successfully!' },
@@ -14,7 +14,7 @@
       ]
     },
     {
-      key: 'build',
+      id: 'build',
       title: 'Build',
       description: 'Bundling static assets for the edge',
       status: 'running',
@@ -24,14 +24,14 @@
       ]
     },
     {
-      key: 'rules',
+      id: 'rules',
       title: 'Routing Rules',
       description: 'Request rules and cache policies',
       status: 'pending',
       lines: []
     },
     {
-      key: 'publish',
+      id: 'publish',
       title: 'Publish',
       description: 'Deploy published to the edge',
       status: 'pending',

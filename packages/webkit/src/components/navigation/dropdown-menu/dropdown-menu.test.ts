@@ -6,8 +6,10 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import CheckableOptions from '../../../../examples/dropdown-menu/checkable-options.vue'
 import Default from '../../../../examples/dropdown-menu/default.vue'
 import Groups from '../../../../examples/dropdown-menu/groups.vue'
+import GroupsWithHeaderAndFooter from '../../../../examples/dropdown-menu/groups-with-header-and-footer.vue'
 import OptionAffordances from '../../../../examples/dropdown-menu/option-affordances.vue'
 import SubMenus from '../../../../examples/dropdown-menu/sub-menus.vue'
+import WithHeaderAndFooter from '../../../../examples/dropdown-menu/with-header-and-footer.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenu, {
   DropdownMenuGroup,
@@ -109,6 +111,31 @@ describe('DropdownMenu', () => {
       expect(DropdownMenu.Trigger).toBe(DropdownMenuTrigger)
       expect(DropdownMenu.Group).toBe(DropdownMenuGroup)
       expect(DropdownMenu.Item).toBe(DropdownMenuOption)
+    })
+
+    it('renders the root header and footer slots outside the scrolling menu', async () => {
+      render(WithHeaderAndFooter)
+      await waitFor(() =>
+        expect(
+          document.body.querySelector('[data-testid="navigation-dropdown-menu__header"]')
+        ).not.toBeNull()
+      )
+      const footer = document.body.querySelector('[data-testid="navigation-dropdown-menu__footer"]')
+      expect(footer).not.toBeNull()
+      expect(document.body.querySelector('[data-testid$="__top"]')).toBeNull()
+      expect(footer?.closest('[role="menu"]')).toBeNull()
+    })
+
+    it('renders the group header and footer slots inline in the section', async () => {
+      render(GroupsWithHeaderAndFooter)
+      await waitFor(() =>
+        expect(
+          document.body.querySelectorAll('[data-testid="navigation-dropdown-menu__group__header"]')
+        ).toHaveLength(2)
+      )
+      expect(
+        document.body.querySelectorAll('[data-testid="navigation-dropdown-menu__group__footer"]')
+      ).toHaveLength(2)
     })
 
     // ---- Root renders + reflects state via data-* -----------------------------

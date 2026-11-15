@@ -38,10 +38,10 @@
 
   const steps: DeployStep[] = [
     {
-      key: 'token',
+      id: 'token',
       title: 'Access token',
       description: 'Deploy token created and added to the CLI',
-      status: 'done',
+      status: 'success',
       duration: '3s',
       lines: [
         {
@@ -71,10 +71,10 @@
       ]
     },
     {
-      key: 'clone',
+      id: 'clone',
       title: 'Clone template',
       description: 'Template cloned into the GitHub scope',
-      status: 'done',
+      status: 'success',
       duration: '4s',
       lines: [
         {
@@ -99,7 +99,7 @@
       ]
     },
     {
-      key: 'install',
+      id: 'install',
       title: 'Install dependencies',
       description: '478 packages installed',
       status: 'running',
@@ -115,7 +115,7 @@
       ]
     },
     {
-      key: 'build',
+      id: 'build',
       title: 'Build',
       description: 'Project built into dist/',
       status: 'pending',
@@ -123,7 +123,7 @@
       lines: []
     },
     {
-      key: 'upload',
+      id: 'upload',
       title: 'Upload',
       description: 'Static assets uploaded to storage',
       status: 'pending',
@@ -131,7 +131,7 @@
       lines: []
     },
     {
-      key: 'service',
+      id: 'service',
       title: 'Service',
       description: 'Service and cache settings created',
       status: 'pending',
@@ -139,7 +139,7 @@
       lines: []
     },
     {
-      key: 'rules',
+      id: 'rules',
       title: 'Routing rules',
       description: 'Request rules and cache policies applied',
       status: 'pending',
@@ -147,7 +147,7 @@
       lines: []
     },
     {
-      key: 'deploy',
+      id: 'deploy',
       title: 'Publish',
       description: 'Repository wired and the deploy published',
       status: 'pending',
@@ -199,7 +199,7 @@
             />
           </template>
 
-          <template #content>
+          <template #default>
             <LogView.Steps
               v-model:open-step="openStep"
               :steps="steps"

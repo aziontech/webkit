@@ -75,6 +75,17 @@ describe('DocPrompt', () => {
       const { getByTestId } = render(DocPrompt, { slots: { default: PROMPT } })
       const text = getByTestId('documentation-doc-prompt').querySelector('[data-kind]')
       expect(text?.getAttribute('data-kind')).toBe('block')
+      expect(text?.getAttribute('data-state')).toBe('closed')
+      expect(text?.hasAttribute('data-expanded')).toBe(false)
+    })
+
+    it('carries no disclosure state on the line shape', () => {
+      const { getByTestId } = render(DocPrompt, {
+        props: { kind: 'line' },
+        slots: { default: PROMPT }
+      })
+      const text = getByTestId('documentation-doc-prompt').querySelector('[data-kind]')
+      expect(text?.hasAttribute('data-state')).toBe(false)
     })
 
     it('mirrors kind="line" onto data-kind', () => {

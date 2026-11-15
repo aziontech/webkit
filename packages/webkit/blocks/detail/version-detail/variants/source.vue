@@ -19,7 +19,7 @@
   import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -29,7 +29,7 @@
     id: string
     name: string
     state: string
-    tag: { label: string; severity: TagSeverity; icon: string }
+    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
     comment: string
     author: string
     createdAgo: string
@@ -57,7 +57,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -122,7 +122,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -383,7 +383,7 @@
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -401,6 +401,7 @@
               <template #tag>
                 <Tag
                   :label="entry.tag.label"
+                  :variant="entry.tag.variant"
                   :severity="entry.tag.severity"
                   :icon="entry.tag.icon"
                   size="small"
@@ -435,7 +436,7 @@
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip text="Back to web-app versions">
+      <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
           kind="transparent"
@@ -467,7 +468,7 @@
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -485,6 +486,7 @@
                 <template #tag>
                   <Tag
                     :label="entry.tag.label"
+                    :variant="entry.tag.variant"
                     :severity="entry.tag.severity"
                     :icon="entry.tag.icon"
                     size="small"
@@ -617,7 +619,7 @@
                             aria-label="Search in folder"
                             class="w-full"
                           >
-                            <template #prefix>
+                            <template #leading>
                               <i
                                 class="ai ai-search"
                                 aria-hidden="true"
@@ -627,7 +629,7 @@
                         </div>
                         <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                           <Tooltip
-                            text="Refresh"
+                            content="Refresh"
                             class="shrink-0"
                           >
                             <IconButton
@@ -640,7 +642,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Download CSV"
+                            content="Download CSV"
                             class="shrink-0"
                           >
                             <IconButton
@@ -653,7 +655,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Columns"
+                            content="Columns"
                             class="shrink-0"
                           >
                             <IconButton
@@ -664,7 +666,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Open in Object Storage"
+                            content="Open in Object Storage"
                             class="shrink-0"
                           >
                             <IconButton
@@ -683,7 +685,7 @@
                         @navigate="onCrumb"
                       />
                       <Card :padded="false">
-                        <template #content>
+                        <template #default>
                           <DataTable
                             ref="tableEl"
                             v-model:globalFilter="search"
@@ -868,7 +870,7 @@
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:expanded="historyExpanded"
+          v-model:open="historyExpanded"
           collapsible
           :min="280"
           :max="560"
@@ -919,6 +921,7 @@
                       <span class="flex shrink-0">
                         <Tag
                           :label="version.tag.label"
+                          :variant="version.tag.variant"
                           :severity="version.tag.severity"
                           size="small"
                         />
@@ -1053,6 +1056,7 @@
                         <span class="flex shrink-0">
                           <Tag
                             :label="entry.tag.label"
+                            :variant="entry.tag.variant"
                             :severity="entry.tag.severity"
                             size="small"
                           />

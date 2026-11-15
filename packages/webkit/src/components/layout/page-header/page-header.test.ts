@@ -132,7 +132,7 @@ describe('PageHeader', () => {
         render(PageHeader, { props: { title: 'Resources' } }).container
       )
 
-      for (const part of ['breadcrumb', 'icon', 'meta', 'tabs']) {
+      for (const part of ['breadcrumbs', 'icon', 'meta', 'tabs']) {
         expect(queryByTestId(`layout-page-header__${part}`)).toBeNull()
       }
     })
@@ -142,7 +142,7 @@ describe('PageHeader', () => {
         render(PageHeader, {
           props: { title: 'acme-store' },
           slots: {
-            breadcrumb: '<nav aria-label="Breadcrumb"><a href="/resources">Resources</a></nav>',
+            breadcrumbs: '<nav aria-label="Breadcrumb"><a href="/resources">Resources</a></nav>',
             icon: '<i class="ai ai-box"></i>',
             meta: '<span>Active</span>',
             actions: '<button type="button">Deploy</button>',
@@ -151,7 +151,7 @@ describe('PageHeader', () => {
         }).container
       )
 
-      const order = ['breadcrumb', 'icon', 'title', 'meta', 'actions', 'tabs'].map((part) =>
+      const order = ['breadcrumbs', 'icon', 'title', 'meta', 'actions', 'tabs'].map((part) =>
         getByTestId(`layout-page-header__${part}`)
       )
       for (let index = 1; index < order.length; index += 1) {

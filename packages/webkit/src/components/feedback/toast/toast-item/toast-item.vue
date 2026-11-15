@@ -12,11 +12,14 @@
 
   const props = withDefaults(
     defineProps<{
-      /** Severity / lifecycle variant; drives the leading icon and its color. */
+      /** Colour meaning; drives the leading icon and its color. */
       severity?: ToastSeverity
+      /** Work in progress: a spinner replaces the leading icon. */
+      loading?: boolean
     }>(),
     {
-      severity: 'default'
+      severity: 'neutral',
+      loading: false
     }
   )
 
@@ -40,12 +43,11 @@
   })
 
   const icons: Record<ToastSeverity, string> = {
-    default: '',
+    neutral: '',
     success: 'ai ai-check',
     info: 'ai ai-circle-info',
     warning: 'ai ai-triangle-alert',
-    danger: 'ai ai-circle-alert',
-    loading: ''
+    danger: 'ai ai-circle-alert'
   }
   const icon = computed(() => icons[props.severity])
 </script>
@@ -56,16 +58,18 @@
     :role="role"
     :data-testid="testId"
     :data-severity="severity"
+    :data-loading="loading || null"
+    :aria-busy="loading || undefined"
     class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-control) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
       <span
-        v-if="severity === 'loading' || icon"
+        v-if="loading || icon"
         class="flex h-[1lh] shrink-0 items-center text-label-md"
         aria-hidden="true"
       >
         <Spinner
-          v-if="severity === 'loading'"
+          v-if="loading"
           class="size-4 text-(--text-muted)"
         />
         <i

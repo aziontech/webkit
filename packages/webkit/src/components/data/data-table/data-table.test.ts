@@ -34,7 +34,7 @@ const rows = [
 
 const columns = [
   { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'status', header: 'Status', enableSorting: false }
+  { accessorKey: 'status', header: 'Status', sortable: false }
 ]
 
 describe('DataTable', () => {
@@ -77,7 +77,7 @@ describe('DataTable', () => {
           columns: [{ accessorKey: 'name', header: 'Name' }],
           paginated: true,
           pageSize: 5,
-          enableRowSelection: true
+          selectable: true
         },
         slots: { toolbar: '<button type="button">Refresh</button>' }
       })
@@ -184,13 +184,13 @@ describe('DataTable', () => {
       expect(cellText).toContain('Inactive')
     })
 
-    it('sets data-border only when bordered is true', () => {
+    it('sets data-bordered only when bordered is true', () => {
       const flush = render(DataTable, { props: { data: rows, columns } })
-      expect(flush.getByTestId('data-data-table').hasAttribute('data-border')).toBe(false)
+      expect(flush.getByTestId('data-data-table').hasAttribute('data-bordered')).toBe(false)
       flush.unmount()
 
       const framed = render(DataTable, { props: { data: rows, columns, bordered: true } })
-      expect(framed.getByTestId('data-data-table').hasAttribute('data-border')).toBe(true)
+      expect(framed.getByTestId('data-data-table').hasAttribute('data-bordered')).toBe(true)
     })
 
     it('renders the default empty state when data is empty', () => {
@@ -225,10 +225,10 @@ describe('DataTable', () => {
 
     it('emits update:sorting when a sortable header is toggled', async () => {
       const { getAllByRole, emitted } = render(DataTable, {
-        props: { data: rows, columns, enableSorting: true }
+        props: { data: rows, columns, sortable: true }
       })
 
-      // The Name column is sortable (enableSorting global true, Status opted out).
+      // The Name column is sortable (sortable global true, Status opted out).
       const nameHead = getAllByRole('columnheader').find(
         (h) => within(h).queryByText('Name') !== null
       ) as HTMLElement
@@ -246,13 +246,13 @@ describe('DataTable', () => {
 
     it('does not render a sort button on a column that opts out of sorting', () => {
       const { getAllByRole } = render(DataTable, {
-        props: { data: rows, columns, enableSorting: true }
+        props: { data: rows, columns, sortable: true }
       })
 
       const statusHead = getAllByRole('columnheader').find(
         (h) => within(h).queryByText('Status') !== null
       ) as HTMLElement
-      // Status column set enableSorting: false.
+      // Status column set sortable: false.
       expect(statusHead.getAttribute('data-sortable')).toBeNull()
       expect(within(statusHead).queryByRole('button')).toBeNull()
     })
@@ -261,7 +261,7 @@ describe('DataTable', () => {
   describe('row selection (data-driven) — checkbox column + update:rowSelection', () => {
     it('adds a leading select-all header checkbox and a checkbox per row', () => {
       const { getByLabelText, getAllByLabelText } = render(DataTable, {
-        props: { data: rows, columns, enableRowSelection: true, rowKey: 'id' }
+        props: { data: rows, columns, selectable: true, rowKey: 'id' }
       })
 
       // The header checkbox is labelled "Select all rows"; each row "Select row".
@@ -271,7 +271,7 @@ describe('DataTable', () => {
 
     it('emits update:rowSelection keyed by rowKey when a row checkbox is toggled', async () => {
       const { getAllByLabelText, emitted } = render(DataTable, {
-        props: { data: rows, columns, enableRowSelection: true, rowKey: 'id' }
+        props: { data: rows, columns, selectable: true, rowKey: 'id' }
       })
 
       // Toggle the first row's checkbox (getRowId uses rowKey='id' -> '1').
@@ -284,7 +284,7 @@ describe('DataTable', () => {
 
     it('select-all toggles every row via update:rowSelection', async () => {
       const { getByLabelText, emitted } = render(DataTable, {
-        props: { data: rows, columns, enableRowSelection: true, rowKey: 'id' }
+        props: { data: rows, columns, selectable: true, rowKey: 'id' }
       })
 
       await fireEvent.click(getByLabelText('Select all rows'))
@@ -299,7 +299,7 @@ describe('DataTable', () => {
         props: {
           data: rows,
           columns,
-          enableRowSelection: true,
+          selectable: true,
           selectOnRowClick: true,
           rowKey: 'id'
         }
@@ -319,7 +319,7 @@ describe('DataTable', () => {
         props: {
           data: rows,
           columns,
-          enableRowSelection: true,
+          selectable: true,
           selectOnRowClick: true,
           rowKey: 'id',
           rowSelectable: (row: Record<string, unknown>) => row.id !== '1' && row.id !== 1
@@ -341,7 +341,7 @@ describe('DataTable', () => {
   describe('v-model round-trip (controlled rowSelection)', () => {
     it('reflects a controlled rowSelection prop as the selected row surface', async () => {
       const { getAllByRole, rerender } = render(DataTable, {
-        props: { data: rows, columns, enableRowSelection: true, rowKey: 'id', rowSelection: {} }
+        props: { data: rows, columns, selectable: true, rowKey: 'id', rowSelection: {} }
       })
 
       // Initially nothing selected.
@@ -352,7 +352,7 @@ describe('DataTable', () => {
       await rerender({
         data: rows,
         columns,
-        enableRowSelection: true,
+        selectable: true,
         rowKey: 'id',
         rowSelection: { '2': true }
       })
@@ -371,7 +371,7 @@ describe('DataTable', () => {
         components: { DataTable, Table },
         setup: () => ({ rows, columns }),
         template: `
-          <DataTable :data="rows" :columns="columns" enable-row-selection>
+          <DataTable :data="rows" :columns="columns" selectable>
             <template #toolbar="{ selectedCount, selectedRows, clearSelection, loading, table }">
               <button type="button" data-testid="scope-toolbar" @click="clearSelection">
                 {{ selectedCount }}|{{ selectedRows.map((row) => row.id).join(',') }}|{{ loading }}|{{ Boolean(table) }}
@@ -622,7 +622,7 @@ describe('DataTable', () => {
       host.style.width = '320px'
       document.body.appendChild(host)
       const view = render(DataTable, {
-        props: { columns, data: rows, enableRowSelection: true, stackable: true },
+        props: { columns, data: rows, selectable: true, stackable: true },
         container: host
       })
       const bar = await waitFor(() => view.getByTestId('data-data-table__stacked-select-all'))
@@ -638,7 +638,7 @@ describe('DataTable', () => {
       host.style.width = '1024px'
       document.body.appendChild(host)
       const view = render(DataTable, {
-        props: { columns, data: rows, enableRowSelection: true },
+        props: { columns, data: rows, selectable: true },
         container: host
       })
       await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
@@ -711,7 +711,7 @@ describe('DataTable', () => {
               data: many,
               virtual: true,
               maxHeight: '480px',
-              enableRowSelection: true,
+              selectable: true,
               manualSorting: true,
               manualFiltering: true,
               manualPagination: true,
@@ -744,7 +744,8 @@ describe('DataTable', () => {
 
       await tableEl.value?.exportCsv({ scope: 'all' })
       expect(exported).toHaveBeenCalledTimes(1)
-      expect((exported.mock.calls[0][0] as unknown[]).length).toBe(10000)
+      expect((exported.mock.calls[0][0] as Event).type).toBe('export')
+      expect((exported.mock.calls[0][1] as unknown[]).length).toBe(10000)
       view.unmount()
       host.remove()
     })
@@ -889,7 +890,7 @@ describe('DataTable', () => {
                   }
                 }),
             columns: [
-              { accessorKey: 'name', header: 'Name', enableSorting: true },
+              { accessorKey: 'name', header: 'Name', sortable: true },
               { accessorKey: 'status', header: 'Status' }
             ],
             pagination: { pageSize: 10 },
@@ -911,7 +912,10 @@ describe('DataTable', () => {
       expect(view.queryByText('item-01')).toBeNull()
     })
 
-    const exportHarness = (mode: 'client' | 'server', onExport: (rows: unknown[]) => void) =>
+    const exportHarness = (
+      mode: 'client' | 'server',
+      onExport: (event: Event, rows: unknown[]) => void
+    ) =>
       defineComponent({
         setup() {
           const data = Array.from({ length: 30 }, (_, i) => ({
@@ -962,7 +966,8 @@ describe('DataTable', () => {
         await waitFor(() => expect(view.getByText('item-10')).toBeTruthy())
         await fireEvent.click(view.getByTestId('data-data-table__export'))
         await waitFor(() => expect(onExport).toHaveBeenCalled())
-        const exported = onExport.mock.calls[0][0] as { name: string }[]
+        expect(onExport.mock.calls[0][0]).toBeInstanceOf(Event)
+        const exported = onExport.mock.calls[0][1] as { name: string }[]
         expect(exported.map((row) => row.name)).toEqual([
           'item-01',
           ...Array.from({ length: 10 }, (_, i) => `item-1${i}`),
@@ -1397,9 +1402,9 @@ describe('DataTable', () => {
           setup: () => () =>
             h(DataTable, {
               ref: tableEl,
-              columns: [{ accessorKey: 'name', header: 'Name', enableSorting: true }],
+              columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
               data: rows,
-              enableSorting: true,
+              sortable: true,
               'onUpdate:state': (value: unknown) => states.push(value)
             })
         })
@@ -1428,6 +1433,7 @@ describe('DataTable', () => {
       )
       await fireEvent.click(view.getByRole('button', { name: /refresh/i }))
       expect(refreshes).toHaveLength(1)
+      expect(refreshes[0][0]).toBeInstanceOf(MouseEvent)
     })
 
     it('names Table.Search from the locale catalog and an ariaLabel', () => {

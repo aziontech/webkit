@@ -3,7 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import ChatMessage, {
     type ChatMessageFeedbackValue,
-    type ChatMessageState
+    type ChatMessageStatus
   } from '@aziontech/webkit/chat-message'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
@@ -15,7 +15,7 @@
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import PromptInput, { type PromptInputState } from '@aziontech/webkit/prompt-input'
+  import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import Reasoning from '@aziontech/webkit/reasoning'
   import Sources, { type AiSource } from '@aziontech/webkit/sources'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -43,7 +43,7 @@
   interface AssistantTurn {
     id: number
     from: 'assistant'
-    state: ChatMessageState
+    status: ChatMessageStatus
     content: string
     thinking: boolean
     answer: Answer
@@ -68,7 +68,7 @@
   const turns = ref<Turn[]>([
     { id: 1, from: 'user', text: 'Why is storefront answering with 502 errors?', time: '14:12' }
   ])
-  const state = ref<PromptInputState>('streaming')
+  const state = ref<PromptInputStatus>('streaming')
   const prompt = ref('')
   const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const assistantOpen = ref(true)
@@ -155,7 +155,7 @@
 
   function stream(turn: AssistantTurn) {
     const full = turn.answer.content
-    turn.state = 'streaming'
+    turn.status = 'streaming'
     state.value = 'streaming'
     let index = turn.content.length
     timer = setInterval(() => {
@@ -167,17 +167,17 @@
 
   function finish(turn: AssistantTurn) {
     stopTimers()
-    turn.state = 'complete'
+    turn.status = 'success'
     turn.thinking = false
     state.value = 'ready'
     composerEl.value?.focus()
   }
 
   function respond(turn: AssistantTurn) {
-    turn.state = 'pending'
+    turn.status = 'pending'
     turn.thinking = true
     turn.content = ''
-    state.value = 'submitted'
+    state.value = 'pending'
     timer = setTimeout(() => {
       turn.thinking = false
       stream(turn)
@@ -191,7 +191,7 @@
     const turn = reactive<AssistantTurn>({
       id: nextId++,
       from: 'assistant',
-      state: 'pending',
+      status: 'pending',
       content: '',
       thinking: true,
       answer: answerFor(text),
@@ -206,7 +206,7 @@
     stopTimers()
     const turn = turns.value[turns.value.length - 1]
     if (turn?.from === 'assistant') {
-      turn.state = 'complete'
+      turn.status = 'success'
       turn.thinking = false
       turn.stopped = true
     }
@@ -228,7 +228,7 @@
 
   const lastAnswer = computed(() => {
     const turn = turns.value[turns.value.length - 1]
-    return turn?.from === 'assistant' && turn.state === 'complete' && !turn.stopped ? turn : null
+    return turn?.from === 'assistant' && turn.status === 'success' && !turn.stopped ? turn : null
   })
 
   onBeforeUnmount(stopTimers)
@@ -236,7 +236,7 @@
   const live = reactive<AssistantTurn>({
     id: 2,
     from: 'assistant',
-    state: 'streaming',
+    status: 'streaming',
     content: knowledge.errors.content.slice(0, 120),
     thinking: false,
     answer: knowledge.errors,
@@ -268,7 +268,7 @@
           </template>
         </PageHeader>
         <Card>
-          <template #content>
+          <template #default>
             <div class="p-(--spacing-md)">
               <KeyValuePairs
                 :columns="3"
@@ -296,7 +296,7 @@
 
     <Drawer
       v-model:open="assistantOpen"
-      side="right"
+      side="end"
       size="medium"
       :modal="false"
     >
@@ -341,14 +341,14 @@
             </div>
             <Conversation
               v-else
-              alignment="start"
+              layout="start"
               aria-label="Conversation with the AI assistant"
             >
               <ChatMessage
                 v-for="turn in turns"
                 :key="turn.id"
                 :from="turn.from"
-                :state="turn.from === 'user' ? 'complete' : turn.state"
+                :status="turn.from === 'user' ? 'success' : turn.status"
                 :timestamp="turn.time"
                 :error-message="turn.error"
                 @retry="retry(turn)"
@@ -363,7 +363,7 @@
                   </Reasoning>
                   <StreamingResponse
                     :content="turn.content"
-                    :streaming="turn.state === 'streaming'"
+                    :streaming="turn.status === 'streaming'"
                     :sources="turn.answer.sources"
                     :anchor="`answer-${turn.id}`"
                   />
@@ -374,7 +374,7 @@
                     You stopped this response.
                   </p>
                   <Sources
-                    v-if="turn.state === 'complete' && !turn.stopped"
+                    v-if="turn.status === 'success' && !turn.stopped"
                     :items="turn.answer.sources"
                     :anchor="`answer-${turn.id}`"
                   />
@@ -416,7 +416,7 @@
             <PromptInput
               ref="composerEl"
               v-model="prompt"
-              :state="state"
+              :status="state"
               :max-rows="4"
               placeholder="Ask about storefront"
               @submit="(_event, { value }) => send(value)"

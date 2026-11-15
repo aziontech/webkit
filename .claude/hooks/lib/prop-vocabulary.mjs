@@ -3,11 +3,12 @@
 // ratchet), the naming engine (packages/webkit/scripts/lib/naming-rules.mjs, which reports
 // every entry) and build-catalog.mjs (stamps `vocabulary` into catalog.json for the MCP).
 //
-// Two stages. `aliases` are blocked today by the spec-compliance hook and ratchet.
-// `staged` aliases belong to the 6.0 naming standard (decisions N1-N18): the naming check
-// reports them now and blocks them once the rename lanes have merged and the lead flips
-// NAMING_STAGED_BLOCKS in packages/webkit/scripts/lib/naming-rules.mjs. Pass
-// { stage: 'all' } to checkPropVocabulary to see both.
+// Two stages. `aliases`, `VALUES`, the `enforced` VALUE_PATTERNS, PATTERNS, SLOTS and
+// EVENT_WORDS are blocked today by the spec-compliance hook and ratchet. `staged` aliases,
+// STAGED_VALUES, the other VALUE_PATTERNS, GROUP_LABEL and DATA_ATTRIBUTES belong to the
+// 6.0 naming standard (decisions N1-N18) still being applied: the naming check reports
+// them now and blocks them once the lead flips NAMING_STAGED_BLOCKS in
+// packages/webkit/scripts/lib/naming-rules.mjs. Pass { stage: 'all' } to see both.
 
 export const CONCEPTS = [
   {
@@ -19,14 +20,12 @@ export const CONCEPTS = [
   {
     concept: 'severity (colour meaning: neutral | info | success | warning | danger)',
     canonical: 'severity',
-    aliases: [],
-    staged: ['tone']
+    aliases: ['tone']
   },
   {
     concept: 'job or step status (pending | running | success | error | canceled | skipped)',
     canonical: 'status',
-    aliases: [],
-    staged: ['state', 'phase', 'outcome']
+    aliases: ['state', 'phase', 'outcome']
   },
   {
     concept: 'light-dismiss (closes on outside-click / Esc)',
@@ -47,20 +46,22 @@ export const CONCEPTS = [
   {
     concept: 'anything that opens (v-model:open, data-state="open|closed")',
     canonical: 'open',
-    aliases: [],
-    staged: ['expanded', 'visible', 'show', 'opened', 'shown']
+    aliases: ['expanded', 'visible', 'show', 'opened', 'shown']
+  },
+  {
+    concept: 'ids of the parts that are open (v-model:openKeys, like selectedKeys)',
+    canonical: 'openKeys',
+    aliases: ['expandedKeys', 'expandedIds', 'openIds', 'expandedItems']
   },
   {
     concept: 'page or item you are on (renders aria-current)',
     canonical: 'active',
-    aliases: [],
-    staged: ['current', 'activated', 'isCurrent']
+    aliases: ['current', 'activated', 'isCurrent']
   },
   {
     concept: 'picked keys of a multi-selection (v-model:selectedKeys)',
     canonical: 'selectedKeys',
-    aliases: [],
-    staged: ['selectedIds', 'selectedValues', 'checkedKeys', 'selectedItems']
+    aliases: ['selectedIds', 'selectedValues', 'checkedKeys', 'selectedItems']
   },
   {
     concept: 'disabled',
@@ -107,8 +108,7 @@ export const CONCEPTS = [
   {
     concept: 'self-advancing media interval (ms)',
     canonical: 'autoplayInterval',
-    aliases: ['autoPlayInterval'],
-    staged: ['interval']
+    aliases: ['autoPlayInterval', 'interval']
   },
   {
     concept: 'motion on / off (positive polarity)',
@@ -147,14 +147,12 @@ export const CONCEPTS = [
   {
     concept: 'identity key of a row (rowKey) or list item (itemKey)',
     canonical: 'itemKey',
-    aliases: [],
-    staged: ['trackBy', 'dataKey', 'keyField', 'idKey']
+    aliases: ['trackBy', 'dataKey', 'keyField', 'idKey']
   },
   {
     concept: 'empty-state title (with emptyDescription, emptyActionLabel)',
     canonical: 'emptyTitle',
-    aliases: [],
-    staged: ['emptyText', 'emptyMessage', 'emptyLabel', 'noResultsText', 'noDataText', 'empty']
+    aliases: ['emptyText', 'emptyMessage', 'emptyLabel', 'noResultsText', 'noDataText', 'empty']
   },
   {
     concept: 'main call-to-action object (with secondaryAction, one shared type)',
@@ -177,14 +175,12 @@ export const CONCEPTS = [
   {
     concept: 'where a link opens (target, as on button and link)',
     canonical: 'target',
-    aliases: [],
-    staged: ['external', 'newTab', 'openInNewTab', 'blank']
+    aliases: ['external', 'newTab', 'openInNewTab', 'blank']
   },
   {
     concept: 'more than one may be picked',
     canonical: 'multiple',
-    aliases: [],
-    staged: ['multi']
+    aliases: ['multi']
   }
 ]
 
@@ -217,18 +213,13 @@ export const PATTERNS = [
 // Shared value tokens: prop -> { banned value: canonical value }. `VALUES` blocks today;
 // `STAGED_VALUES` is the 6.0 standard. A prop matched by VALUE_PATTERNS uses that map.
 export const VALUES = {
-  severity: { error: 'danger', destructive: 'danger' }
-}
-
-export const STAGED_VALUES = {
-  variant: {
-    outlined: 'outline',
-    transparent: 'ghost',
-    text: 'ghost',
+  severity: {
+    error: 'danger',
     destructive: 'danger',
-    error: 'danger'
+    default: 'neutral',
+    secondary: 'neutral',
+    alt: 'neutral'
   },
-  severity: { default: 'neutral', secondary: 'neutral', alt: 'neutral' },
   status: {
     done: 'success',
     ok: 'success',
@@ -247,6 +238,16 @@ export const STAGED_VALUES = {
   }
 }
 
+export const STAGED_VALUES = {
+  variant: {
+    outlined: 'outline',
+    transparent: 'ghost',
+    text: 'ghost',
+    destructive: 'danger',
+    error: 'danger'
+  }
+}
+
 const POSITION = {
   left: 'leading',
   right: 'trailing',
@@ -261,10 +262,15 @@ const ALIGN = { left: 'start', right: 'end', top: 'start', bottom: 'end', center
 const SIDE = { left: 'start', right: 'end' }
 
 export const VALUE_PATTERNS = [
-  { test: /Position$/, map: POSITION, concept: 'position inside the component' },
-  { test: /^align$|Align$|^alignment$/, map: ALIGN, concept: 'alignment' },
-  { test: /^side$|Side$/, map: SIDE, concept: 'side' },
-  { test: /^selectionMode$|Mode$/, map: { multi: 'multiple' }, concept: 'selection mode' },
+  { test: /Position$/, map: POSITION, concept: 'position inside the component', enforced: true },
+  { test: /^align$|Align$|^alignment$/, map: ALIGN, concept: 'alignment', enforced: true },
+  { test: /^side$|Side$/, map: SIDE, concept: 'side', enforced: true },
+  {
+    test: /^selectionMode$|Mode$/,
+    map: { multi: 'multiple' },
+    concept: 'selection mode',
+    enforced: true
+  },
   {
     test: /^treatment$|Treatment$/,
     map: { 'as-is': 'color', original: 'color', 'invert-light': 'knockout' },
@@ -295,7 +301,7 @@ export const NEGATIVE_BOOLEANS = {
   collapsed: 'open'
 }
 
-// Slot names (6.0 standard, staged): leading/trailing for adornments, start/end for sides.
+// Slot names (6.0 standard, enforced): leading/trailing for adornments, start/end for sides.
 export const SLOTS = {
   prefix: 'leading',
   suffix: 'trailing',
@@ -312,7 +318,7 @@ export const SLOTS = {
   breadcrumb: 'breadcrumbs'
 }
 
-// Words inside an event name (6.0 standard, staged).
+// Words inside an event name (6.0 standard, enforced).
 export const EVENT_WORDS = {
   dblclick: 'double-click',
   finish: 'complete',
@@ -373,6 +379,7 @@ function membersOf(unionText) {
 
 export function valueMapFor(prop, stage = 'enforced') {
   const out = { ...(VALUES[prop] || {}) }
+  for (const p of VALUE_PATTERNS) if (p.enforced && p.test.test(prop)) Object.assign(out, p.map)
   if (stage !== 'all') return Object.keys(out).length ? out : null
   Object.assign(out, STAGED_VALUES[prop] || {})
   for (const p of VALUE_PATTERNS) if (p.test.test(prop)) Object.assign(out, p.map)
@@ -433,17 +440,15 @@ export function checkPropVocabulary(props, opts = {}) {
       )
       continue
     }
-    if (stage === 'all') {
-      const pattern = PATTERNS.find((x) => x.test.test(p.name) && p.name !== 'disabled')
-      if (pattern) {
-        push(
-          p.name,
-          `Prop "${p.name}" reads backwards — use ${pattern.fix(p.name)} (${pattern.concept}) (${RULE_DOC}).`,
-          'prop-name',
-          true
-        )
-        continue
-      }
+    const pattern = PATTERNS.find((x) => x.test.test(p.name) && p.name !== 'disabled')
+    if (pattern) {
+      push(
+        p.name,
+        `Prop "${p.name}" reads backwards — use ${pattern.fix(p.name)} (${pattern.concept}) (${RULE_DOC}).`,
+        'prop-name',
+        false
+      )
+      continue
     }
     const valueMap = valueMapFor(p.name, stage)
     if (valueMap) {
@@ -532,13 +537,13 @@ export function checkEventVocabulary(emits, opts = {}) {
       })
       continue
     }
-    if (stage === 'all' && !e.name.startsWith('update:')) {
+    if (!e.name.startsWith('update:')) {
       const word = e.name.split('-').find((w) => Object.hasOwn(EVENT_WORDS, w))
       if (word) {
         violations.push({
           event: e.name,
           rule: 'event-name',
-          staged: true,
+          staged: false,
           message: `Event "${e.name}" uses "${word}" — say "${EVENT_WORDS[word]}" (${RULE_DOC}).`
         })
       }
@@ -565,7 +570,7 @@ export function checkSlotVocabulary(slots) {
       out.push({
         slot: name,
         rule: 'slot-name',
-        staged: true,
+        staged: false,
         message: `Slot "${name}" is not allowed — use "${SLOTS[name]}" (leading/trailing for adornments, start/end for sides) (${RULE_DOC}).`
       })
     }

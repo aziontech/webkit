@@ -113,7 +113,7 @@ the band is one `useCollection` call:
 
           <section class="flex min-h-0 flex-col">
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <DataTable
                   v-bind="tableProps"
                   :bordered="false"
@@ -278,7 +278,7 @@ Bind `totalCount` (it comes in `propertyFilterProps`) so the count is announced 
 
 ## 6. Selection across pages
 
-`selection: {}` (multi) or `selection: { mode: 'single' }`. Selection is a set of keys (`trackBy`, `id` by
+`selection: {}` (multi) or `selection: { mode: 'single' }`. Selection is a set of keys (`itemKey`, `id` by
 default), so it survives paging, sorting and filtering (a filter drops the keys it hides unless
 `keepSelection: true`).
 

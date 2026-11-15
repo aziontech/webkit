@@ -19,7 +19,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the Period chip is reopened and Last 7 days picked while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -81,7 +81,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -136,8 +136,8 @@
       <div class="flex flex-col gap-(--layout-group-gap) py-(--spacing-xs)">
         <ShellMockupPart
           :order="0"
-          :data-open="frame.open || null"
-          class="relative data-open:z-1"
+          :data-state="frame.open ? 'open' : 'closed'"
+          class="relative data-[state=open]:z-1"
         >
           <span class="relative inline-flex">
             <Button
@@ -149,7 +149,7 @@
             <span class="pointer-events-none absolute -top-2 -end-2 flex">
               <Badge
                 label="1"
-                severity="primary"
+                variant="primary"
                 size="small"
               />
             </span>
@@ -184,7 +184,7 @@
                   placeholder="Filter period…"
                   aria-label="Search Period values"
                 >
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-search"
                       aria-hidden="true"
@@ -203,8 +203,8 @@
                 >
                   <span class="grow truncate">{{ period }}</span>
                   <i
-                    :data-picked="frame.period === period || null"
-                    class="ai ai-check invisible shrink-0 text-(--text-default) data-picked:visible"
+                    :data-selected="frame.period === period || null"
+                    class="ai ai-check invisible shrink-0 text-(--text-default) data-selected:visible"
                     aria-hidden="true"
                   />
                 </span>
@@ -251,7 +251,7 @@
               class="grid"
             >
               <Card>
-                <template #content>
+                <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
                       {{ metric.label }}

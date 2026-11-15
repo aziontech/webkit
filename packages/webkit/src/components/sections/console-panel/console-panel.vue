@@ -84,7 +84,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     kind: 'console',
-    titleKind: 'centered',
+    titleKind: 'center',
     titlePadding: 'medium',
     size: 'medium',
     anchor: '',

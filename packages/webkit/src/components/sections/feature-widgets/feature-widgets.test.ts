@@ -209,14 +209,14 @@ describe('FeatureWidgets', () => {
     const { getByTestId } = band()
 
     expect(getByTestId('marketing-bento-grid')).toHaveAttribute('data-columns', '2')
-    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'centered')
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'center')
   })
 
   it('passes columns and titleKind through', () => {
-    const { getByTestId } = band({ columns: 3, titleKind: 'left' })
+    const { getByTestId } = band({ columns: 3, titleKind: 'start' })
 
     expect(getByTestId('marketing-bento-grid')).toHaveAttribute('data-columns', '3')
-    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'left')
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'start')
   })
 
   it('draws an item scene in place of its illustration', async () => {

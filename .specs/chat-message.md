@@ -3,9 +3,9 @@ name: chat-message
 category: ai
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 377f0126cb99f3356ac7f19e86ce575a9f7b24324057b1e254815fe63df6c28c
+checksum: 07c2a9b82a63d29ff0dd7c175866c322c2ceb27b528cecd71b87f67635381c4d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ One message in a generative AI conversation (Cloudscape's chat bubble, AI Elemen
 wrote it (avatar and author line), the content, and — once the response is complete — the inline
 actions a reader takes on it (copy, regenerate, thumbs up / down). It owns the message lifecycle:
 `pending` (waiting for the first token: the loading text), `streaming` (content arriving, busy, no
-actions), `complete` (actions shown; announced once to screen readers through the `Conversation`) and
+actions), `success` (actions shown; announced once to screen readers through the `Conversation`) and
 `error` (an error line with Try again).
 
 User messages sit in a filled bubble; assistant messages are flat, full width, beside the assistant
@@ -45,7 +45,7 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 
 ## Best practices
 
-- Pass `state` from your request: `pending` until the first token, `streaming` while tokens arrive, then `complete` or `error`.
+- Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.
 - Keep actions to five or fewer, always visible (no hover-only): copy, regenerate, feedback.
 - Use `grouped` for a second message by the same author so stacked bubbles read as one turn (only the first shows the avatar).
 - Never put the feedback thumbs on non-AI content.
@@ -64,7 +64,7 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 </script>
 
 <template>
-  <ChatMessage from="assistant" timestamp="10:42" state="complete">
+  <ChatMessage from="assistant" timestamp="10:42" status="success">
     <StreamingResponse :content="answer" />
     <template #actions>
       <ChatMessage.Actions>
@@ -80,9 +80,9 @@ mark; system messages are a muted centered line. Alignment comes from the enclos
 
 Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`); standalone entries
 `chat-message-root`, `chat-message-actions`, `chat-message-feedback`. The root provides
-`{ from, state }` (`injection-key.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
+`{ from, status }` (`injection-key.ts`); `useChatMessageContext()` throws outside a `ChatMessage`.
 
-- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of inline actions; renders nothing unless the message `state` is `complete`.
+- `chat-message-actions/chat-message-actions.vue` — `role="group"` row of inline actions; renders nothing unless the message `status` is `success`.
   - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`).
   - Slot: `default` — the icon actions.
   - `data-testid` fallback: `ai-chat-message-actions`.
@@ -91,7 +91,7 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
   - `data-testid` fallback: `ai-chat-message-feedback`.
 
-Exported types: `ChatMessageFrom`, `ChatMessageState`, `ChatMessageFeedbackValue`. Composed DS
+Exported types: `ChatMessageFrom`, `ChatMessageStatus`, `ChatMessageFeedbackValue`. Composed DS
 components: `avatar`, `button`, `ai-loading`, `icon-button`, `tooltip`.
 
 ```
@@ -112,10 +112,10 @@ packages/webkit/src/components/ai/chat-message/
 | `from`         | `'user' \| 'assistant' \| 'system'`                | `'assistant'` | false    | Who wrote the message: the person (`user`), the generative AI assistant, or the product (`system`).                                           |
 | `author`       | `string`                                           | `''`          | false    | Author name shown over the message and read in its accessible name. Empty uses the locale catalog (`You`, `AI assistant`, `System`).          |
 | `timestamp`    | `string`                                           | `''`          | false    | Time the message was sent, already formatted for display (`10:42`). Added to the accessible name.                                             |
-| `state`        | `'pending' \| 'streaming' \| 'complete' \| 'error'` | `'complete'`  | false    | Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again. |
+| `status`       | `'pending' \| 'streaming' \| 'success' \| 'error'`  | `'success'`   | false    | Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again. |
 | `grouped`      | `boolean`                                          | `false`       | false    | Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn.                               |
-| `errorMessage` | `string`                                           | `''`          | false    | Error text shown while `state` is `error`. Empty uses the locale catalog.                                                                    |
-| `loadingLabel` | `string`                                           | `''`          | false    | Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`).                                        |
+| `errorMessage` | `string`                                           | `''`          | false    | Error text shown while `status` is `error`. Empty uses the locale catalog.                                                                    |
+| `loadingLabel` | `string`                                           | `''`          | false    | Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`).                                        |
 
 ## Events
 
@@ -129,15 +129,15 @@ packages/webkit/src/components/ai/chat-message/
 | --------- | ----- | ------------------------------------------------------------------------------------------------------ |
 | `default` | —     | The content: text, `StreamingResponse`, `Reasoning`, `Sources`, artifacts. Not rendered while `pending`. |
 | `avatar`  | —     | Replaces the default avatar (person glyph for the user, the assistant mark for the AI).                 |
-| `actions` | —     | Inline actions, usually `ChatMessage.Actions`; shown only when `state` is `complete`.                   |
+| `actions` | —     | Inline actions, usually `ChatMessage.Actions`; shown only when `status` is `success`.                   |
 
 ## States
 
-- `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `state`), `data-alignment` (from the conversation), `data-grouped`.
+- `data-from` (`user` | `assistant` | `system`), `data-status` (mirrors `status`), `data-alignment` (from the conversation), `data-grouped`.
 - `aria-busy="true"` while `pending` or `streaming`.
 - `pending`: `AiLoading` (inline, no delay — the owner decides when a message exists) in place of the content.
 - `error`: the content (whatever streamed) stays; an error line with a danger glyph and a Try again `Button` follows.
-- `complete`: the `actions` slot renders.
+- `success`: the `actions` slot renders.
 
 ## Motion & Animations
 
@@ -164,7 +164,7 @@ _None._
 - Visible focus: the composed controls carry their own `focus-visible` rings.
 - Keyboard map: `Tab` through links in the content, then the actions in order; Enter / Space activate. The message adds no key handling.
 - ARIA: `<article aria-label="<author> at <time>">` so each message has a unique name (Cloudscape); avatar wrapper `aria-hidden` (the author line names the author); `aria-busy` while loading or streaming; actions are a `role="group"` named `Message actions`; feedback thumbs use `aria-pressed`, the feedback status is `role="status"`.
-- Announcement: when an assistant or system message turns `complete` or `error` (or mounts complete after the conversation is ready), its text is read once through the `Conversation` live region.
+- Announcement: when an assistant or system message turns `success` or `error` (or mounts finished after the conversation is ready), its text is read once through the `Conversation` live region.
 - Never rely on alignment alone: every message has the avatar and author line (or `grouped` after one that has).
 - Contrast ≥4.5:1 on the muted time and system text.
 

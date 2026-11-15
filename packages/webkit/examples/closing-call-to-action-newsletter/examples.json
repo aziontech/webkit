@@ -31,7 +31,7 @@
   "site": [
     {
       "name": "Default",
-      "summary": "The ask beside a subscribe form, over a strip lit by the pixelated primary wave. The headline sits large on the lead side and the ask labels the email field. The Blog and Resource Hub pages close with it. An empty field and a malformed address each show their message under the field; a valid address fires the `submit` action and sends nothing. Toggle `loading`, `submitted` and `error` to see what the site sets back.",
+      "summary": "The ask beside a subscribe form, over a strip lit by the pixelated primary wave. The headline sits large on the lead side and the ask labels the email field. The Blog and Resource Hub pages close with it. An empty field and a malformed address each show their message under the field; a valid address fires the `submit` action and sends nothing. Toggle `loading`, `submitted` and `failed` to see what the site sets back.",
       "file": "site-default.vue",
       "json": "site-default.json"
     }

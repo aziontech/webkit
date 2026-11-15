@@ -62,8 +62,8 @@
   )
 
   const statusLabels = computed<Record<LogViewStepStatus, string>>(() => ({
-    done: t('logView.stepDone'),
-    failed: t('logView.stepFailed'),
+    success: t('logView.stepDone'),
+    error: t('logView.stepFailed'),
     skipped: t('logView.stepSkipped'),
     running: t('logView.stepRunning'),
     pending: t('logView.stepPending')
@@ -78,8 +78,8 @@
     () =>
       (
         props.steps.find((step) => step.status === 'running') ??
-        props.steps.find((step) => step.status === 'failed')
-      )?.key ?? ''
+        props.steps.find((step) => step.status === 'error')
+      )?.id ?? ''
   )
 
   const expanded = computed<string>({
@@ -91,13 +91,13 @@
 
   const completeLines = computed<LogViewLine[]>(() =>
     props.steps.flatMap((step) =>
-      step.lines.map((line) => ({ ...line, id: `${step.key}-${line.id}` }))
+      step.lines.map((line) => ({ ...line, id: `${step.id}-${line.id}` }))
     )
   )
 
   const percent = computed(() => {
     if (!props.steps.length) return 0
-    const done = props.steps.filter((step) => step.status === 'done').length
+    const done = props.steps.filter((step) => step.status === 'success').length
     return Math.round((done / props.steps.length) * 100)
   })
 
@@ -143,8 +143,8 @@
     >
       <Accordion.Item
         v-for="step in steps"
-        :key="step.key"
-        :value="step.key"
+        :key="step.id"
+        :value="step.id"
         :data-testid="`${testId}__step`"
         :data-status="step.status"
       >
@@ -155,11 +155,11 @@
               aria-hidden="true"
             >
               <i
-                v-if="step.status === 'done'"
+                v-if="step.status === 'success'"
                 class="ai ai-circle-check text-(--success-foreground)"
               />
               <i
-                v-else-if="step.status === 'failed'"
+                v-else-if="step.status === 'error'"
                 class="ai ai-circle-x text-(--danger-foreground)"
               />
               <i
@@ -175,7 +175,7 @@
             <span class="sr-only">{{ statusLabels[step.status] }}</span>
             <span
               :data-status="step.status"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[status=failed]:flex-wrap"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[status=error]:flex-wrap"
             >
               <span
                 :data-status="step.status"
@@ -190,7 +190,7 @@
               <span
                 v-if="step.description"
                 :data-status="step.status"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=failed]:whitespace-normal data-[status=failed]:text-pretty data-[status=failed]:text-(--danger-foreground) data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent data-[status=running]:motion-safe:animate-shimmer motion-reduce:animate-none"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--danger-foreground) data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent data-[status=running]:motion-safe:animate-shimmer motion-reduce:animate-none"
               >
                 {{ step.description }}
               </span>

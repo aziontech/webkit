@@ -8,7 +8,7 @@
   import MarkdownInline from '../lib/markdown-inline'
   import { parseInline } from '../lib/parse-markdown'
 
-  export type ToolApprovalState = 'pending' | 'approved' | 'denied' | 'expired'
+  export type ToolApprovalStatus = 'pending' | 'approved' | 'denied' | 'expired'
   export type ToolApprovalKind = 'default' | 'danger'
 
   defineOptions({
@@ -22,7 +22,7 @@
     /** One or two sentences on what will happen and to what; backticks render as code. */
     description?: string
     /** `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. */
-    state?: ToolApprovalState
+    status?: ToolApprovalStatus
     /** `danger` for an action that cannot be undone: the approve button turns destructive. */
     kind?: ToolApprovalKind
     /** A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. */
@@ -37,7 +37,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     description: '',
-    state: 'pending',
+    status: 'pending',
     kind: 'default',
     confirmationPhrase: '',
     approveLabel: '',
@@ -75,31 +75,31 @@
     () => !props.confirmationPhrase || typed.value.trim() === props.confirmationPhrase
   )
   const resolvedLabel = computed<string>(() => {
-    if (props.state === 'approved') return t('toolApproval.approved')
-    if (props.state === 'denied') return t('toolApproval.denied')
-    if (props.state === 'expired') return t('toolApproval.expired')
+    if (props.status === 'approved') return t('toolApproval.approved')
+    if (props.status === 'denied') return t('toolApproval.denied')
+    if (props.status === 'expired') return t('toolApproval.expired')
     return ''
   })
   const resolvedSeverity = computed(() => {
-    if (props.state === 'approved') return 'success' as const
-    if (props.state === 'denied') return 'warning' as const
+    if (props.status === 'approved') return 'success' as const
+    if (props.status === 'denied') return 'warning' as const
     return 'neutral' as const
   })
 
   watch(
-    () => props.state,
-    (state) => {
-      if (state === 'pending') typed.value = ''
+    () => props.status,
+    (status) => {
+      if (status === 'pending') typed.value = ''
     }
   )
 
   function approve(event: MouseEvent): void {
-    if (props.loading || props.state !== 'pending' || !confirmed.value) return
+    if (props.loading || props.status !== 'pending' || !confirmed.value) return
     emit('approve', event)
   }
 
   function deny(event: MouseEvent): void {
-    if (props.loading || props.state !== 'pending') return
+    if (props.loading || props.status !== 'pending') return
     emit('deny', event)
   }
 
@@ -117,7 +117,7 @@
     :aria-labelledby="titleId"
     :aria-describedby="description ? descriptionId : undefined"
     :data-testid="testId"
-    :data-status="state"
+    :data-status="status"
     :data-kind="kind"
     class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) data-[kind=danger]:data-[status=pending]:border-(--danger-border)"
   >
@@ -153,7 +153,7 @@
     >
       <slot />
     </div>
-    <template v-if="state === 'pending'">
+    <template v-if="status === 'pending'">
       <div
         v-if="confirmationPhrase"
         class="flex flex-col gap-(--spacing-2xs)"

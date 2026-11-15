@@ -28,7 +28,7 @@ afterEach(async () => {
 
 describe('Hint', () => {
   it('renders the tooltip-anchored root carrying the default data-testid', async () => {
-    const { getByTestId } = render(Hint, { props: { text: TEXT } })
+    const { getByTestId } = render(Hint, { props: { content: TEXT } })
     await settle()
 
     const root = getByTestId('input-hint')
@@ -36,8 +36,8 @@ describe('Hint', () => {
     expect(root.getAttribute('data-state')).toBe('closed')
   })
 
-  it('renders a non-submitting button named by the text prop', async () => {
-    const { getByTestId } = render(Hint, { props: { text: TEXT } })
+  it('renders a non-submitting button named by the content prop', async () => {
+    const { getByTestId } = render(Hint, { props: { content: TEXT } })
     await settle()
 
     const trigger = getByTestId('input-hint__trigger')
@@ -47,7 +47,7 @@ describe('Hint', () => {
   })
 
   it('marks the glyph decorative so the button name is the hint text alone', async () => {
-    const { getByTestId } = render(Hint, { props: { text: TEXT } })
+    const { getByTestId } = render(Hint, { props: { content: TEXT } })
     await settle()
 
     const glyph = getByTestId('input-hint__trigger').querySelector('i')
@@ -56,7 +56,7 @@ describe('Hint', () => {
   })
 
   it('opens a role=tooltip panel carrying the text when the trigger takes focus', async () => {
-    const { getByTestId } = render(Hint, { props: { text: TEXT } })
+    const { getByTestId } = render(Hint, { props: { content: TEXT } })
     await settle()
 
     const root = getByTestId('input-hint')
@@ -72,7 +72,7 @@ describe('Hint', () => {
   })
 
   it('forwards placement to the tooltip anchor', async () => {
-    const { getByTestId } = render(Hint, { props: { text: TEXT, placement: 'right' } })
+    const { getByTestId } = render(Hint, { props: { content: TEXT, placement: 'right' } })
     await settle()
 
     expect(getByTestId('input-hint').getAttribute('data-placement')).toBe('right')
@@ -88,7 +88,7 @@ describe('Hint', () => {
       template: `
         <label for="sensitive">
           Sensitive
-          <Hint :text="TEXT" />
+          <Hint :content="TEXT" />
         </label>
         <input id="sensitive" type="checkbox" v-model="checked" />
       `
@@ -105,7 +105,7 @@ describe('Hint', () => {
 
   it('honours a consumer-supplied data-testid on the root and the trigger', async () => {
     const { getByTestId } = render(Hint, {
-      props: { text: TEXT },
+      props: { content: TEXT },
       attrs: { 'data-testid': 'custom-hint' }
     })
     await settle()
@@ -115,7 +115,7 @@ describe('Hint', () => {
   })
 
   it('has no a11y violations while closed', async () => {
-    const { container } = render(Hint, { props: { text: TEXT } })
+    const { container } = render(Hint, { props: { content: TEXT } })
     await settle()
     await expectNoA11yViolations(container)
   })
@@ -129,7 +129,7 @@ describe('Hint', () => {
 
   describe('touch target', () => {
     it('extends the trigger hit area with a touch-target span', () => {
-      const { getByTestId } = render(Hint, { props: { text: 'Shown on hover' } })
+      const { getByTestId } = render(Hint, { props: { content: 'Shown on hover' } })
       const target = getByTestId('input-hint__trigger').querySelector('[data-slot="touch-target"]')
       expect(target?.getAttribute('aria-hidden')).toBe('true')
     })

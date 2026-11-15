@@ -23,7 +23,7 @@
       closable?: boolean
       /** Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, aria-modal false; Escape, the close button and focus restore still work. */
       modal?: boolean
-      /** Edge the drawer panel slides from. */
+      /** Edge the drawer panel slides from, in reading direction: start is the left edge in ltr and the right edge in rtl. */
       side?: DrawerSide
       /** Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. */
       size?: DrawerSize
@@ -33,7 +33,7 @@
       dismissible: true,
       closable: true,
       modal: true,
-      side: 'right',
+      side: 'end',
       size: 'medium'
     }
   )

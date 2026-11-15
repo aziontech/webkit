@@ -118,7 +118,7 @@
   {
     "name": "card",
     "path": "src/components/content/card/card.vue",
-    "limit": "13.75 KB"
+    "limit": "13.85 KB"
   },
   {
     "name": "card-list",
@@ -540,7 +540,7 @@
   {
     "name": "site-nav",
     "path": "src/components/sections/site-nav/site-nav.vue",
-    "limit": "56.65 KB"
+    "limit": "56.75 KB"
   },
   {
     "name": "comparison-table",
@@ -970,7 +970,7 @@
   {
     "name": "wizard",
     "path": "src/components/navigation/wizard/index.ts",
-    "limit": "7.6 KB"
+    "limit": "7.7 KB"
   },
   {
     "name": "wizard-root",
@@ -1537,7 +1537,7 @@
   {
     "name": "log-view",
     "path": "src/components/code/log-view/index.ts",
-    "limit": "42.05 KB"
+    "limit": "42.15 KB"
   },
   {
     "name": "log-view-root",

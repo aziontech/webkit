@@ -16,7 +16,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="shell"
-      line-numbers
+      show-line-numbers
     />
   </div>
 </template>

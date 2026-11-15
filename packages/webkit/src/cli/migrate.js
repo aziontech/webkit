@@ -229,9 +229,22 @@ function scanTag(source, start) {
   return -1
 }
 
+function renameEvent(attrs, from, to) {
+  const name = escapeRe(from)
+  return attrs.replace(
+    new RegExp(`(\\s)(@|v-on:)${name}(?=[\\s=/>.]|$)`, 'g'),
+    (all, sp, on) => `${sp}${on}${to}`
+  )
+}
+
 function renameAttributes(attrs, rules) {
   let out = attrs
   for (const [oldProp, ruleSpec] of Object.entries(rules)) {
+    if (oldProp.startsWith('#')) continue
+    if (oldProp.startsWith('@')) {
+      if (typeof ruleSpec === 'string') out = renameEvent(out, oldProp.slice(1), ruleSpec)
+      continue
+    }
     const rule = typeof ruleSpec === 'string' ? { to: ruleSpec } : ruleSpec
     if (rule.removed) continue
     const forms = [...new Set([oldProp, kebab(oldProp)])]
@@ -249,15 +262,22 @@ function renameAttributes(attrs, rules) {
       )
       const inverts = rule.values && rule.values.true === 'false' && rule.values.false === 'true'
       out = out.replace(
-        new RegExp(`(\\s)(:|v-bind:)${name}(\\s*=\\s*)(["'])([^"']*)\\4`, 'g'),
-        (all, sp, bind, eq, q, expr) =>
-          inverts
+        new RegExp(`(\\s)(:|v-bind:)${name}(\\s*=\\s*)(?:(")([^"]*)"|(')([^']*)')`, 'g'),
+        (all, sp, bind, eq, dq, dv, sq, sv) => {
+          const q = dq || sq
+          const expr = dq ? dv : sv
+          return inverts
             ? `${sp}${bind}${toKebab}${eq}${q}!(${expr})${q}`
             : `${sp}${bind}${toKebab}${eq}${q}${expr}${q}`
+        }
       )
       out = out.replace(
-        new RegExp(`(\\s)${name}(\\s*=\\s*)(["'])([^"']*)\\3`, 'g'),
-        (all, sp, eq, q, value) => {
+        new RegExp(`(\\s)${name}(\\s*=\\s*)(?:(")([^"]*)"|(')([^']*)')`, 'g'),
+        (all, sp, eq, dq, dv, sq, sv) => {
+          const q = dq || sq
+          const value = dq ? dv : sv
+          if (rule.moves && Object.hasOwn(rule.moves, value))
+            return `${sp}${kebab(rule.moves[value])}${eq}${q}${value}${q}`
           const mapped = rule.values && value in rule.values ? rule.values[value] : value
           if (rule.values && (mapped === 'true' || mapped === 'false')) {
             return `${sp}:${toKebab}${eq}${q}${mapped}${q}`
@@ -272,6 +292,53 @@ function renameAttributes(attrs, rules) {
     }
   }
   return out
+}
+
+const VOID_ELEMENTS = new Set(
+  'area base br col embed hr img input link meta param source track wbr'.split(' ')
+)
+const SLOT_NAME = (name) => new RegExp(`(\\s)(#|v-slot:)${escapeRe(name)}(?=[\\s=/>]|$)`, 'g')
+
+function renameChildSlots(source, from, slots) {
+  const edits = []
+  let depth = 0
+  let i = from
+  while (i < source.length) {
+    const lt = source.indexOf('<', i)
+    if (lt < 0) break
+    if (source.startsWith('<!--', lt)) {
+      const close = source.indexOf('-->', lt)
+      i = close < 0 ? source.length : close + 3
+      continue
+    }
+    const closing = source[lt + 1] === '/'
+    const m = source.slice(lt + (closing ? 2 : 1)).match(/^[A-Za-z][\w.:-]*/)
+    if (!m) {
+      i = lt + 1
+      continue
+    }
+    if (closing) {
+      if (depth === 0) break
+      depth -= 1
+      i = lt + 2 + m[0].length
+      continue
+    }
+    const nameEnd = lt + 1 + m[0].length
+    const end = scanTag(source, nameEnd)
+    if (end < 0) break
+    const selfClosing = source[end - 1] === '/'
+    if (depth === 0 && m[0] === 'template') {
+      let attrs = source.slice(nameEnd, end)
+      const before = attrs
+      for (const [oldSlot, newSlot] of slots) {
+        attrs = attrs.replace(SLOT_NAME(oldSlot), (all, sp, sigil) => `${sp}${sigil}${newSlot}`)
+      }
+      if (attrs !== before) edits.push([nameEnd, end, attrs])
+    }
+    if (!selfClosing && !VOID_ELEMENTS.has(m[0].toLowerCase())) depth += 1
+    i = end + 1
+  }
+  return edits
 }
 
 function legacyFor(migration, fromMajor) {
@@ -397,20 +464,29 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
     changes.push(`${from} → ${to}`)
   }
 
-  for (const [binding, subpath] of bindingToSubpath) {
-    const rules = props[subpath]
-    if (!rules) continue
+  for (const [binding, base] of bindingToSubpath) {
     const tagRe = new RegExp(
-      `<(${escapeRe(binding)}(?:\\.Root)?|${escapeRe(kebab(binding))})(?=[\\s/>])`,
+      `<(${escapeRe(binding)}(?:\\.([A-Z][\\w$]*))?|${escapeRe(kebab(binding))})(?=[\\s/>])`,
       'g'
     )
     let result = ''
     let cursor = 0
+    const slotEdits = []
     for (const m of out.matchAll(tagRe)) {
+      const part = m[2] && m[2] !== 'Root' ? m[2] : null
+      const subpath = part ? `${base}-${kebab(part)}` : base
+      const rules = props[subpath]
+      if (!rules) continue
       const start = m.index + m[0].length
       if (start < cursor) continue
       const end = scanTag(out, start)
       if (end < 0) continue
+      const slots = Object.entries(rules)
+        .filter(([key, to]) => key.startsWith('#') && typeof to === 'string')
+        .map(([key, to]) => [key.slice(1), to])
+      if (slots.length && out[end - 1] !== '/') {
+        for (const edit of renameChildSlots(out, end + 1, slots)) slotEdits.push(edit)
+      }
       const attrs = out.slice(start, end)
       for (const [prop, spec] of Object.entries(rules)) {
         if (typeof spec === 'string' || !spec.removed) continue
@@ -423,11 +499,20 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
           )
       }
       const renamed = renameAttributes(attrs, rules)
-      result += out.slice(cursor, start) + renamed
+      if (renamed !== attrs) slotEdits.push([start, end, renamed])
       cursor = end
-      if (renamed !== attrs) changes.push(`<${binding}> props: ${Object.keys(rules).join(', ')}`)
     }
-    out = result + out.slice(cursor)
+    slotEdits.sort((a, b) => a[0] - b[0])
+    cursor = 0
+    for (const [start, end, text] of slotEdits) {
+      if (start < cursor) continue
+      result += out.slice(cursor, start) + text
+      cursor = end
+    }
+    if (slotEdits.length) {
+      out = result + out.slice(cursor)
+      changes.push(`<${binding}> props, slots and events`)
+    }
   }
 
   return { source: out, changes: [...new Set(changes)], warnings: [...new Set(warnings)] }

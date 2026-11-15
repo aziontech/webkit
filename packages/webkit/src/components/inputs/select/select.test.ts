@@ -947,10 +947,10 @@ describe('Select', () => {
       expect(document.activeElement).toBe(options[1])
     })
 
-    it('renders the prefix slot and ignores the removed iconLeft slot', () => {
+    it('renders the leading slot and ignores the removed iconLeft slot', () => {
       const view = render({
         components: { Select, SelectTrigger },
-        template: `<Select><SelectTrigger aria-label="Pick"><template #prefix><i data-testid="p" /></template></SelectTrigger></Select>`
+        template: `<Select><SelectTrigger aria-label="Pick"><template #leading><i data-testid="p" /></template></SelectTrigger></Select>`
       })
       expect(view.getByTestId('p')).toBeTruthy()
       view.unmount()

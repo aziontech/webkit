@@ -1,17 +1,17 @@
 <script setup>
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
 
-  const single = [{ label: 'Page Name', current: true }]
+  const single = [{ label: 'Page Name', active: true }]
   const two = [
     { label: 'Page Name', href: '#' },
-    { label: 'Current Page', current: true }
+    { label: 'Current Page', active: true }
   ]
   const full = [
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
-    { label: 'Current Page', current: true }
+    { label: 'Current Page', active: true }
   ]
 </script>
 

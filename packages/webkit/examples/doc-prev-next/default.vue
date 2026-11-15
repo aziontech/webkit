@@ -4,8 +4,8 @@
 
 <template>
   <DocPrevNext
-    :previous="{ title: 'Deploy an application', href: '/docs/deploy' }"
-    :next="{ title: 'Bind a domain', href: '/docs/domains' }"
+    :previous="{ label: 'Deploy an application', href: '/docs/deploy' }"
+    :next="{ label: 'Bind a domain', href: '/docs/domains' }"
     @navigate="(event, page) => router.push(page.href)"
   />
 </template>

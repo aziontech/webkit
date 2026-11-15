@@ -3,9 +3,9 @@ name: ai-loading
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: bf070b128178ad87b08a64193ca4457ea5cb6990a142b3a041e977003a183aa7
+checksum: 132ff429be3da6f90cb6d0f45ddfa00a41800787d8e81f1abc31083592f877b6
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -80,7 +80,7 @@ _No slots._
 
 ## States
 
-- `data-kind`; `data-visible` once the delay has passed. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
+- `data-kind`; `data-state="closed"` until the delay has passed, then `data-state="open"`. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
 
 ## Motion & Animations
 

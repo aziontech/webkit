@@ -90,7 +90,7 @@ describe('Breadcrumb', () => {
         const last = getByTestId(`${TESTID}__item-last`)
         expect(last.tagName).toBe('SPAN')
         expect(last.getAttribute('aria-current')).toBe('page')
-        expect(last.getAttribute('data-current')).toBe('true')
+        expect(last.getAttribute('data-active')).toBe('true')
         expect(getByTestId(`${TESTID}__item-last__label`).textContent?.trim()).toBe('Settings')
       })
 
@@ -207,7 +207,7 @@ describe('Breadcrumb', () => {
           props: { items: TRAIL }
         })
 
-        // Root guards the last segment with `!lastItem.current` before emitting.
+        // Root guards the last segment with `!lastItem.active` before emitting.
         await fireEvent.click(getByTestId(`${TESTID}__item-last`))
 
         expect(emitted().navigate).toBeUndefined()
@@ -248,7 +248,7 @@ describe('Breadcrumb', () => {
     describe('single item', () => {
       it('renders a lone current item with no overflow menu and no distinct-end separator', async () => {
         const { getByTestId, queryByTestId } = await renderMounted(Breadcrumb, {
-          props: { items: [{ label: 'Only', current: true }] }
+          props: { items: [{ label: 'Only', active: true }] }
         })
 
         // firstItem === lastItem: showDistinctEnds is false, so the first segment
@@ -307,7 +307,7 @@ describe('Breadcrumb', () => {
               </li>
               <BreadcrumbSeparator data-testid="manual__sep-0" />
               <li>
-                <BreadcrumbItem label="Leaf" current data-testid="manual__item-1" />
+                <BreadcrumbItem label="Leaf" active data-testid="manual__item-1" />
               </li>
             </BreadcrumbList>
           </BreadcrumbRoot>
@@ -354,7 +354,7 @@ describe('Breadcrumb', () => {
               <BreadcrumbSeparator />
               <li><BreadcrumbItem label="Projects" href="/p" data-testid="slot__item-2" /></li>
               <BreadcrumbSeparator />
-              <li><BreadcrumbItem label="Settings" current data-testid="slot__item-3" /></li>
+              <li><BreadcrumbItem label="Settings" active data-testid="slot__item-3" /></li>
             </BreadcrumbList>
           </BreadcrumbRoot>
         `
@@ -417,7 +417,7 @@ describe('Breadcrumb', () => {
               { label: 'Page Name', href: '#' },
               { label: 'Page Name', href: '#' },
               { label: 'Page Name', href: '#' },
-              { label: 'Current Page', current: true }
+              { label: 'Current Page', active: true }
             ]
           }
         })
@@ -463,7 +463,7 @@ describe('Breadcrumb', () => {
 
       it('has no a11y violations for a single current item', async () => {
         const { container } = await renderMounted(Breadcrumb, {
-          props: { items: [{ label: 'Only', current: true }] }
+          props: { items: [{ label: 'Only', active: true }] }
         })
 
         await expectNoA11yViolations(container)

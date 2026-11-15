@@ -59,7 +59,7 @@
 
   const path = defineModel<string[]>('path', { default: () => [] })
 
-  const expandedModel = defineModel<string[]>('expanded', { default: () => [] })
+  const expandedModel = defineModel<string[]>('openKeys', { default: () => [] })
 
   const slots = defineSlots<{
     default(): unknown
@@ -219,7 +219,7 @@
         target: node.target ?? '_self',
         tagValue: node.tagValue,
         disabled: node.disabled ?? false,
-        selected: props.activeId !== '' && node.id === props.activeId,
+        active: props.activeId !== '' && node.id === props.activeId,
         onClick: (event: globalThis.MouseEvent) => emit('navigate', event, node)
       })
     }

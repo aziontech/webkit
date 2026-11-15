@@ -117,7 +117,7 @@
               class="w-full max-w-(--container-sm)"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <form
                   class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
                   aria-label="Sign up for a free account"

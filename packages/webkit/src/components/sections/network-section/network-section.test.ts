@@ -61,7 +61,7 @@ const band = (props: Record<string, unknown> = {}) =>
     props: {
       eyebrow: EYEBROW,
       title: TITLE,
-      lead: LEAD,
+      claimsEyebrow: LEAD,
       claims,
       outcomes,
       benefits,
@@ -115,7 +115,7 @@ describe('NetworkSection', () => {
     expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
   })
 
-  it('renders the lead line', () => {
+  it('renders the claims eyebrow', () => {
     const { getByText } = band()
 
     expect(getByText(LEAD)).toBeInTheDocument()

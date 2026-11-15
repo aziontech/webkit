@@ -95,7 +95,7 @@
                 class="w-full max-w-(--container-sm)"
                 :padded="false"
               >
-                <template #content>
+                <template #default>
                   <section
                     class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
                     aria-labelledby="oauth-consent-title"

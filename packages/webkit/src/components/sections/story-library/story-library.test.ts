@@ -11,7 +11,7 @@ const LIST = 'Success stories'
 
 const items = [
   {
-    key: 'case-gpa',
+    id: 'case-gpa',
     href: '/success-cases/gpa',
     client: { name: 'GPA', logo: '/logos/gpa.svg' },
     category: 'Retail',
@@ -19,7 +19,7 @@ const items = [
     facets: { industry: ['Retail'], solution: ['Secure'] }
   },
   {
-    key: 'case-axur',
+    id: 'case-axur',
     href: '/success-cases/axur',
     client: { name: 'Axur', logo: '/logos/axur.svg' },
     category: 'Tech',
@@ -27,7 +27,7 @@ const items = [
     facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }
   },
   {
-    key: 'case-exame',
+    id: 'case-exame',
     href: '/success-cases/exame',
     client: { name: 'Exame', logo: '/logos/exame.svg' },
     category: 'Media',
@@ -38,7 +38,7 @@ const items = [
 
 const facets = [
   {
-    key: 'industry',
+    id: 'industry',
     label: 'Industry',
     allLabel: 'All industries',
     options: [
@@ -48,7 +48,7 @@ const facets = [
     ]
   },
   {
-    key: 'solution',
+    id: 'solution',
     label: 'Solution',
     allLabel: 'All solutions',
     options: [
@@ -59,8 +59,14 @@ const facets = [
   }
 ]
 
-const SEARCH = { placeholder: 'Search by company or story', label: 'Search success stories' }
-const EMPTY = { title: 'No stories match these filters.', action: 'View all success stories' }
+const SEARCH = {
+  searchPlaceholder: 'Search by company or story',
+  searchAriaLabel: 'Search success stories'
+}
+const EMPTY = {
+  emptyTitle: 'No stories match these filters.',
+  emptyActionLabel: 'View all success stories'
+}
 
 const band = (props: Record<string, unknown> = {}) =>
   render(StoryLibrary, {
@@ -69,8 +75,8 @@ const band = (props: Record<string, unknown> = {}) =>
       title: TITLE,
       items,
       facets,
-      search: SEARCH,
-      empty: EMPTY,
+      ...SEARCH,
+      ...EMPTY,
       linkLabel: 'Read story',
       moreLabel: 'Load more',
       ariaLabel: LIST,
@@ -118,8 +124,8 @@ describe('StoryLibrary', () => {
     const { getByRole } = band()
 
     expect(getByRole('search')).toBeInTheDocument()
-    expect(getByRole('textbox', { name: SEARCH.label }).getAttribute('placeholder')).toBe(
-      SEARCH.placeholder
+    expect(getByRole('textbox', { name: SEARCH.searchAriaLabel }).getAttribute('placeholder')).toBe(
+      SEARCH.searchPlaceholder
     )
     expect(getByRole('combobox', { name: 'Industry' })).toBeInTheDocument()
     expect(getByRole('combobox', { name: 'Solution' })).toBeInTheDocument()
@@ -137,7 +143,7 @@ describe('StoryLibrary', () => {
   it('narrows the stories by the search term', async () => {
     const { getByRole } = band()
 
-    await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'news')
+    await userEvent.type(getByRole('textbox', { name: SEARCH.searchAriaLabel }), 'news')
 
     expect(cardNames(getByRole)).toEqual(['Read story: Exame'])
   })
@@ -156,16 +162,18 @@ describe('StoryLibrary', () => {
     const { getByRole, queryByRole, getByText } = band()
 
     await pick('Industry', 'Media')
-    await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'gpa')
+    await userEvent.type(getByRole('textbox', { name: SEARCH.searchAriaLabel }), 'gpa')
 
     expect(queryByRole('list', { name: LIST })).toBeNull()
-    expect(getByText(EMPTY.title)).toBeInTheDocument()
+    expect(getByText(EMPTY.emptyTitle)).toBeInTheDocument()
     expect(queryByRole('button', { name: 'Load more' })).toBeNull()
 
-    await userEvent.click(getByRole('button', { name: EMPTY.action }))
+    await userEvent.click(getByRole('button', { name: EMPTY.emptyActionLabel }))
 
     expect(cardNames(getByRole)).toHaveLength(items.length)
-    expect((getByRole('textbox', { name: SEARCH.label }) as HTMLInputElement).value).toBe('')
+    expect((getByRole('textbox', { name: SEARCH.searchAriaLabel }) as HTMLInputElement).value).toBe(
+      ''
+    )
   })
 
   it('renders the load-more button when moreLabel is set', () => {
@@ -194,7 +202,7 @@ describe('StoryLibrary', () => {
     await userEvent.click(getByRole('button', { name: 'Load more' }))
     expect(cardNames(getByRole)).toHaveLength(2)
 
-    await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'a')
+    await userEvent.type(getByRole('textbox', { name: SEARCH.searchAriaLabel }), 'a')
     expect(cardNames(getByRole)).toHaveLength(1)
   })
 
@@ -222,10 +230,11 @@ describe('StoryLibrary', () => {
     const panel = getByTestId(`${TESTID}__filters`)
     expect(button.getAttribute('aria-controls')).toBe(panel.id)
     expect(button.getAttribute('aria-expanded')).toBe('false')
+    expect(panel.getAttribute('data-state')).toBe('closed')
 
     await userEvent.click(button)
     expect(button.getAttribute('aria-expanded')).toBe('true')
-    expect(panel.hasAttribute('data-expanded')).toBe(true)
+    expect(panel.getAttribute('data-state')).toBe('open')
   })
 
   it('lists each applied facet as a removable chip and counts it on the filter button', async () => {
@@ -245,7 +254,7 @@ describe('StoryLibrary', () => {
 
   it('searches the options only of a select with more than seven', async () => {
     const long = {
-      key: 'product',
+      id: 'product',
       label: 'Product',
       allLabel: 'All products',
       options: [
@@ -285,8 +294,8 @@ describe('StoryLibrary', () => {
     }
   })
 
-  it('opens an external story in a new tab and says so in its name', () => {
-    const { getByRole } = band({ items: [{ ...items[0], external: true }, items[1]] })
+  it('opens a _blank story in a new tab and says so in its name', () => {
+    const { getByRole } = band({ items: [{ ...items[0], target: '_blank' }, items[1]] })
 
     const link = getByRole('link', { name: 'Read story: GPA (opens in a new tab)' })
     expect(link.getAttribute('target')).toBe('_blank')
@@ -295,7 +304,7 @@ describe('StoryLibrary', () => {
   })
 
   it('omits the toolbar when there is no search and no facet', () => {
-    const { queryByRole } = band({ search: undefined, facets: [] })
+    const { queryByRole } = band({ searchPlaceholder: '', searchAriaLabel: '', facets: [] })
 
     expect(queryByRole('search')).toBeNull()
   })
@@ -303,7 +312,7 @@ describe('StoryLibrary', () => {
   it('renders the empty state when there are no stories', () => {
     const { getByText } = band({ items: [] })
 
-    expect(getByText(EMPTY.title)).toBeInTheDocument()
+    expect(getByText(EMPTY.emptyTitle)).toBeInTheDocument()
   })
 
   it('has no a11y violations', async () => {

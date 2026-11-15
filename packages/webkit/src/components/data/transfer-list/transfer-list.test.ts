@@ -34,7 +34,7 @@ const Harness = (opts: { disabled?: boolean; moveOnDoubleClick?: boolean } = {})
     template: `
       <TransferList
         v-model="model"
-        data-key="id"
+        item-key="id"
         :disabled="disabled"
         :move-on-double-click="moveOnDoubleClick"
       >
@@ -199,7 +199,7 @@ describe('TransferList', () => {
 
       it('moves within local state and still emits update:modelValue when no v-model is bound', async () => {
         const { getByTestId, emitted } = render(TransferList, {
-          props: { modelValue: makeModel(), trackBy: 'id' },
+          props: { modelValue: makeModel(), itemKey: 'id' },
           slots: {
             default: () => [
               h(TransferListSource, { title: 'Available' }),
@@ -236,7 +236,7 @@ describe('TransferList', () => {
           },
           template: `
           <div>
-            <TransferList :model-value="model" data-key="id" @update:model-value="refused++">
+            <TransferList :model-value="model" item-key="id" @update:model-value="refused++">
               <TransferListSource title="Available" />
               <TransferListControls />
               <TransferListTarget title="Selected" />
@@ -291,8 +291,9 @@ describe('TransferList', () => {
     })
 
     describe('events with correct payloads', () => {
-      it('fires move with { direction, items } after a selected move', async () => {
+      it('fires move with (event, { direction, items }) after a selected move', async () => {
         let payload: { direction: string; items: unknown[] } | undefined
+        let moveEvent: unknown
         const Tree = defineComponent({
           components: {
             TransferList,
@@ -302,13 +303,14 @@ describe('TransferList', () => {
           },
           setup() {
             const model = ref(makeModel())
-            const onMove = (p: { direction: string; items: unknown[] }) => {
+            const onMove = (event: Event, p: { direction: string; items: unknown[] }) => {
+              moveEvent = event
               payload = p
             }
             return { model, onMove }
           },
           template: `
-          <TransferList v-model="model" data-key="id" @move="onMove">
+          <TransferList v-model="model" item-key="id" @move="onMove">
             <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </TransferListSource>
@@ -326,6 +328,7 @@ describe('TransferList', () => {
         await fireEvent.click(firstOption)
         await fireEvent.click(getByTestId('transfer-list-controls__move-to-target'))
 
+        expect(moveEvent).toBeInstanceOf(MouseEvent)
         expect(payload).toBeDefined()
         expect(payload?.direction).toBe('to-target')
         expect(payload?.items).toEqual([{ id: 1, label: 'Edge Functions' }])
@@ -353,7 +356,7 @@ describe('TransferList', () => {
             return { model, onDouble }
           },
           template: `
-          <TransferList v-model="model" data-key="id" @item-double-click="onDouble">
+          <TransferList v-model="model" item-key="id" @item-double-click="onDouble">
             <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </TransferListSource>
@@ -400,7 +403,7 @@ describe('TransferList', () => {
             return { model, onDouble }
           },
           template: `
-          <TransferList v-model="model" data-key="id" :move-on-double-click="false" @item-double-click="onDouble">
+          <TransferList v-model="model" item-key="id" :move-on-double-click="false" @item-double-click="onDouble">
             <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </TransferListSource>
@@ -462,7 +465,7 @@ describe('TransferList', () => {
           },
           setup: () => ({ model: ref(makeModel()) }),
           template: `
-          <TransferList v-model="model" data-key="id">
+          <TransferList v-model="model" item-key="id">
             <TransferListSource title="Available" :loading="true">
               <template #item="{ item }">{{ item.label }}</template>
             </TransferListSource>
@@ -505,7 +508,7 @@ describe('TransferList', () => {
           },
           setup: () => ({ model: ref(makeModel()) }),
           template: `
-          <TransferList v-model="model" data-key="id" v-slot="{ move, hasSelection, count, disabled, loading }">
+          <TransferList v-model="model" item-key="id" v-slot="{ move, hasSelection, count, disabled, loading }">
             <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </TransferListSource>
@@ -519,7 +522,7 @@ describe('TransferList', () => {
               :data-source-count="count('source')"
               :data-disabled="String(disabled)"
               :data-loading="String(loading)"
-              @click="move('to-target')"
+              @click="move($event, 'to-target')"
             >custom</button>
           </TransferList>
         `
@@ -532,7 +535,7 @@ describe('TransferList', () => {
         expect(slotBtn.getAttribute('data-disabled')).toBe('false')
         expect(slotBtn.getAttribute('data-loading')).toBe('false')
 
-        // Select a source item, then invoke the slot-provided move('to-target').
+        // Select a source item, then invoke the slot-provided move($event, 'to-target').
         const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole(
           'option'
         )
@@ -576,12 +579,12 @@ describe('TransferList', () => {
   })
 
   describe('keyboard, identity and empty lists', () => {
-    const Keyed = (trackBy: string) =>
+    const Keyed = (itemKey: string) =>
       defineComponent({
         components: { TransferList, TransferListSource, TransferListTarget, TransferListControls },
-        setup: () => ({ model: ref(makeModel()), trackBy }),
+        setup: () => ({ model: ref(makeModel()), itemKey }),
         template: `
-        <TransferList v-model="model" :track-by="trackBy">
+        <TransferList v-model="model" :item-key="itemKey">
           <TransferListSource title="Available">
             <template #item="{ item }">{{ item.label }}</template>
           </TransferListSource>
@@ -630,7 +633,7 @@ describe('TransferList', () => {
       ])
     })
 
-    it('keys the selection by trackBy, so it follows the record when the list changes', async () => {
+    it('keys the selection by itemKey, so it follows the record when the list changes', async () => {
       const model = ref(makeModel())
       const view = render(
         defineComponent({
@@ -642,7 +645,7 @@ describe('TransferList', () => {
           },
           setup: () => ({ model }),
           template: `
-          <TransferList v-model="model" track-by="id">
+          <TransferList v-model="model" item-key="id">
             <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
             </TransferListSource>

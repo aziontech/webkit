@@ -6,7 +6,7 @@
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
     { label: 'Page Name', href: '#' },
-    { label: 'Current Page', current: true }
+    { label: 'Current Page', active: true }
   ]
 </script>
 

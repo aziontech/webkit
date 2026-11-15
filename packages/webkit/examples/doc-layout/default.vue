@@ -74,7 +74,7 @@
         <DocPageHeader
           title="First deploy"
           description="Deploy a template and see it served from the edge."
-          :breadcrumb="[
+          :breadcrumbs="[
             { label: 'Get started', href: '/docs/get-started' },
             { label: 'First deploy' }
           ]"

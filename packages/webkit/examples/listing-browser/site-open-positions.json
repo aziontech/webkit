@@ -19,7 +19,7 @@
         "align": "end"
       }
     ],
-    "rows": [
+    "data": [
       {
         "href": "/careers/senior-platform-engineer",
         "group": "Engineering",
@@ -89,7 +89,7 @@
     "groups": ["Engineering", "Security"],
     "facets": [
       {
-        "key": "area",
+        "id": "area",
         "label": "Department",
         "allLabel": "All departments",
         "options": [
@@ -116,7 +116,7 @@
         ]
       },
       {
-        "key": "location",
+        "id": "location",
         "label": "Location",
         "allLabel": "All locations",
         "options": [
@@ -148,15 +148,11 @@
       }
     ],
     "sortAriaLabel": "Sort positions",
-    "search": {
-      "placeholder": "Search by title, team, or location",
-      "shortPlaceholder": "Search positions",
-      "label": "Search positions"
-    },
-    "empty": {
-      "title": "Nothing here yet",
-      "description": "No open positions match your search.",
-      "clearLabel": "View all open positions"
-    }
+    "searchPlaceholder": "Search by title, team, or location",
+    "searchShortPlaceholder": "Search positions",
+    "searchAriaLabel": "Search positions",
+    "emptyTitle": "Nothing here yet",
+    "emptyDescription": "No open positions match your search.",
+    "emptyActionLabel": "View all open positions"
   }
 }

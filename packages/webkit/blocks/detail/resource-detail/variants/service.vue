@@ -29,7 +29,7 @@
 
 <template>
   <Card :padded="false">
-    <template #content>
+    <template #default>
       <div
         class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
       >
@@ -40,7 +40,7 @@
           />
           <div class="flex min-w-0">
             <Tooltip
-              text="Open service-01.example.com in a new tab"
+              content="Open service-01.example.com in a new tab"
               class="w-full"
             >
               <a
@@ -122,7 +122,7 @@
 
           <div class="contents md:hidden">
             <Tooltip
-              text="Select an environment to see its deployment and settings, or add another one"
+              content="Select an environment to see its deployment and settings, or add another one"
             >
               <DropdownMenu
                 placement="bottom-end"
@@ -177,7 +177,7 @@
 
           <DropdownMenu placement="bottom-end">
             <DropdownMenu.Trigger>
-              <Tooltip text="Service actions">
+              <Tooltip content="Service actions">
                 <IconButton
                   icon="ai ai-ellipsis"
                   kind="outlined"
@@ -235,7 +235,7 @@
         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
             <span class="text-label-sm text-(--text-muted)">Custom domains</span>
-            <Tooltip text="Add a custom domain">
+            <Tooltip content="Add a custom domain">
               <IconButton
                 icon="ai ai-circle-plus"
                 kind="transparent"
@@ -295,12 +295,12 @@
       >
         <Accordion
           type="single"
-          arrow-position="left"
+          icon-position="leading"
           collapsible
         >
           <Accordion.Item value="deployment-settings">
             <div class="relative">
-              <Accordion.Trigger :level="3">
+              <Accordion.Trigger :heading-level="3">
                 <span class="flex min-h-12 items-center">
                   <span class="text-label-md text-(--text-default)">Deployment Settings</span>
                 </span>
@@ -316,7 +316,7 @@
                   class="shrink-0"
                 />
                 <div class="pointer-events-auto">
-                  <Tooltip text="Open acme-production in Build and deployment settings">
+                  <Tooltip content="Open acme-production in Build and deployment settings">
                     <a
                       href="/account/build-deployment"
                       class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"

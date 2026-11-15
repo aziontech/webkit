@@ -19,7 +19,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <Button
@@ -52,7 +52,7 @@
             hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
           >
             <Card>
-              <template #content>
+              <template #default>
                 <p class="text-body-sm text-(--text-muted)">Nothing is bound to project-01 yet.</p>
               </template>
             </Card>

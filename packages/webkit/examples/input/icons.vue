@@ -13,7 +13,7 @@
       v-model="leading"
       placeholder="Leading icon"
     >
-      <template #prefix>
+      <template #leading>
         <i class="ai ai-globe" />
       </template>
     </Input>
@@ -21,7 +21,7 @@
       v-model="trailing"
       placeholder="Trailing icon"
     >
-      <template #suffix>
+      <template #trailing>
         <i class="ai ai-search" />
       </template>
     </Input>
@@ -29,10 +29,10 @@
       v-model="both"
       placeholder="Both icons"
     >
-      <template #prefix>
+      <template #leading>
         <i class="ai ai-globe" />
       </template>
-      <template #suffix>
+      <template #trailing>
         <i class="ai ai-search" />
       </template>
     </Input>

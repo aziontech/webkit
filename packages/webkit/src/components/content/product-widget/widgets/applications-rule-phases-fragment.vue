@@ -18,7 +18,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the request phase is collapsed so the response rules rise into view while it is, and reopened after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -73,7 +73,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -143,7 +143,7 @@
                 :model-value="frame.open"
                 type="multiple"
                 size="large"
-                arrow-position="left"
+                icon-position="leading"
               >
                 <Accordion.Item
                   v-for="(phase, phaseIndex) in PHASES"

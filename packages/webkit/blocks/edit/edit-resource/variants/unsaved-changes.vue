@@ -164,7 +164,7 @@
             >
               <SettingsSection title="General">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -206,7 +206,7 @@
                 hint="A module is what makes a rule act: a rule can only apply a capability that is switched on here."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         v-for="field in moduleFields"
@@ -217,7 +217,7 @@
                       >
                         <Tooltip
                           v-if="field.locked"
-                          text="DDoS Protection is always on, on every policy."
+                          content="DDoS Protection is always on, on every policy."
                         >
                           <span class="flex">
                             <Switch
@@ -243,7 +243,7 @@
                 hint="Query the logged executions from the event log or the logs API."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"
@@ -262,7 +262,7 @@
 
               <SettingsSection title="Status">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"

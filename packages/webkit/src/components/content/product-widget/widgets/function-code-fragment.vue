@@ -78,7 +78,7 @@ addEventListener("fetch", (event) =>
             v-model="tab"
             :tabs="FILES"
             :bordered="false"
-            line-numbers
+            show-line-numbers
             copy-aria-label="Copy the function code"
           />
         </div>

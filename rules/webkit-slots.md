@@ -11,7 +11,7 @@ conventions below are enforced by review.
 
 - Declare every slot with a typed `defineSlots<{ ... }>()` in `<script setup>`, one entry
   per slot, each with a short JSDoc line.
-- Name multi-word slots in **kebab-case** (`prefix`, `header-actions`) — matching how the
+- Name multi-word slots in **kebab-case** (`leading`, `header-actions`) — matching how the
   consumer writes `<template #header-actions>`.
 - Give a **scoped slot** a payload typed as an **object with named keys**
   (`{ item, index }`) — the smallest thing that identifies the subject.
@@ -41,7 +41,7 @@ conventions below are enforced by review.
 
   defineSlots<{
     /** Leading adornment. */
-    prefix(): unknown
+    leading(): unknown
     /** Rendered per item; receives the record and its index. */
     item(props: { item: Item; index: number }): unknown
   }>()
@@ -50,7 +50,7 @@ conventions below are enforced by review.
 <template>
   <ul class="flex flex-col gap-(--spacing-xs)">
     <li v-for="(entry, i) in items" :key="entry.id">
-      <slot name="prefix" />
+      <slot name="leading" />
       <slot name="item" :item="entry" :index="i">
         <!-- fallback: shown when the consumer passes no item slot -->
         {{ entry.label }}

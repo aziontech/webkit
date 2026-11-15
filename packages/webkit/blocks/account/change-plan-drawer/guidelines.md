@@ -21,7 +21,7 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 ### B. Drawer — `Drawer` (required)
 
-Two drawers, both `side="right"`, `size="large"`. The upgrade drawer opens on top of the plan drawer and, on success, closes both. Each reset to Yearly and to the account's address when reopened.
+Two drawers, both `side="end"`, `size="large"`. The upgrade drawer opens on top of the plan drawer and, on success, closes both. Each reset to Yearly and to the account's address when reopened.
 
 ### C. Drawer panel — `DrawerContent` (required)
 

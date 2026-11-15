@@ -152,7 +152,7 @@
             :aria-label="t('overflowCount.search')"
             :data-testid="`${testId}__search`"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"

@@ -100,7 +100,7 @@
     /** Whether this widget is the one showing; it replays its entrance each time it becomes active. */
     active?: boolean
     /** Whether the pointer is over the host; a fragment plays its beat while it is. */
-    hover?: boolean
+    hovered?: boolean
     /** How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating. */
     kind?: ShellMockupKind
     /** Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it. */
@@ -116,12 +116,12 @@
     /** Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it. */
     cursor?: boolean
     /** Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace. */
-    interval?: number
+    autoplayInterval?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
     active: true,
-    hover: false,
+    hovered: false,
     kind: undefined,
     chrome: undefined,
     width: undefined,
@@ -129,7 +129,7 @@
     texture: 'none',
     tab: undefined,
     cursor: true,
-    interval: undefined
+    autoplayInterval: undefined
   })
 
   const attrs = useAttrs()
@@ -164,7 +164,7 @@
       fade: props.fade !== 'none',
       texture: props.texture !== 'none',
       tab: props.tab !== undefined,
-      interval: props.interval !== undefined
+      autoplayInterval: props.autoplayInterval !== undefined
     }
     const plated = plating.value ? ['kind', plating.value === 'window' ? 'chrome' : ''] : []
     const ignored = Object.keys(set).filter(

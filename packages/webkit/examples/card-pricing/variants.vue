@@ -5,7 +5,7 @@
 <template>
   <div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
     <CardPricing
-      slot-position="bottom"
+      actions-position="bottom"
       kind="contained"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
@@ -15,7 +15,7 @@
       action-label="Label"
     />
     <CardPricing
-      slot-position="bottom"
+      actions-position="bottom"
       kind="transparent"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
@@ -25,7 +25,7 @@
       action-label="Label"
     />
     <CardPricing
-      slot-position="middle"
+      actions-position="middle"
       kind="contained"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."
@@ -35,7 +35,7 @@
       action-label="Label"
     />
     <CardPricing
-      slot-position="middle"
+      actions-position="middle"
       kind="transparent"
       title="Pro"
       pricing-details="Billed annually or $25/mo billed monthly."

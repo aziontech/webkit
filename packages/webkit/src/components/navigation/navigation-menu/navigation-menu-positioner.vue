@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, type CSSProperties, provide, ref, useAttrs, watch } from 'vue'
 
+  import { useDirection } from '../../../composables/use-direction'
+  import type { Side } from '../../../composables/use-placement'
   import { cn } from '../../../utils/cn'
   import { useNavigationMenuContext } from './composables/use-navigation-menu-context'
   import { useNavigationMenuPositioner } from './composables/use-navigation-menu-positioner'
@@ -8,7 +10,7 @@
 
   defineOptions({ name: 'NavigationMenuPositioner', inheritAttrs: false })
 
-  export type NavigationMenuSide = 'top' | 'right' | 'bottom' | 'left'
+  export type NavigationMenuSide = 'top' | 'end' | 'bottom' | 'start'
   export type NavigationMenuAlign = 'start' | 'center' | 'end'
   /** Collision padding: one number for both axes, or an inset per axis. */
   export type NavigationMenuCollisionPadding = number | { x: number; y: number }
@@ -28,8 +30,8 @@
     collisionPadding?: NavigationMenuCollisionPadding
     /** Sticky positioning while scrolling. */
     sticky?: boolean
-    /** Disables tracking the active trigger as anchor. */
-    disableAnchorTracking?: boolean
+    /** Tracks the active trigger as the anchor; false keeps the popup where it first opened. */
+    trackAnchor?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -40,7 +42,7 @@
     arrowPadding: 8,
     collisionPadding: 8,
     sticky: false,
-    disableAnchorTracking: false
+    trackAnchor: true
   })
 
   defineSlots<{ default(): unknown }>()
@@ -54,10 +56,18 @@
   const positionerEl = ref<HTMLElement | null>(null)
   const arrowEl = ref<HTMLElement | null>(null)
 
-  const anchorEl = computed(() => (props.disableAnchorTracking ? null : root.activeTriggerEl.value))
+  const anchorEl = computed(() => (props.trackAnchor ? root.activeTriggerEl.value : null))
+  const direction = useDirection(positionerEl)
+
+  const physicalSide = computed((): Side => {
+    const rtl = direction.value === 'rtl'
+    if (props.side === 'start') return rtl ? 'right' : 'left'
+    if (props.side === 'end') return rtl ? 'left' : 'right'
+    return props.side
+  })
 
   const positionerOptions = computed(() => ({
-    side: props.side,
+    side: physicalSide.value,
     align: props.align,
     sideOffset: props.sideOffset,
     alignOffset: props.alignOffset,
@@ -67,7 +77,7 @@
 
   const {
     floatingStyles,
-    resolvedSide,
+    resolvedSide: resolvedPhysicalSide,
     resolvedAlign,
     availableWidth,
     availableHeight,
@@ -82,6 +92,12 @@
     positionerOptions,
     root.popupSize
   )
+
+  const resolvedSide = computed((): NavigationMenuSide => {
+    const side = resolvedPhysicalSide.value
+    if (side !== 'left' && side !== 'right') return side
+    return (side === 'left') === (direction.value === 'rtl') ? 'end' : 'start'
+  })
 
   watch(
     () => root.menuPopupMounted.value,

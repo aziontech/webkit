@@ -193,7 +193,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form

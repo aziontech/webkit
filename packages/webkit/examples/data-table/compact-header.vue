@@ -46,11 +46,11 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', enableSorting: false },
+    { accessorKey: 'id', header: 'ID', sortable: false },
     { accessorKey: 'status', header: 'Status' },
-    { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },
+    { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
-    { id: 'actions', header: '', kind: 'action', enableSorting: false }
+    { id: 'actions', header: '', kind: 'action', sortable: false }
   ]
 
   const sorting = ref([])
@@ -76,7 +76,7 @@
     :data="rows"
     :columns="columns"
     row-key="id"
-    enable-sorting
+    sortable
     density="compact"
     v-model:sorting="sorting"
     @row-click="onRowClick"

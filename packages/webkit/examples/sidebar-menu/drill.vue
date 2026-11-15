@@ -17,7 +17,7 @@
           label="Overview"
           icon="ai ai-home"
           href="/overview"
-          selected
+          active
         />
         <SidebarMenuSub>
           <SidebarMenuSubTrigger

@@ -8,7 +8,7 @@ const instance = figma.selectedInstance
 const text = instance.getString('text')
 
 export default {
-  example: figma.code`<Tooltip text="${text}">
+  example: figma.code`<Tooltip content="${text}">
   <IconButton icon="ai ai-circle-info" aria-label="More information" />
 </Tooltip>`,
   imports: [

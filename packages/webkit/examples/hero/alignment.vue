@@ -6,12 +6,12 @@
   <div class="grid grid-cols-1 gap-(--spacing-md) lg:grid-cols-3">
     <Hero
       kind="screen"
-      align="top"
+      align="start"
       max-width="full"
       offset="75dvh"
     >
       <Hero.Title
-        centered
+        align="center"
         eyebrow="Top"
         eyebrow-prefix="//"
         title="Content at the top"
@@ -24,7 +24,7 @@
       offset="75dvh"
     >
       <Hero.Title
-        centered
+        align="center"
         eyebrow="Center"
         eyebrow-prefix="//"
         title="Content centered"
@@ -32,12 +32,12 @@
     </Hero>
     <Hero
       kind="screen"
-      align="bottom"
+      align="end"
       max-width="full"
       offset="75dvh"
     >
       <Hero.Title
-        centered
+        align="center"
         eyebrow="Bottom"
         eyebrow-prefix="//"
         title="Content at the bottom"

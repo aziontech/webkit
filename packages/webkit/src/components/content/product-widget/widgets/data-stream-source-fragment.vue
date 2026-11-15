@@ -16,7 +16,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; WAF Events is picked as the data source while it is, and Applications comes back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -76,7 +76,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const stageEl = ref<globalThis.HTMLElement | null>(null)
@@ -130,8 +130,8 @@
     >
       <ShellMockupPart
         :order="0"
-        :data-open="frame.open || null"
-        class="relative data-open:z-1"
+        :data-state="frame.open ? 'open' : 'closed'"
+        class="relative data-[state=open]:z-1"
       >
         <div class="flex flex-col gap-(--spacing-xs)">
           <FieldLabel
@@ -144,7 +144,7 @@
             :value="frame.source"
             :options="SOURCES"
             :open="frame.open"
-            :highlight="frame.highlight"
+            :highlighted-index="frame.highlight"
             :focused="frame.focused"
             data-cursor="source"
             aria-label="Data Source"

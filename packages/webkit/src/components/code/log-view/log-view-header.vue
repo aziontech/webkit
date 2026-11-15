@@ -13,8 +13,8 @@
   })
 
   defineSlots<{
-    left(): unknown
-    right(): unknown
+    start(): unknown
+    end(): unknown
     search(): unknown
   }>()
 
@@ -34,10 +34,10 @@
     class="flex shrink-0 flex-col gap-(--spacing-sm) border-b border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-sm) sm:h-[48px] sm:flex-row sm:items-center sm:justify-between sm:py-0"
   >
     <div
-      :data-testid="`${testId}__left`"
+      :data-testid="`${testId}__start`"
       class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-sm) sm:w-auto"
     >
-      <slot name="left">
+      <slot name="start">
         <span
           :data-testid="`${testId}__line-count`"
           class="text-label-code-sm text-(--text-muted)"
@@ -98,10 +98,10 @@
     </div>
 
     <div
-      :data-testid="`${testId}__right`"
+      :data-testid="`${testId}__end`"
       class="flex w-full min-w-0 flex-col gap-(--spacing-sm) sm:flex-row sm:items-center sm:gap-(--spacing-sm) sm:w-auto"
     >
-      <slot name="right">
+      <slot name="end">
         <slot name="search">
           <Input
             size="small"
@@ -112,7 +112,7 @@
             :data-testid="`${testId}__search`"
             @update:model-value="ctx.setSearch"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"

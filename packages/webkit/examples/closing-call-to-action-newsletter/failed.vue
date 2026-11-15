@@ -18,6 +18,6 @@
     title="Subscribe to our newsletter"
     description="Product updates, event highlights, and industry insights, delivered to your inbox."
     :form="form"
-    :error="true"
+    :failed="true"
   />
 </template>

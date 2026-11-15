@@ -22,7 +22,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Table from '@aziontech/webkit/table'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { toast, Toaster } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -207,7 +207,12 @@
 
   type AccountType = 'organization' | 'group' | 'workspace'
 
-  type AccountTypeMeta = { label: string; icon: string; severity: TagSeverity }
+  type AccountTypeMeta = {
+    label: string
+    icon: string
+    severity?: TagSeverity
+    variant?: TagVariant
+  }
 
   type Account = {
     id: string
@@ -223,11 +228,12 @@
     expanded: boolean
     typeLabel: string
     typeIcon: string
-    typeSeverity: TagSeverity
+    typeSeverity?: TagSeverity
+    typeVariant?: TagVariant
   }
 
   const accountTypes: Record<AccountType, AccountTypeMeta> = {
-    organization: { label: 'Organization', icon: 'ai ai-building', severity: 'primary' },
+    organization: { label: 'Organization', icon: 'ai ai-building', variant: 'primary' },
     group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
     workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
@@ -285,7 +291,8 @@
           expanded,
           typeLabel: accountTypes[entry.type].label,
           typeIcon: accountTypes[entry.type].icon,
-          typeSeverity: accountTypes[entry.type].severity
+          typeSeverity: accountTypes[entry.type].severity,
+          typeVariant: accountTypes[entry.type].variant
         })
         if (hasChildren && expanded) walk(entry.id, depth + 1)
       }
@@ -359,7 +366,7 @@
       <template #sidebar-header="{ compact }">
         <Tooltip
           v-if="!compact"
-          :text="`Switch account (${shortcut})`"
+          :content="`Switch account (${shortcut})`"
           placement="right"
           class="w-full"
         >
@@ -387,10 +394,10 @@
         </Tooltip>
       </template>
 
-      <template #header-start="{ compact }">
+      <template #header-leading="{ compact }">
         <Tooltip
           v-if="compact"
-          :text="`Switch account (${shortcut})`"
+          :content="`Switch account (${shortcut})`"
           placement="bottom"
         >
           <button
@@ -417,7 +424,7 @@
       <template #actions="{ compact }">
         <template v-if="compact">
           <Tooltip
-            text="Create"
+            content="Create"
             placement="bottom"
           >
             <IconButton
@@ -428,7 +435,7 @@
             />
           </Tooltip>
           <Tooltip
-            text="Agent"
+            content="Agent"
             placement="bottom"
           >
             <IconButton
@@ -457,28 +464,28 @@
       <template #search="{ query }">
         <Command.Group
           v-if="!query"
-          heading="Recents"
+          label="Recents"
         >
           <Command.Item
             v-for="row in recents"
             :key="row.id"
             :value="`recent:${row.id}`"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 :class="row.icon"
                 aria-hidden="true"
               />
             </template>
             {{ row.label }}
-            <template #suffix>
+            <template #trailing>
               <span class="text-label-sm text-(--text-muted)">{{ row.type }}</span>
             </template>
           </Command.Item>
         </Command.Group>
-        <Command.Group heading="Actions">
+        <Command.Group label="Actions">
           <Command.Item value="action:create">
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-circle-plus"
                 aria-hidden="true"
@@ -487,7 +494,7 @@
             Create Application
           </Command.Item>
           <Command.Item value="action:theme">
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-moon"
                 aria-hidden="true"
@@ -500,7 +507,7 @@
 
       <template #account-menu>
         <DropdownMenu.Group>
-          <template #top>
+          <template #header>
             <div class="flex min-w-0 flex-col">
               <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
               <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
@@ -609,7 +616,7 @@
           </PageHeader>
 
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <div
                 class="flex min-h-(--container-3xs) items-center justify-center text-body-sm text-(--text-muted)"
               >
@@ -640,7 +647,7 @@
               placeholder="Search accounts"
               aria-label="Search accounts"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -659,7 +666,7 @@
               v-else
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   :data="accountRows"
                   :columns="accountColumns"
@@ -714,6 +721,7 @@
                     <Table.CellStatus
                       :label="row.typeLabel"
                       :icon="row.typeIcon"
+                      :variant="row.typeVariant"
                       :severity="row.typeSeverity"
                     />
                   </template>

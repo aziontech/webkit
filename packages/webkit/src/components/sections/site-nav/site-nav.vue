@@ -372,7 +372,7 @@
 
     <Drawer
       v-model:open="navOpen"
-      side="left"
+      side="start"
       size="small"
     >
       <DrawerContent>

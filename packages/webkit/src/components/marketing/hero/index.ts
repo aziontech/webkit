@@ -13,6 +13,7 @@ export default HeroRoot
 export { HeroTitle }
 export type { HeroAlign, HeroKind, HeroMediaAlign, HeroSize, HeroWidth } from './hero.vue'
 export type {
+  HeroTitleAlign,
   HeroTitleEyebrowPrefix,
   HeroTitleSize,
   HeroTitleWidth

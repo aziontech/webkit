@@ -56,7 +56,7 @@ const copyPage = {
 
 const trail = [
   { label: 'Success cases', href: '/success-cases' },
-  { label: article.title, current: true }
+  { label: article.title, active: true }
 ]
 
 const band = (props: Record<string, unknown> = {}) =>
@@ -121,6 +121,13 @@ describe('ArticleBody', () => {
     const { getByRole } = band()
 
     expect(getByRole('link', { name: 'Success cases' }).getAttribute('href')).toBe('/success-cases')
+  })
+
+  it('marks the active breadcrumb entry with aria-current', () => {
+    const { container } = band()
+
+    const current = container.querySelector('[aria-current="page"]')
+    expect(current?.textContent).toContain(article.title)
   })
 
   it('renders the markdown body as headings with slug ids, lists and paragraphs', () => {

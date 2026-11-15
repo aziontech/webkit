@@ -232,7 +232,7 @@
                 v-for="section in 3"
                 :key="section"
               >
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-md)">
                     <Skeleton
                       v-for="row in 3"
@@ -249,7 +249,7 @@
             >
               <Alert severity="danger">
                 The profile could not be loaded. Nothing was changed; try again.
-                <template #action>
+                <template #actions>
                   <Button
                     type="button"
                     label="Retry"
@@ -272,7 +272,7 @@
                 anchor="general"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Account name"
@@ -323,7 +323,7 @@
                 anchor="company-information"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Company name"
@@ -388,7 +388,7 @@
                 anchor="address-information"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow title="Postal code">
                         <Input
@@ -462,7 +462,7 @@
                 anchor="login-settings"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Allow social login"
@@ -497,7 +497,7 @@
                 anchor="source-control"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item
                         v-for="provider in sourceControls"
@@ -552,7 +552,7 @@
                 anchor="appearance"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Font family"
@@ -617,7 +617,7 @@
                 anchor="danger-zone"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Delete personal account"

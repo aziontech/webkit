@@ -62,7 +62,7 @@
     </span>
     <Hint
       v-if="hint"
-      :text="hint"
+      :content="hint"
       :data-testid="`${testId}__hint`"
     />
   </label>

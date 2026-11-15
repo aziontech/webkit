@@ -329,7 +329,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form
@@ -502,7 +502,7 @@
   <Drawer
     v-model:open="environmentOpen"
     :size="open ? 'medium' : 'large'"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form

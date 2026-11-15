@@ -57,7 +57,7 @@ export default {
     iconLeft
       ? figma.code`
   <Select.Trigger>
-    <template #prefix>
+    <template #leading>
       <i class="ai ai-globe" />
     </template>
   </Select.Trigger>`

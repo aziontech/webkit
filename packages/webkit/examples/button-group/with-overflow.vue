@@ -37,6 +37,6 @@
     kind="outlined"
     size="small"
     aria-label="Record actions"
-    @toggle="({ pressed }) => (pinned = pressed)"
+    @toggle="(event, { pressed }) => (pinned = pressed)"
   />
 </template>

@@ -121,7 +121,7 @@
           severity="danger"
           :label="`${REPO.name} wasn't deployed. The routing rules were refused.`"
         >
-          <template #action>
+          <template #actions>
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
@@ -149,7 +149,7 @@
           severity="success"
           :label="`${REPO.name} is live at ${resource?.domain}.`"
         >
-          <template #action>
+          <template #actions>
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"

@@ -34,8 +34,11 @@ describe('CopyButton', () => {
     })
 
     it('is in the idle state before any interaction (no copied label present)', () => {
-      const { getByRole, queryByRole } = render(CopyButton, { props: { value: 'token' } })
+      const { getByRole, getByTestId, queryByRole } = render(CopyButton, {
+        props: { value: 'token' }
+      })
       expect(getByRole('button', { name: 'Copy' }).tagName).toBe('BUTTON')
+      expect(getByTestId('actions-copy-button').getAttribute('data-state')).toBe('idle')
       expect(queryByRole('button', { name: 'Copied' })).toBeNull()
     })
 

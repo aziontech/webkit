@@ -14,7 +14,7 @@
     },
     {
       "name": "Lifecycle",
-      "summary": "The same response moving through pending (Generating a response), streaming (busy, caret, no actions) and complete (actions appear). Replay restarts it.",
+      "summary": "The same response moving through pending (Generating a response), streaming (busy, caret, no actions) and success (actions appear). Replay restarts it.",
       "file": "lifecycle.vue"
     },
     {

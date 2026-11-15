@@ -7,7 +7,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 
-  const breadcrumb = [{ label: 'Creation Center', current: true }]
+  const breadcrumb = [{ label: 'Creation Center', active: true }]
 
   const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 </script>
@@ -17,7 +17,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <Tooltip
-          text="Back to Home"
+          content="Back to Home"
           placement="bottom"
         >
           <IconButton
@@ -59,7 +59,7 @@
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Group>
-            <template #top>
+            <template #header>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
                 <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>

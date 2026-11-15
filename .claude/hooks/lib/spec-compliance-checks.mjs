@@ -21,7 +21,11 @@ import {
   resolveSpecForComponentPath,
   resolveTypeUnion
 } from './spec.mjs'
-import { checkEventVocabulary, checkPropVocabulary } from './prop-vocabulary.mjs'
+import {
+  checkEventVocabulary,
+  checkPropVocabulary,
+  checkSlotVocabulary
+} from './prop-vocabulary.mjs'
 
 /** Valid animate-* names from the generated catalog, or null if it can't be read. */
 function loadCatalogAnimations(ROOT) {
@@ -182,6 +186,9 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     for (const v of checkEventVocabulary(sfc.emits)) {
       violations.push(v.message)
     }
+    for (const v of checkSlotVocabulary(sfc.slots)) {
+      if (!v.staged) violations.push(v.message)
+    }
 
     // ---- Default drift: spec Props "Default" column vs .vue withDefaults ----
     const specPropRows = parseTable2(getSection(body, 'Props'), 'type')
@@ -267,14 +274,10 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     } else {
       const animDiff = diff(codeAnimClasses, specAnimClasses)
       const missing = isRoot
-        ? [...specAnimClasses].filter(
-            (c) => !familyAnimations(abs, info.name, vueText).has(c)
-          )
+        ? [...specAnimClasses].filter((c) => !familyAnimations(abs, info.name, vueText).has(c))
         : []
       if (missing.length) {
-        violations.push(
-          `Animation classes in spec but missing in .vue: ${missing.join(', ')}`
-        )
+        violations.push(`Animation classes in spec but missing in .vue: ${missing.join(', ')}`)
       }
       if (animDiff.extra.length) {
         violations.push(`Animation classes in .vue but not in spec: ${animDiff.extra.join(', ')}`)

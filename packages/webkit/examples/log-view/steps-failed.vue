@@ -4,10 +4,10 @@
 
   const steps: LogViewStep[] = [
     {
-      key: 'build',
+      id: 'build',
       title: 'Build',
       description: 'Static assets bundled for the edge',
-      status: 'done',
+      status: 'success',
       duration: '9s',
       lines: [
         { id: '0', time: '13:47:41', type: 'text', message: 'Running npm run build' },
@@ -15,10 +15,10 @@
       ]
     },
     {
-      key: 'rules',
+      id: 'rules',
       title: 'Routing Rules',
       description: 'The rule Deliver Static Assets points to a missing origin.',
-      status: 'failed',
+      status: 'error',
       duration: '4s',
       lines: [
         {
@@ -37,7 +37,7 @@
       ]
     },
     {
-      key: 'publish',
+      id: 'publish',
       title: 'Publish',
       description: 'Deploy published to the edge',
       status: 'skipped',

@@ -125,7 +125,7 @@
         #header
       >
         <SectionTitle
-          kind="horizontal"
+          kind="split"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
@@ -173,7 +173,7 @@
                 <div class="min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)">
                   <CodeBlock
                     :tabs="codeFiles[index]"
-                    line-numbers
+                    show-line-numbers
                     v-bind="{ animateLines: active }"
                     :copy-aria-label="copyAriaLabel || undefined"
                   />

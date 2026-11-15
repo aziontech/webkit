@@ -93,7 +93,7 @@
             :padded="false"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <Progress
                 :value="3"
                 :max="3"
@@ -136,7 +136,7 @@
                     size="small"
                     label="The organization wasn't created. Check your connection, then retry. Your answers are kept."
                   >
-                    <template #action>
+                    <template #actions>
                       <Button
                         label="Retry"
                         kind="secondary"

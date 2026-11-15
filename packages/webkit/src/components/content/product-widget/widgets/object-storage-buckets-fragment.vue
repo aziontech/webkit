@@ -15,7 +15,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; a search narrows the bucket list while it is, and clears after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -78,7 +78,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -139,7 +139,7 @@
             aria-label="Search buckets"
             class="w-full"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"
@@ -151,7 +151,7 @@
 
       <ShellMockupPart :order="1">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               :data="rows"
               :columns="COLUMNS"

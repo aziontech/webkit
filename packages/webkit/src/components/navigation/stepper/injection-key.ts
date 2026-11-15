@@ -8,8 +8,7 @@ export interface StepperStepHandle {
 }
 
 export interface StepperContext {
-  /** The value of the step the reader is on, mirroring the root's v-model. */
-  current: ComputedRef<string>
+  active: ComputedRef<string>
   /** Registers a step and returns its reactive handle. */
   register: (id: symbol) => StepperStepHandle
   /** Hands the step's root element over once mounted, so order is read from the DOM. */

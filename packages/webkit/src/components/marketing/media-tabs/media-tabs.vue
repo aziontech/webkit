@@ -32,15 +32,15 @@
   /** What moves the selection as the reader points at a row. */
   export type MediaTabsSelectOn = 'hover' | 'click'
   /** Which side of the media the tabs sit on. */
-  export type MediaTabsPosition = 'left' | 'right' | 'top' | 'bottom'
+  export type MediaTabsSide = 'start' | 'end' | 'top' | 'bottom'
   /** Height each row is held to beside the media, and the title scale of a row of tabs. */
   export type MediaTabsSize = 'small' | 'medium' | 'large'
 
   interface Props {
-    /** The tabs, in order, at most three when the position is left or right and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
+    /** The tabs, in order, at most three when the tabs side is start or end and five when it is top or bottom; each item is a title, its description, and the image shown while it is active. Items past the limit are not rendered. */
     items?: MediaTabsItem[]
-    /** Which side of the media the tabs sit on. Below the large breakpoint every position stacks, with the active tab's media inside its row. */
-    position?: MediaTabsPosition
+    /** Which side of the media the tabs sit on. Below the large breakpoint every side stacks, with the active tab's media inside its row. */
+    tabsSide?: MediaTabsSide
     /** Height each row is held to, as a multiple of the band's own padding step: three, four and a half, six. In a row of tabs, small sets the title and description two steps down. */
     size?: MediaTabsSize
     /** What moves the selection as the reader points at a row. A click always selects, on either setting. */
@@ -61,7 +61,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
-    position: 'left',
+    tabsSide: 'start',
     size: 'medium',
     selectOn: 'hover',
     autoplay: true,
@@ -98,7 +98,7 @@
   )
 
   const orientation = computed(() =>
-    props.position === 'top' || props.position === 'bottom' ? 'horizontal' : 'vertical'
+    props.tabsSide === 'top' || props.tabsSide === 'bottom' ? 'horizontal' : 'vertical'
   )
 
   const tabs = computed(() => props.items.slice(0, MAX_TABS[orientation.value]))
@@ -202,7 +202,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-position="position"
+    :data-tabs-side="tabsSide"
     :data-orientation="orientation"
     :data-size="size"
     :data-select-on="selectOn"
@@ -216,7 +216,7 @@
   >
     <div
       v-if="hasItems"
-      class="flex flex-col group-data-[position=left]/media-tabs:lg:flex-row group-data-[position=right]/media-tabs:lg:flex-row-reverse group-data-[position=bottom]/media-tabs:lg:flex-col-reverse"
+      class="flex flex-col group-data-[tabs-side=start]/media-tabs:lg:flex-row group-data-[tabs-side=end]/media-tabs:lg:flex-row-reverse group-data-[tabs-side=bottom]/media-tabs:lg:flex-col-reverse"
     >
       <ul
         class="flex flex-col group-data-[orientation=horizontal]/media-tabs:lg:flex-row group-data-[orientation=vertical]/media-tabs:lg:w-[calc(50%+var(--spacing-xl))] group-data-[orientation=vertical]/media-tabs:lg:shrink-0"
@@ -225,7 +225,7 @@
           v-for="(item, index) in tabs"
           :key="`${item.title}-${index}`"
           :data-active="isActive(index) || null"
-          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[position=right]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
+          class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[tabs-side=end]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
           @pointerenter="point(index)"
         >
           <FrameBox
@@ -291,7 +291,7 @@
       <FrameBox
         borders="all"
         marks="all"
-        :flush="position === 'left' ? ['left', 'top'] : 'top'"
+        :flush="tabsSide === 'start' ? ['left', 'top'] : 'top'"
         class="relative hidden overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:block lg:min-w-0 group-data-[orientation=vertical]/media-tabs:lg:flex-1"
       >
         <TextureMaterial

@@ -63,7 +63,7 @@
     role="status"
     :data-testid="testId"
     :data-kind="kind"
-    :data-visible="visible || null"
+    :data-state="visible ? 'open' : 'closed'"
     class="flex w-full min-w-0 flex-col gap-(--spacing-xs) data-[kind=inline]:flex-row data-[kind=inline]:items-center"
   >
     <template v-if="visible">

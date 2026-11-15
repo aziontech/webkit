@@ -79,7 +79,7 @@
       kind="outcomes"
       eyebrow="Region: Earth."
       :title="`${count} outcomes set the floor in ${count} columns`"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="claims"
       :outcomes="outcomes.slice(0, count)"
     />
@@ -89,7 +89,7 @@
       kind="benefits"
       eyebrow="Region: Earth."
       :title="`${count} benefits balanced on up to three columns`"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="claims"
       :benefits="benefits.slice(0, count)"
     />

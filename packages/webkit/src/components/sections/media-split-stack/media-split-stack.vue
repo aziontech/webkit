@@ -127,7 +127,7 @@
     <template v-if="hasBands">
       <SectionTitle
         v-if="hasHeader"
-        kind="centered"
+        kind="center"
         size="large"
         :eyebrow="eyebrow"
         :title="title"

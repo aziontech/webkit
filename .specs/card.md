@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 57ce2dfc1ce2405766c2fa1a1c4e55b98930e4dda107fceba4c1e6ff4fb53c47
+checksum: 49887518dcc87d577eddf0a0da460a4440b1fac19c9ad5883b1ad1228e30e0ae
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -36,7 +36,7 @@ A bordered surface that groups related content under a title, with a header, a b
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
-- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `view/template-browser`).
+- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with the default slot (see `view/template-browser`).
 
 ## Related
 
@@ -44,16 +44,16 @@ A bordered surface that groups related content under a title, with a header, a b
 - `card-pricing` — pricing tier card with its own price hierarchy and action.
 - `card-grid` — responsive grid of cells for marketing pages.
 - `panel` — the layered shell behind overlays, not an in-page card.
-- `empty-state` — goes in the `content` slot when the card has no data yet.
+- `empty-state` — goes in the default slot when the card has no data yet.
 
 ## Best practices
 
-- Put the body in the default slot (or `#content`, its named form).
-- Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-action`.
-- `header-action` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
+- Put the body in the default slot.
+- Use `title` for a plain heading (rendered as an `h2`). Use the `header` slot only when the header needs another layout: it replaces both the title and `header-actions`.
+- `header-actions` content stays hidden until the header is hovered or focused, so keep it to secondary actions and never make it the only way to reach a control.
 - Set `:padded="false"` only when the content draws its own inset or needs flush dividers.
 - The footer renders only when the `footer` slot has content; don't pass an empty template to reserve space.
-- `kind="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `action` slot; it sits above the stretched target and stays reachable on its own.
+- `kind="integration"` lays the card out from props: `title`, `logo` (or the `logo` slot), `vendor`, `description`, `badges` and `installed`. The title becomes a link when `href` is set, otherwise a button that emits `select`, and it stretches over the whole card so the tile is one target. Put a single action (Install, Configure) in the `actions` slot; it sits above the stretched target and stays reachable on its own.
 - Keep the description to one or two sentences; the card clamps it to three lines.
 - Show at most two badges (category, context, plan). The installed state is a prop, not a badge, so it reads the same everywhere.
 - Integration cards sit under a section heading, so their title is an `h3`.
@@ -69,16 +69,14 @@ A bordered surface that groups related content under a title, with a header, a b
 
 <template>
   <Card title="Domains">
-    <template #header-action>
+    <template #header-actions>
       <Button
         label="Edit"
         kind="transparent"
         size="small"
       />
     </template>
-    <template #content>
-      <p>Associate a custom domain to handle user access.</p>
-    </template>
+    <p>Associate a custom domain to handle user access.</p>
     <template #footer>
       <Button
         label="Save"
@@ -108,7 +106,7 @@ A bordered surface that groups related content under a title, with a header, a b
     :badges="[{ label: 'Firewall' }]"
     @select="openDetail"
   >
-    <template #action>
+    <template #actions>
       <Button
         label="Install"
         kind="outlined"
@@ -125,11 +123,11 @@ A bordered surface that groups related content under a title, with a header, a b
 | ------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `kind="integration"`, the item name.                                                                       |
 | `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                                                            |
-| `kind`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot.                                   |
+| `kind`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot.                                  |
 | `logo`        | `string`                     | `''`        | false    | Integration kind: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                         |
 | `vendor`      | `string`                     | `''`        | false    | Integration kind: who publishes the item, shown as "by {vendor}".                                                                                                               |
 | `description` | `string`                     | `''`        | false    | Integration kind: one or two sentences on what the item does.                                                                                                                   |
-| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, severity? }`, severity is a `TagSeverity`, `CardBadgeSeverity` is its alias, defaulting to `info`). |
+| `badges`      | `CardBadge[]`                | `[]`        | false    | Integration kind: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
 | `installed`   | `boolean`                    | `false`     | false    | Integration kind: shows the Installed tag.                                                                                                                                      |
 | `href`        | `string`                     | `''`        | false    | Integration kind: the title links here; without it the title is a button that emits `select`.                                                                                   |
 | `featured`    | `boolean`                    | `false`     | false    | Integration kind: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                         |
@@ -142,23 +140,22 @@ A bordered surface that groups related content under a title, with a header, a b
 
 ## Slots
 
-| Slot            | Scope | Notes                                                                                                            |
-| --------------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
-| `header`        | —     | Replaces the default header layout (title + header-action).                                                      |
-| `header-action` | —     | Actions aligned to the end of the default header; visible on header hover.                                       |
-| `default`       | —     | Main card body: children passed without a slot name. With `kind="integration"` it renders under the description. |
-| `content`       | —     | The named form of `default`; when both are passed, `content` wins.                                               |
-| `footer`        | —     | Footer actions or metadata; omitted when empty.                                                                  |
-| `logo`          | —     | Integration kind: replaces the logo mark, for an `img` with an empty `alt`.                                      |
-| `action`        | —     | Integration kind: one action at the end of the tile, above the stretched title target.                           |
+| Slot             | Scope | Notes                                                                                                            |
+| ---------------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
+| `header`         | —     | Replaces the default header layout (title + header-actions).                                                     |
+| `header-actions` | —     | Actions aligned to the end of the default header; visible on header hover.                                       |
+| `default`        | —     | Main card body: children passed without a slot name. With `kind="integration"` it renders under the description. |
+| `footer`         | —     | Footer actions or metadata; omitted when empty.                                                                  |
+| `logo`           | —     | Integration kind: replaces the logo mark, for an `img` with an empty `alt`.                                      |
+| `actions`        | —     | Integration kind: one action at the end of the tile, above the stretched title target.                           |
 
-> The body is the `default` slot (shadcn, Radix); `content` stays as its named form.
+> The body is the `default` slot (shadcn, Radix).
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
-- Hover-free devices: the `header-action` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
+- Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
 - Integration kind: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
 - Featured (`featured`, integration kind only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.
 
@@ -228,7 +225,7 @@ A bordered surface that groups related content under a title, with a header, a b
 
 ## Examples
 
-- Default — title header + `content`
+- Default — title header + default slot body
 - Header — an action rendered in the `header` slot, aligned to the end (justified: demonstrates the full-control header path)
 - Footer — `footer` region with actions (justified: the footer bar only renders when the slot is filled)
 - Flush — `padded=false` edge-to-edge content (mutually-exclusive boolean state of the `padded` prop)

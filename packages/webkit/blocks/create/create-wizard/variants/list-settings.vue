@@ -466,7 +466,7 @@
             :description="'Off on ' + choice + '.'"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                   <Alert
                     severity="warning"
@@ -511,7 +511,7 @@
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -552,7 +552,7 @@
             >
               <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Type"
@@ -666,7 +666,7 @@
                   </template>
                 </SectionHeader>
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item>
                         <Item.Content>
@@ -741,7 +741,7 @@
                   size="small"
                 />
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item
                         v-for="row in consumers"

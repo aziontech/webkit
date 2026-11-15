@@ -133,7 +133,7 @@
     await nextTick()
     const buttons = Array.from(
       rootEl.value?.querySelectorAll<HTMLElement>(
-        '[data-file-token-remove] button, [data-file-token-remove] a'
+        '[data-slot="file-token-remove"] button, [data-slot="file-token-remove"] a'
       ) ?? []
     )
     const target = buttons[index] ?? buttons[index - 1]
@@ -193,7 +193,7 @@
           </div>
           <span
             v-if="!readonly"
-            data-file-token-remove
+            data-slot="file-token-remove"
             class="ms-auto flex shrink-0"
           >
             <IconButton

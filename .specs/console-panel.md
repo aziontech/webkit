@@ -3,9 +3,9 @@ name: console-panel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 7091eeab4e1c6b25f4a1c7a8dbdde291d2ae5258c54d36729e1577b3925307e7
+checksum: 83267672a87deb5cab696fab4c8c0a0abe06cc10dbc6b7da655625abeb4e5d20
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -66,7 +66,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 | Prop              | Type                     | Default      | Required | JSDoc                                                                                                                                                                                                                              |
 | ----------------- | ------------------------ | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `kind`            | `'console' \| 'diagram'` | `'console'`  | false    | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height.                                                                                                     |
-| `titleKind`       | `SectionTitleKind`       | `'centered'` | false    | Layout of the headline block.                                                                                                                                                                                                      |
+| `titleKind`       | `SectionTitleKind`       | `'center'` | false    | Layout of the headline block.                                                                                                                                                                                                      |
 | `titlePadding`    | `SectionTitlePadding`    | `'medium'`   | false    | Vertical padding of the headline block.                                                                                                                                                                                            |
 | `size`            | `SectionTitleSize`       | `'medium'`   | false    | Step of the headline on the heading scale.                                                                                                                                                                                         |
 | `anchor`          | `string`                 | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                           |

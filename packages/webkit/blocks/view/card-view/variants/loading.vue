@@ -33,7 +33,7 @@
     filtering: { fields: ['name', 'domain', 'owner'] },
     propertyFiltering: { properties },
     pagination: { pageSize: 12, pageSizeOptions: [12, 24, 48] },
-    selection: { mode: 'multi' },
+    selection: { mode: 'multiple' },
     preferences: { defaults: { columns: [{ id: 'owner', visible: false }] } }
   })
 </script>

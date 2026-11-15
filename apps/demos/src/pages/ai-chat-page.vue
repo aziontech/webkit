@@ -111,7 +111,7 @@
 
   function stream(turn) {
     const full = turn.answer.content
-    turn.state = 'streaming'
+    turn.status = 'streaming'
     state.value = 'streaming'
     let index = turn.content.length
     timer = setInterval(() => {
@@ -123,17 +123,17 @@
 
   function finish(turn) {
     stopTimers()
-    turn.state = 'complete'
+    turn.status = 'success'
     turn.thinking = false
     state.value = 'ready'
     composerEl.value?.focus()
   }
 
   function respond(turn) {
-    turn.state = 'pending'
+    turn.status = 'pending'
     turn.thinking = true
     turn.content = ''
-    state.value = 'submitted'
+    state.value = 'pending'
     timer = setTimeout(() => {
       turn.thinking = false
       stream(turn)
@@ -147,7 +147,7 @@
     const turn = reactive({
       id: nextId++,
       from: 'assistant',
-      state: 'pending',
+      status: 'pending',
       content: '',
       thinking: true,
       answer: answerFor(text),
@@ -162,7 +162,7 @@
     stopTimers()
     const turn = turns.value[turns.value.length - 1]
     if (turn?.from === 'assistant') {
-      turn.state = 'complete'
+      turn.status = 'success'
       turn.thinking = false
       turn.stopped = true
     }
@@ -183,7 +183,7 @@
 
   const lastAnswer = computed(() => {
     const turn = turns.value[turns.value.length - 1]
-    return turn?.from === 'assistant' && turn.state === 'complete' && !turn.stopped ? turn : null
+    return turn?.from === 'assistant' && turn.status === 'success' && !turn.stopped ? turn : null
   })
 
   onBeforeUnmount(stopTimers)
@@ -243,7 +243,7 @@
           v-for="turn in turns"
           :key="turn.id"
           :from="turn.from"
-          :state="turn.from === 'user' ? 'complete' : turn.state"
+          :status="turn.from === 'user' ? 'success' : turn.status"
           :timestamp="turn.time"
           :error-message="turn.error"
           @retry="retry(turn)"
@@ -258,7 +258,7 @@
             </Reasoning>
             <StreamingResponse
               :content="turn.content"
-              :streaming="turn.state === 'streaming'"
+              :streaming="turn.status === 'streaming'"
               :sources="turn.answer.sources"
               :anchor="`answer-${turn.id}`"
             />
@@ -269,7 +269,7 @@
               You stopped this response.
             </p>
             <Sources
-              v-if="turn.state === 'complete' && !turn.stopped"
+              v-if="turn.status === 'success' && !turn.stopped"
               :items="turn.answer.sources"
               :anchor="`answer-${turn.id}`"
             />
@@ -311,7 +311,7 @@
       <PromptInput
         ref="composerEl"
         v-model="prompt"
-        :state="state"
+        :status="state"
         :max-length="4000"
         @submit="(_event, { value }) => send(value)"
         @stop="stop"

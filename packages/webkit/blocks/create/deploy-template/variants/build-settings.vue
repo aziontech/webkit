@@ -37,7 +37,7 @@
 
   const breadcrumb = [
     { label: 'Start from a template' },
-    { label: 'Nuxt E-commerce', current: true }
+    { label: 'Nuxt E-commerce', active: true }
   ]
 
   const scopes: SelectOptionItem[] = [
@@ -193,7 +193,7 @@
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-2xl)"
       >
         <Card class="w-full">
-          <template #content>
+          <template #default>
             <div class="flex w-full items-start gap-(--spacing-md)">
               <span
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -251,7 +251,7 @@
           class="flex w-full flex-col items-center gap-(--spacing-xl)"
         >
           <Card class="w-full">
-            <template #content>
+            <template #default>
               <div class="flex flex-col gap-(--spacing-lg)">
                 <div class="flex flex-col gap-(--spacing-2xs)">
                   <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
@@ -295,7 +295,7 @@
                         placeholder="my-repository"
                       />
                       <InputGroupAddon>
-                        <Tooltip text="Repository visibility">
+                        <Tooltip content="Repository visibility">
                           <Switch
                             v-model="isPublic"
                             kind="privacy"
@@ -339,7 +339,7 @@
                         type="single"
                         collapsible
                         size="large"
-                        arrow-position="left"
+                        icon-position="leading"
                       >
                         <Accordion.Item value="build">
                           <Accordion.Trigger>
@@ -407,7 +407,7 @@
                         type="single"
                         collapsible
                         size="large"
-                        arrow-position="left"
+                        icon-position="leading"
                       >
                         <Accordion.Item value="variables">
                           <Accordion.Trigger>
@@ -460,7 +460,7 @@
                                     />
                                     <Tooltip
                                       v-if="field.secret"
-                                      :text="revealed[field.name] ? 'Hide value' : 'Show value'"
+                                      :content="revealed[field.name] ? 'Hide value' : 'Show value'"
                                     >
                                       <IconButton
                                         :icon="revealed[field.name] ? 'ai ai-eye-off' : 'ai ai-eye'"
@@ -475,7 +475,7 @@
                                     </Tooltip>
                                     <InputGroupAddon>
                                       <Tooltip
-                                        :text="
+                                        :content="
                                           field.secret
                                             ? 'The template keeps this value secret.'
                                             : 'The template stores this value as plain text.'

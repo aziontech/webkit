@@ -116,7 +116,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <div class="w-full md:w-fit">

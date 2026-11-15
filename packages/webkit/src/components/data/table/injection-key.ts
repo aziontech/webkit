@@ -124,14 +124,17 @@ export interface TableContext {
   editingFilter: Ref<AppliedFilter | null>
   /** Request editing a committed filter (sets `editingFilter`). */
   editFilter: (filter: AppliedFilter) => void
-  /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`). */
-  exportCsv: (options?: {
-    filename?: string
-    scope?: TableExportScope
-    rows?: Record<string, unknown>[]
-  }) => Promise<void>
-  /** Signal a refresh; the root emits `refresh` (the app refetches). */
-  reload: () => void
+  /** Serialize the visible/ordered columns + filtered rows to CSV and download (or emit `export`); the triggering DOM event is emitted first. */
+  exportCsv: (
+    options?: {
+      filename?: string
+      scope?: TableExportScope
+      rows?: Record<string, unknown>[]
+    },
+    event?: Event
+  ) => Promise<void>
+  /** Signal a refresh; the root emits `refresh` with the triggering DOM event (the app refetches). */
+  reload: (event?: Event) => void
   /** Id a `TableCaption` takes, so the table is labelled by it (`aria-labelledby`). */
   captionId?: string
   /** A `TableCaption` registers while mounted; returns the unregister function. */
@@ -156,8 +159,8 @@ export interface TableColumn {
   accessorKey?: string
   /** Header label (overridden by a `header-<id>` slot). */
   header?: string
-  /** Allow sorting on this column. */
-  enableSorting?: boolean
+  /** Allow sorting on this column; overrides the table-wide `sortable`. */
+  sortable?: boolean
   /** Flex weight; the principal column uses 2 (see `principal`). */
   grow?: 1 | 2 | 3
   /** Mark this as the principal column — it defaults to `grow: 2`. When no column sets it, the first non-checkbox column is principal. */

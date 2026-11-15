@@ -15,19 +15,16 @@
 
   interface Props {
     /** Current sort direction shown by the glyph. */
-    direction?: SortDirection
-    /** Hides the button while keeping its layout slot. */
-    visible?: boolean
+    sortDirection?: SortDirection
   }
   export type TableSortButtonProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
-    direction: 'none',
-    visible: true
+    sortDirection: 'none'
   })
 
   const emit = defineEmits<{
-    toggle: [direction: 'ascending' | 'descending']
+    sort: [direction: 'ascending' | 'descending']
   }>()
 
   const attrs = useAttrs()
@@ -41,19 +38,19 @@
   )
 
   const icon = computed<string>(() => {
-    if (props.direction === 'ascending') return 'ai ai-arrow-up-wide-narrow'
-    if (props.direction === 'descending') return 'ai ai-arrow-down-wide-narrow'
+    if (props.sortDirection === 'ascending') return 'ai ai-arrow-up-wide-narrow'
+    if (props.sortDirection === 'descending') return 'ai ai-arrow-down-wide-narrow'
     return 'ai ai-sort'
   })
 
   const ariaLabel = computed<string>(() => {
-    if (props.direction === 'ascending') return t('tableSortButton.ascending')
-    if (props.direction === 'descending') return t('tableSortButton.descending')
+    if (props.sortDirection === 'ascending') return t('tableSortButton.ascending')
+    if (props.sortDirection === 'descending') return t('tableSortButton.descending')
     return t('tableSortButton.unsorted')
   })
 
   const onClick = () => {
-    emit('toggle', props.direction === 'ascending' ? 'descending' : 'ascending')
+    emit('sort', props.sortDirection === 'ascending' ? 'descending' : 'ascending')
   }
 </script>
 
@@ -64,9 +61,7 @@
     kind="transparent"
     size="small"
     :data-testid="testId"
-    :data-visible="visible"
-    :data-direction="direction"
-    class="data-[visible=false]:invisible data-[visible=false]:pointer-events-none"
+    :data-sort="sortDirection"
     @click="onClick"
   />
 </template>

@@ -24,13 +24,13 @@
   <div class="flex max-w-[692px] flex-col gap-(--spacing-xs)">
     <CodeBlock
       :tabs="command"
-      :line-numbers="false"
+      :show-line-numbers="false"
       show-label
     />
     <CodeBlock
       :tabs="output"
       kind="output"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </div>
 </template>

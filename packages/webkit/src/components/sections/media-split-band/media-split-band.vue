@@ -232,7 +232,7 @@
       <MediaSplit
         framed
         :orientation="orientation"
-        :align="size === 'large' ? 'center' : 'top'"
+        :align="size === 'large' ? 'center' : 'start'"
         :size="size"
         media-fill="surface"
         :texture="texture"
@@ -262,7 +262,7 @@
             <CodeBlock
               :tabs="tabs"
               :default-value="openFile"
-              line-numbers
+              show-line-numbers
               :bordered="false"
               v-bind="{ animateLines: true }"
               :copy-aria-label="copyAriaLabel || undefined"

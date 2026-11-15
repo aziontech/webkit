@@ -7,24 +7,24 @@
 
   const full =
     'The 502 responses started at 14:05, when the **origin certificate** expired. Upload the renewed certificate and the errors stop.'
-  const state = ref('pending')
+  const status = ref('pending')
   const content = ref('')
   let timer
 
   function play() {
     clearTimeout(timer)
     clearInterval(timer)
-    state.value = 'pending'
+    status.value = 'pending'
     content.value = ''
     timer = setTimeout(() => {
-      state.value = 'streaming'
+      status.value = 'streaming'
       let index = 0
       timer = setInterval(() => {
         index = Math.min(full.length, index + 3)
         content.value = full.slice(0, index)
         if (index >= full.length) {
           clearInterval(timer)
-          state.value = 'complete'
+          status.value = 'success'
         }
       }, 40)
     }, 1500)
@@ -39,10 +39,10 @@
 
 <template>
   <div class="flex w-full max-w-(--container-3xl) flex-col items-start gap-(--spacing-md)">
-    <ChatMessage :state="state">
+    <ChatMessage :status="status">
       <StreamingResponse
         :content="content"
-        :streaming="state === 'streaming'"
+        :streaming="status === 'streaming'"
       />
       <template #actions>
         <ChatMessage.Actions>
@@ -58,7 +58,7 @@
       kind="outlined"
       size="small"
       icon="ai ai-refresh"
-      :disabled="state !== 'complete'"
+      :disabled="status !== 'success'"
       @click="play"
     />
   </div>

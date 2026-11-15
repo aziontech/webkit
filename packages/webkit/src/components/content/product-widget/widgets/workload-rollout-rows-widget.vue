@@ -130,7 +130,7 @@
             </span>
           </template>
 
-          <template #content>
+          <template #default>
             <ShellMockupPart
               v-for="(row, index) in ROWS"
               :key="row.version + row.application"

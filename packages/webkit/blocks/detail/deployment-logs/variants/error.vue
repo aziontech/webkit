@@ -7,10 +7,10 @@
 
   const steps: DeployStep[] = [
     {
-      key: 'token',
+      id: 'token',
       title: 'Access token',
       description: 'Deploy token created and added to the CLI',
-      status: 'done',
+      status: 'success',
       duration: '3s',
       lines: [
         {
@@ -40,10 +40,10 @@
       ]
     },
     {
-      key: 'clone',
+      id: 'clone',
       title: 'Clone template',
       description: 'Template cloned into the GitHub scope',
-      status: 'done',
+      status: 'success',
       duration: '4s',
       lines: [
         {
@@ -68,10 +68,10 @@
       ]
     },
     {
-      key: 'install',
+      id: 'install',
       title: 'Install dependencies',
       description: '478 packages installed',
-      status: 'done',
+      status: 'success',
       duration: '9s',
       lines: [
         { id: '0', time: '13:47:41', type: 'text', message: '[TASK] - # npm install' },
@@ -103,10 +103,10 @@
       ]
     },
     {
-      key: 'build',
+      id: 'build',
       title: 'Build',
       description: 'Project built into dist/',
-      status: 'done',
+      status: 'success',
       duration: '8s',
       lines: [
         { id: '0', time: '13:47:50', type: 'text', message: '[TASK] - # Build template' },
@@ -131,10 +131,10 @@
       ]
     },
     {
-      key: 'upload',
+      id: 'upload',
       title: 'Upload',
       description: 'Static assets uploaded to storage',
-      status: 'done',
+      status: 'success',
       duration: '5s',
       lines: [
         {
@@ -165,10 +165,10 @@
       ]
     },
     {
-      key: 'service',
+      id: 'service',
       title: 'Service',
       description: 'Service and cache settings created',
-      status: 'done',
+      status: 'success',
       duration: '5s',
       lines: [
         { id: '0', time: '13:48:03', type: 'text', message: '[TASK] - # Creating service' },
@@ -187,10 +187,10 @@
       ]
     },
     {
-      key: 'rules',
+      id: 'rules',
       title: 'Routing Rules',
       description: 'Request rules and cache policies applied',
-      status: 'failed',
+      status: 'error',
       duration: '4s',
       tag: { label: 'Failed', severity: 'danger' },
       lines: [
@@ -223,7 +223,7 @@
       ]
     },
     {
-      key: 'deploy',
+      id: 'deploy',
       title: 'Publish',
       description: 'Repository wired and the deploy published',
       status: 'skipped',
@@ -233,7 +233,7 @@
     }
   ]
 
-  const stepTag = (key: string) => steps.find((step) => step.key === key)?.tag
+  const stepTag = (key: string) => steps.find((step) => step.id === key)?.tag
 
   const logView = ref<LogViewStepsView>('phased')
   const openStep = ref('rules')
@@ -257,8 +257,8 @@
     </template>
     <template #step-meta="{ step }">
       <Tag
-        v-if="stepTag(step.key)"
-        v-bind="stepTag(step.key)"
+        v-if="stepTag(step.id)"
+        v-bind="stepTag(step.id)"
         size="small"
       />
     </template>

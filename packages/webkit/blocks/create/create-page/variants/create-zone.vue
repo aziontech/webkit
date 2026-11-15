@@ -294,7 +294,7 @@
                 hint="The two fields a zone requires: what the zone is called here, and the domain it answers for."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -356,7 +356,7 @@
                 :hint="`Read from ${importedFrom} and created with the zone, except the SOA and the nameservers, which the provider keeps.`"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List aria-label="Imported records">
                       <Item
                         v-for="(record, index) in shownRecords"
@@ -422,7 +422,7 @@
                 collapsible
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="DNSSEC"

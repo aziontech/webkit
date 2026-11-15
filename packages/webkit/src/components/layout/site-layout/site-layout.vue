@@ -228,7 +228,7 @@
         <CommandGroup
           v-for="group in paletteGroups"
           :key="group.key"
-          :heading="group.heading || t('siteLayout.pages')"
+          :label="group.heading || t('siteLayout.pages')"
         >
           <CommandItem
             v-for="page in group.pages"

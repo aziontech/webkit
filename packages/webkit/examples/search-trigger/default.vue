@@ -17,7 +17,7 @@
     <Command.Input placeholder="Search pages" />
     <Command.List>
       <Command.Empty>No results.</Command.Empty>
-      <Command.Group heading="Pages">
+      <Command.Group label="Pages">
         <Command.Item
           v-for="page in pages"
           :key="page"

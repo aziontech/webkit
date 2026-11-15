@@ -10,13 +10,12 @@ const severity = instance.getEnum('type', {
   success: 'success',
   error: 'danger',
   warning: 'warning',
-  default: 'default'
+  default: 'neutral'
 })
 const loading = instance.getEnum('loading', {
   false: false,
   true: true
 })
-const resolved = loading ? 'loading' : severity
 const showAction = instance.getBoolean('showAction')
 const showClose = instance.getBoolean('showClose')
 
@@ -56,7 +55,7 @@ const trailing =
     : ''
 
 export default {
-  example: figma.code`<Toast.Item${resolved === 'default' ? '' : figma.code` severity="${resolved}"`}>${body}${trailing}
+  example: figma.code`<Toast.Item${severity === 'neutral' ? '' : figma.code` severity="${severity}"`}${loading ? ' loading' : ''}>${body}${trailing}
 </Toast.Item>`,
   imports: ["import Toast from '@aziontech/webkit/toast'"],
   id: 'toast',

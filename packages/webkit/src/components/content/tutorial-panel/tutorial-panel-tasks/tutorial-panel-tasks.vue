@@ -59,7 +59,7 @@
   const total = computed<number>(() => tasks.value.length)
 
   const complete = computed<number>(
-    () => tasks.value.filter((id) => statuses.get(id)?.() === 'complete').length
+    () => tasks.value.filter((id) => statuses.get(id)?.() === 'success').length
   )
 
   const register = (id: symbol, status: () => TutorialTaskStatus): TutorialTaskHandle => {

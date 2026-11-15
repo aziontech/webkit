@@ -47,7 +47,7 @@
   const props = withDefaults(defineProps<Props>(), {
     anchor: '',
     eyebrow: '',
-    titleKind: 'horizontal',
+    titleKind: 'split',
     title: '',
     description: '',
     descriptionWidth: 'narrow',

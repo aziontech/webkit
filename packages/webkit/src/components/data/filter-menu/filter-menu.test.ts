@@ -131,7 +131,7 @@ describe('FilterMenu', () => {
     expect(byTestId('data-filter-menu__field-status')?.hasAttribute('data-applied')).toBe(false)
   })
 
-  it('drills into a multi field: checkbox rows inside a named group toggle values in the model', async () => {
+  it('drills into a multiple field: checkbox rows inside a named group toggle values in the model', async () => {
     const { updates } = mount({ owner: ['jane'] })
     await openField('owner')
     const group = panel()!.querySelector('[role="group"]')!
@@ -141,6 +141,8 @@ describe('FilterMenu', () => {
     expect(jane.getAttribute('role')).toBe('checkbox')
     expect(jane.getAttribute('aria-checked')).toBe('true')
     expect(john.getAttribute('aria-checked')).toBe('false')
+    expect(jane.querySelector('[data-selected]')?.getAttribute('data-selected')).toBe('true')
+    expect(john.querySelector('[data-selected]')?.getAttribute('data-selected')).toBe('false')
     await fireEvent.click(john)
     expect(updates.at(-1)).toEqual({ owner: ['jane', 'john'] })
     await fireEvent.click(byTestId('data-filter-menu__option-jane')!)

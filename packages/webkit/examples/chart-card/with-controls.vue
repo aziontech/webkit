@@ -37,7 +37,7 @@
     <ChartCard.Header>
       <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
-        <Hint text="Requests carrying cross-site scripting attacks against your domains." />
+        <Hint content="Requests carrying cross-site scripting attacks against your domains." />
       </span>
       <ChartCard.Action>
         <Tag

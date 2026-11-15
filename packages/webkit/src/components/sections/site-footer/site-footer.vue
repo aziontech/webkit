@@ -28,8 +28,8 @@
     label: string
     /** Destination the link points to. */
     href: string
-    /** Opens the link in a new tab and closes its label on the external-link glyph. */
-    external?: boolean
+    /** Where the link opens; `_blank` opens it in a new tab and closes its label on the external-link glyph. */
+    target?: '_blank' | '_self'
   }
 
   /** One titled column of footer links. */
@@ -59,7 +59,7 @@
     home?: string
     /** Accessible name of the Azion mark link. Empty uses the locale catalog (`Azion home`). */
     homeAriaLabel?: string
-    /** The link columns, in order; each is `{ title, links }` where every link is `{ label, href, external? }`; an `external` link opens in a new tab and closes on the external-link glyph. */
+    /** The link columns, in order; each is `{ title, links }` where every link is `{ label, href, target? }`; a `_blank` link opens in a new tab and closes on the external-link glyph. */
     columns?: SiteFooterColumn[]
     /** The profile icon buttons, in order; each is `{ icon, label, href }` where `label` names the button for assistive tech. They open in a new tab. */
     socials?: SiteFooterSocial[]
@@ -124,12 +124,12 @@
           v-for="link in column.links"
           :key="link.label"
           :href="link.href"
-          :target="link.external ? '_blank' : undefined"
-          :rel="link.external ? 'noopener noreferrer' : undefined"
-          :data-external="link.external || null"
+          :target="link.target"
+          :rel="link.target === '_blank' ? 'noopener noreferrer' : undefined"
+          :data-external="link.target === '_blank' || null"
         >
           {{ link.label }}
-          <template v-if="link.external">
+          <template v-if="link.target === '_blank'">
             <i
               class="ai ai-external-link shrink-0 text-body-xs leading-none"
               aria-hidden="true"
@@ -180,7 +180,7 @@
             :placeholder="languageAriaLabel || t('siteFooter.language')"
           >
             <SelectTrigger :aria-label="languageAriaLabel || t('siteFooter.language')">
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-globe text-(--text-muted)"
                   aria-hidden="true"

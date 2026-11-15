@@ -17,7 +17,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the Source filter is opened and WAF picked from it while it is, and taken back out after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -75,7 +75,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const stageEl = ref<globalThis.HTMLElement | null>(null)
@@ -147,7 +147,7 @@
             />
             <Badge
               :label="String(appliedCount)"
-              severity="primary"
+              variant="primary"
               size="small"
               aria-hidden="true"
               class="pointer-events-none absolute -top-2 -end-2 min-w-5"
@@ -160,7 +160,7 @@
             aria-label="Search events"
             class="min-w-0 grow"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"
@@ -175,9 +175,9 @@
           class="grid w-fit min-w-(--container-3xs) max-w-(--container-xs) overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm)"
         >
           <div
-            :data-shown="frame.level === 'fields' || null"
+            :data-active="frame.level === 'fields' || null"
             :aria-hidden="frame.level !== 'fields'"
-            class="flex -translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-shown:translate-x-0 data-shown:opacity-100 motion-reduce:transition-none"
+            class="flex -translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-active:translate-x-0 data-active:opacity-100 motion-reduce:transition-none"
           >
             <div class="border-b border-(--border-default) p-(--spacing-xs)">
               <Input
@@ -187,7 +187,7 @@
                 placeholder="Filter by…"
                 aria-label="Search filter fields"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -219,9 +219,9 @@
           </div>
 
           <div
-            :data-shown="frame.level === 'values' || null"
+            :data-active="frame.level === 'values' || null"
             :aria-hidden="frame.level !== 'values'"
-            class="flex translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-shown:translate-x-0 data-shown:opacity-100 motion-reduce:transition-none"
+            class="flex translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-active:translate-x-0 data-active:opacity-100 motion-reduce:transition-none"
           >
             <div
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
@@ -242,7 +242,7 @@
                 placeholder="Filter source…"
                 aria-label="Search Source values"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -260,15 +260,15 @@
               >
                 <span class="grow truncate">{{ source.label }}</span>
                 <i
-                  :data-picked="picked(source.id) || null"
-                  class="ai ai-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-picked:opacity-100 motion-reduce:transition-none"
+                  :data-selected="picked(source.id) || null"
+                  class="ai ai-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-selected:opacity-100 motion-reduce:transition-none"
                   aria-hidden="true"
                 />
               </span>
             </div>
             <div
-              :data-shown="frame.picked || null"
-              class="border-t border-(--border-default) p-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+              :data-state="frame.picked ? 'open' : 'closed'"
+              class="border-t border-(--border-default) p-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
             >
               <span
                 class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"

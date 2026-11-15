@@ -20,8 +20,8 @@
 
   defineOptions({ name: 'DeploymentLogs' })
 
-  type DeploymentPhase = 'running' | 'finished' | 'failed'
-  type DeploymentStepStatus = 'done' | 'running' | 'failed' | 'skipped' | 'pending'
+  type DeploymentPhase = 'running' | 'success' | 'error'
+  type DeploymentStepStatus = 'success' | 'running' | 'error' | 'skipped' | 'pending'
 
   interface Props {
     /** Steps of the deployment, each with its log lines. */
@@ -29,7 +29,7 @@
     /** Streams through the steps instead of drawing a settled deployment. */
     live?: boolean
     /** Milliseconds between revealed log lines. */
-    interval?: number
+    autoplayInterval?: number
     /** Key of the step that failed. */
     failAt?: string
     /** Key of the step a settled deployment is currently on. */
@@ -41,35 +41,35 @@
     /** Heading on the logs row. */
     label?: string
     /** Draws the logs row. */
-    header?: boolean
+    showHeader?: boolean
     /** Offers the per-step copy control. */
     copyable?: boolean
     /** Draws the flush progress bar while the run is in flight. */
-    progressBar?: boolean
+    showProgress?: boolean
     /** Draws the view switch and the wall-clock on the logs row. */
-    controls?: boolean
+    showControls?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     steps: () => DEFAULT_DEPLOYMENT_STEPS,
     live: false,
-    interval: 200,
+    autoplayInterval: 200,
     failAt: '',
     activeAt: '',
     totalLabel: '',
     seek: 0,
     label: 'Deployment Logs',
-    header: true,
+    showHeader: true,
     copyable: true,
-    progressBar: true,
-    controls: true
+    showProgress: true,
+    showControls: true
   })
 
   const emit = defineEmits<{
     /** Fires once the live run has finished every step. */
-    finished: []
+    complete: []
     /** Fires when the live run stops on its failing step. */
-    failed: [key: string]
+    error: [key: string]
   }>()
 
   const view = defineModel<DeploymentLogView>('view', { default: 'phased' })
@@ -96,7 +96,7 @@
   const staticStep = settledIndex !== -1 ? settledIndex : lastIndex.value
 
   const phase = ref<DeploymentPhase>(
-    props.live || activeAtIndex !== -1 ? 'running' : failIndex.value !== -1 ? 'failed' : 'finished'
+    props.live || activeAtIndex !== -1 ? 'running' : failIndex.value !== -1 ? 'error' : 'success'
   )
   const settled = computed(() => phase.value !== 'running')
   const activeStep = ref(props.live ? -1 : staticStep)
@@ -130,11 +130,11 @@
   }
 
   const stepStatus = (i: number): DeploymentStepStatus => {
-    if (phase.value === 'failed') {
-      if (i < activeStep.value) return 'done'
-      return i === activeStep.value ? 'failed' : 'skipped'
+    if (phase.value === 'error') {
+      if (i < activeStep.value) return 'success'
+      return i === activeStep.value ? 'error' : 'skipped'
     }
-    if (phase.value === 'finished' || i < activeStep.value) return 'done'
+    if (phase.value === 'success' || i < activeStep.value) return 'success'
     if (i === activeStep.value && phase.value === 'running') return 'running'
     return 'pending'
   }
@@ -142,7 +142,7 @@
   const STEP_TAGS: Partial<
     Record<DeploymentStepStatus, { label: string; severity: 'danger' | 'neutral' }>
   > = {
-    failed: { label: 'Failed', severity: 'danger' },
+    error: { label: 'Failed', severity: 'danger' },
     skipped: { label: 'Skipped', severity: 'neutral' }
   }
   const stepTag = (i: number) => STEP_TAGS[stepStatus(i)] ?? null
@@ -184,7 +184,7 @@
 
   const totalLines = computed(() => stepList.value.reduce((n, step) => n + step.logs.length, 0))
   const progress = computed(() => {
-    if (phase.value === 'finished') return 100
+    if (phase.value === 'success') return 100
     const done = revealed.value.reduce((sum, n) => sum + n, 0)
     return Math.round((done / totalLines.value) * 100)
   })
@@ -195,7 +195,7 @@
   const activeTitle = computed(() => stepList.value[activeStep.value]?.title ?? '')
 
   const doneCount = computed(
-    () => stepList.value.filter((_step, i) => stepStatus(i) === 'done').length
+    () => stepList.value.filter((_step, i) => stepStatus(i) === 'success').length
   )
   const progressLabel = computed(() => `${doneCount.value}/${stepList.value.length} steps`)
 
@@ -206,15 +206,15 @@
 
   const outcomeLabel = computed(() => {
     const time = timeLabel.value
-    if (phase.value === 'finished') return time ? `Deployed in ${time}` : 'Deployed'
-    if (phase.value === 'failed') return time ? `Failed after ${time}` : 'Failed'
+    if (phase.value === 'success') return time ? `Deployed in ${time}` : 'Deployed'
+    if (phase.value === 'error') return time ? `Failed after ${time}` : 'Failed'
     return time
   })
 
   const failOn = (i: number) => {
     measured.value[i] = Math.max(1, elapsed.value - stepStartedAt.value)
-    phase.value = 'failed'
-    emit('failed', stepList.value[i]?.key ?? '')
+    phase.value = 'error'
+    emit('error', stepList.value[i]?.key ?? '')
   }
 
   const runStep = (i: number, from = 0) => {
@@ -244,17 +244,17 @@
       if (i + 1 < stepList.value.length) {
         after(STEP_GAP_MS, () => runStep(i + 1))
       } else {
-        phase.value = 'finished'
+        phase.value = 'success'
         after(500, () => {
           openStep.value = null
         })
-        after(2200, () => emit('finished'))
+        after(2200, () => emit('complete'))
       }
-    }, props.interval)
+    }, props.autoplayInterval)
   }
 
   const resumeFrom = (ms: number) => {
-    let remaining = Math.floor(ms / props.interval)
+    let remaining = Math.floor(ms / props.autoplayInterval)
 
     for (let i = 0; i < stepList.value.length; i++) {
       const step = stepList.value[i]
@@ -271,8 +271,8 @@
       if (i === failIndex.value) {
         activeStep.value = i
         openStep.value = step.key
-        phase.value = 'failed'
-        emit('failed', step.key)
+        phase.value = 'error'
+        emit('error', step.key)
         return
       }
     }
@@ -299,7 +299,7 @@
 <template>
   <div class="flex w-full flex-col">
     <div
-      v-if="header"
+      v-if="showHeader"
       class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
     >
       <p
@@ -321,19 +321,19 @@
         </template>
 
         <Tag
-          v-else-if="phase === 'finished'"
-          key="finished"
+          v-else-if="phase === 'success'"
+          key="success"
           label="Completed"
           severity="success"
         />
         <Tag
           v-else
-          key="failed"
+          key="error"
           :label="failedTitle ? `Failed on ${failedTitle}` : 'Failed'"
           severity="danger"
         />
 
-        <template v-if="controls && settled">
+        <template v-if="showControls && settled">
           <span class="text-label-sm text-(--text-muted)">{{ outcomeLabel }}</span>
           <ToggleGroup
             v-model="view"
@@ -360,12 +360,12 @@
           <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
             <span class="flex size-5 shrink-0 items-center justify-center">
               <i
-                v-if="stepStatus(i) === 'done'"
+                v-if="stepStatus(i) === 'success'"
                 class="ai ai-circle-check text-(--success-foreground)"
                 aria-hidden="true"
               />
               <i
-                v-else-if="stepStatus(i) === 'failed'"
+                v-else-if="stepStatus(i) === 'error'"
                 class="ai ai-circle-x text-(--danger-foreground)"
                 aria-hidden="true"
               />
@@ -386,12 +386,12 @@
             </span>
 
             <span
-              :data-state="stepStatus(i)"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
+              :data-status="stepStatus(i)"
+              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[status=error]:flex-wrap"
             >
               <span
-                :data-state="stepStatus(i)"
-                class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
+                :data-status="stepStatus(i)"
+                class="shrink-0 text-label-md text-(--text-default) data-[status=pending]:text-(--text-muted) data-[status=skipped]:text-(--text-muted)"
               >
                 {{ step.title }}
               </span>
@@ -402,8 +402,8 @@
                 size="small"
               />
               <span
-                :data-state="stepStatus(i)"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-foreground) data-[state=running]:text-(--text-default)"
+                :data-status="stepStatus(i)"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=error]:whitespace-normal data-[status=error]:text-pretty data-[status=error]:text-(--danger-foreground) data-[status=running]:text-(--text-default)"
               >
                 {{ step.description }}
               </span>
@@ -455,7 +455,7 @@
     </LogView>
 
     <Progress
-      v-if="progressBar && !settled"
+      v-if="showProgress && !settled"
       :value="progress"
       :max="100"
       size="small"

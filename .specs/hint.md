@@ -3,8 +3,8 @@ name: hint
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 8c4f155d65b5be30cad5f0574fbe388a754afca0d758eeca7f62aafe24ce766c
+spec_version: 6
+checksum: 2eb551f2c6069e5740a8a456761507961fdff3ef74658bcfc33a7d606ae0468f
 created: 2026-08-10
 last_updated: 2026-11-15
 ---
@@ -38,7 +38,7 @@ Small info affordance — a muted `ai ai-circle-info` glyph on a focusable butto
 
 - One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.
 - Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
-- The `text` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
+- The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
 - Place it immediately after the thing it explains, not at the end of a row.
 
 ## Usage
@@ -49,7 +49,7 @@ Small info affordance — a muted `ai ai-circle-info` glyph on a focusable butto
 </script>
 
 <template>
-  <Hint text="Values are encrypted at rest and never displayed again after saving." />
+  <Hint content="Values are encrypted at rest and never displayed again after saving." />
 </template>
 ```
 
@@ -57,7 +57,7 @@ Small info affordance — a muted `ai ai-circle-info` glyph on a focusable butto
 
 | Prop        | Type                                               | Default | Required | JSDoc                                                                         |
 | ----------- | -------------------------------------------------- | ------- | -------- | ----------------------------------------------------------------------------- |
-| `text`      | `string`                                           | `''`    | true     | Guidance text revealed on hover or focus; also the trigger's accessible name. |
+| `content`   | `string`                                           | `''`    | true     | Guidance text revealed on hover or focus; also the trigger's accessible name. |
 | `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false    | Anchor side of the tooltip relative to the glyph.                             |
 
 ## Events
@@ -101,7 +101,7 @@ The tooltip's own open/close motion belongs to `tooltip` and is specified there.
 ## Accessibility (WCAG 2.1 AA)
 
 - The trigger is a native `<button type="button">`, so it is in the tab order and the tooltip opens on `focus` as well as hover (`Tooltip` opens on `focusin`).
-- The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `text` prop, so the hint is reachable by screen readers that never see the tooltip.
+- The glyph is decorative (`aria-hidden="true"`); the button's accessible name is the `content` prop, so the hint is reachable by screen readers that never see the tooltip.
 - Keyboard map: `Tab` moves focus to the glyph and opens the tooltip; `Escape` closes it (owned by `Tooltip`); the button has no activation behaviour.
 - The button's default action is prevented on click, so a `Hint` rendered inside a `<label>` never toggles the labelled control.
 - Contrast ≥4.5:1 between `var(--text-muted)` and `var(--bg-canvas)`; the focus ring uses `var(--ring-color)` at 2px with an offset.

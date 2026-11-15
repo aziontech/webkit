@@ -33,7 +33,7 @@
       description: 'Start free for personal projects and experimentation',
       ariaLabel: "I'm working on personal projects. Free plan, Free.",
       name: 'Free',
-      severity: 'contrast',
+      variant: 'contrast',
       price: 'Free'
     },
     {
@@ -51,7 +51,7 @@
       description: 'Optimize costs with usage or spend commitments',
       ariaLabel: "I'm running production at scale. Enterprise plan, From $2,000/mo.",
       name: 'Enterprise',
-      severity: 'primary',
+      variant: 'primary',
       price: 'From $2,000/mo'
     }
   ]
@@ -284,7 +284,7 @@
             :padded="false"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <Progress
                 :value="2"
                 :max="3"
@@ -348,6 +348,7 @@
                               <div class="flex shrink-0 flex-col items-end gap-(--spacing-2xs)">
                                 <Tag
                                   :label="option.name"
+                                  :variant="option.variant"
                                   :severity="option.severity"
                                   size="small"
                                   rounded
@@ -369,7 +370,7 @@
                         <Drawer
                           :open="upgradeOpen"
                           size="large"
-                          side="right"
+                          side="end"
                           @update:open="onOpenChange"
                         >
                           <DrawerContent>
@@ -451,7 +452,7 @@
                                         />
                                       </template>
 
-                                      <template #content>
+                                      <template #default>
                                         <div
                                           v-if="charge"
                                           class="flex flex-col"
@@ -505,7 +506,7 @@
                                       title="Payment method"
                                       :padded="false"
                                     >
-                                      <template #content>
+                                      <template #default>
                                         <div
                                           class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
                                         >
@@ -648,7 +649,7 @@
                                       title="Address information"
                                       :padded="false"
                                     >
-                                      <template #content>
+                                      <template #default>
                                         <fieldset
                                           class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
                                         >

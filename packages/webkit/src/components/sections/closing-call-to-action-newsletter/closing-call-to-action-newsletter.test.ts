@@ -165,7 +165,8 @@ describe('ClosingCallToActionNewsletter', () => {
   })
 
   it('shows the error message under the form on error', () => {
-    const { getByRole } = band({ error: true })
+    const { getByRole, getByTestId } = band({ failed: true })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-failed', 'true')
 
     expect(getByRole('alert').textContent).toContain(form.errorMessage)
     expect(getByRole('button', { name: form.submitLabel })).toBeInTheDocument()
@@ -204,7 +205,7 @@ describe('ClosingCallToActionNewsletter', () => {
     await expectNoA11yViolations(submitted.container)
     submitted.unmount()
 
-    const failed = band({ error: true })
+    const failed = band({ failed: true })
     await expectNoA11yViolations(failed.container)
   })
 })

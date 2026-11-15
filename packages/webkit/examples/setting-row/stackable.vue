@@ -14,7 +14,7 @@
 <template>
   <div class="w-full max-w-(--container-xs)">
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <Item.List>
           <SettingRow
             title="Name"

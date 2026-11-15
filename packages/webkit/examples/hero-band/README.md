@@ -16,7 +16,7 @@ Example: [`site-title-band.vue`](./site-title-band.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` picks the layout (`centered`, `title-band`, `centered-band`, `compact-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`) and `size` the headline step.
+- `kind` picks the layout (`center`, `title-band`, `center-band`, `compact-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`) and `size` the headline step.
 - `eyebrow`, `title` and `description` fill the copy.
 - `primaryAction` and `secondaryAction` are the two buttons, each a `label`, an `href` and `trailing` for the chevron.
 
@@ -51,8 +51,8 @@ Example: [`site-centered-carousel.vue`](./site-centered-carousel.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band` and `kind` is `centered`.
-- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `_id` is `hero-band` and `kind` is `center`.
+- `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
 - `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
@@ -90,7 +90,7 @@ Example: [`site-title-band-carousel.vue`](./site-title-band-carousel.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `_id` is `hero-band`, `kind` is `title-band` and `size` is `large`.
-- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
 - `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
@@ -110,7 +110,7 @@ Example: [`site-pixel-floor.vue`](./site-pixel-floor.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `_id` is `hero-band` and `kind` is `pixel-floor`.
-- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
 - `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.
@@ -131,7 +131,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `_id` is `hero-band` and `kind` is `copy-beside-art`.
 - `eyebrow` is a short overline above the headline.
-- `title` is the page h1, and `highlight` paints its opening words in the brand accent. The block renders nothing without a title.
+- `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
 - `illustration` names the illustration beside the copy, and `illustrationAriaLabel` describes it for screen readers.

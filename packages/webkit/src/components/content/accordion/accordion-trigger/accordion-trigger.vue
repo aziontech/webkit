@@ -10,11 +10,11 @@
 
   interface Props {
     /** Heading level of the wrapping heading element for correct document outline. */
-    level?: 2 | 3 | 4 | 5 | 6
+    headingLevel?: 2 | 3 | 4 | 5 | 6
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    level: 3
+    headingLevel: 3
   })
 
   defineSlots<{
@@ -37,7 +37,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-trigger'
   )
 
-  const headingTag = computed(() => `h${props.level}` as const)
+  const headingTag = computed(() => `h${props.headingLevel}` as const)
 
   const onClick = () => {
     if (itemCtx.disabled.value) return
@@ -89,14 +89,16 @@
       :data-testid="testId"
       :data-state="itemCtx.open.value ? 'open' : 'closed'"
       :data-size="ctx.size.value"
-      :data-arrow="ctx.arrowPosition.value"
+      :data-icon-position="ctx.iconPosition.value"
       :data-disabled="itemCtx.disabled.value || null"
       :class="attrs.class"
-      class="group flex w-full items-center justify-between border-b border-(--border-default) data-[state=closed]:border-b-0 bg-transparent px-[var(--accordion-inset,var(--spacing-md))] text-start text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=medium]:min-h-8 data-[size=medium]:gap-(--spacing-sm) data-[size=medium]:text-body-sm data-[size=large]:min-h-10 data-[size=large]:gap-(--spacing-sm) data-[size=large]:text-body-md data-[arrow=left]:flex-row-reverse data-[arrow=left]:justify-end data-[arrow=left]:gap-(--spacing-xs) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
+      class="group flex w-full items-center justify-between border-b border-(--border-default) data-[state=closed]:border-b-0 bg-transparent px-[var(--accordion-inset,var(--spacing-md))] text-start text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[size=medium]:min-h-8 data-[size=medium]:gap-(--spacing-sm) data-[size=medium]:text-body-sm data-[size=large]:min-h-10 data-[size=large]:gap-(--spacing-sm) data-[size=large]:text-body-md data-[icon-position=leading]:flex-row-reverse data-[icon-position=leading]:justify-end data-[icon-position=leading]:gap-(--spacing-xs) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
       @click="onClick"
       @keydown="onKeydown"
     >
-      <span class="min-w-0 flex-1 data-[arrow=left]:flex-none group-data-[arrow=left]:flex-none">
+      <span
+        class="min-w-0 flex-1 data-[icon-position=leading]:flex-none group-data-[icon-position=leading]:flex-none"
+      >
         <slot />
       </span>
       <i

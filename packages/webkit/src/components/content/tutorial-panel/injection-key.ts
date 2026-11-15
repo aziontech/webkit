@@ -56,13 +56,13 @@ export interface TutorialContext {
   /** Increments on every move the reader makes, so the step that opens can take focus. */
   focusRequest: ComputedRef<number>
   /** Starts (or restarts) a tutorial from its first step. */
-  start: (id: string) => void
+  start: (event: Event, id: string) => void
   /** Leaves the running tutorial. */
-  exit: () => void
+  exit: (event: Event) => void
   /** Moves to a step of the running tutorial and reopens it. */
   goTo: (index: number) => void
-  /** Moves to the next step, or finishes the tutorial on the last one. */
-  next: () => void
+  /** Moves to the next step, or completes the tutorial on the last one. */
+  next: (event: Event) => void
   /** Moves to the previous step. */
   previous: () => void
   /** Closes the current step's popover; its hotspot stays and reopens it. */
@@ -77,8 +77,8 @@ export interface TutorialContext {
 
 export const TutorialPanelInjectionKey: InjectionKey<TutorialContext> = Symbol('TutorialPanel')
 
-/** Where the reader is in a tutorial task, as confirmed by the real UI. */
-export type TutorialTaskStatus = 'upcoming' | 'current' | 'complete'
+/** Whether the reader has done a tutorial task, as confirmed by the real UI. */
+export type TutorialTaskStatus = 'pending' | 'success'
 
 export interface TutorialTaskHandle {
   /** 1-based position of the task in document order. */
@@ -94,7 +94,7 @@ export interface TutorialTasksContext {
   unregister: (id: symbol) => void
   /** Number of registered tasks. */
   total: ComputedRef<number>
-  /** Number of registered tasks whose status is complete. */
+  /** Number of registered tasks whose status is success. */
   complete: ComputedRef<number>
 }
 

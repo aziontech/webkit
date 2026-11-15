@@ -1,6 +1,6 @@
 ---
 name: webkit-ai-surfaces
-description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, AiLoading), wires the message lifecycle (pending → streaming → complete or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
+description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, AiLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
 last_updated: 2026-11-15
 scope: general
@@ -36,8 +36,8 @@ key there does not exist.
 
 ## Start from a block
 
-| The surface                                                   | Copy                             |
-| ------------------------------------------------------------- | -------------------------------- |
+| The surface                                                   | Copy                    |
+| ------------------------------------------------------------- | ----------------------- |
 | The assistant as a page of its own                            | `ai/ai-chat`            |
 | The assistant beside a resource page, about what is on screen | `ai/ai-chat-drawer`     |
 | The assistant proposes a change the reader must allow         | `ai/ai-action-approval` |
@@ -49,18 +49,18 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 
 | Moment                                                                  | Component                                                                       |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| The scrolling thread                                                    | `Conversation` (`alignment="start"` in a drawer or side panel)                  |
+| The scrolling thread                                                    | `Conversation` (`layout="start"` in a drawer or side panel)                     |
 | One prompt or response, its author, lifecycle and actions               | `ChatMessage` + `ChatMessage.Actions`                                           |
 | Thumbs up / down on a response                                          | `ChatMessage.Feedback`                                                          |
 | The composer                                                            | `PromptInput`                                                                   |
-| Waiting for the first token                                             | `ChatMessage state="pending"` (renders `AiLoading`)                             |
+| Waiting for the first token                                             | `ChatMessage status="pending"` (renders `AiLoading`)                            |
 | A table or code block about to appear while text streams                | `AiLoading kind="bar"`                                                          |
 | The model's Markdown, streamed or finished                              | `StreamingResponse`                                                             |
 | The model reasoning before it answers                                   | `Reasoning`                                                                     |
 | Where a statement comes from                                            | `[n]` in the Markdown → `Citation`; the list → `Sources` with the same `anchor` |
 | What to ask next, or what the assistant can do before the first message | `SuggestionGroup` (horizontal after a response, vertical in the empty state)    |
 | A tool or command the agent called                                      | `ToolCall`                                                                      |
-| Permission before something with side effects                           | `ToolApproval`                                                            |
+| Permission before something with side effects                           | `ToolApproval`                                                                  |
 | A file, snippet or table the assistant generated                        | `ArtifactPreview` (stacked under the message, not inside the text)              |
 | Before the first message                                                | `EmptyState` + vertical `SuggestionGroup`                                       |
 
@@ -68,16 +68,16 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 
 Drive `ChatMessage` from your request, never from timers in the view:
 
-1. Submit → push the user's message and an assistant message with `state="pending"`; set the
-   composer's `state="submitted"`. `AiLoading` shows only after one second, so fast responses never
+1. Submit → push the user's message and an assistant message with `status="pending"`; set the
+   composer's `status="pending"`. `AiLoading` shows only after one second, so fast responses never
    flicker.
 2. Reasoning tokens → `Reasoning :streaming="true"` inside the message (collapsed). Thinking ends →
    `streaming=false` and, if the server reports it, `duration`.
-3. First answer token → `state="streaming"` on the message and the composer; pass the accumulated
+3. First answer token → `status="streaming"` on the message and the composer; pass the accumulated
    text to `StreamingResponse :streaming="true"`.
-4. Done → `state="complete"`: the actions render and the `Conversation` reads the finished text once
+4. Done → `status="success"`: the actions render and the `Conversation` reads the finished text once
    to screen readers. Show `Sources` and the follow-up `SuggestionGroup` now, not before.
-5. Failure → `state="error"` with an `error-message` saying what happened; keep the partial text;
+5. Failure → `status="error"` with an `error-message` saying what happened; keep the partial text;
    `@retry` regenerates in place.
 6. Stop → `PromptInput @stop` aborts the request; mark the message complete and say it was stopped.
 
@@ -90,7 +90,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
   `ToolCall` and continue. Writes, deploys, purges and deletes wait for Approve. Irreversible actions
   use `kind="danger"` and `confirmation-phrase`. The card is not a dialog: no focus trap, no initial
   focus, Approve never pre-selected.
-- **Undecided requests expire** (`state="expired"`) and the assistant says nothing ran.
+- **Undecided requests expire** (`status="expired"`) and the assistant says nothing ran.
 - **No secrets** in reasoning, tool inputs or outputs, or commands shown for approval.
 
 ## Hard rules
@@ -104,7 +104,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
 - Up to five support prompts or follow-ups, most likely first, under 72 characters each.
 - Every message keeps its author line (or is `grouped` after one that has it); alignment never carries
   meaning alone.
-- In a drawer or side panel, `alignment="start"`.
+- In a drawer or side panel, `layout="start"`.
 - Artifacts stack under the message as `ArtifactPreview`, each with its own Copy, Download or Open.
 
 ## Words
@@ -125,7 +125,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
 
 The components enforce the live regions, busy states, safe Markdown, actions-only-when-complete,
 the one-second loading delay and the approval gating. Nothing enforces that your code waits for
-`approve` before calling the API, that you pass the real lifecycle `state`, or that you redact secrets:
+`approve` before calling the API, that you pass the real lifecycle `status`, or that you redact secrets:
 those are review items.
 
 ## Review output
@@ -142,7 +142,7 @@ End with the count of Safety findings first; any Safety finding blocks the chang
 ## Definition of Done
 
 - [ ] The screen started from a `ai/*` block.
-- [ ] Every thread is a `Conversation`; every turn a `ChatMessage` with the real lifecycle `state`.
+- [ ] Every thread is a `Conversation`; every turn a `ChatMessage` with the real lifecycle `status`.
 - [ ] Model text renders through `StreamingResponse`; no `v-html` anywhere near model output.
 - [ ] Citations share an `anchor` with their `Sources`.
 - [ ] Every side-effecting call waits for `ToolApproval`; denials and expiry are acknowledged.

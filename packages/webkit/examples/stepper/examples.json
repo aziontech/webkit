@@ -9,7 +9,7 @@
     },
     {
       "name": "States",
-      "summary": "Every step state in one rail: complete, current, error, loading and upcoming. Error and loading outrank current, so a step on screen that failed still says it failed.",
+      "summary": "Every step status in one rail: success, active, error, running and pending. Error and running outrank active, so a step on screen that failed still says it failed.",
       "file": "states.vue"
     },
     {

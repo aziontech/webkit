@@ -84,13 +84,14 @@ describe('PromptInput', () => {
     expect(submitted).toEqual(['かな'])
   })
 
-  it.each(['submitted', 'streaming'] as const)(
+  it.each(['pending', 'streaming'] as const)(
     'swaps Submit for Stop while %s and blocks Enter',
-    async (state) => {
-      const { getByRole, queryByRole, submitted, stops } = harness({
+    async (status) => {
+      const { getByRole, queryByRole, submitted, stops, container } = harness({
         initial: 'next prompt',
-        state
+        status
       })
+      expect(container.querySelector('[data-status]')).toHaveAttribute('data-status', status)
       expect(queryByRole('button', { name: 'Submit' })).toBeNull()
       const textarea = getByRole('textbox')
       expect(textarea).not.toBeDisabled()

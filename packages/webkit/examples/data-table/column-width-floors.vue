@@ -48,9 +48,9 @@
     { accessorKey: 'name', header: 'Name', principal: true },
     { accessorKey: 'status', header: 'Status', minWidth: 96 },
     { accessorKey: 'protocol', header: 'Protocol', minWidth: 96 },
-    { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },
+    { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
-    { id: 'actions', header: '', kind: 'action', enableSorting: false }
+    { id: 'actions', header: '', kind: 'action', sortable: false }
   ]
 
   const sorting = ref([])
@@ -76,7 +76,7 @@
     :data="rows"
     :columns="columns"
     row-key="id"
-    enable-sorting
+    sortable
     paginated
     :page-size="5"
     v-model:sorting="sorting"

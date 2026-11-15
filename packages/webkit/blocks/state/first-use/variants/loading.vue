@@ -18,7 +18,7 @@
       :padded="false"
       class="w-full"
     >
-      <template #content>
+      <template #default>
         <div
           class="flex flex-col items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-xl)"
         >
@@ -76,7 +76,7 @@
         :key="promo"
         class="w-full"
       >
-        <template #content>
+        <template #default>
           <div class="flex flex-col gap-(--spacing-md)">
             <Skeleton
               width="7rem"

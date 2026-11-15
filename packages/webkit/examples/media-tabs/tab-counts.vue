@@ -37,7 +37,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaTabs
-      position="left"
+      tabs-side="start"
       :autoplay="false"
       :items="items"
     >
@@ -46,7 +46,7 @@
       </template>
     </MediaTabs>
     <MediaTabs
-      position="top"
+      tabs-side="top"
       size="small"
       :autoplay="false"
       :items="items"

@@ -225,10 +225,10 @@ describe('JobPosting', () => {
   })
 
   it('shows the error alert under the form', () => {
-    const { getByRole, getByTestId } = band({ error: true })
+    const { getByRole, getByTestId } = band({ failed: true })
 
     expect(getByRole('alert')).toHaveTextContent('We could not send your application.')
-    expect(getByTestId(TESTID)).toHaveAttribute('data-error', 'true')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-failed', 'true')
   })
 
   it('opens the confirmation dialog when submitted turns on, and Done closes it', async () => {
@@ -264,7 +264,7 @@ describe('JobPosting', () => {
   })
 
   it('has no a11y violations with field messages and the error alert', async () => {
-    const { container, getByRole } = band({ error: true })
+    const { container, getByRole } = band({ failed: true })
 
     await fireEvent.click(getByRole('button', { name: 'Submit application' }))
     await expectNoA11yViolations(container)

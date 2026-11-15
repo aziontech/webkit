@@ -179,7 +179,7 @@
     const removing = pick === ''
     const value = pick === undefined ? deployed[key] : pick
     const base = {
-      key,
+      id: key,
       type: target.kind,
       icon: target.icon,
       bindable: true,
@@ -212,10 +212,10 @@
 
   const topologyLevels = computed<TopologyLevel[]>(() => [
     {
-      key: 'domains',
+      id: 'domains',
       nodes: [
         {
-          key: 'domains',
+          id: 'domains',
           type: 'Domains',
           icon: 'ai ai-globe',
           name: 'service-01.example.com',
@@ -233,10 +233,10 @@
       ]
     },
     {
-      key: 'service',
+      id: 'service',
       nodes: [
         {
-          key: 'service',
+          id: 'service',
           type: 'Service',
           icon: 'ai ai-server',
           name: SERVICE.name,
@@ -256,12 +256,12 @@
         }
       ]
     },
-    { key: 'policy', nodes: [slotNode('policy')] },
+    { id: 'policy', nodes: [slotNode('policy')] },
     {
-      key: 'resource',
+      id: 'resource',
       nodes: [
         {
-          key: 'resource',
+          id: 'resource',
           type: 'Resource',
           icon: 'ai ai-box',
           name: 'web-app',
@@ -277,12 +277,12 @@
         { ...slotNode('errorPage'), terminal: true }
       ]
     },
-    { key: 'origin', nodes: [slotNode('origin')] },
+    { id: 'origin', nodes: [slotNode('origin')] },
     {
-      key: 'storage',
+      id: 'storage',
       nodes: [
         {
-          key: 'storage',
+          id: 'storage',
           type: 'Storage',
           icon: 'ai ai-inbox',
           name: 'web-app-assets',
@@ -413,7 +413,7 @@
               aria-label="Search environments"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -497,7 +497,7 @@
         <div class="layout-column layout-boundary flex min-w-0 flex-col">
           <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <div
                   class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
                 >
@@ -510,7 +510,7 @@
                     />
                     <div class="flex min-w-0">
                       <Tooltip
-                        text="Open service-01.example.com in a new tab"
+                        content="Open service-01.example.com in a new tab"
                         class="w-full"
                       >
                         <a
@@ -592,7 +592,7 @@
 
                     <div class="contents md:hidden">
                       <Tooltip
-                        text="Select an environment to see its deployment and settings, or add another one"
+                        content="Select an environment to see its deployment and settings, or add another one"
                       >
                         <DropdownMenu
                           placement="bottom-end"
@@ -647,7 +647,7 @@
 
                     <DropdownMenu placement="bottom-end">
                       <DropdownMenu.Trigger>
-                        <Tooltip text="Service actions">
+                        <Tooltip content="Service actions">
                           <IconButton
                             icon="ai ai-ellipsis"
                             kind="outlined"
@@ -705,7 +705,7 @@
                   <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Custom domains</span>
-                      <Tooltip text="Add a custom domain">
+                      <Tooltip content="Add a custom domain">
                         <IconButton
                           icon="ai ai-circle-plus"
                           kind="transparent"
@@ -767,12 +767,12 @@
                 >
                   <Accordion
                     type="single"
-                    arrow-position="left"
+                    icon-position="leading"
                     collapsible
                   >
                     <Accordion.Item value="deployment-settings">
                       <div class="relative">
-                        <Accordion.Trigger :level="3">
+                        <Accordion.Trigger :heading-level="3">
                           <span class="flex min-h-12 items-center">
                             <span class="text-label-md text-(--text-default)"
                               >Deployment Settings</span
@@ -790,7 +790,9 @@
                             class="shrink-0"
                           />
                           <div class="pointer-events-auto">
-                            <Tooltip text="Open acme-production in Build and deployment settings">
+                            <Tooltip
+                              content="Open acme-production in Build and deployment settings"
+                            >
                               <a
                                 href="/account/build-deployment"
                                 class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -914,7 +916,7 @@
                 />
               </template>
 
-              <template #content>
+              <template #default>
                 <div
                   v-if="!complete"
                   class="flex flex-col"
@@ -960,7 +962,7 @@
             <Drawer
               v-model:open="detailOpen"
               size="large"
-              side="right"
+              side="end"
             >
               <DrawerContent>
                 <PanelHeader class="w-full">
@@ -1060,16 +1062,16 @@
                 class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
               >
                 <TopologyDiagram
-                  v-model:expanded="expanded"
+                  v-model:open-keys="expanded"
                   :levels="topologyLevels"
-                  @bind="(_event, { key, value }) => bind(key, value)"
+                  @bind="(_event, { id, value }) => bind(id, value)"
                   @remove="(_event, key) => unbind(key)"
                   @create="(_event, key) => createTarget(key)"
                 >
                   <template #actions="{ node }">
                     <Tooltip
                       v-if="node.key === 'domains'"
-                      text="Add domain"
+                      content="Add domain"
                     >
                       <IconButton
                         icon="ai ai-plus"
@@ -1122,7 +1124,7 @@
 
     <Drawer
       v-model:open="deployOpen"
-      side="right"
+      side="end"
       size="large"
     >
       <DrawerContent>

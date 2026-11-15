@@ -78,7 +78,7 @@
   >
     <Tooltip
       v-if="displayName"
-      :text="displayName"
+      :content="displayName"
     >
       <Avatar
         :src="avatarSrc || undefined"
@@ -92,7 +92,7 @@
     <Tooltip
       key="tooltip-2"
       v-if="date"
-      :text="absolute"
+      :content="absolute"
       class="min-w-0 shrink!"
     >
       <time

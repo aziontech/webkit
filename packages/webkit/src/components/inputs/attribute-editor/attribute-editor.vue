@@ -520,7 +520,7 @@
               />
             </button>
             <span class="flex-1" />
-            <Tooltip :text="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
+            <Tooltip :content="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
               <IconButton
                 icon="ai ai-chevron-up"
                 kind="outlined"
@@ -532,7 +532,7 @@
                 @click="moveGroup(groupIndex, groupIndex - 1)"
               />
             </Tooltip>
-            <Tooltip :text="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })">
+            <Tooltip :content="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })">
               <IconButton
                 icon="ai ai-chevron-down"
                 kind="outlined"
@@ -698,7 +698,7 @@
                           />
                         </button>
                         <Tooltip
-                          :text="
+                          :content="
                             t('attributeEditor.moveUp', {
                               index: position(index, grouped ? groupIndex : undefined)
                             })
@@ -720,7 +720,7 @@
                           />
                         </Tooltip>
                         <Tooltip
-                          :text="
+                          :content="
                             t('attributeEditor.moveDown', {
                               index: position(index, grouped ? groupIndex : undefined)
                             })
@@ -758,7 +758,7 @@
                       >
                         <Tooltip
                           v-if="removable(item)"
-                          :text="removeLabel(position(index, grouped ? groupIndex : undefined))"
+                          :content="removeLabel(position(index, grouped ? groupIndex : undefined))"
                         >
                           <IconButton
                             icon="ai ai-trash"

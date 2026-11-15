@@ -328,7 +328,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <Button
@@ -416,7 +416,7 @@
                     class="w-full"
                   />
                 </template>
-                <template #content>
+                <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                     <Item
                       kind="outlined"
@@ -463,7 +463,7 @@
                             />
                             <div class="flex min-w-0">
                               <Tooltip
-                                :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                :content="`Open ${domainGroup.domains[0]} in a new tab`"
                                 class="w-full"
                               >
                                 <Link
@@ -503,7 +503,7 @@
                                     placeholder="Search domains"
                                     aria-label="Search domains"
                                   >
-                                    <template #prefix>
+                                    <template #leading>
                                       <i
                                         class="ai ai-search"
                                         aria-hidden="true"
@@ -686,7 +686,7 @@
                               />
                               <div class="flex min-w-0">
                                 <Tooltip
-                                  :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                  :content="`Open ${domainGroup.domains[0]} in a new tab`"
                                   class="w-full"
                                 >
                                   <Link
@@ -726,7 +726,7 @@
                                       placeholder="Search domains"
                                       aria-label="Search domains"
                                     >
-                                      <template #prefix>
+                                      <template #leading>
                                         <i
                                           class="ai ai-search"
                                           aria-hidden="true"

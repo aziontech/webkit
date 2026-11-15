@@ -49,7 +49,7 @@ export default {
   }${
     centered
       ? figma.code`
-  centered`
+  align="center"`
       : ''
   }
 >${

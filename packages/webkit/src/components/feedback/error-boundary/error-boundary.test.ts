@@ -102,7 +102,9 @@ describe('ErrorBoundary', () => {
     await rerender({ resetKey: '/services/2' })
     await waitFor(() => expect(getByTestId('region')).toBeTruthy())
     expect(emitted().retry).toHaveLength(1)
-    expect(emitted().retry![0]).toEqual([])
+    const [event] = emitted().retry![0] as Event[]
+    expect(event).toBeInstanceOf(Event)
+    expect(event?.type).toBe('reset')
   })
 
   it('renders the fallback slot with the error and a working retry', async () => {

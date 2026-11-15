@@ -38,7 +38,7 @@
   }
 
   provide(StepperInjectionKey, {
-    current: computed(() => model.value),
+    active: computed(() => model.value),
     register,
     attach,
     unregister,
@@ -55,7 +55,7 @@
     v-bind="$attrs"
     :aria-label="ariaLabel || t('stepper.label')"
     :data-testid="testId"
-    :data-current="model"
+    :data-active="model"
     data-orientation="vertical"
     class="w-full"
   >

@@ -106,12 +106,12 @@
       <DocPageHeader
         :title="item.title"
         :description="item.purpose"
-        :breadcrumb="[
+        :breadcrumbs="[
           { label: t.components, href: '/components' },
           { label: titleCase(item.category) }
         ]"
         :meta-actions="metaActions"
-        @meta-action="onMetaAction"
+        @action-click="onMetaAction"
       >
         <template #details>
           <div class="flex flex-wrap items-center gap-(--spacing-xs)">

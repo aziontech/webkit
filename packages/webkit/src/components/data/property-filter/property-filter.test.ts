@@ -572,7 +572,7 @@ describe('PropertyFilter', () => {
     })
   })
 
-  describe('hideOperations', () => {
+  describe('showOperations', () => {
     const query = {
       operation: 'and' as const,
       tokens: [
@@ -585,11 +585,11 @@ describe('PropertyFilter', () => {
       { key: 'region', label: 'Region' }
     ]
 
-    it('offers the Match all / Match any toggle by default and hides it with hideOperations', () => {
+    it('offers the Match all / Match any toggle by default and hides it with showOperations false', () => {
       const shown = render(PropertyFilter, { props: { properties, query } })
       expect(shown.getByTestId('data-property-filter__operation')).toBeTruthy()
       shown.unmount()
-      const hidden = render(PropertyFilter, { props: { properties, query, hideOperations: true } })
+      const hidden = render(PropertyFilter, { props: { properties, query, showOperations: false } })
       expect(hidden.queryByTestId('data-property-filter__operation')).toBeNull()
       expect(hidden.getByTestId('data-property-filter').textContent).toContain('us-east')
     })

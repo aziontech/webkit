@@ -54,7 +54,7 @@
     :data-loading="loading || null"
     class="inline-flex items-center gap-(--spacing-2xs)"
   >
-    <Tooltip :text="t('chatMessage.helpful')">
+    <Tooltip :content="t('chatMessage.helpful')">
       <IconButton
         :icon="model === 'up' ? 'ai ai-thumbs-up-fill' : 'ai ai-thumbs-up'"
         :ariaLabel="t('chatMessage.helpful')"
@@ -67,7 +67,7 @@
         @click="choose('up')"
       />
     </Tooltip>
-    <Tooltip :text="t('chatMessage.notHelpful')">
+    <Tooltip :content="t('chatMessage.notHelpful')">
       <IconButton
         :icon="model === 'down' ? 'ai ai-thumbs-down-fill' : 'ai ai-thumbs-down'"
         :ariaLabel="t('chatMessage.notHelpful')"

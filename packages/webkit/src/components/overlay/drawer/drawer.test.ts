@@ -290,7 +290,7 @@ describe('Drawer', () => {
     })
 
     describe('side prop flows through the injected context', () => {
-      it.each(['left', 'right'] as const)(
+      it.each(['start', 'end'] as const)(
         'renders the Teleported role=dialog panel for side=%s',
         async (side) => {
           const { getByTestId } = render(composed({ defaultOpen: true, side }))
@@ -599,7 +599,7 @@ describe('Drawer', () => {
     })
 
     it('reads side reactively and references no missing description', async () => {
-      const side = ref<'left' | 'right'>('right')
+      const side = ref<'start' | 'end'>('end')
       render(
         defineComponent({
           components: { Drawer, DrawerContent, DrawerTitle },
@@ -608,13 +608,13 @@ describe('Drawer', () => {
         })
       )
       await settle()
-      expect(panel()!.getAttribute('data-side')).toBe('right')
+      expect(panel()!.getAttribute('data-side')).toBe('end')
       expect(panel()!.hasAttribute('aria-describedby')).toBe(false)
       expect(panel()!.style.transition).toBe('')
       expect(byTestId('overlay-drawer')!.id).toBe('details')
-      side.value = 'left'
+      side.value = 'start'
       await settle()
-      expect(panel()!.getAttribute('data-side')).toBe('left')
+      expect(panel()!.getAttribute('data-side')).toBe('start')
     })
   })
 

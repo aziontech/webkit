@@ -17,7 +17,7 @@
       />
     </template>
 
-    <template #content>
+    <template #default>
       <Transition
         appear
         enter-active-class="animate-fade-in motion-reduce:animate-none"

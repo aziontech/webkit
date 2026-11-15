@@ -52,16 +52,18 @@ const Page = defineComponent({
     const active = ref<string | null>(null)
     const step = ref(0)
     const events = ref<string[]>([])
-    return { active, step, events }
+    const log = (name: string, event: unknown, id: string) =>
+      events.value.push((event instanceof Event ? '' : '!') + name + ':' + id)
+    return { active, step, events, log }
   },
   template: `
     <TutorialPanelProvider
       v-model:active="active"
       v-model:step="step"
       :tutorials="list"
-      @start="(id) => events.push('start:' + id)"
-      @exit="(id) => events.push('exit:' + id)"
-      @finish="(id) => events.push('finish:' + id)"
+      @start="(event, id) => log('start', event, id)"
+      @exit="(event, id) => log('exit', event, id)"
+      @complete="(event, id) => log('complete', event, id)"
     >
       <main>
         <h1>Applications</h1>
@@ -118,7 +120,9 @@ describe('TutorialPanel', () => {
     expect(dialog?.textContent).toContain('Step 1 of 3')
     expect(document.activeElement).toBe(dialog)
     expect(getByTestId('state').textContent).toContain('first-site|0|start:first-site')
-    const current = panelOf(container).querySelector('[aria-current="step"][data-tutorial-step]')
+    const current = panelOf(container).querySelector(
+      '[aria-current="step"][data-slot="tutorial-step"]'
+    )
     expect(current?.textContent).toContain('Open the create menu')
   })
 
@@ -145,7 +149,7 @@ describe('TutorialPanel', () => {
     expect(openStep()).toBeNull()
     expect(markers()).toHaveLength(0)
     expect(document.activeElement?.textContent).toContain('Tutorial complete')
-    expect(getByTestId('state').textContent).toContain('finish:first-site')
+    expect(getByTestId('state').textContent).toContain('complete:first-site')
     expect(container.textContent).toContain('Give feedback')
     getByRole('button', { name: 'Back to tutorials' }).click()
     await tick()
@@ -178,7 +182,9 @@ describe('TutorialPanel', () => {
     await tick()
     ;(openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement).click()
     await tick()
-    const current = panelOf(container).querySelector('[aria-current="step"][data-tutorial-step]')
+    const current = panelOf(container).querySelector(
+      '[aria-current="step"][data-slot="tutorial-step"]'
+    )
     expect(current?.textContent).toContain('Deploy')
     expect(document.activeElement).toBe(current)
   })
@@ -258,7 +264,8 @@ describe('TutorialPanel', () => {
   const Guide = defineComponent({
     components: { HelpPanel, TutorialPanelTasks, TutorialPanelTask },
     props: {
-      second: { type: String, default: 'current' },
+      second: { type: String, default: 'pending' },
+      secondActive: { type: Boolean, default: true },
       completed: { type: Boolean, default: false },
       withActions: { type: Boolean, default: true }
     },
@@ -269,10 +276,10 @@ describe('TutorialPanel', () => {
         description="Three tasks, about five minutes."
         :completed="completed"
       >
-        <TutorialPanelTask title="Create an application" status="complete">
+        <TutorialPanelTask title="Create an application" status="success">
           Choose a template.
         </TutorialPanelTask>
-        <TutorialPanelTask title="Create a workload" :status="second">
+        <TutorialPanelTask title="Create a workload" :status="second" :active="secondActive">
           Bind your domain.
         </TutorialPanelTask>
         <TutorialPanelTask title="Point your DNS">Add the CNAME record.</TutorialPanelTask>
@@ -293,15 +300,16 @@ describe('TutorialPanel', () => {
       await nextTick()
       const tasks = tasksOf(view)
       expect(tasks.map((task) => task.getAttribute('data-status'))).toEqual([
-        'complete',
-        'current',
-        'upcoming'
+        'success',
+        'pending',
+        'pending'
       ])
+      expect(tasks.map((task) => task.hasAttribute('data-active'))).toEqual([false, true, false])
       expect(tasks[1]?.textContent).toContain('2')
       expect(tasks[2]?.textContent).toContain('3')
     })
 
-    it('marks only the current task with aria-current and announces each status', async () => {
+    it('marks only the active task with aria-current and announces each status', async () => {
       const view = render(Guide)
       await nextTick()
       const tasks = tasksOf(view)
@@ -318,7 +326,7 @@ describe('TutorialPanel', () => {
       expect(progress.textContent?.trim()).toBe('1 of 3 complete')
       expect(progress.getAttribute('aria-live')).toBe('polite')
 
-      await view.rerender({ second: 'complete' })
+      await view.rerender({ second: 'success', secondActive: false })
       await nextTick()
       expect(progress.textContent?.trim()).toBe('2 of 3 complete')
     })

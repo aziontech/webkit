@@ -26,7 +26,7 @@ const optionText = (option: HTMLElement) =>
     .join(' ')
 
 const lastPhone = (emitted: Record<string, unknown[]>) => {
-  const events = emitted['update:phone'] as PhoneNumber[][]
+  const events = emitted['phone-change'] as PhoneNumber[][]
   return events[events.length - 1][0]
 }
 
@@ -302,11 +302,11 @@ describe('PhoneInput', () => {
     })
   })
 
-  describe('update:phone — full number and completeness', () => {
+  describe('phone-change — full number and completeness', () => {
     it('reports the initial state on mount', () => {
       const { emitted } = render(PhoneInput, {})
 
-      expect(emitted()['update:phone']).toEqual([
+      expect(emitted()['phone-change']).toEqual([
         [{ country: 'US', dialCode: '+1', digits: '', number: '', complete: false }]
       ])
     })

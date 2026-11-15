@@ -20,7 +20,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `title` heads the table; `anchor` gives the band an id for in-page links.
 - `columns` are the columns left to right, each a `key`, a `label`, and an optional `grow` (1, 2 or 3) and `align` (`start` or `end`). The first column names the row and the second describes it on phones.
-- `rows[]` are the linked rows, each an `href` and its `values` keyed by column.
+- `data[]` are the linked rows, each an `href` and its `values` keyed by column.
 - `primaryAction` is the outlined button into the full listing, a `label`, an `href` and `trailing` for the chevron. Leave it out for no button.
 
 Example:

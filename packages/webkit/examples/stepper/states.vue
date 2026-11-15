@@ -8,13 +8,13 @@
 <template>
   <Stepper
     v-model="step"
-    aria-label="Step states"
+    aria-label="Step statuses"
   >
     <Stepper.Step
       value="host"
       title="Complete"
       description="The owner marked this step as answered."
-      state="complete"
+      status="success"
     />
     <Stepper.Step
       value="configure"
@@ -25,13 +25,13 @@
       value="addresses"
       title="Error"
       description="Two addresses are not valid IPv4 ranges."
-      state="error"
+      status="error"
     />
     <Stepper.Step
       value="rules"
       title="Loading"
       description="Checking the rules against the firewall."
-      state="loading"
+      status="running"
     />
     <Stepper.Step
       value="review"

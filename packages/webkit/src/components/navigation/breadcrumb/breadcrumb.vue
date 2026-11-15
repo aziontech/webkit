@@ -21,11 +21,11 @@
     href?: string
     showIcon?: boolean
     icon?: string
-    current?: boolean
+    active?: boolean
   }
 
   interface Props {
-    /** Ordered path segments; the last entry is the current page when `current` is omitted. */
+    /** Ordered path segments; the last entry is the current page when `active` is omitted. */
     items?: BreadcrumbItemData[]
     /** Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`). */
     ariaLabel?: string
@@ -57,11 +57,11 @@
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
       const isLast = index === props.items.length - 1
-      const current = item.current ?? isLast
+      const active = item.active ?? isLast
 
       return {
         ...item,
-        current,
+        active,
         href: item.href ?? '#'
       }
     })
@@ -115,11 +115,11 @@
               <BreadcrumbItem
                 :label="item.label"
                 :href="item.href"
-                :current="item.current"
+                :active="item.active"
                 :show-icon="item.showIcon"
                 :icon="item.icon"
                 :data-testid="`${testId}__item-${index}`"
-                @click="(event) => !item.current && onItemClick(event, item.href ?? '#')"
+                @click="(event) => !item.active && onItemClick(event, item.href ?? '#')"
               />
             </li>
             <BreadcrumbSeparator
@@ -137,11 +137,11 @@
             <BreadcrumbItem
               :label="firstItem.label"
               :href="firstItem.href"
-              :current="firstItem.current && !showDistinctEnds"
+              :active="firstItem.active && !showDistinctEnds"
               :show-icon="firstItem.showIcon"
               :icon="firstItem.icon"
               :data-testid="`${testId}__item-0`"
-              @click="(event) => !firstItem.current && onItemClick(event, firstItem.href ?? '#')"
+              @click="(event) => !firstItem.active && onItemClick(event, firstItem.href ?? '#')"
             />
           </li>
 
@@ -201,12 +201,12 @@
               <BreadcrumbItem
                 :label="lastItem.label"
                 :href="lastItem.href"
-                :current="lastItem.current"
+                :active="lastItem.active"
                 :show-icon="lastItem.showIcon"
                 :icon="lastItem.icon"
                 class="text-(--text-default)"
                 :data-testid="`${testId}__item-last`"
-                @click="(event) => !lastItem.current && onItemClick(event, lastItem.href ?? '#')"
+                @click="(event) => !lastItem.active && onItemClick(event, lastItem.href ?? '#')"
               />
             </li>
           </template>

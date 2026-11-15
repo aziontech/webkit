@@ -50,8 +50,7 @@
 
   const popupDataAttrs = computed(() => ({
     'data-kind': props.kind,
-    'data-open': root.menuOpen.value ? '' : undefined,
-    'data-closed': !root.menuOpen.value ? '' : undefined,
+    'data-state': root.menuOpen.value ? 'open' : 'closed',
     'data-starting-style': root.popupTransitionStatus.value === 'starting' ? '' : undefined,
     'data-ending-style': root.popupTransitionStatus.value === 'ending' ? '' : undefined
   }))

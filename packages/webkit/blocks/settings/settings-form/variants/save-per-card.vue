@@ -53,7 +53,7 @@
 
     <div class="layout-section-start">
       <Card title="Preview Toolbar">
-        <template #content>
+        <template #default>
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="savingToolbar"
@@ -130,7 +130,7 @@
 
     <div class="layout-section-start">
       <Card title="Deployment Protection">
-        <template #content>
+        <template #default>
           <fieldset
             class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
             :disabled="savingProtection"

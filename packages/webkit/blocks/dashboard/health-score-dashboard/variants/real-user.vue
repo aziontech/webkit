@@ -172,7 +172,7 @@
               :format-value="formatFixed(vital.decimals)"
             >
               <template #aside>
-                <Hint :text="vital.description" />
+                <Hint :content="vital.description" />
               </template>
             </StatTile>
           </li>

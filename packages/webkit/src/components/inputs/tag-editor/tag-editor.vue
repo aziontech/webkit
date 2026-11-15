@@ -235,7 +235,7 @@
         />
         <Tooltip
           v-else-if="removable"
-          :text="removeLabel"
+          :content="removeLabel"
         >
           <IconButton
             icon="ai ai-trash"

@@ -133,8 +133,8 @@
               ><span
                 v-for="(segment, index) in segments"
                 :key="index"
-                :data-highlight="segment.highlight || null"
-                class="data-[highlight]:text-(--text-default)"
+                :data-slot="segment.highlight ? 'highlight' : undefined"
+                class="data-[slot=highlight]:text-(--text-default)"
                 >{{ segment.text }}</span
               ></template
             ><template v-else>{{ text }}</template></slot

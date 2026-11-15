@@ -30,10 +30,10 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, client: 'claude' })
 
-  const STATES = {
+  const STATUSES = {
     preview: { label: 'Dry run', severity: 'info' },
     running: { label: 'Running', severity: 'neutral' },
-    done: { label: 'Done', severity: 'success' }
+    success: { label: 'Done', severity: 'success' }
   } as const
 
   const rootEl = ref<HTMLElement | null>(null)
@@ -109,10 +109,10 @@
       await wait(900)
       for (const entry of replies) {
         if (entry.kind === 'tool') {
-          push({ ...entry, state: 'running' })
-          await wait(entry.state === 'preview' ? 900 : 700)
+          push({ ...entry, status: 'running' })
+          await wait(entry.status === 'preview' ? 900 : 700)
           rewrite(entry)
-          await wait(entry.state === 'preview' ? 900 : 380)
+          await wait(entry.status === 'preview' ? 900 : 380)
           continue
         }
         const user = entry.kind === 'user'
@@ -184,13 +184,13 @@
               <span class="ms-auto flex shrink-0">
                 <Tag
                   size="small"
-                  :label="STATES[entry.state ?? 'done'].label"
-                  :severity="STATES[entry.state ?? 'done'].severity"
+                  :label="STATUSES[entry.status ?? 'success'].label"
+                  :severity="STATUSES[entry.status ?? 'success'].severity"
                 />
               </span>
             </div>
             <dl
-              v-if="entry.state !== 'running'"
+              v-if="entry.status !== 'running'"
               class="m-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-(--spacing-md) gap-y-(--spacing-2xs) border-t border-(--border-default) px-(--spacing-md) py-(--spacing-sm) text-label-code-sm"
             >
               <template

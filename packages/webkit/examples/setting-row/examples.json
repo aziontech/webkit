@@ -19,7 +19,7 @@
     },
     {
       "name": "Nested",
-      "summary": "Protocol rows that depend on a switch above them: HTTPS rows indent one level (`level` 1) and HTTP/3 ports a second level (`level` 2), each behind a rule.",
+      "summary": "Protocol rows that depend on a switch above them: HTTPS rows indent one level (`depth` 1) and HTTP/3 ports a second level (`depth` 2), each behind a rule.",
       "file": "nested.vue"
     },
     {

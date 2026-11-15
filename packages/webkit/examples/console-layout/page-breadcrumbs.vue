@@ -83,7 +83,7 @@
     <div class="layout-boundary">
       <div class="layout-column flex flex-col">
         <Card>
-          <template #content>
+          <template #default>
             <p class="m-0 text-body-sm text-(--text-muted)">
               The page owns its trail and ends it on the environment it shows.
             </p>

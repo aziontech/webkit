@@ -18,10 +18,10 @@
 
   const steps: DeployStep[] = [
     {
-      key: 'build',
+      id: 'build',
       title: 'Build',
       description: 'Bundle written to .build/worker.js',
-      status: 'done',
+      status: 'success',
       duration: '26s',
       lines: [
         {
@@ -63,10 +63,10 @@
       ]
     },
     {
-      key: 'upload',
+      id: 'upload',
       title: 'Upload',
       description: 'Static assets uploaded to storage',
-      status: 'done',
+      status: 'success',
       duration: '7.8s',
       lines: [
         {
@@ -96,10 +96,10 @@
       ]
     },
     {
-      key: 'manifest',
+      id: 'manifest',
       title: 'Manifest',
       description: 'manifest.json read, every resource resolved',
-      status: 'done',
+      status: 'success',
       duration: '1.7s',
       lines: [
         {
@@ -129,10 +129,10 @@
       ]
     },
     {
-      key: 'function',
+      id: 'function',
       title: 'Function',
       description: 'Function bound to the bundle',
-      status: 'done',
+      status: 'success',
       duration: '3.4s',
       lines: [
         {
@@ -156,10 +156,10 @@
       ]
     },
     {
-      key: 'resource',
+      id: 'resource',
       title: 'Resource',
       description: 'Resource and cache settings applied',
-      status: 'done',
+      status: 'success',
       duration: '2.6s',
       lines: [
         {
@@ -183,10 +183,10 @@
       ]
     },
     {
-      key: 'origin',
+      id: 'origin',
       title: 'Origin',
       description: 'Origin pointed at the storage',
-      status: 'done',
+      status: 'success',
       duration: '1.8s',
       lines: [
         {
@@ -210,10 +210,10 @@
       ]
     },
     {
-      key: 'rules',
+      id: 'rules',
       title: 'Rules',
       description: 'The rules rejected this deployment (409 Conflict).',
-      status: 'failed',
+      status: 'error',
       duration: '4.1s',
       tag: { label: 'Failed', severity: 'danger' },
       lines: [
@@ -247,7 +247,7 @@
       ]
     },
     {
-      key: 'service',
+      id: 'service',
       title: 'Service',
       description: 'Never ran. The deployment stopped at Rules',
       status: 'skipped',
@@ -256,7 +256,7 @@
       lines: []
     },
     {
-      key: 'purge',
+      id: 'purge',
       title: 'Cache purge',
       description: 'Never ran. The deployment stopped at Rules',
       status: 'skipped',
@@ -265,7 +265,7 @@
       lines: []
     },
     {
-      key: 'finish',
+      id: 'finish',
       title: 'Live',
       description: 'Never ran. The deployment stopped at Rules',
       status: 'skipped',
@@ -279,7 +279,7 @@
     { label: 'Complete', value: 'complete' }
   ]
 
-  const stepTag = (key: string) => steps.find((step) => step.key === key)?.tag
+  const stepTag = (key: string) => steps.find((step) => step.id === key)?.tag
 
   const logView = ref<LogViewStepsView>('phased')
   const openStep = ref('rules')
@@ -294,7 +294,7 @@
           size="small"
           label="A rule with the same behavior is already bound to this service, so the manifest was refused. Nothing was published, and the service keeps serving its previous deployment."
         >
-          <template #action>
+          <template #actions>
             <Button
               label="Redeploy"
               kind="secondary"
@@ -310,7 +310,7 @@
           <p class="text-heading-xs text-(--text-default)">Deployment details</p>
 
           <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-            <Tooltip text="Available once the deployment is live">
+            <Tooltip content="Available once the deployment is live">
               <Button
                 label="Visit"
                 kind="secondary"
@@ -323,7 +323,7 @@
 
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
-                <Tooltip text="Deployment actions">
+                <Tooltip content="Deployment actions">
                   <IconButton
                     icon="ai ai-ellipsis"
                     kind="outlined"
@@ -373,14 +373,14 @@
           </div>
         </template>
 
-        <template #content>
+        <template #default>
           <div
             class="grid grid-cols-1 gap-(--spacing-lg) p-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
           >
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Created</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <Tooltip text="John Smith · November 06, 2026, 10:30:58 AM">
+                <Tooltip content="John Smith · November 06, 2026, 10:30:58 AM">
                   <Avatar
                     alt="John Smith"
                     label="John Smith"
@@ -423,7 +423,7 @@
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Service</span>
-              <Tooltip text="Open web-app in Services">
+              <Tooltip content="Open web-app in Services">
                 <a
                   href="/services/1784675753"
                   class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -440,7 +440,7 @@
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Resource</span>
-              <Tooltip text="Open web-app in Resources">
+              <Tooltip content="Open web-app in Resources">
                 <a
                   href="/resources/1784552864"
                   class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -458,7 +458,7 @@
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Triggered by</span>
               <div class="flex min-w-0 items-center">
-                <Tooltip text="Console (UI)">
+                <Tooltip content="Console (UI)">
                   <Tag
                     severity="neutral"
                     size="medium"
@@ -471,7 +471,7 @@
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Preset</span>
               <div class="flex min-w-0 items-center">
-                <Tooltip text="build.preset in platform.config.js">
+                <Tooltip content="build.preset in platform.config.js">
                   <Tag
                     severity="neutral"
                     size="medium"
@@ -506,7 +506,7 @@
                   class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <Tooltip text="Open web-app-mh2saq.example.com in a new tab">
+                <Tooltip content="Open web-app-mh2saq.example.com in a new tab">
                   <a
                     href="https://web-app-mh2saq.example.com"
                     target="_blank"
@@ -538,12 +538,12 @@
           >
             <Accordion
               type="single"
-              arrow-position="left"
+              icon-position="leading"
               collapsible
             >
               <Accordion.Item value="deployment-settings">
                 <div class="relative">
-                  <Accordion.Trigger :level="3">
+                  <Accordion.Trigger :heading-level="3">
                     <span class="flex min-h-12 items-center">
                       <span class="text-label-md text-(--text-default)">Deployment Settings</span>
                     </span>
@@ -553,7 +553,7 @@
                     class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                   >
                     <div class="pointer-events-auto">
-                      <Tooltip text="Open Default in Build and deployment settings">
+                      <Tooltip content="Open Default in Build and deployment settings">
                         <a
                           href="/account/build-deployment"
                           class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -650,7 +650,7 @@
           </div>
         </template>
 
-        <template #content>
+        <template #default>
           <LogView.Steps
             v-model:view="logView"
             v-model:open-step="openStep"
@@ -659,8 +659,8 @@
           >
             <template #step-meta="{ step }">
               <Tag
-                v-if="stepTag(step.key)"
-                v-bind="stepTag(step.key)"
+                v-if="stepTag(step.id)"
+                v-bind="stepTag(step.id)"
                 size="small"
               />
             </template>

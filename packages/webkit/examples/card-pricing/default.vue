@@ -6,7 +6,7 @@
   <CardPricing
     title="Pro"
     pricing-details="Billed annually or $25/mo billed monthly."
-    slot-position="bottom"
+    actions-position="bottom"
     kind="contained"
     value="20"
     prefix="$"

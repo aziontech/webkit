@@ -227,7 +227,7 @@
                       :placeholder="t('comparePlans.search')"
                       :aria-label="pickerSearchLabel"
                     >
-                      <template #prefix>
+                      <template #leading>
                         <i
                           class="ai ai-search"
                           aria-hidden="true"
@@ -367,7 +367,7 @@
               class="border-s border-(--border-default) px-(--spacing-sm) py-(--spacing-md) text-center align-middle text-label-md text-(--text-default) group-data-ruled/row:border-t group-data-closing/row:border-b max-lg:data-folded:hidden"
             >
               <template v-if="isIncluded(row.values[index])">
-                <Tooltip :text="includedText">
+                <Tooltip :content="includedText">
                   <i
                     class="ai ai-circle-check text-body-md text-(--success-foreground)"
                     aria-hidden="true"
@@ -376,7 +376,7 @@
                 <span class="sr-only">{{ includedText }}</span>
               </template>
               <template v-else-if="isExcluded(row.values[index])">
-                <Tooltip :text="excludedText">
+                <Tooltip :content="excludedText">
                   <i
                     class="ai ai-circle-minus text-body-md text-(--text-muted)"
                     aria-hidden="true"

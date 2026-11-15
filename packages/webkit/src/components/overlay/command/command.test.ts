@@ -53,12 +53,12 @@ const composed = (props: Record<string, unknown> = {}, inputProps: Record<string
       <Command v-bind="props" v-model:open="open" @select="onSelect">
         <CommandInput placeholder="Search commands…" v-bind="inputProps" />
         <CommandList>
-          <CommandGroup heading="Actions">
+          <CommandGroup label="Actions">
             <CommandItem value="deploy">Deploy Project</CommandItem>
             <CommandItem value="new-app">Create Application</CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading="Navigation">
+          <CommandGroup label="Navigation">
             <CommandItem value="settings" disabled>Go to Settings</CommandItem>
           </CommandGroup>
           <CommandEmpty>No commands found.</CommandEmpty>
@@ -68,8 +68,8 @@ const composed = (props: Record<string, unknown> = {}, inputProps: Record<string
   })
 
 /**
- * A palette whose first item carries a `prefix` and whose second does not — the
- * mixed case that proves an icon-less row renders no prefix box at all.
+ * A palette whose first item carries a `leading` slot and whose second does not — the
+ * mixed case that proves an icon-less row renders no leading box at all.
  */
 const mixedPrefixes = () =>
   defineComponent({
@@ -88,9 +88,9 @@ const mixedPrefixes = () =>
       <Command v-model:open="open">
         <CommandInput placeholder="Search commands…" />
         <CommandList>
-          <CommandGroup heading="Actions">
+          <CommandGroup label="Actions">
             <CommandItem value="deploy">
-              <template #prefix><i class="ai ai-cloud-upload" aria-hidden="true" /></template>
+              <template #leading><i class="ai ai-cloud-upload" aria-hidden="true" /></template>
               Deploy Project
             </CommandItem>
             <CommandItem value="new-app">Create Application</CommandItem>
@@ -121,10 +121,10 @@ const conditionalResults = () =>
       <Command v-model:open="open">
         <CommandInput placeholder="Search commands…" @update:model-value="query = $event" />
         <CommandList>
-          <CommandGroup v-if="query" heading="Resources">
+          <CommandGroup v-if="query" label="Resources">
             <CommandItem value="res:storefront">storefront</CommandItem>
           </CommandGroup>
-          <CommandGroup heading="Navigation">
+          <CommandGroup label="Navigation">
             <CommandItem value="nav:storage">Object Storage</CommandItem>
           </CommandGroup>
         </CommandList>
@@ -164,6 +164,18 @@ describe('Command', () => {
         expect(input.getAttribute('role')).toBe('combobox')
         expect(input.getAttribute('aria-expanded')).toBe('true')
         expect(input.getAttribute('aria-controls')).toBe(byTestId('overlay-command__list')!.id)
+      })
+
+      it('names each group with its label prop', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const groups = Array.from(document.body.querySelectorAll('[role="group"]'))
+        const names = groups.map((group) => {
+          const id = group.getAttribute('aria-labelledby')
+          return id ? document.getElementById(id)?.textContent?.trim() : null
+        })
+        expect(names).toEqual(['Actions', 'Navigation'])
       })
     })
 
@@ -341,8 +353,8 @@ describe('Command', () => {
     // measured here. These assert the structural mechanism instead: the box is in
     // the DOM only for the row that supplies a glyph. Geometry is verified in the
     // browser against the story.
-    describe('the prefix box belongs to the item that has a prefix', () => {
-      it('renders the box only on the item that carries a prefix', async () => {
+    describe('the leading box belongs to the item that has a leading slot', () => {
+      it('renders the box only on the item that carries a leading slot', async () => {
         render(mixedPrefixes())
         await settle()
 
@@ -351,16 +363,16 @@ describe('Command', () => {
         )
         expect(items).toHaveLength(2)
 
-        const iconed = items[0].querySelector('[data-testid="overlay-command__item__prefix"]')
+        const iconed = items[0].querySelector('[data-testid="overlay-command__item__leading"]')
         expect(iconed).not.toBeNull()
         expect(items[0].querySelector('i.ai-cloud-upload')).not.toBeNull()
 
         // The icon-less row puts no empty box in the DOM, so it carries no indent.
-        expect(items[1].querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
+        expect(items[1].querySelector('[data-testid="overlay-command__item__leading"]')).toBeNull()
         expect(items[1].querySelector('i')).toBeNull()
       })
 
-      it('renders no box at all when no item carries a prefix', async () => {
+      it('renders no box at all when no item carries a leading slot', async () => {
         render(composed({ defaultOpen: true }))
         await settle()
 
@@ -369,7 +381,7 @@ describe('Command', () => {
         )
         expect(items.length).toBeGreaterThan(0)
         for (const item of items) {
-          expect(item.querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
+          expect(item.querySelector('[data-testid="overlay-command__item__leading"]')).toBeNull()
         }
       })
     })
@@ -550,7 +562,7 @@ describe('Command', () => {
         <Command default-open shortcut="">
           <CommandInput placeholder="Search" />
           <CommandList>
-            <CommandGroup heading="Pages">
+            <CommandGroup label="Pages">
               <CommandItem v-for="value in values" :key="value" :value="value">{{ value }}</CommandItem>
             </CommandGroup>
           </CommandList>
@@ -589,8 +601,8 @@ describe('Command', () => {
         <Command default-open shortcut="" @select="onSelect">
           <CommandInput placeholder="Search" />
           <CommandList>
-            <CommandGroup v-if="late" heading="First"><CommandItem value="early">Early</CommandItem></CommandGroup>
-            <CommandGroup heading="Second"><CommandItem value="later">Later</CommandItem></CommandGroup>
+            <CommandGroup v-if="late" label="First"><CommandItem value="early">Early</CommandItem></CommandGroup>
+            <CommandGroup label="Second"><CommandItem value="later">Later</CommandItem></CommandGroup>
           </CommandList>
         </Command>
       `
@@ -626,12 +638,12 @@ describe('Command', () => {
         <Command v-model:open="open" shortcut="" @select="onSelect">
           <CommandInput placeholder="Search" />
           <CommandList>
-            <CommandGroup heading="Navigation">
+            <CommandGroup label="Navigation">
               <CommandItem value="usage">Go to Usage</CommandItem>
               <CommandItem value="prefs" :keywords="['team']">Go to Preferences</CommandItem>
             </CommandGroup>
             <CommandSeparator />
-            <CommandGroup heading="Settings">
+            <CommandGroup label="Settings">
               <CommandItem value="domains">Settings Domains</CommandItem>
               <CommandItem value="deploy">Deploy Project</CommandItem>
             </CommandGroup>
@@ -717,7 +729,7 @@ describe('Command', () => {
         <Command v-model:open="open" shortcut="">
           <CommandInput placeholder="Search" />
           <CommandList>
-            <CommandGroup v-for="group in groups" :key="group.id" :heading="group.heading">
+            <CommandGroup v-for="group in groups" :key="group.id" :label="group.heading">
               <CommandItem v-for="item in group.items" :key="item.value" :value="item.value">{{ item.label }}</CommandItem>
             </CommandGroup>
           </CommandList>
@@ -756,11 +768,11 @@ describe('Command', () => {
           <Command v-model:open="open" v-model:page="page" shortcut="" @select="onSelect">
             <CommandInput placeholder="Search" />
             <CommandList>
-              <CommandGroup heading="Projects">
+              <CommandGroup label="Projects">
                 <CommandItem value="switch" page="projects">Switch Project</CommandItem>
                 <CommandItem value="new">Create Project</CommandItem>
               </CommandGroup>
-              <CommandPage name="projects" heading="Switch project">
+              <CommandPage name="projects" title="Switch project">
                 <CommandItem value="acme-store">acme-store</CommandItem>
                 <CommandItem value="docs-site">docs-site</CommandItem>
               </CommandPage>

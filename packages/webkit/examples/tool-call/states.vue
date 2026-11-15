@@ -7,27 +7,27 @@
     <ToolCall
       name="purge_urls"
       title="Purging one URL"
-      state="pending"
+      status="pending"
     />
     <ToolCall
       name="list_workloads"
       title="Listing your workloads"
-      state="running"
+      status="running"
     />
     <ToolCall
       name="get_cache_settings"
       title="Reading the cache settings of storefront"
-      state="success"
+      status="success"
     />
     <ToolCall
       name="get_metrics"
       title="Reading the error rate"
-      state="error"
+      status="error"
     />
     <ToolCall
       name="delete_domain"
       title="Deleting www.example.com"
-      state="denied"
+      status="denied"
     />
   </div>
 </template>

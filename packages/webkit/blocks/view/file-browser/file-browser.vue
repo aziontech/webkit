@@ -103,13 +103,13 @@
     {
       accessorKey: 'name',
       header: 'Name',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false,
       grow: 3
     },
-    { accessorKey: 'bytes', header: 'Size', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -254,7 +254,7 @@
     <div class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               ref="tableEl"
               v-model:sorting="sorting"
@@ -262,7 +262,7 @@
               :data="sortedRows"
               :columns="columns"
               row-key="id"
-              enable-sorting
+              sortable
               manual-sorting
               paginated
               :page-size="50"
@@ -293,7 +293,7 @@
                       />
                     </div>
                     <Tooltip
-                      text="Refresh"
+                      content="Refresh"
                       class="shrink-0"
                     >
                       <IconButton
@@ -306,7 +306,7 @@
                       />
                     </Tooltip>
                     <Tooltip
-                      text="Download CSV"
+                      content="Download CSV"
                       class="shrink-0"
                     >
                       <IconButton

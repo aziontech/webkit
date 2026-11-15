@@ -3,8 +3,8 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 5
-checksum: 997cef4bef76e58d2c0f07c8366678a9b1b972b003ff35092e95f4ff2ee838b6
+spec_version: 6
+checksum: 13c83d0072cec17355a804886a7762112ffdd139969c400396729985cbb3b404
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -59,7 +59,7 @@ The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Dra
 <template>
   <Drawer
     v-model:open="open"
-    side="right"
+    side="end"
     size="medium"
   >
     <Drawer.Trigger>
@@ -112,7 +112,7 @@ Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attache
 | `closable`    | `boolean`    | `true`     | false    | Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`.                                                                                            |
 | `dismissible` | `boolean`    | `true`     | false    | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`.                                                                                                     |
 | `modal`       | `boolean`    | `true`     | false    | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
-| `side`        | `DrawerSide` | `'right'`  | false    | Edge the drawer panel slides from.                                                                                                                                                                                            |
+| `side`        | `DrawerSide` | `'end'`    | false    | Edge the drawer panel slides from, in reading direction (`start` or `end`).                                                                                                                                                   |
 | `size`        | `DrawerSize` | `'medium'` | false    | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport.                                                                                      |
 
 - Two close paths: `dismissible` gates the light-dismiss paths (`Esc`, overlay click); `closable` shows or removes the close (X) button, as Radix and the prop vocabulary separate them. `Drawer.Close` and the context `close()` always close. Tests: `drawer.test.ts` › closable.
@@ -152,7 +152,7 @@ Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attache
 
 No element sets an inline `transition`, so `motion-reduce:transition-none` wins and the panel appears in place under `prefers-reduced-motion` (pinned by `dialog-motion.test.ts`).
 
-- From `md` up the panel slides in from its `side` edge (`translate-x`) and out to it. `side` names the physical edge of a left-to-right page and the panel anchors on the logical one (`start-0` / `end-0`), so under `dir="rtl"` the slide mirrors with it (`rtl:` variants): a `left` drawer sits on the right and leaves to the right.
+- From `md` up the panel slides in from its `side` edge (`translate-x`) and out to it. `side` is logical (`start` | `end`) and the panel anchors on that edge (`start-0` / `end-0`), so under `dir="rtl"` the slide mirrors with it (`rtl:` variants): a `start` drawer sits on the right and leaves to the right.
 
 ## Tokens
 

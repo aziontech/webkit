@@ -45,7 +45,7 @@
       </button>
     </template>
 
-    <template #header-start="{ compact }">
+    <template #header-leading="{ compact }">
       <button
         v-if="compact"
         type="button"

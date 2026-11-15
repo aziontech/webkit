@@ -20,7 +20,7 @@
       /** Field used as the stable row id (cursor, selection and edits follow it). */
       rowKey?: string
       /** Adds a leading checkbox column with Select all. */
-      enableRowSelection?: boolean
+      selectable?: boolean
       /** Pins the first data column to the inline start edge while the grid scrolls sideways. */
       frozenFirstColumn?: boolean
       /** No cell can be edited; the cursor, range selection and copy still work. */
@@ -33,7 +33,7 @@
     {
       columns: () => [],
       rowKey: 'id',
-      enableRowSelection: false,
+      selectable: false,
       frozenFirstColumn: false,
       readonly: false,
       maxHeight: '',
@@ -44,7 +44,7 @@
   const emit = defineEmits<{
     change: [event: Event, edit: DataGridCellEdit<TRow>]
     'row-add': [event: Event]
-    'row-delete': [event: Event, rows: TRow[]]
+    'row-remove': [event: Event, rows: TRow[]]
     copy: [event: KeyboardEvent | ClipboardEvent, text: string]
   }>()
 
@@ -97,7 +97,7 @@
   const widths = ref<Record<string, number>>({})
   const resizing = ref<string | null>(null)
 
-  const offset = computed<number>(() => (props.enableRowSelection ? 1 : 0))
+  const offset = computed<number>(() => (props.selectable ? 1 : 0))
   const colCount = computed<number>(() => props.columns.length + offset.value)
   const record = (row: TRow): Record<string, unknown> => row as Record<string, unknown>
   const idOf = (row: TRow): string => String(record(row)[props.rowKey] ?? '')
@@ -145,13 +145,13 @@
 
   const cellId = (row: number, col: number): string => `${uid}-r${row}-c${col}`
   const frozenStyle = (col: number): Record<string, string> | undefined => {
-    if (props.enableRowSelection && col === 0) return { insetInlineStart: '0' }
+    if (props.selectable && col === 0) return { insetInlineStart: '0' }
     if (props.frozenFirstColumn && col === offset.value)
       return { insetInlineStart: `${offset.value * SELECT_WIDTH}px` }
     return undefined
   }
   const frozen = (col: number): 'start' | null =>
-    (props.enableRowSelection && col === 0) || (props.frozenFirstColumn && col === offset.value)
+    (props.selectable && col === 0) || (props.frozenFirstColumn && col === offset.value)
       ? 'start'
       : null
 
@@ -428,7 +428,7 @@
 
   const add = (event: Event): void => emit('row-add', event)
   const remove = (event: Event): void => {
-    if (selectedRows.value.length) emit('row-delete', event, selectedRows.value)
+    if (selectedRows.value.length) emit('row-remove', event, selectedRows.value)
   }
 
   const clampWidth = (column: DataGridColumn, width: number): number =>
@@ -601,7 +601,7 @@
           ]"
           role="row"
           :aria-rowindex="r + 2"
-          :aria-selected="enableRowSelection ? Boolean(rowSelection[idOf(row)]) : undefined"
+          :aria-selected="selectable ? Boolean(rowSelection[idOf(row)]) : undefined"
           :data-state="rowSelection[idOf(row)] ? 'selected' : null"
           :data-testid="`${testId}__row`"
           class="group/row flex border-b-(length:--border-width-default) border-solid border-(--border-default) [content-visibility:auto] [contain-intrinsic-size:auto_2.5rem] last:border-b-0"

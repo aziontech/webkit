@@ -440,7 +440,7 @@
         </div>
       </DocProse>
       <div class="mt-(--spacing-2xl)">
-        <DocPrevNext :next="{ title: 'Agent setup', href: '/docs/agent-setup' }" />
+        <DocPrevNext :next="{ label: 'Agent setup', href: '/docs/agent-setup' }" />
       </div>
     </article>
 

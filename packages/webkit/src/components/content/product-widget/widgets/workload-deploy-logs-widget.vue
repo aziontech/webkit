@@ -30,7 +30,7 @@
     /** Whether this widget is the one showing; the deployment streams only while it is and is on screen. */
     active?: boolean
     /** Milliseconds between revealed log lines. */
-    interval?: number
+    autoplayInterval?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -39,7 +39,7 @@
     width: 600,
     fade: 'none',
     active: true,
-    interval: 120
+    autoplayInterval: 120
   })
 
   const STEP_KEYS = ['build', 'upload', 'application', 'rules', 'deploy']
@@ -84,7 +84,7 @@
     run.value += 1
   }
 
-  const onFinished = () => {
+  const onComplete = () => {
     deployed.value = true
     restartTimer = setTimeout(restart, SUMMARY_HOLD_MS)
   }
@@ -121,7 +121,7 @@
             />
           </template>
 
-          <template #content>
+          <template #default>
             <Transition
               mode="out-in"
               leave-to-class="opacity-0"
@@ -179,11 +179,11 @@
                   :live="streaming"
                   active-at="build"
                   label="Logs"
-                  :controls="false"
-                  :progress="false"
+                  :show-controls="false"
+                  :show-progress="false"
                   :steps="STEPS"
-                  :interval="interval"
-                  @finished="onFinished"
+                  :autoplay-interval="autoplayInterval"
+                  @complete="onComplete"
                 />
               </div>
             </Transition>

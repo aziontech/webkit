@@ -108,7 +108,7 @@
           :data-testid="`${testId}__search`"
           @keydown="onSearchKeydown"
         >
-          <template #prefix>
+          <template #leading>
             <i class="ai ai-search" />
           </template>
         </Input>

@@ -10,7 +10,7 @@
     :items="[]"
     :facets="[
       {
-        key: 'industry',
+        id: 'industry',
         label: 'Industry',
         allLabel: 'All industries',
         options: [
@@ -20,7 +20,7 @@
         ]
       },
       {
-        key: 'solution',
+        id: 'solution',
         label: 'Solution',
         allLabel: 'All solutions',
         options: [
@@ -30,7 +30,9 @@
         ]
       }
     ]"
-    :search="{ placeholder: 'Search by company or story', label: 'Search success stories' }"
-    :empty="{ title: 'No stories match these filters.', action: 'View all success stories' }"
+    search-placeholder="Search by company or story"
+    search-aria-label="Search success stories"
+    empty-title="No stories match these filters."
+    empty-action-label="View all success stories"
   />
 </template>

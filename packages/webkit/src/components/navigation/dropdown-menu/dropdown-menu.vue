@@ -26,8 +26,8 @@
 
   defineSlots<{
     default(): unknown
-    top(): unknown
-    bottom(): unknown
+    header(): unknown
+    footer(): unknown
   }>()
 
   interface Props {
@@ -168,11 +168,11 @@
           @keydown="onPanelKeydown"
         >
           <div
-            v-if="$slots['top']"
-            :data-testid="`${testId}__top`"
+            v-if="$slots['header']"
+            :data-testid="`${testId}__header`"
             class="sticky top-0 z-10 bg-(--bg-surface) px-(--spacing-2xs) pb-(--spacing-2xs)"
           >
-            <slot name="top" />
+            <slot name="header" />
           </div>
 
           <div
@@ -186,11 +186,11 @@
           />
 
           <div
-            v-if="$slots['bottom']"
-            :data-testid="`${testId}__bottom`"
+            v-if="$slots['footer']"
+            :data-testid="`${testId}__footer`"
             class="sticky bottom-0 z-10 bg-(--bg-surface) px-(--spacing-2xs) pt-(--spacing-2xs)"
           >
-            <slot name="bottom" />
+            <slot name="footer" />
           </div>
         </div>
       </Transition>

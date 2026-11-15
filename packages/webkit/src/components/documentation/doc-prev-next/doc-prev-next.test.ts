@@ -12,8 +12,8 @@ import DocPrevNext from './doc-prev-next.vue'
 // Those belong to the visual gate. What is real without CSS: which sides render, the
 // anchor semantics, the landmark, and the event payload order.
 
-const PREV = { title: 'Deploy an application', href: '/docs/deploy' }
-const NEXT = { title: 'Bind a domain', href: '/docs/domains' }
+const PREV = { label: 'Deploy an application', href: '/docs/deploy' }
+const NEXT = { label: 'Bind a domain', href: '/docs/domains' }
 
 describe('DocPrevNext', () => {
   describe('rendering & testid', () => {

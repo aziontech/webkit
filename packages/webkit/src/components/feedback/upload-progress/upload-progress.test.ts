@@ -12,16 +12,17 @@ import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import UploadProgress, { type UploadProgressItem } from './upload-progress.vue'
 
 const running = (): UploadProgressItem[] => [
-  { id: '1', name: 'logo.svg', size: 4210, status: 'done' },
+  { id: '1', name: 'logo.svg', size: 4210, status: 'success' },
   { id: '2', name: 'app.js', size: 2048, status: 'running', progress: 50 },
-  { id: '3', name: 'styles.css', status: 'queued' }
+  { id: '3', name: 'styles.css', status: 'pending' }
 ]
 
 describe('UploadProgress', () => {
   it('is a named region whose header counts finished files', () => {
     const view = render(UploadProgress, { props: { items: running(), floating: false } })
     const region = view.getByRole('region', { name: 'File transfers' })
-    expect(region.getAttribute('data-state')).toBe('running')
+    expect(region.getAttribute('data-status')).toBe('running')
+    expect(region.getAttribute('data-state')).toBe('open')
     expect(view.getByTestId('feedback-upload-progress__title').textContent?.trim()).toBe(
       'Uploading 1 of 3 files'
     )
@@ -47,7 +48,7 @@ describe('UploadProgress', () => {
   it('turns into the outcome with retry and close when finished', async () => {
     const view = render(Finished)
     const region = view.getByRole('region')
-    expect(region.getAttribute('data-state')).toBe('failed')
+    expect(region.getAttribute('data-status')).toBe('error')
     expect(view.getByRole('status').textContent).toBe('3 files uploaded, 1 failed')
     expect(view.getByRole('img', { name: 'Failed' })).toBeTruthy()
     expect(view.getByText('Connection lost')).toBeTruthy()
@@ -104,16 +105,18 @@ describe('UploadProgress', () => {
     expect(list?.style.display).toBe('')
   })
 
-  it('v-model:expanded drives the list and emits update:expanded', async () => {
-    const { emitted, getByRole } = render(UploadProgress, {
-      props: { items: running(), floating: false, expanded: true }
+  it('v-model:open drives the list and emits update:open', async () => {
+    const { emitted, getByRole, rerender, getByTestId } = render(UploadProgress, {
+      props: { items: running(), floating: false, open: true }
     })
     await fireEvent.click(getByRole('button', { name: 'Hide files' }))
-    expect(emitted()['update:expanded']).toEqual([[false]])
-    expect(emitted()['update:collapsed']).toBeUndefined()
+    expect(emitted()['update:open']).toEqual([[false]])
+    expect(emitted()['update:expanded']).toBeUndefined()
+    await rerender({ open: false })
+    expect(getByTestId('feedback-upload-progress').getAttribute('data-state')).toBe('closed')
   })
 
-  it('starts expanded when the model is unbound', () => {
+  it('starts open when the model is unbound', () => {
     const { getByRole } = render(UploadProgress, { props: { items: running(), floating: false } })
     expect(getByRole('button', { name: 'Hide files' }).getAttribute('aria-expanded')).toBe('true')
   })

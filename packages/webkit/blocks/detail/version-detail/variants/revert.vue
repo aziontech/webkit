@@ -18,7 +18,7 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
@@ -27,7 +27,7 @@
     id: string
     name: string
     state: string
-    tag: { label: string; severity: TagSeverity; icon: string }
+    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
     comment: string
     author: string
     createdAgo: string
@@ -55,7 +55,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -110,7 +110,7 @@
     id: 'AEO25I38',
     name: 'AEO25I38',
     state: 'active',
-    tag: { label: 'Deployed', severity: 'primary', icon: '' },
+    tag: { label: 'Deployed', variant: 'primary', icon: '' },
     comment: 'Remove rule"Legacy load balancer"',
     author: 'Sam Lee',
     createdAgo: '1 day ago'
@@ -231,7 +231,7 @@
   const tagFor = (entry: VersionEntry): VersionEntry['tag'] => {
     if (entry.state === 'draft') return entry.tag
     return entry.id === deployedId.value
-      ? { label: 'Deployed', severity: 'primary', icon: '' }
+      ? { label: 'Deployed', variant: 'primary', icon: '' }
       : { label: 'Ready', severity: 'success', icon: '' }
   }
   const viewedDeployed = computed(() => deployedId.value === VIEWED)
@@ -326,7 +326,7 @@
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -378,7 +378,7 @@
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip text="Back to web-app versions">
+      <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
           kind="transparent"
@@ -410,7 +410,7 @@
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -479,7 +479,8 @@
                 </span>
                 <Tag
                   :label="viewedDeployed ? 'Deployed' : 'Ready'"
-                  :severity="viewedDeployed ? 'primary' : 'success'"
+                  :variant="viewedDeployed ? 'primary' : undefined"
+                  :severity="viewedDeployed ? undefined : 'success'"
                   size="medium"
                 />
                 <DropdownMenu
@@ -551,7 +552,7 @@
                             anchor="general"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     title="Name"
@@ -585,7 +586,7 @@
                             anchor="modules"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     v-for="mod in defaultModules"
@@ -610,7 +611,7 @@
                             anchor="subscription-modules"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     title="WebSocket Proxy"
@@ -632,7 +633,7 @@
                                         />
                                       </a>
                                     </template>
-                                    <Tooltip text="Contact sales to activate this module.">
+                                    <Tooltip content="Contact sales to activate this module.">
                                       <Switch
                                         v-model="settings.modules.web_socket_proxy"
                                         disabled
@@ -812,7 +813,7 @@
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:expanded="historyExpanded"
+          v-model:open="historyExpanded"
           collapsible
           :min="280"
           :max="560"

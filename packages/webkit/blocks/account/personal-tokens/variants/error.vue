@@ -129,12 +129,12 @@
   )
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'description', header: 'Description', grow: 2, minWidth: 200 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 160 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 160 },
     { accessorKey: 'expires', header: 'Expires', minWidth: 130 },
     { accessorKey: 'lastUsedAt', header: 'Last used', minWidth: 140 },
-    { accessorKey: 'createdAt', header: 'Created', enableSorting: true, minWidth: 160 },
+    { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 160 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -334,7 +334,7 @@
           </div>
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -347,7 +347,7 @@
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -371,7 +371,7 @@
           severity="danger"
         >
           The tokens could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -386,7 +386,7 @@
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <EmptyState
               size="medium"
               icon="ai ai-key"
@@ -411,12 +411,12 @@
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="tokensTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Personal tokens"
             >
@@ -512,7 +512,7 @@
     <Drawer
       v-model:open="createOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form

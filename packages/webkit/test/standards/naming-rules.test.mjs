@@ -15,7 +15,10 @@ import {
   scanRepo
 } from '../../scripts/lib/naming-rules.mjs'
 import {
+  checkDataAttributes,
+  checkEventVocabulary,
   checkPropVocabulary,
+  checkSlotVocabulary,
   vocabularySnapshot
 } from '../../../../.claude/hooks/lib/prop-vocabulary.mjs'
 
@@ -356,24 +359,34 @@ test('the group-label rule applies only to group parts', () => {
   assert.equal(checkPropVocabulary(props, { stage: 'all', component: 'command' }).length, 0)
 })
 
-test('staged vocabulary never blocks today: the enforced stage keeps the pre-6.0 bans only', () => {
+test('the enforced stage blocks the finished vocabulary; staged entries are reported only', () => {
   const props = [
     { name: 'kind', type: "'primary'" },
     { name: 'variant', type: "'outline' | 'ghost'" },
     { name: 'status', type: "'success'" },
     { name: 'current', type: 'boolean' }
   ]
-  assert.deepEqual(checkPropVocabulary(props), [])
+  assert.deepEqual(
+    checkPropVocabulary(props).map((x) => x.prop),
+    ['current']
+  )
   const all = checkPropVocabulary(props, { stage: 'all' })
   assert.deepEqual(
     all.map((x) => [x.prop, x.staged]),
     [
       ['kind', true],
-      ['current', true]
+      ['current', false]
     ]
   )
   assert.equal(checkPropVocabulary([{ name: 'appearance' }]).length, 1)
   assert.equal(checkPropVocabulary([{ name: 'severity', type: "'error'" }]).length, 1)
+  assert.equal(checkPropVocabulary([{ name: 'status', type: "'done' | 'failed'" }]).length, 1)
+  assert.equal(checkPropVocabulary([{ name: 'iconPosition', type: "'left'" }]).length, 1)
+  assert.equal(checkPropVocabulary([{ name: 'hideOperations', type: 'boolean' }]).length, 1)
+  assert.equal(checkPropVocabulary([{ name: 'expandedKeys', type: 'string[]' }]).length, 1)
+  assert.equal(checkEventVocabulary([{ name: 'item-dblclick' }]).length, 1)
+  assert.equal(checkSlotVocabulary([{ name: 'prefix' }])[0].staged, false)
+  assert.equal(checkDataAttributes(['data-open'])[0].staged, true)
 })
 
 test('the catalog vocabulary stamps the 6.0 standard', () => {

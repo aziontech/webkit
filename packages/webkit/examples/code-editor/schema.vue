@@ -44,7 +44,7 @@
       language="json"
       path="arguments.json"
       height="10rem"
-      @validate="(markers) => (problems = markers)"
+      @markers-change="(markers) => (problems = markers)"
     />
     <Field.Description>Each instance starts from these values.</Field.Description>
     <Field.Error v-if="first">Line {{ first.line }}: {{ first.message }}</Field.Error>

@@ -24,7 +24,7 @@
   >
     <CommandInput placeholder="Try set, dpl or team…" />
     <CommandList>
-      <CommandGroup heading="Actions">
+      <CommandGroup label="Actions">
         <CommandItem value="deploy">Deploy Project</CommandItem>
         <CommandItem value="reset-cache">Purge Cache</CommandItem>
         <CommandItem
@@ -33,7 +33,7 @@
           >Invite People</CommandItem
         >
       </CommandGroup>
-      <CommandGroup heading="Navigation">
+      <CommandGroup label="Navigation">
         <CommandItem value="projects">Go to Projects</CommandItem>
         <CommandItem
           value="settings"
@@ -42,7 +42,7 @@
         >
         <CommandItem value="usage">Go to Usage</CommandItem>
       </CommandGroup>
-      <CommandGroup heading="Settings">
+      <CommandGroup label="Settings">
         <CommandItem value="settings-domains">Settings: Domains</CommandItem>
         <CommandItem value="settings-team">Settings: Team</CommandItem>
       </CommandGroup>

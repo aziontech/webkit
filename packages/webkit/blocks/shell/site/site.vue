@@ -458,7 +458,7 @@
       max-width="site"
     >
       <Hero.Title
-        centered
+        :align="'center'"
         eyebrow="Functions"
         eyebrow-prefix="//"
         title="Run serverless code at the edge"

@@ -345,7 +345,7 @@
                     placeholder="Search keywords..."
                     aria-label="Search keywords"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"

@@ -116,8 +116,8 @@
         :key="pill.label"
         role="listitem"
         :data-active="lit[pill.index] || null"
-        :data-tone="toneOf(pill)"
-        class="inline-flex shrink-0 items-center rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) whitespace-nowrap text-overline-sm shadow-(--shadow-sm) [border:var(--border-width-default)_solid_transparent] [background-clip:padding-box,border-box] [background-origin:padding-box,border-box] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)] text-(--text-muted) transition-colors duration-slow-01 ease-productive-entrance data-active:[background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--primary)_0%,var(--primary)_18%,transparent_45%,transparent_55%,var(--primary)_82%,var(--primary)_100%)] data-[tone=azion]:text-(--primary) data-[tone=lit]:text-(--text-default) motion-reduce:transition-none"
+        :data-look="toneOf(pill)"
+        class="inline-flex shrink-0 items-center rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) whitespace-nowrap text-overline-sm shadow-(--shadow-sm) [border:var(--border-width-default)_solid_transparent] [background-clip:padding-box,border-box] [background-origin:padding-box,border-box] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)] text-(--text-muted) transition-colors duration-slow-01 ease-productive-entrance data-active:[background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),linear-gradient(135deg,var(--primary)_0%,var(--primary)_18%,transparent_45%,transparent_55%,var(--primary)_82%,var(--primary)_100%)] data-[look=azion]:text-(--primary) data-[look=lit]:text-(--text-default) motion-reduce:transition-none"
         >{{ pill.label }}</span
       >
     </div>

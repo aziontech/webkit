@@ -23,7 +23,7 @@
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Actions">
+      <CommandGroup label="Actions">
         <CommandItem
           value="command"
           shortcut="meta+k"

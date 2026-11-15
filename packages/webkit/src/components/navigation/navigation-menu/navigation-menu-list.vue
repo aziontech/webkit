@@ -16,15 +16,15 @@
     prefix?: string
     /** When set, the group heading is itself a link to the section's own page. */
     href?: string
-    /** Enables sliding highlight on the root horizontal list. */
-    highlight?: boolean
+    /** Shows the sliding highlight on the root horizontal list. */
+    showHighlight?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     label: undefined,
     prefix: '',
     href: '',
-    highlight: true
+    showHighlight: true
   })
 
   defineSlots<{ default(): unknown }>()
@@ -49,7 +49,7 @@
     )
   }
 
-  const useHighlight = computed(() => props.highlight && !isGroup.value)
+  const useHighlight = computed(() => props.showHighlight && !isGroup.value)
 
   const { selectorStyle, setTarget, onTargetPointerleave, onListPointerleave } =
     useNavigationMenuListHighlight(listContainerEl, root)
@@ -131,7 +131,7 @@
       :class="cn(ROOT_CLASS, isVertical && VERTICAL_CLASS, attrs.class as string | undefined)"
       role="list"
       :data-testid="testId"
-      :data-open="root.menuOpen.value ? '' : undefined"
+      :data-state="root.menuOpen.value ? 'open' : 'closed'"
     >
       <slot />
     </ul>
@@ -141,7 +141,7 @@
     :class="cn(ROOT_CLASS, isVertical && VERTICAL_CLASS, attrs.class as string | undefined)"
     role="list"
     :data-testid="testId"
-    :data-open="root.menuOpen.value ? '' : undefined"
+    :data-state="root.menuOpen.value ? 'open' : 'closed'"
   >
     <slot />
   </ul>

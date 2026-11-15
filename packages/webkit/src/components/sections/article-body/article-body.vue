@@ -56,8 +56,8 @@
     label: string
     /** Destination of the entry. */
     href?: string
-    /** Marks the entry as the current page. */
-    current?: boolean
+    /** Marks the entry as the page you are on; it renders `aria-current`. */
+    active?: boolean
   }
 
   /** Labels of the share group. */
@@ -125,7 +125,7 @@
     eyebrow?: string
     /** The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`. */
     article: ArticleBodyArticle
-    /** The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`. */
+    /** The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. */
     trail?: ArticleBodyCrumb[]
     /** The article as markdown; its `##` and `###` headings feed the outline. */
     body?: string
@@ -540,7 +540,7 @@
                 >
                   <p class="m-0 text-heading-xs text-(--text-default)">{{ share.title }}</p>
                   <div class="flex items-center gap-(--spacing-sm)">
-                    <Tooltip :text="share.copyLink">
+                    <Tooltip :content="share.copyLink">
                       <IconButton
                         kind="outlined"
                         size="medium"
@@ -551,7 +551,7 @@
                     </Tooltip>
                     <Tooltip
                       v-if="hasFeed"
-                      :text="share.copyFeed ?? ''"
+                      :content="share.copyFeed ?? ''"
                     >
                       <IconButton
                         kind="outlined"
@@ -561,7 +561,7 @@
                         @click="copyFeed"
                       />
                     </Tooltip>
-                    <Tooltip :text="share.shareX">
+                    <Tooltip :content="share.shareX">
                       <IconButton
                         kind="outlined"
                         size="medium"
@@ -571,7 +571,7 @@
                         target="_blank"
                       />
                     </Tooltip>
-                    <Tooltip :text="share.shareLinkedIn">
+                    <Tooltip :content="share.shareLinkedIn">
                       <IconButton
                         kind="outlined"
                         size="medium"

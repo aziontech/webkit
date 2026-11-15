@@ -3,8 +3,8 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: 3ca5f6abe03ceae1d04e8ca7597251ab1b887b1651ba00941a1e4821a76529b3
-spec_version: 5
+checksum: 43dc74e96a7451f2aae651afc52a8cdb58e95ebc6b15044822ce922e408346fe
+spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -62,7 +62,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
     anchor="general"
   >
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <Item.List>
           <SettingRow
             title="Name"
@@ -111,7 +111,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 
 - Visual states: `default`, `hover` / `focus-within` (reveals the copy-link button)
 - `data-state` on the root: `open` | `closed` when `collapsible`
-- `data-open` on the body mirrors whether it is unfolded
+- `data-state` on the body: `open` | `closed`, mirroring whether it is unfolded
 - Only a collapsible band folds along the `0fr`/`1fr` grid track (`data-collapsible` on the body); a band that is not collapsible lays its body out in normal flow, so it has no track that can resolve to zero height.
 - Responsive: the body is the `@container/settings-section`, so rows and fields inside lay out for the section, not the window.
 - Hover-free devices: the copy-link button is shown inline after the title where the pointer cannot hover (`@media (hover: none)`), instead of floating outside the start edge on hover.

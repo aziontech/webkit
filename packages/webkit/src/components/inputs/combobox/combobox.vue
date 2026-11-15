@@ -471,7 +471,7 @@
         @blur="onBlur"
         @keydown="onKeydown"
       >
-        <template #prefix>
+        <template #leading>
           <i
             class="ai ai-search text-(--text-muted)"
             aria-hidden="true"
@@ -479,7 +479,7 @@
         </template>
         <template
           v-if="loading"
-          #suffix
+          #trailing
         >
           <Spinner
             class="size-3.5 text-(--text-muted)"

@@ -205,11 +205,11 @@
           <p
             ref="promptEl"
             :data-kind="kind"
-            :data-expanded="kind === 'block' && expanded ? '' : undefined"
+            :data-state="kind === 'block' ? (expanded ? 'open' : 'closed') : undefined"
             :data-overflow="kind === 'line' && overflow ? overflow : undefined"
             :tabindex="kind === 'line' ? 0 : undefined"
             :style="{ maxHeight: capOverride || undefined }"
-            class="m-0 text-body-code-sm text-(--text-default) motion-reduce:transition-none data-[kind=block]:max-h-[3.5lh] data-[kind=block]:overflow-hidden data-[kind=block]:whitespace-pre-wrap data-[kind=block]:transition-[max-height] data-[kind=block]:duration-moderate-02 data-[kind=block]:ease-productive-exit data-[kind=line]:overflow-x-auto data-[kind=line]:whitespace-nowrap data-[kind=line]:rounded-(--shape-control) data-[kind=line]:[scrollbar-width:none] data-[kind=block]:data-[expanded]:max-h-none data-[kind=block]:data-[expanded]:ease-productive-entrance data-[kind=line]:focus-visible:outline-2 data-[kind=line]:focus-visible:outline-offset-2 data-[kind=line]:focus-visible:outline-(--ring-color) data-[kind=line]:[&::-webkit-scrollbar]:hidden"
+            class="m-0 text-body-code-sm text-(--text-default) motion-reduce:transition-none data-[kind=block]:max-h-[3.5lh] data-[kind=block]:overflow-hidden data-[kind=block]:whitespace-pre-wrap data-[kind=block]:transition-[max-height] data-[kind=block]:duration-moderate-02 data-[kind=block]:ease-productive-exit data-[kind=line]:overflow-x-auto data-[kind=line]:whitespace-nowrap data-[kind=line]:rounded-(--shape-control) data-[kind=line]:[scrollbar-width:none] data-[kind=block]:data-[state=open]:max-h-none data-[kind=block]:data-[state=open]:ease-productive-entrance data-[kind=line]:focus-visible:outline-2 data-[kind=line]:focus-visible:outline-offset-2 data-[kind=line]:focus-visible:outline-(--ring-color) data-[kind=line]:[&::-webkit-scrollbar]:hidden"
             @scroll="measure"
           >
             <slot>{{ label }}</slot>

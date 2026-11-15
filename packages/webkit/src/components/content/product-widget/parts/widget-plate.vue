@@ -25,14 +25,14 @@
 
   const FORWARDED = [
     'active',
-    'hover',
+    'hovered',
     'kind',
     'chrome',
     'width',
     'fade',
     'texture',
     'tab',
-    'interval'
+    'autoplayInterval'
   ]
 
   const forwarded = computed(() =>

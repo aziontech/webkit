@@ -226,7 +226,7 @@
             'relative shrink-0 overflow-hidden',
             iconMode.value
               ? 'w-(--sidebar-width) has-[>div>input:checked]:w-(--sidebar-rail-width) min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-(--sidebar-rail-width)'
-              : 'data-[collapsed]:border-e-0 has-[>div>input:checked]:border-e-0 w-(--sidebar-width) has-[>div>input:checked]:w-0 min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0',
+              : 'data-[state=closed]:border-e-0 has-[>div>input:checked]:border-e-0 w-(--sidebar-width) has-[>div>input:checked]:w-0 min-w-(--sidebar-min-width) has-[>div>input:checked]:min-w-0',
             'data-[resizing]:min-w-0 max-w-(--sidebar-max-width)',
             RAIL_MOTION_CLASS,
             props.resizable ? 'resize-x data-[hydrated]:resize-none' : undefined
@@ -301,7 +301,7 @@
     :style="asideStyle"
     :aria-label="labels.root"
     :data-testid="testId"
-    :data-collapsed="isCollapsed ? '' : undefined"
+    :data-state="isCollapsed ? 'closed' : 'open'"
     :data-rail="rail ? '' : undefined"
     :data-resizing="resizing ? '' : undefined"
     :data-hydrated="hydrated ? '' : undefined"
@@ -365,7 +365,7 @@
           </div>
           <Tooltip
             v-if="collapseMode !== null"
-            :text="rail ? labels.expand : labels.collapse"
+            :content="rail ? labels.expand : labels.collapse"
             :placement="rail ? railPlacement : 'top'"
           >
             <IconButton
@@ -441,7 +441,7 @@
         class="pointer-events-none absolute start-full top-1/2 -translate-y-1/2 translate-x-[calc(-1_*_var(--size-10))] rtl:translate-x-(--size-10) ps-(--spacing-2xs) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-expressive-exit group-hover:translate-x-0 rtl:group-hover:translate-x-0 group-hover:opacity-100 group-hover:pointer-events-auto group-hover:ease-expressive-entrance group-focus-within:translate-x-0 rtl:group-focus-within:translate-x-0 group-focus-within:opacity-100 group-focus-within:pointer-events-auto group-focus-within:ease-expressive-entrance motion-reduce:transition-none motion-reduce:translate-none"
       >
         <Tooltip
-          :text="labels.expand"
+          :content="labels.expand"
           :placement="dir === 'rtl' ? 'left' : 'right'"
         >
           <IconButton

@@ -19,7 +19,7 @@ Example: [`site-default.vue`](./site-default.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
 - `eyebrow`, `title` and `description` make the section title.
-- `position` is the side of the diagram the tabs sit on: `top` (the default), `bottom`, `left` or `right`. Left and right hold up to three tabs.
+- `tabsSide` is the side of the diagram the tabs sit on: `top` (the default), `bottom`, `start` or `end`. Start and end hold up to three tabs.
 - `tabs` are up to five architectures, each a `value`, a `title`, a `description` and the `diagram` name it draws; `diagramAriaLabel` replaces the description that diagram ships.
 - `autoplayInterval` is how long each tab holds, in milliseconds (6000 by default).
 - `primaryAction` is the large button in the section title, a `label`, an `href` and `trailing`. Leave it out to drop the button.

@@ -152,7 +152,7 @@
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <Tooltip
-          text="Back to Services"
+          content="Back to Services"
           placement="bottom"
         >
           <IconButton
@@ -194,7 +194,7 @@
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Group>
-            <template #top>
+            <template #header>
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
                 <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>
@@ -256,7 +256,7 @@
             <section class="flex flex-col gap-(--layout-group-gap)">
               <SectionHeader title="General" />
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Name"
@@ -292,7 +292,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeader title="Delivery settings" />
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
@@ -363,7 +363,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeader title="Features" />
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Compression"
@@ -448,7 +448,7 @@
                             severity="danger"
                             :label="originError"
                           >
-                            <template #action>
+                            <template #actions>
                               <Button
                                 label="Reload origins"
                                 kind="secondary"
@@ -465,7 +465,7 @@
                 </div>
               </header>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Origin"
@@ -552,7 +552,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeader title="Cache expiration policies" />
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Browser maximum TTL"
@@ -592,7 +592,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <SectionHeader title="Debug rules" />
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Active"

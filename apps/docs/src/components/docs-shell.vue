@@ -125,7 +125,7 @@
               :display-value="localeLabel"
             >
               <Select.Trigger :aria-label="t.language">
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-globe text-(--text-muted)"
                     aria-hidden="true"
@@ -143,7 +143,7 @@
               </Select.Content>
             </Select>
           </div>
-          <Tooltip :text="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
+          <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
             <IconButton
               :icon="settings.dir === 'rtl' ? 'ai ai-align-left' : 'ai ai-align-right'"
               kind="outlined"

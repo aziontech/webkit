@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import Current from '../../../../../examples/breadcrumb-item/current.vue'
+import Active from '../../../../../examples/breadcrumb-item/active.vue'
 import Default from '../../../../../examples/breadcrumb-item/default.vue'
 import Disabled from '../../../../../examples/breadcrumb-item/disabled.vue'
 import WithIcon from '../../../../../examples/breadcrumb-item/with-icon.vue'
@@ -71,14 +71,14 @@ describe('BreadcrumbItem', () => {
   describe('current page semantics', () => {
     it('renders a span with aria-current="page" and tabindex -1 when current', () => {
       const { getByTestId } = render(BreadcrumbItem, {
-        props: { label: 'Current', current: true }
+        props: { label: 'Current', active: true }
       })
 
       const root = getByTestId(TESTID)
 
       expect(root.tagName).toBe('SPAN')
       expect(root.getAttribute('aria-current')).toBe('page')
-      expect(root.getAttribute('data-current')).toBe('true')
+      expect(root.getAttribute('data-active')).toBe('true')
       expect(root.getAttribute('tabindex')).toBe('-1')
       // A current segment is a span, so it has no href.
       expect(root.getAttribute('href')).toBeNull()
@@ -92,7 +92,7 @@ describe('BreadcrumbItem', () => {
       const root = getByTestId(TESTID)
 
       expect(root.getAttribute('aria-current')).toBeNull()
-      expect(root.getAttribute('data-current')).toBeNull()
+      expect(root.getAttribute('data-active')).toBeNull()
     })
   })
 
@@ -157,7 +157,7 @@ describe('BreadcrumbItem', () => {
 
     it('still emits click for the current segment (span)', async () => {
       const { getByTestId, emitted } = render(BreadcrumbItem, {
-        props: { label: 'Current', current: true }
+        props: { label: 'Current', active: true }
       })
 
       await fireEvent.click(getByTestId(TESTID))
@@ -168,12 +168,12 @@ describe('BreadcrumbItem', () => {
 
   describe('variant smoke', () => {
     it.each([
-      { current: false, disabled: false },
-      { current: true, disabled: false },
-      { current: false, disabled: true }
-    ])('renders with current=$current disabled=$disabled', ({ current, disabled }) => {
+      { active: false, disabled: false },
+      { active: true, disabled: false },
+      { active: false, disabled: true }
+    ])('renders with active=$active disabled=$disabled', ({ active, disabled }) => {
       const { getByTestId } = render(BreadcrumbItem, {
-        props: { label: 'Segment', current, disabled }
+        props: { label: 'Segment', active, disabled }
       })
 
       expect(getByTestId(TESTID)).toBeTruthy()
@@ -191,7 +191,7 @@ describe('BreadcrumbItem', () => {
 
     it('has no a11y violations for the current-page segment', async () => {
       const { container } = render(BreadcrumbItem, {
-        props: { label: 'Current', current: true }
+        props: { label: 'Current', active: true }
       })
 
       await expectNoA11yViolations(container)
@@ -222,8 +222,8 @@ describe('BreadcrumbItem', () => {
       expect(getByTestId(`${TESTID}__label`).textContent?.trim()).toBe('Page Name')
     })
 
-    it('composes the Current story as a current-page span', () => {
-      const { getByTestId } = render(Current)
+    it('composes the Active example as a current-page span', () => {
+      const { getByTestId } = render(Active)
 
       const root = getByTestId(TESTID)
       expect(root.tagName).toBe('SPAN')

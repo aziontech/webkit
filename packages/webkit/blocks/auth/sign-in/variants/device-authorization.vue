@@ -139,7 +139,7 @@
                 class="w-full max-w-(--container-sm)"
                 :padded="false"
               >
-                <template #content>
+                <template #default>
                   <section
                     class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)"
                     aria-labelledby="device-authorization-title"
@@ -175,7 +175,7 @@
                       size="small"
                     >
                       We could not check the code. Your entry is kept; try again in a moment.
-                      <template #action>
+                      <template #actions>
                         <Button
                           label="Retry"
                           kind="secondary"

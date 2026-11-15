@@ -97,11 +97,11 @@ describe('Flow', () => {
     })
 
     describe('Flow.Node — flow-node.vue props & a11y', () => {
-      it('renders role=listitem with data-flow-kind=node and is styled by default', () => {
+      it('renders role=listitem with data-slot=flow-node and is styled by default', () => {
         const { getByTestId } = renderTree(`<Flow><FlowNode>N</FlowNode></Flow>`)
         const node = getByTestId('data-flow__node')
         expect(node.getAttribute('role')).toBe('listitem')
-        expect(node.getAttribute('data-flow-kind')).toBe('node')
+        expect(node.getAttribute('data-slot')).toBe('flow-node')
         expect(node.hasAttribute('data-styled')).toBe(true)
       })
 
@@ -134,14 +134,16 @@ describe('Flow', () => {
       it('renders a connector port on each edge of a styled node, hidden from the a11y tree', () => {
         const { getByTestId } = renderTree(`<Flow><FlowNode>N</FlowNode></Flow>`)
         const node = getByTestId('data-flow__node')
-        const ports = Array.from(node.querySelectorAll<HTMLElement>('[data-flow-port]'))
-        expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(['end', 'start'])
+        const ports = Array.from(node.querySelectorAll<HTMLElement>('[data-slot="flow-port"]'))
+        expect(ports.map((p) => p.getAttribute('data-side'))).toEqual(['end', 'start'])
         expect(ports.every((p) => p.getAttribute('aria-hidden') === 'true')).toBe(true)
       })
 
       it('renders no ports on an unstyled node (its slot content owns the appearance)', () => {
         const { getByTestId } = renderTree(`<Flow><FlowNode unstyled>N</FlowNode></Flow>`)
-        expect(getByTestId('data-flow__node').querySelectorAll('[data-flow-port]').length).toBe(0)
+        expect(
+          getByTestId('data-flow__node').querySelectorAll('[data-slot="flow-port"]').length
+        ).toBe(0)
       })
 
       it('marks a terminal node and gives it no outgoing port', () => {
@@ -157,11 +159,11 @@ describe('Flow', () => {
         const [, chain, leaf] = getAllByTestId('data-flow__node')
         expect(leaf.getAttribute('data-flow-terminal')).toBe('true')
         expect(
-          Array.from(leaf.querySelectorAll<HTMLElement>('[data-flow-port]')).map((p) =>
-            p.getAttribute('data-flow-port')
+          Array.from(leaf.querySelectorAll<HTMLElement>('[data-slot="flow-port"]')).map((p) =>
+            p.getAttribute('data-side')
           )
         ).toEqual(['end'])
-        expect(chain.querySelectorAll('[data-flow-port]').length).toBe(2)
+        expect(chain.querySelectorAll('[data-slot="flow-port"]').length).toBe(2)
         expect(chain.hasAttribute('data-flow-terminal')).toBe(false)
       })
     })
@@ -216,7 +218,7 @@ describe('Flow', () => {
     })
 
     describe('Flow.Parallel — flow-parallel.vue align prop', () => {
-      it('renders a list item with data-flow-kind=parallel holding its branches in a nested list, default align=start', () => {
+      it('renders a list item with data-slot=flow-parallel holding its branches in a nested list, default align=start', () => {
         const { getByTestId } = renderTree(`
         <Flow>
           <FlowParallel>
@@ -227,7 +229,7 @@ describe('Flow', () => {
       `)
         const group = getByTestId('data-flow__parallel')
         expect(group.getAttribute('role')).toBe('listitem')
-        expect(group.getAttribute('data-flow-kind')).toBe('parallel')
+        expect(group.getAttribute('data-slot')).toBe('flow-parallel')
         expect(group.getAttribute('data-align')).toBe('start')
         const branches = getByTestId('data-flow__parallel__branches')
         expect(branches.parentElement).toBe(group)
@@ -248,7 +250,7 @@ describe('Flow', () => {
     })
 
     describe('Flow.Anchor side, Flow.Parallel default and live context', () => {
-      it.each([['end'], ['start']])('maps side=%s to data-flow-anchor and its port', (side) => {
+      it.each([['end'], ['start']])('maps side=%s to data-side and its port', (side) => {
         const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>
@@ -257,10 +259,10 @@ describe('Flow', () => {
         </Flow>
       `)
         const anchor = getByTestId('data-flow__anchor')
-        expect(anchor.getAttribute('data-flow-anchor')).toBe(side)
+        expect(anchor.getAttribute('data-side')).toBe(side)
         expect(
-          Array.from(anchor.querySelectorAll('[data-flow-port]')).map((port) =>
-            port.getAttribute('data-flow-port')
+          Array.from(anchor.querySelectorAll('[data-slot="flow-port"]')).map((port) =>
+            port.getAttribute('data-side')
           )
         ).toEqual([side])
       })
@@ -293,7 +295,7 @@ describe('Flow', () => {
     })
 
     describe('Flow.Anchor — flow-anchor.vue side prop', () => {
-      it.each([['end'], ['start']])('maps side=%s to data-flow-anchor=%s', (type) => {
+      it.each([['end'], ['start']])('maps side=%s to data-side=%s', (type) => {
         const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>
@@ -301,7 +303,7 @@ describe('Flow', () => {
           </FlowNode>
         </Flow>
       `)
-        expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe(type)
+        expect(getByTestId('data-flow__anchor').getAttribute('data-side')).toBe(type)
       })
 
       it('ignores the retired type attribute: only side marks an edge', () => {
@@ -312,7 +314,7 @@ describe('Flow', () => {
           </FlowNode>
         </Flow>
       `)
-        expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe('both')
+        expect(getByTestId('data-flow__anchor').hasAttribute('data-side')).toBe(false)
       })
 
       it('marks an anchor with no side as "both"', () => {
@@ -323,7 +325,7 @@ describe('Flow', () => {
           </FlowNode>
         </Flow>
       `)
-        expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe('both')
+        expect(getByTestId('data-flow__anchor').hasAttribute('data-side')).toBe(false)
       })
 
       it.each([
@@ -338,9 +340,9 @@ describe('Flow', () => {
         </Flow>
       `)
         const ports = Array.from(
-          getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-flow-port]')
+          getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-slot="flow-port"]')
         )
-        expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(expected)
+        expect(ports.map((p) => p.getAttribute('data-side'))).toEqual(expected)
       })
 
       it('places ports on both edges when the anchor has no side', () => {
@@ -352,9 +354,9 @@ describe('Flow', () => {
         </Flow>
       `)
         const ports = Array.from(
-          getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-flow-port]')
+          getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-slot="flow-port"]')
         )
-        expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(['end', 'start'])
+        expect(ports.map((p) => p.getAttribute('data-side'))).toEqual(['end', 'start'])
       })
     })
 
@@ -445,7 +447,7 @@ describe('Flow', () => {
       it('renders the AnchoredNode story exposing start/end anchors inside an unstyled node', () => {
         const { getAllByTestId } = render(AnchoredNode)
         const anchors = getAllByTestId('data-flow__anchor')
-        const types = anchors.map((a) => a.getAttribute('data-flow-anchor')).sort()
+        const types = anchors.map((a) => a.getAttribute('data-side')).sort()
         expect(types).toEqual(['end', 'start'])
       })
 
@@ -498,7 +500,7 @@ describe('Flow', () => {
         </div>
       `)
         const root = getByTestId('data-flow')
-        const nodes = root.querySelectorAll<HTMLElement>('[data-flow-kind="node"]')
+        const nodes = root.querySelectorAll<HTMLElement>('[data-slot="flow-node"]')
         await waitFor(() => {
           expect(root.querySelectorAll('svg path').length).toBe(1)
         })
@@ -511,7 +513,9 @@ describe('Flow', () => {
         expect(Math.abs(fromX! - (source.left - base))).toBeLessThan(2)
         expect(Math.abs(toX! - (sink.right - base))).toBeLessThan(2)
 
-        const port = nodes[0]!.querySelector<HTMLElement>('[data-flow-port="start"]')!
+        const port = nodes[0]!.querySelector<HTMLElement>(
+          '[data-slot="flow-port"][data-side="start"]'
+        )!
         expect(port.getBoundingClientRect().right).toBeLessThanOrEqual(source.left + 1)
       })
     })

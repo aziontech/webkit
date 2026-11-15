@@ -250,7 +250,7 @@
   )
 
   const focusTrigger = (): void => {
-    triggerEl.value?.querySelector<HTMLElement>('[data-part="trigger"]')?.focus()
+    triggerEl.value?.querySelector<HTMLElement>('[data-slot="date-range-picker-trigger"]')?.focus()
   }
 
   const close = (): void => {
@@ -487,7 +487,7 @@
       </button>
       <button
         type="button"
-        data-part="trigger"
+        data-slot="date-range-picker-trigger"
         :disabled="isDisabled"
         :data-size="size"
         :data-empty="!triggerText || null"

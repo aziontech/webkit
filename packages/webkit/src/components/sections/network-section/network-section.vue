@@ -77,8 +77,8 @@
     /** Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. */
     title?: string
     /** Overline-set line above the claims. */
-    lead?: string
-    /** Short figures rendered as chips under the lead, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. */
+    claimsEyebrow?: string
+    /** Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. */
     claims?: (string | NetworkSectionClaim)[]
     /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'as-is'`, and `highlights` are the phrases of `text` set in the accent. */
     outcomes?: NetworkSectionOutcome[]
@@ -93,7 +93,7 @@
     anchor: '',
     eyebrow: '',
     title: '',
-    lead: '',
+    claimsEyebrow: '',
     claims: () => [],
     outcomes: () => [],
     benefits: () => [],
@@ -158,7 +158,7 @@
           >
             <SectionTitle
               :framed="false"
-              kind="left"
+              kind="start"
               size="small"
               :eyebrow="eyebrow"
               :title="title"
@@ -182,10 +182,10 @@
 
             <div class="relative flex flex-col gap-(--spacing-md)">
               <p
-                v-if="lead"
+                v-if="claimsEyebrow"
                 class="m-0 text-overline-md text-(--text-muted)"
               >
-                {{ lead }}
+                {{ claimsEyebrow }}
               </p>
 
               <ul

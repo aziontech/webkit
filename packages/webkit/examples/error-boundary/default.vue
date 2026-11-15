@@ -36,7 +36,7 @@
 <template>
   <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
     <Card title="Top services">
-      <template #content>
+      <template #default>
         <ErrorBoundary
           @error="report"
           @retry="recover"

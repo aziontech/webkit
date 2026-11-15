@@ -171,7 +171,7 @@
     },
     endResize: (event) => {
       resizing.value = false
-      boardItem?.endResize()
+      boardItem?.endResize(event)
       emit('resize-end', event)
     }
   })

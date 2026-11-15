@@ -72,7 +72,7 @@
       <template #actions="{ compact }">
         <template v-if="compact">
           <Tooltip
-            text="Create"
+            content="Create"
             placement="bottom"
           >
             <IconButton
@@ -84,7 +84,7 @@
             />
           </Tooltip>
           <Tooltip
-            text="Agent"
+            content="Agent"
             placement="bottom"
           >
             <IconButton
@@ -116,28 +116,28 @@
       <template #search="{ query }">
         <Command.Group
           v-if="!query"
-          heading="Recents"
+          label="Recents"
         >
           <Command.Item
             v-for="row in recents"
             :key="row.id"
             :value="`recent:${row.id}`"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 :class="row.icon"
                 aria-hidden="true"
               />
             </template>
             {{ row.label }}
-            <template #suffix>
+            <template #trailing>
               <span class="text-label-sm text-(--text-muted)">{{ row.type }}</span>
             </template>
           </Command.Item>
         </Command.Group>
-        <Command.Group heading="Actions">
+        <Command.Group label="Actions">
           <Command.Item value="action:create">
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-circle-plus"
                 aria-hidden="true"
@@ -146,7 +146,7 @@
             Create Resource
           </Command.Item>
           <Command.Item value="action:theme">
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-moon"
                 aria-hidden="true"
@@ -159,7 +159,7 @@
 
       <template #account-menu>
         <DropdownMenu.Group>
-          <template #top>
+          <template #header>
             <div class="flex min-w-0 flex-col">
               <span class="truncate text-label-md text-(--text-default)">{{ account.name }}</span>
               <span class="truncate text-body-xs text-(--text-muted)">{{ account.email }}</span>

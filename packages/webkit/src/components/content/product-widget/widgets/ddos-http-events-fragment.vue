@@ -13,7 +13,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the elevator runs through the logged requests only while it is. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -153,7 +153,7 @@
           <div class="min-h-0 flex-1 px-(--spacing-md)">
             <MockupElevator
               :count="EVENTS.length"
-              :active="hover || !canHover"
+              :active="hovered || !canHover"
             >
               <template #default="{ index }">
                 <div class="flex items-start gap-(--spacing-sm) py-(--spacing-2xs)">

@@ -47,15 +47,15 @@
 
   const emit = defineEmits<{
     action: [event: MouseEvent]
-    /** Dismissed, after the fade; carries the close click or the Escape key, none after life expires. */
-    close: [event?: Event]
+    /** Dismissed, after the fade; carries the close click, the Escape key, or a `timeout` Event when life expires. */
+    close: [event: Event]
   }>()
 
   const slots = defineSlots<{
     /** Alert copy: inline prose, or flow content such as paragraphs and a list. Falls back to label when empty. */
     default(): unknown
     /** Custom action control; replaces the built-in Button when provided. */
-    action(): unknown
+    actions(): unknown
   }>()
 
   const defaultIcons = {
@@ -89,7 +89,7 @@
 
   const resolvedIcon = computed(() => props.icon || defaultIcons[normalizedSeverity.value])
 
-  const hasTrailingControl = () => Boolean(props.actionLabel || slots.action || props.closable)
+  const hasTrailingControl = () => Boolean(props.actionLabel || slots.actions || props.closable)
 
   const role = computed(() =>
     normalizedSeverity.value === 'danger' || normalizedSeverity.value === 'warning'
@@ -120,8 +120,7 @@
   }
 
   const onAfterLeave = () => {
-    if (dismissEvent) emit('close', dismissEvent)
-    else emit('close')
+    emit('close', dismissEvent ?? new Event('timeout'))
   }
 
   const onAction = (event: MouseEvent) => {
@@ -203,11 +202,11 @@
         </div>
       </div>
       <div
-        v-if="$slots['action'] || actionLabel"
-        data-slot="alert-action"
+        v-if="$slots['actions'] || actionLabel"
+        data-slot="alert-actions"
         class="contents @max-sm/alert:order-last @max-sm/alert:flex @max-sm/alert:basis-full"
       >
-        <slot name="action">
+        <slot name="actions">
           <Button
             kind="secondary"
             :size="size"

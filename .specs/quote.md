@@ -3,8 +3,8 @@ name: quote
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 28b6bd2fede4fa75485e0462ef106e814df971b9e18190f03217abcb5c829276
+spec_version: 4
+checksum: bedd4eaea1c7e09e9df66d9c1ffbff7ce13501dd801be7875f70d921289dd2d6
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -101,7 +101,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 - Register: `data-kind="inline" | "signed" | "highlight"` on the root
 - No mark is rendered when neither `logo` nor the `mark` slot is given, and the quotation moves up to lead the block
 - No `figcaption` is rendered when neither `name` nor `jobTitle` is given
-- Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-highlight` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted
+- Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-slot="highlight"` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted
 - In `highlight`, the likeness is drawn only when `photo` is given; there is no initials fallback
 - In `highlight`, the mark takes its own column beside the quotation from `md` up, and leads the block above it below `md`
 - In `highlight`, a quote stretched taller than its content by the band holding it gives the slack to the quotation: the attribution and the `actions` area floor at the bottom, so quotations of different lengths share one line for both

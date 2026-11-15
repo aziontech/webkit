@@ -24,7 +24,7 @@
       </template>
 
       <Hero.Title
-        centered
+        align="center"
         eyebrow="Infrastructure"
         eyebrow-prefix="//"
         title="A global network built for fast applications"

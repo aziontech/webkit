@@ -53,7 +53,7 @@ export default {
     slotPosition === 'bottom'
       ? ''
       : figma.code`
-  slot-position="${slotPosition}"`
+  actions-position="${slotPosition}"`
   }${
     kind === 'contained'
       ? ''

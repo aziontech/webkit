@@ -167,9 +167,9 @@
       <DocPageHeader
         :title="block.title"
         :description="block.summary"
-        :breadcrumb="[{ label: t.blocks, href: '/blocks' }, { label: titleCase(block.group) }]"
+        :breadcrumbs="[{ label: t.blocks, href: '/blocks' }, { label: titleCase(block.group) }]"
         :meta-actions="metaActions"
-        @meta-action="onMetaAction"
+        @action-click="onMetaAction"
       >
         <template #details>
           <div class="flex flex-wrap items-center gap-(--spacing-xs)">

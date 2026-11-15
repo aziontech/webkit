@@ -207,7 +207,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Name"
@@ -244,7 +244,7 @@
                 Delivery settings
               </h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
@@ -337,7 +337,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Origins</h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Origin type"
@@ -435,7 +435,7 @@
                 Cache expiration policies
               </h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow title="Browser cache settings">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
@@ -511,7 +511,7 @@
             <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
               <h2 class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Debug rules</h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Active"

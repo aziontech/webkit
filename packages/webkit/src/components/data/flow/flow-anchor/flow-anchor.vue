@@ -34,14 +34,15 @@
   )
 
   const PORT_CLASS =
-    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:start-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:end-0 data-[flow-port=start]:translate-x-full rtl:data-[flow-port=end]:translate-x-full rtl:data-[flow-port=start]:-translate-x-full group-data-[disabled]:border-dashed'
+    'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[side=end]:start-0 data-[side=end]:-translate-x-full data-[side=start]:end-0 data-[side=start]:translate-x-full rtl:data-[side=end]:translate-x-full rtl:data-[side=start]:-translate-x-full group-data-[disabled]:border-dashed'
 
   const port = computed<FlowAnchorSide | undefined>(() => props.side)
 </script>
 
 <template>
   <div
-    :data-flow-anchor="port ?? 'both'"
+    data-slot="flow-anchor"
+    :data-side="port"
     :data-testid="testId"
     class="relative block"
     :class="attrs.class"
@@ -49,14 +50,16 @@
     <span
       v-if="port !== 'start'"
       aria-hidden="true"
-      data-flow-port="end"
+      data-slot="flow-port"
+      data-side="end"
       :class="PORT_CLASS"
     />
     <slot />
     <span
       v-if="port !== 'end'"
       aria-hidden="true"
-      data-flow-port="start"
+      data-slot="flow-port"
+      data-side="start"
       :class="PORT_CLASS"
     />
   </div>

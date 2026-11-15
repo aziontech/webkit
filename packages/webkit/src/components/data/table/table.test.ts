@@ -232,23 +232,23 @@ describe('Table', () => {
       })
     })
 
-    describe('TableSortButton — direction glyph, aria-label & toggle payload', () => {
+    describe('TableSortButton — direction glyph, aria-label & sort payload', () => {
       it('toggles ascending<->descending and exposes the matching aria-label', async () => {
         const { getByRole, emitted, rerender } = render(TableSortButton, {
-          props: { direction: 'none' as const }
+          props: { sortDirection: 'none' as const }
         })
 
-        // direction=none -> label "Sort column"; first toggle -> ascending.
+        // sortDirection=none -> label "Sort column"; first click -> ascending.
         const btn = getByRole('button', { name: 'Sort column' })
         await fireEvent.click(btn)
-        expect((emitted().toggle as string[][])[0]).toEqual(['ascending'])
+        expect((emitted().sort as string[][])[0]).toEqual(['ascending'])
 
-        // direction=ascending -> label "Sorted ascending"; toggle -> descending.
-        await rerender({ direction: 'ascending' as const })
+        // sortDirection=ascending -> label "Sorted ascending"; click -> descending.
+        await rerender({ sortDirection: 'ascending' as const })
         const asc = getByRole('button', { name: 'Sorted ascending' })
         await fireEvent.click(asc)
-        const toggles = emitted().toggle as string[][]
-        expect(toggles[toggles.length - 1]).toEqual(['descending'])
+        const sorts = emitted().sort as string[][]
+        expect(sorts[sorts.length - 1]).toEqual(['descending'])
       })
     })
 
@@ -291,7 +291,7 @@ describe('Table', () => {
       const root = view.getByTestId('data-table')
       expect(root.getAttribute('data-density')).toBe('compact')
       expect(root.hasAttribute('data-wrap')).toBe(true)
-      expect(root.hasAttribute('data-border')).toBe(true)
+      expect(root.hasAttribute('data-bordered')).toBe(true)
       const table = view.getByRole('table', { name: 'Domains' })
       expect(root.hasAttribute('aria-label')).toBe(false)
       expect(table.contains(view.getByRole('button', { name: 'Refresh' }))).toBe(false)

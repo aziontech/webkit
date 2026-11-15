@@ -101,12 +101,12 @@
     v-bind="$attrs"
     ref="rootEl"
     class="inline-flex"
-    :data-state="copied ? 'copied' : 'default'"
+    :data-state="copied ? 'copied' : 'idle'"
     :data-disabled="disabled ? '' : undefined"
     :data-testid="testId"
   >
     <Tooltip
-      :text="label"
+      :content="label"
       :disabled="disabled"
       :data-testid="`${testId}__tooltip`"
     >

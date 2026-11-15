@@ -33,7 +33,7 @@
             :padded="false"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <div class="grid grow grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
                 <div
                   v-for="metric in 4"
@@ -62,7 +62,7 @@
 
         <div class="w-full shrink-0 xl:w-[30%] xl:max-w-(--container-xs)">
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                 <div class="flex items-center [&>*+*]:-ms-2">
                   <Skeleton

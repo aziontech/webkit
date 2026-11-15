@@ -214,8 +214,8 @@ function treeCase(expandAll = false): Case {
       render: () =>
         h(Tree, {
           items,
-          expanded: expanded.value,
-          'onUpdate:expanded': (v: string[]) => (expanded.value = v),
+          openKeys: expanded.value,
+          'onUpdate:openKeys': (v: string[]) => (expanded.value = v),
           ariaLabel: 'Objects'
         })
     }),
@@ -237,21 +237,21 @@ function treeMultiSelectCase(): Case {
     }))
   }))
   const ids = items.flatMap((folder) => [folder.id, ...folder.children.map((child) => child.id)])
-  const selectedIds = ref<string[]>([])
+  const selectedKeys = ref<string[]>([])
   return {
     mount: () => ({
       render: () =>
         h(Tree, {
           items,
-          expanded: ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9'],
+          openKeys: ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9'],
           selectable: 'multiple',
-          selectedIds: selectedIds.value,
-          'onUpdate:selectedIds': (v: string[]) => (selectedIds.value = v),
+          selectedKeys: selectedKeys.value,
+          'onUpdate:selectedKeys': (v: string[]) => (selectedKeys.value = v),
           ariaLabel: 'Objects'
         })
     }),
     update: () => {
-      selectedIds.value = ids
+      selectedKeys.value = ids
     }
   }
 }
@@ -484,7 +484,7 @@ function codeBlockCase(): Case {
           tabs,
           modelValue: active.value,
           'onUpdate:modelValue': (v: string) => (active.value = v),
-          lineNumbers: true
+          showLineNumbers: true
         })
     }),
     update: () => {
@@ -511,7 +511,7 @@ function codeBlockDiffCase(): Case {
   ]
   return {
     mount: () => ({
-      render: () => h(CodeBlock, { tabs, diffView: view.value, lineNumbers: true })
+      render: () => h(CodeBlock, { tabs, diffView: view.value, showLineNumbers: true })
     }),
     update: () => {
       view.value = 'unified'
@@ -592,11 +592,11 @@ function tableCase(n: number, virtual: boolean, change: 'sort' | 'filter' | 'sel
     requests: (i * 7919) % 100_000
   }))
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true },
+    { accessorKey: 'name', header: 'Name', sortable: true },
     { accessorKey: 'domain', header: 'Domain' },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'status', header: 'Status', sortable: true },
     { accessorKey: 'owner', header: 'Owner' },
-    { accessorKey: 'requests', header: 'Requests', enableSorting: true, align: 'end' as const }
+    { accessorKey: 'requests', header: 'Requests', sortable: true, align: 'end' as const }
   ]
   let collection: UseCollectionReturn<(typeof items)[number], (typeof columns)[number]> | null =
     null
@@ -847,7 +847,7 @@ function commandCase(): Case {
               h(CommandInput, { placeholder: 'Search' }),
               h(CommandList, null, () =>
                 Array.from({ length: 20 }, (_, g) =>
-                  h(CommandGroup, { key: g, heading: `Group ${g}` }, () =>
+                  h(CommandGroup, { key: g, label: `Group ${g}` }, () =>
                     Array.from({ length: 50 }, (_, i) =>
                       h(CommandItem, { key: i, value: `g${g}-i${i}` }, () => `Page ${g}.${i}`)
                     )
@@ -979,10 +979,11 @@ function listingBrowserCase(): Case {
       h(ListingBrowser, {
         title: 'Customers',
         columns,
-        rows,
+        data: rows,
         groups,
         facets,
-        search: { placeholder: 'Search customers', label: 'Search customers' }
+        searchPlaceholder: 'Search customers',
+        searchAriaLabel: 'Search customers'
       })
   })
   return {
@@ -1262,7 +1263,7 @@ function transferListCase(): Case {
           {
             modelValue: model.value,
             'onUpdate:modelValue': (v: [unknown[], unknown[]]) => (model.value = v),
-            trackBy: 'id'
+            itemKey: 'id'
           },
           {
             default: () => [
@@ -1288,7 +1289,7 @@ function cardsCase(): Case {
           CardList,
           {
             items,
-            selectionMode: 'multi',
+            selectionMode: 'multiple',
             selectedKeys: selected.value,
             'onUpdate:selectedKeys': (v: string[]) => (selected.value = v)
           },
@@ -1309,9 +1310,9 @@ function tablePresetsCase(): Case {
     requests: (i * 7919) % 100_000
   }))
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true },
+    { accessorKey: 'name', header: 'Name', sortable: true },
     { accessorKey: 'tags', header: 'Tags' },
-    { accessorKey: 'requests', header: 'Requests', enableSorting: true }
+    { accessorKey: 'requests', header: 'Requests', sortable: true }
   ]
   const sorting = ref<{ id: string; desc: boolean }[]>([])
   return {

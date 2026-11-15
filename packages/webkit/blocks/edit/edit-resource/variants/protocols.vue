@@ -252,7 +252,7 @@
             anchor="protocols"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -315,7 +315,7 @@
                       key="httpsPorts"
                       title="HTTPS ports"
                       description="The ports this workload answers TLS traffic on."
-                      :level="1"
+                      :depth="1"
                     >
                       <MultiSelect
                         v-model="form.httpsPorts"
@@ -370,7 +370,7 @@
                       key="http3Ports"
                       title="HTTP/3 ports"
                       description="The ports QUIC is answered on."
-                      :level="1"
+                      :depth="1"
                     >
                       <MultiSelect
                         v-model="form.http3Ports"
@@ -468,7 +468,7 @@
             anchor="mutual-authentication"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -495,7 +495,7 @@
                       title="Mode"
                       description="What happens when a client certificate cannot be verified."
                       kind="stacked"
-                      :level="1"
+                      :depth="1"
                     >
                       <RadioGroup
                         v-model="form.mtlsMode"
@@ -518,7 +518,7 @@
                       key="trustedCa"
                       title="Trusted CA certificate"
                       description="The authority client certificates are verified against."
-                      :level="1"
+                      :depth="1"
                     >
                       <Select
                         :model-value="form.trustedCa"
@@ -547,7 +547,7 @@
                               aria-label="Search certificates"
                               @keydown.stop
                             >
-                              <template #prefix>
+                              <template #leading>
                                 <i
                                   class="ai ai-search"
                                   aria-hidden="true"
@@ -603,7 +603,7 @@
                       key="crl"
                       title="Certificate revocation lists"
                       description="Certificates on these lists are refused during the handshake."
-                      :level="1"
+                      :depth="1"
                     >
                       <MultiSelect
                         v-model="form.crl"
@@ -669,7 +669,7 @@
 
     <Drawer
       v-model:open="uploadOpen"
-      side="right"
+      side="end"
       size="large"
     >
       <DrawerContent>

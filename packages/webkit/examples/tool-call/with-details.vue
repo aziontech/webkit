@@ -12,31 +12,31 @@
     <ToolCall
       name="get_cache_settings"
       title="Reading the cache settings of storefront"
-      state="success"
+      status="success"
     >
       <template #input>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'input', code: input, language: 'json' }]"
-          :line-numbers="false"
+          :show-line-numbers="false"
         />
       </template>
       <template #output>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'output', code: output, language: 'json' }]"
-          :line-numbers="false"
+          :show-line-numbers="false"
         />
       </template>
     </ToolCall>
     <ToolCall
       name="get_metrics"
       title="Reading the error rate"
-      state="error"
+      status="error"
       default-open
     >
       <template #output>
         <CodeBlock
           :tabs="[{ label: 'JSON', value: 'error', code: failure, language: 'json' }]"
-          :line-numbers="false"
+          :show-line-numbers="false"
         />
       </template>
     </ToolCall>

@@ -167,7 +167,7 @@ describe('Quote', () => {
     const highlights = ['high availability', 'global-scale applications']
     const { container } = render(Quote, { props: { ...props, highlights } })
     const quotation = container.querySelector('blockquote')
-    const phrases = [...container.querySelectorAll('blockquote [data-highlight]')].map(
+    const phrases = [...container.querySelectorAll('blockquote [data-slot="highlight"]')].map(
       (span) => span.textContent
     )
 
@@ -180,7 +180,7 @@ describe('Quote', () => {
     const { container } = render(Quote, { props: { ...props, highlights: ['not in the quote'] } })
 
     expect(container.querySelector('blockquote')).not.toHaveAttribute('data-highlighted')
-    expect(container.querySelector('[data-highlight]')).toBeNull()
+    expect(container.querySelector('[data-slot="highlight"]')).toBeNull()
   })
 
   it('ignores highlights when the default slot replaces the text', () => {
@@ -190,7 +190,7 @@ describe('Quote', () => {
     })
 
     expect(container.querySelector('blockquote')).not.toHaveAttribute('data-highlighted')
-    expect(container.querySelector('[data-highlight]')).toBeNull()
+    expect(container.querySelector('[data-slot="highlight"]')).toBeNull()
   })
 
   it('has no a11y violations with highlighted phrases', async () => {

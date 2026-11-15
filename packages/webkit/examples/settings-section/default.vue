@@ -34,7 +34,7 @@
       anchor="appearance"
     >
       <Card :padded="false">
-        <template #content>
+        <template #default>
           <Item.List>
             <SettingRow
               title="Font family"

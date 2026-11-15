@@ -12,8 +12,8 @@
 
   /** A neighbouring page. */
   export type DocPageLink = {
-    /** The page title shown on the link. */
-    title: string
+    /** The text of the link: the page title. */
+    label: string
     /** The destination. */
     href: string
   }
@@ -71,7 +71,7 @@
           class="ai ai-chevron-left size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:-translate-x-0.5 rtl:group-hover:translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
           aria-hidden="true"
         />
-        <span class="text-label-md text-(--text-default)">{{ previous.title }}</span>
+        <span class="text-label-md text-(--text-default)">{{ previous.label }}</span>
       </span>
     </a>
     <span v-else />
@@ -86,7 +86,7 @@
         nextLabel || t('docPrevNext.next')
       }}</span>
       <span class="flex items-center gap-(--spacing-2xs)">
-        <span class="text-label-md text-(--text-default)">{{ next.title }}</span>
+        <span class="text-label-md text-(--text-default)">{{ next.label }}</span>
         <i
           class="ai ai-chevron-right size-4 text-label-sm text-(--text-default) transition-[translate] duration-150 ease-out group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 motion-reduce:transition-none rtl:-scale-x-100"
           aria-hidden="true"

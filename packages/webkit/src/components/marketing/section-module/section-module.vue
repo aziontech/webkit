@@ -9,7 +9,7 @@
   })
 
   /** Layout of the default header row. */
-  export type SectionModuleKind = 'centered' | 'left' | 'horizontal'
+  export type SectionModuleKind = 'center' | 'start' | 'split'
 
   interface Props {
     /** Headline of the module's header row, rendered as its `h2`. */
@@ -30,7 +30,7 @@
     title: '',
     description: '',
     eyebrow: '',
-    kind: 'left',
+    kind: 'start',
     divided: true,
     padded: true
   })

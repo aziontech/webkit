@@ -153,7 +153,7 @@
     /** The app's header actions; render them icon-only while compact. */
     actions(props: { compact: boolean; toggleTools: () => void }): unknown
     /** Content at the start of the header, before the breadcrumbs. */
-    'header-start'(props: { compact: boolean }): unknown
+    'header-leading'(props: { compact: boolean }): unknown
     /** Content in the rail under the wordmark, above the navigation; compact is true in the compact drawer. */
     'sidebar-header'(props: { compact: boolean }): unknown
     /** A composed trail that replaces the one built from the breadcrumbs prop. */
@@ -462,7 +462,7 @@
   >
     <AppLayout
       v-model:tools-open="toolsOpen"
-      :navigation-label="ariaLabel || t('consoleLayout.navigation')"
+      :navigation-aria-label="ariaLabel || t('consoleLayout.navigation')"
       :tools-label="toolsLabel"
     >
       <template #navigation="{ drawer, closeNavigation }">
@@ -510,7 +510,7 @@
           >
             <SidebarMenu
               v-model:path="menuPath"
-              v-model:expanded="menuExpanded"
+              v-model:open-keys="menuExpanded"
               :groups="menuGroups"
               :active-id="currentId"
               role="presentation"
@@ -546,7 +546,7 @@
                 @select="onAccountSelect"
               >
                 <DropdownMenuTrigger>
-                  <Tooltip :text="t('consoleLayout.accountMenu')">
+                  <Tooltip :content="t('consoleLayout.accountMenu')">
                     <IconButton
                       icon="ai ai-ellipsis-vertical"
                       :ariaLabel="t('consoleLayout.accountMenu')"
@@ -569,7 +569,7 @@
               <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
                 <template v-if="compact">
                   <Tooltip
-                    :text="t('consoleLayout.openNavigation')"
+                    :content="t('consoleLayout.openNavigation')"
                     placement="bottom"
                   >
                     <IconButton
@@ -592,7 +592,7 @@
                   </a>
                 </template>
                 <slot
-                  name="header-start"
+                  name="header-leading"
                   :compact="compact"
                 />
                 <div
@@ -722,7 +722,7 @@
         <CommandGroup
           v-for="group in paletteGroups"
           :key="group.key"
-          :heading="group.heading || t('consoleLayout.pages')"
+          :label="group.heading || t('consoleLayout.pages')"
         >
           <CommandItem
             v-for="item in group.items"
@@ -731,7 +731,7 @@
           >
             <template
               v-if="item.icon"
-              #prefix
+              #leading
             >
               <i
                 :class="item.icon"

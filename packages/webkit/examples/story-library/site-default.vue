@@ -1,17 +1,17 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import StoryLibrary from '@aziontech/webkit/story-library'
   import axurExtendedReversed from '@aziontech/webkit/assets/axur-extended-reversed.svg'
   import exameExtendedReversed from '@aziontech/webkit/assets/exame-extended-reversed.svg'
   import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
   import gpaExtendedReversed from '@aziontech/webkit/assets/gpa-extended-reversed.svg'
   import marisaExtendedReversed from '@aziontech/webkit/assets/marisa-extended-reversed.svg'
   import panvelExtendedReversed from '@aziontech/webkit/assets/panvel-extended-reversed.svg'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+  import StoryLibrary from '@aziontech/webkit/story-library'
 
   const items = [
     {
-      key: 'case-gpa',
+      id: 'case-gpa',
       href: '/site/success-cases/gpa',
       client: {
         name: 'GPA',
@@ -27,7 +27,7 @@
       }
     },
     {
-      key: 'case-axur',
+      id: 'case-axur',
       href: '/site/success-cases/axur',
       client: {
         name: 'Axur',
@@ -43,7 +43,7 @@
       }
     },
     {
-      key: 'case-exame',
+      id: 'case-exame',
       href: '/site/success-cases/exame',
       client: {
         name: 'Exame',
@@ -59,7 +59,7 @@
       }
     },
     {
-      key: 'case-fourbank',
+      id: 'case-fourbank',
       href: '/site/success-cases/fourbank',
       client: {
         name: 'Fourbank',
@@ -75,7 +75,7 @@
       }
     },
     {
-      key: 'case-panvel',
+      id: 'case-panvel',
       href: '/site/success-cases/panvel',
       client: {
         name: 'Panvel',
@@ -91,7 +91,7 @@
       }
     },
     {
-      key: 'case-marisa',
+      id: 'case-marisa',
       href: '/site/success-cases/marisa',
       client: {
         name: 'Marisa',
@@ -110,7 +110,7 @@
 
   const facets = [
     {
-      key: 'industry',
+      id: 'industry',
       label: 'Industry',
       allLabel: 'All industries',
       options: [
@@ -129,7 +129,7 @@
       ]
     },
     {
-      key: 'solution',
+      id: 'solution',
       label: 'Solution',
       allLabel: 'All solutions',
       options: [
@@ -152,7 +152,7 @@
       ]
     },
     {
-      key: 'product',
+      id: 'product',
       label: 'Product',
       allLabel: 'All products',
       options: [
@@ -207,16 +207,6 @@
       ]
     }
   ]
-
-  const search = {
-    placeholder: 'Search by company or story',
-    label: 'Search success stories'
-  }
-
-  const empty = {
-    title: 'No stories match these filters.',
-    action: 'View all success stories'
-  }
 </script>
 
 <template>
@@ -228,8 +218,10 @@
       title="Companies building with Azion"
       :items="items"
       :facets="facets"
-      :search="search"
-      :empty="empty"
+      search-placeholder="Search by company or story"
+      search-aria-label="Search success stories"
+      empty-title="No stories match these filters."
+      empty-action-label="View all success stories"
       link-label="Read story"
       more-label="Load more"
       aria-label="Success stories"

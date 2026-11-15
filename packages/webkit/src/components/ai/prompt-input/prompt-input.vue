@@ -14,7 +14,7 @@
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
 
-  export type PromptInputState = 'ready' | 'submitted' | 'streaming'
+  export type PromptInputStatus = 'ready' | 'pending' | 'streaming'
 
   export interface PromptInputMenuOption {
     value: string
@@ -51,8 +51,8 @@
     minRows?: number
     /** Rows the text area grows to before it scrolls. */
     maxRows?: number
-    /** Request lifecycle: `submitted` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. */
-    state?: PromptInputState
+    /** Request lifecycle: `pending` and `streaming` swap Submit for Stop and block another submit; typing stays allowed. */
+    status?: PromptInputStatus
     /** Disables the text area, the submit control and every control in the slots' row. */
     disabled?: boolean
     /** Shortcut menus opened by a trigger character at the start of a word: `/` for commands, `@` for things to reference. Choosing an option inserts `<trigger><label>` and adds it to `references`. */
@@ -65,7 +65,7 @@
     maxLength: 0,
     minRows: 1,
     maxRows: 6,
-    state: 'ready',
+    status: 'ready',
     disabled: false,
     menus: () => []
   })
@@ -113,7 +113,7 @@
   const overBy = computed<number>(() =>
     props.maxLength > 0 ? Math.max(0, length.value - props.maxLength) : 0
   )
-  const busy = computed<boolean>(() => props.state !== 'ready')
+  const busy = computed<boolean>(() => props.status !== 'ready')
   const canSubmit = computed<boolean>(
     () => !props.disabled && !busy.value && overBy.value === 0 && model.value.trim().length > 0
   )
@@ -279,7 +279,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-status="state"
+    :data-status="status"
     :data-disabled="disabled || null"
     :data-invalid="overBy > 0 || null"
     class="flex w-full flex-col gap-(--spacing-xs)"

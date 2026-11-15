@@ -3,9 +3,9 @@ name: doc-layout
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 5d09e0bb8ee555c9ba1cbf9cd316fa774e8079da87917024eb489e318b253188
+checksum: a0bb58081246a683c962972a1e75aeca67b85ad0535bedb57cb5e07a6bbee2c3
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -42,7 +42,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 - Pass the page's headings as `outline` (`{ id, text, depth }`) with the same ids the `DocHeading`s carry; the layout tracks which one is in view.
 - Put the theme switch in `navigation-footer`, the GitHub and Console links in `actions`, a call to action (`DocCallToAction`) in `aside`, and the site footer (`Footer kind="content"`) in `footer`.
 - The page renders no `<main>` and no `ScrollArea` around the article: the document scrolls.
-- Bind `v-model:navigation-expanded` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
+- Bind `v-model:navigation-open` and `v-model:navigation-width` to state the app persists (local storage, a cookie) so the rail keeps the reader's size and collapsed state across pages and reloads; leave them unbound and the rail resets on each mount.
 - A drill row (`kind: 'drill'`) opens its level in place; the rail's Back then reads `Back to Docs` at the first level. Set `rootLabel` when the tree is not the whole docs (`Back to API reference`); never add a hand-made Back row to `navigation`.
 
 ## Usage
@@ -84,11 +84,11 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## v-model
 
-| Model                         | Type             | Default | Emits                       | Notes                                                                                                                                                                                          |
-| ----------------------------- | ---------------- | ------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:search-open`         | `boolean`        | `false` | `update:searchOpen`         | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
-| `v-model:navigation-expanded` | `boolean`        | `true`  | `update:navigationExpanded` | Whether the navigation rail is expanded from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                          |
-| `v-model:navigation-width`    | `number \| null` | `null`  | `update:navigationWidth`    | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
+| Model                      | Type             | Default | Emits                    | Notes                                                                                                                                                                                          |
+| -------------------------- | ---------------- | ------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:search-open`      | `boolean`        | `false` | `update:searchOpen`      | Whether the search palette is open; the header search and ⌘K / Ctrl K set it.                                                                                                                  |
+| `v-model:navigation-open`  | `boolean`        | `true`  | `update:navigationOpen`  | Whether the navigation rail is open from `lg`; `false` collapses it to the edge affordance that brings it back. No effect below `lg`, where the rail is a drawer.                              |
+| `v-model:navigation-width` | `number \| null` | `null`  | `update:navigationWidth` | The rail's width in px after the reader drags its edge; `null` uses the natural width (`var(--container-2xs)`). Clamped by `Sidebar` between `var(--container-3xs)` and `var(--container-sm)`. |
 
 ## Events
 
@@ -192,7 +192,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 ## Examples
 
 - Default — the layout with a docs tree, section links, an article with headings tracked by the outline, a call to action in the end rail and the footer.
-- Persisted rail — `v-model:navigation-expanded` and `v-model:navigation-width` bound to local storage, so the rail keeps its size and collapsed state across reloads.
+- Persisted rail — `v-model:navigation-open` and `v-model:navigation-width` bound to local storage, so the rail keeps its size and collapsed state across reloads.
 
 ## Constraints — DO NOT
 

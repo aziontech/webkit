@@ -16,7 +16,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the list scrolls to Image Processor and switches it on while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -77,7 +77,7 @@
   const LAST = FRAMES.length - 1
   const LEAD = 150
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -176,8 +176,8 @@
           :data-anchor="module.key === 'image-processor' || undefined"
         >
           <div
-            :data-enabled="enabled(module.key) || null"
-            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-enabled:border-(--primary) motion-reduce:transition-none"
+            :data-on="enabled(module.key) || null"
+            class="flex items-start gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) p-(--spacing-md) transition-colors duration-moderate-01 ease-productive-entrance data-on:border-(--primary) motion-reduce:transition-none"
           >
             <LegacySwitch
               :checked="enabled(module.key)"

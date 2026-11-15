@@ -18,7 +18,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; an event row is opened and the log downloaded as CSV while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -114,7 +114,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const stageEl = ref<globalThis.HTMLElement | null>(null)
@@ -178,7 +178,7 @@
             />
             <Badge
               label="1"
-              severity="primary"
+              variant="primary"
               size="small"
               aria-hidden="true"
               class="pointer-events-none absolute -top-2 -end-2 min-w-5"
@@ -191,7 +191,7 @@
             aria-label="Search events"
             class="min-w-0 grow"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"
@@ -244,8 +244,8 @@
               class="flex min-h-12 items-center justify-center border-b border-(--border-default) px-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance data-selected:bg-(--bg-selected) motion-reduce:transition-none"
             >
               <i
-                :data-open="selected(index) || null"
-                class="ai ai-chevron-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-open:-rotate-90"
+                :data-state="selected(index) ? 'open' : 'closed'"
+                class="ai ai-chevron-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-[state=open]:rotate-90 data-[state=open]:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-[state=open]:-rotate-90"
                 aria-hidden="true"
               />
             </span>

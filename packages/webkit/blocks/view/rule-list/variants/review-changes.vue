@@ -430,7 +430,7 @@
               class="w-full"
               :disabled="loading"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -447,19 +447,19 @@
         />
 
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <Accordion
               v-model="openPhases"
               type="multiple"
               size="large"
-              arrow-position="left"
+              icon-position="leading"
             >
               <Accordion.Item
                 v-for="group in groups"
                 :key="group.value"
                 :value="group.value"
               >
-                <Accordion.Trigger :level="2">
+                <Accordion.Trigger :heading-level="2">
                   <span class="flex min-w-0 items-center gap-(--spacing-sm)">
                     <span class="truncate">{{ group.label }} phase</span>
                     <span
@@ -496,7 +496,7 @@
                           class="flex items-center gap-(--spacing-2xs)"
                         >
                           <Tooltip
-                            :text="
+                            :content="
                               lockReason(group.value, row) ||
                               'Type a position to move the rule there'
                             "
@@ -525,7 +525,7 @@
                               />
                             </span>
                           </Tooltip>
-                          <Tooltip :text="lockReason(group.value, row) || 'Move up'">
+                          <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="ai ai-chevron-up"
                               kind="outlined"
@@ -540,7 +540,7 @@
                               @click="step(group.value, position(group.value, row), -1, 'up')"
                             />
                           </Tooltip>
-                          <Tooltip :text="lockReason(group.value, row) || 'Move down'">
+                          <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="ai ai-chevron-down"
                               kind="outlined"

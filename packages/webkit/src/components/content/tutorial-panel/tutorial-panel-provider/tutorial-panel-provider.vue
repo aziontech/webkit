@@ -19,9 +19,9 @@
   })
 
   const emit = defineEmits<{
-    start: [id: string]
-    exit: [id: string]
-    finish: [id: string]
+    start: [event: Event, id: string]
+    exit: [event: Event, id: string]
+    complete: [event: Event, id: string]
   }>()
 
   /** Id of the running tutorial; null when none runs. Use with v-model:active; unbound, the provider keeps it locally. */
@@ -68,18 +68,18 @@
     focusRequest.value += 1
   }
 
-  const start = (id: string) => {
+  const start = (event: Event, id: string) => {
     active.value = id
     move(0)
-    emit('start', id)
+    emit('start', event, id)
   }
 
-  const exit = () => {
+  const exit = (event: Event) => {
     const id = activeTutorial.value?.id
     active.value = null
     step.value = 0
     dismissed.value = false
-    if (id) emit('exit', id)
+    if (id) emit('exit', event, id)
   }
 
   const goTo = (index: number) => {
@@ -87,11 +87,11 @@
     move(index)
   }
 
-  const next = () => {
+  const next = (event: Event) => {
     if (!activeTutorial.value) return
     const to = currentStep.value + 1
     move(Math.min(to, steps.value.length))
-    if (to >= steps.value.length) emit('finish', activeTutorial.value.id)
+    if (to >= steps.value.length) emit('complete', event, activeTutorial.value.id)
   }
 
   const previous = () => {

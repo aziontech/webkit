@@ -15,7 +15,7 @@
     <SectionGap hatch />
 
     <HeroBand
-      kind="centered"
+      kind="center"
       eyebrow="Applications"
       title="Build, route and secure from one page"
       description="Every application setting lives on one page of the console."

@@ -3,9 +3,9 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 37b2bad09df3f7fc6361b6f5488a1bad72768a8d7380276a0977b7ee36434cd2
+checksum: 69a33003837ecbb8f6ce68cc899a720833f9a8a199a6d16263f7901b892d68a2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -87,7 +87,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
     :items="items"
     aria-label="Editor actions"
     @click="(_event, id) => run(id)"
-    @toggle="({ pressed }) => (wrap = pressed)"
+    @toggle="(event, { pressed }) => (wrap = pressed)"
   />
 </template>
 ```
@@ -111,10 +111,10 @@ Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted 
 
 ## Events
 
-| Event    | Payload                                            | Notes                                                                 |
-| -------- | -------------------------------------------------- | --------------------------------------------------------------------- |
-| `click`  | `(event: MouseEvent \| KeyboardEvent, id: string)` | An action or a menu option was chosen (from the bar or the overflow). |
-| `toggle` | `{ id: string; pressed: boolean }`                 | A toggle was activated; `pressed` is the new state to store.          |
+| Event    | Payload                                                                          | Notes                                                                 |
+| -------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `click`  | `(event: MouseEvent \| KeyboardEvent, id: string)`                               | An action or a menu option was chosen (from the bar or the overflow). |
+| `toggle` | `(event: MouseEvent \| KeyboardEvent, detail: { id: string; pressed: boolean })` | A toggle was activated; `pressed` is the new state to store.          |
 
 ## Slots
 
@@ -123,7 +123,7 @@ Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted 
 ## States
 
 - Visual states per item: `default`, `hover`, `focus-visible`, `pressed` (toggle, `data-pressed`, `--bg-selected`), `loading` (action), `disabled`.
-- Root data attributes: `data-kind`, `data-size`; each item `data-button-group-item="<id>"`.
+- Root data attributes: `data-kind`, `data-size`; each item `data-slot="button-group-item"` with `data-id="<id>"`.
 - Overflow: a pressed toggle shows a check and a hidden "On" in the More actions menu; a menu item becomes a labelled group of its options.
 
 ## Motion & Animations

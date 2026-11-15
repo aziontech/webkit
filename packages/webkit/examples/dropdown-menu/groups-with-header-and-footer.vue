@@ -5,7 +5,6 @@
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
@@ -18,38 +17,55 @@
       />
     </DropdownMenuTrigger>
 
-    <template #top>
-      <div class="p-(--spacing-2xs)">
-        <Input
-          placeholder="Search options…"
-          size="small"
-        />
-      </div>
-    </template>
+    <DropdownMenuGroup label="Account">
+      <template #header>
+        <span class="text-label-sm text-(--text-muted)">Signed in as jordan.silva@example.com</span>
+      </template>
 
-    <DropdownMenuGroup label="Suggestions">
       <DropdownMenuOption
         value="profile"
         label="Profile"
+        command="⌘P"
       />
       <DropdownMenuOption
         value="settings"
         label="Settings"
       />
-      <DropdownMenuOption
-        value="billing"
-        label="Billing"
-      />
-    </DropdownMenuGroup>
 
-    <template #bottom>
-      <div class="flex justify-end p-(--spacing-2xs)">
+      <template #footer>
         <Button
           kind="transparent"
+          role="menuitem"
           size="small"
-          label="View all"
+          label="Manage account"
+          class="w-full"
         />
-      </div>
-    </template>
+      </template>
+    </DropdownMenuGroup>
+
+    <DropdownMenuGroup label="Workspace">
+      <template #header>
+        <span class="text-label-sm text-(--text-muted)">Azion · 12 members</span>
+      </template>
+
+      <DropdownMenuOption
+        value="invite"
+        label="Invite members"
+      />
+      <DropdownMenuOption
+        value="logs"
+        label="Audit log"
+      />
+
+      <template #footer>
+        <Button
+          kind="transparent"
+          role="menuitem"
+          size="small"
+          label="Workspace settings"
+          class="w-full"
+        />
+      </template>
+    </DropdownMenuGroup>
   </DropdownMenuRoot>
 </template>

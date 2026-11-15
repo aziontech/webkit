@@ -7,15 +7,16 @@
   <ArticleIndex
     anchor="posts"
     all-label="All articles"
-    category-label="Category"
+    category-aria-label="Category"
     row-label="Read article"
     more-label="Load more"
     aria-label="Articles"
     :categories="['Developers', 'Security', 'Company news', 'Serverless']"
-    :search="{ placeholder: 'Search articles', label: 'Search articles' }"
+    search-placeholder="Search articles"
+    search-aria-label="Search articles"
     :items="[
       {
-        key: 'ship-portfolio-two-commands-azion-cli',
+        id: 'ship-portfolio-two-commands-azion-cli',
         href: '/blog/ship-portfolio-two-commands-azion-cli',
         image: placeholderImage,
         meta: 'Developers • SEP 25, 2026',
@@ -27,7 +28,7 @@
         categories: ['Developers']
       },
       {
-        key: 'how-to-reduce-ai-agent-latency',
+        id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
         image: placeholderImage,
         meta: 'Serverless • SEP 23, 2026',
@@ -39,7 +40,7 @@
         categories: ['Serverless']
       },
       {
-        key: 'cloudflare-alternatives-and-competitors',
+        id: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
         image: placeholderImage,
         meta: 'Security • SEP 22, 2026',

@@ -39,4 +39,7 @@ export type {
   SidebarMenuNode,
   SidebarMenuSubKind
 } from './injection-key'
-export type { SidebarMenuItemTagSeverity } from './sidebar-menu-item/sidebar-menu-item.vue'
+export type {
+  SidebarMenuItemTagSeverity,
+  SidebarMenuItemTagVariant
+} from './sidebar-menu-item/sidebar-menu-item.vue'

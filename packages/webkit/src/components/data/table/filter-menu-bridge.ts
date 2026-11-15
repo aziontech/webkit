@@ -7,7 +7,7 @@ import type { FilterMenuField, FilterMenuModel, FilterMenuValue } from '../filte
 import type { AppliedFilter, FilterField, FilterOperator, FilterValue } from './injection-key'
 
 const KINDS: Partial<Record<FilterField['type'], FilterMenuField['kind']>> = {
-  'multi-select': 'multi',
+  'multi-select': 'multiple',
   select: 'single',
   date: 'date'
 }
@@ -51,7 +51,7 @@ const toAppliedFilter = (
 ): AppliedFilter | null => {
   const first = values[0]
   if (first === undefined) return null
-  if (field.kind === 'multi')
+  if (field.kind === 'multiple')
     return {
       field: field.id,
       operator: 'in',

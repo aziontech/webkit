@@ -88,7 +88,7 @@ describe('Toast', () => {
 
         const item = scope.getByTestId('feedback-toast__item')
         expect(item.hasAttribute('role')).toBe(false)
-        expect(item.getAttribute('data-severity')).toBe('default')
+        expect(item.getAttribute('data-severity')).toBe('neutral')
         expect(scope.getByTestId('feedback-toast__title').textContent).toContain('Saved')
         expect(scope.getByTestId('feedback-toast__description').textContent).toContain(
           'All changes persisted'
@@ -145,8 +145,28 @@ describe('Toast', () => {
         const scope = within(region!)
 
         const item = scope.getByTestId('feedback-toast__item')
-        expect(item.getAttribute('data-severity')).toBe('loading')
+        expect(item.getAttribute('data-severity')).toBe('neutral')
+        expect(item.hasAttribute('data-loading')).toBe(true)
         expect(scope.getByText('Working…')).toBeTruthy()
+      })
+
+      it('toast.promise drops loading and takes the outcome severity when it settles', async () => {
+        await mountToaster({ position: 'bottom-right', duration: 0 })
+        let resolve: (value: string) => void = () => {}
+        toast.promise(new Promise<string>((r) => (resolve = r)), {
+          loading: 'Deploying',
+          success: 'Deployed',
+          error: 'Failed'
+        })
+        const region = await regionFor('bottom-right')
+        const item = within(region!).getByTestId('feedback-toast__item')
+        expect(item.hasAttribute('data-loading')).toBe(true)
+        resolve('ok')
+        await vi.waitFor(() => {
+          const settled = within(region!).getByTestId('feedback-toast__item')
+          expect(settled.hasAttribute('data-loading')).toBe(false)
+          expect(settled.getAttribute('data-severity')).toBe('success')
+        })
       })
     })
 
@@ -433,7 +453,11 @@ describe('Toast', () => {
       await mountToaster({ position: 'bottom-right', duration: 0 })
       const id = toast.loading('Deploying')
       await vi.waitFor(() => expect(liveRegion('polite')!.textContent).toBe('Deploying'))
-      useToastStore().update(id, { severity: 'danger', message: 'Deployment failed' })
+      useToastStore().update(id, {
+        severity: 'danger',
+        loading: false,
+        message: 'Deployment failed'
+      })
       await vi.waitFor(() => expect(liveRegion('assertive')!.textContent).toBe('Deployment failed'))
     })
 
@@ -547,9 +571,9 @@ describe('Toast', () => {
       expect('type' in useToastStore().toasts[0]!).toBe(false)
     })
 
-    it('a store entry added without a severity is default', () => {
+    it('a store entry added without a severity is neutral', () => {
       useToastStore().add({ id: 'plain', message: 'Plain', duration: 0 })
-      expect(useToastStore().toasts.find((t) => t.id === 'plain')!.severity).toBe('default')
+      expect(useToastStore().toasts.find((t) => t.id === 'plain')!.severity).toBe('neutral')
     })
   })
 

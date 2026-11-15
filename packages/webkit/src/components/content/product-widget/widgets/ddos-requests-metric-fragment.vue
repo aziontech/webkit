@@ -14,7 +14,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the cursor reads the attack peak off the chart, tooltip included, while it is. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -64,7 +64,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -193,9 +193,9 @@
                       :x2="x(PEAK)"
                       y1="0"
                       :y2="HEIGHT"
-                      :data-shown="frame.tip || null"
+                      :data-state="frame.tip ? 'open' : 'closed'"
                       vector-effect="non-scaling-stroke"
-                      class="stroke-(--text-muted) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+                      class="stroke-(--text-muted) opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
                     />
                   </svg>
 
@@ -207,8 +207,8 @@
 
                   <span
                     :style="peakStyle"
-                    :data-shown="frame.tip || null"
-                    class="absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-shown:opacity-100 motion-reduce:transition-none"
+                    :data-state="frame.tip ? 'open' : 'closed'"
+                    class="absolute z-1 flex -translate-x-1/2 translate-y-12 flex-col gap-(--spacing-2xs) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs) whitespace-nowrap opacity-0 transition-opacity duration-moderate-01 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
                   >
                     <span class="text-label-sm text-(--text-default)">
                       Oct 16, 2026, 02:02:40 PM

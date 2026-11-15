@@ -83,7 +83,7 @@
           severity="success"
           :label="`${run.name} is live at ${run.record?.service.domain}. It took ${run.attempt} attempt${run.attempt > 1 ? 's' : ''}.`"
         >
-          <template #action>
+          <template #actions>
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"

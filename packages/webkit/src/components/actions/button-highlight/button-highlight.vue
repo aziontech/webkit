@@ -50,7 +50,7 @@
 
   const loadingTestId = computed(() => `${testId.value}__loading`)
 
-  const isInactive = computed(() => props.disabled || props.loading)
+  const isInert = computed(() => props.disabled || props.loading)
 
   const isAnchor = computed(() => Boolean(props.href))
 
@@ -66,7 +66,7 @@
     'data-[size=small]:min-w-14 data-[size=small]:h-7 ' +
     'data-[loading]:cursor-wait ' +
     'data-[disabled]:cursor-not-allowed ' +
-    'data-[inactive]:border-transparent data-[inactive]:bg-(--bg-disabled)'
+    'data-[inert]:border-transparent data-[inert]:bg-(--bg-disabled)'
 
   const GLOW_CLASS =
     'absolute inset-0 pointer-events-none ' +
@@ -74,23 +74,23 @@
     '[background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] ' +
     '[filter:blur(12px)] ' +
     'motion-reduce:animate-none ' +
-    'group-data-[inactive]/highlight:hidden'
+    'group-data-[inert]/highlight:hidden'
 
   const BASE_CLASS =
     'absolute inset-px pointer-events-none rounded-[inherit] ' +
     '[background-image:linear-gradient(120deg,var(--color-brand-accent-900)_17%,var(--color-brand-accent-100)_53%,var(--color-brand-accent-600)_96%)] ' +
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
-    'group-data-[inactive]/highlight:[background-image:none] ' +
-    'group-data-[inactive]/highlight:bg-(--bg-disabled) ' +
-    'group-data-[inactive]/highlight:opacity-100'
+    'group-data-[inert]/highlight:[background-image:none] ' +
+    'group-data-[inert]/highlight:bg-(--bg-disabled) ' +
+    'group-data-[inert]/highlight:opacity-100'
 
   const SCRIM_CLASS =
     'absolute inset-px pointer-events-none rounded-[inherit] ' +
     'bg-(--bg-backdrop) ' +
     'transition-opacity duration-300 ease-out motion-reduce:transition-none ' +
     'group-hover/highlight:opacity-25 ' +
-    'group-data-[inactive]/highlight:hidden'
+    'group-data-[inert]/highlight:hidden'
 
   const CONTENT_CLASS =
     'relative z-1 inline-flex items-center justify-center gap-(--spacing-xs) w-full h-full ' +
@@ -98,10 +98,10 @@
     'data-[size=large]:px-(--spacing-md) data-[size=large]:text-button-lg ' +
     'data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md ' +
     'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
-    'group-data-[inactive]/highlight:text-(--text-disabled)'
+    'group-data-[inert]/highlight:text-(--text-disabled)'
 
   const onClick = (event: MouseEvent) => {
-    if (isInactive.value) {
+    if (isInert.value) {
       event.preventDefault()
       return
     }
@@ -118,13 +118,13 @@
     :target="target"
     :rel="target === '_blank' ? 'noopener noreferrer' : undefined"
     :class="ROOT_CLASS"
-    :aria-disabled="isInactive || undefined"
+    :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
-    :tabindex="isInactive ? -1 : undefined"
+    :tabindex="isInert ? -1 : undefined"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
-    :data-inactive="isInactive ? '' : undefined"
+    :data-inert="isInert ? '' : undefined"
     :data-testid="testId"
     @click="onClick"
   >
@@ -164,13 +164,13 @@
     v-bind="$attrs"
     type="button"
     :disabled="disabled"
-    :aria-disabled="isInactive || undefined"
+    :aria-disabled="isInert || undefined"
     :aria-busy="loading || undefined"
     :class="ROOT_CLASS"
     :data-size="size"
     :data-disabled="disabled ? '' : undefined"
     :data-loading="loading ? '' : undefined"
-    :data-inactive="isInactive ? '' : undefined"
+    :data-inert="isInert ? '' : undefined"
     :data-testid="testId"
     @click="onClick"
   >

@@ -8,7 +8,7 @@
 
   const items = [
     {
-      key: 'netshoes',
+      id: 'netshoes',
       href: '/success-cases/netshoes',
       title: 'Netshoes Blocks 4M+ Threats in 6 Months with Azion WAF',
       description:
@@ -20,7 +20,7 @@
       }
     },
     {
-      key: 'renner',
+      id: 'renner',
       href: '/success-cases/renner',
       title: 'Lojas Renner Optimizes Online Shopping Journey with Azion',
       description:
@@ -32,7 +32,7 @@
       }
     },
     {
-      key: 'gpa',
+      id: 'gpa',
       href: '/success-cases/gpa',
       title: 'GPA solved a cyberattack and reduced costs by 30%',
       description:
@@ -51,7 +51,7 @@
     <SectionGap hatch />
 
     <ArticleCards
-      kind="left"
+      kind="start"
       title="Related Success Cases"
       :items="items"
       aria-label="Related Success Cases"

@@ -31,7 +31,7 @@
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -41,7 +41,7 @@
     id: string
     name: string
     state: string
-    tag: { label: string; severity: TagSeverity; icon: string }
+    tag: { label: string; severity?: TagSeverity; variant?: TagVariant; icon: string }
     comment: string
     author: string
     createdAgo: string
@@ -69,7 +69,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -134,7 +134,7 @@
       id: 'AEO25I38',
       name: 'AEO25I38',
       state: 'active',
-      tag: { label: 'Deployed', severity: 'primary', icon: '' },
+      tag: { label: 'Deployed', variant: 'primary', icon: '' },
       comment: 'Remove rule"Legacy load balancer"',
       author: 'Sam Lee',
       createdAgo: '1 day ago'
@@ -289,7 +289,7 @@
   })
 
   const cacheColumns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', principal: true, hideable: false, enableSorting: true },
+    { accessorKey: 'name', header: 'Name', principal: true, hideable: false, sortable: true },
     { accessorKey: 'browserCache', header: 'Browser cache', minWidth: 140 },
     { accessorKey: 'edgeCache', header: 'Edge cache', minWidth: 140 },
     { accessorKey: 'tieredCache', header: 'Tiered cache', minWidth: 120 },
@@ -464,7 +464,7 @@
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -482,6 +482,7 @@
               <template #tag>
                 <Tag
                   :label="entry.tag.label"
+                  :variant="entry.tag.variant"
                   :severity="entry.tag.severity"
                   :icon="entry.tag.icon"
                   size="small"
@@ -516,7 +517,7 @@
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip text="Back to web-app versions">
+      <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
           kind="transparent"
@@ -548,7 +549,7 @@
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -566,6 +567,7 @@
                 <template #tag>
                   <Tag
                     :label="entry.tag.label"
+                    :variant="entry.tag.variant"
                     :severity="entry.tag.severity"
                     :icon="entry.tag.icon"
                     size="small"
@@ -698,7 +700,7 @@
                             aria-label="Search cache settings"
                             class="w-full"
                           >
-                            <template #prefix>
+                            <template #leading>
                               <i
                                 class="ai ai-search"
                                 aria-hidden="true"
@@ -708,7 +710,7 @@
                         </div>
                         <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                           <Tooltip
-                            text="Refresh"
+                            content="Refresh"
                             class="shrink-0"
                           >
                             <IconButton
@@ -721,7 +723,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Download CSV"
+                            content="Download CSV"
                             class="shrink-0"
                           >
                             <IconButton
@@ -736,7 +738,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Columns"
+                            content="Columns"
                             class="shrink-0"
                           >
                             <IconButton
@@ -749,14 +751,14 @@
                         </div>
                       </header>
                       <Card :padded="false">
-                        <template #content>
+                        <template #default>
                           <DataTable
                             ref="tableEl"
                             v-model:globalFilter="search"
                             :data="rows"
                             :columns="cacheColumns"
                             row-key="id"
-                            enable-sorting
+                            sortable
                             paginated
                             :page-size="10"
                             :bordered="false"
@@ -781,7 +783,7 @@
                             </template>
                             <template #cell-modifiedAgo="{ row }">
                               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                <Tooltip :text="row.author">
+                                <Tooltip :content="row.author">
                                   <Avatar
                                     :alt="row.author"
                                     :label="row.author"
@@ -840,7 +842,7 @@
                   <Drawer
                     v-model:open="drawerOpen"
                     size="large"
-                    side="right"
+                    side="end"
                   >
                     <DrawerContent>
                       <form
@@ -869,7 +871,7 @@
                               hint="Names the cache setting in the rules that reference it."
                             >
                               <Card :padded="false">
-                                <template #content>
+                                <template #default>
                                   <Item.List>
                                     <SettingRow
                                       title="Name"
@@ -903,7 +905,7 @@
                               hint="How long the visitor's browser may reuse a response before asking again."
                             >
                               <Card :padded="false">
-                                <template #content>
+                                <template #default>
                                   <Item.List>
                                     <SettingRow
                                       key="browserBehavior"
@@ -933,7 +935,7 @@
                                       key="browserMaxAge"
                                       title="Maximum TTL in seconds"
                                       description="Up to 31536000 seconds, one year."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <NumberInput
                                         v-model="form.browserMaxAge"
@@ -953,7 +955,7 @@
                               hint="How long the edge may serve a stored response before it asks the origin again."
                             >
                               <Card :padded="false">
-                                <template #content>
+                                <template #default>
                                   <Item.List>
                                     <SettingRow
                                       key="edgeBehavior"
@@ -983,7 +985,7 @@
                                       key="edgeMaxAge"
                                       title="Maximum TTL in seconds"
                                       description="From 60 to 31536000 seconds."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <NumberInput
                                         v-model="form.edgeMaxAge"
@@ -1021,7 +1023,7 @@
                                       key="largeFileOffset"
                                       title="Fragment size in kB"
                                       description="Each fragment requested from the origin. 1024 kB is the default."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <NumberInput
                                         v-model="form.largeFileOffset"
@@ -1047,7 +1049,7 @@
                                       key="tieredTopology"
                                       title="Topology"
                                       description="Where the second layer sits. Pin a region only when the origin is fixed to one."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <Select
                                         v-model="form.tieredTopology"
@@ -1077,7 +1079,7 @@
                               collapsible
                             >
                               <Card :padded="false">
-                                <template #content>
+                                <template #default>
                                   <Item.List>
                                     <SettingRow
                                       key="varyByMethod"
@@ -1132,7 +1134,7 @@
                                       key="queryStringFields"
                                       title="Query string fields"
                                       description="Comma separated and case sensitive: utm_source and UTM_SOURCE are two fields."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <Input
                                         v-model="form.queryStringFields"
@@ -1170,7 +1172,7 @@
                                       key="cookieNames"
                                       title="Cookie names"
                                       description="Comma separated. A name ending in * matches every cookie that starts with it."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <Input
                                         v-model="form.cookieNames"
@@ -1209,7 +1211,7 @@
                                       key="deviceGroups"
                                       title="Device groups"
                                       description="Groups defined on this version's Device Groups tab."
-                                      :level="1"
+                                      :depth="1"
                                     >
                                       <MultiSelect
                                         v-model="form.deviceGroups"
@@ -1347,7 +1349,7 @@
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:expanded="historyExpanded"
+          v-model:open="historyExpanded"
           collapsible
           :min="280"
           :max="560"
@@ -1398,6 +1400,7 @@
                       <span class="flex shrink-0">
                         <Tag
                           :label="version.tag.label"
+                          :variant="version.tag.variant"
                           :severity="version.tag.severity"
                           size="small"
                         />
@@ -1532,6 +1535,7 @@
                         <span class="flex shrink-0">
                           <Tag
                             :label="entry.tag.label"
+                            :variant="entry.tag.variant"
                             :severity="entry.tag.severity"
                             size="small"
                           />

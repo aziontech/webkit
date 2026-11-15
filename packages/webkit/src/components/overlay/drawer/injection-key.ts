@@ -1,7 +1,7 @@
 import type { InjectionKey, Ref } from 'vue'
 
 export type DrawerSize = 'small' | 'medium' | 'large'
-export type DrawerSide = 'left' | 'right'
+export type DrawerSide = 'start' | 'end'
 
 export interface DrawerContext {
   testId: string

@@ -251,7 +251,7 @@
                 hint="The mark identifies the organization in the header and the switcher, next to its name."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -345,7 +345,7 @@
                 hint="You create it, so you own it. Only an owner can delete an organization."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item size="small">
                         <Item.Media>
@@ -363,7 +363,7 @@
                         <Item.Actions>
                           <Tag
                             label="Owner"
-                            severity="primary"
+                            variant="primary"
                             size="medium"
                             icon="ai ai-key"
                           />
@@ -384,7 +384,7 @@
                 hint="A workspace groups the resources of one context, such as a team, an environment or a kind of application."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -424,7 +424,7 @@
                 collapsible
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         v-for="question in EXTRA"

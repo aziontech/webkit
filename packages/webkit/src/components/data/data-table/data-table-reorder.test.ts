@@ -27,13 +27,17 @@ const status = (): string =>
 const mountTable = (extra: Record<string, unknown> = {}) => {
   const data = ref<Row[]>(seed())
   const events: { from: number; to: number; row: Row }[] = []
+  const triggers: Event[] = []
   const Host = defineComponent({
     setup: () => () =>
       h(DataTable, {
         data: data.value,
         'onUpdate:data': (next: Row[]) => (data.value = next),
-        onReorder: (payload: { from: number; to: number; row: Row }) => events.push(payload),
-        columns: [{ accessorKey: 'name', header: 'Name', enableSorting: true }],
+        onReorder: (event: Event, payload: { from: number; to: number; row: Row }) => {
+          triggers.push(event)
+          events.push(payload)
+        },
+        columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
         rowKey: 'id',
         reorderable: true,
         stackable: false,
@@ -41,7 +45,7 @@ const mountTable = (extra: Record<string, unknown> = {}) => {
       })
   })
   const view = render(Host)
-  return { view, data, events }
+  return { view, data, events, triggers }
 }
 
 afterEach(() => cleanup())
@@ -58,10 +62,11 @@ describe('DataTable', () => {
     })
 
     it('moves the focused row with the arrow keys, Home and End, and announces it', async () => {
-      const { data, events } = mountTable()
+      const { data, events, triggers } = mountTable()
       handles()[0].focus()
       await fireEvent.keyDown(handles()[0], { key: 'ArrowDown' })
       expect(data.value.map((row) => row.id)).toEqual(['b', 'a', 'c', 'd'])
+      expect(triggers[0]).toBeInstanceOf(KeyboardEvent)
       expect(events[0]).toMatchObject({ from: 0, to: 1, row: { id: 'a' } })
       await waitFor(() => expect(status()).toBe('Moved Alpha to position 2 of 4.'))
       await waitFor(() =>
@@ -147,7 +152,7 @@ describe('DataTable', () => {
     })
 
     it('keeps grips with row selection and maps positions under pagination', async () => {
-      const { data } = mountTable({ enableRowSelection: true, paginated: true, pageSize: 2 })
+      const { data } = mountTable({ selectable: true, paginated: true, pageSize: 2 })
       expect(handles()).toHaveLength(2)
       expect(
         document.body.querySelectorAll('[role="checkbox"], input[type="checkbox"]').length

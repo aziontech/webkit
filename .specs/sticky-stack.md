@@ -3,8 +3,8 @@ name: sticky-stack
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 2f147d5fb14cd0b4c7ead5bce04d6d7865ae2c9897809f74df3001d6244caf8c
+spec_version: 4
+checksum: c0cd15a44eff4ce2c6246c1bd24924d46a78fcff2c26a93c9be42859b12a49ed
 created: 2026-09-25
 last_updated: 2026-11-15
 ---
@@ -87,7 +87,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
       <template #media>
         <CodeBlock
           :tabs="samples"
-          line-numbers
+          show-line-numbers
         />
       </template>
     </StickyStack>
@@ -97,32 +97,32 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `items` | `StickyStackItem[]` | `[]` | false | The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height the open claim is held to, and so the height of the whole stack beside the media. |
-| `dwell` | `number` | `0.7` | false | Screen-heights of scrolling each claim holds while the band is pinned; the band's total scroll is one screen plus this much per claim. |
-| `showProgress` | `boolean` | `true` | false | Fills a hairline along the open claim's bottom edge as its share of the scroll is spent. |
+| Prop           | Type                             | Default    | Required | JSDoc                                                                                                                                  |
+| -------------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`        | `StickyStackItem[]`              | `[]`       | false    | The claims, in reading order; each item is a title, the sentence that opens with it, and the image shown while it is open.             |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Height the open claim is held to, and so the height of the whole stack beside the media.                                               |
+| `dwell`        | `number`                         | `0.7`      | false    | Screen-heights of scrolling each claim holds while the band is pinned; the band's total scroll is one screen plus this much per claim. |
+| `showProgress` | `boolean`                        | `true`     | false    | Fills a hairline along the open claim's bottom edge as its share of the scroll is spent.                                               |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `index-change` | `number` | The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim. |
+| Event                 | Payload  | Notes                                                                                                                           |
+| --------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `active-index-change` | `number` | The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `media` | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays. |
-| `actions` | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty. |
-| `backdrop` | — | Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty. |
+| Slot       | Scope                                                       | Notes                                                                                                                                                                                                                                                                      |
+| ---------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `media`    | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's medium; replaces the image built from the item's own source. Mounted fresh on every change, so an entrance animation inside it replays.                                                                                                                        |
+| `actions`  | `{ item: StickyStackItem, index: number, active: boolean }` | The claim's own controls, pinned to the bottom edge of the open claim. From `lg` up they show only while the claim is open and are out of the tab order while it is collapsed; below `lg` every claim is open and carries its own. Nothing renders when the slot is empty. |
+| `backdrop` | —                                                           | Fills the media frame behind every claim's medium, from `lg` up. Mounted once and never swapped, so a texture or an animated surface placed here holds still while the media change over it. Nothing renders when the slot is empty.                                       |
 
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible` on each claim's title control
 - `data-active` marks the open claim; it holds the plain text tone and shows its description
-- `data-complete` marks every claim already read; they collapse to their title and rest at a muted tone, further dimmed so the read part of the run is legible at a glance, stacked above the open one
+- `data-completed` marks every claim already read; they collapse to their title and rest at a muted tone, further dimmed so the read part of the run is legible at a glance, stacked above the open one
 - `data-size` carries the size token, which is what sets the open claim's height and so the stack's height
 - `data-progress` is present on the root while `showProgress` is on
 - The media frame shows exactly one medium: the outgoing one leaves as the incoming one mounts
@@ -133,30 +133,30 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| a claim opens or collapses as the scroll moves | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance` | inline (catalog duration + easing) | `motion-reduce:transition-none` |
-| a claim dims as it is read past | `transition-[color,opacity] duration-moderate-01 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
-| the open claim's description arrives, after its title | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-100` while open | inline (catalog duration + easing) | `motion-reduce:transition-none` |
-| the open claim's actions arrive, after its description | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-200` while open | inline (catalog duration + easing) | `motion-reduce:transition-none` |
-| the medium for the newly open claim arrives | `animate-fade-in` | semantic (fade-in) | `motion-reduce:animate-none` |
-| the medium for the claim just closed leaves | `animate-fade-out` | semantic (fade-out) | `motion-reduce:animate-none` |
+| Trigger                                                | Animation / Transition                                                                              | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| a claim opens or collapses as the scroll moves         | `transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance`                     | inline (catalog duration + easing)                | `motion-reduce:transition-none` |
+| a claim dims as it is read past                        | `transition-[color,opacity] duration-moderate-01 ease-out`                                          | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| the open claim's description arrives, after its title  | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-100` while open | inline (catalog duration + easing)                | `motion-reduce:transition-none` |
+| the open claim's actions arrive, after its description | `transition-[opacity,translate] duration-moderate-02 ease-productive-entrance delay-200` while open | inline (catalog duration + easing)                | `motion-reduce:transition-none` |
+| the medium for the newly open claim arrives            | `animate-fade-in`                                                                                   | semantic (fade-in)                                | `motion-reduce:animate-none`    |
+| the medium for the claim just closed leaves            | `animate-fade-out`                                                                                  | semantic (fade-out)                               | `motion-reduce:animate-none`    |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (claim title) | `.text-heading-md` |
-| typography (claim description) | `.text-body-md` |
-| surface | `var(--bg-surface)` |
-| canvas (media frame) | `var(--bg-canvas)` |
-| text (open claim) | `var(--text-default)` |
-| text (read / unread claim) | `var(--text-muted)` |
+| Region                           | Token (DESIGN.md)       |
+| -------------------------------- | ----------------------- |
+| typography (claim title)         | `.text-heading-md`      |
+| typography (claim description)   | `.text-body-md`         |
+| surface                          | `var(--bg-surface)`     |
+| canvas (media frame)             | `var(--bg-canvas)`      |
+| text (open claim)                | `var(--text-default)`   |
+| text (read / unread claim)       | `var(--text-muted)`     |
 | border (band rules and the seam) | `var(--border-default)` |
-| progress hairline | `var(--primary)` |
-| spacing.x | `var(--spacing-xl)` |
-| spacing.y | `var(--spacing-md)` |
-| ring | `var(--ring-color)` |
+| progress hairline                | `var(--primary)`        |
+| spacing.x                        | `var(--spacing-xl)`     |
+| spacing.y                        | `var(--spacing-md)`     |
+| ring                             | `var(--ring-color)`     |
 
 ## Theme gaps
 

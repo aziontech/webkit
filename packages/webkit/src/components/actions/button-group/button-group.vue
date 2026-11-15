@@ -93,7 +93,7 @@
 
   const emit = defineEmits<{
     click: [event: MouseEvent | KeyboardEvent, id: string]
-    toggle: [detail: { id: string; pressed: boolean }]
+    toggle: [event: MouseEvent | KeyboardEvent, detail: { id: string; pressed: boolean }]
   }>()
 
   const attrs = useAttrs()
@@ -157,7 +157,7 @@
   const activate = (event: MouseEvent | KeyboardEvent, item: ButtonGroupItem) => {
     if (item.disabled || (!isToggle(item) && !isMenu(item) && item.loading)) return
     if (isToggle(item)) {
-      emit('toggle', { id: item.id, pressed: !item.pressed })
+      emit('toggle', event, { id: item.id, pressed: !item.pressed })
       return
     }
     emit('click', event, item.id)
@@ -179,13 +179,13 @@
 
   const controls = () =>
     Array.from(
-      rootEl.value?.querySelectorAll<HTMLElement>('[data-button-group-item]') ?? []
+      rootEl.value?.querySelectorAll<HTMLElement>('[data-slot="button-group-item"]') ?? []
     ).filter((el) => !el.hasAttribute('disabled'))
 
   const onFocusin = (event: FocusEvent) => {
     const id = (event.target as HTMLElement | null)
-      ?.closest('[data-button-group-item]')
-      ?.getAttribute('data-button-group-item')
+      ?.closest('[data-slot="button-group-item"]')
+      ?.getAttribute('data-id')
     if (id) focusedId.value = id
   }
 
@@ -230,7 +230,7 @@
         :data-testid="`${testId}__menu`"
         @select="onMenuSelect"
       >
-        <Tooltip :text="item.label">
+        <Tooltip :content="item.label">
           <DropdownMenuTrigger>
             <IconButton
               :icon="item.icon"
@@ -239,7 +239,8 @@
               :size="size"
               :disabled="item.disabled"
               :tabindex="tabStopId === item.id ? 0 : -1"
-              :data-button-group-item="item.id"
+              data-slot="button-group-item"
+              :data-id="item.id"
               :data-testid="`${testId}__item`"
             />
           </DropdownMenuTrigger>
@@ -256,7 +257,7 @@
       </DropdownMenu>
       <Tooltip
         v-else
-        :text="item.label"
+        :content="item.label"
       >
         <IconButton
           :icon="iconOf(item)"
@@ -267,7 +268,8 @@
           :disabled="item.disabled"
           :loading="!isToggle(item) && Boolean(item.loading)"
           :tabindex="tabStopId === item.id ? 0 : -1"
-          :data-button-group-item="item.id"
+          data-slot="button-group-item"
+          :data-id="item.id"
           :data-pressed="isToggle(item) && item.pressed ? '' : undefined"
           :data-testid="`${testId}__item`"
           class="data-[pressed]:bg-(--bg-selected) data-[pressed]:text-(--text-default) forced-colors:data-[pressed]:outline-2 forced-colors:data-[pressed]:outline-[Highlight]"
@@ -282,7 +284,7 @@
       :data-testid="`${testId}__overflow`"
       @select="onOverflowSelect"
     >
-      <Tooltip :text="overflowName">
+      <Tooltip :content="overflowName">
         <DropdownMenuTrigger>
           <IconButton
             icon="ai ai-ellipsis"
@@ -290,7 +292,8 @@
             :kind="kind"
             :size="size"
             :tabindex="tabStopId === OVERFLOW_ID ? 0 : -1"
-            :data-button-group-item="OVERFLOW_ID"
+            data-slot="button-group-item"
+            :data-id="OVERFLOW_ID"
             :data-testid="`${testId}__overflow-trigger`"
           />
         </DropdownMenuTrigger>

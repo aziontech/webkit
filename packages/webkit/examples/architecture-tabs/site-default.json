@@ -4,7 +4,7 @@
     "eyebrow": "Routing",
     "title": "Every AI request through one control point",
     "description": "Every client calls one endpoint. Firewall stops abuse, then a function checks the key, routes the call, and logs it.",
-    "position": "bottom",
+    "tabsSide": "bottom",
     "tabs": [
       {
         "value": "request-path",

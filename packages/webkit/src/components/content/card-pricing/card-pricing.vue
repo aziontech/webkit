@@ -11,7 +11,7 @@
   })
 
   /** Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. */
-  export type CardPricingSlotPosition = 'bottom' | 'middle'
+  export type CardPricingActionsPosition = 'bottom' | 'middle'
   /** Whether the card draws its own surface. */
   export type CardPricingKind = 'contained' | 'transparent'
 
@@ -27,9 +27,9 @@
     /** Text of the tag beside the plan name. */
     tagLabel?: string
     /** Reserves the caveat's band so a row of cards aligns row-for-row. Set it on every card in the row. */
-    aligned?: boolean
+    equalHeight?: boolean
     /** Composition of the card: `bottom` stacks the actions under the price, `middle` puts the price and actions between the header and the default slot. */
-    slotPosition?: CardPricingSlotPosition
+    actionsPosition?: CardPricingActionsPosition
     /** Whether the card draws its own surface: `contained` has a border and a surface, `transparent` sits on the page. */
     kind?: CardPricingKind
     /** Price amount, already formatted, without the currency symbol. */
@@ -54,8 +54,8 @@
     showPricingDetails: true,
     showTag: false,
     tagLabel: 'Popular',
-    aligned: false,
-    slotPosition: 'bottom',
+    equalHeight: false,
+    actionsPosition: 'bottom',
     kind: 'contained',
     value: '20',
     prefix: '$',
@@ -75,7 +75,7 @@
 
   const testId = computed(() => attrs['data-testid'] ?? 'content-card-pricing')
 
-  const isMiddle = computed(() => props.slotPosition === 'middle')
+  const isMiddle = computed(() => props.actionsPosition === 'middle')
 
   const currencySize = computed(() => (isMiddle.value ? 'large' : 'medium'))
 
@@ -89,17 +89,17 @@
   <article
     v-bind="$attrs"
     :data-testid="testId"
-    :data-slot-position="slotPosition"
+    :data-actions-position="actionsPosition"
     :data-kind="kind"
-    :data-aligned="aligned || null"
+    :data-equal-height="equalHeight || null"
     :data-animated="animated || null"
-    class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[slot-position=bottom]:gap-(--spacing-lg) data-[slot-position=middle]:justify-between data-[kind=contained]:rounded-(--shape-card) data-[kind=contained]:border-(length:--border-width-default) data-[kind=contained]:border-(--border-default) data-[kind=contained]:bg-(--bg-surface)"
+    class="group/card flex w-full flex-col items-start overflow-clip p-(--spacing-lg) data-[actions-position=bottom]:gap-(--spacing-lg) data-[actions-position=middle]:justify-between data-[kind=contained]:rounded-(--shape-card) data-[kind=contained]:border-(length:--border-width-default) data-[kind=contained]:border-(--border-default) data-[kind=contained]:bg-(--bg-surface)"
   >
     <div
-      class="flex w-full flex-col items-start group-data-[slot-position=bottom]/card:shrink-0 group-data-[slot-position=middle]/card:min-h-px group-data-[slot-position=middle]/card:flex-1 group-data-[slot-position=middle]/card:gap-(--spacing-lg)"
+      class="flex w-full flex-col items-start group-data-[actions-position=bottom]/card:shrink-0 group-data-[actions-position=middle]/card:min-h-px group-data-[actions-position=middle]/card:flex-1 group-data-[actions-position=middle]/card:gap-(--spacing-lg)"
     >
       <div
-        class="flex w-full max-w-(--container-xs) shrink-0 flex-col items-start group-data-[slot-position=bottom]/card:gap-(--spacing-xs) group-data-[slot-position=middle]/card:gap-(--spacing-md)"
+        class="flex w-full max-w-(--container-xs) shrink-0 flex-col items-start group-data-[actions-position=bottom]/card:gap-(--spacing-xs) group-data-[actions-position=middle]/card:gap-(--spacing-md)"
         :data-testid="`${testId}__header`"
       >
         <div class="flex min-h-6 w-full shrink-0 items-center gap-(--spacing-xs)">
@@ -111,14 +111,14 @@
           </h3>
           <Tag
             v-if="showTag"
-            severity="primary"
+            variant="primary"
             :label="tagLabel"
             :data-testid="`${testId}__tag`"
           />
         </div>
 
         <div
-          class="flex w-full shrink-0 flex-col items-start gap-(--spacing-2xs) group-data-[slot-position=bottom]/card:min-h-11 group-data-[slot-position=middle]/card:min-h-16"
+          class="flex w-full shrink-0 flex-col items-start gap-(--spacing-2xs) group-data-[actions-position=bottom]/card:min-h-11 group-data-[actions-position=middle]/card:min-h-16"
           :data-testid="`${testId}__pricing`"
         >
           <Transition
@@ -145,8 +145,8 @@
             :data-testid="`${testId}__currency`"
           />
           <p
-            v-if="(showPricingDetails && pricingDetails) || aligned"
-            class="text-(--text-muted) [word-break:break-word] group-data-[aligned]/card:min-h-[3lh] group-data-[slot-position=bottom]/card:text-body-sm group-data-[slot-position=middle]/card:text-body-md"
+            v-if="(showPricingDetails && pricingDetails) || equalHeight"
+            class="text-(--text-muted) [word-break:break-word] group-data-[equal-height]/card:min-h-[3lh] group-data-[actions-position=bottom]/card:text-body-sm group-data-[actions-position=middle]/card:text-body-md"
             :data-testid="`${testId}__pricing-details`"
           >
             {{ showPricingDetails ? pricingDetails : '' }}
@@ -164,7 +164,7 @@
     </div>
 
     <div
-      class="flex w-full shrink-0 items-start gap-(--spacing-md) group-data-[slot-position=middle]/card:pt-(--spacing-xl)"
+      class="flex w-full shrink-0 items-start gap-(--spacing-md) group-data-[actions-position=middle]/card:pt-(--spacing-xl)"
       :data-testid="`${testId}__actions`"
     >
       <slot name="actions">

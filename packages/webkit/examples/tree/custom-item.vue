@@ -104,7 +104,7 @@
 <template>
   <div class="max-w-(--container-sm)">
     <Tree
-      v-model:expanded="expanded"
+      v-model:open-keys="expanded"
       :items="items"
       aria-label="Bucket objects"
     >

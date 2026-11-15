@@ -82,7 +82,7 @@
     <template #actions="{ compact }">
       <Tooltip
         v-if="compact"
-        text="Create"
+        content="Create"
         placement="bottom"
       >
         <IconButton
@@ -110,7 +110,7 @@
     <template #search="{ query }">
       <Command.Group
         v-if="!query"
-        heading="Recents"
+        label="Recents"
       >
         <Command.Item value="recent:edge-shop">edge-shop</Command.Item>
         <Command.Item value="recent:auth-handler">auth-handler</Command.Item>

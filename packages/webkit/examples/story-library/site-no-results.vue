@@ -7,7 +7,7 @@
 
   const facets = [
     {
-      key: 'industry',
+      id: 'industry',
       label: 'Industry',
       allLabel: 'All industries',
       options: [
@@ -26,7 +26,7 @@
       ]
     },
     {
-      key: 'solution',
+      id: 'solution',
       label: 'Solution',
       allLabel: 'All solutions',
       options: [
@@ -49,7 +49,7 @@
       ]
     },
     {
-      key: 'product',
+      id: 'product',
       label: 'Product',
       allLabel: 'All products',
       options: [
@@ -104,16 +104,6 @@
       ]
     }
   ]
-
-  const search = {
-    placeholder: 'Search by company or story',
-    label: 'Search success stories'
-  }
-
-  const empty = {
-    title: 'No stories match these filters.',
-    action: 'View all success stories'
-  }
 </script>
 
 <template>
@@ -125,8 +115,10 @@
       title="Companies building with Azion"
       :items="items"
       :facets="facets"
-      :search="search"
-      :empty="empty"
+      search-placeholder="Search by company or story"
+      search-aria-label="Search success stories"
+      empty-title="No stories match these filters."
+      empty-action-label="View all success stories"
       link-label="Read story"
       more-label="Load more"
       aria-label="Success stories"

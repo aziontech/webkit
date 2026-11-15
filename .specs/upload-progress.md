@@ -3,9 +3,9 @@ name: upload-progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: b951b4e8528d2a8ccc9a7a9c79575faea4f72713987b5ff199039e15c96f0fd9
+checksum: 42e6a626b4f6a0ae928cd25f0dd47f21686fca6e19cd02e9c9de1838894d3762
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -50,9 +50,9 @@ A card that follows a file transfer to its end while the person keeps working: u
   import UploadProgress from '@aziontech/webkit/upload-progress'
 
   const items = [
-    { id: '1', name: 'logo.svg', size: 4210, status: 'done' },
+    { id: '1', name: 'logo.svg', size: 4210, status: 'success' },
     { id: '2', name: 'app.js', size: 248320, status: 'running', progress: 64 },
-    { id: '3', name: 'styles.css', size: 52100, status: 'queued' }
+    { id: '3', name: 'styles.css', size: 52100, status: 'pending' }
   ]
 </script>
 
@@ -74,13 +74,13 @@ A card that follows a file transfer to its end while the person keeps working: u
 | `floating`   | `boolean`                        | `true`     | false    | Fixes the card to the inline-end bottom corner of the viewport; false renders it in the flow. |
 | `cancelable` | `boolean`                        | `true`     | false    | Shows Cancel on running and waiting files and Cancel all in the header.                       |
 
-Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'canceled'`; `UploadProgressItem = { id: string; name: string; size?: number; progress?: number; status: UploadProgressStatus; error?: string }`. `progress` is 0–100; a running file without it shows an indeterminate bar.
+Types: `UploadProgressStatus = 'pending' | 'running' | 'success' | 'error' | 'canceled'`; `UploadProgressItem = { id: string; name: string; size?: number; progress?: number; status: UploadProgressStatus; error?: string }`. `progress` is 0–100; a running file without it shows an indeterminate bar.
 
 ## v-model
 
 | Model               | Type      | Default | Emits              | Notes                                                     |
 | ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:expanded`  | `boolean` | `undefined` (resolves to `true`) | `update:expanded`  | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts expanded. |
+| `v-model:open`      | `boolean` | `undefined` (resolves to `true`) | `update:open`      | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts open. |
 
 ## Events
 
@@ -98,9 +98,9 @@ Types: `UploadProgressStatus = 'queued' | 'running' | 'done' | 'error' | 'cancel
 
 ## States
 
-- Root `data-state`: `running` (some file queued or running) | `done` (all finished, none failed) | `failed` (all finished, at least one error).
-- Root `data-floating` when floating; `data-collapsed` when the list is hidden.
-- Row `data-status`: `queued` | `running` | `done` | `error` | `canceled`.
+- Root `data-status`: `running` (some file pending or running) | `success` (all finished, none failed) | `error` (all finished, at least one error).
+- Root `data-floating` when floating; `data-state="open|closed"` for the file list.
+- Row `data-status`: `pending` | `running` | `success` | `error` | `canceled`.
 
 ## Motion & Animations
 

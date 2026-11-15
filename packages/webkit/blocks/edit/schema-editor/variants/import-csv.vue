@@ -645,7 +645,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <DataTable
           :data="definitionRows"
           :columns="definitionColumns"
@@ -689,7 +689,7 @@
                   @select="onTableAction"
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip text="Table actions">
+                    <Tooltip content="Table actions">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="outlined"
@@ -765,7 +765,7 @@
     <Drawer
       v-model:open="createOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -914,7 +914,7 @@
                         class="w-full"
                       >
                         <Select.Trigger>
-                          <template #prefix>
+                          <template #leading>
                             <span
                               class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"
@@ -1095,7 +1095,7 @@
     <Drawer
       v-model:open="columnOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1142,7 +1142,7 @@
                       class="w-full"
                     >
                       <Select.Trigger>
-                        <template #prefix>
+                        <template #leading>
                           <span
                             class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                             aria-hidden="true"
@@ -1253,7 +1253,7 @@
     <Drawer
       v-model:open="rowOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1345,7 +1345,7 @@
             class="w-full"
           >
             <Select.Trigger>
-              <template #prefix>
+              <template #leading>
                 <span
                   class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                   aria-hidden="true"
@@ -1421,7 +1421,7 @@
           language="sql"
           readonly
           height="3rem"
-          :line-numbers="false"
+          :show-line-numbers="false"
           aria-label="Statement that will run"
         />
         <Field>

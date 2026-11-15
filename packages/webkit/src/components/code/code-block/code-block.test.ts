@@ -372,9 +372,9 @@ describe('CodeBlock', () => {
       expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(3)
     })
 
-    it('hides the line-number gutter when lineNumbers is false', () => {
+    it('hides the line-number gutter when showLineNumbers is false', () => {
       const { queryAllByTestId } = render(CodeBlock, {
-        props: { tabs: singleTab, defaultValue: 'only', lineNumbers: false }
+        props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
       })
 
       expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
@@ -472,18 +472,18 @@ describe('CodeBlock', () => {
   })
 
   describe('bordered', () => {
-    it('draws the outer border by default (data-border set)', () => {
+    it('draws the outer border by default (data-bordered set)', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      expect(getByTestId('code-code-block').getAttribute('data-border')).toBe('true')
+      expect(getByTestId('code-code-block').getAttribute('data-bordered')).toBe('true')
     })
 
-    it('drops the outer border when bordered is false (data-border absent)', () => {
+    it('drops the outer border when bordered is false (data-bordered absent)', () => {
       const { getByTestId } = render(CodeBlock, {
         props: { tabs: singleTab, bordered: false }
       })
 
-      expect(getByTestId('code-code-block').getAttribute('data-border')).toBeNull()
+      expect(getByTestId('code-code-block').getAttribute('data-bordered')).toBeNull()
     })
   })
 

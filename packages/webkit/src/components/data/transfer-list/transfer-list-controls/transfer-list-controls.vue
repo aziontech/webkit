@@ -35,7 +35,7 @@
       :aria-label="t('transferList.moveSelectedToTarget')"
       :data-testid="`${testId}__move-to-target`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.move('to-target')"
+      @click="ctx.move($event, 'to-target')"
     >
       <svg
         viewBox="0 0 24 24"
@@ -57,7 +57,7 @@
       :aria-label="t('transferList.moveAllToTarget')"
       :data-testid="`${testId}__move-all-to-target`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.moveAll('to-target')"
+      @click="ctx.moveAll($event, 'to-target')"
     >
       <svg
         viewBox="0 0 24 24"
@@ -80,7 +80,7 @@
       :aria-label="t('transferList.moveSelectedToSource')"
       :data-testid="`${testId}__move-to-source`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.move('to-source')"
+      @click="ctx.move($event, 'to-source')"
     >
       <svg
         viewBox="0 0 24 24"
@@ -102,7 +102,7 @@
       :aria-label="t('transferList.moveAllToSource')"
       :data-testid="`${testId}__move-all-to-source`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
-      @click="ctx.moveAll('to-source')"
+      @click="ctx.moveAll($event, 'to-source')"
     >
       <svg
         viewBox="0 0 24 24"

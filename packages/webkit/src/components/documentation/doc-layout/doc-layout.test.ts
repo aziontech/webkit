@@ -212,16 +212,16 @@ describe('DocLayout', () => {
       expect(rail(view).getByRole('button', { name: 'Collapse navigation' })).toBeTruthy()
     })
 
-    it('collapses the rail and emits update:navigationExpanded', async () => {
+    it('collapses the rail and emits update:navigationOpen', async () => {
       const onExpanded = vi.fn()
-      const view = mount({ 'onUpdate:navigationExpanded': onExpanded })
+      const view = mount({ 'onUpdate:navigationOpen': onExpanded })
       await userEvent.click(rail(view).getByRole('button', { name: 'Collapse navigation' }))
       expect(onExpanded).toHaveBeenLastCalledWith(false)
     })
 
     it('brings a collapsed rail back from the edge affordance', async () => {
       const onExpanded = vi.fn()
-      const view = mount({ navigationExpanded: false, 'onUpdate:navigationExpanded': onExpanded })
+      const view = mount({ navigationOpen: false, 'onUpdate:navigationOpen': onExpanded })
       expect(view.getByTestId('documentation-doc-layout__navigation').hasAttribute('inert')).toBe(
         true
       )
@@ -239,7 +239,7 @@ describe('DocLayout', () => {
     })
 
     it('has no axe violations with the rail collapsed', async () => {
-      const { container } = mount({ navigationExpanded: false })
+      const { container } = mount({ navigationOpen: false })
       await expectNoA11yViolations(container)
     })
   })

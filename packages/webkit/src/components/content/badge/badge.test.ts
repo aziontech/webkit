@@ -5,7 +5,8 @@ import Default from '../../../../examples/badge/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Badge from './badge.vue'
 
-const SEVERITIES = ['primary', 'secondary', 'success', 'warning', 'danger', 'neutral'] as const
+const SEVERITIES = ['neutral', 'info', 'success', 'warning', 'danger'] as const
+const VARIANTS = ['primary', 'secondary'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 describe('Badge', () => {
@@ -62,21 +63,39 @@ describe('Badge', () => {
     expect(root).toHaveAttribute('data-size', 'large')
   })
 
-  it('applies default severity=primary and size=medium when unset', () => {
+  it('applies default variant=primary and size=medium when unset, with no severity', () => {
     const { getByTestId } = render(Badge, { props: { label: '1' } })
 
     const root = getByTestId('content-badge')
-    expect(root).toHaveAttribute('data-severity', 'primary')
+    expect(root).toHaveAttribute('data-variant', 'primary')
+    expect(root).not.toHaveAttribute('data-severity')
     expect(root).toHaveAttribute('data-size', 'medium')
   })
 
-  it('falls back to primary on an invalid severity', () => {
+  it.each(VARIANTS)('renders data-variant=%s for each brand look', (variant) => {
+    const { getByTestId } = render(Badge, { props: { label: '1', variant } })
+    expect(getByTestId('content-badge')).toHaveAttribute('data-variant', variant)
+  })
+
+  it('lets severity win over variant when both are set', () => {
     const { getByTestId } = render(Badge, {
-      // @ts-expect-error exercising the runtime guard on an out-of-range severity
-      props: { label: '1', severity: 'not-a-severity' }
+      props: { label: '1', variant: 'secondary', severity: 'danger' }
     })
 
-    expect(getByTestId('content-badge')).toHaveAttribute('data-severity', 'primary')
+    const root = getByTestId('content-badge')
+    expect(root).toHaveAttribute('data-severity', 'danger')
+    expect(root).not.toHaveAttribute('data-variant')
+  })
+
+  it('falls back to the variant on an invalid severity', () => {
+    const { getByTestId } = render(Badge, {
+      // @ts-expect-error exercising the runtime guard on an out-of-range severity
+      props: { label: '1', severity: 'primary' }
+    })
+
+    const root = getByTestId('content-badge')
+    expect(root).not.toHaveAttribute('data-severity')
+    expect(root).toHaveAttribute('data-variant', 'primary')
   })
 
   it.each(SEVERITIES)('renders data-severity=%s for each valid severity', (severity) => {
@@ -104,10 +123,9 @@ describe('Badge', () => {
 
   it('renders the composed Default story fixture', () => {
     const { getByTestId } = render(Default)
-    // Default story args: value "99", severity primary, size medium
     const root = getByTestId('content-badge')
     expect(root).toHaveTextContent('99')
-    expect(root).toHaveAttribute('data-severity', 'primary')
+    expect(root).toHaveAttribute('data-variant', 'primary')
     expect(root).toHaveAttribute('data-size', 'medium')
   })
 })

@@ -8,7 +8,7 @@
     title="Subscription Plan"
     class="max-w-(--container-xs)"
   >
-    <template #content>
+    <template #default>
       <KeyValuePairs
         kind="split"
         aria-label="Subscription plan"

@@ -8,7 +8,7 @@
     :padded="false"
     class="w-full"
   >
-    <template #content>
+    <template #default>
       <Item.List>
         <Item href="#">
           <Item.Media kind="icon">

@@ -97,9 +97,9 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-side="side"
-    :data-active="entry ? true : null"
-    :data-current="isCurrent || null"
-    class="group/hotspot inline-flex max-w-full items-center gap-(--spacing-2xs) data-[active]:data-[side=end]:pe-(--spacing-xs) data-[active]:data-[side=start]:ps-(--spacing-xs)"
+    :data-marker="entry ? true : null"
+    :data-active="isCurrent || null"
+    class="group/hotspot inline-flex max-w-full items-center gap-(--spacing-2xs) data-[marker]:data-[side=end]:pe-(--spacing-xs) data-[marker]:data-[side=start]:ps-(--spacing-xs)"
   >
     <slot v-if="side !== 'start'" />
     <Popover
@@ -117,7 +117,7 @@
           type="button"
           :aria-label="t('hotspot.label', { title: entry.title })"
           :data-testid="`${testId}__marker`"
-          :data-current="isCurrent || null"
+          :data-active="isCurrent || null"
           class="relative inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-(--radius-full) outline-none before:absolute before:-inset-2 before:content-[''] focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         >
           <span
@@ -127,7 +127,7 @@
           />
           <span
             aria-hidden="true"
-            class="relative size-3 rounded-(--radius-full) border-2 border-(--primary) bg-(--bg-surface) transition-colors duration-fast-02 ease-productive-entrance group-data-[current]/hotspot:bg-(--primary) motion-reduce:transition-none"
+            class="relative size-3 rounded-(--radius-full) border-2 border-(--primary) bg-(--bg-surface) transition-colors duration-fast-02 ease-productive-entrance group-data-[active]/hotspot:bg-(--primary) motion-reduce:transition-none"
           />
         </button>
       </PopoverTrigger>
@@ -162,7 +162,7 @@
               kind="primary"
               size="small"
               :data-testid="`${testId}__next`"
-              @click="context?.next()"
+              @click="(event: Event) => context?.next(event)"
             />
           </PopoverFooter>
         </div>

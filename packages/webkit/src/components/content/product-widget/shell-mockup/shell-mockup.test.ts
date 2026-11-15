@@ -107,10 +107,12 @@ describe('ShellMockup', () => {
       const crumbs = Array.from(root.querySelectorAll('ol li'))
 
       expect(crumbs.map((crumb) => crumb.textContent?.trim())).toEqual(['Workloads', 'my-workload'])
-      expect(crumbs[1]?.hasAttribute('data-current')).toBe(true)
-      expect(crumbs[0]?.hasAttribute('data-current')).toBe(false)
+      expect(crumbs[1]?.hasAttribute('data-active')).toBe(true)
+      expect(crumbs[0]?.hasAttribute('data-active')).toBe(false)
 
-      const active = root.querySelectorAll('[data-active]')
+      const active = Array.from(root.querySelectorAll('[data-active]')).filter(
+        (el) => !el.closest('ol')
+      )
       expect(active).toHaveLength(1)
       expect(active[0]?.textContent).toContain('Workloads')
     })

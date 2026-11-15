@@ -86,7 +86,7 @@
     <ListingTable
       title="Latest roles"
       :columns="columns"
-      :rows="rows"
+      :data="rows"
       :primary-action="primaryAction"
     />
 

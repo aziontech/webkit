@@ -3,9 +3,9 @@ name: board
 category: layout
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 0a943302eb279d7758a585fae5d5933f6bc46f1c5fc5bcc8ec9fe16796c9b08f
+checksum: c454693710ac09fbce72b2b4ca03c126b85e5aaa5ec1e05d762ca6dc406e6212
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -160,8 +160,8 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
 
 | Event         | Payload                                                     | Notes                                                      |
 | ------------- | ----------------------------------------------------------- | ---------------------------------------------------------- |
-| `item-move`   | `{ id: string; from: number; to: number }`                  | An item moved, by drop or by the keyboard; zero-based.     |
-| `item-resize` | `{ id: string; span: number; height: number \| undefined }` | A resize ended (pointer up or a resize key on the corner). |
+| `item-move`   | `(event: KeyboardEvent \| DragEvent, payload: { id: string; from: number; to: number })` | An item moved, by drop or by the keyboard; zero-based. The drop or key event comes first. |
+| `item-resize` | `(event: PointerEvent \| KeyboardEvent, payload: { id: string; span: number; height: number \| undefined })` | A resize ended (pointer up or a resize key on the corner); that event comes first. |
 
 Both are **notifications next to `v-model:layout`**, not activation events: the model already
 carries the new layout, and these say which item changed and how, for an undo toast, an analytics

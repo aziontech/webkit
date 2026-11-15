@@ -372,7 +372,7 @@
       <DocPageHeader
         title="Agent setup"
         description="Azion ships an MCP server, agent-ready documentation and a CLI, so your coding agent can build on the platform from your editor or terminal."
-        :breadcrumb="crumbs"
+        :breadcrumbs="crumbs"
         last-updated="2026-08-26"
         :meta-actions="metaActions"
       />
@@ -538,8 +538,8 @@
         </DocCardGroup>
       </DocProse>
       <DocPrevNext
-        :previous="{ title: 'MCP server', href: '/docs/dev-tools/mcp' }"
-        :next="{ title: 'Claude Code', href: '/docs/agent-setup/claude-code' }"
+        :previous="{ label: 'MCP server', href: '/docs/dev-tools/mcp' }"
+        :next="{ label: 'Claude Code', href: '/docs/agent-setup/claude-code' }"
       />
     </article>
 

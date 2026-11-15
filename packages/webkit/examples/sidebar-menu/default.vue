@@ -12,7 +12,7 @@
           label="End User"
           icon="ai ai-user"
           href="/end-user"
-          selected
+          active
         />
         <SidebarMenuItem
           label="Web Browser"

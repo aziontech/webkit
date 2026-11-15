@@ -40,7 +40,7 @@
 
 <template>
   <Tooltip
-    :text="title || label"
+    :content="title || label"
     :disabled="!title"
   >
     <a

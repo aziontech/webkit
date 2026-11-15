@@ -69,10 +69,12 @@
 
   const taskStatus = (taskIndex: number): TutorialTaskStatus => {
     const range = taskRanges.value[taskIndex]
-    if (!range) return 'upcoming'
-    if (context.step.value > range.last) return 'complete'
-    if (context.step.value >= range.first) return 'current'
-    return 'upcoming'
+    return range && context.step.value > range.last ? 'success' : 'pending'
+  }
+
+  const taskActive = (taskIndex: number): boolean => {
+    const range = taskRanges.value[taskIndex]
+    return Boolean(range && context.step.value >= range.first && context.step.value <= range.last)
   }
 
   const stepIndex = (taskIndex: number, local: number): number =>
@@ -83,7 +85,7 @@
 
   const focusCurrentStep = () => {
     rootEl.value
-      ?.querySelector<globalThis.HTMLElement>('[data-tutorial-step][aria-current="step"]')
+      ?.querySelector<globalThis.HTMLElement>('[data-slot="tutorial-step"][aria-current="step"]')
       ?.focus({ preventScroll: true })
   }
 
@@ -108,8 +110,8 @@
     { flush: 'post' }
   )
 
-  const exit = async () => {
-    context.exit()
+  const exit = async (event: Event) => {
+    context.exit(event)
     await nextTick()
     listHeadingEl.value?.focus({ preventScroll: true })
   }
@@ -190,7 +192,7 @@
                 size="small"
                 :aria-describedby="`${uid}-${tutorial.id}`"
                 :data-testid="`${testId}__start`"
-                @click="context.start(tutorial.id)"
+                @click="(event: Event) => context.start(event, tutorial.id)"
               />
             </div>
           </li>
@@ -229,7 +231,10 @@
               kind="outlined"
               size="small"
               :data-testid="`${testId}__restart`"
-              @click="context.start(context.active.value.id)"
+              @click="
+                (event: Event) =>
+                  context.active.value && context.start(event, context.active.value.id)
+              "
             />
             <Button
               :label="t('tutorialPanel.back')"
@@ -252,12 +257,13 @@
             :key="`${context.active.value.id}-${taskIndex}`"
             :title="task.title"
             :status="taskStatus(taskIndex)"
+            :active="taskActive(taskIndex)"
           >
             <ol class="flex w-full flex-col gap-(--spacing-2xs)">
               <li
                 v-for="(item, local) in task.steps"
                 :key="item.hotspotId"
-                data-tutorial-step
+                data-slot="tutorial-step"
                 :tabindex="stepIndex(taskIndex, local) === context.step.value ? -1 : undefined"
                 :aria-current="
                   stepIndex(taskIndex, local) === context.step.value ? 'step' : undefined

@@ -4,10 +4,10 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import type { ConversationAlignment } from './injection-key'
+  import type { ConversationLayout } from './injection-key'
   import { ConversationInjectionKey } from './injection-key'
 
-  export type { ConversationAlignment }
+  export type { ConversationLayout }
 
   defineOptions({
     name: 'Conversation',
@@ -18,12 +18,12 @@
     /** Accessible name of the message log. Empty uses the locale catalog (`Conversation`). */
     ariaLabel?: string
     /** `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). */
-    alignment?: ConversationAlignment
+    layout?: ConversationLayout
   }
 
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    alignment: 'split'
+    layout: 'split'
   })
 
   defineSlots<{
@@ -120,7 +120,7 @@
   })
 
   provide(ConversationInjectionKey, {
-    alignment: computed(() => props.alignment),
+    alignment: computed(() => props.layout),
     ready,
     announce
   })
@@ -132,7 +132,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-alignment="alignment"
+    :data-layout="layout"
     :data-pinned="pinned || null"
     class="relative flex min-h-0 w-full flex-1 flex-col"
   >

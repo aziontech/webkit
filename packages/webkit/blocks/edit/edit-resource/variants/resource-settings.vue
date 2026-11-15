@@ -112,7 +112,7 @@
           anchor="general"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -154,7 +154,7 @@
           anchor="list-settings"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"

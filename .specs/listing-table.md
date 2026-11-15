@@ -3,11 +3,11 @@ name: listing-table
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 00c9f5b2c52a84611303b9561088357e87b7a09b6dbaab66718bed95be18d967
+last_updated: 2026-11-15
+checksum: c9f6b85b36faeb9758c8c48b90fb0b3f7e29ee8e71e706bc8650e9a703008617
 ---
 # ListingTable — Component Spec
 
@@ -50,7 +50,7 @@ import ListingTable from '@aziontech/webkit/listing-table'
       { key: 'team', label: 'Team and location', grow: 2 },
       { key: 'type', label: 'Work type', align: 'end' }
     ]"
-    :rows="[
+    :data="[
       { href: '/careers/software-engineer-go', values: { role: 'Software Engineer (Go)', team: 'Engineering · Porto Alegre', type: 'Hybrid · Full-time' } }
     ]"
     :primary-action="{ label: 'See all 23 roles', href: '/careers/jobs', trailing: true }"
@@ -65,7 +65,7 @@ import ListingTable from '@aziontech/webkit/listing-table'
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the left-aligned section title as its `h2`; the band renders no header when empty. |
 | `columns` | `ListingTableColumn[]` | `[]` | false | The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. |
-| `rows` | `ListingTableRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
+| `data` | `ListingTableRow[]` | `[]` | false | The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. |
 | `primaryAction` | `ListingTableAction` | `undefined` | false | Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
 
 ## Events
@@ -81,7 +81,7 @@ import ListingTable from '@aziontech/webkit/listing-table'
 - Visual states: `default`, `hover` (row fill `var(--bg-hover)` in both the table and the list)
 - Whole-row navigation: a click on a row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
 - Metadata cells (every column after the first) render `text-overline-sm`, truncated to one line, with their full value as `title`
-- Empty: when `rows` or `columns` is empty the band renders nothing — not the header, not the frame
+- Empty: when `data` or `columns` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set; the footer button only when `primaryAction` is set
 - Below `sm` the table is hidden and the rows render as an item list
 

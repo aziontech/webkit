@@ -38,18 +38,18 @@
     ariaLabel: ''
   })
 
-  const expanded = defineModel<string[]>('expanded', { default: () => [] })
+  const openKeys = defineModel<string[]>('openKeys', { default: () => [] })
 
   const emit = defineEmits<{
     /** An existing option was picked in a node's bind control. */
     bind: [
       event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-      binding: { key: string; value: string }
+      binding: { id: string; value: string }
     ]
     /** The remove control of a bound node was activated. */
-    remove: [event: globalThis.MouseEvent, key: string]
+    remove: [event: globalThis.MouseEvent, id: string]
     /** Create was picked in a node's bind control. */
-    create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, key: string]
+    create: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, id: string]
   }>()
 
   defineSlots<{
@@ -71,13 +71,13 @@
   const label = computed<string>(() => props.ariaLabel || t('topologyDiagram.label'))
 
   const PLACEHOLDER: TopologyLevel[] = [
-    { key: 'a', nodes: [{ key: 'a', type: '' }] },
-    { key: 'b', nodes: [{ key: 'b', type: '' }] },
+    { id: 'a', nodes: [{ id: 'a', type: '' }] },
+    { id: 'b', nodes: [{ id: 'b', type: '' }] },
     {
-      key: 'c',
+      id: 'c',
       nodes: [
-        { key: 'c', type: '' },
-        { key: 'd', type: '', terminal: true }
+        { id: 'c', type: '' },
+        { id: 'd', type: '', terminal: true }
       ]
     }
   ]
@@ -96,11 +96,11 @@
     }
   )
 
-  const isOpen = (key: string): boolean => expanded.value.includes(key)
+  const isOpen = (key: string): boolean => openKeys.value.includes(key)
   const toggle = (key: string): void => {
-    expanded.value = isOpen(key)
-      ? expanded.value.filter((entry) => entry !== key)
-      : [...expanded.value, key]
+    openKeys.value = isOpen(key)
+      ? openKeys.value.filter((entry) => entry !== key)
+      : [...openKeys.value, key]
   }
 </script>
 
@@ -162,12 +162,12 @@
         <ol
           ref="containerEl"
           :aria-hidden="loading || undefined"
-          class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
+          class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
         >
           <li
             v-for="level in shown"
-            :key="level.key"
-            data-flow-kind="parallel"
+            :key="level.id"
+            data-slot="flow-parallel"
             :data-testid="`${testId}__level`"
             class="flex min-w-(--size-56) flex-1 flex-col items-start gap-(--spacing-md)"
           >
@@ -178,14 +178,14 @@
             >
             <div
               v-for="node in level.nodes"
-              :key="node.key"
-              data-flow-kind="node"
+              :key="node.id"
+              data-slot="flow-node"
               :data-flow-terminal="node.terminal ? 'true' : null"
               class="relative z-1 w-full"
             >
               <div
                 v-if="loading"
-                data-flow-anchor="both"
+                data-slot="flow-anchor"
                 class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-solid border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
               >
                 <Skeleton
@@ -200,12 +200,12 @@
               <TopologyDiagramNode
                 v-else
                 :node="node"
-                :open="isOpen(node.key)"
+                :open="isOpen(node.id)"
                 :test-id="testId"
-                @toggle="toggle(node.key)"
-                @bind="(event, value) => emit('bind', event, { key: node.key, value })"
-                @remove="(event) => emit('remove', event, node.key)"
-                @create="(event) => emit('create', event, node.key)"
+                @toggle="() => toggle(node.id)"
+                @bind="(event, value) => emit('bind', event, { id: node.id, value })"
+                @remove="(event) => emit('remove', event, node.id)"
+                @create="(event) => emit('create', event, node.id)"
               >
                 <template
                   v-if="$slots['actions']"

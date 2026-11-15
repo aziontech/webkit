@@ -404,8 +404,8 @@
                   aria-hidden="true"
                 />
                 <li
-                  :data-current="index === crumbs.length - 1 || null"
-                  class="truncate text-(--text-muted) data-current:text-(--text-default)"
+                  :data-active="index === crumbs.length - 1 || null"
+                  class="truncate text-(--text-muted) data-active:text-(--text-default)"
                 >
                   {{ crumb }}
                 </li>

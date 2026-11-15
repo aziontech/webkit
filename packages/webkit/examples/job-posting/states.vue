@@ -72,7 +72,7 @@
       :messages="messages"
       :secondary-action="{ label: 'See open positions', href: '/careers' }"
       :submitted="submitted"
-      error
+      failed
     />
   </div>
 </template>

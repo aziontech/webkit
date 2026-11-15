@@ -89,34 +89,22 @@
       maxHeight?: string
       /** Draw the outer card border around the table (off by default; the table is typically framed by a surrounding surface). */
       bordered?: boolean
-      /** Row records. */
-      data?: TRow[]
       /** Column definitions; the table renders its header and rows from them. */
       columns?: TableColumn[]
       /** Field used as the stable row id (for selection). */
       rowKey?: string
-      /** Enable sorting globally (per-column `enableSorting` overrides). */
-      enableSorting?: boolean
-      /** Add a leading selection-checkbox column. */
-      enableRowSelection?: boolean
+      /** Sorts every column on header click (a column's own `sortable` overrides). */
+      sortable?: boolean
+      /** Adds a leading selection-checkbox column. */
+      selectable?: boolean
       /** Decides per row whether it can be selected (`(row) => row.kind === 'file'`). A row it rejects draws no checkbox, ignores row clicks and stays out of Select all. */
       rowSelectable?: (row: TRow) => boolean
-      /** Clicking a row toggles its selection (requires enableRowSelection). */
+      /** Clicking a row toggles its selection (requires selectable). */
       selectOnRowClick?: boolean
       /** Render a Pagination in the footer. */
       paginated?: boolean
       /** Rows per page when paginated. */
       pageSize?: number
-      /** Supports v-model:sorting (TanStack SortingState). */
-      sorting?: SortingState
-      /** Supports v-model:rowSelection (TanStack RowSelectionState). */
-      rowSelection?: RowSelectionState
-      /** Supports v-model:columnVisibility (TanStack VisibilityState). */
-      columnVisibility?: VisibilityState
-      /** Supports v-model:globalFilter text. */
-      globalFilter?: string
-      /** Supports v-model:pagination (TanStack PaginationState). */
-      pagination?: PaginationState
       /** Server-side sorting: emit events, do not sort locally. */
       manualSorting?: boolean
       /** Server-side pagination: emit events, do not slice locally. */
@@ -131,12 +119,8 @@
       loading?: boolean
       /** Message of a failed load, shown in place of the rows (the `error` slot replaces it). Empty shows the rows. */
       error?: string
-      /** Supports v-model:filters — structured applied conditions (distinct from globalFilter). */
-      filters?: AppliedFilter[]
       /** Fields Table.Filter offers, as facets in the menu or as properties in the property filter. */
       filterFields?: FilterField[]
-      /** Supports v-model:state — aggregate serializable snapshot layered over the per-concern models. */
-      state?: TableStateSnapshot
       /** Uncontrolled seed applied once on mount (per-concern v-model wins over it). */
       initialState?: Partial<TableStateSnapshot>
       /** Default filename for Table.Export and exportCsv(). */
@@ -161,8 +145,6 @@
       rowReorderable?: (row: TRow) => boolean
       /** Tree rows. Returns a row's children; rows with children expand in place under a chevron in the principal column and the grid becomes a `treegrid`. */
       getSubRows?: (row: TRow) => TRow[] | undefined
-      /** Supports v-model:expanded (TanStack ExpandedState): `true` for every row, or `{ [rowId]: true }`. */
-      expanded?: ExpandedState
       /** More rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested. */
       moreRows?: boolean
       /** The next rows are loading; shows a loading line under the rows and holds further `load-more` requests. */
@@ -171,20 +153,14 @@
     {
       maxHeight: '',
       bordered: false,
-      data: () => [],
       columns: () => [],
       rowKey: 'id',
-      enableSorting: false,
-      enableRowSelection: false,
+      sortable: false,
+      selectable: false,
       rowSelectable: undefined,
       selectOnRowClick: false,
       paginated: false,
       pageSize: 10,
-      sorting: undefined,
-      rowSelection: undefined,
-      columnVisibility: undefined,
-      globalFilter: undefined,
-      pagination: undefined,
       manualSorting: false,
       manualPagination: false,
       manualFiltering: false,
@@ -192,9 +168,7 @@
       pageSizeOptions: () => [10, 25, 50, 100],
       loading: false,
       error: '',
-      filters: undefined,
       filterFields: () => [],
-      state: undefined,
       initialState: undefined,
       exportFilename: 'export.csv',
       exportRows: undefined,
@@ -207,30 +181,39 @@
       reorderable: false,
       rowReorderable: undefined,
       getSubRows: undefined,
-      expanded: undefined,
       moreRows: false,
       loadingMore: false
     }
   )
 
   const emit = defineEmits<{
-    'update:sorting': [value: SortingState]
-    'update:rowSelection': [value: RowSelectionState]
-    'update:columnVisibility': [value: VisibilityState]
-    'update:globalFilter': [value: string]
-    'update:pagination': [value: PaginationState]
     'row-click': [event: MouseEvent, row: TRow]
-    'update:filters': [value: AppliedFilter[]]
-    'update:state': [value: TableStateSnapshot]
     'filter-apply': [event: Event, filters: AppliedFilter[]]
     'filter-remove': [event: Event, filter: AppliedFilter]
-    refresh: []
-    export: [rows: TRow[]]
-    'update:data': [value: TRow[]]
-    reorder: [payload: { from: number; to: number; row: TRow }]
-    'update:expanded': [value: ExpandedState]
-    'load-more': []
+    refresh: [event: Event]
+    export: [event: Event, rows: TRow[]]
+    reorder: [event: KeyboardEvent | PointerEvent, payload: { from: number; to: number; row: TRow }]
+    'load-more': [event: Event]
   }>()
+
+  /** Row records; `reorderable` writes the new order back (v-model:data). */
+  const data = defineModel<TRow[]>('data', { default: () => [] })
+  /** TanStack SortingState (v-model:sorting). */
+  const sorting = defineModel<SortingState>('sorting')
+  /** TanStack RowSelectionState (v-model:rowSelection). */
+  const rowSelection = defineModel<RowSelectionState>('rowSelection')
+  /** TanStack VisibilityState (v-model:columnVisibility). */
+  const columnVisibility = defineModel<VisibilityState>('columnVisibility')
+  /** Search text across every column (v-model:globalFilter). */
+  const globalFilter = defineModel<string>('globalFilter')
+  /** TanStack PaginationState (v-model:pagination). */
+  const pagination = defineModel<PaginationState>('pagination')
+  /** Structured applied conditions, distinct from globalFilter (v-model:filters). */
+  const filters = defineModel<AppliedFilter[]>('filters')
+  /** Aggregate serializable snapshot layered over the per-concern models (v-model:state). */
+  const state = defineModel<TableStateSnapshot>('state')
+  /** TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }` (v-model:expanded). */
+  const expanded = defineModel<ExpandedState>('expanded')
 
   /** Live tail: while true new rows are expected on top; the table scrolls to the newest row and marks the first row older than the live start. Bound with v-model:live; Table.LiveButton toggles it. */
   const live = defineModel<boolean>('live', { default: false })
@@ -293,52 +276,54 @@
   )
 
   const seed = <K extends keyof TableStateSnapshot>(key: K): TableStateSnapshot[K] | undefined =>
-    props.state?.[key] ?? props.initialState?.[key]
-  const internalSorting = ref<SortingState>(props.sorting ?? seed('sorting') ?? [])
-  const internalRowSelection = ref<RowSelectionState>(props.rowSelection ?? {})
+    state.value?.[key] ?? props.initialState?.[key]
+  const internalSorting = ref<SortingState>(sorting.value ?? seed('sorting') ?? [])
+  const internalRowSelection = ref<RowSelectionState>(rowSelection.value ?? {})
   const internalColumnVisibility = ref<VisibilityState>(
-    props.columnVisibility ?? seed('columnVisibility') ?? {}
+    columnVisibility.value ?? seed('columnVisibility') ?? {}
   )
-  const internalGlobalFilter = ref<string>(props.globalFilter ?? seed('globalFilter') ?? '')
+  const internalGlobalFilter = ref<string>(globalFilter.value ?? seed('globalFilter') ?? '')
   const internalPagination = ref<PaginationState>(
-    props.pagination ?? seed('pagination') ?? { pageIndex: 0, pageSize: props.pageSize }
+    pagination.value ?? seed('pagination') ?? { pageIndex: 0, pageSize: props.pageSize }
   )
   const internalColumnOrder = ref<ColumnOrderState>(seed('columnOrder') ?? [])
-  const internalFilters = ref<AppliedFilter[]>(props.filters ?? seed('filters') ?? [])
-  const internalExpanded = ref<ExpandedState>(props.expanded ?? {})
+  const internalFilters = ref<AppliedFilter[]>(filters.value ?? seed('filters') ?? [])
+  const internalExpanded = ref<ExpandedState>(expanded.value ?? {})
   watch(
-    () => props.expanded,
+    () => expanded.value,
     (v) => v !== undefined && (internalExpanded.value = v)
   )
   watch(
-    () => props.sorting,
+    () => sorting.value,
     (v) => v && (internalSorting.value = v)
   )
   watch(
-    () => props.rowSelection,
+    () => rowSelection.value,
     (v) => v && (internalRowSelection.value = v)
   )
   watch(
-    () => props.columnVisibility,
+    () => columnVisibility.value,
     (v) => v && (internalColumnVisibility.value = v)
   )
   watch(
-    () => props.globalFilter,
+    () => globalFilter.value,
     (v) => v !== undefined && (internalGlobalFilter.value = v)
   )
   watch(
-    () => props.filters,
+    () => filters.value,
     (v) => v !== undefined && (internalFilters.value = v)
   )
   watch(
-    () => props.pagination,
+    () => pagination.value,
     (v) => v && (internalPagination.value = v)
   )
   watch(
     () => props.pageSize,
     (size: number) => {
-      if (props.pagination) return
+      const bound = getCurrentInstance()?.vnode.props
+      if (bound && 'pagination' in bound) return
       internalPagination.value = { pageIndex: 0, pageSize: size }
+      if (pagination.value) pagination.value = internalPagination.value
     }
   )
 
@@ -346,7 +331,7 @@
     return typeof updater === 'function' ? (updater as (old: T) => T)(current) : updater
   }
 
-  const appliedFilters = computed<AppliedFilter[]>(() => props.filters ?? internalFilters.value)
+  const appliedFilters = computed<AppliedFilter[]>(() => filters.value ?? internalFilters.value)
   const filterFields = computed<FilterField[]>(() => props.filterFields)
 
   const timeOf = (raw: unknown): number | null => {
@@ -448,7 +433,7 @@
       id: col.id ?? col.accessorKey ?? col.header ?? '',
       accessorKey: col.accessorKey,
       header: col.header,
-      enableSorting: col.enableSorting ?? props.enableSorting,
+      enableSorting: col.sortable ?? props.sortable,
       enableHiding: col.hideable ?? col.kind !== 'action',
       filterFn: appliedFilterFn,
       size: col.width,
@@ -469,7 +454,7 @@
     () =>
       props.manualSorting && props.manualFiltering && props.manualPagination && !props.getSubRows
   )
-  const records = (): RowRecord[] => props.data as unknown as RowRecord[]
+  const records = (): RowRecord[] => data.value as unknown as RowRecord[]
   const typed = <T,>(value: unknown): T => value as T
   const cellSlotOf = (id: string): `cell-${string}` => `cell-${id}`
   const headerSlotOf = (id: string): `header-${string}` => `header-${id}`
@@ -486,19 +471,19 @@
     },
     state: {
       get sorting() {
-        return props.sorting ?? internalSorting.value
+        return sorting.value ?? internalSorting.value
       },
       get rowSelection() {
-        return props.rowSelection ?? internalRowSelection.value
+        return rowSelection.value ?? internalRowSelection.value
       },
       get columnVisibility() {
-        return props.columnVisibility ?? internalColumnVisibility.value
+        return columnVisibility.value ?? internalColumnVisibility.value
       },
       get globalFilter() {
-        return props.globalFilter ?? internalGlobalFilter.value
+        return globalFilter.value ?? internalGlobalFilter.value
       },
       get pagination() {
-        return props.pagination ?? internalPagination.value
+        return pagination.value ?? internalPagination.value
       },
       get columnFilters() {
         return mappedColumnFilters.value
@@ -507,7 +492,7 @@
         return internalColumnOrder.value
       },
       get expanded() {
-        return props.expanded ?? internalExpanded.value
+        return expanded.value ?? internalExpanded.value
       }
     },
     getSubRows: (row) => {
@@ -515,7 +500,7 @@
     },
     enableSubRowSelection: false,
     getRowId: (row) => rowKeyOf(row as RowRecord),
-    enableRowSelection: (row) => props.enableRowSelection && isSelectable(row.original),
+    enableRowSelection: (row) => props.selectable && isSelectable(row.original),
     manualSorting: props.manualSorting,
     manualPagination: props.manualPagination,
     manualFiltering: props.manualFiltering,
@@ -523,38 +508,38 @@
       return props.rowCount
     },
     onSortingChange: (updater: Updater<SortingState>) => {
-      const next = applyUpdater(updater, props.sorting ?? internalSorting.value)
+      const next = applyUpdater(updater, sorting.value ?? internalSorting.value)
       internalSorting.value = next
-      emit('update:sorting', next)
+      sorting.value = next
     },
     onRowSelectionChange: (updater: Updater<RowSelectionState>) => {
-      const next = applyUpdater(updater, props.rowSelection ?? internalRowSelection.value)
+      const next = applyUpdater(updater, rowSelection.value ?? internalRowSelection.value)
       internalRowSelection.value = next
-      emit('update:rowSelection', next)
+      rowSelection.value = next
     },
     onColumnVisibilityChange: (updater: Updater<VisibilityState>) => {
-      const next = applyUpdater(updater, props.columnVisibility ?? internalColumnVisibility.value)
+      const next = applyUpdater(updater, columnVisibility.value ?? internalColumnVisibility.value)
       internalColumnVisibility.value = next
-      emit('update:columnVisibility', next)
+      columnVisibility.value = next
     },
     onGlobalFilterChange: (updater: Updater<string>) => {
-      const next = applyUpdater(updater, props.globalFilter ?? internalGlobalFilter.value)
+      const next = applyUpdater(updater, globalFilter.value ?? internalGlobalFilter.value)
       internalGlobalFilter.value = next
-      emit('update:globalFilter', next)
+      globalFilter.value = next
     },
     onPaginationChange: (updater: Updater<PaginationState>) => {
-      const next = applyUpdater(updater, props.pagination ?? internalPagination.value)
+      const next = applyUpdater(updater, pagination.value ?? internalPagination.value)
       internalPagination.value = next
-      emit('update:pagination', next)
+      pagination.value = next
     },
     onColumnFiltersChange: () => {},
     onColumnOrderChange: (updater: Updater<ColumnOrderState>) => {
       internalColumnOrder.value = applyUpdater(updater, internalColumnOrder.value)
     },
     onExpandedChange: (updater: Updater<ExpandedState>) => {
-      const next = applyUpdater(updater, props.expanded ?? internalExpanded.value)
+      const next = applyUpdater(updater, expanded.value ?? internalExpanded.value)
       internalExpanded.value = next
-      emit('update:expanded', next)
+      expanded.value = next
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -614,33 +599,33 @@
 
   const applyFilters = (event: Event, next: AppliedFilter[]): void => {
     internalFilters.value = next
-    emit('update:filters', next)
+    filters.value = next
     emit('filter-apply', event, next)
   }
   const removeFilter = (event: Event, filter: AppliedFilter): void => {
     const key = filterKey(filter)
     const next = appliedFilters.value.filter((entry) => filterKey(entry) !== key)
     internalFilters.value = next
-    emit('update:filters', next)
+    filters.value = next
     emit('filter-remove', event, filter)
   }
   const clearFilters = (): void => {
     if (appliedFilters.value.length > 0) {
       internalFilters.value = []
-      emit('update:filters', [])
+      filters.value = []
     }
     if (internalGlobalFilter.value !== '') {
       internalGlobalFilter.value = ''
-      emit('update:globalFilter', '')
+      globalFilter.value = ''
     }
   }
   const editFilter = (filter: AppliedFilter): void => {
     editingFilter.value = filter
   }
 
-  const reload = (): void => {
+  const reload = (event: Event = new Event('refresh')): void => {
     if (props.loading) return
-    emit('refresh')
+    emit('refresh', event)
   }
 
   const instance = getCurrentInstance()
@@ -652,8 +637,8 @@
     if (scope === 'page') return rows.value.map((row) => row.original)
     return table.getFilteredRowModel().rows.map((row) => row.original)
   }
-  const writeExport = (data: RowRecord[], filename?: string): void => {
-    emit('export', typed<TRow[]>(data))
+  const writeExport = (event: Event, data: RowRecord[], filename?: string): void => {
+    emit('export', event, typed<TRow[]>(data))
     if (hasExportListener()) return
     const columns = table
       .getVisibleLeafColumns()
@@ -664,11 +649,14 @@
       }))
     downloadCsv(filename || props.exportFilename, toCsv({ columns, rows: data }))
   }
-  const exportCsv = (options?: {
-    filename?: string
-    scope?: TableExportScope
-    rows?: RowRecord[]
-  }): Promise<void> => {
+  const exportCsv = (
+    options?: {
+      filename?: string
+      scope?: TableExportScope
+      rows?: RowRecord[]
+    },
+    event: Event = new Event('export')
+  ): Promise<void> => {
     const scope = options?.scope ?? 'filtered'
     const source =
       options?.rows ??
@@ -676,8 +664,8 @@
         ? typed<RowRecord[] | Promise<RowRecord[]>>(props.exportRows(scope))
         : resolveExportRows(scope))
     if (source instanceof Promise)
-      return source.then((data) => writeExport(data, options?.filename))
-    writeExport(source, options?.filename)
+      return source.then((data) => writeExport(event, data, options?.filename))
+    writeExport(event, source, options?.filename)
     return Promise.resolve()
   }
 
@@ -696,30 +684,30 @@
   const setState = (next: Partial<TableStateSnapshot>): void => {
     if (next.sorting !== undefined) {
       internalSorting.value = next.sorting
-      emit('update:sorting', next.sorting)
+      sorting.value = next.sorting
     }
     if (next.pagination !== undefined) {
       internalPagination.value = next.pagination
-      emit('update:pagination', next.pagination)
+      pagination.value = next.pagination
     }
     if (next.columnVisibility !== undefined) {
       internalColumnVisibility.value = next.columnVisibility
-      emit('update:columnVisibility', next.columnVisibility)
+      columnVisibility.value = next.columnVisibility
     }
     if (next.columnOrder !== undefined) {
       internalColumnOrder.value = next.columnOrder
     }
     if (next.globalFilter !== undefined) {
       internalGlobalFilter.value = next.globalFilter
-      emit('update:globalFilter', next.globalFilter)
+      globalFilter.value = next.globalFilter
     }
     if (next.filters !== undefined) {
       internalFilters.value = next.filters
-      emit('update:filters', next.filters)
+      filters.value = next.filters
     }
   }
 
-  const emitState = useDebounceFn((value: TableStateSnapshot) => emit('update:state', value), 60)
+  const emitState = useDebounceFn((value: TableStateSnapshot) => (state.value = value), 60)
   let lastStateJson = ''
   watch(
     () => snapshot(),
@@ -732,7 +720,7 @@
     { deep: true }
   )
   watch(
-    () => props.state,
+    () => state.value,
     (value) => {
       if (!value) return
       if (JSON.stringify(value) === JSON.stringify(snapshot())) return
@@ -803,7 +791,7 @@
   }
 
   const onRowClick = (event: MouseEvent, row: Row<RowRecord>) => {
-    if (props.selectOnRowClick && props.enableRowSelection && row.getCanSelect()) {
+    if (props.selectOnRowClick && props.selectable && row.getCanSelect()) {
       row.toggleSelected()
     }
     emit('row-click', event, typed<TRow>(row.original))
@@ -822,7 +810,7 @@
     props.columns.filter((c: TableColumn) => frozenEdgeOf(c) === 'end')
   )
   const selectionFrozen = computed<boolean>(
-    () => props.enableRowSelection && leftFrozenCols.value.length > 0
+    () => props.selectable && leftFrozenCols.value.length > 0
   )
 
   const justLoaded = ref<boolean>(true)
@@ -1168,9 +1156,9 @@
   }
   watch(
     [
-      () => props.data,
-      () => props.sorting ?? internalSorting.value,
-      () => props.globalFilter ?? internalGlobalFilter.value,
+      () => data.value,
+      () => sorting.value ?? internalSorting.value,
+      () => globalFilter.value ?? internalGlobalFilter.value,
       () => mappedColumnFilters.value
     ],
     () => {
@@ -1180,10 +1168,10 @@
   )
 
   const moreRequested = ref<boolean>(false)
-  const requestMore = (): void => {
+  const requestMore = (event: Event = new Event('load-more')): void => {
     if (!props.moreRows || props.loadingMore || props.loading) return
     moreRequested.value = true
-    emit('load-more')
+    emit('load-more', event)
   }
   const moreShown = computed<boolean>(
     () =>
@@ -1347,8 +1335,8 @@
     () => [
       props.columns,
       props.loading,
-      props.enableRowSelection,
-      props.data,
+      props.selectable,
+      data.value,
       renderedRows.value.length,
       headers.value.map((header) => header.column.id).join('|'),
       stacked.value
@@ -1359,7 +1347,7 @@
   const reorderActive = computed<boolean>(() => props.reorderable && !treeActive.value)
   const reorderLocked = computed<boolean>(() => table.getState().sorting.length > 0)
   const leadingCells = computed<number>(
-    () => (props.enableRowSelection ? 1 : 0) + (reorderActive.value ? 1 : 0)
+    () => (props.selectable ? 1 : 0) + (reorderActive.value ? 1 : 0)
   )
   const reorderHandleFrozen = computed<boolean>(
     () => reorderActive.value && leftFrozenCols.value.length > 0
@@ -1405,7 +1393,12 @@
     return ids.indexOf(dragId.value) < ids.indexOf(id) ? 'after' : 'before'
   }
 
-  const moveRow = (id: string, targetId: string, message: 'moved' | 'dropped'): void => {
+  const moveRow = (
+    event: KeyboardEvent | PointerEvent,
+    id: string,
+    targetId: string,
+    message: 'moved' | 'dropped'
+  ): void => {
     const from = records().findIndex((row) => rowKeyOf(row) === id)
     const to = records().findIndex((row) => rowKeyOf(row) === targetId)
     if (from < 0 || to < 0 || from === to) return
@@ -1418,8 +1411,8 @@
       total: orderedIds.value.length
     })
     focusAfterMove = id
-    emit('update:data', typed<TRow[]>(next))
-    emit('reorder', { from, to, row: typed<TRow>(moved) })
+    data.value = typed<TRow[]>(next)
+    emit('reorder', event, { from, to, row: typed<TRow>(moved) })
   }
 
   const focusHandle = (id: string): void => {
@@ -1429,7 +1422,7 @@
     handle?.focus()
   }
   watch(
-    () => props.data,
+    () => data.value,
     () => {
       const id = focusAfterMove
       if (!id) return
@@ -1461,7 +1454,7 @@
     if (target === undefined) return
     event.preventDefault()
     if (target < 0 || target >= ids.length || target === index || !canMoveId(ids[target])) return
-    moveRow(id, ids[target], 'moved')
+    moveRow(event, id, ids[target], 'moved')
   }
 
   const REORDER_EDGE = 32
@@ -1487,12 +1480,12 @@
     if (event.clientY < box.top + REORDER_EDGE) viewport.scrollTop -= REORDER_EDGE / 2
     else if (event.clientY > box.bottom - REORDER_EDGE) viewport.scrollTop += REORDER_EDGE / 2
   }
-  const onHandlePointerup = (): void => {
+  const onHandlePointerup = (event: PointerEvent): void => {
     const id = dragId.value
     const target = overId.value
     dragId.value = null
     overId.value = null
-    if (id && target && target !== id) moveRow(id, target, 'dropped')
+    if (id && target && target !== id) moveRow(event, id, target, 'dropped')
   }
   const onHandlePointercancel = (): void => {
     dragId.value = null
@@ -1640,7 +1633,7 @@
         toggleTreeRow(row)
         return
       case ' ':
-        if (!props.enableRowSelection || !row.getCanSelect()) return
+        if (!props.selectable || !row.getCanSelect()) return
         event.preventDefault()
         row.toggleSelected()
         return
@@ -1669,12 +1662,12 @@
     ref="rootEl"
     v-bind="splitAttrs[0]"
     :data-testid="testId"
-    :data-border="bordered || null"
+    :data-bordered="bordered || null"
     :data-stacked="stacked || null"
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
+    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"
@@ -1732,7 +1725,7 @@
         :data-overflow-end="overflowEnd || undefined"
       >
         <div
-          v-if="stacked && enableRowSelection && !loading && rowTotal > 0"
+          v-if="stacked && selectable && !loading && rowTotal > 0"
           :data-testid="`${testId}__stacked-select-all`"
           class="flex min-h-10 items-center gap-(--spacing-xs) px-(--spacing-sm) pt-(--spacing-xs)"
         >
@@ -1772,12 +1765,12 @@
                   key="reorder"
                   kind="checkbox"
                   :frozen="reorderHandleFrozen ? 'start' : undefined"
-                  data-reorder-cell
+                  data-slot="reorder-cell"
                 >
                   <span class="sr-only">{{ t('tableReorder.column') }}</span>
                 </TableHeadCell>
                 <TableHeadCell
-                  v-if="enableRowSelection"
+                  v-if="selectable"
                   key="select"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
@@ -1840,7 +1833,7 @@
                   :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                 />
                 <TableCell
-                  v-if="enableRowSelection"
+                  v-if="selectable"
                   key="select"
                   kind="checkbox"
                   :frozen="selectionFrozen ? 'start' : undefined"
@@ -1941,7 +1934,7 @@
                     key="reorder"
                     kind="checkbox"
                     :frozen="reorderHandleFrozen ? 'start' : undefined"
-                    data-reorder-cell
+                    data-slot="reorder-cell"
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <IconButton
@@ -1963,7 +1956,7 @@
                     />
                   </TableCell>
                   <TableCell
-                    v-if="enableRowSelection"
+                    v-if="selectable"
                     key="select"
                     kind="checkbox"
                     :frozen="selectionFrozen ? 'start' : undefined"
@@ -1997,7 +1990,7 @@
                     <span
                       v-if="treeActive && viewOf(cell.column.id).principal"
                       aria-hidden="true"
-                      data-tree-gutter
+                      data-slot="tree-gutter"
                       class="flex shrink-0 justify-end"
                       :style="{
                         inlineSize: `calc(var(--spacing-md) * ${row.depth} + var(--size-7))`

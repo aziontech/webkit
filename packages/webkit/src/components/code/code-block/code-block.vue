@@ -79,7 +79,7 @@
     /** Language of the single `code` snippet (highlighting and the label header). */
     language?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
-    lineNumbers?: boolean
+    showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). */
     copyAriaLabel?: string
     /** Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. */
@@ -103,7 +103,7 @@
     defaultValue: undefined,
     code: '',
     language: '',
-    lineNumbers: true,
+    showLineNumbers: true,
     copyAriaLabel: '',
     copyable: undefined,
     kind: 'code',
@@ -146,7 +146,7 @@
   const panelId = `${uid}-panel`
   const tabId = (index: number): string => `${uid}-tab-${index}`
 
-  const gutter = computed<boolean>(() => props.lineNumbers)
+  const gutter = computed<boolean>(() => props.showLineNumbers)
 
   const normalizedTabs = computed<CodeBlockTab[]>(() => {
     if (props.tabs.length === 0) {
@@ -282,12 +282,12 @@
   const splitRows = computed(() =>
     isSplit.value
       ? pairDiffLines(diffRows.value).map((pair) => ({
-          left: pair.left && {
+          start: pair.left && {
             tokens: originalLines.value[pair.left.number - 1] ?? [],
             number: pair.left.number,
             state: pair.left.change === 'removed' ? 'removed' : 'default'
           },
-          right: pair.right && {
+          end: pair.right && {
             tokens: highlightedLines.value[pair.right.number - 1] ?? [],
             number: pair.right.number,
             state: diffState(pair.right.change, pair.right.number)
@@ -692,11 +692,11 @@
   <div
     :class="
       cn(
-        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[bordered]:border data-[bordered]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
         attrs.class as string | undefined
       )
     "
-    :data-border="bordered || null"
+    :data-bordered="bordered || null"
     :data-copyable="canCopy || null"
     :data-kind="kind"
     :data-testid="testId"
@@ -921,14 +921,14 @@
             :data-testid="`${testId}__split`"
           >
             <div
-              v-for="side in ['left', 'right'] as const"
+              v-for="side in ['start', 'end'] as const"
               :key="side"
               role="group"
               tabindex="0"
-              :aria-label="side === 'left' ? t('codeBlock.original') : t('codeBlock.modified')"
+              :aria-label="side === 'start' ? t('codeBlock.original') : t('codeBlock.modified')"
               :data-side="side"
               :data-testid="`${testId}__side`"
-              class="min-w-0 overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[side=left]:border-e data-[side=left]:border-(--border-muted)"
+              class="min-w-0 overflow-x-auto outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset data-[side=start]:border-e data-[side=start]:border-(--border-muted)"
             >
               <div class="flex min-w-full w-max flex-col">
                 <template
@@ -937,7 +937,7 @@
                 >
                   <div
                     v-if="!chunk.mounted"
-                    :ref="(el) => side === 'left' && observeLineChunk(el, chunk.index)"
+                    :ref="(el) => side === 'start' && observeLineChunk(el, chunk.index)"
                     :data-chunk="chunk.index"
                     aria-hidden="true"
                     class="shrink-0"

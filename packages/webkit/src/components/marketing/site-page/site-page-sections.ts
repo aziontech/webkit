@@ -123,14 +123,14 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
       ...p,
       titleLength:
         p['titleLength'] ??
-        ([p['highlight'], p['title']].filter(Boolean).join(' ').length > 45 ? 'long' : 'short')
+        ([p['titleHighlight'], p['title']].filter(Boolean).join(' ').length > 45 ? 'long' : 'short')
     })
   },
   'resource-grid': {
     target: 'capability-grid',
     props: (p) => ({
       ...p,
-      titleKind: 'horizontal',
+      titleKind: 'split',
       items: records(p['items']).filter((item) => Boolean(item['title']))
     })
   },
@@ -140,14 +140,14 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
       ...without(p, 'items', 'headerOffset'),
       steps: records(p['items']),
       pinned: true,
-      titleKind: 'centered',
+      titleKind: 'center',
       ...(p['headerOffset'] ? { headerOffset: p['headerOffset'] } : {})
     })
   },
   'sticky-scroll-code': { target: 'feature-scroll' },
   'use-case-links': {
     target: 'capability-grid',
-    props: (p) => ({ ...p, titleKind: 'left' })
+    props: (p) => ({ ...p, titleKind: 'start' })
   }
 }
 

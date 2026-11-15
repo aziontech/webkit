@@ -31,7 +31,7 @@
         >
           <template
             v-if="o.leftIcon"
-            #left
+            #leading
           >
             <i
               :class="o.leftIcon"

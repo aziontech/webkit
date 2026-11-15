@@ -88,7 +88,7 @@
 <template>
   <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
-      v-model:expanded="expanded"
+      v-model:open-keys="expanded"
       v-model:selected="selected"
       :items="items"
       selectable

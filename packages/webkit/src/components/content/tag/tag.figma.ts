@@ -31,7 +31,10 @@ export default {
   label="${label}"${
     severity === 'primary'
       ? ''
-      : figma.code`
+      : ['accent', 'contrast'].includes(severity)
+        ? figma.code`
+  variant="${severity}"`
+        : figma.code`
   severity="${severity}"`
   }${
     size === 'medium'

@@ -143,17 +143,17 @@ describe('LogView', () => {
         expect(root.contains(content)).toBe(true)
       })
 
-      // The outline AND the corner radius hang off data-border (Tailwind
-      // `data-[border]:` variants), so dropping the attribute drops both.
-      it('sets data-border by default and drops it when bordered is false', () => {
+      // The outline AND the corner radius hang off data-bordered (Tailwind
+      // `data-[bordered]:` variants), so dropping the attribute drops both.
+      it('sets data-bordered by default and drops it when bordered is false', () => {
         const bordered = render(LogView, { props: { lines: LINES } })
         expect(
-          within(bordered.container).getByTestId('code-log-view').getAttribute('data-border')
+          within(bordered.container).getByTestId('code-log-view').getAttribute('data-bordered')
         ).toBe('true')
 
         const flush = render(LogView, { props: { lines: LINES, bordered: false } })
         expect(
-          within(flush.container).getByTestId('code-log-view').hasAttribute('data-border')
+          within(flush.container).getByTestId('code-log-view').hasAttribute('data-bordered')
         ).toBe(false)
       })
 
@@ -655,7 +655,7 @@ describe('LogView', () => {
       it('Borderless story renders the shell without the outer border', () => {
         const { getByTestId } = render(Borderless)
 
-        expect(getByTestId('code-log-view').hasAttribute('data-border')).toBe(false)
+        expect(getByTestId('code-log-view').hasAttribute('data-bordered')).toBe(false)
         expect(getByTestId('code-log-view__content')).toBeTruthy()
       })
     })
@@ -663,10 +663,10 @@ describe('LogView', () => {
     describe('LogView.Steps: a run with known steps', () => {
       const STEPS: LogViewStep[] = [
         {
-          key: 'build',
+          id: 'build',
           title: 'Build',
           description: 'Assets bundled',
-          status: 'done',
+          status: 'success',
           duration: '9s',
           lines: [
             { id: '1', time: '13:47:41', type: 'text', message: 'Running build' },
@@ -674,13 +674,13 @@ describe('LogView', () => {
           ]
         },
         {
-          key: 'rules',
+          id: 'rules',
           title: 'Routing Rules',
           description: 'Applying rules',
           status: 'running',
           lines: [{ id: '1', time: '13:48:08', type: 'text', message: 'Configuring rules' }]
         },
-        { key: 'publish', title: 'Publish', status: 'pending', lines: [] }
+        { id: 'publish', title: 'Publish', status: 'pending', lines: [] }
       ]
 
       const stepsHost = (props: Record<string, unknown> = {}, slots = {}) => {
@@ -709,7 +709,7 @@ describe('LogView', () => {
         const { getAllByTestId, getByTestId, getByText } = render(Host)
         const items = getAllByTestId('code-log-view__steps__step')
         expect(items.map((item) => item.getAttribute('data-status'))).toEqual([
-          'done',
+          'success',
           'running',
           'pending'
         ])
@@ -722,9 +722,9 @@ describe('LogView', () => {
 
       it('opens the failed step when no step runs', () => {
         const failed: LogViewStep[] = [
-          { ...STEPS[0]!, status: 'done' },
-          { ...STEPS[1]!, status: 'failed', description: 'Origin not found' },
-          { key: 'publish', title: 'Publish', status: 'skipped', lines: [] }
+          { ...STEPS[0]!, status: 'success' },
+          { ...STEPS[1]!, status: 'error', description: 'Origin not found' },
+          { id: 'publish', title: 'Publish', status: 'skipped', lines: [] }
         ]
         const { getByText, queryByText } = render(LogViewSteps, { props: { steps: failed } })
         expect(getByText('Configuring rules')).toBeTruthy()
@@ -788,8 +788,8 @@ describe('LogView', () => {
 
       it('waits on a pending step and says a skipped step never ran', async () => {
         const steps: LogViewStep[] = [
-          { key: 'a', title: 'Pending step', status: 'pending', lines: [] },
-          { key: 'b', title: 'Skipped step', status: 'skipped', lines: [] }
+          { id: 'a', title: 'Pending step', status: 'pending', lines: [] },
+          { id: 'b', title: 'Skipped step', status: 'skipped', lines: [] }
         ]
         const pending = render(LogViewSteps, { props: { steps, openStep: 'a' } })
         expect(pending.getByText('Waiting to start…')).toBeTruthy()
@@ -799,7 +799,7 @@ describe('LogView', () => {
       })
 
       it('fills the header, step-meta and step-empty slots', () => {
-        const steps: LogViewStep[] = [{ key: 'a', title: 'Publish', status: 'skipped', lines: [] }]
+        const steps: LogViewStep[] = [{ id: 'a', title: 'Publish', status: 'skipped', lines: [] }]
         const { getByTestId, getByText } = render(LogViewSteps, {
           props: { steps, openStep: 'a' },
           slots: {

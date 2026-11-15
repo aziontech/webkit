@@ -53,7 +53,7 @@
     <DocPageHeader
       :title="page.title"
       :description="page.summary"
-      :breadcrumb="[{ label: t.foundations, href: '/foundations' }, { label: page.title }]"
+      :breadcrumbs="[{ label: t.foundations, href: '/foundations' }, { label: page.title }]"
       :meta-actions="metaActions"
     />
     <FoundationDemo

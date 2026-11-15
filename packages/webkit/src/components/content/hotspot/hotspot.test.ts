@@ -62,7 +62,8 @@ describe('Hotspot', () => {
     const { container } = render(Host, { props: { active: 'guide', step: 1 } })
     await tick()
     expect(markers()).toHaveLength(2)
-    const current = container.querySelector('[data-current]') as HTMLElement
+    const current = container.querySelector('[data-active]') as HTMLElement
+    expect(container.querySelectorAll('[data-marker]')).toHaveLength(2)
     expect(current.textContent).toContain('Beta')
     expect(current.querySelector('.animate-ping')).not.toBeNull()
     expect(markers()[1]?.getAttribute('aria-label')).toBe('Tutorial step: Second')

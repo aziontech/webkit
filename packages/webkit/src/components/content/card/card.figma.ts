@@ -24,7 +24,7 @@ export default {
   </template>`
       : ''
   }
-  <template #content>
+  <template #default>
     ${content}
   </template>${
     showFooter

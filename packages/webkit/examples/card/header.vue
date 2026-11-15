@@ -16,7 +16,7 @@
         />
       </div>
     </template>
-    <template #content>
+    <template #default>
       <p class="text-body-sm text-(--text-muted)">
         An action rendered in the header slot stays visible, aligned to the end of the header.
       </p>

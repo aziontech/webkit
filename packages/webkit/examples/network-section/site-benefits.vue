@@ -37,7 +37,7 @@
       kind="benefits"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="claims"
       :benefits="benefits"
     />

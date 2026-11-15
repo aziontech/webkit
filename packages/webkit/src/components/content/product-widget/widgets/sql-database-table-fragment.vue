@@ -17,7 +17,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; a column is added and named while it is, and taken back out after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -70,7 +70,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const goingBack = ref(false)
@@ -123,7 +123,7 @@
     <div class="py-(--spacing-xs)">
       <ShellMockupPart :order="0">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)">
               <div
                 class="grid grid-cols-[auto_minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1.2fr)_auto_auto] items-center gap-(--spacing-xs) px-(--spacing-2xs)"
@@ -171,7 +171,7 @@
                       :display-value="shown"
                     >
                       <Select.Trigger aria-label="Column type">
-                        <template #prefix>
+                        <template #leading>
                           <span
                             class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                             aria-hidden="true"
@@ -243,7 +243,7 @@
                         :display-value="shown"
                       >
                         <Select.Trigger aria-label="Column type">
-                          <template #prefix>
+                          <template #leading>
                             <span
                               class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"

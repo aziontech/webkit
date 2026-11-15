@@ -293,7 +293,7 @@
               aria-label="Search environments"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -388,7 +388,7 @@
                 anchor="general"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -435,7 +435,7 @@
                 anchor="domains"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <div class="flex min-w-0 flex-col">
                       <DataTable
                         :data="domains"
@@ -471,7 +471,7 @@
                             placement="bottom-end"
                           >
                             <DropdownMenu.Trigger>
-                              <Tooltip text="Row actions">
+                              <Tooltip content="Row actions">
                                 <IconButton
                                   icon="ai ai-ellipsis"
                                   kind="outlined"
@@ -555,7 +555,7 @@
                       </Alert>
 
                       <Card :padded="false">
-                        <template #content>
+                        <template #default>
                           <Item.List>
                             <SettingRow
                               v-for="environment in linkedEnvironments"
@@ -624,7 +624,7 @@
                     anchor="protocol-settings"
                   >
                     <Card :padded="false">
-                      <template #content>
+                      <template #default>
                         <Item.List>
                           <SettingRow
                             title="HTTP ports"
@@ -811,7 +811,7 @@
                     anchor="mutual-authentication"
                   >
                     <Card :padded="false">
-                      <template #content>
+                      <template #default>
                         <Item.List>
                           <SettingRow
                             title="Mutual authentication"
@@ -921,7 +921,7 @@
                 anchor="danger-zone"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Delete this resource"

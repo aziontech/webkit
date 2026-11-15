@@ -1,7 +1,7 @@
 import { reactive, readonly, ref } from 'vue'
 
-/** Severity / lifecycle variants reflected on each toast via `data-severity`. */
-export type ToastSeverity = 'default' | 'success' | 'info' | 'warning' | 'danger' | 'loading'
+/** Colour meaning of a toast, reflected via `data-severity`. */
+export type ToastSeverity = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
 
 /** Corner (or edge-center) a toast (or the whole Toaster) is anchored to. */
 export type ToastPosition =
@@ -51,8 +51,10 @@ export interface ToastPromiseMessages<T> {
 export interface ToastEntry {
   /** Stable identity used for keying and dismissal. */
   id: string
-  /** Severity / lifecycle variant. */
+  /** Colour meaning. */
   severity: ToastSeverity
+  /** Work in progress: the toast shows a spinner until it is updated. */
+  loading?: boolean
   /** Primary line. */
   message: string
   /** Supporting line. */
@@ -186,7 +188,7 @@ const add: ToastStore['add'] = (entry) => {
       : Math.max(defaultDuration.value, ACTION_MIN_DURATION)
     : defaultDuration.value
   const duration = entry.duration ?? fallback
-  const next: ToastEntry = { ...entry, severity: entry.severity ?? 'default', duration }
+  const next: ToastEntry = { ...entry, severity: entry.severity ?? 'neutral', duration }
   const existing = entries.findIndex((item) => item.id === next.id)
   if (existing !== -1) {
     entries.splice(existing, 1, next)
@@ -224,10 +226,16 @@ export const toastStore: ToastStore = {
 
 export const useToastStore = (): ToastStore => toastStore
 
-const raise = (severity: ToastSeverity, message: string, options: ToastOptions = {}): string =>
+const raise = (
+  severity: ToastSeverity,
+  message: string,
+  options: ToastOptions = {},
+  loading = false
+): string =>
   toastStore.add({
     id: options.id ?? nextId(),
     severity,
+    loading,
     message,
     description: options.description,
     action: options.action,
@@ -255,7 +263,7 @@ interface ToastFn {
   dismiss: (id?: string) => void
 }
 
-const base = (message: string, options?: ToastOptions): string => raise('default', message, options)
+const base = (message: string, options?: ToastOptions): string => raise('neutral', message, options)
 
 const toastFn = base as ToastFn
 
@@ -263,22 +271,32 @@ toastFn.success = (message, options) => raise('success', message, options)
 toastFn.error = (message, options) => raise('danger', message, options)
 toastFn.info = (message, options) => raise('info', message, options)
 toastFn.warning = (message, options) => raise('warning', message, options)
-toastFn.loading = (message, options) => raise('loading', message, { duration: 0, ...options })
+toastFn.loading = (message, options) => raise('neutral', message, { duration: 0, ...options }, true)
 
 toastFn.progress = (message, value, options) =>
-  raise('default', message, { duration: 0, ...options, progress: value })
+  raise('neutral', message, { duration: 0, ...options, progress: value })
 
 toastFn.promise = (promise, messages, options) => {
-  const id = raise('loading', messages.loading, { duration: 0, ...options })
+  const id = raise('neutral', messages.loading, { duration: 0, ...options }, true)
   promise.then(
     (value) => {
       const text =
         typeof messages.success === 'function' ? messages.success(value) : messages.success
-      toastStore.update(id, { severity: 'success', message: text, duration: defaultDuration.value })
+      toastStore.update(id, {
+        severity: 'success',
+        loading: false,
+        message: text,
+        duration: defaultDuration.value
+      })
     },
     (reason) => {
       const text = typeof messages.error === 'function' ? messages.error(reason) : messages.error
-      toastStore.update(id, { severity: 'danger', message: text, duration: defaultDuration.value })
+      toastStore.update(id, {
+        severity: 'danger',
+        loading: false,
+        message: text,
+        duration: defaultDuration.value
+      })
     }
   )
   return id

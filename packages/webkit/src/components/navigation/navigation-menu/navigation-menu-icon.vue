@@ -17,7 +17,7 @@
 
   const ROOT_CLASS =
     'inline-flex transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none ' +
-    'data-[open]:rotate-180'
+    'data-[state=open]:rotate-180'
 </script>
 
 <template>
@@ -25,7 +25,7 @@
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     aria-hidden="true"
     :data-testid="testId"
-    :data-open="item.itemOpen.value ? '' : undefined"
+    :data-state="item.itemOpen.value ? 'open' : 'closed'"
   >
     <slot />
   </span>

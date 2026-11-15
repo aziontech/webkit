@@ -213,7 +213,7 @@
                   <strong class="font-medium">Changed elsewhere.</strong>
                   This project was saved by someone else after you opened it. Reload to see their
                   values, or keep editing and confirm the overwrite when you save.
-                  <template #action>
+                  <template #actions>
                     <Button
                       type="button"
                       label="Reload"
@@ -234,7 +234,7 @@
                 >
                   <strong class="font-medium">Edits discarded.</strong>
                   The form now shows the values saved elsewhere. Undo brings your edits back.
-                  <template #action>
+                  <template #actions>
                     <Button
                       type="button"
                       label="Undo"
@@ -258,7 +258,7 @@
                   anchor="general"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           title="Name"
@@ -305,7 +305,7 @@
                   anchor="modules"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           v-for="mod in defaultModules"
@@ -331,7 +331,7 @@
                   anchor="subscription-modules"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           v-for="mod in subscriptionModules"
@@ -349,7 +349,7 @@
                               >Contact sales</a
                             >
                           </template>
-                          <Tooltip text="Contact sales to activate this module.">
+                          <Tooltip content="Contact sales to activate this module.">
                             <Switch
                               v-model="form.modules[mod.key]"
                               disabled

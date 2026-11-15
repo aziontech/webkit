@@ -10,7 +10,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; this fragment holds still either way. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -53,7 +53,7 @@
           :padded="false"
           title="How do you want to start?"
         >
-          <template #content>
+          <template #default>
             <Item.List>
               <Item
                 v-for="method in METHODS"

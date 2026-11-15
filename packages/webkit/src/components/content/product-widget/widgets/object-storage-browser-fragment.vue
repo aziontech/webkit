@@ -19,7 +19,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the assets folder is opened while it is, and left after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -126,7 +126,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover.value)
+  const wanted = () => props.active && (props.hovered || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -191,7 +191,7 @@
     >
       <ShellMockupPart :order="0">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               :data="rows"
               :columns="COLUMNS"
@@ -217,7 +217,7 @@
                     aria-label="Search in folder"
                     class="w-full"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"

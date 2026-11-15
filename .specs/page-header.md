@@ -3,8 +3,8 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 55a78399fab92892a4f5247a09238d5d17b130b342c05c384c993631b527cfa7
-spec_version: 4
+checksum: 749c0501db00e5e60287746b417b1f334e7be8ed394ed524c683e23778d66b4b
+spec_version: 5
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -14,14 +14,14 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumb` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
+The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumbs` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
 ## When to use
 
 - Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
-- A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumb`, `icon`, `meta`, `tabs`).
+- A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumbs`, `icon`, `meta`, `tabs`).
 
 ## When NOT to use
 
@@ -33,7 +33,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 - `section-header` — the h2 band heading inside a page.
 - `page-tabs` — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
-- `breadcrumb` — the usual content of the `breadcrumb` slot.
+- `breadcrumb` — the usual content of the `breadcrumbs` slot.
 - `tag` — the usual content of the `meta` slot (a status, an environment, a version).
 - `button` — the usual content of the `actions` slot (outlined, `size="medium"`).
 
@@ -43,7 +43,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 - Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
-- `breadcrumb`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
+- `breadcrumbs`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
 - `icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
 - `meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
 - `tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
@@ -90,7 +90,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
     title="acme-store"
     description="Storefront served from three regions."
   >
-    <template #breadcrumb>
+    <template #breadcrumbs>
       <Breadcrumb :items="[{ label: 'Resources', href: '/resources' }, { label: 'acme-store' }]" />
     </template>
     <template #icon>
@@ -140,7 +140,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 | ------------- | ----- | --------------------------------------------------------------------------------------------------- |
 | `description` | —     | Rich description content (links, inline buttons); replaces the `description` prop.                  |
 | `actions`     | —     | The actions the page owns, Documentation first and the create action on the outer edge.             |
-| `breadcrumb`  | —     | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`.       |
+| `breadcrumbs` | —     | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`.       |
 | `icon`        | —     | A leading glyph or square avatar before the title, decorative (`aria-hidden`).                      |
 | `meta`        | —     | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
 | `tabs`        | —     | The tabs of the page's sections, across the full width under the title and actions.                 |
@@ -149,7 +149,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
-- Each region renders only when its slot is filled: `__breadcrumb` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
+- Each region renders only when its slot is filled: `__breadcrumbs` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
 - Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
 ## Motion & Animations
@@ -214,7 +214,7 @@ No built-in strings: the title, description and every region come from the consu
 - ListPage — medium title with the Documentation and create actions.
 - SettingsPage — small title, no actions.
 - Sizes — every `size` value stacked.
-- DetailPage — justified: the `breadcrumb`, `icon`, `meta` and `tabs` regions only appear together on a resource detail header, which none of the other examples shows.
+- DetailPage — justified: the `breadcrumbs`, `icon`, `meta` and `tabs` regions only appear together on a resource detail header, which none of the other examples shows.
 - RichDescription — the `description` slot with inline buttons; justified because a hub description carries inline controls.
 
 ## Constraints — DO NOT

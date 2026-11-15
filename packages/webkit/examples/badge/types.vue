@@ -6,15 +6,19 @@
   <div class="flex flex-wrap items-center gap-4">
     <Badge
       label="99"
-      severity="primary"
+      variant="primary"
     />
     <Badge
       label="99"
-      severity="secondary"
+      variant="secondary"
     />
     <Badge
       label="99"
       severity="success"
+    />
+    <Badge
+      label="99"
+      severity="info"
     />
     <Badge
       label="99"

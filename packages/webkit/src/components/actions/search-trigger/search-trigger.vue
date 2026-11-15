@@ -78,7 +78,7 @@
     v-bind="
       collapsible
         ? {
-            text: resolvedLabel,
+            content: resolvedLabel,
             placement: 'bottom',
             disabled: disabled || !folded,
             'data-testid': `${testId}__tooltip`

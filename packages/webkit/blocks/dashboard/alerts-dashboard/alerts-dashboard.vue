@@ -8,7 +8,7 @@
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
-  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
+  import SeverityTag, { type SeverityTagLevel } from '@aziontech/webkit/severity-tag'
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
@@ -30,7 +30,7 @@
   }
 
   interface LevelCount {
-    id: SeverityTagSeverity
+    id: SeverityTagLevel
     count: number
   }
 
@@ -39,13 +39,13 @@
     name: string
     type: string
     score: number
-    level: SeverityTagSeverity
+    level: SeverityTagLevel
     alerts: number
   }
 
   interface AlertRow {
     id: string
-    level: SeverityTagSeverity
+    level: SeverityTagLevel
     rank: number
     title: string
     entity: string
@@ -335,7 +335,7 @@
       accessorKey: 'score',
       header: 'Risk score',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 160
     },
     {
@@ -343,7 +343,7 @@
       accessorKey: 'alerts',
       header: 'Open alerts',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       minWidth: 104
     }
   ]
@@ -465,7 +465,7 @@
       accessorKey: 'rank',
       header: 'Severity',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 120
     },
     {
@@ -563,7 +563,7 @@
               :loading="loading"
             >
               <template #aside>
-                <Hint :text="figure.description" />
+                <Hint :content="figure.description" />
               </template>
             </StatTile>
           </li>
@@ -577,7 +577,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Alerts per day</ChartCard.Title>
-              <Hint text="Alerts raised each day, stacked by severity level." />
+              <Hint content="Alerts raised each day, stacked by severity level." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -607,7 +607,7 @@
 
         <div class="lg:col-span-4">
           <Card title="Open by severity">
-            <template #content>
+            <template #default>
               <ul
                 v-if="loading"
                 aria-busy="true"
@@ -661,7 +661,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>By type</ChartCard.Title>
-              <Hint text="Alerts raised in the period, by the kind of behavior that raised them." />
+              <Hint
+                content="Alerts raised in the period, by the kind of behavior that raised them."
+              />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -680,7 +682,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Highest risk</ChartCard.Title>
               <Hint
-                text="The entities with the highest risk score, from the severity and number of their open alerts."
+                content="The entities with the highest risk score, from the severity and number of their open alerts."
               />
             </span>
           </ChartCard.Header>
@@ -690,7 +692,7 @@
               :data="entities"
               :columns="entityColumns"
               row-key="id"
-              enable-sorting
+              sortable
               density="compact"
               bordered
               :loading="loading"
@@ -729,7 +731,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Open alerts</ChartCard.Title>
-              <Hint text="Every open alert, most severe first." />
+              <Hint content="Every open alert, most severe first." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -738,7 +740,7 @@
               :data="alerts"
               :columns="alertColumns"
               row-key="id"
-              enable-sorting
+              sortable
               paginated
               :page-size="10"
               :page-size-options="[10, 25, 50]"

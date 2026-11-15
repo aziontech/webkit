@@ -14,7 +14,7 @@
     },
     {
       "name": "Move",
-      "summary": "A move between folders with `operation=\"move\"`, collapsed with `v-model:expanded` set to `false` so only the header and overall bar show.",
+      "summary": "A move between folders with `operation=\"move\"`, closed with `v-model:open` set to `false` so only the header and overall bar show.",
       "file": "move.vue"
     }
   ]

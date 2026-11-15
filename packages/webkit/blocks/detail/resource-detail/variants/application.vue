@@ -158,7 +158,7 @@
     const removing = pick === ''
     const value = pick === undefined ? deployed[key] : pick
     const base = {
-      key,
+      id: key,
       type: target.kind,
       icon: target.icon,
       bindable: true,
@@ -187,10 +187,10 @@
 
   const levels = computed<TopologyLevel[]>(() => [
     {
-      key: 'domain',
+      id: 'domain',
       nodes: [
         {
-          key: 'domain',
+          id: 'domain',
           type: 'Domain',
           icon: 'ai ai-globe',
           name: 'shop.example.com',
@@ -200,10 +200,10 @@
       ]
     },
     {
-      key: 'workload',
+      id: 'workload',
       nodes: [
         {
-          key: 'workload',
+          id: 'workload',
           type: 'Workload',
           icon: 'ai ai-sitemap',
           name: 'storefront',
@@ -212,12 +212,12 @@
         }
       ]
     },
-    { key: 'firewall', nodes: [slotNode('firewall')] },
+    { id: 'firewall', nodes: [slotNode('firewall')] },
     {
-      key: 'application',
+      id: 'application',
       nodes: [
         {
-          key: 'application',
+          id: 'application',
           type: 'Application',
           icon: 'ai ai-box',
           name: APP.name,
@@ -226,7 +226,7 @@
         }
       ]
     },
-    { key: 'function', nodes: [{ ...slotNode('function'), terminal: true }] }
+    { id: 'function', nodes: [{ ...slotNode('function'), terminal: true }] }
   ])
 
   const stagedChanges = computed(() =>
@@ -337,7 +337,7 @@
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-section-gap)"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <div
                 class="flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
               >
@@ -350,7 +350,7 @@
                   />
                   <div class="flex min-w-0">
                     <Tooltip
-                      :text="`Open ${APP.host} in a new tab`"
+                      :content="`Open ${APP.host} in a new tab`"
                       class="w-full"
                     >
                       <a
@@ -382,7 +382,7 @@
                   />
                   <DropdownMenu placement="bottom-end">
                     <DropdownMenu.Trigger>
-                      <Tooltip text="Application actions">
+                      <Tooltip content="Application actions">
                         <IconButton
                           icon="ai ai-ellipsis"
                           kind="outlined"
@@ -492,7 +492,7 @@
             </template>
           </SectionHeader>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 :data="versions"
                 :columns="versionColumns"
@@ -543,7 +543,7 @@
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 :data="deployments"
                 :columns="deploymentColumns"
@@ -585,9 +585,9 @@
             class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
           >
             <TopologyDiagram
-              v-model:expanded="expanded"
+              v-model:open-keys="expanded"
               :levels="levels"
-              @bind="(_event, { key, value }) => bind(key, value)"
+              @bind="(_event, { id, value }) => bind(id, value)"
               @remove="(_event, key) => unbind(key)"
               @create="(_event, key) => createTarget(key)"
             />
@@ -604,7 +604,7 @@
 
     <Drawer
       v-model:open="deployOpen"
-      side="right"
+      side="end"
       size="large"
     >
       <DrawerContent>

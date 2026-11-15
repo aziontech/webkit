@@ -18,7 +18,7 @@
       v-model="digits"
       v-model:country="country"
       name="phone"
-      @update:phone="phone = $event"
+      @phone-change="phone = $event"
     />
     <Field.Description>We'll use this to send the verification code.</Field.Description>
   </Field>

@@ -38,7 +38,7 @@
 <template>
   <div
     role="listitem"
-    data-flow-kind="parallel"
+    data-slot="flow-parallel"
     :data-align="align"
     :data-testid="testId"
     class="flex flex-col"
@@ -46,7 +46,7 @@
   >
     <div
       role="list"
-      data-flow-branches
+      data-slot="flow-branches"
       :data-align="align"
       :data-testid="`${testId}__branches`"
       class="flex w-full flex-col gap-(--spacing-md) data-[align=start]:items-start data-[align=end]:items-end"

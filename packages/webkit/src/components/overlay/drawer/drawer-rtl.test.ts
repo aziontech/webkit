@@ -9,7 +9,7 @@ import Drawer from './drawer.vue'
 import DrawerContent from './drawer-content.vue'
 import DrawerTitle from './drawer-title.vue'
 
-const closedTranslate = async (side: 'left' | 'right') => {
+const closedTranslate = async (side: 'start' | 'end') => {
   const view = render(() =>
     h(Drawer, { open: true, side }, () => h(DrawerContent, () => h(DrawerTitle, () => 'Settings')))
   )
@@ -30,11 +30,11 @@ describe('Drawer', () => {
   describe('in a right-to-left document (styled)', () => {
     it('slides a side drawer out through the edge it is anchored to', async () => {
       await page.viewport(1280, 900)
-      expect(await closedTranslate('left')).toBe('-100%')
+      expect(await closedTranslate('start')).toBe('-100%')
 
       document.documentElement.setAttribute('dir', 'rtl')
-      expect(await closedTranslate('left')).toBe('100%')
-      expect(await closedTranslate('right')).toBe('-100%')
+      expect(await closedTranslate('start')).toBe('100%')
+      expect(await closedTranslate('end')).toBe('-100%')
     })
   })
 })

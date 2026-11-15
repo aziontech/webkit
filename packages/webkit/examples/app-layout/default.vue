@@ -52,7 +52,7 @@
                 label="Services"
                 icon="ai ai-edge-application"
                 href="#"
-                selected
+                active
               />
               <SidebarMenuItem
                 label="Variables"
@@ -99,7 +99,7 @@
             <Command.Input placeholder="Search the console" />
             <Command.List>
               <Command.Empty>No page matches your search.</Command.Empty>
-              <Command.Group heading="Pages">
+              <Command.Group label="Pages">
                 <Command.Item
                   v-for="page in searchPages"
                   :key="page"

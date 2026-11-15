@@ -143,7 +143,7 @@
       id: column.name,
       accessorKey: column.name,
       header: column.name,
-      enableSorting: true,
+      sortable: true,
       minWidth: 160
     })),
     { id: '__actions', kind: 'action', hideable: false }
@@ -464,7 +464,7 @@ LIMIT 3;`
               <div class="flex items-center justify-between gap-(--spacing-xs)">
                 <span class="text-heading-2xs text-(--text-default)">Tables</span>
                 <div class="flex items-center gap-(--spacing-2xs)">
-                  <Tooltip text="Refresh tables">
+                  <Tooltip content="Refresh tables">
                     <IconButton
                       icon="ai ai-refresh"
                       kind="outlined"
@@ -472,7 +472,7 @@ LIMIT 3;`
                       aria-label="Refresh tables"
                     />
                   </Tooltip>
-                  <Tooltip text="Create Table">
+                  <Tooltip content="Create Table">
                     <IconButton
                       icon="ai ai-plus"
                       kind="outlined"
@@ -489,7 +489,7 @@ LIMIT 3;`
                 placeholder="Search tables"
                 aria-label="Search tables"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -546,7 +546,7 @@ LIMIT 3;`
                 </Item>
                 <DropdownMenu placement="bottom-end">
                   <DropdownMenu.Trigger>
-                    <Tooltip :text="`Actions for ${table.name}`">
+                    <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="transparent"
@@ -639,7 +639,7 @@ LIMIT 3;`
                   :placeholder="filterPlaceholder"
                   aria-label="Filter rows"
                 >
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-search"
                       aria-hidden="true"
@@ -654,7 +654,7 @@ LIMIT 3;`
                   size="medium"
                   icon="ai ai-sort"
                 />
-                <Tooltip text="Refresh">
+                <Tooltip content="Refresh">
                   <IconButton
                     icon="ai ai-refresh"
                     kind="outlined"
@@ -677,8 +677,8 @@ LIMIT 3;`
                 :data="filteredRows"
                 :columns="dataColumns"
                 row-key="__k"
-                enable-row-selection
-                enable-sorting
+                selectable
+                sortable
                 paginated
                 :page-size="25"
                 :page-size-options="[25, 50, 100]"
@@ -714,7 +714,7 @@ LIMIT 3;`
                   >
                 </template>
                 <template #cell-__actions="{ row }">
-                  <Tooltip :text="`Delete row ${row['id'] ?? row.__k}`">
+                  <Tooltip :content="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="ai ai-trash"
                       kind="transparent"
@@ -786,7 +786,7 @@ LIMIT 3;`
               />
             </div>
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <DataTable
                   :data="schemaRows"
                   :columns="schemaColumns"
@@ -839,7 +839,7 @@ LIMIT 3;`
                 placeholder="Search queries"
                 aria-label="Search queries"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -887,7 +887,7 @@ LIMIT 3;`
                   "
                 >
                   <DropdownMenu.Trigger>
-                    <Tooltip :text="`Actions for ${oneLine(item.sql)}`">
+                    <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
                         icon="ai ai-ellipsis"
                         kind="transparent"
@@ -982,7 +982,7 @@ LIMIT 3;`
                 aria-label="Search results"
                 :disabled="!resultRows.length"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -996,7 +996,7 @@ LIMIT 3;`
                 :options="resultViewOptions"
                 aria-label="Result view"
               />
-              <Tooltip text="Refresh results">
+              <Tooltip content="Refresh results">
                 <IconButton
                   icon="ai ai-refresh"
                   kind="outlined"
@@ -1006,7 +1006,7 @@ LIMIT 3;`
                   @click="runQuery"
                 />
               </Tooltip>
-              <Tooltip text="Download results">
+              <Tooltip content="Download results">
                 <IconButton
                   icon="ai ai-download"
                   kind="outlined"
@@ -1015,7 +1015,7 @@ LIMIT 3;`
                   :disabled="!resultRows.length"
                 />
               </Tooltip>
-              <Tooltip text="Toggle columns">
+              <Tooltip content="Toggle columns">
                 <IconButton
                   icon="ai ai-table"
                   kind="outlined"
@@ -1088,7 +1088,7 @@ LIMIT 3;`
     <Drawer
       v-model:open="templatesOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <PanelHeader class="w-full">
@@ -1109,7 +1109,7 @@ LIMIT 3;`
               placeholder="Search templates"
               aria-label="Search templates"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"

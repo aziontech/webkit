@@ -69,15 +69,15 @@
     {
       accessorKey: 'version',
       header: 'Version',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false
     },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 128 },
-    { accessorKey: 'project', header: 'Project', enableSorting: true, grow: 2 },
-    { accessorKey: 'environment', header: 'Environment', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'deployedAt', header: 'Deployed', enableSorting: true, minWidth: 120 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 128 },
+    { accessorKey: 'project', header: 'Project', sortable: true, grow: 2 },
+    { accessorKey: 'environment', header: 'Environment', sortable: true, minWidth: 104 },
+    { accessorKey: 'deployedAt', header: 'Deployed', sortable: true, minWidth: 120 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -247,7 +247,7 @@
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Tooltip
-                text="Refresh"
+                content="Refresh"
                 class="shrink-0"
               >
                 <IconButton
@@ -260,7 +260,7 @@
                 />
               </Tooltip>
               <Tooltip
-                text="Download CSV"
+                content="Download CSV"
                 class="shrink-0"
               >
                 <IconButton
@@ -284,7 +284,7 @@
               v-if="status === 'empty'"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <EmptyState
                   size="medium"
                   icon="ai ai-cloud-upload"
@@ -309,12 +309,12 @@
               v-else
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   ref="deploymentsTableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                   @row-click="(_event, row) => openDeployment(row)"
                 >

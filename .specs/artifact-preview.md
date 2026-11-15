@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: bc379ed7c53ea75fc6e5e1e4fed6bb49460b128fd9d381ae9c1fdd3eee39392b
+checksum: 5a118f8b6ca7e1f7569e7e5976cd238e7e0a6ef5b384ffd556b3bead354279eb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -65,7 +65,7 @@ preview (Cloudscape's inline preview): the first lines of code, the first rows o
   >
     <CodeBlock
       :tabs="[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]"
-      :line-numbers="false"
+      :show-line-numbers="false"
       :bordered="false"
     />
   </ArtifactPreview>

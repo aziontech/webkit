@@ -8,7 +8,7 @@
       type="single"
       collapsible
       default-value="overview"
-      arrow-position="right"
+      icon-position="trailing"
     >
       <Accordion.Item value="overview">
         <Accordion.Trigger>What is Azion?</Accordion.Trigger>
@@ -23,7 +23,7 @@
       type="single"
       collapsible
       default-value="overview"
-      arrow-position="left"
+      icon-position="leading"
     >
       <Accordion.Item value="overview">
         <Accordion.Trigger>What is Azion?</Accordion.Trigger>

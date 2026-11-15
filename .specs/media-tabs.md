@@ -3,11 +3,11 @@ name: media-tabs
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: f3ef00fc2dfa39770e1f29d6da86e056823a5db923d5e14a20458da85d493be6
+checksum: efe6e435b21a79ac472b8a217f6af1e5114de250f50e164d52525dd6d3163f75
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
+A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `tabsSide` decides where the tabs sit: `start` or `end` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
 
 ## When to use
 
@@ -87,8 +87,8 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 | Prop               | Type                                     | Default      | Required | JSDoc                                                                                                                                                                                                 |
 | ------------------ | ---------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `position` is `left` or `right` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
-| `position`         | `'left' \| 'right' \| 'top' \| 'bottom'` | `'left'`     | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every position stacks, with the active tab's media inside its row.                                                                 |
+| `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `tabsSide` is `start` or `end` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
+| `tabsSide`         | `'start' \| 'end' \| 'top' \| 'bottom'`  | `'start'`    | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every side stacks, with the active tab's media inside its row.                                                                 |
 | `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                    |
 | `selectOn`         | `'hover' \| 'click'`                     | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                    |
 | `autoplay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                    |
@@ -126,10 +126,10 @@ None. The tab shown is the `v-model` (`update:modelValue`).
 - The media frame shows exactly one medium at full opacity; the rest are present and transparent, which is what lets them cross-fade
 - A tab's frame carries no padding of its own; the title and description sit in an inset block, so the mobile media runs flush to the frame's edges
 - Every tab and the media column are `frame-box` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
-- The band holds at most three tabs when the position is `left` or `right` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
+- The band holds at most three tabs when the side is `start` or `end` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
 - Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
 - With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
-- `data-position` carries the position and `data-orientation` the axis it implies (`vertical` for `left` and `right`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `right` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every position keeps one hairline at the seam between the tabs and the media
+- `data-tabs-side` carries the side and `data-orientation` the axis it implies (`vertical` for `start` and `end`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `end` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every side keeps one hairline at the seam between the tabs and the media
 - The media column is grounded on a `texture-material` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
 - Empty: when `items` is empty the band renders nothing
 
@@ -197,8 +197,8 @@ None. The tab shown is the `v-model` (`update:modelValue`).
 
 - Default
 - Sizes — composite story rendering every `size` value, so the row-height ladder that the media column measures from is visible in one frame
-- TabCounts — composite story rendering three tabs beside the media (`left`) and five tabs in a row (`top`), the two counts the band is built for
-- Positions — composite story rendering `left`, `right`, `top` and `bottom`, so the four placements and their seams are visible in one frame
+- TabCounts — composite story rendering three tabs beside the media (`start`) and five tabs in a row (`top`), the two counts the band is built for
+- Positions — composite story rendering `start`, `end`, `top` and `bottom`, so the four placements and their seams are visible in one frame
 - Static — `autoplay` off and `selectOn` on click, so the band rests on its first tab and a reader can inspect it without it moving
 
 ## Constraints — DO NOT

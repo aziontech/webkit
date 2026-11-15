@@ -3,11 +3,11 @@ name: flow
 category: data
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: 377e04199f44ae118b9503d4cd9dff623af2280cfc79313020a618a6adc6a377
+checksum: a6730b41dc6239f859d468570ea6c89014ceb85e96718b4fecdbb37443a443bf
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -134,9 +134,10 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 - `data-disabled` mirrors the `disabled` prop on `flow-node`
 - `data-styled` is present on `flow-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow` and `flow-parallel`
-- `data-flow-anchor` mirrors the `side` prop on `flow-anchor` (`start` / `end` / `both`)
+- Part markers are `data-slot`: `flow-node`, `flow-parallel`, `flow-branches` (the nested list of a parallel step), `flow-anchor` and `flow-port`
+- `data-side` mirrors the `side` prop on `flow-anchor` (`start` / `end`; absent when the anchor attaches on both edges)
 - The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
-- `data-flow-port` marks a connector port and selects the edge it sits on (`start` = outgoing / right, `end` = incoming / left). Emitted on both edges of a styled `flow-node`, and on the attaching edge(s) of a `flow-anchor`. The port sits entirely **outside** the box, flush against that edge — never inside it, so the node's surface and its `focus-visible` ring cannot crop the port
+- `data-slot="flow-port"` marks a connector port and its `data-side` selects the edge it sits on (`start` = outgoing / right, `end` = incoming / left). Emitted on both edges of a styled `flow-node`, and on the attaching edge(s) of a `flow-anchor`. The port sits entirely **outside** the box, flush against that edge — never inside it, so the node's surface and its `focus-visible` ring cannot crop the port
 - Port appearance follows the enclosing node: solid border by default, `border-dashed` under `data-disabled`
 - `data-flow-terminal` mirrors the `terminal` prop on `flow-node`. The composable drops that branch's exit, so no connector is drawn leaving it; the root additionally hides any outgoing port inside it (including one rendered by a nested `flow-anchor`)
 - `data-flow-leading` / `data-flow-trailing` are stamped by the connector composable on the first / last direct child of the diagram (both, when there is only one). The root hides the ports on those outer edges, because no connector reaches them. They are attributes rather than `:first-child` / `:last-child` rules because the connector `<svg>` is a sibling of the nodes in the same container

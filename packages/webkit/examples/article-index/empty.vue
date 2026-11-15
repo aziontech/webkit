@@ -8,20 +8,19 @@
     anchor="posts"
     title="All articles"
     all-label="All articles"
-    category-label="Category"
+    category-aria-label="Category"
     row-label="Read article"
     more-label="Load more"
     aria-label="Articles"
     :categories="['Developers', 'Security']"
-    :search="{ placeholder: 'Search articles', label: 'Search articles' }"
-    :empty="{
-      title: 'No articles match these filters',
-      description: 'Try another category or a shorter search.',
-      action: 'View all articles'
-    }"
+    search-placeholder="Search articles"
+    search-aria-label="Search articles"
+    empty-title="No articles match these filters"
+    empty-description="Try another category or a shorter search."
+    empty-action-label="View all articles"
     :items="[
       {
-        key: 'ship-a-site-in-two-commands',
+        id: 'ship-a-site-in-two-commands',
         href: '/blog/ship-a-site-in-two-commands',
         image: placeholderImage,
         meta: 'Developers • SEP 25, 2026',

@@ -3,10 +3,10 @@ name: feature-widgets
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: c53ae023ab825d6279c68a6e89eb7b35018866629539554c96ed2e9932d23645
+checksum: 60e6660bc8c62d6b467f71f0073b65f16322d3e28c607530ba26e67255586339
 ---
 # FeatureWidgets — Component Spec
 
@@ -69,7 +69,7 @@ import FeatureWidgets from '@aziontech/webkit/feature-widgets'
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `primaryAction` | `FeatureWidgetsAction` | `undefined` | false | First button under the headline; `{ label, href, trailing? }`. Omitted when absent. |
 | `secondaryAction` | `FeatureWidgetsAction` | `undefined` | false | Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. |
-| `titleKind` | `SectionTitleKind` | `'centered'` | false | Alignment of the section title over the grid: `centered`, `left` or `horizontal`. |
+| `titleKind` | `SectionTitleKind` | `'center'` | false | Alignment of the section title over the grid: `center`, `start` or `split`. |
 | `columns` | `FeatureWidgetsColumns` | `2` | false | Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. |
 | `copiedLabel` | `string` | `''` | false | Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. |
 | `items` | `FeatureWidgetsItem[]` | `[]` | false | The cells, in order; each is `{ title, description, scene?, illustration?, action?, copy? }` where `scene` is `{ component, props? }` naming a webkit scene asset drawn in a 20rem window and handed `hover` while the pointer is over the cell, `illustration` is drawn when no scene is set, `action` is `{ label, href }` rendered as an outlined link button and `copy` is `{ label, text }` rendered as a copy button that puts `text` on the clipboard; a cell may carry both. |

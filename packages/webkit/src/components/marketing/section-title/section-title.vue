@@ -10,12 +10,12 @@
   })
 
   /** Layout of the header row. */
-  export type SectionTitleKind = 'centered' | 'left' | 'horizontal'
+  export type SectionTitleKind = 'center' | 'start' | 'split'
   /** Step of the headline on the heading scale. */
   export type SectionTitleSize = 'small' | 'medium' | 'large'
   /** Vertical padding step of the framed header. */
   export type SectionTitlePadding = 'small' | 'medium'
-  /** Column span of the description in the horizontal layout. */
+  /** Column span of the description in the split layout. */
   export type SectionTitleDescriptionWidth = 'narrow' | 'wide'
 
   interface Props {
@@ -25,7 +25,7 @@
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
-    /** Layout of the header: `centered` stacks and centers the copy, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
+    /** Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. */
     kind?: SectionTitleKind
     /** Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. */
     size?: SectionTitleSize
@@ -33,14 +33,14 @@
     framed?: boolean
     /** Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. */
     padding?: SectionTitlePadding
-    /** Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too. */
+    /** Width of the description in the split layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too. */
     descriptionWidth?: SectionTitleDescriptionWidth
   }
 
   const props = withDefaults(defineProps<Props>(), {
     description: '',
     eyebrow: '',
-    kind: 'centered',
+    kind: 'center',
     size: 'medium',
     framed: true,
     padding: 'medium',
@@ -83,10 +83,10 @@
     class="group"
   >
     <div
-      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[kind=centered]:items-center"
+      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[kind=center]:items-center"
     >
       <div
-        v-if="kind === 'horizontal'"
+        v-if="kind === 'split'"
         class="flex w-full flex-col gap-(--spacing-lg)"
       >
         <Overline
@@ -112,7 +112,7 @@
 
       <div
         v-else
-        class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[kind=centered]:items-center group-data-[kind=centered]:text-center"
+        class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[kind=center]:items-center group-data-[kind=center]:text-center"
       >
         <Overline
           v-if="eyebrow"
@@ -135,7 +135,7 @@
 
       <div
         v-if="slots.actions"
-        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[kind=centered]:justify-center"
+        class="flex w-full max-w-full min-w-0 flex-col items-stretch gap-(--spacing-md) [&>*]:w-full [&>*]:max-w-full sm:w-auto sm:flex-row sm:items-center sm:[&>*]:w-auto sm:group-data-[kind=center]:justify-center"
       >
         <slot name="actions" />
       </div>

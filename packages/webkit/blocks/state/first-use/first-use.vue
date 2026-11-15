@@ -27,7 +27,7 @@
       :padded="false"
       class="w-full"
     >
-      <template #content>
+      <template #default>
         <EmptyState
           icon="ai ai-box"
           title="Create your first resource"
@@ -133,7 +133,7 @@
         :padded="false"
         class="w-full"
       >
-        <template #content>
+        <template #default>
           <a
             href="https://www.azion.com/en/templates/"
             target="_blank"
@@ -200,7 +200,7 @@
         :padded="false"
         class="w-full"
       >
-        <template #content>
+        <template #default>
           <a
             href="/agent-setup"
             class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"

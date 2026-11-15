@@ -190,7 +190,7 @@
 </script>
 
 <template>
-  <Tooltip text="Select an environment to see its deployment and settings, or add another one">
+  <Tooltip content="Select an environment to see its deployment and settings, or add another one">
     <DropdownMenuRoot
       placement="bottom-end"
       @select="(_event, value) => onSelect(value)"
@@ -231,7 +231,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form

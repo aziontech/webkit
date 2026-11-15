@@ -36,11 +36,11 @@
   )
 
   const isDisabled = computed<boolean>(() => props.disabled || (ctx?.loading.value ?? false))
-  const onClick = (): void => ctx?.reload()
+  const onClick = (event: MouseEvent): void => ctx?.reload(event)
 </script>
 
 <template>
-  <Tooltip :text="t('tableRefreshButton.label')">
+  <Tooltip :content="t('tableRefreshButton.label')">
     <IconButton
       v-bind="$attrs"
       :data-testid="testId"

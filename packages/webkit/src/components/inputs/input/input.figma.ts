@@ -61,14 +61,14 @@ export default {
 >${
           iconLeft
             ? figma.code`
-  <template #prefix>
+  <template #leading>
     <i class="ai ai-globe" />
   </template>`
             : ''
         }${
           iconRight
             ? figma.code`
-  <template #suffix>
+  <template #trailing>
     <i class="ai ai-search" />
   </template>`
             : ''

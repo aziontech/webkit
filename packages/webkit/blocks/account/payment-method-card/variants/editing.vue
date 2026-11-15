@@ -110,7 +110,7 @@
     title="Payment method"
     :padded="false"
   >
-    <template #content>
+    <template #default>
       <div class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)">
         <div
           v-if="!editingCard"

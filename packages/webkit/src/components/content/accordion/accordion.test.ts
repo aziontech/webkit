@@ -59,23 +59,28 @@ describe('Accordion', () => {
       expect(root.getAttribute('data-orientation')).toBe('vertical')
       expect(root.getAttribute('data-type')).toBe('single')
       expect(root.getAttribute('data-size')).toBe('medium')
-      expect(root.getAttribute('data-arrow')).toBe('right')
+      expect(root.getAttribute('data-icon-position')).toBe('trailing')
     })
 
-    it('mirrors type / size / arrowPosition onto root and context-driven sub-components', () => {
+    it('mirrors type / size / iconPosition onto root and context-driven sub-components', () => {
       const view = render(
-        host({ type: 'multiple', size: 'large', arrowPosition: 'left', defaultValue: ['overview'] })
+        host({
+          type: 'multiple',
+          size: 'large',
+          iconPosition: 'leading',
+          defaultValue: ['overview']
+        })
       )
 
       const root = view.getByTestId('content-accordion')
       expect(root.getAttribute('data-type')).toBe('multiple')
       expect(root.getAttribute('data-size')).toBe('large')
-      expect(root.getAttribute('data-arrow')).toBe('left')
+      expect(root.getAttribute('data-icon-position')).toBe('leading')
 
       // Trigger and open content read size/arrow from the injected context.
       const overviewTrigger = trigger(view, 'What is Azion')
       expect(overviewTrigger.getAttribute('data-size')).toBe('large')
-      expect(overviewTrigger.getAttribute('data-arrow')).toBe('left')
+      expect(overviewTrigger.getAttribute('data-icon-position')).toBe('leading')
       expect(regions()[0].getAttribute('data-size')).toBe('large')
     })
 
@@ -410,13 +415,13 @@ describe('Accordion', () => {
     })
 
     // ---- Trigger anatomy ---------------------------------------------------------------
-    it('wraps the trigger button in an h3 by default and honors the level prop', () => {
+    it('wraps the trigger button in an h3 by default and honors the headingLevel prop', () => {
       const Leveled = defineComponent({
         components: { Accordion, AccordionItem, AccordionTrigger, AccordionContent },
         template: `
         <Accordion>
           <AccordionItem value="one">
-            <AccordionTrigger :level="2">Level two heading</AccordionTrigger>
+            <AccordionTrigger :heading-level="2">Level two heading</AccordionTrigger>
             <AccordionContent>Body</AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -94,7 +94,7 @@
                 class="w-full max-w-(--container-sm)"
                 :padded="false"
               >
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
                     <PageHeader
                       title="Set up multi-factor authentication"
@@ -116,7 +116,7 @@
                     >
                       We could not check the code, and multi-factor authentication is still off. Try
                       again in a moment.
-                      <template #action>
+                      <template #actions>
                         <Button
                           label="Retry"
                           kind="secondary"

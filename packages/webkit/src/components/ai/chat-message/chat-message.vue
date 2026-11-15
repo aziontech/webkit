@@ -7,10 +7,10 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import AiLoading from '../ai-loading/ai-loading.vue'
   import { ConversationInjectionKey } from '../conversation/injection-key'
-  import type { ChatMessageFrom, ChatMessageState } from './injection-key'
+  import type { ChatMessageFrom, ChatMessageStatus } from './injection-key'
   import { ChatMessageInjectionKey } from './injection-key'
 
-  export type { ChatMessageFrom, ChatMessageState }
+  export type { ChatMessageFrom, ChatMessageStatus }
 
   defineOptions({
     name: 'ChatMessage',
@@ -24,13 +24,13 @@
     author?: string
     /** Time the message was sent, already formatted for display (`10:42`). Added to the accessible name. */
     timestamp?: string
-    /** Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `complete` shows the actions, `error` shows the error line with Try again. */
-    state?: ChatMessageState
+    /** Lifecycle: `pending` shows the loading text, `streaming` marks the content busy, `success` shows the actions, `error` shows the error line with Try again. */
+    status?: ChatMessageStatus
     /** Follows a message by the same author: drops the avatar and the author line so stacked messages read as one turn. */
     grouped?: boolean
-    /** Error text shown while `state` is `error`. Empty uses the locale catalog. */
+    /** Error text shown while `status` is `error`. Empty uses the locale catalog. */
     errorMessage?: string
-    /** Loading text shown while `state` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`). */
+    /** Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`). */
     loadingLabel?: string
   }
 
@@ -38,7 +38,7 @@
     from: 'assistant',
     author: '',
     timestamp: '',
-    state: 'complete',
+    status: 'success',
     grouped: false,
     errorMessage: '',
     loadingLabel: ''
@@ -54,7 +54,7 @@
     default?(): unknown
     /** Replaces the default avatar (a person glyph for the user, the assistant mark for the AI). */
     avatar?(): unknown
-    /** Inline actions under the content, usually a `ChatMessage.Actions`; shown only when the message is complete. */
+    /** Inline actions under the content, usually a `ChatMessage.Actions`; shown only when the message status is `success`. */
     actions?(): unknown
   }>()
 
@@ -72,36 +72,36 @@
       : name.value
   )
   const alignment = computed(() => conversation?.alignment.value ?? 'split')
-  const busy = computed<boolean>(() => props.state === 'pending' || props.state === 'streaming')
-  const showActions = () => props.state === 'complete' && Boolean(slots.actions)
+  const busy = computed<boolean>(() => props.status === 'pending' || props.status === 'streaming')
+  const showActions = () => props.status === 'success' && Boolean(slots.actions)
 
   const bodyEl = ref<HTMLElement | null>(null)
 
   function announce(): void {
     if (!conversation || props.from === 'user') return
     const text =
-      props.state === 'error'
+      props.status === 'error'
         ? props.errorMessage || t('chatMessage.error')
         : (bodyEl.value?.textContent ?? '')
     conversation.announce(name.value, text.slice(0, 600))
   }
 
   watch(
-    () => props.state,
+    () => props.status,
     (next, previous) => {
-      if (previous !== next && (next === 'complete' || next === 'error')) announce()
+      if (previous !== next && (next === 'success' || next === 'error')) announce()
     },
     { flush: 'post' }
   )
 
   onMounted(() => {
-    if (conversation?.ready.value && (props.state === 'complete' || props.state === 'error'))
+    if (conversation?.ready.value && (props.status === 'success' || props.status === 'error'))
       announce()
   })
 
   provide(ChatMessageInjectionKey, {
     from: computed(() => props.from),
-    state: computed(() => props.state)
+    status: computed(() => props.status)
   })
 </script>
 
@@ -112,7 +112,7 @@
     :aria-busy="busy || undefined"
     :data-testid="testId"
     :data-from="from"
-    :data-status="state"
+    :data-status="status"
     :data-alignment="alignment"
     :data-grouped="grouped || null"
     class="group/message flex w-full min-w-0 gap-(--spacing-sm) data-[from=user]:data-[alignment=split]:flex-row-reverse data-[from=system]:justify-center data-[grouped]:-mt-(--spacing-sm)"
@@ -152,7 +152,7 @@
         </span>
       </p>
       <AiLoading
-        v-if="state === 'pending'"
+        v-if="status === 'pending'"
         :label="loadingLabel"
         :delay="0"
         :data-testid="`${testId}__loading`"
@@ -167,7 +167,7 @@
         <slot />
       </div>
       <div
-        v-if="state === 'error'"
+        v-if="status === 'error'"
         :data-testid="`${testId}__error`"
         class="flex flex-wrap items-center gap-(--spacing-sm) text-body-sm text-(--danger-foreground)"
       >

@@ -36,7 +36,7 @@
   "site": [
     {
       "name": "ContactSplit",
-      "summary": "The Contact page. A valid form fires the `submit` action and sends nothing; toggle `loading`, `submitted` and `error` to see what the site sets back.",
+      "summary": "The Contact page. A valid form fires the `submit` action and sends nothing; toggle `loading`, `submitted` and `failed` to see what the site sets back.",
       "file": "site-contact-split.vue",
       "json": "site-contact-split.json"
     },

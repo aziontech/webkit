@@ -13,7 +13,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the code scrolls to its end while it is, and back after. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -70,7 +70,7 @@ addEventListener("fetch", (event) => {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const GLIDE = globalThis.parseFloat(duration['slow-04'])
 
-  const scrolled = computed(() => props.active && (props.hover || !canHover.value))
+  const scrolled = computed(() => props.active && (props.hovered || !canHover.value))
 
   const scroller = () => {
     const area = hostEl.value?.querySelector<globalThis.HTMLElement>('[data-testid$="__scroll"]')
@@ -139,7 +139,7 @@ addEventListener("fetch", (event) => {
             <CodeBlock
               :tabs="FILES"
               :bordered="false"
-              line-numbers
+              show-line-numbers
               copy-aria-label="Copy the function code"
             />
           </div>

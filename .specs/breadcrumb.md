@@ -3,11 +3,11 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: b561bf054a24b793ab4f10a2fde65dd7c1500076dded60fbb383729b2502edd5
+checksum: c4c93d4664f8ff7e9eda794a2dd65ec6b33a8545836ab09981d154a62fe9d032
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -40,7 +40,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 ## Best practices
 
 - Prefer `items`; only `items` mode collapses the middle segments into an overflow menu when its own box is narrower than 768px. The default slot renders only when `items` is empty, and a hand-composed trail never collapses.
-- Let the last entry be the current page — it is treated as current unless its `current` is set to `false`; give every ancestor an `href`.
+- Let the last entry be the current page — it is treated as current unless its `active` is set to `false`; give every ancestor an `href`.
 - Handle routing in `@navigate`, which receives `(event, href)` for ancestor segments; call `event.preventDefault()` when a client-side router takes over.
 - **Vue Router:** a segment has no `to`; put the route's path in `href` (for a named route, `router.resolve(to).href`) and write `@navigate="(event, href) => { event.preventDefault(); router.push(href) }"`. The segment stays a real link, so open-in-new-tab keeps working; leave a modified click (Ctrl, ⌘, Shift, middle button) to the browser.
 - In slot mode, wrap each `Breadcrumb.Item` in an `li`: `Breadcrumb.List` is an `ol` and the item renders an `a` / `span`, while `Breadcrumb.Separator` is already an `li`.
@@ -74,7 +74,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
       <li>
         <Breadcrumb.Item
           label="my-application"
-          current
+          active
         />
       </li>
     </Breadcrumb.List>
@@ -91,12 +91,12 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ## Props
 
-| Prop        | Type                   | Default    | Required | JSDoc                                                                                                         |
-| ----------- | ---------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------- |
-| `items`     | `BreadcrumbItemData[]` | `() => []` | false    | Ordered path segments; the last entry is treated as the current page when `current` is omitted on that entry. |
-| `ariaLabel` | `string`               | `''`       | false    | Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`).                     |
+| Prop        | Type                   | Default    | Required | JSDoc                                                                                                        |
+| ----------- | ---------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `items`     | `BreadcrumbItemData[]` | `() => []` | false    | Ordered path segments; the last entry is treated as the current page when `active` is omitted on that entry. |
+| `ariaLabel` | `string`               | `''`       | false    | Accessible name of the navigation landmark; empty uses the locale catalog (`Breadcrumb`).                    |
 
-`BreadcrumbItemData`: `{ label: string; href?: string; showIcon?: boolean; icon?: string; current?: boolean }`
+`BreadcrumbItemData`: `{ label: string; href?: string; showIcon?: boolean; icon?: string; active?: boolean }`
 
 ## Events
 
@@ -113,7 +113,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 ## States
 
 - Visual states: inherited from `BreadcrumbItem` (default, hover, focus-visible, disabled)
-- Last segment in `items` is current when its `current` is not explicitly `false`
+- Last segment in `items` is current when its `active` is not explicitly `false`
 
 ### Responsive contract
 

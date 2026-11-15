@@ -7,11 +7,11 @@ import ArticleIndex from './article-index.vue'
 
 const TESTID = 'sections-article-index'
 const LIST = 'Articles'
-const SEARCH = { placeholder: 'Search articles', label: 'Search articles' }
+const SEARCH = { searchPlaceholder: 'Search articles', searchAriaLabel: 'Search articles' }
 
 const items = [
   {
-    key: 'portfolio',
+    id: 'portfolio',
     href: '/blog/portfolio',
     image: '/media/portfolio.png',
     meta: 'Developers • SEP 25, 2026',
@@ -22,7 +22,7 @@ const items = [
     categories: ['Developers']
   },
   {
-    key: 'latency',
+    id: 'latency',
     href: '/blog/latency',
     image: '/media/latency.png',
     meta: 'Serverless • SEP 23, 2026',
@@ -33,7 +33,7 @@ const items = [
     categories: ['Serverless']
   },
   {
-    key: 'alternatives',
+    id: 'alternatives',
     href: '/blog/alternatives',
     image: '/media/alternatives.png',
     meta: 'Security • SEP 22, 2026',
@@ -50,8 +50,8 @@ const band = (props: Record<string, unknown> = {}) =>
       items,
       categories: ['Developers', 'Serverless', 'Security'],
       allLabel: 'All articles',
-      categoryLabel: 'Category',
-      search: SEARCH,
+      categoryAriaLabel: 'Category',
+      ...SEARCH,
       rowLabel: 'Read article',
       moreLabel: 'Load more',
       ariaLabel: LIST,
@@ -93,7 +93,7 @@ describe('ArticleIndex', () => {
         'Serverless',
         'Security'
       ])
-      expect(getByRole('textbox', { name: SEARCH.label })).toBeInTheDocument()
+      expect(getByRole('textbox', { name: SEARCH.searchAriaLabel })).toBeInTheDocument()
     })
 
     it('renders one linked row per article, in order, in the byline layout', () => {
@@ -125,7 +125,7 @@ describe('ArticleIndex', () => {
     it('narrows the list by search, combined with the category', async () => {
       const { getByRole, queryByRole } = band()
 
-      await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'cdn')
+      await userEvent.type(getByRole('textbox', { name: SEARCH.searchAriaLabel }), 'cdn')
       expect(headlines(getByRole)).toEqual(['Best Cloudflare Alternatives'])
 
       await userEvent.click(getByRole('radio', { name: 'Developers' }))
@@ -179,20 +179,23 @@ describe('ArticleIndex', () => {
 
     it('renders the empty state and clears every filter from its action', async () => {
       const { getByRole, getByText } = band({
-        empty: {
-          title: 'No articles match these filters',
-          description: 'Try another category.',
-          action: 'View all articles'
-        }
+        emptyTitle: 'No articles match these filters',
+        emptyDescription: 'Try another category.',
+        emptyActionLabel: 'View all articles'
       })
 
-      await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'nothing like this')
+      await userEvent.type(
+        getByRole('textbox', { name: SEARCH.searchAriaLabel }),
+        'nothing like this'
+      )
       expect(getByText('No articles match these filters')).toBeInTheDocument()
       expect(getByText('Try another category.')).toBeInTheDocument()
 
       await userEvent.click(getByRole('button', { name: 'View all articles' }))
       expect(headlines(getByRole)).toHaveLength(items.length)
-      expect((getByRole('textbox', { name: SEARCH.label }) as HTMLInputElement).value).toBe('')
+      expect(
+        (getByRole('textbox', { name: SEARCH.searchAriaLabel }) as HTMLInputElement).value
+      ).toBe('')
     })
 
     it('names the band by its title, drawn as the h2', () => {
@@ -203,23 +206,23 @@ describe('ArticleIndex', () => {
     })
 
     it('mirrors rowKind on the list', () => {
-      const { getByRole } = band({ rowKind: 'centered' })
+      const { getByRole } = band({ rowKind: 'center' })
 
-      expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('centered')
+      expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('center')
     })
 
     it('draws the client mark when a row has no cover, and an author photo when given', () => {
       const { getByAltText, getByRole } = band({
         items: [
           {
-            key: 'acme',
+            id: 'acme',
             href: 'https://example.com/acme',
             mark: { name: 'Acme', logo: '/logos/acme.svg' },
             meta: 'Case study',
             title: 'Acme moved its storefront',
             authors: [{ name: 'Jane Doe', avatar: '/people/jane.png' }],
             byline: 'Jane Doe · 4 min read',
-            external: true
+            target: '_blank'
           }
         ]
       })
@@ -259,7 +262,7 @@ describe('ArticleIndex', () => {
     })
 
     it('omits the toolbar when there are no categories and no search', () => {
-      const { queryByRole } = band({ categories: [], search: undefined })
+      const { queryByRole } = band({ categories: [], searchPlaceholder: '', searchAriaLabel: '' })
 
       expect(queryByRole('search')).toBeNull()
     })
@@ -279,10 +282,11 @@ describe('ArticleIndex', () => {
 
     it('has no a11y violations in the empty state', async () => {
       const { container, getByRole } = band({
-        empty: { title: 'No articles match these filters', action: 'View all articles' }
+        emptyTitle: 'No articles match these filters',
+        emptyActionLabel: 'View all articles'
       })
 
-      await userEvent.type(getByRole('textbox', { name: SEARCH.label }), 'zzz')
+      await userEvent.type(getByRole('textbox', { name: SEARCH.searchAriaLabel }), 'zzz')
       await expectNoA11yViolations(container)
     })
   })
@@ -293,7 +297,7 @@ describe('ArticleIndex', () => {
 
     const items = [
       {
-        key: 'security-ebook',
+        id: 'security-ebook',
         href: '/lp/security',
         image: '/media/security.png',
         meta: 'E-books • OCT 15, 2026',
@@ -302,7 +306,7 @@ describe('ArticleIndex', () => {
         facets: { contentType: ['E-books'], industry: ['Fintech'] }
       },
       {
-        key: 'mcp',
+        id: 'mcp',
         href: '/blog/mcp',
         image: '/media/mcp.svg',
         meta: 'Blog • OCT 14, 2026',
@@ -311,7 +315,7 @@ describe('ArticleIndex', () => {
         facets: { contentType: ['Blog'], industry: ['Tech'] }
       },
       {
-        key: 'cloudflare',
+        id: 'cloudflare',
         href: '/lp/cloudflare',
         image: '/media/cloudflare.png',
         meta: 'Comparisons • OCT 3, 2026',
@@ -323,13 +327,13 @@ describe('ArticleIndex', () => {
 
     const facets = [
       {
-        key: 'contentType',
+        id: 'contentType',
         label: 'Content type',
         allLabel: 'All content types',
         options: ['E-books', 'Blog', 'Comparisons']
       },
       {
-        key: 'industry',
+        id: 'industry',
         label: 'Industry',
         allLabel: 'All industries',
         options: ['Fintech', 'Tech']
@@ -398,7 +402,7 @@ describe('ArticleIndex', () => {
       it('renders one linked row per resource, in order, in the centered layout', () => {
         const { getByRole } = band()
 
-        expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('centered')
+        expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('center')
         expect(headlines(getByRole)).toEqual(items.map((item) => item.title))
         expect(getByRole('link', { name: items[1]?.title }).getAttribute('href')).toBe(
           items[1]?.href
@@ -474,11 +478,9 @@ describe('ArticleIndex', () => {
 
       it('renders the empty state and resets every facet from its action', async () => {
         const { getByRole, getByText } = band({
-          empty: {
-            title: 'No resources match these filters',
-            description: 'Try another content type or industry.',
-            action: 'View all resources'
-          }
+          emptyTitle: 'No resources match these filters',
+          emptyDescription: 'Try another content type or industry.',
+          emptyActionLabel: 'View all resources'
         })
 
         await pick('Industry', 'Fintech')
@@ -493,7 +495,7 @@ describe('ArticleIndex', () => {
 
       it('searches the options only of a dropdown with more than seven', async () => {
         const long = {
-          key: 'topic',
+          id: 'topic',
           label: 'Topic',
           allLabel: 'All topics',
           options: ['Caching', 'Routing', 'Serverless', 'Security', 'Storage', 'Edge', 'Data', 'AI']
@@ -518,12 +520,12 @@ describe('ArticleIndex', () => {
         const { getByAltText, getByRole } = band({
           items: [
             {
-              key: 'acme',
+              id: 'acme',
               href: 'https://example.com/acme',
               mark: { name: 'Acme', logo: '/logos/acme.svg' },
               meta: 'Success stories',
               title: 'Acme moved its storefront',
-              external: true
+              target: '_blank'
             }
           ]
         })
@@ -549,7 +551,7 @@ describe('ArticleIndex', () => {
   })
 
   describe('filters', () => {
-    const facet = { key: 'topic', label: 'Topic', allLabel: 'All topics', options: ['Developers'] }
+    const facet = { id: 'topic', label: 'Topic', allLabel: 'All topics', options: ['Developers'] }
 
     it('draws only the category picker and the search field by default', () => {
       const { getByRole, queryByRole } = band({ facets: [facet] })
@@ -564,10 +566,10 @@ describe('ArticleIndex', () => {
 
       const list = getByRole('list', { name: LIST })
       expect(list.getAttribute('data-filters')).toBe('facets')
-      expect(list.getAttribute('data-kind')).toBe('centered')
+      expect(list.getAttribute('data-kind')).toBe('center')
       expect(getByRole('combobox', { name: 'Topic' })).toBeInTheDocument()
       expect(queryByRole('radiogroup', { name: 'Category' })).toBeNull()
-      expect(queryByRole('textbox', { name: SEARCH.label })).toBeNull()
+      expect(queryByRole('textbox', { name: SEARCH.searchAriaLabel })).toBeNull()
     })
 
     it('keeps an explicit rowKind over the filter default', () => {

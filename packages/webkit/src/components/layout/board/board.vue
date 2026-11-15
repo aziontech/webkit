@@ -35,8 +35,14 @@
   })
 
   const emit = defineEmits<{
-    'item-move': [payload: { id: string; from: number; to: number }]
-    'item-resize': [payload: { id: string; span: number; height: number | undefined }]
+    'item-move': [
+      event: KeyboardEvent | DragEvent,
+      payload: { id: string; from: number; to: number }
+    ]
+    'item-resize': [
+      event: PointerEvent | KeyboardEvent,
+      payload: { id: string; span: number; height: number | undefined }
+    ]
   }>()
 
   const layout = defineModel<BoardLayoutItem[]>('layout', { default: () => [] })
@@ -73,7 +79,7 @@
     return labels.get(id)?.() || t('board.item', { position: indexOf(id) + 1 })
   }
 
-  function reorder(id: string, to: number) {
+  function reorder(event: KeyboardEvent | DragEvent, id: string, to: number) {
     const from = indexOf(id)
     if (from < 0 || to < 0 || to >= current.value.length || from === to) return
     const next = [...current.value]
@@ -85,7 +91,7 @@
       position: to + 1,
       total: next.length
     })
-    emit('item-move', { id, from, to })
+    emit('item-move', event, { id, from, to })
   }
 
   function update(id: string, patch: Partial<BoardLayoutItem>) {
@@ -119,18 +125,18 @@
         if (labels.get(id) === label) labels.delete(id)
       }
     },
-    move: (id: string, direction: BoardMoveDirection) =>
-      reorder(id, indexOf(id) + (direction === 'up' || direction === 'left' ? -1 : 1)),
+    move: (event: KeyboardEvent, id: string, direction: BoardMoveDirection) =>
+      reorder(event, id, indexOf(id) + (direction === 'up' || direction === 'left' ? -1 : 1)),
     startDrag: (id) => {
       draggingId.value = id
     },
     endDrag: () => {
       draggingId.value = null
     },
-    drop: (targetId) => {
+    drop: (event, targetId) => {
       const id = draggingId.value
       draggingId.value = null
-      if (id && id !== targetId) reorder(id, indexOf(targetId))
+      if (id && id !== targetId) reorder(event, id, indexOf(targetId))
     },
     setSpan: (id, next) =>
       update(id, {
@@ -141,7 +147,7 @@
         height:
           next === undefined ? undefined : clamp(Math.round(next), props.minHeight, props.maxHeight)
       }),
-    announceResize: (id) => {
+    announceResize: (event, id) => {
       const item = current.value[indexOf(id)]
       if (!item) return
       const params = { label: labelOf(id), span: item.span, columns: props.columns }
@@ -149,7 +155,7 @@
         item.height === undefined
           ? t('board.resized', params)
           : t('board.resizedWithHeight', { ...params, height: item.height })
-      emit('item-resize', { id, span: item.span, height: item.height })
+      emit('item-resize', event, { id, span: item.span, height: item.height })
     }
   })
 </script>

@@ -229,7 +229,9 @@
             >
               Metrics
             </h2>
-            <Hint text="Traffic across every resource in the last hour, refreshed each minute." />
+            <Hint
+              content="Traffic across every resource in the last hour, refreshed each minute."
+            />
           </div>
 
           <ul class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 xl:grid-cols-4">
@@ -244,7 +246,7 @@
                 :unit="metric.unit"
               >
                 <template #aside>
-                  <Hint :text="metric.hint" />
+                  <Hint :content="metric.hint" />
                 </template>
               </StatTile>
             </li>
@@ -266,11 +268,11 @@
             >
               Resources
             </h2>
-            <Hint text="The DNS zones you changed most recently." />
+            <Hint content="The DNS zones you changed most recently." />
           </div>
 
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 :data="zones"
                 :columns="zoneColumns"
@@ -345,7 +347,7 @@
           </h2>
 
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 :data="activity"
                 :columns="activityColumns"
@@ -387,7 +389,7 @@
         class="flex w-full min-w-0 flex-col gap-(--layout-section-gap) xl:max-w-(--container-xs) xl:shrink-0"
       >
         <Card title="Monthly usage">
-          <template #content>
+          <template #default>
             <dl class="flex flex-col gap-(--spacing-sm)">
               <div
                 v-for="usage in monthlyUsage"
@@ -413,7 +415,7 @@
         </Card>
 
         <Card title="Marketplace trends">
-          <template #content>
+          <template #default>
             <article
               :key="featured.id"
               :aria-label="`${featured.name}, template ${templateIndex + 1} of ${templates.length}`"
@@ -452,7 +454,7 @@
           </template>
           <template #footer>
             <div class="flex items-center gap-(--spacing-sm)">
-              <Tooltip text="Previous template">
+              <Tooltip content="Previous template">
                 <IconButton
                   icon="ai ai-chevron-left"
                   kind="transparent"
@@ -472,7 +474,7 @@
                   class="size-2 rounded-full bg-(--border-default) transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--text-default) motion-reduce:transition-none"
                 />
               </div>
-              <Tooltip text="Next template">
+              <Tooltip content="Next template">
                 <IconButton
                   icon="ai ai-chevron-right"
                   kind="transparent"

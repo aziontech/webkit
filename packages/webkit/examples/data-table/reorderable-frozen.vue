@@ -53,7 +53,7 @@
     :columns="columns"
     row-key="id"
     reorderable
-    enable-row-selection
+    selectable
     aria-label="Rules, in the order they run"
   >
     <template #cell-status="{ value }">

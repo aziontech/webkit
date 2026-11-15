@@ -14,4 +14,4 @@ const ChatMessageRoot = Object.assign(ChatMessage, {
 
 export default ChatMessageRoot
 export { ChatMessageActions, ChatMessageFeedback }
-export type { ChatMessageFeedbackValue, ChatMessageFrom, ChatMessageState } from './injection-key'
+export type { ChatMessageFeedbackValue, ChatMessageFrom, ChatMessageStatus } from './injection-key'

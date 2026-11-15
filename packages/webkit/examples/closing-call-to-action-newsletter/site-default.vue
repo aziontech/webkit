@@ -48,7 +48,7 @@
       :form="form"
       :loading="loading"
       :submitted="submitted"
-      :error="error"
+      :failed="error"
       @submit="onSubmit"
     />
   </SectionContainer>

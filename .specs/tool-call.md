@@ -3,9 +3,9 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 95f60b8c89f7a7a70a9a9c6c566facfbfe83fc0d73f3b0207d6486df9edb54dc
+checksum: 89f6919feceb2a17cffe91fef2b83325a92f0a9cd91d3fff05b7093fb223945c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -54,14 +54,14 @@ collapsible panel. It is the record of what the agent did; authorization before 
   <ToolCall
     name="list_workloads"
     title="Listing your workloads"
-    state="success"
+    status="success"
   >
     <template #input>
       <CodeBlock
         :tabs="[
           { label: 'JSON', value: 'in', code: '{ &quot;limit&quot;: 10 }', language: 'json' }
         ]"
-        :line-numbers="false"
+        :show-line-numbers="false"
       />
     </template>
   </ToolCall>
@@ -70,7 +70,7 @@ collapsible panel. It is the record of what the agent did; authorization before 
 
 ## Sub-components
 
-_None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `status-indicator`._
+_None. Exports: `"./tool-call"`; type `ToolCallStatus`. Composed DS components: `status-indicator`._
 
 ## Props
 
@@ -78,7 +78,7 @@ _None. Exports: `"./tool-call"`; type `ToolCallState`. Composed DS components: `
 | ------------- | ------------------------------------------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `name`        | `string`                                                     | —           | true     | The tool or command identifier, shown in code font (`list_workloads`).                                                  |
 | `title`       | `string`                                                     | `''`        | false    | What the call does in the reader's words (`Listing your workloads`). Empty shows only the name.                         |
-| `state`       | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false    | `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
+| `status`      | `'pending' \| 'running' \| 'success' \| 'error' \| 'denied'` | `'running'` | false    | `pending` waits for authorization, `running` is in flight, then `success`, `error` or `denied` (the reader refused it). |
 | `defaultOpen` | `boolean`                                                    | `false`     | false    | Initial open state when uncontrolled; details start collapsed.                                                          |
 
 ## v-model
@@ -100,7 +100,7 @@ _No events._
 
 ## States
 
-- `data-status` mirrors `state`; `data-state="open|closed"` only when a slot makes it expandable.
+- `data-status` mirrors `status`; `data-state="open|closed"` only when a slot makes it expandable.
 - Status mapping: `pending` neutral, `running` info with spinner, `success` success, `error` danger, `denied` warning.
 - Without `input` / `output` the row is static (no button).
 
@@ -168,7 +168,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/tool-call/`: States (every state), With details (input and output, error open)._
+_Examples in `packages/webkit/examples/tool-call/`: States (every status), With details (input and output, error open)._
 
 ## Constraints — DO NOT
 

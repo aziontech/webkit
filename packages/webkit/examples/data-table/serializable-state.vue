@@ -50,7 +50,7 @@
       :data="rows"
       :columns="columns"
       row-key="id"
-      enable-sorting
+      sortable
       bordered
     />
   </div>

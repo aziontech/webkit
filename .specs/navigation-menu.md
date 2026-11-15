@@ -3,11 +3,11 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: df5f26de9330d705fc9f84e7818284dc86b114b083820f588f41715f68a67c6d
+checksum: 83339457a0d5d9fa376067f4b564fbe015578eb3a575d999269e545707437917
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -130,10 +130,10 @@ The top bar of a site: a row of links and triggers whose items open large panels
 - `navigation-menu-icon.vue` — Public sub-component `navigation-menu-icon`.
 - `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
 - `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
-- `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`.
+- `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`; `show-highlight` (default `true`) shows the sliding highlight on the root horizontal list.
 - `navigation-menu-popup.vue` — Public sub-component `navigation-menu-popup`.
 - `navigation-menu-portal.vue` — Public sub-component `navigation-menu-portal`.
-- `navigation-menu-positioner.vue` — Public sub-component `navigation-menu-positioner`.
+- `navigation-menu-positioner.vue` — Public sub-component `navigation-menu-positioner`; `side` is `top | end | bottom | start` (logical: `start`/`end` follow the reading direction) and `track-anchor` (default `true`) keeps the popup on the active trigger.
 - `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`.
 - `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`.
 
@@ -155,9 +155,9 @@ The top bar of a site: a row of links and triggers whose items open large panels
 
 ## Events
 
-| Event                  | Payload         | Notes |
-| ---------------------- | --------------- | ----- |
-| `open-change-complete` | `open: boolean` | —     |
+| Event                 | Payload         | Notes                                                       |
+| --------------------- | --------------- | ----------------------------------------------------------- |
+| `open-transition-end` | `open: boolean` | Fires when the popup finishes its open or close transition. |
 
 ## Slots
 
@@ -168,7 +168,8 @@ The top bar of a site: a row of links and triggers whose items open large panels
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-state` values: `open` | `closed` (where applicable)
+- `data-state` values: `open` | `closed` — on the root, the list, each trigger icon, the content, the popup and the backdrop (no `data-open` / `data-closed`)
+- `data-side` on the positioner and the arrow: `top` | `end` | `bottom` | `start`
 
 ## Motion & Animations
 

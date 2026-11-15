@@ -6,7 +6,7 @@
 
   const items = [
     {
-      key: 'ship-portfolio-two-commands-azion-cli',
+      id: 'ship-portfolio-two-commands-azion-cli',
       href: '/blog/ship-portfolio-two-commands-azion-cli',
       image: placeholderImage,
       meta: 'Developers • SEP 25, 2026',
@@ -22,7 +22,7 @@
       categories: ['Developers']
     },
     {
-      key: 'how-to-reduce-ai-agent-latency',
+      id: 'how-to-reduce-ai-agent-latency',
       href: '/blog/how-to-reduce-ai-agent-latency',
       image: placeholderImage,
       meta: 'Serverless • SEP 23, 2026',
@@ -38,7 +38,7 @@
       categories: ['Serverless']
     },
     {
-      key: 'cloudflare-alternatives-and-competitors',
+      id: 'cloudflare-alternatives-and-competitors',
       href: '/blog/cloudflare-alternatives-and-competitors',
       image: placeholderImage,
       meta: 'Security • SEP 22, 2026',
@@ -54,7 +54,7 @@
       categories: ['Security']
     },
     {
-      key: 'which-azion-plan-is-right-for-your-project',
+      id: 'which-azion-plan-is-right-for-your-project',
       href: '/blog/which-azion-plan-is-right-for-your-project',
       image: placeholderImage,
       meta: 'Company news • SEP 22, 2026',
@@ -81,11 +81,6 @@
     'Observability',
     'Routing and networking'
   ]
-
-  const search = {
-    placeholder: 'Search articles',
-    label: 'Search articles'
-  }
 </script>
 
 <template>
@@ -97,11 +92,13 @@
       :items="items"
       :categories="categories"
       all-label="All articles"
-      category-label="Category"
-      :search="search"
+      category-aria-label="Category"
+      search-placeholder="Search articles"
+      search-aria-label="Search articles"
       row-label="Read article"
       more-label="Load more"
-      :empty="{ title: 'No articles match these filters', action: 'View all articles' }"
+      empty-title="No articles match these filters"
+      empty-action-label="View all articles"
       aria-label="Articles"
     />
 

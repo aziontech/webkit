@@ -25,7 +25,7 @@ describe('CardList', () => {
   })
 
   it('selects cards one by one and all at once', async () => {
-    const view = render(CardList, { props: { items, selectionMode: 'multi' }, slots })
+    const view = render(CardList, { props: { items, selectionMode: 'multiple' }, slots })
     await fireEvent.click(view.getByRole('checkbox', { name: 'Bravo' }))
     expect(view.emitted()['update:selectedKeys']?.at(-1)).toEqual([['b']])
     await fireEvent.click(view.getByLabelText('Select all items'))
@@ -37,7 +37,7 @@ describe('CardList', () => {
 
   it('mounts a long list in chunks and still selects every item at once', async () => {
     const many = Array.from({ length: 1000 }, (_, i) => ({ id: `k${i}`, name: `Item ${i}` }))
-    const view = render(CardList, { props: { items: many, selectionMode: 'multi' }, slots })
+    const view = render(CardList, { props: { items: many, selectionMode: 'multiple' }, slots })
     const cards = view.getAllByTestId('data-card-list__card')
     expect(cards.length).toBeGreaterThan(0)
     expect(cards.length).toBeLessThan(many.length)
@@ -113,7 +113,7 @@ describe('CardList', () => {
   })
 
   it('has no axe violations', async () => {
-    const view = render(CardList, { props: { items, selectionMode: 'multi' }, slots })
+    const view = render(CardList, { props: { items, selectionMode: 'multiple' }, slots })
     await expectNoA11yViolations(view.container)
     view.unmount()
     const plain = render(Default)

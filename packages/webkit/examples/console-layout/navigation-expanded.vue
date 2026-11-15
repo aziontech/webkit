@@ -29,9 +29,9 @@
     @search-select="onSearchSelect"
   >
     <template #search>
-      <Command.Group heading="Actions">
+      <Command.Group label="Actions">
         <Command.Item value="action:sidebar">
-          <template #prefix>
+          <template #leading>
             <i
               :class="navigationOpen ? 'ai ai-chevrons-left' : 'ai ai-chevrons-right'"
               aria-hidden="true"

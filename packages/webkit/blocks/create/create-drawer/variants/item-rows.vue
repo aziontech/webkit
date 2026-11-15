@@ -117,7 +117,7 @@
     <Drawer
       v-model:open="drawerOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -146,7 +146,7 @@
               <section class="flex flex-col gap-(--layout-group-gap)">
                 <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -200,7 +200,7 @@
               <section class="flex flex-col gap-(--layout-group-gap)">
                 <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Connection</p>
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Protocol"
@@ -280,7 +280,7 @@
               <section class="flex flex-col gap-(--layout-group-gap)">
                 <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Options</p>
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"

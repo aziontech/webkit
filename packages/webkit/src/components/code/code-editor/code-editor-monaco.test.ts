@@ -178,7 +178,7 @@ describe('CodeEditor', () => {
       expect(typeof api.languages?.getLanguages).toBe('function')
     }, 30_000)
 
-    it('checks a JSON document against its schema and emits the problems through validate', async () => {
+    it('checks a JSON document against its schema and emits the problems through markers-change', async () => {
       const view = render(Schema)
       await waitFor(
         () => expect(view.getByTestId('code-code-editor')).toHaveAttribute('data-mode', 'monaco'),

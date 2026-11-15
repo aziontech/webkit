@@ -15,7 +15,7 @@
     /** Whether the list is open under the trigger. */
     open?: boolean
     /** Index of the option the pointer rests on; a negative index shows none. */
-    highlight?: number
+    highlightedIndex?: number
     /** Whether the trigger shows its focus ring. */
     focused?: boolean
     /** Which side of the trigger the list opens on. */
@@ -29,7 +29,7 @@
   const props = withDefaults(defineProps<Props>(), {
     options: () => [],
     open: false,
-    highlight: -1,
+    highlightedIndex: -1,
     focused: false,
     side: 'bottom',
     ariaLabel: '',
@@ -38,11 +38,11 @@
 
   defineSlots<{
     /** Content before the trigger's value, such as a variable sign. */
-    prefix?(): unknown
+    leading?(): unknown
   }>()
 
   const highlightStyle = computed(() => ({
-    translate: `0 ${Math.max(props.highlight, 0) * 100}%`
+    translate: `0 ${Math.max(props.highlightedIndex, 0) * 100}%`
   }))
 
   const shown = (value: unknown) => String(value)
@@ -51,8 +51,8 @@
 <template>
   <span
     :data-focused="focused || null"
-    :data-open="open || null"
-    class="relative flex w-full rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 data-open:z-1 motion-reduce:transition-none"
+    :data-state="open ? 'open' : 'closed'"
+    class="relative flex w-full rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 data-[state=open]:z-1 motion-reduce:transition-none"
   >
     <Select
       :model-value="value"
@@ -65,10 +65,10 @@
         :aria-label="ariaLabel"
       >
         <template
-          v-if="$slots['prefix']"
-          #prefix
+          v-if="$slots['leading']"
+          #leading
         >
-          <slot name="prefix" />
+          <slot name="leading" />
         </template>
       </Select.Trigger>
 
@@ -85,9 +85,9 @@
         >
           <span class="relative isolate flex flex-col">
             <span
-              :data-visible="highlight >= 0 || null"
+              :data-highlighted="highlightedIndex >= 0 || null"
               :style="highlightStyle"
-              class="absolute inset-x-0 top-0 -z-1 h-8 rounded-(--shape-control) bg-(--bg-hover) opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance data-visible:opacity-100 motion-reduce:transition-none"
+              class="absolute inset-x-0 top-0 -z-1 h-8 rounded-(--shape-control) bg-(--bg-hover) opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance data-highlighted:opacity-100 motion-reduce:transition-none"
             />
             <Select.Option
               v-for="(option, index) in options"

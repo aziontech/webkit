@@ -28,7 +28,7 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
-  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
@@ -65,10 +65,12 @@
     { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
     { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
   ]
-  const roleSeverity = (value: UserRole): TagSeverity =>
-    (({ Owner: 'highlight', Admin: 'info', Developer: 'neutral', Viewer: 'neutral' }) as const)[
-      value
-    ] ?? 'neutral'
+  const roleSeverity = (value: UserRole): TagSeverity | undefined =>
+    value === 'Owner'
+      ? undefined
+      : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
+  const roleVariant = (value: UserRole): TagVariant | undefined =>
+    value === 'Owner' ? 'highlight' : undefined
 
   const DAY = 86_400_000
   const REFERENCE = Date.UTC(2026, 10, 10, 12)
@@ -147,11 +149,11 @@
     (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'email', header: 'Email', grow: 2, minWidth: 220 },
-    { accessorKey: 'role', header: 'Role', enableSorting: true, minWidth: 120 },
+    { accessorKey: 'role', header: 'Role', sortable: true, minWidth: 120 },
     { accessorKey: 'teams', header: 'Teams', grow: 2, minWidth: 220 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { accessorKey: 'lastActive', header: 'Last active', minWidth: 160 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -377,7 +379,7 @@
           </div>
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -390,7 +392,7 @@
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -414,7 +416,7 @@
           severity="danger"
         >
           The users could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -428,12 +430,12 @@
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="usersTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Users"
             >
@@ -461,13 +463,14 @@
               <template #cell-role="{ value }">
                 <Tag
                   :label="value"
+                  :variant="roleVariant(value)"
                   :severity="roleSeverity(value)"
                   size="small"
                 />
               </template>
               <template #cell-teams="{ row }">
                 <Tooltip
-                  :text="row.owner ? 'The account owner is always an administrator.' : ''"
+                  :content="row.owner ? 'The account owner is always an administrator.' : ''"
                   :disabled="!row.owner"
                   class="w-full"
                 >
@@ -594,7 +597,7 @@
 
     <Drawer
       v-model:open="inviteOpen"
-      side="right"
+      side="end"
       size="large"
       :dismissible="!sending"
       :closable="!sending"
@@ -722,6 +725,7 @@
               <KeyValuePairs.Item label="Role">
                 <Tag
                   :label="pending.role"
+                  :variant="roleVariant(pending.role)"
                   :severity="roleSeverity(pending.role)"
                   size="small"
                 />

@@ -5,6 +5,7 @@
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
+  import Input from '@aziontech/webkit/input'
 </script>
 
 <template>
@@ -17,55 +18,38 @@
       />
     </DropdownMenuTrigger>
 
-    <DropdownMenuGroup label="Account">
-      <template #top>
-        <span class="text-label-sm text-(--text-muted)">Signed in as jordan.silva@example.com</span>
-      </template>
+    <template #header>
+      <div class="p-(--spacing-2xs)">
+        <Input
+          placeholder="Search options…"
+          size="small"
+        />
+      </div>
+    </template>
 
+    <DropdownMenuGroup label="Suggestions">
       <DropdownMenuOption
         value="profile"
         label="Profile"
-        command="⌘P"
       />
       <DropdownMenuOption
         value="settings"
         label="Settings"
       />
-
-      <template #bottom>
-        <Button
-          kind="transparent"
-          role="menuitem"
-          size="small"
-          label="Manage account"
-          class="w-full"
-        />
-      </template>
+      <DropdownMenuOption
+        value="billing"
+        label="Billing"
+      />
     </DropdownMenuGroup>
 
-    <DropdownMenuGroup label="Workspace">
-      <template #top>
-        <span class="text-label-sm text-(--text-muted)">Azion · 12 members</span>
-      </template>
-
-      <DropdownMenuOption
-        value="invite"
-        label="Invite members"
-      />
-      <DropdownMenuOption
-        value="logs"
-        label="Audit log"
-      />
-
-      <template #bottom>
+    <template #footer>
+      <div class="flex justify-end p-(--spacing-2xs)">
         <Button
           kind="transparent"
-          role="menuitem"
           size="small"
-          label="Workspace settings"
-          class="w-full"
+          label="View all"
         />
-      </template>
-    </DropdownMenuGroup>
+      </div>
+    </template>
   </DropdownMenuRoot>
 </template>

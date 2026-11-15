@@ -3,9 +3,9 @@ name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 097deb1eef13e6e364d958494ebf4b78665fc15aec6e504abd2bcbc6c054c7d3
+checksum: 8c3aa136610b4c69c07c31d509275882cbe096c9b8759040d59d20bf9f16462a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -50,7 +50,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 - Title is a question naming the action and target; put tool and command names in backticks (code).
 - Match the approve label to the title verb (`Deploy`, `Delete`) when it is not a generic tool call.
 - Never pre-focus or pre-select Approve for a risky action.
-- Do not leave a request pending forever: expire it (`state="expired"`) and have the assistant say nothing ran.
+- Do not leave a request pending forever: expire it (`status="expired"`) and have the assistant say nothing ran.
 - After Deny, the assistant acknowledges in the conversation ("Skipping that step.").
 
 ## Usage
@@ -61,7 +61,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
   import ToolApproval from '@aziontech/webkit/tool-approval'
   import CodeBlock from '@aziontech/webkit/code-block'
 
-  const state = ref('pending')
+  const status = ref('pending')
 </script>
 
 <template>
@@ -69,15 +69,15 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
     title="Allow `azion deploy --env production`?"
     description="Deploys the current build of storefront to production."
     approve-label="Deploy"
-    :state="state"
-    @approve="state = 'approved'"
-    @deny="state = 'denied'"
+    :status="status"
+    @approve="status = 'approved'"
+    @deny="status = 'denied'"
   >
     <CodeBlock
       :tabs="[
         { label: 'Shell', value: 'cmd', code: 'azion deploy --env production', language: 'bash' }
       ]"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </ToolApproval>
 </template>
@@ -85,7 +85,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 
 ## Sub-components
 
-_None. Exports: `"./tool-approval"`; types `ToolApprovalState`, `ToolApprovalKind`.
+_None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalKind`.
 Composed DS components: `button`, `status-indicator`; the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
 
@@ -95,7 +95,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 | -------------------- | -------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `title`              | `string`                                           | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code.      |
 | `description`        | `string`                                           | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                                             |
-| `state`              | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                            |
+| `status`             | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                            |
 | `kind`               | `'default' \| 'danger'`                            | `'default'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
 | `confirmationPhrase` | `string`                                           | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
 | `approveLabel`       | `string`                                           | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`).          |
@@ -117,7 +117,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## States
 
-- `data-status` mirrors `state`; `data-kind`.
+- `data-status` mirrors `status`; `data-kind`.
 - `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `kind="danger"`); Approve disabled until the phrase matches.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 

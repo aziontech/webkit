@@ -5,7 +5,7 @@
 
 <template>
   <HeroTitle
-    mobile-centered
+    :mobile-align="'center'"
     eyebrow="Application Performance and Reliability"
     eyebrow-prefix="//"
     title="Make your applications fast and always reliable"

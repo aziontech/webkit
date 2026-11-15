@@ -163,7 +163,7 @@
 <template>
   <div class="layout-column-form">
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <Item.List>
           <SettingRow
             title="Protect with a firewall"
@@ -178,8 +178,8 @@
         </Item.List>
 
         <div
-          :data-open="enabled || null"
-          class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+          :data-state="enabled ? 'open' : 'closed'"
+          class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
         >
           <div
             class="min-w-0 overflow-hidden"
@@ -235,7 +235,7 @@
                     placeholder="Search firewalls"
                     aria-label="Search firewalls"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"

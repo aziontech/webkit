@@ -13,7 +13,7 @@ const current = instance.getEnum('current', {
 })
 
 export default {
-  example: figma.code`<BreadcrumbItem${label === 'Page Name' ? '' : figma.code` label="${label}"`}${current ? ' current' : ''}${showIcon ? ' show-icon' : ''} />`,
+  example: figma.code`<BreadcrumbItem${label === 'Page Name' ? '' : figma.code` label="${label}"`}${current ? ' active' : ''}${showIcon ? ' show-icon' : ''} />`,
   imports: ["import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'"],
   id: 'breadcrumb-item',
   metadata: { nestable: true }

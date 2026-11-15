@@ -3,11 +3,11 @@ name: pagination
 category: data
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 65739a983268ecd4cbf8d58755bf58ab3496b05e740d6188fb63c75fdf968c7c
+checksum: 26682ab667b20bd897c308769886879ada9d97597006087834db5173ea5d5212
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -38,7 +38,7 @@ Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. 
 
 ## Best practices
 
-- Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `selected` / `disabled` state and every click.
+- Prefer data-driven mode (`total` set); in composition mode the root emits nothing and you own every button's `active` / `disabled` state and every click.
 - `page` is 1-based. Changing the page size through the selector emits `update:pageSize` and resets the page to `1`.
 - Keep `page-size-options` aligned with what your data source accepts; the default is `[10, 25, 50, 100]`.
 - Tune `sibling-count` (default `1`) instead of hiding buttons — it controls how many numbers sit on each side of the current page before the overflow ellipsis.
@@ -65,7 +65,7 @@ Composition mode — one import of the root; every part is reached via dot-notat
     />
     <Pagination.Button
       kind="number"
-      selected
+      active
       >1</Pagination.Button
     >
     <Pagination.Button kind="number">2</Pagination.Button>
@@ -117,7 +117,7 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
      (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
      map points each public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
-- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `selected?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `selected` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
+- `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
 - `pagination-info/pagination-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
 - `pagination-page-size/pagination-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-control)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `ai ai-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Pagination `controls` slot.
 
@@ -167,13 +167,13 @@ _None of its own._ The two-way values above are the root's only emits.
 
 ## States
 
-- Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`
+- Visual states: `default`, `hover`, `active`, `focus-visible`, current page (`active` prop), `disabled`
 - The page buttons render as one **segmented strip**: a single container carrying the `var(--border-default)` border and the `var(--shape-control)` radius, with the buttons butted against each other at zero gap. Only the two end buttons round their outer corners.
 - `data-kind` on PaginationButton: `previous` | `next` | `number` | `more`. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are mutually exclusive: pressing a button drops the hover layer and shows the `var(--bg-active)` layer alone, so the pressed surface reads one step below hover.
-- `data-selected` on PaginationButton mirrors the current-page `selected` prop; `aria-current="page"` set when selected.
+- `data-active` on PaginationButton mirrors the current-page `active` prop; `aria-current="page"` set when active.
 - `data-disabled` on PaginationButton mirrors the `disabled` prop; `disabled` attribute and `aria-disabled` set.
-- Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `selected` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
+- Data-driven mode: `Previous` is disabled on the first page, `Next` on the last; the current page button is `active` (`aria-current="page"`); the overflow ellipsis (`more`) is non-interactive: an `aria-hidden` `span`, out of the tab order, that emits nothing.
 - Responsive: the root is the `@container/pagination`. The page list stays whole at every width (`siblingCount` already caps it at seven slots, e.g. `1 2 3 4 5 … 60`), so a phone footer reads the same numbered strip as a desktop one, as in the design sample; when the box is too narrow for the info text and the controls on one line, the strip and the page-size control wrap together under the info text, aligned to the end.
 - Touch: the buttons and the page-size select are drawn at 28 px on every pointer. On a coarse pointer (`pointer-coarse:`) each button carries an invisible, `aria-hidden` hit area that extends it to 44 px tall (vertical only: the buttons are butted, so the width stays the drawn 28 px), and the select itself grows to 44 px tall inside its 28 px frame, which draws the border, surface and focus ring.
 
@@ -230,7 +230,7 @@ _None of its own._ The two-way values above are the root's only emits.
 ## Examples
 
 - Default — full pagination with page-info text, Previous/numbers/overflow/Next, and a rows-per-page selector.
-- Buttons — PaginationButton in every `kind` (`previous` / `next` / `number` / `more`) and state (`default` / `selected` / `disabled`); justified because the button kinds and the current-page (`selected`) and `disabled` treatments are the core sub-component API and are not all visible in the Default story.
+- Buttons — PaginationButton in every `kind` (`previous` / `next` / `number` / `more`) and state (`default` / `active` / `disabled`); justified because the button kinds and the current-page (`active`) and `disabled` treatments are the core sub-component API and are not all visible in the Default story.
 - DataDriven — `total`-driven pagination with `v-model:page` / `v-model:page-size`; justified because the data-driven mode (internal rendering of info text, windowed page numbers, overflow ellipsis, page-size selector) and its emitted events are a distinct API surface from the slot-composition Default story and cannot be exercised there.
 
 ## Constraints — DO NOT

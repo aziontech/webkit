@@ -50,7 +50,7 @@
     /** The site sent the address: the form gives way to `form.successMessage`. */
     submitted?: boolean
     /** The site could not send the address: `form.errorMessage` shows under the form. */
-    error?: boolean
+    failed?: boolean
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
     hatch?: boolean
   }
@@ -62,7 +62,7 @@
     description: '',
     loading: false,
     submitted: false,
-    error: false,
+    failed: false,
     hatch: true
   })
 
@@ -120,7 +120,7 @@
     :data-testid="testId"
     :data-loading="loading || null"
     :data-submitted="submitted || null"
-    :data-error="error || null"
+    :data-failed="failed || null"
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
@@ -223,7 +223,7 @@
                 </div>
               </form>
               <Alert
-                v-if="error && form.errorMessage"
+                v-if="failed && form.errorMessage"
                 severity="danger"
                 :label="form.errorMessage"
               />

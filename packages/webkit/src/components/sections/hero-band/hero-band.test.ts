@@ -111,7 +111,7 @@ describe('HeroBand', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['centered', 'title-band', 'pixel-floor', 'copy-beside-art'] as const)(
+  it.each(['center', 'title-band', 'pixel-floor', 'copy-beside-art'] as const)(
     'mirrors kind=%s on data-kind',
     (kind) => {
       const { getByTestId } = band({ kind })
@@ -129,7 +129,7 @@ describe('HeroBand', () => {
   })
 
   it('takes the site header token out of a screen-filling band, and nothing out of a band', async () => {
-    const { getByTestId, rerender } = band({ kind: 'centered' })
+    const { getByTestId, rerender } = band({ kind: 'center' })
 
     expect(getByTestId(HERO_TESTID).getAttribute('data-kind')).toBe('screen')
     expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe(
@@ -144,13 +144,13 @@ describe('HeroBand', () => {
   })
 
   it('sets a short headline on the narrow measure in the centered layouts only', () => {
-    for (const kind of ['centered', 'title-band', 'centered-band']) {
+    for (const kind of ['center', 'title-band', 'center-band']) {
       const { getByTestId, unmount } = band({ kind })
       expect(getByTestId(TESTID)).toHaveAttribute('data-title-measure', 'narrow')
       unmount()
     }
     for (const props of [
-      { kind: 'centered', titleLength: 'long' },
+      { kind: 'center', titleLength: 'long' },
       { kind: 'compact-band' },
       { kind: 'copy-beside-art' },
       { kind: 'pixel-floor' }
@@ -180,13 +180,13 @@ describe('HeroBand', () => {
   })
 
   it('sets the centered headline in the narrow column by default', () => {
-    const { getByTestId } = band({ kind: 'centered' })
+    const { getByTestId } = band({ kind: 'center' })
 
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
   })
 
   it('widens the centered headline column with titleLength=long', () => {
-    const { getByTestId } = band({ kind: 'centered', titleLength: 'long' })
+    const { getByTestId } = band({ kind: 'center', titleLength: 'long' })
 
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('3xl')
   })
@@ -203,7 +203,7 @@ describe('HeroBand', () => {
     expect(long.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
   })
 
-  it.each(['centered', 'pixel-floor', 'copy-beside-art'] as const)(
+  it.each(['center', 'pixel-floor', 'copy-beside-art'] as const)(
     'fills a screen with kind=%s',
     (kind) => {
       const { getByTestId } = band({ kind })
@@ -213,7 +213,7 @@ describe('HeroBand', () => {
   )
 
   it('renders the title as the page h1 with its highlight', () => {
-    const { getByRole } = band({ highlight: HIGHLIGHT })
+    const { getByRole } = band({ titleHighlight: HIGHLIGHT })
 
     expect(getByRole('heading', { level: 1 }).textContent?.replace(/\s+/g, ' ').trim()).toBe(
       `${HIGHLIGHT} ${TITLE}`
@@ -221,7 +221,7 @@ describe('HeroBand', () => {
   })
 
   it('names the hero landmark by the full headline', () => {
-    const { getByRole } = band({ highlight: HIGHLIGHT })
+    const { getByRole } = band({ titleHighlight: HIGHLIGHT })
 
     expect(getByRole('region', { name: `${HIGHLIGHT} ${TITLE}` })).toBeInTheDocument()
   })
@@ -363,7 +363,7 @@ describe('HeroBand', () => {
     expect(hero).toHaveAttribute('data-kind', 'screen')
     expect(hero).not.toHaveAttribute('data-padded')
     expect(hero).toContainElement(getByTestId('scene'))
-    expect(getByTestId('marketing-hero-title')).toHaveAttribute('data-centered')
+    expect(getByTestId('marketing-hero-title')).toHaveAttribute('data-align', 'center')
   })
 
   it('renders only the root when title is empty', () => {
@@ -383,12 +383,12 @@ describe('HeroBand', () => {
     await expectNoA11yViolations(container)
   })
 
-  it.each(['centered', 'title-band', 'pixel-floor', 'copy-beside-art', 'copy-on-top-art'] as const)(
+  it.each(['center', 'title-band', 'pixel-floor', 'copy-beside-art', 'copy-on-top-art'] as const)(
     'has no a11y violations with kind=%s',
     async (kind) => {
       const { container } = band({
         kind,
-        highlight: kind === 'centered' ? HIGHLIGHT : '',
+        titleHighlight: kind === 'center' ? HIGHLIGHT : '',
         illustration: kind === 'copy-beside-art' ? 'global-network' : '',
         illustrationAriaLabel: 'A global network'
       })
@@ -398,7 +398,7 @@ describe('HeroBand', () => {
   )
 
   describe('sample opening bands', () => {
-    it.each(['centered-band', 'compact-band'] as const)(
+    it.each(['center-band', 'compact-band'] as const)(
       'renders %s as a band, not a screen',
       (kind) => {
         const { getByTestId } = render(HeroBand, { props: { kind, title: TITLE } })
@@ -409,7 +409,7 @@ describe('HeroBand', () => {
 
     it('renders the top and bottom scene slots', () => {
       const { getByText } = render(HeroBand, {
-        props: { kind: 'centered', title: TITLE },
+        props: { kind: 'center', title: TITLE },
         slots: { top: '<p>Top scene</p>', bottom: '<p>Bottom scene</p>' }
       })
       expect(getByText('Top scene')).toBeInTheDocument()
@@ -431,7 +431,7 @@ describe('HeroBand', () => {
         const nodes = await findAllByTestId(NODE_TESTID)
 
         expect(
-          container.querySelectorAll('[role="listitem"][data-flow-kind="parallel"]')
+          container.querySelectorAll('[role="listitem"][data-slot="flow-parallel"]')
         ).toHaveLength(levels.length)
         expect(nodes.map((node) => node.textContent?.includes('shop-prod'))).toEqual([
           false,
@@ -464,13 +464,13 @@ describe('HeroBand', () => {
         })
 
         expect(await findAllByTestId(NODE_TESTID)).toHaveLength(4)
-        expect(container.querySelectorAll('[data-flow-kind="parallel"]')).toHaveLength(
+        expect(container.querySelectorAll('[data-slot="flow-parallel"]')).toHaveLength(
           levels.length
         )
       })
 
       it('draws nothing in other layouts or when a scene slot is given', () => {
-        const other = band({ kind: 'centered', levels })
+        const other = band({ kind: 'center', levels })
         expect(other.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
         other.unmount()
 

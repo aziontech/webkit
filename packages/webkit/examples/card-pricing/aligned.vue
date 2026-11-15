@@ -5,7 +5,7 @@
 <template>
   <div class="grid grid-cols-[repeat(auto-fit,320px)] gap-6">
     <CardPricing
-      aligned
+      equal-height
       title="Hobby"
       pricing-details=""
       value="Free"
@@ -14,7 +14,7 @@
       action-label="Start for free"
     />
     <CardPricing
-      aligned
+      equal-height
       show-tag
       tag-label="Popular"
       title="Pro"
@@ -25,7 +25,7 @@
       action-label="Continue with Pro"
     />
     <CardPricing
-      aligned
+      equal-height
       title="Enterprise"
       pricing-details="Tailored to your usage requirements and payment terms"
       value="Custom"

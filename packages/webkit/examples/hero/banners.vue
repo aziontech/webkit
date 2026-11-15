@@ -39,7 +39,7 @@
         </template>
 
         <Hero.Title
-          centered
+          align="center"
           eyebrow="#top"
           eyebrow-prefix="//"
           title="Closer to every user"

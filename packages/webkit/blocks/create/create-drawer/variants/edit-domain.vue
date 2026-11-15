@@ -194,7 +194,7 @@
     @select="(_event, value) => onRowAction(value)"
   >
     <DropdownMenuTrigger>
-      <Tooltip text="Row actions">
+      <Tooltip content="Row actions">
         <IconButton
           icon="ai ai-ellipsis"
           kind="outlined"
@@ -232,7 +232,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form

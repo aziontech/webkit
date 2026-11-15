@@ -48,8 +48,8 @@
 
   const emit = defineEmits<{
     error: [event: ErrorBoundaryErrorEvent]
-    /** The region mounts again; carries the click event when the Retry button triggered it. */
-    retry: [event?: Event]
+    /** The region mounts again; carries the Retry click, the event the slot passed, a `retry` Event when the slot passed none, or a `reset` Event for a `resetKey` change. */
+    retry: [event: Event]
   }>()
 
   defineSlots<{
@@ -95,15 +95,14 @@
     const moveFocus = focusWasInside()
     failure.value = null
     generation.value += 1
-    if (event) emit('retry', event)
-    else emit('retry')
+    emit('retry', event ?? new Event('retry'))
     if (moveFocus) void nextTick(() => rootEl.value?.focus({ preventScroll: true }))
   }
 
   watch(
     () => props.resetKey,
     () => {
-      if (failure.value) retry()
+      if (failure.value) retry(new Event('reset'))
     }
   )
 </script>

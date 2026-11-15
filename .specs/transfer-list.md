@@ -3,8 +3,8 @@ name: transfer-list
 category: data
 structure: composition
 status: implemented
-spec_version: 5
-checksum: 27d84ea3e39b3e44561f7fdd1c8649507bc932e93ad563124926784214c71d10
+spec_version: 6
+checksum: 97f77c46d37fe536363b5f71c65cc2d81379396a25e113003f1bb0fe98fa156f
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -38,7 +38,7 @@ Compound, composition API: the root (`<TransferList>`) owns the bound data (`v-m
 
 ## Best practices
 
-- Set `track-by` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.
+- Set `item-key` to a unique item field so rows keep stable keys across moves and the selection follows the record when the lists change; without it rows and the selection are keyed by their index.
 - Set `title` on both `TransferList.Source` and `TransferList.Target`; it is the listbox's accessible name.
 - Listen to `move` for side effects such as saving the assignment instead of diffing `v-model`.
 - Set `:move-on-double-click="false"` when double-click should do something else; `item-double-click` still fires.
@@ -64,7 +64,7 @@ Composition — one import of the root; every part is reached via dot-notation (
 <template>
   <TransferList
     v-model="model"
-    track-by="id"
+    item-key="id"
   >
     <TransferList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>
@@ -114,7 +114,7 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 
 | Prop                | Type      | Default | Required | JSDoc                                                                                                                                                                                                                               |
 | ------------------- | --------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `trackBy`           | `string`  | `''`    | false    | Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index. |
+| `itemKey`           | `string`  | `''`    | false    | Item field that identifies a record, the same name as `card-list`: each row's render key and the key of the selection, so an external change to the v-model pair keeps the selection on its records. Empty falls back to the index. |
 | `disabled`          | `boolean` | `false` | false    | Disables all selection and move controls and applies disabled tokens.                                                                                                                                                               |
 | `moveOnDoubleClick` | `boolean` | `true`  | false    | When true, double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move.                                                                                                    |
 
@@ -128,7 +128,7 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 
 | Event               | Payload                                                                                      | Notes                                                                                                                                                                                                                                    |
 | ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `move`              | `{ direction: 'to-target' \| 'to-source'; items: unknown[] }`                                | Fired after items move between lists, with the moved items.                                                                                                                                                                              |
+| `move`              | `(event: Event, payload: { direction: 'to-target' \| 'to-source'; items: unknown[] })`      | Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items.                                                                                                                                                                              |
 | `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 
 ## Slots
@@ -137,7 +137,7 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 | --------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `default` | `{ move, moveAll, hasSelection, count, disabled, loading }` | Composition slot; receives `<TransferList.Source>`, `<TransferList.Controls>`, and `<TransferList.Target>` in flow order. The scope exposes the move actions plus selection/loading state, so a consumer can render custom controls inside the root in place of `<TransferList.Controls>`. |
 
-The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its instance (via `defineExpose`), so controls rendered **outside** the root can drive it through a template ref. The signatures match the slot scope above.
+The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its instance (via `defineExpose`), so controls rendered **outside** the root can drive it through a template ref. The signatures match the slot scope above: `move(event, direction)` and `moveAll(event, direction)` take the DOM event of the activating control first, so the `move` event can forward it.
 
 ## States
 

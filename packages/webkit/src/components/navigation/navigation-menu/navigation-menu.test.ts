@@ -55,7 +55,7 @@ const renderTree = (template: string) =>
 // Viewport is the overlay host that Content teleports into.
 const COMPOSED = `
   <NavigationMenu aria-label="Primary">
-    <NavigationMenuList :highlight="false">
+    <NavigationMenuList :show-highlight="false">
       <NavigationMenuItem value="solutions">
         <NavigationMenuTrigger>
           Solutions
@@ -152,20 +152,20 @@ describe('NavigationMenu', () => {
     describe('root landmark rendering (navigation-menu-root.vue)', () => {
       it('renders as a nav with the default aria-label, orientation and testid', () => {
         const { getByTestId } = renderTree(
-          `<NavigationMenu><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+          `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
         )
 
         const root = getByTestId('navigation-navigation-menu')
         expect(root.tagName).toBe('NAV')
         expect(root).toHaveAttribute('aria-label', 'Main')
         expect(root).toHaveAttribute('data-orientation', 'horizontal')
-        // Closed by default -> no data-open.
-        expect(root).not.toHaveAttribute('data-open')
+        // Closed by default -> data-state="closed".
+        expect(root).toHaveAttribute('data-state', 'closed')
       })
 
       it('honours a custom aria-label and vertical orientation', () => {
         const { getByTestId } = renderTree(
-          `<NavigationMenu aria-label="Sidebar" orientation="vertical"><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+          `<NavigationMenu aria-label="Sidebar" orientation="vertical"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
         )
 
         const root = getByTestId('navigation-navigation-menu')
@@ -199,7 +199,7 @@ describe('NavigationMenu', () => {
     })
 
     describe('overlay open via injected root state + Teleport', () => {
-      it('clicking a submenu trigger opens the menu, flips aria-expanded/data-open, and teleports the panel to body', async () => {
+      it('clicking a submenu trigger opens the menu, flips aria-expanded/data-state, and teleports the panel to body', async () => {
         const { getByRole, getByTestId } = renderTree(COMPOSED)
 
         const trigger = getByRole('button', { name: /Solutions/ })
@@ -211,7 +211,7 @@ describe('NavigationMenu', () => {
         await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
           timeout: OPEN_TIMEOUT
         })
-        expect(getByTestId('navigation-navigation-menu')).toHaveAttribute('data-open', '')
+        expect(getByTestId('navigation-navigation-menu')).toHaveAttribute('data-state', 'open')
         expect(trigger).toHaveAttribute('data-popup-open', '')
 
         // Content is teleported to document.body — query it there, not the container.
@@ -227,7 +227,7 @@ describe('NavigationMenu', () => {
 
         const content = body().getByTestId('navigation-navigation-menu__content')
         expect(content).toHaveAttribute('role', 'region')
-        expect(content).toHaveAttribute('data-open', '')
+        expect(content).toHaveAttribute('data-state', 'open')
       })
 
       it('switching from one open submenu to another moves aria-expanded to the new trigger', async () => {
@@ -264,7 +264,7 @@ describe('NavigationMenu', () => {
       const TALL_PANEL = (rows: number, wrapperStyle: string) => `
       <div style="${wrapperStyle}">
         <NavigationMenu aria-label="Primary">
-          <NavigationMenuList :highlight="false">
+          <NavigationMenuList :show-highlight="false">
             <NavigationMenuItem value="solutions">
               <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -333,7 +333,7 @@ describe('NavigationMenu', () => {
       const PINNED_PANEL = `
       <div style="position:fixed;left:0;right:0;top:8px">
         <NavigationMenu aria-label="Primary">
-          <NavigationMenuList :highlight="false">
+          <NavigationMenuList :show-highlight="false">
             <NavigationMenuItem value="solutions">
               <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
               <NavigationMenuContent>
@@ -419,7 +419,7 @@ describe('NavigationMenu', () => {
         await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'), {
           timeout: OPEN_TIMEOUT
         })
-        expect(getByTestId('navigation-navigation-menu')).not.toHaveAttribute('data-open')
+        expect(getByTestId('navigation-navigation-menu')).toHaveAttribute('data-state', 'closed')
       })
 
       it('ArrowRight roves to the next trigger and opens it', async () => {
@@ -457,7 +457,7 @@ describe('NavigationMenu', () => {
           },
           template: `
           <NavigationMenu @update:modelValue="onUpdate">
-            <NavigationMenuList :highlight="false">
+            <NavigationMenuList :show-highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
                 <NavigationMenuContent>Panel</NavigationMenuContent>
@@ -494,7 +494,7 @@ describe('NavigationMenu', () => {
           },
           template: `
           <NavigationMenu v-model="value" @update:modelValue="onUpdate">
-            <NavigationMenuList :highlight="false">
+            <NavigationMenuList :show-highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
                 <NavigationMenuContent>Panel</NavigationMenuContent>
@@ -542,7 +542,7 @@ describe('NavigationMenu', () => {
           },
           template: `
           <NavigationMenu v-model="controlled">
-            <NavigationMenuList :highlight="false">
+            <NavigationMenuList :show-highlight="false">
               <NavigationMenuItem value="solutions">
                 <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
                 <NavigationMenuContent>
@@ -624,7 +624,7 @@ describe('NavigationMenu', () => {
         'renders the root landmark for orientation=%s',
         (orientation) => {
           const { getByTestId } = renderTree(
-            `<NavigationMenu orientation="${orientation}"><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+            `<NavigationMenu orientation="${orientation}"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
           )
           expect(getByTestId('navigation-navigation-menu')).toHaveAttribute(
             'data-orientation',
@@ -755,7 +755,7 @@ describe('NavigationMenu', () => {
   describe('audit fixes', () => {
     it('forwards consumer attributes to the nav landmark', () => {
       const { getByTestId } = renderTree(
-        `<NavigationMenu id="site-nav" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+        `<NavigationMenu id="site-nav" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
       const root = getByTestId('navigation-navigation-menu')
       expect(root.id).toBe('site-nav')
@@ -795,7 +795,7 @@ describe('NavigationMenu', () => {
 
     it('renders NavigationMenu.Link as an anchor, and as a trigger button without href', () => {
       const { getByRole } = renderTree(
-        `<NavigationMenu><NavigationMenuList :highlight="false"><NavigationMenuItem><NavigationMenuLink href="https://example.com/pricing" active>Pricing</NavigationMenuLink></NavigationMenuItem><NavigationMenuItem value="more"><NavigationMenuLink>More</NavigationMenuLink></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+        `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuLink href="https://example.com/pricing" active>Pricing</NavigationMenuLink></NavigationMenuItem><NavigationMenuItem value="more"><NavigationMenuLink>More</NavigationMenuLink></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
       const link = getByRole('link', { name: 'Pricing' })
       expect(link).toHaveAttribute('href', 'https://example.com/pricing')

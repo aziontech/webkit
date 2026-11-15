@@ -100,7 +100,7 @@ describe('SiteFooter', () => {
           title: 'Developer',
           links: [
             { label: 'Docs', href: '/docs' },
-            { label: 'Our Community', href: 'https://discord.gg/azion', external: true }
+            { label: 'Our Community', href: 'https://discord.gg/azion', target: '_blank' }
           ]
         }
       ]

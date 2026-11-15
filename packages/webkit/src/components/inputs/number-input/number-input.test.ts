@@ -383,16 +383,16 @@ describe('NumberInput', () => {
   })
 
   describe('slots', () => {
-    it('renders the prefix slot content', () => {
+    it('renders the leading slot content', () => {
       const { getByText } = render(NumberInput, {
-        slots: { prefix: '<span>$</span>' }
+        slots: { leading: '<span>$</span>' }
       })
       expect(getByText('$')).toBeTruthy()
     })
 
-    it('renders the suffix slot content', () => {
+    it('renders the trailing slot content', () => {
       const { getByText } = render(NumberInput, {
-        slots: { suffix: '<span>kg</span>' }
+        slots: { trailing: '<span>kg</span>' }
       })
       expect(getByText('kg')).toBeTruthy()
     })

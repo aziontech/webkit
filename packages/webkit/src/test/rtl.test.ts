@@ -149,7 +149,7 @@ const overlays = () => [
     h(PopoverTrigger, null, () => h('button', { type: 'button' }, 'Popover')),
     h(PopoverContent, null, () => 'Popover body')
   ]),
-  h(Tooltip, { open: true, text: 'Tip' }, () => h('button', { type: 'button' }, 'Tooltip')),
+  h(Tooltip, { open: true, content: 'Tip' }, () => h('button', { type: 'button' }, 'Tooltip')),
   h(Select, { open: true, modelValue: 'a' }, () => [
     h(SelectTrigger, { 'aria-label': 'Pick' }),
     h(SelectContent, null, () => h(SelectOption, { value: 'a', label: 'Alpha' }))

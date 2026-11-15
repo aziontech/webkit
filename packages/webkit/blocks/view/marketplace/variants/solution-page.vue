@@ -253,7 +253,7 @@
             <Tabs.Panel value="applications">
               <div class="pt-(--layout-group-gap)">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <DataTable
                       :data="installs"
                       :columns="columns"
@@ -294,7 +294,7 @@
           aria-label="Install"
         >
           <Card>
-            <template #content>
+            <template #default>
               <form
                 class="flex flex-col gap-(--spacing-md)"
                 novalidate

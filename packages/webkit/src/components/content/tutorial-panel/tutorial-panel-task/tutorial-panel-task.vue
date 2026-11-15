@@ -14,13 +14,16 @@
   interface Props {
     /** What the reader does, in their words. */
     title?: string
-    /** Where the reader is in the tutorial; set by the owner from what the real UI confirmed. */
+    /** Whether the reader has done the task; set by the owner from what the real UI confirmed. */
     status?: TutorialTaskStatus
+    /** The task the reader is on; renders aria-current="step". */
+    active?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     title: '',
-    status: 'upcoming'
+    status: 'pending',
+    active: false
   })
 
   defineSlots<{
@@ -44,8 +47,8 @@
   )
 
   const statusLabel = computed<string>(() => {
-    if (props.status === 'complete') return t('helpPanel.taskComplete')
-    if (props.status === 'current') return t('helpPanel.taskCurrent')
+    if (props.active) return t('helpPanel.taskCurrent')
+    if (props.status === 'success') return t('helpPanel.taskComplete')
     return t('helpPanel.taskNotStarted')
   })
 </script>
@@ -56,22 +59,23 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-status="status"
-    :aria-current="status === 'current' ? 'step' : undefined"
+    :data-active="active || null"
+    :aria-current="active ? 'step' : undefined"
     class="group/task flex w-full items-start gap-(--spacing-2xs)"
   >
     <span
       aria-hidden="true"
-      class="flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[status=current]/task:border-(--secondary) group-data-[status=current]/task:text-(--text-default) group-data-[status=complete]/task:border-(--secondary) group-data-[status=complete]/task:bg-(--secondary) group-data-[status=complete]/task:text-(--secondary-foreground) motion-reduce:transition-none"
+      class="flex size-6 shrink-0 items-center justify-center rounded-(--radius-full) border border-(--border-default) bg-(--bg-surface) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[active]/task:border-(--secondary) group-data-[active]/task:text-(--text-default) group-data-[status=success]/task:border-(--secondary) group-data-[status=success]/task:bg-(--secondary) group-data-[status=success]/task:text-(--secondary-foreground) motion-reduce:transition-none"
     >
       <span
-        v-if="status === 'complete'"
+        v-if="status === 'success' && !active"
         class="ai ai-check text-label-sm"
       />
       <span v-else>{{ index }}</span>
     </span>
     <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
       <span
-        class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[status=current]/task:text-(--text-default) group-data-[status=complete]/task:text-(--text-default) motion-reduce:transition-none"
+        class="flex min-h-6 items-center text-label-md text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance group-data-[active]/task:text-(--text-default) group-data-[status=success]/task:text-(--text-default) motion-reduce:transition-none"
         >{{ title }}</span
       >
       <span class="sr-only">{{ statusLabel }}</span>

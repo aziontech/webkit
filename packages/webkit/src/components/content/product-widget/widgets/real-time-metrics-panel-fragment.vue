@@ -12,7 +12,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; the elevator runs through the panels only while it is. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -95,11 +95,11 @@
       >
         <MockupElevator
           :count="PANELS.length"
-          :active="hover || !canHover"
+          :active="hovered || !canHover"
         >
           <template #default="{ index }">
             <Card>
-              <template #content>
+              <template #default>
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                   <div class="flex min-w-0 items-baseline justify-between gap-(--spacing-xs)">
                     <span class="min-w-0 truncate text-label-md text-(--text-default)">

@@ -217,7 +217,7 @@
               :delta="metric.delta"
             >
               <template #aside>
-                <Hint :text="metric.hint" />
+                <Hint :content="metric.hint" />
               </template>
             </StatTile>
           </StatTileGroup>
@@ -235,7 +235,7 @@
               :padded="false"
               class="w-full"
             >
-              <template #content>
+              <template #default>
                 <Item
                   href="/agents/setup"
                   class="h-full"
@@ -274,7 +274,7 @@
             </Card>
             <div class="absolute end-(--spacing-xs) top-(--spacing-xs)">
               <Tooltip
-                text="Dismiss"
+                content="Dismiss"
                 placement="top"
               >
                 <IconButton

@@ -3,8 +3,8 @@ name: resizable
 category: layout
 structure: composition
 status: implemented
-spec_version: 3
-checksum: be5a2f62fddd6efb27d8c88766e52537915a0640112740c2bd57a17c8ca4d1ad
+spec_version: 4
+checksum: bfe1af11a096eceba31ba43c0e3bd7647a2731416cc362c8bab473e5cb909726
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit
 created: 2026-08-16
@@ -55,7 +55,7 @@ It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's
   import Resizable from '@aziontech/webkit/resizable'
 
   const previewWidth = ref(480)
-  const previewExpanded = ref(true)
+  const previewOpen = ref(true)
 </script>
 
 <template>
@@ -68,7 +68,7 @@ It exists because `Sidebar` was being used for both jobs. `Sidebar` is the app's
 
     <Resizable.Pane
       v-model:basis="previewWidth"
-      v-model:expanded="previewExpanded"
+      v-model:open="previewOpen"
       collapsible
       :min="280"
       :max="720"
@@ -101,7 +101,7 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `basis` — `number`, default unset. The pane length in pixels along the group axis, two-way through `v-model:basis`. Leave unset for the pane that absorbs the remaining space.
 - `min` — `number`, default `96`. Smallest length in pixels a drag may set.
 - `max` — `number`, default `720`. Largest length in pixels a drag may set.
-- `expanded` — `boolean`, default `true`. Whether the pane is shown at its length; `false` renders it at zero length. Two-way through `v-model:expanded`. The pane stays mounted, so its content keeps its state.
+- `open` — `boolean`, default `true`. Whether the pane is shown at its length; `false` renders it at zero length. Two-way through `v-model:open`. The pane stays mounted, so its content keeps its state.
 - `collapsible` — `boolean`, default `false`. Whether dragging past the minimum collapses the pane instead of stopping at it.
 - `ariaLabel` — `string`, default `''`. Accessible name for the region.
 
@@ -111,7 +111,7 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `disabled` — `boolean`, default `false`. Disables the drag and the keyboard nudge, and removes the separator from the tab order.
 
 `resizable-pane` events: `update:basis` (`number`) on every step of a drag and on a
-keyboard nudge, and `update:expanded` (`boolean`) when a drag past the minimum or `Enter` on the
+keyboard nudge, and `update:open` (`boolean`) when a drag past the minimum or `Enter` on the
 handle collapses the pane, or a drag back out restores it. Each is the `v-model` half of the props above.
 
 `resizable-handle` emits nothing: it drives the pane beside it through the group's
@@ -145,7 +145,7 @@ PANE that owns the two-way values (see Sub-components) and the root only carries
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - `data-orientation`: `horizontal` | `vertical` — on the root, and mirrored onto every pane and handle so each part styles itself off one fact.
-- `data-collapsed` is set while the pane is collapsed (`expanded` false)
+- `data-state` is `closed` while the pane is collapsed (`open` false) and `open` otherwise
 - `data-resizing` on the handle while a drag is in flight
 - `data-disabled` mirrors the handle's `disabled` prop
 - Reflow: the group clips on its main axis (`overflow-x-clip` / `overflow-y-clip`), so the hit area of a handle at the edge (a collapsed end pane) never adds overflow.
@@ -194,7 +194,7 @@ _none_
 
 - Default
 - Orientations — composite story rendering a horizontal group and a vertical group side by side. The axis is this component's only variant axis, so it takes the place a `Types` story would.
-- Collapsed — the state story for `collapsible` + `v-model:expanded`, showing a pane at zero length and the control outside it that brings it back.
+- Collapsed — the state story for `collapsible` + `v-model:open`, showing a pane at zero length and the control outside it that brings it back.
 - Disabled — the state story for the handle's `disabled` prop.
 
 There is no `Sizes` story: the component has no `size` prop, because a pane's length is data the reader sets rather than a token the author picks.

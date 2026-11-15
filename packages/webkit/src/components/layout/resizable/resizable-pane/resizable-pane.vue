@@ -26,7 +26,7 @@
   /** Pane length in px along the group axis; a pane that never receives one is flexible and absorbs the remainder. */
   const basis = defineModel<number | undefined>('basis', { default: undefined })
   /** Whether the pane is shown at its length; false renders it at zero length. It stays mounted, so its content keeps its state. */
-  const expanded = defineModel<boolean>('expanded', { default: true })
+  const open = defineModel<boolean>('open', { default: true })
 
   defineSlots<{
     default(): unknown
@@ -42,9 +42,9 @@
   )
 
   const flexible = computed(() => basis.value === undefined)
-  const isCollapsed = computed(() => !expanded.value)
+  const isCollapsed = computed(() => !open.value)
   const setCollapsed = (value: boolean) => {
-    expanded.value = !value
+    open.value = !value
   }
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
@@ -110,7 +110,7 @@
     :aria-label="ariaLabel || undefined"
     :data-testid="testId"
     :data-orientation="orientation"
-    :data-collapsed="isCollapsed || null"
+    :data-state="isCollapsed ? 'closed' : 'open'"
     :data-flexible="(flexible && !isCollapsed) || null"
     :style="paneStyle"
     class="flex min-h-0 min-w-0 flex-col overflow-hidden"

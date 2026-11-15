@@ -364,7 +364,7 @@
     >
       <DocPageHeader
         description="Terminal agent that reads your codebase, runs commands and edits files. Made by Anthropic."
-        :breadcrumb="crumbs"
+        :breadcrumbs="crumbs"
         last-updated="2026-08-26"
         :meta-actions="metaActions"
       >
@@ -637,8 +637,8 @@
         </DocCardGroup>
       </DocProse>
       <DocPrevNext
-        :previous="{ title: 'Agent setup', href: '/docs/agent-setup' }"
-        :next="{ title: 'Cursor', href: '/docs/agent-setup/cursor' }"
+        :previous="{ label: 'Agent setup', href: '/docs/agent-setup' }"
+        :next="{ label: 'Cursor', href: '/docs/agent-setup/cursor' }"
       />
     </article>
 

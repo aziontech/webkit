@@ -10,7 +10,7 @@
     /** Whether this fragment is the one showing. */
     active?: boolean
     /** Whether the pointer is over the fragment's card; this fragment holds still either way. */
-    hover?: boolean
+    hovered?: boolean
   }
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
@@ -79,7 +79,7 @@
           <CodeBlock
             :tabs="FILES"
             :bordered="false"
-            line-numbers
+            show-line-numbers
             copy-aria-label="Copy the function code"
           />
         </ShellMockupPart>

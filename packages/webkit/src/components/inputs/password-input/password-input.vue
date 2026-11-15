@@ -52,9 +52,9 @@
 
   defineSlots<{
     /** Leading adornment at the inline start of the field (an icon, a unit). */
-    prefix(): unknown
+    leading(): unknown
     /** Trailing adornment at the inline end of the field. */
-    suffix(): unknown
+    trailing(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -89,8 +89,8 @@
     return rest
   })
 
-  const hasIconLeft = () => Boolean(slots['prefix'])
-  const hasIconRight = () => !props.toggleable && Boolean(slots['suffix'])
+  const hasLeading = () => Boolean(slots['leading'])
+  const hasTrailing = () => !props.toggleable && Boolean(slots['trailing'])
 
   const toggleLabel = computed(() =>
     visible.value ? t('passwordInput.hide') : t('passwordInput.show')
@@ -117,10 +117,10 @@
     :data-disabled="isDisabled || null"
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
-    :data-has-icon-left="hasIconLeft() || null"
-    :data-has-icon-right="hasIconRight() || null"
+    :data-leading="hasLeading() || null"
+    :data-trailing="hasTrailing() || null"
     :data-toggleable="toggleable || null"
-    :data-visible="visible || null"
+    :data-revealed="visible || null"
     :data-monospace="monospace || null"
     :class="[
       'group relative inline-flex items-center w-full h-10',
@@ -137,11 +137,11 @@
     ]"
   >
     <span
-      v-if="hasIconLeft()"
+      v-if="hasLeading()"
       class="inline-flex shrink-0 items-center justify-center ps-(--spacing-md) text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="prefix" />
+      <slot name="leading" />
     </span>
 
     <input
@@ -160,17 +160,17 @@
       :aria-required="isRequired || undefined"
       :data-testid="testId"
       dir="auto"
-      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[has-icon-left]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[leading]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
       v-bind="passthroughAttrs"
       @input="onInput"
     />
 
     <span
-      v-if="hasIconRight()"
+      v-if="hasTrailing()"
       class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
       aria-hidden="true"
     >
-      <slot name="suffix" />
+      <slot name="trailing" />
     </span>
 
     <IconButton

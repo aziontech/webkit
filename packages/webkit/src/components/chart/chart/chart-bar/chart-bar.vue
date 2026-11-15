@@ -16,7 +16,7 @@
     /** Stacks the series in one bar per category instead of grouping them side by side. */
     stacked?: boolean
     /** Draws the formatted value at each bar end, for ordered bars. */
-    labeled?: boolean
+    showLabels?: boolean
     /** Bar form. `histogram` fills each category band less 1px, stacks segments with no gap, squares both ends and ends the value axis at the tallest column, for event volume over time buckets. */
     kind?: ChartBarKind
   }
@@ -24,7 +24,7 @@
   const props = withDefaults(defineProps<Props>(), {
     ids: () => [],
     stacked: false,
-    labeled: false,
+    showLabels: false,
     kind: 'default'
   })
 
@@ -36,7 +36,7 @@
     ctx.registerMark(() => ({
       kind: 'bar',
       stacked: props.stacked,
-      labeled: props.labeled,
+      labeled: props.showLabels,
       ids: ids.value,
       fit: props.kind === 'histogram'
     }))
@@ -133,7 +133,7 @@
           })
         })
         const total = layers[layers.length - 1]?.upper[index] ?? 0
-        if (props.labeled && total > 0) labels.push(labelAt(index, center, scale(total), total))
+        if (props.showLabels && total > 0) labels.push(labelAt(index, center, scale(total), total))
       }
     } else {
       const series = Math.max(1, list.length)
@@ -158,7 +158,7 @@
             color: entry.color,
             delay: delayOf(index)
           })
-          if (props.labeled && series === 1) labels.push(labelAt(index, center, end, value))
+          if (props.showLabels && series === 1) labels.push(labelAt(index, center, end, value))
         })
       }
     }

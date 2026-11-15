@@ -413,12 +413,12 @@ describe('ConsoleLayout', () => {
       expect(header.getByRole('button', { name: 'New' })).toBeTruthy()
     })
 
-    it('renders a header-start switcher and a composed breadcrumb trail', () => {
+    it('renders a header-leading switcher and a composed breadcrumb trail', () => {
       const { getByRole } = mount(
         { breadcrumbs: [{ label: 'Ignored' }] },
         {},
         {
-          'header-start': () => h('button', { type: 'button' }, 'Switch account'),
+          'header-leading': () => h('button', { type: 'button' }, 'Switch account'),
           breadcrumbs: () => h('span', 'Composed trail')
         }
       )
@@ -665,12 +665,12 @@ describe('ConsoleLayout', () => {
 
     it('renders the rail expanded by default', () => {
       const view = mount()
-      expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+      expect(rail(view).getAttribute('data-state')).toBe('open')
     })
 
     it('collapses the rail when navigationOpen is false', () => {
       const view = mount({ navigationOpen: false })
-      expect(rail(view).hasAttribute('data-collapsed')).toBe(true)
+      expect(rail(view).getAttribute('data-state')).toBe('closed')
     })
 
     it('emits update:navigationOpen when the rail collapses itself', async () => {
@@ -678,12 +678,12 @@ describe('ConsoleLayout', () => {
       const view = mount({ 'onUpdate:navigationOpen': onOpen })
       await userEvent.click(view.getByRole('button', { name: 'Collapse sidebar' }))
       expect(onOpen).toHaveBeenCalledWith(false)
-      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+      await waitFor(() => expect(rail(view).getAttribute('data-state')).toBe('closed'))
     })
 
     it('ignores the removed navigationExpanded model', () => {
       const view = mount({ navigationExpanded: false })
-      expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+      expect(rail(view).getAttribute('data-state')).toBe('open')
     })
 
     it('toggles navigationOpen with Ctrl+B / Cmd+B on wide layouts', async () => {
@@ -691,10 +691,10 @@ describe('ConsoleLayout', () => {
       const view = mount({ 'onUpdate:navigationOpen': onExpanded })
       await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
       expect(onExpanded).toHaveBeenLastCalledWith(false)
-      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+      await waitFor(() => expect(rail(view).getAttribute('data-state')).toBe('closed'))
       await fireEvent.keyDown(document.body, { key: 'b', metaKey: true })
       expect(onExpanded).toHaveBeenLastCalledWith(true)
-      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
+      await waitFor(() => expect(rail(view).getAttribute('data-state')).toBe('open'))
     })
 
     it('does not handle Ctrl+B while the navigation is the compact drawer', async () => {
@@ -717,7 +717,7 @@ describe('ConsoleLayout', () => {
         })
       )
       await waitFor(() => rail(view))
-      expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
+      expect(rail(view).getAttribute('data-state')).toBe('open')
 
       await userEvent.click(
         within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
@@ -726,7 +726,7 @@ describe('ConsoleLayout', () => {
       )
       const dialog = await waitFor(() => within(document.body).getByRole('dialog'))
       await userEvent.click(within(dialog).getByText('Collapse sidebar'))
-      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+      await waitFor(() => expect(rail(view).getAttribute('data-state')).toBe('closed'))
 
       await userEvent.click(
         within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
@@ -735,7 +735,7 @@ describe('ConsoleLayout', () => {
       )
       const reopened = await waitFor(() => within(document.body).getByRole('dialog'))
       await userEvent.click(within(reopened).getByText('Expand sidebar'))
-      await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
+      await waitFor(() => expect(rail(view).getAttribute('data-state')).toBe('open'))
     })
   })
 

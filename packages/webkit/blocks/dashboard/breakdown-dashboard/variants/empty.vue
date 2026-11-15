@@ -93,7 +93,7 @@
       accessorKey: 'rank',
       header: 'Rank',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 64
     },
     {
@@ -101,7 +101,7 @@
       accessorKey: 'name',
       header: 'Name',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       grow: 2
     },
@@ -110,7 +110,7 @@
       accessorKey: 'category',
       header: 'Category',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 120
     },
     {
@@ -118,7 +118,7 @@
       accessorKey: 'amount',
       header: 'Amount',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       minWidth: 104
     },
     {
@@ -126,7 +126,7 @@
       accessorKey: 'share',
       header: 'Share of total',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       minWidth: 160
     },
     {
@@ -134,7 +134,7 @@
       accessorKey: 'change',
       header: 'Change',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       minWidth: 104
     }
   ]
@@ -248,7 +248,7 @@
             :loading="loading"
           >
             <template #aside>
-              <Hint :text="figure.description" />
+              <Hint :content="figure.description" />
             </template>
           </StatTile>
         </li>
@@ -262,7 +262,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Spend by category</ChartCard.Title>
               <Hint
-                text="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
+                content="Monthly spend stacked by category; the top edge is the total. Legend totals sum the whole range."
               />
             </span>
             <ChartCard.Action>
@@ -322,7 +322,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Current split</ChartCard.Title>
-              <Hint text="This month’s spend by category, with the total in the center." />
+              <Hint content="This month’s spend by category, with the total in the center." />
             </span>
             <ChartCard.Action>
               <DropdownMenu placement="bottom-end">
@@ -362,7 +362,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Top contributors</ChartCard.Title>
               <Hint
-                text="The resources that cost the most this month, their share of the total and the change against last month."
+                content="The resources that cost the most this month, their share of the total and the change against last month."
               />
             </span>
             <ChartCard.Action>
@@ -390,7 +390,7 @@
               :data="contributors"
               :columns="contributorColumns"
               row-key="id"
-              enable-sorting
+              sortable
               density="compact"
               bordered
               :loading="loading"

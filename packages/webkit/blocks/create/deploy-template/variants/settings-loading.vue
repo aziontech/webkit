@@ -18,7 +18,7 @@
 
   const breadcrumb = [
     { label: 'Start from a template' },
-    { label: 'Nuxt E-commerce', current: true }
+    { label: 'Nuxt E-commerce', active: true }
   ]
 
   const scopes: SelectOptionItem[] = [
@@ -80,7 +80,7 @@
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-2xl)"
       >
         <Card class="w-full">
-          <template #content>
+          <template #default>
             <div class="flex w-full items-start gap-(--spacing-md)">
               <span
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -138,7 +138,7 @@
           class="flex w-full flex-col items-center gap-(--spacing-xl)"
         >
           <Card class="w-full">
-            <template #content>
+            <template #default>
               <div class="flex flex-col gap-(--spacing-lg)">
                 <div class="flex flex-col gap-(--spacing-2xs)">
                   <h2 class="text-heading-xs text-(--text-default)">Deploy your project</h2>
@@ -182,7 +182,7 @@
                         placeholder="my-repository"
                       />
                       <InputGroupAddon>
-                        <Tooltip text="Repository visibility">
+                        <Tooltip content="Repository visibility">
                           <Switch
                             v-model="isPublic"
                             kind="privacy"

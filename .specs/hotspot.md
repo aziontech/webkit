@@ -3,9 +3,9 @@ name: hotspot
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 15ec4002fc88b2e3d342eb9b0b8aaddb7c01c1c0a469b1b970f4584fb79e983f
+checksum: 2b769524fd9762e1c4f270637bbb01fac1cbceeeb75c1fa7e22cc9f6142eb631
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -81,8 +81,8 @@ _No events — moves go through the `TutorialPanel.Provider`, which emits `updat
 
 ## States
 
-- Visual states: `inactive` (no marker), `active` (static marker: the step belongs to the running tutorial), `current` (marker filled and pulsing, popover open), `dismissed` (current step closed by the reader: marker filled, no pulse, popover closed)
-- `data-active` on the root when the marker shows; `data-current` on the root and on the marker for the current step
+- Visual states: `idle` (no marker), `marked` (static marker: the step belongs to the running tutorial), `active` (the current step: marker filled and pulsing, popover open), `dismissed` (active step closed by the reader: marker filled, no pulse, popover closed)
+- `data-marker` on the root when the marker shows; `data-active` on the root and on the marker for the current step (the step you are on)
 - `data-side` mirrors `side`
 - The popover's `data-state` is `open` | `closed` (owned by `Popover`)
 

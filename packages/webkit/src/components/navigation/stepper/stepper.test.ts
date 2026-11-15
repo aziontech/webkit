@@ -11,7 +11,7 @@ const Rail = defineComponent({
   components: { Stepper, StepperStep },
   props: {
     start: { type: String, default: 'host' },
-    configureState: { type: String, default: 'upcoming' },
+    configureStatus: { type: String, default: 'pending' },
     reviewDisabled: { type: Boolean, default: false }
   },
   data() {
@@ -23,9 +23,9 @@ const Rail = defineComponent({
         value="host"
         title="Where it runs"
         description="The firewall that reads this list."
-        state="complete"
+        status="success"
       />
-      <StepperStep value="configure" title="Configure" :state="configureState" />
+      <StepperStep value="configure" title="Configure" :status="configureStatus" />
       <StepperStep value="review" title="Review" :disabled="reviewDisabled" />
     </Stepper>
   `
@@ -35,11 +35,11 @@ const Single = defineComponent({
   components: { Stepper, StepperStep },
   props: {
     current: { type: String, default: '' },
-    state: { type: String, default: 'upcoming' }
+    status: { type: String, default: 'pending' }
   },
   template: `
     <Stepper :model-value="current" aria-label="Steps">
-      <StepperStep value="one" title="One" :state="state" />
+      <StepperStep value="one" title="One" :status="status" />
     </Stepper>
   `
 })
@@ -47,7 +47,9 @@ const Single = defineComponent({
 const stepsOf = (view: ReturnType<typeof render>) => view.getAllByTestId('navigation-stepper-step')
 
 const statesOf = (view: ReturnType<typeof render>) =>
-  stepsOf(view).map((step) => step.getAttribute('data-state'))
+  stepsOf(view).map((step) =>
+    step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
+  )
 
 const buttonIn = (step: Element) => step.querySelector('button') as globalThis.HTMLButtonElement
 
@@ -144,48 +146,47 @@ describe('Stepper', () => {
       ])
     })
 
-    it('replaces the number with the state glyph once a step is no longer upcoming', () => {
+    it('replaces the number with the state glyph once a step is no longer pending', () => {
       const view = render(Rail, { props: { start: '' } })
       expect(stepsOf(view)[0].textContent).not.toContain('1')
       expect(stepsOf(view)[1].textContent).toContain('2')
     })
   })
 
-  describe('state prop maps to data-state', () => {
-    it.each([
-      ['upcoming', 'upcoming'],
-      ['complete', 'complete'],
-      ['error', 'error'],
-      ['loading', 'loading']
-    ])(
-      'renders state="%s" as data-state="%s" when it is not the current step',
-      (state, expected) => {
-        const view = render(Single, { props: { current: 'other', state } })
-        expect(stepsOf(view)[0].getAttribute('data-state')).toBe(expected)
+  describe('status prop maps to data-status', () => {
+    it.each(['pending', 'success', 'error', 'running'])(
+      'renders status="%s" as data-status when it is not the active step',
+      (status) => {
+        const view = render(Single, { props: { current: 'other', status } })
+        const step = stepsOf(view)[0]
+        expect(step.getAttribute('data-status')).toBe(status)
+        expect(step.hasAttribute('data-active')).toBe(false)
+        expect(step.hasAttribute('data-completed')).toBe(status === 'success')
+        expect(step.hasAttribute('data-state')).toBe(false)
       }
     )
   })
 
-  describe('current is derived from the root v-model', () => {
+  describe('active is derived from the root v-model', () => {
     it('marks the step whose value matches the model', () => {
       const view = render(Rail, { props: { start: 'configure' } })
-      expect(statesOf(view)).toEqual(['complete', 'current', 'upcoming'])
-      expect(view.getByTestId('navigation-stepper').getAttribute('data-current')).toBe('configure')
+      expect(statesOf(view)).toEqual(['success', 'active', 'pending'])
+      expect(view.getByTestId('navigation-stepper').getAttribute('data-active')).toBe('configure')
     })
 
     it('marks no step when the model matches nothing', () => {
       const view = render(Rail, { props: { start: '' } })
-      expect(statesOf(view)).toEqual(['complete', 'upcoming', 'upcoming'])
+      expect(statesOf(view)).toEqual(['success', 'pending', 'pending'])
     })
 
     it.each([
       ['error', 'error'],
-      ['loading', 'loading'],
-      ['complete', 'current'],
-      ['upcoming', 'current']
-    ])('resolves state="%s" on the current step as data-state="%s"', (state, expected) => {
-      const view = render(Single, { props: { current: 'one', state } })
-      expect(stepsOf(view)[0].getAttribute('data-state')).toBe(expected)
+      ['running', 'running'],
+      ['success', 'active'],
+      ['pending', 'active']
+    ])('resolves status="%s" on the active step as %s', (status, expected) => {
+      const view = render(Single, { props: { current: 'one', status } })
+      expect(statesOf(view)).toEqual([expected])
     })
   })
 
@@ -193,12 +194,12 @@ describe('Stepper', () => {
     it('writes the clicked step value back to the model', async () => {
       const view = render(Rail, { props: { start: 'host' } })
       const root = view.getByTestId('navigation-stepper')
-      expect(root.getAttribute('data-current')).toBe('host')
+      expect(root.getAttribute('data-active')).toBe('host')
 
       await userEvent.click(buttonIn(stepsOf(view)[1]))
 
-      expect(root.getAttribute('data-current')).toBe('configure')
-      expect(statesOf(view)).toEqual(['complete', 'current', 'upcoming'])
+      expect(root.getAttribute('data-active')).toBe('configure')
+      expect(statesOf(view)).toEqual(['success', 'active', 'pending'])
     })
 
     it('does not move the model when the step is disabled', async () => {
@@ -210,8 +211,8 @@ describe('Stepper', () => {
 
       await userEvent.click(review)
 
-      expect(root.getAttribute('data-current')).toBe('host')
-      expect(statesOf(view)).toEqual(['current', 'upcoming', 'upcoming'])
+      expect(root.getAttribute('data-active')).toBe('host')
+      expect(statesOf(view)).toEqual(['active', 'pending', 'pending'])
     })
 
     it('mirrors the disabled prop onto the step', () => {
@@ -234,7 +235,7 @@ describe('Stepper', () => {
     })
 
     it('marks a loading step aria-busy and leaves the others alone', () => {
-      const view = render(Rail, { props: { start: 'host', configureState: 'loading' } })
+      const view = render(Rail, { props: { start: 'host', configureStatus: 'running' } })
       const [host, configure, review] = stepsOf(view).map(buttonIn)
 
       expect(configure.getAttribute('aria-busy')).toBe('true')
@@ -256,16 +257,16 @@ describe('Stepper', () => {
       await nextTick()
 
       const [host, configure, review] = stepsOf(view)
-      expect(host.querySelector('[data-step-connector]')).not.toBeNull()
-      expect(configure.querySelector('[data-step-connector]')).not.toBeNull()
-      expect(review.querySelector('[data-step-connector]')).toBeNull()
-      expect(view.container.querySelectorAll('[data-step-connector]')).toHaveLength(2)
+      expect(host.querySelector('[data-slot="step-connector"]')).not.toBeNull()
+      expect(configure.querySelector('[data-slot="step-connector"]')).not.toBeNull()
+      expect(review.querySelector('[data-slot="step-connector"]')).toBeNull()
+      expect(view.container.querySelectorAll('[data-slot="step-connector"]')).toHaveLength(2)
     })
 
     it('is omitted entirely on a single-step rail', async () => {
       const view = render(Single)
       await nextTick()
-      expect(view.container.querySelectorAll('[data-step-connector]')).toHaveLength(0)
+      expect(view.container.querySelectorAll('[data-slot="step-connector"]')).toHaveLength(0)
     })
   })
 
@@ -278,7 +279,7 @@ describe('Stepper', () => {
 
     it('has no violations with a loading step and a closed step', async () => {
       const { container } = render(Rail, {
-        props: { start: 'configure', configureState: 'loading', reviewDisabled: true }
+        props: { start: 'configure', configureStatus: 'loading', reviewDisabled: true }
       })
       await nextTick()
       await expectNoA11yViolations(container)
@@ -305,7 +306,7 @@ describe('Stepper', () => {
           components: { Stepper, StepperStep },
           template: `
           <Stepper model-value="deploy" aria-label="Deploy">
-            <StepperStep value="deploy" title="Deploy" state="error">
+            <StepperStep value="deploy" title="Deploy" status="error">
               <a href="https://example.com/logs">View logs</a>
             </StepperStep>
             <StepperStep value="verify" title="Verify" />

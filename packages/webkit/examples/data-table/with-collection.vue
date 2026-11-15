@@ -19,7 +19,7 @@
   }
 
   const columns = [
-    { accessorKey: 'name', header: 'Domain', enableSorting: true },
+    { accessorKey: 'name', header: 'Domain', sortable: true },
     { accessorKey: 'status', header: 'Status' }
   ]
 

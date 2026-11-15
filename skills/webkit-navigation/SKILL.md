@@ -67,14 +67,14 @@ A page picks **exactly one**. The choice is not stylistic — it follows from wh
 
 |                      | **Persistent console shell**                                                                       | **Focused creation shell**                                                                                 |
 | -------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `top-bar/creation-bar` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail        |
+| What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `top-bar/creation-bar` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail           |
 | Use for              | Hubs, lists, dashboards, settings — anywhere the user _browses_ and moves laterally                | Create / import / deploy a template / wizard — a single task with a start and an end                       |
 | Rail                 | **Yes** — the layout's navigation rail, built from your `navigation` data                          | **No** — removed so the task is the only focus                                                             |
 | Header               | The layout's: `breadcrumbs`, `SearchTrigger` (⌘K palette), your `actions` slot, the account avatar | `GlobalHeader`: back button + Azion brand + breadcrumb + account avatar                                    |
 | Way out              | Lateral — pick any other module from the rail or the ⌘K palette                                    | Linear — the **back** button (and breadcrumb) returns to where the flow started                            |
 | Signed-in user       | The rail footer (account + `account-menu`) **and** the header avatar, both from `account`          | Header avatar (end of the bar)                                                                             |
 | Where the page lives | In the layout's default slot: the page is **only its body** (no `<main>`, no chrome)               | A route rendered **outside** `ConsoleLayout`; the flow is a whole screen and owns its bar and its `<main>` |
-| Typical pages        | dashboards, list / index pages, settings hubs, resource-detail pages                               | create / edit forms, multi-step wizards, deploy / publish flows (`create/*`)                      |
+| Typical pages        | dashboards, list / index pages, settings hubs, resource-detail pages                               | create / edit forms, multi-step wizards, deploy / publish flows (`create/*`)                               |
 
 ### Shell 1 — persistent console: `ConsoleLayout`
 
@@ -113,7 +113,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
     <template #actions="{ compact }">
       <Tooltip
         v-if="compact"
-        text="Create"
+        content="Create"
         placement="bottom"
       >
         <IconButton
@@ -228,7 +228,7 @@ What each part of the layout takes:
 - **`actions`** slot — the app's own header actions (`Create`, `Agent`), icon-only with a `Tooltip`
   while its `compact` is true. Page actions never go here; they belong to the page's `PageHeader` or
   tab row.
-- **`header-start`** (an account switcher), **`notifications`** (flash `Alert`s above the page) and
+- **`header-leading`** (an account switcher), **`notifications`** (flash `Alert`s above the page) and
   **`tools`** (help or the notifications list, opened with `v-model:tools-open` or the `actions`
   slot's `toggleTools`).
 - **`search`** slot + **`search-select`** — extra `Command.Group`s (recents, actions) listed before the
@@ -508,7 +508,7 @@ narrow the list and the table they narrow.
             <CollectionPreferences v-bind="preferencesProps" />
           </div>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 v-bind="tableProps"
                 :bordered="false"
@@ -641,11 +641,11 @@ Each tab renders one of two bodies:
 A console screen has at most three navigation levels, and each level has one control. The breadcrumb
 is not a level; it names where the reader is (below).
 
-| Level | Owner                                                           | Lists                                            |
-| ----- | --------------------------------------------------------------- | ------------------------------------------------ |
-| 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too    | modules and first-level pages                    |
-| 2     | `PageTabs` of a resource or of a split module                   | the pages of that resource or module             |
-| 3     | the `detail/sectioned-resource` block, in one tab body | more than 7 sibling pages of that tab, in groups |
+| Level | Owner                                                        | Lists                                            |
+| ----- | ------------------------------------------------------------ | ------------------------------------------------ |
+| 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too | modules and first-level pages                    |
+| 2     | `PageTabs` of a resource or of a split module                | the pages of that resource or module             |
+| 3     | the `detail/sectioned-resource` block, in one tab body       | more than 7 sibling pages of that tab, in groups |
 
 1. **One owner per level.** At most one control per level on a screen: the rail, one `PageTabs`, and
    at most one local navigation inside the active tab.

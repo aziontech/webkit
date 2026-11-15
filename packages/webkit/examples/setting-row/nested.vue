@@ -29,7 +29,7 @@
 
 <template>
   <Card :padded="false">
-    <template #content>
+    <template #default>
       <Item.List>
         <SettingRow
           title="HTTP ports"
@@ -58,7 +58,7 @@
           title="HTTPS ports"
           description="One port per line. 443 is the default."
           kind="stacked"
-          :level="1"
+          :depth="1"
         >
           <Textarea
             v-model="form.httpsPorts"
@@ -72,7 +72,7 @@
           v-if="form.useHttps"
           title="Minimum TLS version"
           description="Clients negotiating below this version are refused."
-          :level="1"
+          :depth="1"
         >
           <Select
             v-model="form.minimumTlsVersion"
@@ -101,7 +101,7 @@
           title="HTTP/3 support"
           description="Serve HTTP/3 over QUIC. It runs on top of HTTPS."
           kind="compact"
-          :level="1"
+          :depth="1"
         >
           <Switch
             v-model="form.useHttp3"
@@ -114,7 +114,7 @@
           title="HTTP/3 ports"
           description="One port per line. 443 is the default."
           kind="stacked"
-          :level="2"
+          :depth="2"
         >
           <Textarea
             v-model="form.quicPorts"
