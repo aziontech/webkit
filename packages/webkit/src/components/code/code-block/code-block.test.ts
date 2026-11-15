@@ -379,18 +379,6 @@ describe('CodeBlock', () => {
 
       expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
     })
-
-    it('still honours the deprecated showLineNumbers over lineNumbers', () => {
-      const off = render(CodeBlock, {
-        props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
-      })
-      expect(off.queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
-      off.unmount()
-      const on = render(CodeBlock, {
-        props: { tabs: singleTab, lineNumbers: false, showLineNumbers: true }
-      })
-      expect(on.queryAllByTestId('code-code-block__line-number')).toHaveLength(3)
-    })
   })
 
   describe('single snippet (code + language)', () => {

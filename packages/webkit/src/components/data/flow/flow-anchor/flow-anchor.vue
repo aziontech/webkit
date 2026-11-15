@@ -10,22 +10,14 @@
 
   /** Which connector attaches to the anchor. */
   export type FlowAnchorSide = 'start' | 'end'
-  /** Which connector attaches to the anchor. @deprecated since 6.0 — use `FlowAnchorSide`. Removed in 7.0. */
-  export type FlowAnchorType = FlowAnchorSide
 
   const props = withDefaults(
     defineProps<{
       /** Which connector attaches here: `end` is the incoming endpoint, `start` the outgoing origin; empty marks both. */
       side?: FlowAnchorSide
-      /**
-       * Which connector attaches here.
-       * @deprecated since 6.0 — use `side`. Removed in 7.0.
-       */
-      type?: FlowAnchorType
     }>(),
     {
-      side: undefined,
-      type: undefined
+      side: undefined
     }
   )
 
@@ -44,7 +36,7 @@
   const PORT_CLASS =
     'pointer-events-none absolute top-1/2 size-2 -translate-y-1/2 rounded-(--radius-sm) border-solid border-[length:var(--border-width-default,1px)] border-(--border-muted) bg-(--accent) data-[flow-port=end]:start-0 data-[flow-port=end]:-translate-x-full data-[flow-port=start]:end-0 data-[flow-port=start]:translate-x-full rtl:data-[flow-port=end]:translate-x-full rtl:data-[flow-port=start]:-translate-x-full group-data-[disabled]:border-dashed'
 
-  const port = computed<FlowAnchorSide | undefined>(() => props.side ?? props.type)
+  const port = computed<FlowAnchorSide | undefined>(() => props.side)
 </script>
 
 <template>

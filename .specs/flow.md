@@ -3,13 +3,13 @@ name: flow
 category: data
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/y38AUdg5uXuMeXofUkOxv6/Illustrations?node-id=129-2056
   node_id: 129:2056
-checksum: accb25ec378b4a2e83860b2d63ea920c525a3085af391d865a48b9e6b8d72a3e
+checksum: e3e3a6a54ce5324b2c84675abcd31fb9d61bdc10a7bc4a399af87f057ff7f9b7
 created: 2026-06-25
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Flow — Component Spec
@@ -39,7 +39,7 @@ Flow renders a directed flow diagram: a horizontal sequence of steps (`flow-node
 ## Best practices
 
 - Write steps as direct children of `Flow` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.
-- Use `unstyled` when the slot content is the whole node, and put a `Flow.Anchor` (`type="end"` incoming, `type="start"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.
+- Use `unstyled` when the slot content is the whole node, and put a `Flow.Anchor` (`side="end"` incoming, `side="start"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.
 - Mark a leaf that hangs off the chain with `terminal`; it receives a connector but sends none on.
 - Do not clip a node with `overflow-hidden` in a wrapping card — the connector ports sit outside the node's box and would disappear.
 - Let a wide flow scroll in its own container; the root is an `overflow: auto` region, and there is no drag-to-pan.
@@ -87,7 +87,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 ## Sub-components
 
 - `flow-node/flow-node.vue` — A single step in the flow. Renders the default node box; `unstyled` drops the box so the `default` slot defines the node's appearance (a dot, a card, a tall node). `disabled` marks the step disabled, rendering adjacent connectors at reduced opacity (mirrored by `data-disabled`). `terminal` ends the node's branch: it still receives an incoming connector but originates none, so the chain continues through its siblings while the branch stops there — the shape a **leaf** needs (an attached resource that hangs off the chain rather than passing it on). A terminal node therefore renders no outgoing port. Content via the `default` slot.
-- `flow-anchor/flow-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. Prop `side?: 'start' | 'end'` (default `undefined`): `side="end"` is the incoming endpoint, `side="start"` the outgoing origin; omitted marks both. Prop `type?: 'start' | 'end'` (default `undefined`) is the same under its old name, **@deprecated since 6.0 — use `side`. Removed in 7.0.** (`type` is kept for native pass-through), read when `side` is unset; the exported `FlowAnchorType` is deprecated for `FlowAnchorSide` the same way. Content via the `default` slot. Its class merges with the consumer's through Vue's own class merge (no `cn`).
+- `flow-anchor/flow-anchor.vue` — Marks a connector-attachment point inside a node and wraps the content that the connector should touch. Prop `side?: 'start' | 'end'` (default `undefined`): `side="end"` is the incoming endpoint, `side="start"` the outgoing origin; omitted marks both. Content via the `default` slot. Its class merges with the consumer's through Vue's own class merge (no `cn`).
 - `flow-parallel/flow-parallel.vue` — Container whose direct `flow-node` children are laid out as parallel branches stacked vertically; the `flow` root draws the fan-out/fan-in junction connectors. `align?: 'start' | 'end'` (default `'start'`) controls the horizontal alignment of the branches. Its class merges with the consumer's through Vue's own class merge (no `cn`).
 
 <!-- Resulting layout (composition):
@@ -134,7 +134,7 @@ Each part is also a standalone import (`import FlowNode from '@aziontech/webkit/
 - `data-disabled` mirrors the `disabled` prop on `flow-node`
 - `data-styled` is present on `flow-node` unless `unstyled` (gates the default box utilities)
 - `data-align` mirrors the `align` prop on `flow` and `flow-parallel`
-- `data-flow-anchor` mirrors the `side` prop (else the deprecated `type`) on `flow-anchor` (`start` / `end` / `both`)
+- `data-flow-anchor` mirrors the `side` prop on `flow-anchor` (`start` / `end` / `both`)
 - The root provides `testId` and `align` as computed refs, so a changed `data-testid` or `align` reaches every sub-component
 - `data-flow-port` marks a connector port and selects the edge it sits on (`start` = outgoing / right, `end` = incoming / left). Emitted on both edges of a styled `flow-node`, and on the attaching edge(s) of a `flow-anchor`. The port sits entirely **outside** the box, flush against that edge — never inside it, so the node's surface and its `focus-visible` ring cannot crop the port
 - Port appearance follows the enclosing node: solid border by default, `border-dashed` under `data-disabled`

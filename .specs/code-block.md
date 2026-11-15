@@ -3,12 +3,12 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 3725b180af94150934df8ecd716869e71c4c862665121ed17ea1189a4c8226be
+checksum: e0a2d32377ee1d22e3db1374ef35406c9039193b838eaaf70f9b588ca94e28b3
 created: 2026-05-28
 last_updated: 2026-11-15
 ---
@@ -141,7 +141,6 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 | `code`            | `string`             | `''`        | false    | Code of a single snippet, used when `tabs` is empty.                                                                                                                                                                             |
 | `language`        | `string`             | `''`        | false    | Language of the single `code` snippet (highlighting and the label header).                                                                                                                                                       |
 | `lineNumbers`     | `boolean`            | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`).                                                                                                                 |
-| `showLineNumbers` | `boolean`            | `undefined` | false    | **@deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.** Shows the line-number gutter; when set it wins over `lineNumbers`.                                                                                                |
 | `copyAriaLabel`   | `string`             | `''`        | false    | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`).                                                                                                        |
 | `copyable`        | `boolean`            | `undefined` | false    | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from.                                                                                    |
 | `kind`            | `'code' \| 'output'` | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                               |

@@ -80,11 +80,6 @@
     language?: string
     /** Shows a fixed-width gutter with zero-padded line numbers before each code line. */
     lineNumbers?: boolean
-    /**
-     * Shows the line-number gutter.
-     * @deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.
-     */
-    showLineNumbers?: boolean
     /** Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`). */
     copyAriaLabel?: string
     /** Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from. */
@@ -109,7 +104,6 @@
     code: '',
     language: '',
     lineNumbers: true,
-    showLineNumbers: undefined,
     copyAriaLabel: '',
     copyable: undefined,
     kind: 'code',
@@ -152,7 +146,7 @@
   const panelId = `${uid}-panel`
   const tabId = (index: number): string => `${uid}-tab-${index}`
 
-  const gutter = computed<boolean>(() => props.showLineNumbers ?? props.lineNumbers)
+  const gutter = computed<boolean>(() => props.lineNumbers)
 
   const normalizedTabs = computed<CodeBlockTab[]>(() => {
     if (props.tabs.length === 0) {
