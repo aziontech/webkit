@@ -61,12 +61,12 @@
       "update": 120,
       "update_is": "replace the 1k rows"
     },
-    "log-view-10k": {
+    "log-viewer-10k": {
       "mount": 50,
       "update": 50,
       "update_is": "search the 10k lines (the log view renders only the visible window)"
     },
-    "log-view-10k-tail": {
+    "log-viewer-10k-tail": {
       "mount": 200,
       "update": 1100,
       "update_is": "append 20 lines one at a time to a searched 10k-line log"
@@ -156,7 +156,7 @@
       "update": 200,
       "update_is": "replace the 1k rows"
     },
-    "listing-browser-1k": {
+    "listing-index-1k": {
       "mount": 300,
       "update": 150,
       "update_is": "type a query into the search of 1k grouped rows"

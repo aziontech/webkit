@@ -20,9 +20,9 @@ import { MAP_CHART_COUNTRIES } from '../components/chart/map-chart/map-chart-cou
 import Tracker from '../components/chart/tracker/tracker.vue'
 import CodeBlock from '../components/code/code-block/code-block.vue'
 import CodeEditor from '../components/code/code-editor/code-editor.vue'
-import LogView from '../components/code/log-view/log-view.vue'
-import LogViewContent from '../components/code/log-view/log-view-content.vue'
-import LogViewHeader from '../components/code/log-view/log-view-header.vue'
+import LogViewer from '../components/code/log-viewer/log-viewer.vue'
+import LogViewerContent from '../components/code/log-viewer/log-viewer-content.vue'
+import LogViewerHeader from '../components/code/log-viewer/log-viewer-header.vue'
 import Trace from '../components/code/trace/trace.vue'
 import Item from '../components/content/item/item.vue'
 import ItemContent from '../components/content/item/item-content.vue'
@@ -43,15 +43,15 @@ import TransferList, {
   TransferListTarget
 } from '../components/data/transfer-list'
 import Tree from '../components/data/tree/tree.vue'
-import DocLayout from '../components/documentation/doc-layout/doc-layout.vue'
-import DocMarkdown from '../components/documentation/doc-markdown/doc-markdown.vue'
+import DocLayout from '../components/docs/doc-layout/doc-layout.vue'
+import DocMarkdown from '../components/docs/doc-markdown/doc-markdown.vue'
 import UploadProgress, {
   type UploadProgressItem
 } from '../components/feedback/upload-progress/upload-progress.vue'
-import Combobox from '../components/inputs/combobox/combobox.vue'
-import MultiSelect from '../components/inputs/multi-select'
-import SchemaForm from '../components/inputs/schema-form/schema-form.vue'
-import Select from '../components/inputs/select'
+import Combobox from '../components/input/combobox/combobox.vue'
+import MultiSelect from '../components/input/multi-select'
+import SchemaForm from '../components/input/schema-form/schema-form.vue'
+import Select from '../components/input/select'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -63,9 +63,9 @@ import Command, {
   CommandItem,
   CommandList
 } from '../components/overlay/command'
-import ListingBrowser from '../components/sections/listing-browser/listing-browser.vue'
-import ListingTable from '../components/sections/listing-table/listing-table.vue'
-import WebkitProvider from '../components/utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../components/provider/webkit-provider/webkit-provider.vue'
+import ListingIndex from '../components/section/listing-index/listing-index.vue'
+import ListingTable from '../components/section/listing-table/listing-table.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
 type Scenario = keyof typeof budgets.scenarios
@@ -401,7 +401,7 @@ function barListCase(): Case {
   }
 }
 
-function logViewCase(): Case {
+function logViewerCase(): Case {
   const kinds = ['text', 'success', 'warning', 'text'] as const
   const lines = Array.from({ length: 10_000 }, (_, i) => ({
     id: String(i),
@@ -414,14 +414,14 @@ function logViewCase(): Case {
     mount: () => ({
       render: () =>
         h(
-          LogView,
+          LogViewer,
           {
             lines,
             search: search.value,
             'onUpdate:search': (v: string) => (search.value = v),
             style: 'height:640px'
           },
-          { default: () => [h(LogViewHeader), h(LogViewContent)] }
+          { default: () => [h(LogViewerHeader), h(LogViewerContent)] }
         )
     }),
     update: () => {
@@ -430,7 +430,7 @@ function logViewCase(): Case {
   }
 }
 
-function logViewTailCase(): Case {
+function logViewerTailCase(): Case {
   const make = (i: number) => ({
     id: String(i),
     time: '13:47:33',
@@ -443,14 +443,14 @@ function logViewTailCase(): Case {
     mount: () => ({
       render: () =>
         h(
-          LogView,
+          LogViewer,
           {
             lines: lines.value,
             search: search.value,
             'onUpdate:search': (v: string) => (search.value = v),
             style: 'height:640px'
           },
-          { default: () => [h(LogViewHeader), h(LogViewContent)] }
+          { default: () => [h(LogViewerHeader), h(LogViewerContent)] }
         )
     }),
     update: async () => {
@@ -951,7 +951,7 @@ function listingTableCase(): Case {
   }
 }
 
-function listingBrowserCase(): Case {
+function listingIndexCase(): Case {
   const groups = Array.from({ length: 10 }, (_, i) => `Group ${i}`)
   const columns = [
     { key: 'name', label: 'Name', grow: 2 as const },
@@ -976,7 +976,7 @@ function listingBrowserCase(): Case {
   ]
   const Host = defineComponent({
     setup: () => () =>
-      h(ListingBrowser, {
+      h(ListingIndex, {
         title: 'Customers',
         columns,
         data: rows,
@@ -990,7 +990,7 @@ function listingBrowserCase(): Case {
     mount: () => Host,
     update: async () => {
       const field = document.querySelector<HTMLInputElement>('input[type="text"]')
-      if (!field) throw new Error('listing-browser search field not found')
+      if (!field) throw new Error('listing-index search field not found')
       field.value = 'acme 12'
       field.dispatchEvent(new Event('input', { bubbles: true }))
     }
@@ -1168,10 +1168,7 @@ function traceCase(): Case {
   return {
     mount: () => ({ render: () => h(Trace, { spans, style: 'width:900px' }) }),
     update: () =>
-      typeInto(
-        '[data-testid="code-trace__search"] input, input[data-testid="code-trace__search"]',
-        'span-99'
-      )
+      typeInto('[data-testid="trace__search"] input, input[data-testid="trace__search"]', 'span-99')
   }
 }
 
@@ -1241,11 +1238,9 @@ function filterMenuCase(): Case {
     update: async () => {
       open.value = true
       await settle()
-      document.body
-        .querySelector<HTMLElement>('[data-testid="data-filter-menu__field-host"]')
-        ?.click()
+      document.body.querySelector<HTMLElement>('[data-testid="filter-menu__field-host"]')?.click()
       await settle()
-      await typeInto('[data-testid="data-filter-menu__panel"] input', '99')
+      await typeInto('[data-testid="filter-menu__panel"] input', '99')
       await settle()
     }
   }
@@ -1379,11 +1374,11 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('BarList with 1k rows', async () => {
     check('bar-list-1k', await measure(barListCase))
   })
-  it('LogView with 10k lines: mount and search', async () => {
-    check('log-view-10k', await measure(logViewCase))
+  it('LogViewer with 10k lines: mount and search', async () => {
+    check('log-viewer-10k', await measure(logViewerCase))
   })
-  it('LogView with 10k lines and a search: tail 20 appended lines', async () => {
-    check('log-view-10k-tail', await measure(logViewTailCase))
+  it('LogViewer with 10k lines and a search: tail 20 appended lines', async () => {
+    check('log-viewer-10k-tail', await measure(logViewerTailCase))
   })
   it('Timestamp with 1k values: mount and change the time zone', async () => {
     check('timestamp-1k', await measure(timestampCase))
@@ -1445,8 +1440,8 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('ListingTable with 1k rows: mount and replace', async () => {
     check('listing-table-1k', await measure(listingTableCase))
   })
-  it('ListingBrowser with 1k rows: mount and search', async () => {
-    check('listing-browser-1k', await measure(listingBrowserCase))
+  it('ListingIndex with 1k rows: mount and search', async () => {
+    check('listing-index-1k', await measure(listingIndexCase))
   })
   it('Select with 1k options and a preselected value: mount names it by label', async () => {
     check('select-1k-preselected', await measure(() => selectCase(false, true)))

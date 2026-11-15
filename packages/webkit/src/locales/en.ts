@@ -65,7 +65,7 @@ export const barList = {
   errorTitle: 'Could not load the data'
 } as const
 
-export const board = {
+export const dashboardGrid = {
   label: 'Dashboard',
   item: 'Item {position}',
   moved: '{label} moved to position {position} of {total}.',
@@ -210,7 +210,7 @@ export const command = {
   title: 'Command menu'
 } as const
 
-export const comparePlans = {
+export const planComparison = {
   about: 'About {label}',
   search: 'Search',
   searchPicker: 'Search {picker}',
@@ -219,7 +219,7 @@ export const comparePlans = {
   excluded: 'Not included'
 } as const
 
-export const comparisonTable = {
+export const competitorComparison = {
   about: 'About {capability}'
 } as const
 
@@ -367,7 +367,7 @@ export const docPageHeader = {
   lastUpdated: 'Last updated'
 } as const
 
-export const docPrevNext = {
+export const docPreviousNext = {
   label: 'Page navigation',
   previous: 'Previous',
   next: 'Next'
@@ -522,7 +522,7 @@ export const footer = {
   label: 'Footer'
 } as const
 
-export const globalHeader = {
+export const appHeader = {
   label: 'Global header'
 } as const
 
@@ -531,11 +531,11 @@ export const helpPanel = {
   learnMore: 'Learn more'
 } as const
 
-export const heroBand = {
+export const heroSection = {
   carouselLabel: 'Proven on mission-critical workloads'
 } as const
 
-export const heroForm = {
+export const heroFormSection = {
   search: 'Search',
   noMatch: 'No results found.'
 } as const
@@ -573,7 +573,7 @@ export const link = {
   label: 'Learn more'
 } as const
 
-export const listingBrowser = {
+export const listingIndex = {
   filters: 'Filters',
   filtersApplied: '{label} ({count})',
   search: 'Search',
@@ -581,7 +581,7 @@ export const listingBrowser = {
   noMatch: 'No results found.'
 } as const
 
-export const logView = {
+export const logViewer = {
   searchPlaceholder: 'Find in logs',
   search: 'Search logs',
   loading: 'Loading…',
@@ -646,7 +646,7 @@ export const numberInput = {
   decrement: 'Decrement'
 } as const
 
-export const outcomeMark = {
+export const outcomeIcon = {
   success: 'Succeeded',
   danger: 'Failed',
   warning: 'Needs attention',
@@ -836,7 +836,7 @@ export const siteFooter = {
   language: 'Language'
 } as const
 
-export const siteNav = {
+export const siteHeader = {
   open: 'Open navigation',
   home: 'Azion home',
   search: 'Search',
@@ -869,7 +869,7 @@ export const stepper = {
   upcoming: 'Not started'
 } as const
 
-export const storyLibrary = {
+export const storyIndex = {
   search: 'Search',
   searchFacet: 'Search {facet}',
   noMatch: 'No results found.',
@@ -896,7 +896,7 @@ export const table = {
   errorTitle: 'Could not load the data'
 } as const
 
-export const tableExport = {
+export const tableExportButton = {
   label: 'Export CSV'
 } as const
 
@@ -1116,7 +1116,7 @@ export const toolApproval = {
   confirmLabel: 'Type {phrase} to confirm'
 } as const
 
-export const aiLoading = {
+export const responseLoading = {
   generating: 'Generating a response'
 } as const
 
@@ -1217,7 +1217,7 @@ export const otpInput = {
   label: 'One-time code'
 } as const
 
-export const consolePanel = {
+export const consoleShowcase = {
   views: 'Console views'
 } as const
 
@@ -1225,7 +1225,7 @@ export const runtimeApiCloud = {
   label: 'Globals available in the Azion Runtime'
 } as const
 
-export const clientMosaicColumns = {
+export const clientStoryColumns = {
   list: 'Customer stories',
   story: 'Read story'
 } as const
@@ -1240,11 +1240,11 @@ export const common = {
   newTab: '(opens in a new tab)'
 } as const
 
-export const closingCallToActionNewsletter = {
+export const newsletterSection = {
   email: 'Email address'
 } as const
 
-export const sectionCommand = {
+export const copyCommand = {
   command: 'Command',
   prompt: 'Prompt',
   copyCommand: 'Copy command',
@@ -1318,7 +1318,7 @@ export const dataTable = {
 
 export const en = {
   toolApproval,
-  aiLoading,
+  responseLoading,
   alert,
   appLayout,
   articleBody,
@@ -1328,7 +1328,7 @@ export const en = {
   attributeEditor,
   avatar,
   barList,
-  board,
+  dashboardGrid,
   breadcrumb,
   browserFrame,
   buttonGroup,
@@ -1346,8 +1346,8 @@ export const en = {
   combobox,
   command,
   consoleLayout,
-  comparePlans,
-  comparisonTable,
+  planComparison,
+  competitorComparison,
   confirmDialog,
   conversation,
   copyButton,
@@ -1362,7 +1362,7 @@ export const en = {
   docLayout,
   docOnThisPage,
   docPageHeader,
-  docPrevNext,
+  docPreviousNext,
   docPrompt,
   docProse,
   donutChart,
@@ -1375,23 +1375,23 @@ export const en = {
   uploadProgress,
   footer,
   gaugeChart,
-  globalHeader,
+  appHeader,
   helpPanel,
-  heroBand,
-  heroForm,
+  heroSection,
+  heroFormSection,
   hotspot,
   keyValueList,
   kbd,
   link,
-  listingBrowser,
+  listingIndex,
   logoWall,
-  logView,
+  logViewer,
   mapChart,
   sidebarMenu,
   multiSelect,
   navigationMenu,
   numberInput,
-  outcomeMark,
+  outcomeIcon,
   overflowCount,
   pagination,
   passwordInput,
@@ -1411,17 +1411,17 @@ export const en = {
   sidebar,
   siteFooter,
   siteLayout,
-  siteNav,
+  siteHeader,
   sources,
   splitButton,
   statTile,
   statusIndicator,
   stepper,
-  storyLibrary,
+  storyIndex,
   suggestionGroup,
   dataGrid,
   table,
-  tableExport,
+  tableExportButton,
   tableHeadCell,
   tableRefreshButton,
   tableCellActions,
@@ -1448,14 +1448,14 @@ export const en = {
   wizard,
   paymentBrand,
   otpInput,
-  consolePanel,
+  consoleShowcase,
   runtimeApiCloud,
-  clientMosaicColumns,
-  sectionCommand,
+  clientStoryColumns,
+  copyCommand,
   searchTrigger,
   copyPromptButton,
   docAgentCard,
   common,
-  closingCallToActionNewsletter,
+  newsletterSection,
   dataTable
 }
