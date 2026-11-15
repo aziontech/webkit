@@ -248,13 +248,8 @@
     "entryOnly": true
   },
   {
-    "name": "doc-tooltip",
-    "path": "src/components/documentation/doc-tooltip/doc-tooltip.vue",
-    "limit": "6.35 KB"
-  },
-  {
-    "name": "doc-pagination",
-    "path": "src/components/documentation/doc-pagination/doc-pagination.vue",
+    "name": "doc-prev-next",
+    "path": "src/components/documentation/doc-prev-next/doc-prev-next.vue",
     "limit": "2.25 KB"
   },
   {

@@ -523,14 +523,13 @@
     "doc-markdown",
     "doc-on-this-page",
     "doc-page-header",
-    "doc-pagination",
+    "doc-prev-next",
     "doc-prompt",
     "doc-prose",
     "doc-step",
     "doc-steps",
     "doc-tab",
     "doc-tabs",
-    "doc-tooltip",
     "doc-update",
     "docs/STYLEGUIDE.md",
     "donut-chart",
@@ -2419,7 +2418,6 @@
       "title": null
     },
     "doc-card-group": {
-      "cols": null,
       "columns": null,
       "mobileColumns": null
     },
@@ -2470,7 +2468,7 @@
       "metaActions": null,
       "title": null
     },
-    "doc-pagination": {
+    "doc-prev-next": {
       "next": null,
       "nextLabel": null,
       "previous": null,
@@ -2499,19 +2497,6 @@
       "title": null
     },
     "doc-step": {
-      "title": null
-    },
-    "doc-tooltip": {
-      "delay": null,
-      "href": null,
-      "label": null,
-      "linkLabel": null,
-      "placement": [
-        "auto",
-        "bottom",
-        "top"
-      ],
-      "tip": null,
       "title": null
     },
     "doc-update": {

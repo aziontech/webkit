@@ -880,9 +880,9 @@
       "types": "./types/components/documentation/doc-page-header/doc-page-header.vue.d.ts",
       "default": "./src/components/documentation/doc-page-header/doc-page-header.vue"
     },
-    "./doc-pagination": {
-      "types": "./types/components/documentation/doc-pagination/doc-pagination.vue.d.ts",
-      "default": "./src/components/documentation/doc-pagination/doc-pagination.vue"
+    "./doc-prev-next": {
+      "types": "./types/components/documentation/doc-prev-next/doc-prev-next.vue.d.ts",
+      "default": "./src/components/documentation/doc-prev-next/doc-prev-next.vue"
     },
     "./doc-prompt": {
       "types": "./types/components/documentation/doc-prompt/doc-prompt.vue.d.ts",
@@ -907,10 +907,6 @@
     "./doc-steps": {
       "types": "./types/components/documentation/doc-steps/doc-steps.vue.d.ts",
       "default": "./src/components/documentation/doc-steps/doc-steps.vue"
-    },
-    "./doc-tooltip": {
-      "types": "./types/components/documentation/doc-tooltip/doc-tooltip.vue.d.ts",
-      "default": "./src/components/documentation/doc-tooltip/doc-tooltip.vue"
     },
     "./doc-update": {
       "types": "./types/components/documentation/doc-update/doc-update.vue.d.ts",
@@ -3135,8 +3131,8 @@
       "doc-page-header": [
         "./types/components/documentation/doc-page-header/doc-page-header.vue.d.ts"
       ],
-      "doc-pagination": [
-        "./types/components/documentation/doc-pagination/doc-pagination.vue.d.ts"
+      "doc-prev-next": [
+        "./types/components/documentation/doc-prev-next/doc-prev-next.vue.d.ts"
       ],
       "doc-prompt": [
         "./types/components/documentation/doc-prompt/doc-prompt.vue.d.ts"
@@ -3155,9 +3151,6 @@
       ],
       "doc-steps": [
         "./types/components/documentation/doc-steps/doc-steps.vue.d.ts"
-      ],
-      "doc-tooltip": [
-        "./types/components/documentation/doc-tooltip/doc-tooltip.vue.d.ts"
       ],
       "doc-update": [
         "./types/components/documentation/doc-update/doc-update.vue.d.ts"

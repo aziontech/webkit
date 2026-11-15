@@ -473,7 +473,7 @@ export const es: Messages = {
   docPageHeader: {
     lastUpdated: 'Actualizado el'
   },
-  docPagination: {
+  docPrevNext: {
     label: 'Navegación entre páginas',
     previous: 'Anterior',
     next: 'Siguiente'

@@ -48,10 +48,6 @@
     "mobileCols": "mobileColumns",
     "cols": "columns"
   },
-  "doc-tooltip": {
-    "headline": "title",
-    "cta": "linkLabel"
-  },
   "feature-tabs": {
     "interval": "autoplayInterval"
   },
