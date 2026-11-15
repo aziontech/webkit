@@ -11,9 +11,11 @@ const { searchPatterns, searchComponents, suggestComponent } =
 
 _resetCatalogCache()
 const catalog = loadCatalog()
-const { queries } = JSON.parse(
+const { queries: allQueries } = JSON.parse(
   readFileSync(new URL('./search-queries.json', import.meta.url), 'utf-8')
 )
+const queries = allQueries.filter((q) => !q.pending)
+const pending = allQueries.filter((q) => q.pending)
 
 const MIN_TOP1 = 0.95
 
@@ -32,20 +34,21 @@ const results = queries.map((q) => {
   return {
     ...q,
     got: got.slice(0, 3),
-    top1: got[0] === q.top1,
-    top3: got.slice(0, 3).some((id) => q.top3.includes(id))
+    top1Hit: got[0] === q.top1,
+    top3Hit: got.slice(0, 3).some((id) => q.top3.includes(id))
   }
 })
 
 test('the query set covers at least 80 queries in en, pt-BR and es', () => {
   assert.ok(queries.length >= 80, `${queries.length} queries`)
+  for (const q of pending) assert.equal(typeof q.pending, 'string', q.query)
   for (const lang of ['en', 'pt-BR', 'es']) {
     assert.ok(
       queries.some((q) => q.lang === lang),
       `no ${lang} query`
     )
   }
-  for (const q of queries) {
+  for (const q of allQueries) {
     assert.ok(['patterns', 'components', 'suggest'].includes(q.tool), q.query)
     assert.ok(q.top3.includes(q.top1), `${q.query}: top3 must contain top1`)
   }
@@ -59,21 +62,25 @@ test('every expected id exists in the catalog', () => {
   }
 })
 
+for (const q of pending) {
+  test(`${q.tool} "${q.query}" → ${q.top1}`, { skip: q.pending }, () => {})
+}
+
 test('every query has an acceptable answer in its first three results', () => {
   const misses = results
-    .filter((r) => !r.top3)
+    .filter((r) => !r.top3Hit)
     .map((r) => `${r.tool} "${r.query}" → ${r.got.join(', ') || '(none)'}; want ${r.top1}`)
   assert.deepEqual(misses, [])
 })
 
 test(`top-1 accuracy stays at or above ${MIN_TOP1 * 100}%`, (t) => {
-  const hits = results.filter((r) => r.top1).length
-  const top3 = results.filter((r) => r.top3).length
+  const hits = results.filter((r) => r.top1Hit).length
+  const top3 = results.filter((r) => r.top3Hit).length
   t.diagnostic(
     `top-1 ${hits}/${results.length} (${((100 * hits) / results.length).toFixed(1)}%), top-3 ${top3}/${results.length}`
   )
   const misses = results
-    .filter((r) => !r.top1)
+    .filter((r) => !r.top1Hit)
     .map((r) => `${r.tool} "${r.query}" → ${r.got[0] ?? '(none)'}; want ${r.top1}`)
   assert.ok(hits / results.length >= MIN_TOP1, misses.join('\n'))
 })

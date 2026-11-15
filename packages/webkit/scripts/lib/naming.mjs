@@ -3,27 +3,39 @@ import { join, relative } from 'node:path'
 
 export const MARKET_ALIASES = {
   'alert-dialog': 'confirm-dialog',
+  banner: 'alert',
+  'blog-index': 'article-index',
   'bordered-box': 'frame-box',
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
   'command-palette': 'command',
+  comparison: 'compare-plans',
   'config-provider': 'webkit-provider',
+  cta: 'closing-call-to-action',
   'data-table': 'table',
   datatable: 'table',
-  'date-picker': 'calendar',
+  'feature-grid': 'capability-grid',
   'input-otp': 'otp-input',
+  kebab: 'dropdown-menu',
   keyboard: 'kbd',
   loader: 'spinner',
   'locale-provider': 'webkit-provider',
+  'logo-cloud': 'logo-wall',
+  marquee: 'ticker',
   modal: 'dialog',
+  newsletter: 'closing-call-to-action-newsletter',
+  notice: 'alert',
   notification: 'toast',
   'segmented-control': 'toggle-group',
   sheet: 'drawer',
   snackbar: 'toast',
+  stats: 'stats-band',
   steps: 'stepper',
+  testimonial: 'client-quotes',
+  testimonials: 'client-quotes',
   'text-field': 'input',
-  tiles: 'radio-cards',
-  toggle: 'toggle-group'
+  tiles: 'radio-group',
+  transfer: 'transfer-list'
 }
 
 export const NON_ENGLISH_WORDS = [
@@ -52,21 +64,31 @@ export function retiredNames(migration) {
   )
 }
 
-export function synonymMap(retired) {
-  const map = { ...retired }
-  for (const [name, to] of Object.entries(MARKET_ALIASES)) map[name] = to
-  return map
-}
-
-export function buildAliases(subpaths, retired) {
+export function buildAliases(subpaths) {
   const exported = new Set(subpaths)
   const out = {}
-  for (const [name, to] of Object.entries(synonymMap(retired)).sort(([a], [b]) =>
-    a.localeCompare(b)
-  )) {
+  for (const [name, to] of Object.entries(MARKET_ALIASES).sort(([a], [b]) => a.localeCompare(b))) {
     if (!exported.has(name) && exported.has(to)) out[name] = to
   }
   return out
+}
+
+export function removedNames(subpaths, migration) {
+  const exported = new Set(subpaths)
+  return Object.fromEntries(
+    Object.entries(migration?.removed || {})
+      .filter(([from]) => !exported.has(from))
+      .sort(([a], [b]) => a.localeCompare(b))
+  )
+}
+
+export function buildRenamed(subpaths, retired) {
+  const exported = new Set(subpaths)
+  return Object.fromEntries(
+    Object.entries(retired)
+      .filter(([from, to]) => !exported.has(from) && exported.has(to))
+      .sort(([a], [b]) => a.localeCompare(b))
+  )
 }
 
 function segmentProblem(segment) {

@@ -246,10 +246,17 @@ async function main() {
         surface: z
           .enum(['product', 'marketing', 'docs'])
           .optional()
-          .describe('Restrict to one surface. Console screens use "product" only.')
+          .describe('Restrict to one surface. Console screens use "product" only.'),
+        fragments: z
+          .boolean()
+          .optional()
+          .describe(
+            'Fragments are cards dropped into a page, not screens. They are left out when the query asks for a page or screen; pass true to include them, false to never include them.'
+          )
       }
     },
-    async ({ query, surface }) => json(searchPatterns(catalog, query, { surface }))
+    async ({ query, surface, fragments }) =>
+      json(searchPatterns(catalog, query, { surface, fragments }))
   )
 
   tool(

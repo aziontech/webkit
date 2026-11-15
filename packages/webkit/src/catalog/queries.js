@@ -228,6 +228,21 @@ function resolveAlias(catalog, name) {
   return to && catalog.getEntry(to) ? { alias: key, to } : null
 }
 
+function retiredNote(catalog, key) {
+  const name = normalize(key).replace(/ /g, '-')
+  const to = catalog.renamed?.[name]
+  if (to && catalog.getEntry(to)) {
+    return {
+      to,
+      note: `"${name}" was renamed in WebKit v6: import ${catalog.prefix}${to}. Run \`npx @aziontech/webkit migrate v6\` to rewrite old imports.`
+    }
+  }
+  const replacement = catalog.removed?.[name]
+  return replacement
+    ? { to: null, note: `"${name}" was removed in WebKit v6. Use ${replacement} instead.` }
+    : null
+}
+
 function aliasNote(alias, to) {
   return `"${alias}" is not a webkit export: it is another name for "${to}". Import @aziontech/webkit/${to}.`
 }
@@ -241,6 +256,11 @@ function aliasHits(catalog, query) {
     const phrase = normalize(alias)
     if (nq === phrase) hits.set(to, { alias, boost: 100 })
     else if (!hits.has(to) && hasPhrase(nq, phrase)) hits.set(to, { alias, boost: 30 })
+  }
+  for (const [from, to] of Object.entries(catalog.renamed || {})) {
+    if (catalog.getEntry(to) && nq === normalize(from) && !hits.has(to)) {
+      hits.set(to, { alias: from, boost: 100, renamed: true })
+    }
   }
   return hits
 }
@@ -259,13 +279,22 @@ export function getComponent(catalog, name) {
         note: aliasNote(resolved.alias, resolved.to)
       }
     }
+    const retired = retiredNote(catalog, key)
+    if (retired?.to) {
+      return {
+        ...getComponent(catalog, retired.to),
+        requested: key,
+        renamedFrom: key,
+        note: retired.note
+      }
+    }
     return {
       ok: false,
       available: true,
       found: false,
       name: key,
       suggestions: catalog.suggestSubpaths(key),
-      message: `No webkit export named "${key}".`
+      message: retired ? retired.note : `No webkit export named "${key}".`
     }
   }
   return {
@@ -413,7 +442,6 @@ function scoreMatch(name, entry, query) {
   for (const w of words) {
     if (n === w) score += 25
     else if (hasPhrase(n, w)) score += 15
-    else if (n.includes(w)) score += 8
     else if (w.includes(n) && n.length >= 3) score += 12
     if (c.includes(w)) score += 4
     if (hasPhrase(prose, w)) score += 6
@@ -429,10 +457,26 @@ function conceptHits(catalog, query) {
   const q = normalize(query)
   const hits = new Map()
   if (!q) return hits
+  const words = contentWords(q)
+  const owners = new Map()
+  const covered = new Map()
   for (const { key, term } of longestMatches(q, NORMALIZED_TERMS)) {
     if (!catalog.getEntry(key)) continue
-    const boost = term === q ? 90 : 30
-    if ((hits.get(key) ?? 0) < boost) hits.set(key, boost)
+    const owner = owners.get(term)
+    if (owner && owner !== key) continue
+    owners.set(term, key)
+    if (term === q) {
+      hits.set(key, 90)
+      continue
+    }
+    const tokens = covered.get(key) ?? new Set()
+    for (const w of term.split(' ')) tokens.add(w)
+    covered.set(key, tokens)
+  }
+  for (const [key, tokens] of covered) {
+    if (hits.has(key)) continue
+    const share = words.length ? words.filter((w) => tokens.has(w)).length / words.length : 0
+    hits.set(key, Math.round(30 + 50 * Math.min(1, share)))
   }
   return hits
 }
@@ -504,27 +548,27 @@ export function searchComponents(catalog, query, { surface } = {}) {
   const aliases = aliasHits(catalog, q)
   const concepts = conceptHits(catalog, q)
   const ranked = catalog.subpaths
-    .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
+    .filter((sub) => SEARCHABLE_KINDS.has(catalog.getEntry(sub)?.kind))
     .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => {
       const e = catalog.getDetails(sub)
-      const score =
-        scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
-      return { sub, score }
+      const base = nameScore(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
+      const productBonus = !wantedSurface && base > 0 && isProductEntry(e) ? PRODUCT_BONUS : 0
+      return { sub, score: base + productBonus }
     })
     .filter((r) => r.score > 0)
-    .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
+    .sort((a, b) => b.score - a.score || tieBreak(catalog, a.sub, b.sub))
     .slice(0, 10)
     .map((r) => {
-      const card = { ...componentCard(catalog, r.sub), score: r.score }
+      const card = { ...searchCard(catalog, r.sub), score: r.score }
       if (normalize(r.sub) === nq || concepts.get(r.sub) === 90) card.exact = true
       const hit = aliases.get(r.sub)
       return hit
         ? {
             ...card,
             exact: hit.boost === 100,
-            aliasOf: hit.alias,
-            note: aliasNote(hit.alias, r.sub)
+            ...(hit.renamed ? { renamedFrom: hit.alias } : { aliasOf: hit.alias }),
+            note: hit.renamed ? retiredNote(catalog, hit.alias).note : aliasNote(hit.alias, r.sub)
           }
         : card
     })
@@ -537,6 +581,61 @@ export function searchComponents(catalog, query, { surface } = {}) {
     count: ranked.length,
     matches: ranked
   }
+}
+
+const PRODUCT_BONUS = 15
+const SEARCHABLE_KINDS = new Set(['component', 'subcomponent'])
+
+function nameScore(sub, entry, query) {
+  const score = scoreMatch(sub, entry, query)
+  if (entry?.kind !== 'subcomponent' || !entry.parent) return score
+  return hasPhrase(normalize(query), normalize(entry.parent)) ? score : Math.round(score / 2)
+}
+
+function partBinding(parent, sub) {
+  const rest = sub.startsWith(`${parent}-`) ? sub.slice(parent.length + 1) : sub
+  return `${pascalCase(parent)}.${pascalCase(rest)}`
+}
+
+function searchCard(catalog, sub) {
+  const card = componentCard(catalog, sub)
+  const e = catalog.getEntry(sub)
+  if (e?.kind !== 'subcomponent' || !e.parent) return card
+  const parent = pascalCase(e.parent)
+  const compound = partBinding(e.parent, sub)
+  return {
+    ...card,
+    kind: 'subcomponent',
+    parent: e.parent,
+    compoundBinding: compound,
+    hint: `${card.binding} is a part of ${parent}: compose it inside ${parent} as ${compound} (import ${parent} from '${catalog.prefix}${e.parent}'), or import it alone from '${card.import}'.`
+  }
+}
+const popularityCache = new WeakMap()
+
+function popularity(catalog) {
+  if (popularityCache.has(catalog)) return popularityCache.get(catalog)
+  const counts = new Map()
+  for (const p of Object.values(catalog.patterns || {})) {
+    for (const imp of p.imports || []) {
+      const sub = subpathOf(catalog, imp)
+      counts.set(sub, (counts.get(sub) ?? 0) + 1)
+    }
+  }
+  popularityCache.set(catalog, counts)
+  return counts
+}
+
+function tieBreak(catalog, a, b) {
+  const product =
+    Number(isProductEntry(catalog.getEntry(b))) - Number(isProductEntry(catalog.getEntry(a)))
+  if (product) return product
+  const uses = popularity(catalog)
+  return (uses.get(b) ?? 0) - (uses.get(a) ?? 0) || a.localeCompare(b)
+}
+
+function isProductEntry(entry) {
+  return (entry?.surface ?? 'product') === 'product'
 }
 
 function componentSuggestion(catalog, need, opts) {
@@ -797,9 +896,19 @@ function patternCard(id, p, score) {
     variants: (p.variants || []).map((v) => v.name),
     source: p.source,
     surface: p.surface ?? 'product',
+    ...(p.kind === 'fragment' ? { kind: 'fragment', note: FRAGMENT_NOTE } : {}),
     ...(score != null ? { score } : {})
   }
 }
+
+const FRAGMENT_NOTE =
+  'A card, not a page: drop this fragment into the page pattern that needs it; it is never a whole screen.'
+
+function screenIntentOf(nq) {
+  return SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
+}
+
+const EXACT_PATTERN_SCORE = 1000
 
 function isExactPattern(id, p, q) {
   return [id, id.split('/').pop(), p.name].some((s) => normalize(s) === q)
@@ -822,7 +931,7 @@ function scorePattern(id, p, { q, groups, generic, words }) {
   }
   const genericScreen = (phrase) =>
     NORMALIZED_SCREEN_WORDS.some((w) => intents.includes(`${phrase} ${w}`))
-  let score = isExactPattern(id, p, q) ? 1000 : 0
+  let score = isExactPattern(id, p, q) ? EXACT_PATTERN_SCORE : 0
   score += phraseScore(q, 160)
   for (const group of groups) {
     score += 0.8 * Math.max(0, ...group.map((t) => phraseScore(t)))
@@ -841,13 +950,15 @@ function surfaceOf(wanted) {
   return wanted ? String(wanted).toLowerCase().trim() : null
 }
 
-export function searchPatterns(catalog, query, { surface } = {}) {
+export function searchPatterns(catalog, query, { surface, fragments } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const wantedSurface = surfaceOf(surface)
-  const entries = Object.entries(catalog.patterns || {}).filter(
-    ([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface
-  )
   const raw = String(query || '').trim()
+  const nq = normalize(raw)
+  const hideFragments = fragments === false || (fragments !== true && screenIntentOf(nq))
+  const entries = Object.entries(catalog.patterns || {})
+    .filter(([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface)
+    .filter(([id, p]) => !hideFragments || p.kind !== 'fragment' || isExactPattern(id, p, nq))
   const scope = wantedSurface ? { surface: wantedSurface } : {}
   if (!raw) {
     return {
@@ -956,6 +1067,7 @@ export function getPattern(catalog, id, { variant } = {}) {
     skills: p.skills || [],
     source: p.source,
     surface: p.surface ?? 'product',
+    ...(p.kind === 'fragment' ? { kind: 'fragment', fragmentNote: FRAGMENT_NOTE } : {}),
     ...(moved ? { movedFrom: moved.from, note: movedNote(moved, p) } : {}),
     variant: chosen ? chosen.name : p.primary,
     sfc: chosen ? chosen.sfc : p.sfc,
@@ -973,6 +1085,8 @@ export function getPattern(catalog, id, { variant } = {}) {
 function sectionSuggestion(catalog, need) {
   const q = normalize(need)
   const words = contentWords(q)
+  const aliases = aliasHits(catalog, need)
+  const concepts = conceptHits(catalog, need)
   const ranked = catalog.subpaths
     .filter((sub) => {
       const e = catalog.getEntry(sub)
@@ -982,7 +1096,7 @@ function sectionSuggestion(catalog, need) {
       const e = catalog.getDetails(sub)
       const name = normalize(sub)
       const prose = normalize([e.purpose || '', ...(e.useWhen || [])].join(' '))
-      let score = 0
+      let score = (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
       for (const w of words) {
         if (hasPhrase(name, w)) score += 20
         else if (name.includes(w)) score += 10
@@ -995,14 +1109,6 @@ function sectionSuggestion(catalog, need) {
   return ranked
 }
 
-function preferProductSurface(catalog, component) {
-  if (!component?.best) return component
-  const all = [component.best, ...(component.alternatives || [])]
-  const isProduct = (c) => (catalog.getEntry(c.name)?.surface ?? 'product') === 'product'
-  const ordered = [...all.filter(isProduct), ...all.filter((c) => !isProduct(c))]
-  return { ...component, best: ordered[0], alternatives: ordered.slice(1) }
-}
-
 export function suggestComponent(catalog, need, { surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
@@ -1012,10 +1118,7 @@ export function suggestComponent(catalog, need, { surface } = {}) {
   const isMarketing =
     wantedSurface === 'marketing' ||
     (!wantedSurface && MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w))))
-  const component =
-    isMarketing || wantedSurface
-      ? componentSuggestion(catalog, q, opts)
-      : preferProductSurface(catalog, componentSuggestion(catalog, q, opts))
+  const component = componentSuggestion(catalog, q, opts)
 
   const page = marketingPageIntent(q, wantedSurface)
   if (page && !page.words.length) {
@@ -1056,15 +1159,17 @@ export function suggestComponent(catalog, need, { surface } = {}) {
 
   const patterns = searchPatterns(catalog, q, opts)
   const topPattern = patterns.matches?.[0]
-  const screenIntent = SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
+  const screenIntent = screenIntentOf(nq)
   const exactComponent =
     component.best &&
     (component.best.exact === true ||
       normalize(component.best.name) === nq ||
-      normalize(component.best.aliasOf ?? '') === nq)
+      normalize(component.best.aliasOf ?? component.best.renamedFrom ?? '') === nq)
+  const exactPattern = topPattern && topPattern.score >= EXACT_PATTERN_SCORE
   if (
     topPattern &&
-    (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60 && !exactComponent)
+    (exactPattern || !exactComponent) &&
+    (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60)
   ) {
     return {
       ok: true,
@@ -1074,7 +1179,10 @@ export function suggestComponent(catalog, need, { surface } = {}) {
       recommendation: 'pattern',
       pattern: topPattern,
       patternAlternatives: patterns.matches.slice(1, 3),
-      hint: `This is a screen: start from the pattern. Call get_pattern("${topPattern.id}") and copy its SFC; use the components below only for pieces the pattern does not cover.`,
+      hint:
+        topPattern.kind === 'fragment'
+          ? `This is a card, not a page: call get_pattern("${topPattern.id}") and drop its SFC into the page pattern that needs it.`
+          : `This is a screen: start from the pattern. Call get_pattern("${topPattern.id}") and copy its SFC; use the components below only for pieces the pattern does not cover.`,
       best: component.best,
       alternatives: component.alternatives
     }

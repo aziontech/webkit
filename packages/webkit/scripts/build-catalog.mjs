@@ -16,7 +16,12 @@ import {
   writeLlms
 } from './build-llms.mjs'
 import { exportTarget } from './lib/exports.mjs'
-import { buildAliases, retiredNames } from './lib/naming.mjs'
+import {
+  formatStaleReferences,
+  retiredReferenceNames,
+  staleReferences
+} from './lib/catalog-references.mjs'
+import { buildAliases, buildRenamed, removedNames, retiredNames } from './lib/naming.mjs'
 import { SURFACES, surfaceFromTarget } from './lib/surfaces.mjs'
 import { iconKeywords } from '../../icons/scripts/icon-keywords.mjs'
 import {
@@ -326,6 +331,7 @@ export async function build() {
     .filter((k) => k.startsWith('./'))
     .map((k) => k.slice(2))
   const subpathSet = new Set(subpaths)
+  const v6Migration = JSON.parse(readFileSync(V6_MIGRATION, 'utf-8'))
 
   const compoundRoots = subpaths.filter((s) => {
     if (s.includes('/')) return false
@@ -468,7 +474,9 @@ export async function build() {
     tokens: buildTokens(),
     vocabulary: vocabularySnapshot(),
     surfaces: SURFACES,
-    aliases: buildAliases(subpaths, retiredNames(JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')))),
+    aliases: buildAliases(subpaths),
+    renamed: buildRenamed(subpaths, retiredNames(v6Migration)),
+    removed: removedNames(subpaths, v6Migration),
     imports,
     assets: buildAssets(imports),
     patterns,
@@ -836,6 +844,21 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
         'Every component export needs its own page, and every sub-component and -root export must be listed on its compound page.\n'
     )
     process.exit(1)
+  }
+  const stale = formatStaleReferences(
+    staleReferences(full, {
+      retired: retiredReferenceNames(
+        JSON.parse(readFileSync(V6_MIGRATION, 'utf-8')),
+        existsSync(V6_BLOCKS) ? JSON.parse(readFileSync(V6_BLOCKS, 'utf-8')) : {}
+      )
+    })
+  )
+  if (stale.length) {
+    process.stderr.write(
+      `${process.argv.includes('--check') ? '✖' : '⚠'} ${stale.length} stale reference(s) in spec Purpose / When to use / When NOT to use / Related:\n  ${stale.join('\n  ')}\n` +
+        'Name an export, a catalog alias or a pattern id; fix the text in .specs/<name>.md.\n'
+    )
+    if (process.argv.includes('--check')) process.exit(1)
   }
   if (process.argv.includes('--check')) {
     const drift = checkParts(catalog, files)
