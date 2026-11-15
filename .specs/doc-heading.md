@@ -3,11 +3,11 @@ name: doc-heading
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: ee9cf5a06423503a121ccf0df865e6e077654d4aeab364ab5fa2340c6a163ce8
+checksum: 36d2f471e29b01a8973bc638502bf4fc276119bf7667d120e341f8646d9e9d99
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocHeading — Component Spec
@@ -18,6 +18,7 @@ A documentation section heading that is also the link to itself. The whole text 
 
 ## When to use
 
+- Use DocHeading only for h2/h3 inside documentation pages; a console page band uses SectionHeader.
 - Every `h2`–`h4` on a docs page that the page rail lists.
 - Section headings on a designed docs page composed in Vue.
 

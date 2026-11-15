@@ -3,10 +3,10 @@ name: doc-page-header
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 381b7e6e0adfcf828420e114896b70153b9bc476fc454ef9da64a2bfd4b25649
+spec_version: 3
+checksum: 96f12a45102844f286818ab6b5b1b69f1e88f561f5540496d3445f8dfd03b350
 created: 2026-08-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocPageHeader — Component Spec
@@ -17,6 +17,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 
 ## When to use
 
+- Use DocPageHeader only on documentation pages; console pages use PageHeader.
 - At the top of any documentation or changelog page, above `DocProse`.
 
 ## When NOT to use

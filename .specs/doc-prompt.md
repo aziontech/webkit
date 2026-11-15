@@ -3,10 +3,10 @@ name: doc-prompt
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 6772c71d0dfa9643eff6da4db36f389dbf4e7f9398a85d6cbf4bc0899fd47a91
+spec_version: 2
+checksum: 131649afc41e5a6dccb8294fae769f108540a66b69a7489ab7ac3e19a06178be
 created: 2026-08-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # DocPrompt — Component Spec
@@ -17,6 +17,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 
 ## When to use
 
+- Use DocPrompt to show a prompt the reader pastes into an agent, with its copy control.
 - A documentation step, onboarding screen, or empty state whose next action is "paste this into your agent".
 - A short list of example prompts a reader can try, under a heading that has already said what they are.
 - Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes.

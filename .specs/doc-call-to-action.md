@@ -3,11 +3,11 @@ name: doc-call-to-action
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 6513cdc75fb85170381c9395b3d33542578c69e5f6798d6654382e784f221acc
+checksum: 6d6c3537dad79f0c720f370fad6b63f4206af511c33bfe37d3951f3070980f56
 created: 2026-11-14
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocCallToAction — Component Spec
@@ -18,6 +18,7 @@ The closing offer of a documentation page, parked at the foot of the "On this pa
 
 ## When to use
 
+- Use DocCallToAction only in the docs 'On this page' rail; marketing bands use CallToAction.
 - Once per documentation page, last in the right rail.
 
 ## When NOT to use

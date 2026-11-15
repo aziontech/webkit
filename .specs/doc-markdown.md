@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 84e9133a2f116a41ee87ac2d9eee141a058e689cffedead9b0a2442740ac2017
+checksum: 003099034fa9998ce7b10c55f6ebc9e3f833dd7d29610caaa6f09c529463a067
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ Renders a documentation page written in Markdown with Mintlify-style MDX compone
 
 ## When to use
 
+- Use DocMarkdown for a whole documentation page written in MDX; model Markdown that arrives while it renders uses StreamingResponse.
 - A docs page whose content is authored as `.mdx` / Markdown text (a content folder, a CMS field, a string in data) instead of hand-composed Doc components.
 - Copy held in data that carries inline markup (a sentence with code and a link in a block's fixture) and should render the same as a page paragraph.
 

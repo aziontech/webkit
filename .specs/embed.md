@@ -3,10 +3,10 @@ name: embed
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 2b1261669746c32d353a898568846fdd5f4198a4598ec30c28310bcbfde90b09
+spec_version: 3
+checksum: 76a52371f524dc167728ae8f24e9decd9f0d7ec3ee0b8136a4a197d8fca383f8
 created: 2026-09-22
-last_updated: 2026-09-25
+last_updated: 2026-11-15
 ---
 
 # Embed — Component Spec
@@ -17,6 +17,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 ## When to use
 
+- Use Embed for third-party iframe content; for a screenshot in documentation use DocFrame, to run live components use BrowserFrame.
 - To embed a video player, live demo, status page or third-party form in a marketing page.
 - Whenever content comes from another origin and must sit inside the page's own frame.
 - When the embedded thing has a natural aspect ratio the page should preserve while it scales.
