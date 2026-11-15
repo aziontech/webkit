@@ -26,8 +26,14 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`);
 - PrimeIcons classes, in every source file whether it imports WebKit or not: each `pi pi-<name>`
   pair becomes its Azion twin (`pi pi-check` → `ai ai-check`, `pi pi-minus-circle` →
-  `ai ai-circle-minus`, `pi pi-twitter` → `ai ai-x`; the map is `src/cli/migrations/v6-icons.json`).
-  A `pi-<name>` outside a pair, and a third-party mark with no Azion glyph, is listed to fix by hand.
+  `ai ai-circle-minus`, `pi pi-times` → `ai ai-x`, `pi pi-twitter` → `ai ai-x-brand`; the map is
+  `src/cli/migrations/v6-icons.json`). A `pi-<name>` outside a pair, and a third-party mark with no
+  Azion glyph, is listed to fix by hand;
+- renamed Azion icons: each `ai ai-<old>` pair takes its v6 name (`ai ai-times` → `ai ai-x`,
+  `ai ai-cog` → `ai ai-settings`, `ai ai-angle-down` → `ai ai-chevron-down`), and the colored base
+  class `ai-cor` becomes `ai-color` with its brand names (`ai-cor ai-next` → `ai-color ai-nextjs`).
+  The v5 X mark `ai ai-x` becomes `ai ai-x-brand` only when `package.json` shows WebKit 5 (or
+  `--from 5`), because `ai-x` is the close glyph in v6; otherwise it is listed to check by hand.
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
 does not export.
@@ -71,6 +77,14 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 The AI tooling knows the old names too: the MCP and `catalog.json#aliases` resolve a retired or
 market name (`paginator`, `message`, `modal`, `sheet`, `tiles`, `segmented-control`, …) to the v6
 component.
+
+Client logo files spell the brand one word per word, and the codemod rewrites their import paths:
+`assets/americamovil-*` → `assets/america-movil-*`, `cocacola` → `coca-cola`, `primevideo` →
+`prime-video`, `gfg` → `global-fashion-group`, `calvinklein` → `calvin-klein`, `crateandbarrel` →
+`crate-and-barrel`, `gruposabemi` → `grupo-sabemi`, `lojadomecanico` → `loja-do-mecanico`,
+`lojaintegrada` → `loja-integrada`, `newbalance` → `new-balance`, `omeleteco` → `omelete-co`,
+`queroquero` → `quero-quero`, `rocketchat` → `rocket-chat`, `todocartoes` → `todo-cartoes`,
+`getninjas` → `get-ninjas` (each `-extended-*` / `-symbol-*` file).
 
 ## 3. Renamed props and values
 
@@ -220,16 +234,54 @@ before the rename keeps rendering. Write the new name in code:
 
 ## 4. Manual changes
 
-### Icons: the Azion set replaces PrimeIcons
+### Icons: the Azion set replaces PrimeIcons, with Lucide names
 
 Every WebKit component, default `icon` and example now draws `ai ai-<name>` from `@aziontech/icons`;
-no component renders a PrimeIcons (`pi pi-*`) class. The Azion font carries every glyph the `pi` set
-had under the same name (`ai ai-chevron-right`, `ai ai-trash`, …), so an `icon` you pass keeps
-working once `migrate v6` has rewritten it. `import '@aziontech/icons'` now loads only the Azion set
-and the colour icons: if your app still renders `pi` classes (one of the third-party marks the
-codemod lists, such as `pi-apple` or `pi-paypal`), add `import '@aziontech/icons/primeicons'`
-yourself. The RTL mirror of `@aziontech/webkit/styles` targets the `ai` names (`ai-chevron-left`,
-`ai-arrow-right`, …).
+no component renders a PrimeIcons (`pi pi-*`) class, and `@aziontech/icons` no longer ships the
+PrimeIcons font or its `@aziontech/icons/primeicons` entry. If your app still renders one of the
+third-party marks the codemod lists (`pi-apple`, `pi-paypal`, …), draw your own SVG or install the
+`primeicons` package.
+
+The Azion glyphs take the [Lucide](https://lucide.dev/icons) names, and `migrate v6` rewrites them
+(every pair is in the `azionicons` and `color` maps of `src/cli/migrations/v6-icons.json`):
+
+- close and status: `ai-times` → `ai-x`, `ai-times-circle` → `ai-circle-x`, `ai-check-circle` →
+  `ai-circle-check`, `ai-info-circle` → `ai-circle-info`, `ai-question-circle` → `ai-circle-help`,
+  `ai-exclamation-circle` → `ai-circle-alert`, `ai-exclamation-triangle` → `ai-triangle-alert`,
+  `ai-check-square` → `ai-square-check`; every `ai-<x>-circle` is `ai-circle-<x>`
+  (`ai-plus-circle` → `ai-circle-plus`, `ai-arrow-circle-up` → `ai-circle-arrow-up`, …);
+- Font Awesome words: `ai-bars` → `ai-menu`, `ai-cog` → `ai-settings`, `ai-th-large` and
+  `ai-objects-column` → `ai-layout-grid`, `ai-ellipsis-h` / `-v` → `ai-ellipsis` /
+  `ai-ellipsis-vertical`, `ai-sliders-h` / `-v` → `ai-sliders-horizontal` / `-vertical`,
+  `ai-arrows-h` / `-v` / `-alt` → `ai-move-horizontal` / `ai-move-vertical` / `ai-move`,
+  `ai-share-alt` → `ai-share`, `ai-directions-alt` → `ai-signpost`, `ai-map-marker` →
+  `ai-map-pin`, `ai-sign-in` / `-out` → `ai-log-in` / `ai-log-out`, `ai-pen-to-square` →
+  `ai-square-pen`, `ai-user-edit` → `ai-user-pen`, `ai-file-edit` → `ai-file-pen`,
+  `ai-envelope` → `ai-mail`, `ai-hashtag` → `ai-hash`, `ai-thumbtack` → `ai-pin`,
+  `ai-search-plus` / `-minus` → `ai-zoom-in` / `ai-zoom-out`, `ai-calendar-times` →
+  `ai-calendar-x`, `ai-arrow-right-arrow-left` → `ai-arrow-right-left`, the two long
+  `ai-arrow-…-center` names → `ai-minimize` / `ai-maximize`;
+- `-slash` is `-off`: `ai-eye-off`, `ai-bell-off`, `ai-filter-off`, `ai-sort-off`;
+- one glyph, one name: `ai-angle-*` → `ai-chevron-*`, `ai-angle-double-*` → `ai-chevrons-*`,
+  `ai-file-o` → `ai-file`, `ai-filter-alt` → `ai-filter`, `ai-sort-alt` → `ai-sort`,
+  `ai-sort-up` / `-down` → `ai-arrow-up` / `ai-arrow-down`, `ai-clone` → `ai-copy`, `ai-branch`
+  → `ai-git-branch`, `ai-unlock` → `ai-lock-open`, `ai-step-backward-alt` / `ai-step-forward-alt`
+  → `ai-fast-backward` / `ai-fast-forward`, `ai-step-backward` → `ai-step-back`;
+- sort order in the name: `ai-sort-alpha-down` → `ai-arrow-down-a-z` (`-alt` → `ai-arrow-down-z-a`),
+  `ai-sort-numeric-down` → `ai-arrow-down-0-1`, `ai-sort-amount-down` → `ai-arrow-down-wide-narrow`,
+  and the same for `-up`;
+- spelling and brands: `ai-pratices-review` → `ai-practices-review`, `ai-scizors` → `ai-scissors`,
+  `ai-open` → `ai-openai`, `ai-next` → `ai-nextjs`, `ai-mcp-logo` → `ai-mcp`, the X mark `ai-x` →
+  `ai-x-brand`;
+- colored icons: the base class `ai-cor` is `ai-color` (`<i class="ai-color ai-google">`), and
+  `ai-open`, `ai-next`, `ai-js`, `ai-ts`, `ai-azuredevops`, `ai-x` are `ai-openai`, `ai-nextjs`,
+  `ai-javascript`, `ai-typescript`, `ai-azure-devops`, `ai-x-brand`.
+
+The brand mark `workers-cloudflare` (`Ticker` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`,
+`HeroBand` `carouselMarks`) is `cloudflare-workers`; rename the string by hand.
+
+The RTL mirror of `@aziontech/webkit/styles` targets the `ai` names (`ai-chevron-left`,
+`ai-arrow-right`, `ai-log-out`, …).
 
 ### `@aziontech/theme` is a peer dependency
 
@@ -827,7 +879,7 @@ copy them again to get the mirrored version.
   follows changes. Tabs, ToggleGroup, Slider, Pagination, NavigationMenu, Menu
   submenus, Tree, DatePicker, Resizable, Carousel, QuoteTabs, Tracker and CodeBlock tabs already use
   it: under `rtl`, ArrowLeft moves to the next item.
-- **Icons.** Arrows, chevrons, carets and sign-in/sign-out glyphs mirror under `rtl`
+- **Icons.** Arrows, chevrons, carets and log-in/log-out glyphs mirror under `rtl`
   (`@aziontech/webkit/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
   MenuItem); external-link arrows, media controls and logos do not. Add `rtl:-scale-x-100` to a
   directional glyph you draw yourself.

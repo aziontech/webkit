@@ -110,6 +110,114 @@
       "to": "radio-group-item",
       "from": "RadioButton",
       "binding": "RadioGroupItem"
+    },
+    "assets/americamovil-extended-color.svg": {
+      "to": "assets/america-movil-extended-color.svg"
+    },
+    "assets/calvinklein-extended-mono.svg": {
+      "to": "assets/calvin-klein-extended-mono.svg"
+    },
+    "assets/calvinklein-extended-reversed.svg": {
+      "to": "assets/calvin-klein-extended-reversed.svg"
+    },
+    "assets/cocacola-extended-color.svg": {
+      "to": "assets/coca-cola-extended-color.svg"
+    },
+    "assets/cocacola-extended-mono.svg": {
+      "to": "assets/coca-cola-extended-mono.svg"
+    },
+    "assets/cocacola-extended-reversed.svg": {
+      "to": "assets/coca-cola-extended-reversed.svg"
+    },
+    "assets/crateandbarrel-extended-mono.svg": {
+      "to": "assets/crate-and-barrel-extended-mono.svg"
+    },
+    "assets/crateandbarrel-extended-reversed.svg": {
+      "to": "assets/crate-and-barrel-extended-reversed.svg"
+    },
+    "assets/getninjas-extended-mono.svg": {
+      "to": "assets/get-ninjas-extended-mono.svg"
+    },
+    "assets/getninjas-extended-reversed.svg": {
+      "to": "assets/get-ninjas-extended-reversed.svg"
+    },
+    "assets/gfg-extended-mono.svg": {
+      "to": "assets/global-fashion-group-extended-mono.svg"
+    },
+    "assets/gfg-extended-reversed.svg": {
+      "to": "assets/global-fashion-group-extended-reversed.svg"
+    },
+    "assets/gruposabemi-extended-color.svg": {
+      "to": "assets/grupo-sabemi-extended-color.svg"
+    },
+    "assets/gruposabemi-extended-mono.svg": {
+      "to": "assets/grupo-sabemi-extended-mono.svg"
+    },
+    "assets/gruposabemi-extended-reversed.svg": {
+      "to": "assets/grupo-sabemi-extended-reversed.svg"
+    },
+    "assets/lojadomecanico-extended-color.svg": {
+      "to": "assets/loja-do-mecanico-extended-color.svg"
+    },
+    "assets/lojadomecanico-extended-mono.svg": {
+      "to": "assets/loja-do-mecanico-extended-mono.svg"
+    },
+    "assets/lojadomecanico-extended-reversed.svg": {
+      "to": "assets/loja-do-mecanico-extended-reversed.svg"
+    },
+    "assets/lojaintegrada-extended-color.svg": {
+      "to": "assets/loja-integrada-extended-color.svg"
+    },
+    "assets/lojaintegrada-extended-reversed.svg": {
+      "to": "assets/loja-integrada-extended-reversed.svg"
+    },
+    "assets/newbalance-extended-color.svg": {
+      "to": "assets/new-balance-extended-color.svg"
+    },
+    "assets/newbalance-extended-mono.svg": {
+      "to": "assets/new-balance-extended-mono.svg"
+    },
+    "assets/newbalance-extended-reversed.svg": {
+      "to": "assets/new-balance-extended-reversed.svg"
+    },
+    "assets/omeleteco-extended-mono.svg": {
+      "to": "assets/omelete-co-extended-mono.svg"
+    },
+    "assets/omeleteco-extended-reversed.svg": {
+      "to": "assets/omelete-co-extended-reversed.svg"
+    },
+    "assets/primevideo-extended-color.svg": {
+      "to": "assets/prime-video-extended-color.svg"
+    },
+    "assets/primevideo-extended-mono.svg": {
+      "to": "assets/prime-video-extended-mono.svg"
+    },
+    "assets/primevideo-extended-reversed.svg": {
+      "to": "assets/prime-video-extended-reversed.svg"
+    },
+    "assets/queroquero-extended-color.svg": {
+      "to": "assets/quero-quero-extended-color.svg"
+    },
+    "assets/queroquero-extended-mono.svg": {
+      "to": "assets/quero-quero-extended-mono.svg"
+    },
+    "assets/queroquero-extended-reversed.svg": {
+      "to": "assets/quero-quero-extended-reversed.svg"
+    },
+    "assets/rocketchat-extended-color.svg": {
+      "to": "assets/rocket-chat-extended-color.svg"
+    },
+    "assets/rocketchat-extended-mono.svg": {
+      "to": "assets/rocket-chat-extended-mono.svg"
+    },
+    "assets/rocketchat-extended-reversed.svg": {
+      "to": "assets/rocket-chat-extended-reversed.svg"
+    },
+    "assets/todocartoes-extended-mono.svg": {
+      "to": "assets/todo-cartoes-extended-mono.svg"
+    },
+    "assets/todocartoes-extended-reversed.svg": {
+      "to": "assets/todo-cartoes-extended-reversed.svg"
     }
   },
   "removed": {
