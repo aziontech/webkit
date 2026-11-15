@@ -34,13 +34,13 @@
 
   const attrs = useAttrs()
   const ctx = inject(DrawerInjectionKey)
-  const contentRef = ref<HTMLElement | null>(null)
+  const contentEl = ref<HTMLElement | null>(null)
   const isOpen = computed(() => ctx?.isOpen.value ?? false)
   const isModal = computed(() => ctx?.modal ?? true)
   const { motionState } = useDrawerMotionState(isOpen)
   const portalLocale = usePortalLocale()
   const isScrollLocked = useScrollLock(defaultDocument?.body)
-  const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentRef })
+  const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentEl })
   const testId = computed(() => ctx?.testId ?? 'overlay-drawer')
 
   const forwardedAttrs = computed(() =>
@@ -88,7 +88,7 @@
     },
     { immediate: true }
   )
-  useFocusTrap(contentRef, isOpen, () => isModal.value && isFocusTop.value)
+  useFocusTrap(contentEl, isOpen, () => isModal.value && isFocusTop.value)
 
   useEventListener(defaultDocument, 'keydown', (event: globalThis.KeyboardEvent) => {
     if (!isOpen.value || event.key !== 'Escape' || event.defaultPrevented) return
@@ -101,7 +101,7 @@
   watch(isOpen, async (open, wasOpen) => {
     if (open || !wasOpen || !ctx) return
     await nextTick()
-    const target = ctx.triggerRef.value ?? ctx.returnFocusRef.value
+    const target = ctx.triggerEl.value ?? ctx.returnFocusEl.value
     if (target?.isConnected) target.focus()
   })
 
@@ -134,7 +134,7 @@
         @click="onOverlayClick"
       />
       <div
-        ref="contentRef"
+        ref="contentEl"
         role="dialog"
         v-bind="forwardedAttrs"
         :class="

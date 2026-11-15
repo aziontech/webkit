@@ -197,8 +197,8 @@
   const offersAbsolute = computed(() => props.rangeSelectorMode !== 'relative-only')
 
   const isOpen = computed<boolean>(() => openModel.value ?? props.defaultOpen)
-  const triggerRef = ref<HTMLElement | null>(null)
-  const panelRef = ref<HTMLElement | null>(null)
+  const triggerEl = ref<HTMLElement | null>(null)
+  const panelEl = ref<HTMLElement | null>(null)
 
   const panelMode = ref<PanelMode>('relative')
   const draftKey = ref<string>('')
@@ -250,7 +250,7 @@
   )
 
   const focusTrigger = (): void => {
-    triggerRef.value?.querySelector<HTMLElement>('[data-part="trigger"]')?.focus()
+    triggerEl.value?.querySelector<HTMLElement>('[data-part="trigger"]')?.focus()
   }
 
   const close = (): void => {
@@ -412,8 +412,8 @@
   const isOpenRef = computed(() => isOpen.value)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: 'bottom-start',
     offset: 6,
@@ -421,12 +421,12 @@
     onDismiss: () => setOpen(false)
   })
 
-  useFocusTrap(panelRef, isOpenRef)
+  useFocusTrap(panelEl, isOpenRef)
 
   const onDocumentMousedown = (event: MouseEvent): void => {
     const target = event.target as Node | null
     if (!target || !isOpen.value) return
-    if (!triggerRef.value?.contains(target) && !panelRef.value?.contains(target)) setOpen(false)
+    if (!triggerEl.value?.contains(target) && !panelEl.value?.contains(target)) setOpen(false)
   }
 
   const onPanelKeydown = (event: KeyboardEvent): void => {
@@ -465,7 +465,7 @@
     class="inline-flex max-w-full"
   >
     <span
-      ref="triggerRef"
+      ref="triggerEl"
       :data-disabled="isDisabled || null"
       :data-invalid="field.invalid.value || null"
       class="inline-flex max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
@@ -543,7 +543,7 @@
       >
         <div
           v-if="isOpen"
-          ref="panelRef"
+          ref="panelEl"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           role="dialog"

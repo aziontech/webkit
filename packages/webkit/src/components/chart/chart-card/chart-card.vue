@@ -56,7 +56,7 @@
   const attrs = useAttrs()
   const boardItem = inject(BoardItemInjectionKey, null)
   const uid = useId()
-  const rootRef = ref<globalThis.HTMLElement | null>(null)
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
   const armed = ref(false)
   const dragging = ref(false)
   const resizing = ref(false)
@@ -94,7 +94,7 @@
   }
 
   function measure(): ChartCardMeasure {
-    const root = rootRef.value
+    const root = rootEl.value
     const grid = root?.parentElement
     if (!root || !grid)
       return { height: root?.offsetHeight ?? 0, columns: DEFAULT_COLUMNS, columnWidth: 0 }
@@ -179,7 +179,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     role="group"
     :data-testid="testId"

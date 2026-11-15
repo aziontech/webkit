@@ -30,7 +30,7 @@
 
   const root = useNavigationMenuContext()
   const item = useNavigationMenuItemContext()
-  const contentRef = ref<HTMLElement | null>(null)
+  const contentEl = ref<HTMLElement | null>(null)
 
   const contentOpen = computed(() => root.menuPopupMounted.value && item.itemOpen.value)
 
@@ -76,7 +76,7 @@
 
   const shouldRender = computed(() => mounted.value || props.keepMounted)
 
-  watch(contentRef, (target) => {
+  watch(contentEl, (target) => {
     const element = resolveHostElement(target)
 
     if (contentOpen.value && element) {
@@ -85,7 +85,7 @@
   })
 
   watch(contentOpen, (open) => {
-    const element = resolveHostElement(contentRef.value)
+    const element = resolveHostElement(contentEl.value)
 
     if (open && element) {
       root.setCurrentContentEl(element)
@@ -105,7 +105,7 @@
       }
 
       await nextTick()
-      await waitForCloseTransition(resolveHostElement(contentRef.value))
+      await waitForCloseTransition(resolveHostElement(contentEl.value))
 
       if (!contentOpen.value) {
         setMounted(false)
@@ -130,7 +130,7 @@
   >
     <div
       :id="item.contentId"
-      ref="contentRef"
+      ref="contentEl"
       :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
       :style="contentStyle"
       :data-testid="testId"

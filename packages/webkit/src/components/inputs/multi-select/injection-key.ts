@@ -13,7 +13,7 @@ export interface MultiSelectContext {
   /** Stable id used to wire trigger `aria-controls` and content element id. */
   contentId: string
   /** Trigger element ref; the content reads it to anchor below. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Current open state. */
   open: Ref<boolean>
   setOpen: (value: boolean) => void
@@ -71,7 +71,7 @@ export interface MultiSelectContext {
   showCreate: ComputedRef<boolean>
   create: (event: MultiSelectCommitEvent) => void
   /** The control that holds focus for the trigger: the input when searchable, else the trigger button. */
-  controlRef: Ref<globalThis.HTMLElement | null>
+  controlEl: Ref<globalThis.HTMLElement | null>
   focusControl: () => void
   /** Set by the content: moves focus into the list for an arrow, Home or End key. */
   navigate: Ref<((key: string) => void) | null>

@@ -43,8 +43,8 @@
 
   const attrs = useAttrs()
   const uid = useId()
-  const triggerRef = ref<HTMLElement | null>(null)
-  const returnFocusRef = ref<HTMLElement | null>(null)
+  const triggerEl = ref<HTMLElement | null>(null)
+  const returnFocusEl = ref<HTMLElement | null>(null)
   const hasDescription = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
@@ -76,7 +76,7 @@
     () => isOpen.value,
     (open) => {
       if (open && typeof document !== 'undefined') {
-        returnFocusRef.value = document.activeElement as HTMLElement | null
+        returnFocusEl.value = document.activeElement as HTMLElement | null
       }
     },
     { flush: 'sync' }
@@ -107,8 +107,8 @@
     unregisterDescription: () => {
       hasDescription.value = false
     },
-    triggerRef,
-    returnFocusRef,
+    triggerEl,
+    returnFocusEl,
     get side() {
       return props.side
     }

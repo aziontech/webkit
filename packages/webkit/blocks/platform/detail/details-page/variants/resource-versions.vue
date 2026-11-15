@@ -170,7 +170,7 @@
 
   const search = ref('')
   const pagination = ref({ pageIndex: 0, pageSize: 10 })
-  const tableRef = ref<TableExposed | null>(null)
+  const tableEl = ref<TableExposed | null>(null)
   const columnVisibility = ref({})
 
   const loading = ref(false)
@@ -270,9 +270,9 @@
                       icon="ai ai-download"
                       kind="outlined"
                       size="medium"
-                      :disabled="!tableRef"
+                      :disabled="!tableEl"
                       aria-label="Download CSV"
-                      @click="tableRef?.exportCsv({ filename: 'analytics-app-versions.csv' })"
+                      @click="tableEl?.exportCsv({ filename: 'analytics-app-versions.csv' })"
                     />
                   </Tooltip>
                   <Tooltip
@@ -292,7 +292,7 @@
               <Card :padded="false">
                 <template #content>
                   <DataTable
-                    ref="tableRef"
+                    ref="tableEl"
                     v-model:pagination="pagination"
                     v-model:globalFilter="search"
                     v-model:columnVisibility="columnVisibility"

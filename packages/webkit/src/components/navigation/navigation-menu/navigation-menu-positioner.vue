@@ -51,12 +51,10 @@
   )
 
   const root = useNavigationMenuContext()
-  const positionerRef = ref<HTMLElement | null>(null)
-  const arrowRef = ref<HTMLElement | null>(null)
+  const positionerEl = ref<HTMLElement | null>(null)
+  const arrowEl = ref<HTMLElement | null>(null)
 
-  const anchorRef = computed(() =>
-    props.disableAnchorTracking ? null : root.activeTriggerEl.value
-  )
+  const anchorEl = computed(() => (props.disableAnchorTracking ? null : root.activeTriggerEl.value))
 
   const positionerOptions = computed(() => ({
     side: props.side,
@@ -78,9 +76,9 @@
     popupOrigin,
     resetPlacement
   } = useNavigationMenuPositioner(
-    anchorRef,
-    positionerRef,
-    arrowRef,
+    anchorEl,
+    positionerEl,
+    arrowEl,
     positionerOptions,
     root.popupSize
   )
@@ -96,7 +94,7 @@
 
   provide(NavigationMenuPositionerInjectionKey, {
     setArrowEl: (element) => {
-      arrowRef.value = element
+      arrowEl.value = element
     },
     arrowStyles,
     resolvedSide,
@@ -131,7 +129,7 @@
 
 <template>
   <div
-    ref="positionerRef"
+    ref="positionerEl"
     :hidden="positionerHidden"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :style="positionerStyle"

@@ -56,7 +56,7 @@
   <button
     :ref="
       (el) => {
-        ctx.triggerRef.value = el as globalThis.HTMLElement | null
+        ctx.triggerEl.value = el as globalThis.HTMLElement | null
       }
     "
     v-bind="$attrs"

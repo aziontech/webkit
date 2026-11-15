@@ -50,7 +50,7 @@
 
   const AvatarMarble = defineAsyncComponent(() => import('./avatar-marble.vue'))
 
-  const imageRef = ref<HTMLImageElement | null>(null)
+  const imageEl = ref<HTMLImageElement | null>(null)
   const imageFailed = ref(false)
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-avatar')
@@ -89,7 +89,7 @@
   )
 
   onMounted(() => {
-    if (imageRef.value?.complete && !imageRef.value.naturalWidth) imageFailed.value = true
+    if (imageEl.value?.complete && !imageEl.value.naturalWidth) imageFailed.value = true
   })
 
   function onImageError() {
@@ -116,7 +116,7 @@
   >
     <img
       v-if="hasImage"
-      ref="imageRef"
+      ref="imageEl"
       :src="src"
       :alt="imageAlt"
       :data-testid="`${testId}__image`"

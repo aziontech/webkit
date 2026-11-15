@@ -38,12 +38,12 @@
 
   const NUDGE_STEP = 24
 
-  const handleRef = ref<globalThis.HTMLElement | null>(null)
+  const handleEl = ref<globalThis.HTMLElement | null>(null)
   const resizing = ref(false)
-  const dir = useDirection(handleRef)
+  const dir = useDirection(handleEl)
 
   const target = (): { pane: ResizablePaneApi; sign: 1 | -1 } | null => {
-    const el = handleRef.value
+    const el = handleEl.value
     if (!el || !ctx) return null
     const before = ctx.paneFor(el.previousElementSibling)
     if (before && !before.flexible()) return { pane: before, sign: 1 }
@@ -53,7 +53,7 @@
   }
 
   const current = computed(() => {
-    const el = handleRef.value
+    const el = handleEl.value
     if (!el || !ctx) return null
     void ctx.revision.value
     const before = ctx.paneFor(el.previousElementSibling)
@@ -79,7 +79,7 @@
     const start = hit.pane.measure()
 
     resizing.value = true
-    handleRef.value?.setPointerCapture?.(event.pointerId)
+    handleEl.value?.setPointerCapture?.(event.pointerId)
     globalThis.document.body.style.userSelect = 'none'
     globalThis.document.body.style.cursor = horizontal ? 'col-resize' : 'row-resize'
 
@@ -131,7 +131,7 @@
 
 <template>
   <div
-    ref="handleRef"
+    ref="handleEl"
     v-bind="$attrs"
     role="separator"
     tabindex="0"

@@ -15,13 +15,13 @@
   )
 
   const root = useNavigationMenuContext()
-  const viewportTargetRef = ref<HTMLElement | null>(null)
+  const viewportTargetEl = ref<HTMLElement | null>(null)
 
   const ROOT_CLASS =
     'relative h-full w-full overflow-hidden group-data-[constrained]/positioner:overflow-y-auto'
 
   watch(
-    viewportTargetRef,
+    viewportTargetEl,
     (target) => {
       root.setViewportTargetEl(resolveHostElement(target))
     },
@@ -35,7 +35,7 @@
     :data-testid="testId"
   >
     <div
-      ref="viewportTargetRef"
+      ref="viewportTargetEl"
       class="relative h-full w-[var(--navigation-menu-viewport-width,100%)]"
       :data-testid="`${testId}__target`"
     >

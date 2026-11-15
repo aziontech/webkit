@@ -53,11 +53,11 @@
   }
 
   function onControl(el: globalThis.HTMLElement | null) {
-    ctx.triggerRef.value = el
+    ctx.triggerEl.value = el
   }
 
   onBeforeUnmount(() => {
-    ctx.triggerRef.value = null
+    ctx.triggerEl.value = null
   })
 </script>
 

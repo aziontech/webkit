@@ -312,7 +312,7 @@
   }
 
   const search = ref('')
-  const tableRef = ref<TableExposed | null>(null)
+  const tableEl = ref<TableExposed | null>(null)
   const loading = ref(false)
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   const refresh = () => {
@@ -647,9 +647,9 @@
                               icon="ai ai-download"
                               kind="outlined"
                               size="medium"
-                              :disabled="!tableRef"
+                              :disabled="!tableEl"
                               aria-label="Download CSV"
-                              @click="tableRef?.exportCsv({ filename: 'web-app-source.csv' })"
+                              @click="tableEl?.exportCsv({ filename: 'web-app-source.csv' })"
                             />
                           </Tooltip>
                           <Tooltip
@@ -685,7 +685,7 @@
                       <Card :padded="false">
                         <template #content>
                           <DataTable
-                            ref="tableRef"
+                            ref="tableEl"
                             v-model:globalFilter="search"
                             :data="rows"
                             :columns="fileColumns"

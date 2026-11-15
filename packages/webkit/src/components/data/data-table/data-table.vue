@@ -948,9 +948,9 @@
   )
   const selectAllId = `${useId()}-select-all`
 
-  const viewportRef = ref<ComponentPublicInstance | null>(null)
-  const viewportEl = (): HTMLElement | undefined =>
-    viewportRef.value?.$el as HTMLElement | undefined
+  const viewportEl = ref<ComponentPublicInstance | null>(null)
+  const viewportElement = (): HTMLElement | undefined =>
+    viewportEl.value?.$el as HTMLElement | undefined
   const scrollTop = ref<number>(0)
   const viewportClientHeight = ref<number>(0)
   const VIRTUAL_OVERSCAN = 8
@@ -1028,7 +1028,7 @@
   const overflowStart = ref<boolean>(false)
   const overflowEnd = ref<boolean>(false)
   const measureEdges = (): void => {
-    const el = viewportEl()
+    const el = viewportElement()
     if (!el) return
     const offset = Math.abs(el.scrollLeft)
     overflowStart.value = offset > 1
@@ -1057,7 +1057,7 @@
   let rowObserver: ResizeObserver | null = null
   let heightsFrame = 0
   const onRowsResized = (entries: ResizeObserverEntry[]): void => {
-    const el = viewportEl()
+    const el = viewportElement()
     const anchor = el ? indexAt(rowOffsets.value, el.scrollTop) : 0
     const estimate = rowHeight.value
     let shift = 0
@@ -1122,7 +1122,7 @@
     () => [virtualActive.value, renderedRows.value.length],
     () =>
       void nextTick(() => {
-        const el = viewportEl()
+        const el = viewportElement()
         if (el && virtualActive.value) viewportClientHeight.value = visibleHeightOf(el)
       }),
     { flush: 'post' }
@@ -1155,7 +1155,7 @@
   }
   watch([lazySentinel, lazyLimit, lazyActive], observeSentinel, { flush: 'post' })
   const rowsInReach = (): number => {
-    const el = viewportEl()
+    const el = viewportElement()
     if (!el || typeof el.getBoundingClientRect !== 'function') return LAZY_CHUNK
     const scrollsItself =
       el.scrollHeight > el.clientHeight &&
@@ -1218,7 +1218,7 @@
     return (rowIndexById.value.get(id) ?? 0) > 0 ? id : null
   })
   const scrollToNewest = (): void => {
-    const el = viewportEl()
+    const el = viewportElement()
     if (el) el.scrollTop = 0
     scrollTop.value = 0
   }
@@ -1233,7 +1233,7 @@
   watch(rowTotal, (total, previous) => {
     if (!live.value) return
     if (liveStartId.value === null && total > 0) liveStartId.value = rowIdAt(0)
-    if (total > (previous ?? 0) && (viewportEl()?.scrollTop ?? 0) < rowHeight.value)
+    if (total > (previous ?? 0) && (viewportElement()?.scrollTop ?? 0) < rowHeight.value)
       void nextTick(scrollToNewest)
   })
 
@@ -1333,7 +1333,7 @@
     void nextTick(() => {
       measureAutoWidths()
       measureEdges()
-      const el = viewportEl()
+      const el = viewportElement()
       if (!el || typeof ResizeObserver === 'undefined') return
       edgeObserver = new ResizeObserver(measureEdges)
       edgeObserver.observe(el)
@@ -1481,7 +1481,7 @@
       ?.closest<HTMLElement>('[data-reorder-row]')
     const hitId = hit && rootEl.value?.contains(hit) ? hit.getAttribute('data-reorder-row') : null
     if (hitId && canMoveId(hitId)) overId.value = hitId
-    const viewport = viewportEl()
+    const viewport = viewportElement()
     if (!viewport) return
     const box = viewport.getBoundingClientRect()
     if (event.clientY < box.top + REORDER_EDGE) viewport.scrollTop -= REORDER_EDGE / 2
@@ -1580,7 +1580,7 @@
     treeFocusId.value = id
     await nextTick()
     let el = treeRowEl(id)
-    const viewport = viewportEl()
+    const viewport = viewportElement()
     const index = rowIndexById.value.get(id)
     if (!el && virtualActive.value && viewport && index !== undefined) {
       viewport.scrollTop = rowOffsets.value[index] ?? 0
@@ -1719,7 +1719,7 @@
     </div>
 
     <ScrollArea
-      ref="viewportRef"
+      ref="viewportEl"
       :orientation="viewportHeight ? 'both' : 'horizontal'"
       :data-testid="`${testId}__viewport`"
       class="min-w-0 max-h-(--table-viewport-height)"

@@ -151,8 +151,8 @@
   const reducedMotion = usePreferredReducedMotion()
   const direction = useDirection()
   const rtl = computed(() => direction.value === 'rtl')
-  const stageRef = ref<globalThis.HTMLElement | null>(null)
-  const { width: stageWidth, height: stageHeight } = useElementSize(stageRef)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
 
   const marks = shallowReactive(new Map<symbol, () => ChartMarkRegistration>())
   const axes = shallowReactive(new Map<symbol, () => ChartAxisKind>())
@@ -490,7 +490,7 @@
   }
 
   function indexAtPointer(event: globalThis.PointerEvent): number | null {
-    const stage = stageRef.value
+    const stage = stageEl.value
     if (!stage || !count.value) return null
     const rect = stage.getBoundingClientRect()
     const offset = vertical.value ? event.clientX - rect.left : event.clientY - rect.top
@@ -504,7 +504,7 @@
     draft.value = [index, index]
     setActiveIndex(index)
     try {
-      stageRef.value?.setPointerCapture?.(event.pointerId)
+      stageEl.value?.setPointerCapture?.(event.pointerId)
     } catch {
       return
     }
@@ -731,7 +731,7 @@
     </div>
     <template v-else>
       <div
-        ref="stageRef"
+        ref="stageEl"
         role="group"
         :aria-roledescription="t('chart.roleDescription')"
         tabindex="0"

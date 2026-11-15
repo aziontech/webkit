@@ -130,7 +130,7 @@
 
   provide(SelectInjectionKey, {
     contentId: `select-${useId()}`,
-    triggerRef: ref<globalThis.HTMLElement | null>(null),
+    triggerEl: ref<globalThis.HTMLElement | null>(null),
     open: openState,
     setOpen,
     modelValue: model as Ref<SelectValue>,

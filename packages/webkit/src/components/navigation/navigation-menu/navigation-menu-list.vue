@@ -36,7 +36,7 @@
 
   const root = useNavigationMenuContext()
   const headingId = useId()
-  const listContainerRef = ref<HTMLElement | null>(null)
+  const listContainerEl = ref<HTMLElement | null>(null)
 
   const isGroup = computed(() => props.label != null && props.label !== '')
 
@@ -52,7 +52,7 @@
   const useHighlight = computed(() => props.highlight && !isGroup.value)
 
   const { selectorStyle, setTarget, onTargetPointerleave, onListPointerleave } =
-    useNavigationMenuListHighlight(listContainerRef, root)
+    useNavigationMenuListHighlight(listContainerEl, root)
 
   if (useHighlight.value) {
     provideNavigationMenuListHighlightContext({
@@ -116,7 +116,7 @@
   </div>
   <div
     v-else-if="useHighlight"
-    ref="listContainerRef"
+    ref="listContainerEl"
     class="relative"
     :data-testid="`${testId}__highlight`"
     @pointerleave="onListPointerleave"

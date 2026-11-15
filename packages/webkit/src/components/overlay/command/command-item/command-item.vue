@@ -62,8 +62,8 @@
   const slots = useSlots()
 
   const itemId = useId()
-  const rootRef = ref<HTMLElement | null>(null)
-  const labelRef = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
+  const labelEl = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
 
   const testId = computed(
@@ -143,7 +143,7 @@
   let unregister: (() => void) | null = null
 
   onMounted(() => {
-    itemText.value = labelRef.value?.textContent?.trim() || String(props.value)
+    itemText.value = labelEl.value?.textContent?.trim() || String(props.value)
     unregister = ctx.registerItem({
       value: props.value,
       id: itemId,
@@ -151,7 +151,7 @@
       disabled: disabledRef,
       isVisible,
       order,
-      el: rootRef,
+      el: rootEl,
       activate
     })
   })
@@ -163,7 +163,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-show="isVisible"
     :id="itemId"
     v-bind="attrs"
@@ -190,7 +190,7 @@
     </span>
 
     <span
-      ref="labelRef"
+      ref="labelEl"
       class="flex-1 truncate text-start"
     >
       <template

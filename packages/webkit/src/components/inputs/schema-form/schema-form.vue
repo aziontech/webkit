@@ -126,7 +126,7 @@
   const { t } = useTranslate({ schemaForm: en.schemaForm })
   const [DefineNodes, ReuseNodes] = createReusableTemplate<{ nodes: SchemaFormNode[] }>()
 
-  const rootRef = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
   const touched = reactive(new Set<string>())
   const dismissed = reactive(new Set<string>())
   const drafts = reactive(new Map<string, { text: string; snapshot: string }>())
@@ -516,7 +516,7 @@
     if (first) {
       for (const section of sectionsHolding(tree.value.nodes, first)) openSections.add(section.path)
       await nextTick()
-      const field = rootRef.value?.querySelector<HTMLElement>(`[data-path="${CSS.escape(first)}"]`)
+      const field = rootEl.value?.querySelector<HTMLElement>(`[data-path="${CSS.escape(first)}"]`)
       field
         ?.querySelector<HTMLElement>('input, textarea, button, [tabindex]:not([tabindex="-1"])')
         ?.focus()
@@ -807,7 +807,7 @@
   </DefineNodes>
 
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="rootAttrs"
     data-slot="schema-form"
     :data-testid="testId"

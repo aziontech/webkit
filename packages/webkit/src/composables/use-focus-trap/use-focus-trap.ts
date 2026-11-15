@@ -8,7 +8,7 @@ const FOCUSABLE_SELECTOR =
 const AUTOFOCUS_SELECTOR = '[data-autofocus]:not([disabled])'
 
 export function useFocusTrap(
-  containerRef: MaybeRefOrGetter<HTMLElement | null | undefined>,
+  containerEl: MaybeRefOrGetter<HTMLElement | null | undefined>,
   active: MaybeRefOrGetter<boolean>,
   isTop: MaybeRefOrGetter<boolean> = true
 ): void {
@@ -20,7 +20,7 @@ export function useFocusTrap(
         return
       }
 
-      const root = toValue(containerRef)
+      const root = toValue(containerEl)
       if (!root) return
 
       const focusable = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
@@ -56,7 +56,7 @@ export function useFocusTrap(
     (isActive) => {
       if (!isActive) return
       void nextTick(() => {
-        const root = toValue(containerRef)
+        const root = toValue(containerEl)
         if (!root) return
         const first =
           root.querySelector<HTMLElement>(AUTOFOCUS_SELECTOR) ??

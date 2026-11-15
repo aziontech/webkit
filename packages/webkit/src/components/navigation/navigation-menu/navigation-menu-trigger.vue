@@ -42,7 +42,7 @@
   const root = useNavigationMenuContext()
   const listHighlight = useNavigationMenuListHighlightContext()
   const itemContext = useOptionalNavigationMenuItemContext()
-  const controlRef = ref<HTMLElement | null>(null)
+  const controlEl = ref<HTMLElement | null>(null)
 
   const isLink = computed(() => props.href !== '')
 
@@ -63,7 +63,7 @@
     'focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) ' +
     'data-[popup-open]:text-(--text-default) data-[pressed]:text-(--text-default) data-[active]:text-(--text-default)'
 
-  const resolveElement = () => resolveHostElement(controlRef.value)
+  const resolveElement = () => resolveHostElement(controlEl.value)
 
   const syncHighlight = () => {
     if (isLink.value && props.active) {
@@ -159,7 +159,7 @@
     syncHighlight()
   })
 
-  watch(controlRef, syncTriggerRegistration)
+  watch(controlEl, syncTriggerRegistration)
   watch(() => props.active, syncHighlight)
 
   watch(itemOpen, (open) => {
@@ -178,7 +178,7 @@
 <template>
   <component
     :is="componentTag"
-    ref="controlRef"
+    ref="controlEl"
     v-bind="passthroughAttrs"
     :href="isLink ? href : undefined"
     :type="isLink ? undefined : 'button'"

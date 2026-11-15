@@ -40,9 +40,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'input-select-option'
   )
 
-  const labelRef = ref<globalThis.HTMLElement | null>(null)
-  const recordLabel = () =>
-    ctx.registerLabel(props.value, labelRef.value?.textContent?.trim() ?? '')
+  const labelEl = ref<globalThis.HTMLElement | null>(null)
+  const recordLabel = () => ctx.registerLabel(props.value, labelEl.value?.textContent?.trim() ?? '')
   onMounted(recordLabel)
   onUpdated(recordLabel)
 
@@ -94,7 +93,7 @@
       />
     </span>
     <span
-      ref="labelRef"
+      ref="labelEl"
       class="flex-1 truncate text-start"
     >
       <slot />

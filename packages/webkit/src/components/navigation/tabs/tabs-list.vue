@@ -31,7 +31,7 @@
     throw new Error('Tabs.List must be used within Tabs (Root).')
   }
 
-  const listRef = ref<HTMLElement | null>(null)
+  const listEl = ref<HTMLElement | null>(null)
   const indicatorVisible = ref(false)
   const indicatorWidth = ref(0)
   const indicatorHeight = ref(0)
@@ -56,7 +56,7 @@
   }))
 
   const updateScrollAffordance = () => {
-    const el = listRef.value
+    const el = listEl.value
     if (!el) return
     const scrolled = Math.abs(el.scrollLeft)
     canScrollStart.value = scrolled > 1
@@ -67,10 +67,10 @@
     'relative flex w-full shrink-0 items-end gap-(--spacing-xs) overflow-x-auto bg-transparent [scrollbar-width:none] [&::-webkit-scrollbar]:hidden data-[align=center]:justify-center-safe'
 
   const syncIndicator = () => {
-    const listEl = listRef.value
+    const list = listEl.value
     const targetValue = indicatorTarget.value
 
-    if (!listEl || targetValue === null) {
+    if (!list || targetValue === null) {
       indicatorVisible.value = false
       return
     }
@@ -83,13 +83,13 @@
       return
     }
 
-    const listRect = listEl.getBoundingClientRect()
+    const listRect = list.getBoundingClientRect()
     const tabRect = tabEl.getBoundingClientRect()
 
     indicatorWidth.value = tabRect.width
     indicatorHeight.value = tabRect.height
-    indicatorOffsetX.value = tabRect.left - listRect.left + listEl.scrollLeft
-    indicatorOffsetY.value = tabRect.top - listRect.top + listEl.scrollTop
+    indicatorOffsetX.value = tabRect.left - listRect.left + list.scrollLeft
+    indicatorOffsetY.value = tabRect.top - listRect.top + list.scrollTop
     indicatorVisible.value = true
   }
 
@@ -104,19 +104,19 @@
 
   onMounted(() => {
     scheduleIndicatorSync()
-    listRef.value?.addEventListener('scroll', updateScrollAffordance, { passive: true })
+    listEl.value?.addEventListener('scroll', updateScrollAffordance, { passive: true })
 
-    if (typeof ResizeObserver !== 'undefined' && listRef.value) {
+    if (typeof ResizeObserver !== 'undefined' && listEl.value) {
       resizeObserver = new ResizeObserver(() => {
         syncIndicator()
         updateScrollAffordance()
       })
-      resizeObserver.observe(listRef.value)
+      resizeObserver.observe(listEl.value)
     }
   })
 
   onBeforeUnmount(() => {
-    listRef.value?.removeEventListener('scroll', updateScrollAffordance)
+    listEl.value?.removeEventListener('scroll', updateScrollAffordance)
     resizeObserver?.disconnect()
     resizeObserver = null
   })
@@ -128,7 +128,7 @@
 <template>
   <div class="relative w-full">
     <div
-      ref="listRef"
+      ref="listEl"
       role="tablist"
       :class="cn(LIST_CLASS, attrs.class as string | undefined)"
       :data-align="align"

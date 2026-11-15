@@ -118,10 +118,10 @@
   const STEP_SHARE = 0.01
   const PAGE_SHARE = 0.1
 
-  const gridRef = ref<HTMLElement | null>(null)
-  const trackRef = ref<HTMLElement | null>(null)
+  const gridEl = ref<HTMLElement | null>(null)
+  const trackEl = ref<HTMLElement | null>(null)
   let drag: Drag | null = null
-  const dir = useDirection(gridRef)
+  const dir = useDirection(gridEl)
 
   const search = ref<string>('')
   const collapsed = ref<Set<string>>(new Set())
@@ -331,7 +331,7 @@
   }
 
   const msAt = (event: PointerEvent): number => {
-    const track = trackRef.value
+    const track = trackEl.value
     if (!track) return 0
     const rect = track.getBoundingClientRect()
     const share = rect.width ? (event.clientX - rect.left) / rect.width : 0
@@ -340,7 +340,7 @@
 
   const capture = (event: PointerEvent): void => {
     try {
-      trackRef.value?.setPointerCapture?.(event.pointerId)
+      trackEl.value?.setPointerCapture?.(event.pointerId)
     } catch {
       return
     }
@@ -437,7 +437,7 @@
   }
 
   const rowElement = (id: string): HTMLElement | null =>
-    gridRef.value?.querySelector<HTMLElement>(`[data-span-id="${CSS.escape(id)}"]`) ?? null
+    gridEl.value?.querySelector<HTMLElement>(`[data-span-id="${CSS.escape(id)}"]`) ?? null
 
   const focusRow = async (id: string): Promise<void> => {
     focusedId.value = id
@@ -599,7 +599,7 @@
       </div>
       <div class="px-(--spacing-md) py-(--spacing-xs)">
         <div
-          ref="trackRef"
+          ref="trackEl"
           :data-testid="`${testId}__track`"
           class="relative h-8 cursor-crosshair touch-none rounded-(--shape-button) bg-(--bg-canvas) select-none"
           @pointerdown="onTrackDown"
@@ -679,7 +679,7 @@
 
       <div
         v-else-if="rows.length"
-        ref="gridRef"
+        ref="gridEl"
         role="treegrid"
         :aria-label="ariaLabel || t('trace.label')"
         :aria-describedby="detail ? detailId : undefined"

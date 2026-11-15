@@ -61,7 +61,7 @@
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
   const { panelStyle } = usePlacement({
-    triggerRef: ctx.triggerRef,
+    triggerRef: ctx.triggerEl,
     panelRef: root,
     isOpen: ctx.open,
     placement: 'bottom-start',
@@ -74,7 +74,7 @@
     lazy,
     open: ctx.open,
     setOpen: ctx.setOpen,
-    triggerRef: ctx.triggerRef,
+    triggerEl: ctx.triggerEl,
     pendingFocus: ctx.pendingFocus,
     textFieldSelector: 'input:not([type="checkbox"]):not([type="radio"]), textarea'
   })
@@ -83,7 +83,7 @@
   const listLabelledby = computed(() =>
     listLabel.value
       ? undefined
-      : (ctx.ariaLabelledby.value ?? ctx.labelledBy.value ?? ctx.triggerRef.value?.id ?? undefined)
+      : (ctx.ariaLabelledby.value ?? ctx.labelledBy.value ?? ctx.triggerEl.value?.id ?? undefined)
   )
 
   const portalLocale = usePortalLocale()

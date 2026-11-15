@@ -25,7 +25,7 @@ export interface SelectContext {
   /** Stable id used to wire trigger `aria-controls` and content element id. */
   contentId: string
   /** Trigger element ref; the content reads it to anchor below. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Current open state. */
   open: Ref<boolean>
   setOpen: (value: boolean) => void

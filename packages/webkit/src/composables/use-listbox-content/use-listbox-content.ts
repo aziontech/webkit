@@ -19,7 +19,7 @@ export interface UseListboxContentOptions {
   lazy: Ref<{ revealAll: () => void; hasHidden: () => boolean } | null>
   open: MaybeRefOrGetter<boolean>
   setOpen: (value: boolean) => void
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Where focus lands when the list opens; the trigger writes it, the content clears it. */
   pendingFocus: Ref<ListboxFocusIntent>
   /** Fields inside the panel whose keystrokes are text, not typeahead. */
@@ -41,9 +41,9 @@ export interface UseListboxContentReturn {
 const OPTION_SELECTOR = '[role="option"]:not([data-disabled])'
 
 export function useListboxContent(options: UseListboxContentOptions): UseListboxContentReturn {
-  const { root, lazy, setOpen, triggerRef, pendingFocus } = options
+  const { root, lazy, setOpen, triggerEl, pendingFocus } = options
   const isOpen = () => toValue(options.open)
-  const focusBack = () => (options.focusTarget?.value ?? triggerRef.value)?.focus()
+  const focusBack = () => (options.focusTarget?.value ?? triggerEl.value)?.focus()
 
   useOverlayLayer(() => isOpen(), { element: root })
 
@@ -144,7 +144,7 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
     const target = event.target as globalThis.Node | null
     if (!el || !target) return
     if (el.contains(target)) return
-    if (triggerRef.value?.contains(target)) return
+    if (triggerEl.value?.contains(target)) return
     setOpen(false)
   }
 

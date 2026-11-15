@@ -48,8 +48,8 @@
   const attrs = useAttrs()
   const uid = useId()
 
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
   let openTimer: ReturnType<typeof setTimeout> | undefined
   let closeTimer: ReturnType<typeof setTimeout> | undefined
   let returningFocus = false
@@ -71,8 +71,8 @@
   const isOpenRef = computed(() => isOpenState.value && !props.disabled)
 
   const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef,
-    panelRef,
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: () => props.placement,
     offset: () => props.offset,
@@ -115,19 +115,19 @@
   }
 
   function focusTrigger() {
-    const host = triggerRef.value
+    const host = triggerEl.value
     if (host) triggerControl(host).focus()
   }
 
   function focusContent(): boolean {
-    const first = panelRef.value?.querySelector<globalThis.HTMLElement>(HOVER_CARD_FOCUSABLE)
+    const first = panelEl.value?.querySelector<globalThis.HTMLElement>(HOVER_CARD_FOCUSABLE)
     first?.focus()
     return Boolean(first)
   }
 
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
     if (event.key !== 'Escape' || !isOpenState.value) return
-    const inside = Boolean(panelRef.value?.contains(globalThis.document.activeElement))
+    const inside = Boolean(panelEl.value?.contains(globalThis.document.activeElement))
     setOpen(false)
     if (!inside) return
     returningFocus = true
@@ -150,8 +150,8 @@
     isOpen: isOpenRef,
     placement: resolvedPlacementRef,
     panelStyle,
-    triggerRef,
-    panelRef,
+    triggerEl,
+    panelEl,
     scheduleOpen,
     scheduleClose,
     cancelClose,

@@ -44,10 +44,10 @@
   const group = inject(MultiSelectGroupInjectionKey, null)
 
   const id = Symbol('MultiSelectOption')
-  const labelRef = ref<globalThis.HTMLElement | null>(null)
+  const labelEl = ref<globalThis.HTMLElement | null>(null)
   const labelText = ref('')
   const recordLabel = () => {
-    const text = labelRef.value?.textContent?.trim() ?? ''
+    const text = labelEl.value?.textContent?.trim() ?? ''
     labelText.value = text
     ctx.registerLabel(props.value, text)
     ctx.registerOption(id, text)
@@ -124,7 +124,7 @@
       />
     </span>
     <span
-      ref="labelRef"
+      ref="labelEl"
       class="flex-1 truncate text-start"
     >
       <slot />

@@ -106,8 +106,8 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ attributeEditor: en.attributeEditor })
   const baseId = useId()
-  const rootRef = ref<HTMLElement | null>(null)
-  const addRef = ref<{ $el?: HTMLElement } | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
+  const addEl = ref<{ $el?: HTMLElement } | null>(null)
   const announcement = ref('')
 
   const testId = computed(
@@ -203,7 +203,7 @@
 
   const focusRow = async (selector: string) => {
     await nextTick()
-    const row = rootRef.value?.querySelector<HTMLElement>(selector)
+    const row = rootEl.value?.querySelector<HTMLElement>(selector)
     const target = row?.querySelector<HTMLElement>(
       'input:not([type=hidden]):not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled), [tabindex="0"]'
     )
@@ -211,7 +211,7 @@
       target.focus()
       return
     }
-    addRef.value?.$el?.focus()
+    addEl.value?.$el?.focus()
   }
 
   const rowSelector = (index: number, groupIndex: number | undefined) =>
@@ -298,13 +298,13 @@
     if (
       active instanceof HTMLElement &&
       active.isConnected &&
-      rootRef.value?.contains(active) &&
+      rootEl.value?.contains(active) &&
       !active.matches(':disabled')
     ) {
       if (document.activeElement !== active) active.focus()
       return
     }
-    rootRef.value?.querySelector<HTMLElement>(fallback)?.focus()
+    rootEl.value?.querySelector<HTMLElement>(fallback)?.focus()
   }
 
   const moveRow = (index: number, groupIndex: number | undefined, to: number) => {
@@ -446,7 +446,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="$attrs"
     class="group/attribute-editor @container/attribute-editor flex w-full min-w-0 flex-col gap-(--spacing-md)"
     :style="columnsStyle"
@@ -812,7 +812,7 @@
         <Button
           v-if="!grouped"
           key="add"
-          ref="addRef"
+          ref="addEl"
           :label="addLabel"
           icon="ai ai-plus"
           kind="outlined"
@@ -824,7 +824,7 @@
         <Button
           v-else
           key="add-group"
-          ref="addRef"
+          ref="addEl"
           :label="groupAddLabel"
           icon="ai ai-plus"
           kind="outlined"

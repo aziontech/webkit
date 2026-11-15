@@ -84,7 +84,7 @@
   const customRange = ref<DateRangeValue | null>(null)
   const query = ref<string>('')
   const direction = ref<'forward' | 'back'>('forward')
-  const panelRef = ref<HTMLElement | null>(null)
+  const panelEl = ref<HTMLElement | null>(null)
   const returnFocus = ref<HTMLElement | null>(null)
 
   const testId = computed<string>(
@@ -241,7 +241,7 @@
     if (isOpen) return
     const active = globalThis.document?.activeElement ?? null
     const hadFocus = Boolean(
-      active && (panelRef.value?.contains(active) || triggerEl()?.contains(active))
+      active && (panelEl.value?.contains(active) || triggerEl()?.contains(active))
     )
     const origin = returnFocus.value
     activeId.value = null
@@ -266,7 +266,7 @@
   }
 
   const levelRows = (): HTMLElement[] => [
-    ...(panelRef.value?.querySelectorAll<HTMLElement>(
+    ...(panelEl.value?.querySelectorAll<HTMLElement>(
       `[data-level="${levelKey.value}"] [data-filter-row]`
     ) ?? [])
   ]
@@ -337,7 +337,7 @@
     <PopoverContent>
       <PopoverTitle class="sr-only">{{ triggerLabel }}</PopoverTitle>
       <div
-        ref="panelRef"
+        ref="panelEl"
         class="flex flex-col"
         @keydown.down="move($event, 1)"
         @keydown.up="move($event, -1)"

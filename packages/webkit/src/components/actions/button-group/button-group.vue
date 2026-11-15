@@ -98,8 +98,8 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ buttonGroup: en.buttonGroup })
-  const rootRef = ref<HTMLElement | null>(null)
-  const dir = useDirection(rootRef)
+  const rootEl = ref<HTMLElement | null>(null)
+  const dir = useDirection(rootEl)
   const focusedId = ref<string | null>(null)
 
   const OVERFLOW_ID = '__overflow'
@@ -179,7 +179,7 @@
 
   const controls = () =>
     Array.from(
-      rootRef.value?.querySelectorAll<HTMLElement>('[data-button-group-item]') ?? []
+      rootEl.value?.querySelectorAll<HTMLElement>('[data-button-group-item]') ?? []
     ).filter((el) => !el.hasAttribute('disabled'))
 
   const onFocusin = (event: FocusEvent) => {
@@ -207,7 +207,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="rootAttrs"
     role="toolbar"
     aria-orientation="horizontal"

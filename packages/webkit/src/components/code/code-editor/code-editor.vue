@@ -170,7 +170,7 @@
     return rest
   })
 
-  const rootRef = ref<HTMLElement | null>(null)
+  const rootEl = ref<HTMLElement | null>(null)
   const monacoHost = ref<HTMLElement | null>(null)
   const textareas = ref<Record<string, HTMLTextAreaElement | null>>({})
   const scrollers = ref<Record<string, HTMLElement | null>>({})
@@ -406,8 +406,8 @@
   }
 
   const applyTheme = () => {
-    if (!api || !rootRef.value) return
-    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootRef.value))
+    if (!api || !rootEl.value) return
+    applyThemeOnce(api, CODE_EDITOR_THEME, themeFromTokens(rootEl.value))
   }
 
   const severityOf = (severity: CodeEditorMarkerSeverity) => {
@@ -506,9 +506,9 @@
     await nextTick()
     try {
       const host = monacoHost.value
-      if (!host || !rootRef.value) throw new Error('missing host')
+      if (!host || !rootEl.value) throw new Error('missing host')
       applyTheme()
-      const font = fontFromTokens(rootRef.value)
+      const font = fontFromTokens(rootEl.value)
       const file = props.path || (props.schema ? 'model.json' : '')
       const uri = file && api.Uri ? api.Uri.parse(`inmemory://webkit/${uid}/${file}`) : undefined
       mainModel = api.editor.createModel(model.value, props.language, uri)
@@ -623,7 +623,7 @@
 
 <template>
   <div
-    ref="rootRef"
+    ref="rootEl"
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-mode="mode"

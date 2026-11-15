@@ -34,11 +34,11 @@
   }
 
   function onControl(el: globalThis.HTMLElement | null) {
-    if (ctx) ctx.triggerRef.value = el
+    if (ctx) ctx.triggerEl.value = el
   }
 
   onBeforeUnmount(() => {
-    if (ctx) ctx.triggerRef.value = null
+    if (ctx) ctx.triggerEl.value = null
   })
 </script>
 

@@ -53,7 +53,7 @@
 
   const promptText = ref('')
 
-  const promptRef = ref<globalThis.HTMLElement | null>(null)
+  const promptEl = ref<globalThis.HTMLElement | null>(null)
   const expanded = ref(false)
   const capped = ref(false)
   const overflow = ref<'start' | 'end' | 'both' | ''>('')
@@ -65,7 +65,7 @@
   let capPx = 0
 
   const measure = () => {
-    const el = promptRef.value
+    const el = promptEl.value
     if (!el) return
 
     if (props.kind === 'line') {
@@ -89,7 +89,7 @@
   }
 
   const readPromptText = () => {
-    promptText.value = (promptRef.value?.textContent ?? '').replace(/\s+/g, ' ').trim()
+    promptText.value = (promptEl.value?.textContent ?? '').replace(/\s+/g, ' ').trim()
   }
 
   const RELEASE_FALLBACK_MS = 600
@@ -100,7 +100,7 @@
   let releaseMove: (() => void) | null = null
 
   const toggle = () => {
-    const el = promptRef.value
+    const el = promptEl.value
     const next = !expanded.value
 
     if (!el || prefersReducedMotion()) {
@@ -154,9 +154,9 @@
     readPromptText()
     nextTick(measure)
 
-    if (typeof globalThis.ResizeObserver === 'function' && promptRef.value) {
+    if (typeof globalThis.ResizeObserver === 'function' && promptEl.value) {
       observer = new globalThis.ResizeObserver(() => measure())
-      observer.observe(promptRef.value)
+      observer.observe(promptEl.value)
     }
   })
 
@@ -203,7 +203,7 @@
       <div class="min-w-0 flex-1">
         <div class="relative">
           <p
-            ref="promptRef"
+            ref="promptEl"
             :data-kind="kind"
             :data-expanded="kind === 'block' && expanded ? '' : undefined"
             :data-overflow="kind === 'line' && overflow ? overflow : undefined"

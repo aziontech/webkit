@@ -101,7 +101,7 @@
   const saving = ref(false)
   const freshness = ref<string | null>('conflict')
   const overwriteOpen = ref(false)
-  const noticeRef = ref<{ $el?: HTMLElement } | null>(null)
+  const noticeEl = ref<{ $el?: HTMLElement } | null>(null)
   let editsBeforeReload: ResourceRecord | null = null
 
   const { isDirty: dirty, commit } = useUnsavedChanges(() => form, {
@@ -149,7 +149,7 @@
     commit(savedElsewhere)
     Object.assign(form, structuredClone(savedElsewhere))
     freshness.value = 'reloaded'
-    nextTick(() => noticeRef.value?.$el?.focus?.())
+    nextTick(() => noticeEl.value?.$el?.focus?.())
   }
 
   const undoReload = () => {
@@ -206,7 +206,7 @@
                 <Alert
                   v-if="freshness === 'conflict'"
                   key="conflict"
-                  ref="noticeRef"
+                  ref="noticeEl"
                   severity="warning"
                   data-testid="stale-record-notice"
                 >
@@ -228,7 +228,7 @@
                 <Alert
                   v-else-if="freshness === 'reloaded'"
                   key="reloaded"
-                  ref="noticeRef"
+                  ref="noticeEl"
                   severity="info"
                   data-testid="stale-record-reloaded"
                 >

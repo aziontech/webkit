@@ -777,8 +777,8 @@
     }, 700)
   }
 
-  const tableRef = ref<TableExposed<EventRecord> | null>(null)
-  const exportCsv = () => tableRef.value?.exportCsv({ filename: 'events.csv' })
+  const tableEl = ref<TableExposed<EventRecord> | null>(null)
+  const exportCsv = () => tableEl.value?.exportCsv({ filename: 'events.csv' })
 
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
 
@@ -1268,7 +1268,7 @@
               icon="ai ai-download"
               kind="outlined"
               size="medium"
-              :disabled="!tableRef"
+              :disabled="!tableEl"
               aria-label="Download CSV"
               data-testid="export-button"
               @click="exportCsv"
@@ -1627,7 +1627,7 @@
               <section class="flex min-h-0 min-w-0 flex-1 flex-col">
                 <div class="flex min-h-0 flex-1">
                   <DataTable
-                    ref="tableRef"
+                    ref="tableEl"
                     v-model:pagination="pagination"
                     :data="matchedEvents"
                     :columns="columns"

@@ -71,7 +71,7 @@
   const attrs = useAttrs()
   const slots = useSlots()
 
-  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
+  const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const {
     controlId,
@@ -114,14 +114,14 @@
 
   const onChromeMousedown = (event: globalThis.MouseEvent) => {
     if (isDisabled.value) return
-    if (event.target === inputRef.value) return
+    if (event.target === inputEl.value) return
     event.preventDefault()
-    inputRef.value?.focus()
+    inputEl.value?.focus()
   }
 
   defineExpose({
     /** Moves focus to the native field. */
-    focus: (): void => inputRef.value?.focus()
+    focus: (): void => inputEl.value?.focus()
   })
 </script>
 
@@ -148,7 +148,7 @@
     </span>
 
     <input
-      ref="inputRef"
+      ref="inputEl"
       :type="type"
       :value="model"
       :placeholder="placeholder"

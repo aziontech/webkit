@@ -42,12 +42,12 @@
 
   const resolvedLabel = computed(() => props.label || t('searchTrigger.label'))
 
-  const buttonRef = ref<HTMLButtonElement | null>(null)
-  const labelRef = ref<HTMLElement | null>(null)
+  const buttonEl = ref<HTMLButtonElement | null>(null)
+  const labelEl = ref<HTMLElement | null>(null)
   const folded = ref(true)
 
-  useResizeObserver(buttonRef, () => {
-    folded.value = (labelRef.value?.getClientRects().length ?? 0) === 0
+  useResizeObserver(buttonEl, () => {
+    folded.value = (labelEl.value?.getClientRects().length ?? 0) === 0
   })
 
   const Bare: FunctionalComponent = (_, { slots }) => slots['default']?.()
@@ -87,7 +87,7 @@
     "
   >
     <button
-      ref="buttonRef"
+      ref="buttonEl"
       type="button"
       v-bind="$attrs"
       :data-testid="testId"
@@ -111,7 +111,7 @@
         >{{ resolvedLabel }}</span
       >
       <span
-        ref="labelRef"
+        ref="labelEl"
         aria-hidden="true"
         class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted) group-disabled/search-trigger:text-(--text-disabled) group-data-[collapsible=true]/search-trigger:hidden group-data-[collapsible=true]/search-trigger:@2xl:inline"
         :data-testid="`${testId}__label`"

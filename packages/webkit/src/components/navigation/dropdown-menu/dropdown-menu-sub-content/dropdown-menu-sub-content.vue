@@ -26,8 +26,8 @@
   const sub = useDropdownSubContext()
   const level = useMenuLevel()
 
-  const panelRef = ref<globalThis.HTMLElement | null>(null)
-  const bodyRef = ref<globalThis.HTMLElement | null>(null)
+  const panelEl = ref<globalThis.HTMLElement | null>(null)
+  const bodyEl = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? `${parent.testId}__sub-panel`
@@ -36,39 +36,39 @@
   const isOpen = computed(() => sub.isOpen.value && parent.isOpen.value)
 
   const placement = computed(() =>
-    resolveDirection(sub.triggerRef.value) === 'rtl' ? 'left-start' : 'right-start'
+    resolveDirection(sub.triggerEl.value) === 'rtl' ? 'left-start' : 'right-start'
   )
 
   const { resolvedPlacement, panelStyle } = usePlacement({
-    triggerRef: sub.triggerRef,
-    panelRef,
+    triggerRef: sub.triggerEl,
+    panelRef: panelEl,
     isOpen,
     placement,
     offset: 4,
     onDismiss: () => sub.setOpen(false)
   })
 
-  const focusFirstOption = () => focusMenuItem(panelRef.value, 'first')
+  const focusFirstOption = () => focusMenuItem(panelEl.value, 'first')
 
   function closeToTrigger() {
     sub.setOpen(false)
-    sub.triggerRef.value?.focus({ preventScroll: true })
+    sub.triggerEl.value?.focus({ preventScroll: true })
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
-    const back = resolveDirection(panelRef.value) === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
+    const back = resolveDirection(panelEl.value) === 'rtl' ? 'ArrowRight' : 'ArrowLeft'
     if (event.key === 'ArrowDown') {
       event.preventDefault()
-      focusMenuItem(panelRef.value, 'next')
+      focusMenuItem(panelEl.value, 'next')
     } else if (event.key === 'ArrowUp') {
       event.preventDefault()
-      focusMenuItem(panelRef.value, 'prev')
+      focusMenuItem(panelEl.value, 'prev')
     } else if (event.key === 'Home') {
       event.preventDefault()
       focusFirstOption()
     } else if (event.key === 'End') {
       event.preventDefault()
-      focusMenuItem(panelRef.value, 'last')
+      focusMenuItem(panelEl.value, 'last')
     } else if (event.key === 'Escape' || event.key === back) {
       event.preventDefault()
       closeToTrigger()
@@ -84,7 +84,7 @@
     if (!sub.isOpen.value) sub.setOpen(true)
   }
 
-  const unregisterPanel = parent.registerSubPanel(() => panelRef.value)
+  const unregisterPanel = parent.registerSubPanel(() => panelEl.value)
 
   watch(isOpen, async (open) => {
     if (!open) {
@@ -102,11 +102,11 @@
 
   provide(DropdownMenuInjectionKey, {
     ...parent,
-    panelBodyRef: bodyRef,
+    panelBodyEl: bodyEl,
     focusFirstOption,
-    focusLastOption: () => focusMenuItem(panelRef.value, 'last'),
-    focusNextOption: () => focusMenuItem(panelRef.value, 'next'),
-    focusPrevOption: () => focusMenuItem(panelRef.value, 'prev'),
+    focusLastOption: () => focusMenuItem(panelEl.value, 'last'),
+    focusNextOption: () => focusMenuItem(panelEl.value, 'next'),
+    focusPrevOption: () => focusMenuItem(panelEl.value, 'prev'),
     activeSub: level.activeSub,
     setActiveSub: level.setActiveSub,
     cancelSubClose: level.cancelSubClose
@@ -126,7 +126,7 @@
       <div
         v-if="isOpen"
         v-bind="attrs"
-        ref="panelRef"
+        ref="panelEl"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
         :data-testid="testId"
@@ -139,7 +139,7 @@
       >
         <div
           :id="sub.contentId"
-          ref="bodyRef"
+          ref="bodyEl"
           role="menu"
           tabindex="-1"
           :aria-labelledby="sub.triggerId"

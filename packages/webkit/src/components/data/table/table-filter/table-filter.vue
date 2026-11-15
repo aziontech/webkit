@@ -70,7 +70,7 @@
     () => import('../../property-filter/property-filter.vue')
   )
 
-  const menuRef = ref<InstanceType<typeof FilterMenuComponent> | null>(null)
+  const menuEl = ref<InstanceType<typeof FilterMenuComponent> | null>(null)
   const menuLabels = useFilterMenuLabels()
   const menuFields = computed(() => toMenuFields(fields.value))
   const menuModel = computed<FilterMenuModel>(() => toMenuModel(applied.value, menuFields.value))
@@ -92,7 +92,7 @@
     () => ctx?.editingFilter.value ?? null,
     (filter) => {
       if (!filter || props.kind !== 'menu') return
-      menuRef.value?.open(filter.field)
+      menuEl.value?.open(filter.field)
       if (ctx) ctx.editingFilter.value = null
     }
   )
@@ -101,7 +101,7 @@
 <template>
   <FilterMenu
     v-if="kind === 'menu'"
-    ref="menuRef"
+    ref="menuEl"
     v-bind="$attrs"
     :data-testid="testId"
     :fields="menuFields"

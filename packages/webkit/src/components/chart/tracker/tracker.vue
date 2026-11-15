@@ -44,8 +44,8 @@
   const attrs = useAttrs()
   const dir = useDirection()
   const { t } = useTranslate({ tracker: en.tracker })
-  const stripRef = ref<globalThis.HTMLDivElement | null>(null)
-  const { width: stripWidth } = useElementSize(stripRef)
+  const stripEl = ref<globalThis.HTMLDivElement | null>(null)
+  const { width: stripWidth } = useElementSize(stripEl)
 
   const uid = useId()
   const summaryId = `${uid}-summary`
@@ -128,7 +128,7 @@
   }
 
   function onPointermove(event: globalThis.PointerEvent) {
-    const strip = stripRef.value
+    const strip = stripEl.value
     if (!strip || !count.value) return
     const rect = strip.getBoundingClientRect()
     setActiveIndex(
@@ -189,7 +189,7 @@
         {{ readout.label }}
       </div>
       <div
-        ref="stripRef"
+        ref="stripEl"
         :data-testid="`${testId}__strip`"
         class="flex h-8 w-full gap-0.5"
         @pointermove="onPointermove"

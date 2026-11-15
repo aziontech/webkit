@@ -48,7 +48,7 @@
   }
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')
 
-  const paneRef = ref<globalThis.HTMLElement | null>(null)
+  const paneEl = ref<globalThis.HTMLElement | null>(null)
 
   const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max)
 
@@ -70,7 +70,7 @@
   })
 
   const measure = () => {
-    const el = paneRef.value
+    const el = paneEl.value
     if (!el) return basis.value ?? props.min
     return orientation.value === 'horizontal' ? el.offsetWidth : el.offsetHeight
   }
@@ -83,9 +83,9 @@
   )
 
   onMounted(() => {
-    if (!paneRef.value || !ctx) return
+    if (!paneEl.value || !ctx) return
     if (basis.value !== undefined) basis.value = clamp(basis.value)
-    ctx.register(paneRef.value, {
+    ctx.register(paneEl.value, {
       basis: () => basis.value ?? measure(),
       flexible: () => flexible.value,
       min: () => props.min,
@@ -98,13 +98,13 @@
   })
 
   onBeforeUnmount(() => {
-    if (paneRef.value && ctx) ctx.unregister(paneRef.value)
+    if (paneEl.value && ctx) ctx.unregister(paneEl.value)
   })
 </script>
 
 <template>
   <div
-    ref="paneRef"
+    ref="paneEl"
     v-bind="$attrs"
     role="group"
     :aria-label="ariaLabel || undefined"

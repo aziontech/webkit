@@ -22,8 +22,8 @@
 
   const isOpen = computed(() => ctx.isOpen.value)
 
-  function setHostRef(el: unknown) {
-    ctx.triggerRef.value = el instanceof HTMLElement ? el : null
+  function setHostEl(el: unknown) {
+    ctx.triggerEl.value = el instanceof HTMLElement ? el : null
   }
 
   function onPointerenter(event: globalThis.PointerEvent) {
@@ -38,7 +38,7 @@
 
   function onFocusout(event: globalThis.FocusEvent) {
     const next = event.relatedTarget as globalThis.Node | null
-    if (next && (ctx.triggerRef.value?.contains(next) || ctx.panelRef.value?.contains(next))) return
+    if (next && (ctx.triggerEl.value?.contains(next) || ctx.panelEl.value?.contains(next))) return
     ctx.scheduleClose()
   }
 
@@ -50,7 +50,7 @@
   watch(
     () => (isOpen.value ? ctx.contentId : ''),
     (id) => {
-      const host = ctx.triggerRef.value
+      const host = ctx.triggerEl.value
       if (!host) return
       const el = triggerControl(host)
       const ids = (el.getAttribute('aria-describedby') ?? '')
@@ -64,14 +64,14 @@
   )
 
   onBeforeUnmount(() => {
-    ctx.triggerRef.value = null
+    ctx.triggerEl.value = null
   })
 </script>
 
 <template>
   <span
     v-bind="attrs"
-    :ref="setHostRef"
+    :ref="setHostEl"
     :data-testid="testId"
     :data-state="isOpen ? 'open' : 'closed'"
     class="inline-flex w-fit"

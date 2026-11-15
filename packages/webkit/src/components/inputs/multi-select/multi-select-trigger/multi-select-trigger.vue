@@ -52,7 +52,7 @@
   })
 
   const setControl = (el: unknown) => {
-    ctx.controlRef.value = (el as globalThis.HTMLElement | null) ?? null
+    ctx.controlEl.value = (el as globalThis.HTMLElement | null) ?? null
   }
 
   const removeChip = (value: unknown) => {
@@ -65,14 +65,14 @@
     if (locked.value) return
     const target = event.target as globalThis.Element | null
     const button = target?.closest('button')
-    if (button && button !== ctx.controlRef.value) return
+    if (button && button !== ctx.controlEl.value) return
     ctx.focusControl()
     if (ctx.searchable.value) ctx.setOpen(true)
     else ctx.setOpen(!ctx.open.value)
   }
 
   const onFieldKeydown = (event: globalThis.KeyboardEvent) => {
-    if (event.target !== ctx.controlRef.value) return
+    if (event.target !== ctx.controlEl.value) return
     if (ctx.searchable.value) onInputKeydown(event)
     else onKeydown(event)
   }
@@ -140,7 +140,7 @@
     v-if="!field"
     :ref="
       (el) => {
-        ctx.triggerRef.value = el as globalThis.HTMLElement | null
+        ctx.triggerEl.value = el as globalThis.HTMLElement | null
       }
     "
     v-bind="$attrs"
@@ -190,7 +190,7 @@
     v-else
     :ref="
       (el) => {
-        ctx.triggerRef.value = el as globalThis.HTMLElement | null
+        ctx.triggerEl.value = el as globalThis.HTMLElement | null
       }
     "
     v-bind="$attrs"

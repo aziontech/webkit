@@ -66,9 +66,9 @@
   const zoomable = computed(() => Boolean(props.src) && !isClip.value)
 
   const zoomed = ref(false)
-  const triggerRef = ref<HTMLButtonElement | null>(null)
-  const overlayRef = ref<HTMLElement | null>(null)
-  const zoomImageRef = ref<HTMLImageElement | null>(null)
+  const triggerEl = ref<HTMLButtonElement | null>(null)
+  const overlayEl = ref<HTMLElement | null>(null)
+  const zoomImageEl = ref<HTMLImageElement | null>(null)
 
   const flip = ref('')
 
@@ -92,13 +92,13 @@
 
   const open = async () => {
     if (!zoomable.value) return
-    const from = triggerRef.value?.getBoundingClientRect()
+    const from = triggerEl.value?.getBoundingClientRect()
     zoomed.value = true
     armed.value = false
     flip.value = ''
     if (prefersReducedMotion()) return
     await nextTick()
-    const image = zoomImageRef.value
+    const image = zoomImageEl.value
     if (!from || !image) return
     flip.value = flipTransform(from, image.getBoundingClientRect())
     requestAnimationFrame(() => {
@@ -110,8 +110,8 @@
   }
 
   const close = () => {
-    const image = zoomImageRef.value
-    const from = triggerRef.value?.getBoundingClientRect()
+    const image = zoomImageEl.value
+    const from = triggerEl.value?.getBoundingClientRect()
     if (!image || !from || prefersReducedMotion()) {
       zoomed.value = false
       return
@@ -120,7 +120,7 @@
   }
 
   const onZoomTransitionend = (event: TransitionEvent) => {
-    if (event.target !== zoomImageRef.value || event.propertyName !== 'transform') return
+    if (event.target !== zoomImageEl.value || event.propertyName !== 'transform') return
     if (flip.value) zoomed.value = false
   }
 
@@ -128,7 +128,7 @@
     isScrollLocked.value = isOpen
   })
 
-  useFocusTrap(overlayRef, zoomed)
+  useFocusTrap(overlayEl, zoomed)
 
   useEventListener(defaultDocument, 'keydown', (event: KeyboardEvent) => {
     if (!zoomed.value || event.key !== 'Escape') return
@@ -139,7 +139,7 @@
   watch(zoomed, async (isOpen, wasOpen) => {
     if (isOpen || !wasOpen) return
     await nextTick()
-    triggerRef.value?.focus()
+    triggerEl.value?.focus()
   })
 
   const portalLocale = usePortalLocale()
@@ -175,7 +175,7 @@
       ></video>
       <button
         v-else-if="zoomable"
-        ref="triggerRef"
+        ref="triggerEl"
         type="button"
         :data-testid="`${testId}__zoom-trigger`"
         :aria-label="alt ? t('docFrame.zoomNamed', { alt }) : t('docFrame.zoom')"
@@ -223,7 +223,7 @@
         v-if="zoomed"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
-        ref="overlayRef"
+        ref="overlayEl"
         role="dialog"
         aria-modal="true"
         data-state="open"
@@ -247,7 +247,7 @@
           {{ t('docFrame.close') }}
         </button>
         <img
-          ref="zoomImageRef"
+          ref="zoomImageEl"
           :src="src"
           :alt="alt"
           :style="{ transform: flip }"

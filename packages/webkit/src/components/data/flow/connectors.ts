@@ -121,12 +121,12 @@ const pairEndpoints = (exits: Endpoint[], entries: Endpoint[]): Array<[Endpoint,
   return Array.from({ length: count }, (_, i): [Endpoint, Endpoint] => [exits[i], entries[i]])
 }
 
-export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
+export const useFlowConnectors = (containerEl: Ref<HTMLElement | null>) => {
   const paths = ref<FlowPath[]>([])
   const viewBox = ref<string>('0 0 0 0')
 
   const measure = () => {
-    const container = containerRef.value
+    const container = containerEl.value
     if (!container) {
       return
     }
@@ -179,9 +179,9 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
     globalThis.requestAnimationFrame(measure)
   })
 
-  useResizeObserver(() => containerRef.value, measure)
+  useResizeObserver(() => containerEl.value, measure)
   useMutationObserver(
-    () => containerRef.value,
+    () => containerEl.value,
     () => measure(),
     {
       childList: true,

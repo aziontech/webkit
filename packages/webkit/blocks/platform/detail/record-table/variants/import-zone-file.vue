@@ -202,7 +202,7 @@
     }, 700)
   }
 
-  const tableRef = ref<TableExposed<DnsRecord> | null>(null)
+  const tableEl = ref<TableExposed<DnsRecord> | null>(null)
 
   const SUPPORTED = ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'CAA', 'SRV', 'NS', 'PTR']
 
@@ -769,7 +769,7 @@ legacy  IN HINFO "PC" "Linux"`
                     size="medium"
                     :disabled="!matchingItems.length"
                     aria-label="Download CSV"
-                    @click="tableRef?.exportCsv({ filename: 'records.csv' })"
+                    @click="tableEl?.exportCsv({ filename: 'records.csv' })"
                   />
                 </Tooltip>
                 <CollectionPreferences
@@ -781,7 +781,7 @@ legacy  IN HINFO "PC" "Linux"`
             <Card :padded="false">
               <template #content>
                 <DataTable
-                  ref="tableRef"
+                  ref="tableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting

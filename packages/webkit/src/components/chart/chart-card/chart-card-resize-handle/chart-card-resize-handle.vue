@@ -20,7 +20,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ chartCard: en.chartCard })
   const ctx = useChartCardContext()
-  const handleRef = ref<globalThis.HTMLElement | null>(null)
+  const handleEl = ref<globalThis.HTMLElement | null>(null)
 
   const HEIGHT_STEP = 24
 
@@ -48,7 +48,7 @@
   })
 
   function release() {
-    const handle = handleRef.value
+    const handle = handleEl.value
     if (origin && handle?.hasPointerCapture(origin.pointerId))
       handle.releasePointerCapture(origin.pointerId)
     origin = null
@@ -67,7 +67,7 @@
       columnWidth: measure.columnWidth
     }
     try {
-      handleRef.value?.setPointerCapture(event.pointerId)
+      handleEl.value?.setPointerCapture(event.pointerId)
     } catch {}
     event.preventDefault()
     ctx.startResize(event)
@@ -115,7 +115,7 @@
 <template>
   <div
     v-if="ctx.resizable.value"
-    ref="handleRef"
+    ref="handleEl"
     v-bind="$attrs"
     role="separator"
     tabindex="0"

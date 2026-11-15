@@ -45,7 +45,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tabs: en.tabs })
-  const buttonRef = ref<HTMLElement | null>(null)
+  const buttonEl = ref<HTMLElement | null>(null)
   const resolvedValue = computed(() => props.value ?? props.label)
 
   const context = inject(TabsInjectionKey, null) as TabsContext | null
@@ -117,7 +117,7 @@
       get disabled() {
         return props.disabled
       },
-      el: buttonRef
+      el: buttonEl
     })
   })
 
@@ -132,7 +132,7 @@
 
 <template>
   <button
-    ref="buttonRef"
+    ref="buttonEl"
     type="button"
     :role="context ? 'tab' : undefined"
     v-bind="passthroughAttrs"

@@ -51,8 +51,8 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
   )
 
-  const navRef = ref<globalThis.HTMLElement | null>(null)
-  const isCollapsed = useBreadcrumbCollapse(navRef)
+  const navEl = ref<globalThis.HTMLElement | null>(null)
+  const isCollapsed = useBreadcrumbCollapse(navEl)
 
   const resolvedItems = computed(() =>
     props.items.map((item, index) => {
@@ -95,7 +95,7 @@
 
 <template>
   <nav
-    ref="navRef"
+    ref="navEl"
     v-bind="attrs"
     :class="cn('inline-flex w-full min-w-0 items-center', attrs.class as string | undefined)"
     :aria-label="ariaLabel || t('breadcrumb.label')"

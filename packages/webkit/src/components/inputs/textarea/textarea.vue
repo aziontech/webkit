@@ -53,7 +53,7 @@
   const model = defineModel<string>({ default: '' })
 
   const attrs = useAttrs()
-  const textareaRef = ref<globalThis.HTMLTextAreaElement | null>(null)
+  const textareaEl = ref<globalThis.HTMLTextAreaElement | null>(null)
 
   const {
     controlId,
@@ -87,7 +87,7 @@
   const measuresHeight = ref(false)
 
   const fitHeight = () => {
-    const field = textareaRef.value
+    const field = textareaEl.value
     if (!field || !measuresHeight.value || !props.autoResize) return
     field.style.height = 'auto'
     field.style.height = `${field.scrollHeight + field.offsetHeight - field.clientHeight}px`
@@ -117,13 +117,13 @@
 
   defineExpose({
     /** Moves focus to the native field. */
-    focus: (): void => textareaRef.value?.focus()
+    focus: (): void => textareaEl.value?.focus()
   })
 </script>
 
 <template>
   <textarea
-    ref="textareaRef"
+    ref="textareaEl"
     dir="auto"
     v-bind="passthroughAttrs"
     :id="controlId"

@@ -48,8 +48,8 @@
 
   const attrs = useAttrs()
   const uid = useId()
-  const triggerRef = ref<HTMLElement | null>(null)
-  const panelRef = ref<HTMLElement | null>(null)
+  const triggerEl = ref<HTMLElement | null>(null)
+  const panelEl = ref<HTMLElement | null>(null)
   const hoverTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
@@ -72,8 +72,8 @@
   const placementRef = computed(() => props.placement)
 
   const { resolvedPlacement, panelStyle, anchored, updatePosition } = usePlacement({
-    triggerRef,
-    panelRef,
+    triggerRef: triggerEl,
+    panelRef: panelEl,
     isOpen: isOpenRef,
     placement: placementRef,
     offset: 8,
@@ -84,7 +84,7 @@
   const resolvedPlacementRef = computed(() => resolvedPlacement.value as TooltipPlacement)
 
   const { isTop } = useOverlayLayer(() => isOpen.value && Boolean(props.text), {
-    element: panelRef,
+    element: panelEl,
     transient: true
   })
 
@@ -158,7 +158,7 @@
   }
 
   function onFocusout(event: globalThis.FocusEvent) {
-    const trigger = triggerRef.value
+    const trigger = triggerEl.value
     const next = event.relatedTarget as Node | null
     if (trigger?.contains(next)) return
     closeTooltip()
@@ -167,7 +167,7 @@
   watch(
     () => (isOpen.value && props.text ? tooltipId.value : ''),
     (id) => {
-      const host = triggerRef.value
+      const host = triggerEl.value
       if (!host) return
       const el = triggerControl(host)
       const ids = (el.getAttribute('aria-describedby') ?? '')
@@ -208,7 +208,7 @@
 
 <template>
   <span
-    ref="triggerRef"
+    ref="triggerEl"
     v-bind="attrs"
     class="inline-flex w-fit shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
     :data-testid="testId"
@@ -236,7 +236,7 @@
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
         :id="tooltipId"
-        ref="panelRef"
+        ref="panelEl"
         role="tooltip"
         :data-testid="`${testId}__panel`"
         :data-state="isOpen ? 'open' : 'closed'"

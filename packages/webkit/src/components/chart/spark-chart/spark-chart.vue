@@ -50,12 +50,12 @@
   const gradientId = `spark-chart-${useId()}`
   const reducedMotion = usePreferredReducedMotion()
   const entered = ref(false)
-  const rootRef = ref<globalThis.HTMLDivElement | null>(null)
+  const rootEl = ref<globalThis.HTMLDivElement | null>(null)
   const measuredWidth = ref(0)
   let frame = 0
   let measureFrame = 0
 
-  useResizeObserver(rootRef, ([entry]) => {
+  useResizeObserver(rootEl, ([entry]) => {
     if (measureFrame) globalThis.cancelAnimationFrame(measureFrame)
     measureFrame = globalThis.requestAnimationFrame(() => {
       measureFrame = 0
@@ -146,7 +146,7 @@
 <template>
   <div
     v-bind="$attrs"
-    ref="rootRef"
+    ref="rootEl"
     :data-testid="testId"
     :data-kind="kind"
     :data-size="size"

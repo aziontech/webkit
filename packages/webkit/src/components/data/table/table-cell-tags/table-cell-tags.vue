@@ -39,10 +39,10 @@
       (ctx ? `${ctx.testId}__cell-tags` : 'data-table__cell-tags')
   )
 
-  const rowRef = ref<HTMLElement | null>(null)
-  const iconRef = ref<HTMLElement | null>(null)
-  const rulerRef = ref<HTMLElement | null>(null)
-  const chipRef = ref<HTMLElement | null>(null)
+  const rowEl = ref<HTMLElement | null>(null)
+  const iconEl = ref<HTMLElement | null>(null)
+  const rulerEl = ref<HTMLElement | null>(null)
+  const chipEl = ref<HTMLElement | null>(null)
   const fit = ref<number>(props.items.length)
 
   const shownCount = computed<number>(() => Math.min(props.items.length, Math.max(1, fit.value)))
@@ -57,11 +57,11 @@
   )
 
   const measure = (): void => {
-    const row = rowRef.value
-    const ruler = rulerRef.value
+    const row = rowEl.value
+    const ruler = rulerEl.value
     if (!row || !ruler) return
     const gap = Number.parseFloat(globalThis.getComputedStyle(row).columnGap) || 0
-    const available = row.clientWidth - (iconRef.value ? iconRef.value.offsetWidth + gap : 0)
+    const available = row.clientWidth - (iconEl.value ? iconEl.value.offsetWidth + gap : 0)
     const ends = Array.from(ruler.querySelectorAll<HTMLElement>('[data-ruler-item]')).map(
       (node) => node.offsetLeft + node.offsetWidth
     )
@@ -69,7 +69,7 @@
       fit.value = props.items.length
       return
     }
-    const chip = (chipRef.value?.offsetWidth ?? 0) + gap
+    const chip = (chipEl.value?.offsetWidth ?? 0) + gap
     let count = 0
     while (count < ends.length && ends[count] + chip <= available) count += 1
     fit.value = Math.max(1, count)
@@ -77,7 +77,7 @@
 
   let watched: HTMLElement | null = null
   onMounted(() => {
-    watched = rowRef.value
+    watched = rowEl.value
     if (watched) watchSize(watched, measure)
     measure()
   })
@@ -142,14 +142,14 @@
   >
   <div
     v-else
-    ref="rowRef"
+    ref="rowEl"
     v-bind="$attrs"
     :data-testid="testId"
     class="relative flex w-full min-w-0 items-center gap-(--spacing-xs)"
   >
     <i
       v-if="icon"
-      ref="iconRef"
+      ref="iconEl"
       :class="icon"
       class="shrink-0 text-body-lg text-(--text-muted)"
       aria-hidden="true"
@@ -182,7 +182,7 @@
       aria-hidden="true"
     >
       <span
-        ref="rulerRef"
+        ref="rulerEl"
         class="flex w-max items-center gap-(--spacing-xxs) whitespace-nowrap"
       >
         <span
@@ -199,7 +199,7 @@
           />
         </span>
         <span
-          ref="chipRef"
+          ref="chipEl"
           class="inline-flex"
         >
           <Tag

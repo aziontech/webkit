@@ -29,7 +29,7 @@
       watch(
         () => anchorProps.el,
         (el) => {
-          ctx.triggerRef.value = el
+          ctx.triggerEl.value = el
         },
         { immediate: true }
       )

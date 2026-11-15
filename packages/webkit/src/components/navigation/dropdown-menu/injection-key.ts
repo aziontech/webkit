@@ -33,7 +33,7 @@ export interface DropdownMenuSubContext {
   /** Whether the panel should focus its first item when it opens. */
   focusOnOpen: Ref<boolean>
   /** The sub-trigger row element, the panel's anchor and focus-return target. */
-  triggerRef: Ref<globalThis.HTMLElement | null>
+  triggerEl: Ref<globalThis.HTMLElement | null>
   /** Menu level of the panel that holds the sub-trigger. */
   parent: MenuContext
 }

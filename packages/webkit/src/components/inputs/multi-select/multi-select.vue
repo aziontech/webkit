@@ -193,10 +193,10 @@
     return true
   })
 
-  const controlRef = ref<globalThis.HTMLElement | null>(null)
-  const triggerRef = ref<globalThis.HTMLElement | null>(null)
+  const controlEl = ref<globalThis.HTMLElement | null>(null)
+  const triggerEl = ref<globalThis.HTMLElement | null>(null)
   const focusControl = () => {
-    ;(controlRef.value ?? triggerRef.value)?.focus()
+    ;(controlEl.value ?? triggerEl.value)?.focus()
   }
 
   const create = (event: MultiSelectCommitEvent) => {
@@ -215,7 +215,7 @@
 
   provide(MultiSelectInjectionKey, {
     contentId: `multi-select-${useId()}`,
-    triggerRef,
+    triggerEl,
     open: openState,
     setOpen,
     modelValue: model as unknown as import('vue').Ref<unknown[]>,
@@ -253,7 +253,7 @@
     visibleCount,
     showCreate,
     create,
-    controlRef,
+    controlEl,
     focusControl,
     navigate: ref<((key: string) => void) | null>(null)
   })

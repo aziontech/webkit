@@ -29,7 +29,7 @@
   )
 
   const root = useNavigationMenuContext()
-  const popupHostRef = shallowRef<MaybeElement>(null)
+  const popupHostEl = shallowRef<MaybeElement>(null)
 
   const ROOT_CLASS =
     'w-[var(--navigation-menu-popup-width,auto)] h-[var(--navigation-menu-popup-height,auto)] [transform-origin:var(--popup-origin,top_left)] ' +
@@ -61,14 +61,14 @@
   }))
 
   watch(
-    popupHostRef,
+    popupHostEl,
     (target) => {
       root.setPopupEl(resolveHostElement(target))
     },
     { immediate: true }
   )
 
-  onClickOutside(popupHostRef, (event) => {
+  onClickOutside(popupHostEl, (event) => {
     if (!root.menuOpen.value) {
       return
     }
@@ -87,7 +87,7 @@
 
 <template>
   <nav
-    ref="popupHostRef"
+    ref="popupHostEl"
     :hidden="popupHidden"
     :class="cn(ROOT_CLASS, attrs.class as string | undefined)"
     :style="popupStyle"

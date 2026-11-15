@@ -66,7 +66,7 @@
   const lazy = ref<{ revealAll: () => void; hasHidden: () => boolean } | null>(null)
 
   const { panelStyle } = usePlacement({
-    triggerRef: ctx.triggerRef,
+    triggerRef: ctx.triggerEl,
     panelRef: root,
     isOpen: ctx.open,
     placement: 'bottom-start',
@@ -74,14 +74,14 @@
     matchTriggerWidth: true
   })
 
-  const focusTarget = computed(() => ctx.controlRef.value ?? ctx.triggerRef.value)
+  const focusTarget = computed(() => ctx.controlEl.value ?? ctx.triggerEl.value)
 
   const { onKeydown, navigate } = useListboxContent({
     root,
     lazy,
     open: ctx.open,
     setOpen: ctx.setOpen,
-    triggerRef: ctx.triggerRef,
+    triggerEl: ctx.triggerEl,
     pendingFocus: ctx.pendingFocus,
     textFieldSelector: 'input:not([type="checkbox"]), textarea',
     focusTarget,

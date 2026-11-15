@@ -160,8 +160,8 @@
   const draft = ref<string>('')
   const open = ref<boolean>(false)
   const active = ref<number>(-1)
-  const fieldRef = ref<HTMLElement | null>(null)
-  const panelRef = ref<HTMLElement | null>(null)
+  const fieldEl = ref<HTMLElement | null>(null)
+  const panelEl = ref<HTMLElement | null>(null)
 
   const operatorLabel = (operator: PropertyFilterOperator): string => {
     switch (operator) {
@@ -391,7 +391,7 @@
     queryContext(queryText.value, caret.value, props.properties, props.freeText)
   )
 
-  const inputEl = (): HTMLInputElement | null | undefined => fieldRef.value?.querySelector('input')
+  const inputEl = (): HTMLInputElement | null | undefined => fieldEl.value?.querySelector('input')
 
   const insertAtCaret = (insert: string): void => {
     const { from, to } = context.value
@@ -534,8 +534,8 @@
   )
 
   const { panelStyle } = usePlacement({
-    triggerRef: fieldRef,
-    panelRef,
+    triggerRef: fieldEl,
+    panelRef: panelEl,
     isOpen: expanded,
     placement: 'bottom-start',
     offset: 4,
@@ -702,7 +702,7 @@
     class="@container/property-filter flex w-full min-w-0 flex-col gap-(--spacing-xs)"
   >
     <div
-      ref="fieldRef"
+      ref="fieldEl"
       :data-mode="mode"
       class="w-full min-w-0 [&[data-mode=query]_input]:text-label-code-sm"
     >
@@ -753,7 +753,7 @@
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           :id="listId"
-          ref="panelRef"
+          ref="panelEl"
           role="listbox"
           :aria-label="t('propertyFilter.suggestions')"
           :aria-busy="valueRows === 'loading' || undefined"

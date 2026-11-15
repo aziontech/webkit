@@ -124,8 +124,8 @@
     return rest
   })
 
-  const anchorRef = ref<HTMLElement | null>(null)
-  const panelRef = ref<HTMLElement | null>(null)
+  const anchorEl = ref<HTMLElement | null>(null)
+  const panelEl = ref<HTMLElement | null>(null)
   const open = computed<boolean>({
     get: () => openModel.value ?? props.defaultOpen,
     set: (next) => {
@@ -224,7 +224,7 @@
       (rows.value.length > 0 || props.loading || (typing.value && Boolean(query.value)))
   )
 
-  useOverlayLayer(expanded, { element: panelRef, transient: true })
+  useOverlayLayer(expanded, { element: panelEl, transient: true })
 
   const emptyLabel = computed(() => props.emptyTitle || t('combobox.empty'))
 
@@ -240,8 +240,8 @@
   })
 
   const { panelStyle } = usePlacement({
-    triggerRef: anchorRef,
-    panelRef,
+    triggerRef: anchorEl,
+    panelRef: panelEl,
     isOpen: expanded,
     placement: 'bottom-start',
     offset: 4,
@@ -250,11 +250,11 @@
 
   const panelSizing = computed(() => [panelStyle.value, { minWidth: `${anchorWidth.value}px` }])
 
-  const inputEl = () => anchorRef.value?.querySelector('input') ?? null
+  const inputEl = () => anchorEl.value?.querySelector('input') ?? null
 
   const setOpen = (next: boolean) => {
     if (next && (isDisabled.value || props.readonly)) return
-    if (next) anchorWidth.value = anchorRef.value?.offsetWidth ?? 0
+    if (next) anchorWidth.value = anchorEl.value?.offsetWidth ?? 0
     open.value = next
     if (!next) active.value = -1
   }
@@ -444,7 +444,7 @@
     class="relative w-full min-w-0"
   >
     <div
-      ref="anchorRef"
+      ref="anchorEl"
       class="relative w-full"
     >
       <Input
@@ -513,7 +513,7 @@
         <ul
           v-show="expanded"
           :id="listId"
-          ref="panelRef"
+          ref="panelEl"
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           role="listbox"

@@ -120,8 +120,8 @@
   const mounted = useMounted()
   const reducedMotion = usePreferredReducedMotion()
   const uid = useId()
-  const stageRef = ref<globalThis.HTMLElement | null>(null)
-  const { width: stageWidth, height: stageHeight } = useElementSize(stageRef)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+  const { width: stageWidth, height: stageHeight } = useElementSize(stageEl)
   const geometry = shallowRef<Readonly<Record<string, string>> | null>(null)
   const entered = ref(false)
   let frame = 0
@@ -526,7 +526,7 @@
     </div>
     <template v-else>
       <div
-        ref="stageRef"
+        ref="stageEl"
         role="group"
         :aria-roledescription="t('mapChart.roleDescription')"
         tabindex="0"

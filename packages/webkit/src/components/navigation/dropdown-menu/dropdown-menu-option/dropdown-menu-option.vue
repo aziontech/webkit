@@ -125,8 +125,8 @@
 
 <template>
   <Teleport
-    v-if="inGroup || ctx.panelBodyRef.value"
-    :to="ctx.panelBodyRef.value ?? 'body'"
+    v-if="inGroup || ctx.panelBodyEl.value"
+    :to="ctx.panelBodyEl.value ?? 'body'"
     :disabled="inGroup"
   >
     <component

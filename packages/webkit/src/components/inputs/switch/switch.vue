@@ -65,10 +65,10 @@
 
   const isChecked = computed(() => model.value === true)
 
-  const buttonRef = ref<globalThis.HTMLButtonElement | null>(null)
+  const buttonEl = ref<globalThis.HTMLButtonElement | null>(null)
 
   onMounted(() => {
-    if (props.autofocus) buttonRef.value?.focus()
+    if (props.autofocus) buttonEl.value?.focus()
   })
 
   function onToggle() {
@@ -87,7 +87,7 @@
 
 <template>
   <button
-    ref="buttonRef"
+    ref="buttonEl"
     type="button"
     role="switch"
     :id="controlId"

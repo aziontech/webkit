@@ -76,7 +76,7 @@
   const slots = useSlots()
 
   const visible = ref(false)
-  const inputRef = ref<globalThis.HTMLInputElement | null>(null)
+  const inputEl = ref<globalThis.HTMLInputElement | null>(null)
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'input-password-input'
@@ -108,7 +108,7 @@
 
   defineExpose({
     /** Moves focus to the native field. */
-    focus: (): void => inputRef.value?.focus()
+    focus: (): void => inputEl.value?.focus()
   })
 </script>
 
@@ -145,7 +145,7 @@
     </span>
 
     <input
-      ref="inputRef"
+      ref="inputEl"
       :type="visible ? 'text' : 'password'"
       :id="controlId"
       :aria-describedby="describedBy"
