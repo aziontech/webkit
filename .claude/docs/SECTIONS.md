@@ -26,7 +26,17 @@ Two names are the **same string**, on purpose:
 | component name, folder, spec (`.specs/use-cases.md`), testid `sections-use-cases` | `use-cases`              |
 | public path `@aziontech/webkit/use-cases`, import binding                         | `use-cases` → `UseCases` |
 
-A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `SectionGap` before each band and one after the last (a page that ends on a closing band closes on that band's own frame instead, stacked closing bands share one frame, and a `closing-call-to-action` of `kind: 'frame'` takes no gap), and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, owned by `shells/website`). A new section is added there in the same change, or the `site-page` test fails.
+A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `SectionGap` before each band and one after the last (a page that ends on a closing band — `closing-call-to-action`, `closing-call-to-action-newsletter`, or a `template-gallery` with `closing: true` — closes on that band's own frame instead, stacked closing bands share one frame, and a `closing-call-to-action` of `kind: 'frame'` takes no gap), and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, owned by `shells/website`). A new section is added there in the same change, or the `site-page` test fails.
+
+**Retired `_id`s keep rendering.** The site's page JSON lives outside this repo, so when a section is merged into another or renamed, its old `_id` gets an entry in `sitePageSectionAliases` (same file): the `target` section and a `props` transform from the old shape to the new one (`{ _id: 'hero-copy-on-top-art', props }` renders `hero-band` with `kind: 'copy-on-top-art'`). Add the alias and a `site-page` test row in the same change as the merge. It is the one alias the package keeps; the old export, its types and its props are removed, not re-exported.
+
+## Section or primitive
+
+Most bands exist twice on purpose: a **section** (`faq-section`, `stats-band`, `client-quotes`, `hero-band`, `closing-call-to-action`, `media-split-band`, `site-footer`) and the **primitive** it composes (`faq`, `big-numbers`, `quote-tabs`, `hero`, `call-to-action`, `media-split`, `footer`). The rule that picks one:
+
+> Rendering page JSON, or you need a whole band with no custom content → the section. Building an SFC by hand, needing slots, or nesting inside another band → the primitive.
+
+Customer proof, for example: `Quote` for one testimonial; `ClientQuotes` for a band of quotes the reader browses by client; `LogoWallQuote` for customer logos plus one featured quote; `RecognitionMarquee` only for a looping row of analyst or press quotes; `QuoteTabs` in a hand-built SFC that needs the `#actions` slot.
 
 ```vue
 <script setup>
