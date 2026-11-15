@@ -11,7 +11,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
@@ -407,30 +407,21 @@
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                   <Field.Legend kind="label">Domain source</Field.Legend>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                    <Field.Label
+                  <RadioGroup
+                    v-model="form.kind"
+                    kind="card"
+                    name="domain-kind"
+                    aria-label="Domain source"
+                    :disabled="submitting"
+                  >
+                    <RadioGroup.Item
                       v-for="option in kindOptions"
                       :key="option.value"
+                      :value="option.value"
+                      :description="option.description"
+                      >{{ option.label }}</RadioGroup.Item
                     >
-                      <Field
-                        orientation="horizontal"
-                        :disabled="submitting"
-                      >
-                        <RadioButton
-                          v-model="form.kind"
-                          :value="option.value"
-                          name="domain-kind"
-                          :id="'domain-kind-' + option.value"
-                        />
-                        <Field.Content>
-                          <Field.Title>{{ option.label }}</Field.Title>
-                          <Field.Description v-if="option.description">{{
-                            option.description
-                          }}</Field.Description>
-                        </Field.Content>
-                      </Field>
-                    </Field.Label>
-                  </div>
+                  </RadioGroup>
                 </fieldset>
 
                 <Field

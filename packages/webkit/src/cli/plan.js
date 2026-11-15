@@ -126,7 +126,6 @@ export const LABEL_CONTROL_COMPONENTS = [
   'NumberInput',
   'PasswordInput',
   'PhoneInput',
-  'RadioButton',
   'Select',
   'Slider',
   'Switch',

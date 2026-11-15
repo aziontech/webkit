@@ -9,7 +9,8 @@
   import FieldLabel from '../../inputs/field/field-label/field-label.vue'
   import FieldLegend from '../../inputs/field/field-legend/field-legend.vue'
   import FieldSet from '../../inputs/field/field-set/field-set.vue'
-  import RadioButton from '../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import Textarea from '../../inputs/textarea/textarea.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
@@ -101,7 +102,10 @@
     if (!reason.value) {
       missing.value = true
       await nextTick()
-      globalThis.document?.getElementById(`${uid}-${options.value[0]?.value}`)?.focus()
+      globalThis.document
+        ?.getElementById(`${uid}-reasons`)
+        ?.querySelector<HTMLInputElement>('input[type="radio"]')
+        ?.focus()
       return
     }
     emit('submit', event, { reason: reason.value, details: details.value.trim() })
@@ -134,23 +138,20 @@
               :disabled="loading"
             >
               <FieldLegend kind="label">{{ t('feedbackReason.reason') }}</FieldLegend>
-              <div class="flex flex-col gap-(--spacing-sm)">
-                <Field
+              <RadioGroup
+                :id="`${uid}-reasons`"
+                v-model="reason"
+                :name="`${uid}-reason`"
+                :invalid="missing"
+                :disabled="loading"
+              >
+                <RadioGroupItem
                   v-for="option in options"
                   :key="option.value"
-                  orientation="horizontal"
-                  :invalid="missing"
-                  :disabled="loading"
+                  :value="option.value"
+                  >{{ option.label }}</RadioGroupItem
                 >
-                  <RadioButton
-                    v-model="reason"
-                    :value="option.value"
-                    :name="`${uid}-reason`"
-                    :id="`${uid}-${option.value}`"
-                  />
-                  <FieldLabel :for="`${uid}-${option.value}`">{{ option.label }}</FieldLabel>
-                </Field>
-              </div>
+              </RadioGroup>
               <FieldError
                 v-if="missing"
                 :id="`${uid}-error`"

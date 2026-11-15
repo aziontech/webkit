@@ -15,7 +15,7 @@
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -618,26 +618,21 @@
                 <template #content>
                   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                     <div class="flex flex-col gap-(--spacing-xs)">
-                      <Field.Label
-                        v-for="phase in PHASES"
-                        :key="phase.value"
+                      <RadioGroup
+                        v-model="form.phase"
+                        kind="card"
+                        name="rule-phase"
+                        aria-label="Phase"
+                        :disabled="submitting || editing"
                       >
-                        <Field
-                          orientation="horizontal"
-                          :disabled="submitting || editing"
+                        <RadioGroup.Item
+                          v-for="phase in PHASES"
+                          :key="phase.value"
+                          :value="phase.value"
+                          :description="phase.description"
+                          >{{ phase.label }}</RadioGroup.Item
                         >
-                          <RadioButton
-                            v-model="form.phase"
-                            :value="phase.value"
-                            name="rule-phase"
-                            :id="`rule-phase-${phase.value}`"
-                          />
-                          <Field.Content>
-                            <Field.Title>{{ phase.label }}</Field.Title>
-                            <Field.Description>{{ phase.description }}</Field.Description>
-                          </Field.Content>
-                        </Field>
-                      </Field.Label>
+                      </RadioGroup>
                       <HelperText
                         v-if="editing"
                         kind="disabled"

@@ -1,45 +1,59 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="TOption extends RadioGroupOption = RadioGroupOption">
   import { computed, provide, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import { fieldContextKey } from '../field/injection-key'
-  import { RadioGroupInjectionKey, type RadioGroupOrientation } from './injection-key'
+  import {
+    RadioGroupInjectionKey,
+    type RadioGroupKind,
+    type RadioGroupOption,
+    type RadioGroupOrientation
+  } from './injection-key'
+  import RadioGroupItem from './radio-group-item/radio-group-item.vue'
 
   defineOptions({
     name: 'RadioGroup',
     inheritAttrs: false
   })
 
-  export type { RadioGroupOrientation }
-
-  export interface Props {
-    /** Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group. */
-    name?: string
-    /** Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way. */
-    orientation?: RadioGroupOrientation
-    /** Disables every option and applies the disabled tokens. */
-    disabled?: boolean
-    /** Requires a selection: sets aria-required on the group and required on the radios, so a native form blocks an empty submit. */
-    required?: boolean
-    /** Marks the group invalid: sets aria-invalid on the group and on every radio. */
-    invalid?: boolean
-  }
-  export type RadioGroupProps = Props
-
-  const props = withDefaults(defineProps<Props>(), {
-    name: '',
-    orientation: 'vertical',
-    disabled: false,
-    required: false,
-    invalid: false
-  })
+  const props = withDefaults(
+    defineProps<{
+      /** Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group. */
+      name?: string
+      /** Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way. */
+      orientation?: RadioGroupOrientation
+      /** Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). */
+      kind?: RadioGroupKind
+      /** Options rendered as RadioGroup.Item rows, in place of composed items; extra fields reach the option and tag slots. Empty renders the default slot. */
+      options?: TOption[]
+      /** Disables every option and applies the disabled tokens. */
+      disabled?: boolean
+      /** Requires a selection: sets aria-required on the group and required on the radios, so a native form blocks an empty submit. */
+      required?: boolean
+      /** Marks the group invalid: sets aria-invalid on the group and on every radio. */
+      invalid?: boolean
+    }>(),
+    {
+      name: '',
+      orientation: 'vertical',
+      kind: 'default',
+      options: () => [],
+      disabled: false,
+      required: false,
+      invalid: false
+    }
+  )
 
   /** Selected value; set to the value of the chosen item. */
-  const model = defineModel<string | undefined>()
+  const model = defineModel<TOption['value'] | undefined>()
 
   defineSlots<{
     /** The RadioGroup.Item options. */
     default(): unknown
+    /** Body of one data-driven option, in place of its label. */
+    option(props: { option: TOption; selected: boolean }): unknown
+    /** Trailing content of one data-driven option, such as a price or a tag. */
+    tag(props: { option: TOption; selected: boolean }): unknown
   }>()
 
   const attrs = useAttrs()
@@ -70,13 +84,23 @@
   provide(RadioGroupInjectionKey, {
     name: computed(() => props.name || generatedName),
     value: computed(() => model.value),
+    kind: computed(() => props.kind),
     disabled: field.disabled,
     testId,
     select: (value: string) => {
       if (field.disabled.value) return
-      model.value = value
+      model.value = value as TOption['value']
     }
   })
+</script>
+
+<script lang="ts">
+  export type {
+    RadioGroupKind,
+    RadioGroupOption,
+    RadioGroupOrientation,
+    RadioGroupProps
+  } from './injection-key'
 </script>
 
 <template>
@@ -90,11 +114,39 @@
     :aria-invalid="field.invalid.value || undefined"
     :data-testid="testId"
     :data-orientation="orientation"
+    :data-kind="kind"
     :data-disabled="field.disabled.value || null"
     :data-required="field.required.value || null"
     :data-invalid="field.invalid.value || null"
-    class="flex data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-(--spacing-sm) data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-(--spacing-md) data-[orientation=horizontal]:gap-y-(--spacing-sm)"
+    class="group/radio-group flex data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-(--spacing-sm) data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-(--spacing-md) data-[orientation=horizontal]:gap-y-(--spacing-sm) data-[kind=card]:data-[orientation=vertical]:gap-(--spacing-xs) data-[kind=card]:data-[orientation=horizontal]:gap-x-(--spacing-xs) data-[kind=card]:data-[orientation=horizontal]:gap-y-(--spacing-xs) data-[kind=card]:data-[orientation=horizontal]:items-stretch"
   >
-    <slot />
+    <slot v-if="!options.length" />
+    <RadioGroupItem
+      v-for="option in options"
+      v-else
+      :key="option.value"
+      :value="option.value"
+      :description="option.description ?? ''"
+      :icon="option.icon ?? ''"
+      :aria-label="option.ariaLabel ?? ''"
+      :disabled="option.disabled ?? false"
+    >
+      <slot
+        name="option"
+        :option="option"
+        :selected="model === option.value"
+        >{{ option.label }}</slot
+      >
+      <template
+        v-if="$slots['tag']"
+        #tag
+      >
+        <slot
+          name="tag"
+          :option="option"
+          :selected="model === option.value"
+        />
+      </template>
+    </RadioGroupItem>
   </div>
 </template>

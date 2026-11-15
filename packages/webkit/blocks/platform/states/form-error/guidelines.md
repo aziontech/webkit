@@ -70,11 +70,11 @@ HTTP ports, with `MultiSelect.Trigger` carrying the id the error points at.
 
 The Origin. It takes `invalid` when the server says the chosen origin no longer exists, and `required` once the list is reloaded without it.
 
-### N. Choice cards — `Field` (required)
+### N. Choice cards — `RadioGroup` (required)
 
-Protocol usage, a `fieldset` of `Field`s each wrapping a `RadioButton` with a label and a description.
+Protocol usage, a `RadioGroup` with `kind="card"`, each option with a label and a description.
 
-### O. Choice — `RadioButton` (required)
+### O. Choice — `RadioGroup.Item` (required)
 
 One per protocol option.
 

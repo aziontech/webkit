@@ -47,7 +47,7 @@ Large; full name with `autocomplete="name"`.
 
 `Organization mark`, the `kind="label"` legend of the `fieldset` that holds the radio cards.
 
-### I. Mark picker — `RadioCards` (required)
+### I. Mark picker — `RadioGroup` with `kind="card"` (required)
 
 Seven colors, `aria-label="Organization mark"`, each card showing the generated mark.
 

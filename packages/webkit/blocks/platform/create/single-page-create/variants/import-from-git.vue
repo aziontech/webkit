@@ -9,7 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
   import PhoneInput from '@aziontech/webkit/phone-input'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select from '@aziontech/webkit/select'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
@@ -303,28 +303,20 @@
 
           <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
             <Field.Legend kind="label">Deployment type</Field.Legend>
-            <div class="flex flex-col gap-(--spacing-sm)">
-              <Field.Label
+            <RadioGroup
+              v-model="form.deploymentType"
+              kind="card"
+              name="deploymentType"
+              :disabled="submitting"
+            >
+              <RadioGroup.Item
                 v-for="option in deploymentTypes"
                 :key="option.value"
+                :value="option.value"
+                :description="option.description"
+                >{{ option.label }}</RadioGroup.Item
               >
-                <Field
-                  orientation="horizontal"
-                  :disabled="submitting"
-                >
-                  <RadioButton
-                    v-model="form.deploymentType"
-                    :value="option.value"
-                    name="deploymentType"
-                    :id="`tpl-deploymentType-${option.value}`"
-                  />
-                  <Field.Content>
-                    <Field.Title>{{ option.label }}</Field.Title>
-                    <Field.Description>{{ option.description }}</Field.Description>
-                  </Field.Content>
-                </Field>
-              </Field.Label>
-            </div>
+            </RadioGroup>
             <HelperText
               v-if="deploymentTypeWarning"
               kind="required"
@@ -334,25 +326,19 @@
 
           <fieldset class="m-0 flex w-full flex-col gap-(--spacing-xs) border-0 p-0">
             <Field.Legend kind="label">Runtime</Field.Legend>
-            <div class="flex flex-wrap gap-(--spacing-lg)">
-              <div
+            <RadioGroup
+              v-model="form.runtime"
+              orientation="horizontal"
+              name="runtime"
+              :disabled="submitting"
+            >
+              <RadioGroup.Item
                 v-for="option in runtimes"
                 :key="option.value"
+                :value="option.value"
+                >{{ option.label }}</RadioGroup.Item
               >
-                <Field
-                  orientation="horizontal"
-                  :disabled="submitting"
-                >
-                  <RadioButton
-                    v-model="form.runtime"
-                    :value="option.value"
-                    name="runtime"
-                    :id="`tpl-runtime-${option.value}`"
-                  />
-                  <Field.Label :for="`tpl-runtime-${option.value}`">{{ option.label }}</Field.Label>
-                </Field>
-              </div>
-            </div>
+            </RadioGroup>
           </fieldset>
 
           <Field>

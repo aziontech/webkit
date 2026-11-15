@@ -5,7 +5,6 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -13,7 +12,7 @@
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import type { SelectOptionItem } from '@aziontech/webkit/select-root'
@@ -832,34 +831,21 @@
                             description="What happens when the client certificate cannot be validated against the Trusted CA."
                             kind="stacked"
                           >
-                            <div
-                              role="radiogroup"
+                            <RadioGroup
+                              v-model="form.mtls.mode"
+                              kind="card"
+                              name="mtls-mode"
                               aria-label="Mutual authentication mode"
-                              class="flex w-full flex-col gap-(--spacing-sm)"
+                              :disabled="saving"
                             >
-                              <Field.Label
+                              <RadioGroup.Item
                                 v-for="option in mtlsModeOptions"
                                 :key="option.value"
+                                :value="option.value"
+                                :description="option.description"
+                                >{{ option.label }}</RadioGroup.Item
                               >
-                                <Field
-                                  orientation="horizontal"
-                                  :disabled="saving"
-                                >
-                                  <RadioButton
-                                    v-model="form.mtls.mode"
-                                    :value="option.value"
-                                    name="mtls-mode"
-                                    :id="`mtls-mode-${option.value}`"
-                                  />
-                                  <Field.Content>
-                                    <Field.Title>{{ option.label }}</Field.Title>
-                                    <Field.Description v-if="option.description">{{
-                                      option.description
-                                    }}</Field.Description>
-                                  </Field.Content>
-                                </Field>
-                              </Field.Label>
-                            </div>
+                            </RadioGroup>
                           </SettingRow>
                           <SettingRow
                             v-if="armed"

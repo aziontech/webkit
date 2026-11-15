@@ -3,11 +3,11 @@ name: table
 category: data
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 56ffdaf3ced65dd1f44e401ceaab9689e39b0904513fa81488b6ee184f0cd790
+checksum: b9aecf14a318bc467434fdbe1a8a4642e4a987f2594cfbc64b359aefd541083b
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ Composition primitives for building accessible, pixel-perfect data tables, in tw
 - A short titled preview of a longer listing on a marketing page → use `listing-table`.
 - A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
-- A grid of selectable cards or options → use `radio-cards`.
+- A grid of selectable cards or options → use `radio-group` with `kind="card"`.
 - The same records as a grid of cards → use `cards` (same collection, card layout).
 
 ## Related

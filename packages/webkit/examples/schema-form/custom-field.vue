@@ -1,5 +1,5 @@
 <script setup>
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SchemaForm from '@aziontech/webkit/schema-form'
   import { ref } from 'vue'
 
@@ -29,10 +29,12 @@
     class="max-w-(--container-sm)"
   >
     <template #field:mode="{ value, setValue, disabled }">
-      <RadioCards
+      <RadioGroup
         :model-value="value"
+        kind="card"
+        orientation="horizontal"
         aria-label="Cache mode"
-        :items="[
+        :options="[
           {
             value: 'honor',
             label: 'Honor origin headers',

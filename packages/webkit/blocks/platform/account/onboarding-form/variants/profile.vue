@@ -8,7 +8,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Progress from '@aziontech/webkit/progress'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
 
@@ -161,9 +161,11 @@
                           <Field.Legend kind="label"
                             >How are you planning to use the platform?</Field.Legend
                           >
-                          <RadioCards
+                          <RadioGroup
                             v-model="usage"
-                            :items="usageOptions"
+                            kind="card"
+                            orientation="horizontal"
+                            :options="usageOptions"
                             aria-label="How are you planning to use the platform?"
                           />
                           <HelperText
@@ -175,9 +177,11 @@
 
                         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
                           <Field.Legend kind="label">What best describes your role?</Field.Legend>
-                          <RadioCards
+                          <RadioGroup
                             v-model="role"
-                            :items="roleOptions"
+                            kind="card"
+                            orientation="horizontal"
+                            :options="roleOptions"
                             aria-label="What best describes your role?"
                           />
                           <HelperText

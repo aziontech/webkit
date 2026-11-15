@@ -19,7 +19,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
   import Progress from '@aziontech/webkit/progress'
-  import RadioCards from '@aziontech/webkit/radio-cards'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -364,38 +364,40 @@
 
                     <div class="animate-fade-in motion-reduce:animate-none">
                       <div class="flex flex-col gap-(--spacing-xs)">
-                        <RadioCards
+                        <RadioGroup
                           :model-value="pendingPlanId || plan"
-                          :items="plans"
+                          kind="card"
+                          orientation="horizontal"
+                          :options="plans"
                           aria-label="Plan"
                           @update:model-value="selectPlan"
                         >
-                          <template #default="{ item }">
+                          <template #option="{ option }">
                             <div
                               class="flex w-full items-center justify-between gap-(--spacing-sm)"
                             >
                               <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
                                 <span class="text-body-sm text-(--text-default)">{{
-                                  item.label
+                                  option.label
                                 }}</span>
                                 <span class="text-body-xs text-(--text-muted)">{{
-                                  item.description
+                                  option.description
                                 }}</span>
                               </div>
                               <div class="flex shrink-0 flex-col items-end gap-(--spacing-xxs)">
                                 <Tag
-                                  :label="item.name"
-                                  :severity="item.severity"
+                                  :label="option.name"
+                                  :severity="option.severity"
                                   size="small"
                                   rounded
                                 />
                                 <span class="text-label-sm text-(--text-muted)">
-                                  {{ item.price }}
+                                  {{ option.price }}
                                 </span>
                               </div>
                             </div>
                           </template>
-                        </RadioCards>
+                        </RadioGroup>
 
                         <HelperText
                           v-if="submitted && !plan"

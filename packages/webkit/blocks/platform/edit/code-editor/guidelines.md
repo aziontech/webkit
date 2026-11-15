@@ -58,9 +58,9 @@ A flush `Card` with one small `Item` per field: a Move up and a Move down `IconB
 
 Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `HelperText` once the field was touched.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Field`, `RadioButton`, `Switch`, `HelperText` (required)
+### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `RadioGroup`, `Switch`, `HelperText` (required)
 
-The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `Field` choice cards around `RadioButton`s) and Status (Active as a `Switch`). See `skills/webkit-form`.
+The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`kind="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 

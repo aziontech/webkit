@@ -12,7 +12,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import SettingRow from '@aziontech/webkit/setting-row'
@@ -627,31 +627,21 @@
                             title="Type"
                             kind="stacked"
                           >
-                            <fieldset
-                              class="m-0 flex w-full flex-col gap-(--spacing-sm) border-0 p-0"
+                            <RadioGroup
+                              v-model="form.type"
+                              kind="card"
+                              class="w-full"
+                              name="access-lists-type"
+                              aria-label="Type"
                             >
-                              <legend class="sr-only">Type</legend>
-                              <Field.Label
+                              <RadioGroup.Item
                                 v-for="option in types"
                                 :key="option.value"
+                                :value="option.value"
+                                :description="option.description"
+                                >{{ option.label }}</RadioGroup.Item
                               >
-                                <Field orientation="horizontal">
-                                  <RadioButton
-                                    v-model="form.type"
-                                    :value="option.value"
-                                    name="access-lists-type"
-                                  />
-                                  <Field.Content>
-                                    <Field.Title>
-                                      {{ option.label }}
-                                    </Field.Title>
-                                    <Field.Description v-if="option.description">
-                                      {{ option.description }}
-                                    </Field.Description>
-                                  </Field.Content>
-                                </Field>
-                              </Field.Label>
-                            </fieldset>
+                            </RadioGroup>
                           </SettingRow>
                           <SettingRow
                             :title="listField.label"

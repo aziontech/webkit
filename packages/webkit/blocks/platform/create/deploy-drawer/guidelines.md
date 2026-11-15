@@ -43,9 +43,9 @@ A small `Accordion` below the resource rows, collapsed, listing the modules and 
 
 A full-width `ToggleGroup` in the card header switches between Use existing and Create new. The project is an outlined `Item`: its name, a New `Tag` when it will be created, and its domains grouped by environment, the first one a small `Link` (`target="_blank"`, with its external glyph) under a `Tooltip` that says it opens in a new tab, the rest behind a `+N` `Tag` whose `Popover.Trigger` is named "N more domains" and opens a searchable `Popover` listing each domain as a `Link`. Never hand-roll the anchors. Change opens a `DropdownMenu` of the projects grouped by how they relate to the service.
 
-### G. Environment — `Field`, `RadioButton`, `Tag` (required)
+### G. Environment — `RadioGroup`, `Tag` (required)
 
-Choice cards, one horizontal `Field` with a `RadioButton` per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
+Choice cards, a `RadioGroup` with `kind="card"` and one item per environment of the project, each with one sentence on how it serves traffic and a small `Tag` such as Last used. The group carries an `aria-label`.
 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 

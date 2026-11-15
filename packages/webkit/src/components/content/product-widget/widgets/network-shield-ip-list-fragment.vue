@@ -2,14 +2,11 @@
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Field from '../../../inputs/field/field.vue'
-  import FieldContent from '../../../inputs/field/field-content/field-content.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
-  import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -177,26 +174,20 @@
 
       <ShellMockupPart :order="1">
         <div class="flex flex-col gap-(--spacing-sm)">
-          <FieldLabel
-            v-for="type in TYPES"
-            :key="type.value"
+          <RadioGroup
+            model-value="ip_cidr"
+            kind="card"
+            name="network-list-type"
+            aria-label="Type"
           >
-            <Field orientation="horizontal">
-              <RadioButton
-                model-value="ip_cidr"
-                name="network-list-type"
-                :value="type.value"
-              />
-              <FieldContent>
-                <FieldTitle>
-                  {{ type.label }}
-                </FieldTitle>
-                <FieldDescription v-if="type.description">
-                  {{ type.description }}
-                </FieldDescription>
-              </FieldContent>
-            </Field>
-          </FieldLabel>
+            <RadioGroupItem
+              v-for="type in TYPES"
+              :key="type.value"
+              :value="type.value"
+              :description="type.description"
+              >{{ type.label }}</RadioGroupItem
+            >
+          </RadioGroup>
         </div>
       </ShellMockupPart>
 

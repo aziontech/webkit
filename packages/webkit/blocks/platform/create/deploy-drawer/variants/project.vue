@@ -9,13 +9,12 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PanelContent from '@aziontech/webkit/panel-content'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import Separator from '@aziontech/webkit/separator'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Tag from '@aziontech/webkit/tag'
@@ -558,45 +557,31 @@
               title="Environment"
               hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
             >
-              <div
-                role="radiogroup"
+              <RadioGroup
+                v-model="environment"
+                kind="card"
+                name="project-deploy-environment"
                 aria-label="Environment"
-                class="flex min-w-0 flex-col gap-(--spacing-xs)"
               >
-                <div
+                <RadioGroup.Item
                   v-for="entry in environmentChoices"
                   :key="entry.name"
-                  class="relative min-w-0"
+                  :value="entry.name"
+                  :description="entry.description"
                 >
-                  <Field.Label>
-                    <Field orientation="horizontal">
-                      <RadioButton
-                        v-model="environment"
-                        name="project-deploy-environment"
-                        :value="entry.name"
-                      />
-                      <Field.Content>
-                        <Field.Title>
-                          {{ entry.name }}
-                        </Field.Title>
-                        <Field.Description v-if="entry.description">
-                          {{ entry.description }}
-                        </Field.Description>
-                      </Field.Content>
-                    </Field>
-                  </Field.Label>
-                  <div
+                  {{ entry.name }}
+                  <template
                     v-if="entry.tag"
-                    class="pointer-events-none absolute end-(--spacing-sm) top-(--spacing-sm)"
+                    #tag
                   >
                     <Tag
                       :label="entry.tag"
                       severity="info"
                       size="small"
                     />
-                  </div>
-                </div>
-              </div>
+                  </template>
+                </RadioGroup.Item>
+              </RadioGroup>
 
               <Alert
                 v-if="sharedWith.length"

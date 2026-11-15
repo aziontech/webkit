@@ -3,11 +3,11 @@ name: feedback-reason-dialog
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: e314373d9b69460ea034fd368f6c39dc960f283b996d471ac19a6804eb9ec60f
+checksum: 0ec19fed5004d65087d4c1a32a4e6fe78657f7aaf89fa5f5335edfbe225bb6b3
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # FeedbackReasonDialog — Component Spec
@@ -113,7 +113,7 @@ _none_
 ## Accessibility (WCAG 2.1 AA)
 
 - A modal `Dialog` named by its title and described by its one-line description; focus moves into it and returns to the thumbs-down on close.
-- The reasons are a `fieldset` with a `legend` (`Reason`), one `RadioButton` per reason with its label; the details `Textarea` is labelled `Details (optional)`.
+- The reasons are a `fieldset` with a `legend` (`Reason`), a `RadioGroup` with one `RadioGroup.Item` per reason and its label; the details `Textarea` is labelled `Details (optional)`.
 - Submitting without a reason marks the fieldset invalid, shows the error text and focuses the first radio; nothing is sent.
 - Keyboard: `Tab` through radios (arrows within the group), details, Cancel, Send feedback; `Enter` in a radio submits; `Escape` closes.
 
@@ -147,7 +147,7 @@ _none_
 
 ## Performance
 
-- Bundle budget: 31.64 KB gzip for `./feedback-reason-dialog` in `.size-limit.json` (most of it is `Dialog`, `Field`, `RadioButton`, `Textarea` and `Button`, shared with the page).
+- Bundle budget: 31.64 KB gzip for `./feedback-reason-dialog` in `.size-limit.json` (most of it is `Dialog`, `Field`, `RadioGroup`, `Textarea` and `Button`, shared with the page).
 - Runtime budget: renders only while open (the dialog content is portalled on open).
 - Heavy parts: none.
 

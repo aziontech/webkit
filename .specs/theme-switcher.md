@@ -3,13 +3,13 @@ name: theme-switcher
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5721-5138
   node_id: 5721:5138
-checksum: 75c63144c66063fe029a79499727bfbd1982eb799baeb502d103729eea94b8f1
+checksum: 7a87f31e0c1d9899d610d7344c52cd52bd17e40c30871160c6ea725e965ba493
 created: 2026-07-13
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Theme Switcher — Component Spec
@@ -20,6 +20,7 @@ A compact pill-shaped segmented control that lets the user pick the app color-th
 
 ## When to use
 
+- Use ThemeSwitcher only for the system / light / dark choice in app chrome; for any other segmented choice use ToggleGroup, and for a choice in a form use RadioGroup.
 - The app-wide color mode picker in a header, footer, account menu or settings page.
 
 ## When NOT to use

@@ -4,7 +4,6 @@
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -13,7 +12,7 @@
   import MultiSelect from '@aziontech/webkit/multi-select'
   import NumberInput from '@aziontech/webkit/number-input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioButton from '@aziontech/webkit/radio-button'
+  import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SettingRow from '@aziontech/webkit/setting-row'
   import Switch from '@aziontech/webkit/switch'
@@ -244,30 +243,21 @@
                   <Item.List>
                     <SettingRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Protocol usage</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.protocolUsage"
+                          kind="card"
+                          class="w-full"
+                          name="protocolUsage"
+                          aria-label="Protocol usage"
+                        >
+                          <RadioGroup.Item
                             v-for="option in protocolUsageOptions"
                             :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.protocolUsage"
-                                :value="option.value"
-                                name="protocolUsage"
-                                :id="`app-protocolUsage-${option.value}`"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ option.label }}
-                                </Field.Title>
-                                <Field.Description v-if="option.description">
-                                  {{ option.description }}
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </div>
                     </SettingRow>
                     <SettingRow title="HTTP ports">
@@ -363,27 +353,20 @@
                       description="Select the protocol used between the cache servers and the origin."
                     >
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Protocol policy</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.protocolPolicy"
+                          kind="card"
+                          class="w-full"
+                          name="protocolPolicy"
+                          aria-label="Protocol policy"
+                        >
+                          <RadioGroup.Item
                             v-for="option in protocolPolicyOptions"
                             :key="option.value"
+                            :value="option.value"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.protocolPolicy"
-                                :value="option.value"
-                                name="protocolPolicy"
-                                :id="`app-protocolPolicy-${option.value}`"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ option.label }}
-                                </Field.Title>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </div>
                     </SettingRow>
                     <SettingRow
@@ -451,30 +434,21 @@
                   <Item.List>
                     <SettingRow title="Browser cache settings">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Browser cache settings</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.browserCache"
+                          kind="card"
+                          class="w-full"
+                          name="browserCache"
+                          aria-label="Browser cache settings"
+                        >
+                          <RadioGroup.Item
                             v-for="option in browserCacheOptions"
                             :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.browserCache"
-                                :value="option.value"
-                                name="browserCache"
-                                :id="`app-browserCache-${option.value}`"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ option.label }}
-                                </Field.Title>
-                                <Field.Description v-if="option.description">
-                                  {{ option.description }}
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </div>
                     </SettingRow>
                     <SettingRow
@@ -493,30 +467,21 @@
                     </SettingRow>
                     <SettingRow title="Cache Settings">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                        <fieldset class="flex w-full flex-col gap-(--spacing-sm)">
-                          <legend class="sr-only">Cache Settings</legend>
-                          <Field.Label
+                        <RadioGroup
+                          v-model="form.cache"
+                          kind="card"
+                          class="w-full"
+                          name="cache"
+                          aria-label="Cache Settings"
+                        >
+                          <RadioGroup.Item
                             v-for="option in cacheOptions"
                             :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
                           >
-                            <Field orientation="horizontal">
-                              <RadioButton
-                                v-model="form.cache"
-                                :value="option.value"
-                                name="cache"
-                                :id="`app-cache-${option.value}`"
-                              />
-                              <Field.Content>
-                                <Field.Title>
-                                  {{ option.label }}
-                                </Field.Title>
-                                <Field.Description v-if="option.description">
-                                  {{ option.description }}
-                                </Field.Description>
-                              </Field.Content>
-                            </Field>
-                          </Field.Label>
-                        </fieldset>
+                        </RadioGroup>
                       </div>
                     </SettingRow>
                     <SettingRow

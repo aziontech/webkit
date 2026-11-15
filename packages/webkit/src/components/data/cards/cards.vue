@@ -7,7 +7,8 @@
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
-  import RadioButton from '../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import type { CardsItemSlotProps, CardsSelectionMode } from './types'
 
   defineOptions({
@@ -186,33 +187,48 @@
             class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) transition-colors duration-150 ease-out motion-reduce:transition-none data-[selected]:border-(--border-selected) data-[selected]:bg-(--bg-selected)"
           >
             <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-              <div
-                :id="headerId(index)"
-                class="min-w-0 flex-1 text-label-md text-(--text-default)"
-              >
-                <slot
-                  name="header"
-                  :item="item"
-                  :index="index"
-                  :selected="on"
-                />
-              </div>
-              <Checkbox
-                v-if="selectionMode === 'multi'"
-                :model-value="on"
-                :aria-labelledby="headerId(index)"
-                :data-testid="`${testId}__select`"
-                @update:model-value="(value: unknown) => toggle(item, !!value)"
-              />
-              <RadioButton
-                v-else-if="selectionMode === 'single'"
+              <RadioGroup
+                v-if="selectionMode === 'single'"
                 :model-value="selected[0] ?? ''"
-                :value="key"
                 :name="`${uid}-selection`"
-                :aria-labelledby="headerId(index)"
                 :data-testid="`${testId}__select`"
+                class="min-w-0 flex-1"
                 @update:model-value="toggle(item, true)"
-              />
+              >
+                <RadioGroupItem :value="key">
+                  <span
+                    :id="headerId(index)"
+                    class="text-label-md text-(--text-default)"
+                  >
+                    <slot
+                      name="header"
+                      :item="item"
+                      :index="index"
+                      :selected="on"
+                    />
+                  </span>
+                </RadioGroupItem>
+              </RadioGroup>
+              <template v-else>
+                <div
+                  :id="headerId(index)"
+                  class="min-w-0 flex-1 text-label-md text-(--text-default)"
+                >
+                  <slot
+                    name="header"
+                    :item="item"
+                    :index="index"
+                    :selected="on"
+                  />
+                </div>
+                <Checkbox
+                  v-if="selectionMode === 'multi'"
+                  :model-value="on"
+                  :aria-labelledby="headerId(index)"
+                  :data-testid="`${testId}__select`"
+                  @update:model-value="(value: unknown) => toggle(item, !!value)"
+                />
+              </template>
             </div>
             <div
               class="flex min-w-0 flex-col gap-(--spacing-xs) text-body-sm text-(--text-default)"

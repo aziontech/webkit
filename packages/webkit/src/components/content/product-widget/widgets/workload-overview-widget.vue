@@ -5,7 +5,8 @@
   import CopyButton from '../../../actions/copy-button/copy-button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import RadioButton from '../../../inputs/radio-button/radio-button.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
   import Tabs from '../../../navigation/tabs'
   import Avatar from '../../avatar/avatar.vue'
@@ -569,34 +570,30 @@
                 aria-hidden="true"
               />
             </h3>
-            <div
-              v-for="environment in ENVIRONMENTS"
-              :key="environment.name"
-              :data-selected="environment.selected || null"
-              class="flex gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) data-selected:border-(--primary) data-selected:bg-(--bg-selected)"
+            <RadioGroup
+              :model-value="SELECTED_ENVIRONMENT"
+              kind="card"
+              aria-label="Environment"
             >
-              <RadioButton
-                class="mt-0.5"
-                tabindex="-1"
-                :model-value="SELECTED_ENVIRONMENT"
+              <RadioGroupItem
+                v-for="environment in ENVIRONMENTS"
+                :key="environment.name"
                 :value="environment.name"
-              />
-              <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-                <span
-                  class="flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
+                :description="environment.description"
+              >
+                {{ environment.name }}
+                <template
+                  v-if="environment.tag"
+                  #tag
                 >
-                  {{ environment.name }}
                   <Tag
-                    v-if="environment.tag"
-                    class="ms-auto"
                     :label="environment.tag"
                     severity="info"
                     size="small"
                   />
-                </span>
-                <span class="text-body-xs text-(--text-muted)">{{ environment.description }}</span>
-              </span>
-            </div>
+                </template>
+              </RadioGroupItem>
+            </RadioGroup>
           </div>
         </div>
 
