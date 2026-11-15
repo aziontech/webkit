@@ -45,10 +45,10 @@
   >
     <template #title>Workloads</template>
     <template #toolbar>
-      <Table.Filter />
-    </template>
-    <template #filters>
-      <Table.AppliedFilters />
+      <Table.Filter
+        kind="property"
+        title="Filter workloads"
+      />
     </template>
     <template #cell-status="{ value }">
       <Table.CellStatus

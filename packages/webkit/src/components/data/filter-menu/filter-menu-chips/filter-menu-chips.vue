@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, inject, useAttrs } from 'vue'
 
   import Avatar from '../../../content/avatar/avatar.vue'
   import Chip from '../../../inputs/chip/chip.vue'
+  import { toMenuFields, toMenuModel } from '../../table/filter-menu-bridge'
+  import { TableInjectionKey } from '../../table/injection-key'
   import { useFilterMenuChannel } from '../composables/use-filter-menu-channel'
   import { useFilterMenuLabels } from '../composables/use-filter-menu-labels'
   import {
@@ -20,7 +22,7 @@
   })
 
   interface Props {
-    /** The fields the linked menu receives; chips reopen the menu that shares this array. */
+    /** The fields the linked menu receives; chips reopen the menu that shares this array. Empty inside a DataTable reads the table's filter fields and filters. */
     fields?: FilterMenuField[]
   }
 
@@ -41,26 +43,40 @@
   const attrs = useAttrs()
   const labels = useFilterMenuLabels()
   const { t } = labels
+  const ctx = inject(TableInjectionKey, null)
+  const linked = computed<boolean>(() => props.fields.length === 0 && Boolean(ctx?.table.value))
+  const fields = computed<FilterMenuField[]>(() =>
+    linked.value ? toMenuFields(ctx?.filterFields.value ?? []) : props.fields
+  )
+  const value = computed<FilterMenuModel>(() =>
+    linked.value ? toMenuModel(ctx?.appliedFilters.value ?? [], fields.value) : model.value
+  )
+  const filterOf = (field: FilterMenuField) =>
+    ctx?.appliedFilters.value.find((filter) => filter.field === field.id)
   const { requestOpen } = useFilterMenuChannel(() => props.fields)
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'data-filter-menu-chips'
   )
 
-  const chips = computed<FilterMenuField[]>(() => appliedFields(props.fields, model.value))
+  const chips = computed<FilterMenuField[]>(() => appliedFields(fields.value, value.value))
 
   const summaryOf = (field: FilterMenuField): FilterMenuSummary | null =>
-    labels.summaryOf(model.value, field)
+    labels.summaryOf(value.value, field)
   const avatarsOf = (field: FilterMenuField): FilterMenuOption[] =>
-    pickedAvatars(valuesOf(model.value, field), labels.optionsOf(field))
+    pickedAvatars(valuesOf(value.value, field), labels.optionsOf(field))
 
   const onEdit = (event: MouseEvent | KeyboardEvent, field: FilterMenuField): void => {
     emit('edit', event, field)
+    const filter = linked.value ? filterOf(field) : undefined
+    if (filter) return ctx?.editFilter(filter)
     requestOpen(field.id, (event.currentTarget as HTMLElement | null) ?? null)
   }
 
   const onRemove = (event: MouseEvent, field: FilterMenuField): void => {
     emit('remove', event, field)
+    const filter = linked.value ? filterOf(field) : undefined
+    if (filter) return ctx?.removeFilter(event, filter)
     model.value = clearField(model.value, field)
   }
 </script>
