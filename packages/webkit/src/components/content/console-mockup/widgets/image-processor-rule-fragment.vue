@@ -131,7 +131,7 @@
     variant="bare"
     shell="legacy"
     fade="bottom"
-    class="[--mockup-fade-start:72%]"
+    class="[--console-mockup-fade-start:72%]"
     :chrome="false"
     :active="active"
     :width="420"

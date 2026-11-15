@@ -124,7 +124,7 @@
     variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
-    class="[--mockup-fade-edge:24%]"
+    class="[--console-mockup-fade-edge:24%]"
     :chrome="false"
     :active="active"
     :width="420"

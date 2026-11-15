@@ -73,7 +73,7 @@ describe('GaugeChart', () => {
   it('fills the arc to the share of the range and clamps past the ends', async () => {
     const view = mount({ value: 150, min: 50, max: 100 })
     const arc = view.getByTestId('gauge-chart__arc')
-    expect(arc.getAttribute('style')).toContain('--gauge-dash: 100 100')
+    expect(arc.getAttribute('style')).toContain('--gauge-chart-dash: 100 100')
     await vi.waitFor(() => expect(arc.getAttribute('data-entered')).toBe('true'))
   })
 

@@ -127,7 +127,7 @@
     variant="bare"
     shell="legacy"
     fade="bottom"
-    class="[--mockup-fade-start:70%]"
+    class="[--console-mockup-fade-start:70%]"
     :chrome="false"
     :active="active"
     :width="420"

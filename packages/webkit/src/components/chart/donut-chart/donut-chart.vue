@@ -386,12 +386,12 @@
             :data-active="activeIndex === index || null"
             :data-dimmed="(activeIndex !== null && activeIndex !== index) || null"
             :style="{
-              '--donut-dash': slice.dash,
-              '--donut-width': `${WIDTH[type]}`,
-              '--donut-lift': `${WIDTH[type] + LIFT[type]}`,
+              '--donut-chart-dash': slice.dash,
+              '--donut-chart-width': `${WIDTH[type]}`,
+              '--donut-chart-lift': `${WIDTH[type] + LIFT[type]}`,
               transitionDelay: slice.delay
             }"
-            class="cursor-pointer [stroke-dasharray:0_100] [stroke-width:var(--donut-width)] transition-[stroke-dasharray,stroke-width,opacity] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[active]:[stroke-width:var(--donut-lift)] data-[dimmed]:opacity-40 data-[entered]:[stroke-dasharray:var(--donut-dash)]"
+            class="cursor-pointer [stroke-dasharray:0_100] [stroke-width:var(--donut-chart-width)] transition-[stroke-dasharray,stroke-width,opacity] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[active]:[stroke-width:var(--donut-chart-lift)] data-[dimmed]:opacity-40 data-[entered]:[stroke-dasharray:var(--donut-chart-dash)]"
             @pointerenter="setActive(index)"
           />
         </svg>
@@ -431,8 +431,8 @@
           >
             <span
               :data-hidden="entry.hidden || null"
-              :style="{ '--donut-key': entry.color }"
-              class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--donut-key) data-[hidden]:opacity-30"
+              :style="{ '--donut-chart-key': entry.color }"
+              class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--donut-chart-key) data-[hidden]:opacity-30"
             />
             <span class="min-w-0 flex-1 truncate">{{ entry.name }}</span>
             <span class="text-label-code-md tabular-nums text-(--text-muted)">{{

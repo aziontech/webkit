@@ -150,7 +150,7 @@
     variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
-    class="[--mockup-fade-edge:18%] [--mockup-fade-start:78%]"
+    class="[--console-mockup-fade-edge:18%] [--console-mockup-fade-start:78%]"
     :chrome="false"
     :active="active"
     :width="420"

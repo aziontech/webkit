@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 1144e0befd603237fdbead3d8436f0f21675f0d48012375e8e0cab75e5749e17
+checksum: 973d61b507d6ee430ea3ab0f916c866be251126d4d168ac3567391de1b05dbd8
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -67,9 +67,9 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 - Keep padding **inside the row**, never on the list. Every list (`Group`'s `<ul>`, `SubContent`'s `<ul>`) is a bare `m-0 list-none p-0 flex flex-col`; the row owns `px-(--spacing-sm)` and `min-h-8`. That is what lets a row's hover surface span the full menu width instead of stopping short of a list inset.
 - **The rail means parentage, not membership.** It is drawn only by an inline `SidebarMenu.SubContent`, where it ties children to the row above them. A `SidebarMenu.Group` draws none and indents nothing: its label already marks the section, so a rail there would spend the same ink saying something the label has said and dilute what the rail means everywhere else. A grouped row therefore sits flush with an ungrouped one.
 - Indentation is the nested list's `padding-left`, not a margin on each row — so the rail, which is drawn relative to that padding box, stays aligned no matter what a row contains.
-- One step of nesting is `--menu-indent` = `calc(var(--spacing-sm) + var(--spacing-md))` (28 px), the step the reference sidebar uses. It is deliberately **narrower than the row's own icon column** (40 px), which is a chosen trade: a tighter tree, at the cost of a child's label landing slightly left of its parent's rather than aligned with it. Widening it to 40 px would align the columns and read as more indentation.
-- **One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-2xs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.
-- **The rail descends from that column**, so `--menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--menu-indent - --menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.
+- One step of nesting is `--sidebar-menu-indent` = `calc(var(--spacing-sm) + var(--spacing-md))` (28 px), the step the reference sidebar uses. It is deliberately **narrower than the row's own icon column** (40 px), which is a chosen trade: a tighter tree, at the cost of a child's label landing slightly left of its parent's rather than aligned with it. Widening it to 40 px would align the columns and read as more indentation.
+- **One content column, `var(--spacing-sm)`.** Every row type starts its content on it, whatever the row is: a group title's text, an icon-bearing row's **glyph** (its box pads by `var(--spacing-2xs)`, and the glyph's centring inside a `size-8` box carries it the rest of the way), and an icon-less row's label — a `SubTrigger` without a glyph included — (`pl-(--spacing-sm)` directly). A `SubTrigger` that does carry one (drill only) switches to the icon-bearing inset, so both cases land on the column. Nesting shifts the whole column by exactly one `--sidebar-menu-indent`, so the alignment cascades at every depth. Measured: level 1 content at 12 px for all four row types, level 2 at 40 px.
+- **The rail descends from that column**, so `--sidebar-menu-rail-x` is `var(--spacing-sm)` — one value for every parent, not a per-row calculation. The elbow spans from that line to the child **row's left edge** (`--sidebar-menu-indent - --sidebar-menu-rail-x`) and stops there: it must never reach the child's content, because the row's box begins at the indent and its hover and selected surfaces fill that box, so a wider elbow would be drawn underneath them. **The rail lives in the gutter beside the rows, never on top of one.** Every token involved is fixed at all breakpoints, unlike `--spacing-lg` / `--spacing-xl`, which would drift the elbow.
 - **A row renders no icon box when it has no icon.** An empty box misreports where the row's content starts, so the label sits off the column its siblings hold and the rail anchors to blank space. This rule is what makes the column hold.
 - Hover and active are `::before` / `::after` **ghost layers** per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)) — never a `transition-colors` on the row root, and never a `background-color` swap that discards the selected fill.
 - Pick one affordance per meaning: `chevron-down` expands children in place, `chevron-right` replaces the menu. A **group title carries no affordance at all** — it separates rows without folding them, so it never competes with the rows it labels. Folding belongs to a row, which has a chevron and a rail to say which rows it owns.
@@ -200,7 +200,7 @@ element instead of three.
     - **Without one** the label is a `<button>` that **reveals the children too**, so the whole row does. There is no destination to protect, and leaving the arrow as the only live target is a 28 px box — **7 % of the row's area**, with the other 93 % doing nothing — which on a phone reads as a broken menu. This is the shape most containers have (a console module's settings drill, every one of the 28 container rows in the sample's docs tree), so it is the one that must be right by default.
     - `href` is the signal rather than a boolean because it is the same data every other row in this menu uses to say where it goes, and because it makes the behaviour fall out of the tree in data-driven mode: `SidebarMenuNode.href` already exists. It also follows [`root-element.md`](../.claude/rules/root-element.md) — the root switches element on a **data** prop, never an `as`/`is` string.
     - The **link** is an `<a href>` carrying `sub.triggerId`, the icon column and the row's typography (`min-w-0 flex-1`, so it fills what the arrow leaves). A real anchor, so middle-click and open-in-new-tab work; the consumer intercepts a plain left click for SPA routing. It announces its activation through `click` and does **nothing else** — it neither expands nor pushes. **A disabled row drops its `href` outright** (an anchor with no destination is not a link) and takes `tabindex="-1"` + `aria-disabled`.
-    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `type="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
+    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `type="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--sidebar-menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
     - **`aria-expanded` / `aria-controls` sit on whichever control expands the children, and on exactly one of them.** With a link that is the arrow. Without one the **label** already reveals, so it carries them and the arrow becomes a **redundant pointer affordance** for the same action: `tabindex="-1"` + `aria-hidden="true"`, so it leaves the tab order and the accessibility tree rather than announcing a second control for one thing. One tab stop per row either way.
     - **The arrow keys work from the row's own control**: `ArrowRight` expands / pushes and `ArrowLeft` collapses, so a keyboard reader reaches the children without first tabbing to an arrow.
     - Focus returns, on pop, to **whichever control pushed the level** — the arrow when the label is a link, the label otherwise.
@@ -255,7 +255,7 @@ packages/webkit/src/components/navigation/
 **Scope — additive only.** Every file in the `sidebar-menu/` tree above is **new**. Two existing files are
 touched, neither in a way a consumer can observe as a break: `packages/webkit/package.json#exports`
 by **adding** keys (no existing key changes target), and `sidebar.vue` by **adding one CSS variable**
-to its `<nav>` (`--menu-ring-offset`, beside the `--menu-item-ring-offset` it already sets) so a menu
+to its `<nav>` (`--sidebar-menu-ring-offset`, beside the `--sidebar-menu-item-ring-offset` it already sets) so a menu
 hosted there rings against the sidebar's surface. No existing prop, default, event, slot or
 `data-testid` anywhere in the package is altered, and nothing is deprecated or removed. The release
 is a `feat` (minor), never a `feat!`.
@@ -455,7 +455,7 @@ both are load-bearing:
 | surface (row pressed, `::after` ghost)                                        | `var(--bg-active)`                               |
 | ring                                                                          | `var(--ring-color)`                              |
 | ring offset                                                                   | `var(--bg-canvas)` (host-overridable, see below) |
-| surface while sliding                                                         | `var(--menu-slide-surface, var(--bg-surface))`   |
+| surface while sliding                                                         | `var(--sidebar-menu-slide-surface, var(--bg-surface))`   |
 
 Geometry — the Kumo box model re-expressed in our tokens. Every Kumo value in the middle column is
 something the token rules forbid in a webkit component (arbitrary `p-*`/`gap-*` where a
@@ -482,14 +482,14 @@ literals), so the right column is the contract:
 occlude one another: cross-sliding two of them through one viewport, you read the leaving layer
 through the gaps between the arriving layer's rows — opacity does not help, because opaque _text_
 hides nothing. So a surface in motion (`data-motion="push"` or `"pop"`) takes
-`var(--menu-slide-surface, var(--bg-surface))`, and drops it again at rest. A host on a different
-fill sets `--menu-slide-surface` to match; at rest the menu is as transparent as it ever was.
+`var(--sidebar-menu-slide-surface, var(--bg-surface))`, and drops it again at rest. A host on a different
+fill sets `--sidebar-menu-slide-surface` to match; at rest the menu is as transparent as it ever was.
 
 The menu paints no background of its own at rest — the host supplies the surface. The focus ring's offset
-colour therefore comes from the host through `var(--menu-ring-offset, var(--bg-canvas))`, the same
+colour therefore comes from the host through `var(--sidebar-menu-ring-offset, var(--bg-canvas))`, the same
 pattern `sidebar.vue` already uses to hand `sidebar-menu-item` its own offset — and `sidebar.vue` now sets
 **both** variables on its `<nav>`, so a menu dropped into a `Sidebar` rings against the sidebar's
-own fill with nothing to wire. A host on a different surface sets `--menu-ring-offset` the same way.
+own fill with nothing to wire. A host on a different surface sets `--sidebar-menu-ring-offset` the same way.
 
 ## Theme gaps
 
@@ -509,7 +509,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-cont
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]` — `ring-offset-1` per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)), with the offset colour handed down by the host (`Sidebar` sets `--menu-ring-offset` to its own surface, mirroring the existing `--menu-item-ring-offset` pattern).
+- Visible focus: `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--sidebar-menu-ring-offset,var(--bg-canvas))]` — `ring-offset-1` per the interactive-states standard ([`component-states.md`](../.claude/rules/component-states.md)), with the offset colour handed down by the host (`Sidebar` sets `--sidebar-menu-ring-offset` to its own surface, mirroring the existing `--sidebar-menu-item-ring-offset` pattern).
 - Keyboard map: `Tab` / `Shift+Tab` move between rows; `Enter`/`Space` activates a row, toggles an inline `Sub`, or pushes a drill level; `ArrowRight` expands a collapsed inline `Sub` or pushes a drill level; `ArrowLeft` collapses an expanded inline `Sub`, or pops one drill level when the current level is not the root; `Escape` pops one drill level.
 - ARIA:
   - The root renders a plain container with `role="navigation"` and `aria-label` from `ariaLabel`. It does **not** render `<nav>`: the menu is injected into a host that may already be a `<nav>` landmark (`Sidebar` is), and nesting landmarks duplicates them in the landmark list. When the host provides the landmark, the consumer suppresses the role by passing `role="presentation"` — and **the name goes with the role**: the root renders no `aria-label` under `role="presentation"` / `"none"`, because ARIA prohibits naming a presentational element and the a11y tree drops the name anyway. The consumer therefore suppresses the landmark with one attribute rather than remembering to unset `ariaLabel` as well.

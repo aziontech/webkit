@@ -155,7 +155,7 @@
   <ConsoleMockupShell
     variant="bare"
     fade="bottom"
-    class="[--mockup-fade-start:76%]"
+    class="[--console-mockup-fade-start:76%]"
     :chrome="false"
     :active="active"
     :width="520"

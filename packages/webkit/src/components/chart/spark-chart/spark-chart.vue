@@ -158,7 +158,7 @@
       :role="ariaLabel ? 'img' : undefined"
       :aria-label="ariaLabel || undefined"
       :aria-hidden="ariaLabel ? undefined : 'true'"
-      class="absolute inset-0 block size-full overflow-visible [--spark-bar-from:1_0]"
+      class="absolute inset-0 block size-full overflow-visible [--spark-chart-bar-from:1_0]"
     >
       <template v-if="stroke">
         <defs v-if="type === 'area'">
@@ -206,7 +206,7 @@
         :d="bar.d"
         :fill="hue"
         :data-entered="entered || null"
-        class="origin-bottom [scale:var(--spark-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:[scale:1]"
+        class="origin-bottom [scale:var(--spark-chart-bar-from)] [transform-box:fill-box] transition-[scale] duration-slow-01 ease-productive-entrance motion-reduce:transition-none data-[entered]:[scale:1]"
       />
     </svg>
   </div>

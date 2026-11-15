@@ -146,7 +146,7 @@
   <ConsoleMockupShell
     variant="bare"
     :fade="frame.lifted ? 'y' : 'bottom'"
-    class="[--mockup-fade-edge:14%] [--mockup-fade-start:76%]"
+    class="[--console-mockup-fade-edge:14%] [--console-mockup-fade-start:76%]"
     :chrome="false"
     :active="active"
     :width="420"

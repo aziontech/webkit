@@ -78,18 +78,18 @@
 
   const INLINE_CLASS =
     'relative m-0 flex w-full list-none flex-col p-0 ' +
-    '[--menu-indent:calc(var(--spacing-sm)+var(--spacing-xs))] ' +
+    '[--sidebar-menu-indent:calc(var(--spacing-sm)+var(--spacing-xs))] ' +
     '[--sidebar-menu-rail-x:var(--spacing-sm)] ' +
-    'ps-(--menu-indent) ' +
+    'ps-(--sidebar-menu-indent) ' +
     '[&>li]:relative ' +
-    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:start-[calc(var(--sidebar-menu-rail-x)-var(--menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--menu-indent)-var(--sidebar-menu-rail-x))] [&>li]:before:rounded-es-(--shape-control) [&>li]:before:border-b [&>li]:before:border-s [&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
-    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:start-[calc(var(--sidebar-menu-rail-x)-var(--menu-indent))] [&>li]:after:w-0 [&>li]:after:border-s [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
+    "[&>li]:before:pointer-events-none [&>li]:before:absolute [&>li]:before:top-0 [&>li]:before:start-[calc(var(--sidebar-menu-rail-x)-var(--sidebar-menu-indent))] [&>li]:before:h-4 [&>li]:before:w-[calc(var(--sidebar-menu-indent)-var(--sidebar-menu-rail-x))] [&>li]:before:rounded-es-(--shape-control) [&>li]:before:border-b [&>li]:before:border-s [&>li]:before:border-(--border-default) [&>li]:before:content-[''] " +
+    "[&>li]:after:pointer-events-none [&>li]:after:absolute [&>li]:after:top-4 [&>li]:after:bottom-0 [&>li]:after:start-[calc(var(--sidebar-menu-rail-x)-var(--sidebar-menu-indent))] [&>li]:after:w-0 [&>li]:after:border-s [&>li]:after:border-(--border-default) [&>li]:after:content-[''] " +
     '[&>li:last-child]:after:hidden'
 
   const DRILL_CLASS =
     'relative z-10 flex w-full flex-col ' +
-    'data-[motion=push]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
-    'data-[motion=pop]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
+    'data-[motion=push]:bg-[var(--sidebar-menu-slide-surface,var(--bg-surface))] ' +
+    'data-[motion=pop]:bg-[var(--sidebar-menu-slide-surface,var(--bg-surface))] ' +
     'data-[state=open]:translate-x-0 ' +
     'data-[state=closed]:z-0 ' +
     'data-[state=closed]:absolute data-[state=closed]:inset-x-0 data-[state=closed]:top-0 ' +

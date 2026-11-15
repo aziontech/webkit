@@ -3,10 +3,10 @@ name: hero-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: a3eb80a8a9fef7ae138af2f68f90ceb3d99f7dbf80e79c3f8bef16fd9df9a060
+checksum: 82252fa877aa028da19a8aed1bdda61b1358deec94723cb32f06f79b04b69fdd
 template: 2
 ---
 
@@ -106,7 +106,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 - `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `center`, `title-band` and `center-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `marqueeMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
-- `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-art-width`, `--hero-art-bleed`, `--hero-art-trim-top` and `--hero-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
+- `copy-beside-art` art bounds: a registered illustration whose drawn area is known (the `azion-to-*` comparisons and the solution illustrations) takes a width, a bleed past the column's end edge and a top and bottom trim computed from where it is drawn on its canvas, set as `--hero-section-art-width`, `--hero-section-art-bleed`, `--hero-section-art-trim-top` and `--hero-section-art-trim-bottom` on the art box from `md` up; any other illustration keeps the default bounds (161.45 % wide, 35.73 % bleed, no trim); an `image` fills the media column. Below `md` the art takes the column width
 - `data-orientation="portrait"` on an `image` taller than it is wide
 - Topology: in `copy-on-top-art` with no `top` or `bottom` slot, `levels` draws a `FlowDiagram` in the bottom window, one column per level and one card per node with a title; a level left with no card is dropped, and with none left the window is not drawn. A lit node carries `data-lit` and a brand glow. Other layouts ignore `levels`, and a slotted scene wins over it
 - Argument grid: `items` renders a framed three-column `CardGrid` of `FeatureItem`s (headings at level 2) inside a site-wide `SectionContainer` under the hero, closed by a hatched `SectionGap`; only with a title and at least one item

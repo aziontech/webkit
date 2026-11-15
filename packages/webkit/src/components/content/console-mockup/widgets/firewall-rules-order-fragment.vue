@@ -106,7 +106,7 @@
     variant="bare"
     shell="legacy"
     :fade="frame.review ? 'y' : 'bottom'"
-    class="[--mockup-fade-edge:12%] [--mockup-fade-start:88%]"
+    class="[--console-mockup-fade-edge:12%] [--console-mockup-fade-start:88%]"
     :chrome="false"
     :active="active"
     :width="420"

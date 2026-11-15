@@ -108,7 +108,7 @@
   <ConsoleMockupShell
     variant="bare"
     fade="bottom"
-    class="[--mockup-fade-start:82%]"
+    class="[--console-mockup-fade-start:82%]"
     :chrome="false"
     :active="active"
     :width="480"

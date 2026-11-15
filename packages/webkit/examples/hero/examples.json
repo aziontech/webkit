@@ -39,7 +39,7 @@
     },
     {
       "name": "AssetWindows",
-      "summary": "The `top` and `bottom` slots are asset windows anchored to the band’s edges. Each one clips its child, so an asset larger than the band shows only the part the window frames — `--banner-top-height` sizes the window and `--banner-top-x` / `-y` move the asset inside it. The band is an `isolate` stacking context whose layer order is set by `--banner-z-background`, `--banner-z-top`, `--banner-z-bottom` and `--banner-z-content`.",
+      "summary": "The `top` and `bottom` slots are asset windows anchored to the band’s edges. Each one clips its child, so an asset larger than the band shows only the part the window frames — `--hero-banner-top-height` sizes the window and `--hero-banner-top-x` / `-y` move the asset inside it. The band is an `isolate` stacking context whose layer order is set by `--hero-banner-z-background`, `--hero-banner-z-top`, `--hero-banner-z-bottom` and `--hero-banner-z-content`.",
       "file": "asset-windows.vue"
     },
     {
@@ -54,7 +54,7 @@
     },
     {
       "name": "Carousel",
-      "summary": "The band’s floor holds the `bottom` window and the brand strip in one block, so a single ground covers both — `--banner-floor-bg` plinths the floor a shade off the band’s own canvas. `floorTexture` fills that window without wiring a slot: the cell is fixed, so the band already carries the ink (`--banner-floor-ink`) and the horizontal falloff fitted to it, and `--texture-pool-a` / `-b` place the light inside it. `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry, and `marquee-label` names what the marks are evidence of.",
+      "summary": "The band’s floor holds the `bottom` window and the brand strip in one block, so a single ground covers both — `--hero-banner-floor-bg` plinths the floor a shade off the band’s own canvas. `floorTexture` fills that window without wiring a slot: the cell is fixed, so the band already carries the ink (`--hero-banner-floor-ink`) and the horizontal falloff fitted to it, and `--texture-pool-a` / `-b` place the light inside it. `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry, and `marquee-label` names what the marks are evidence of.",
       "file": "carousel.vue"
     },
     {

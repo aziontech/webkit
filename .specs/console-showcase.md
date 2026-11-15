@@ -3,9 +3,9 @@ name: console-showcase
 category: section
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: df829f204315477af0b69dd07ebeaddebb7443bca2419171e2a686751b86d00c
+checksum: b5b0cadaae9223dfd1cc4b098be960c344903f2d035b96351afeffa0762b2254
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -95,7 +95,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 - `data-variant` mirrors `variant`.
 - The first tab is selected on render.
-- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
+- `--console-mockup-fade-start` / `--console-mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
 
 ## Motion & Animations
 

@@ -83,7 +83,7 @@ frame read as _drawn on_ the page rather than as a card sitting on it.
 ```html
 <section
   class="relative w-full overflow-hidden border-b border-[var(--border-default)]
-                flex min-h-[calc(100dvh-var(--banner-offset,0px))] flex-col justify-center"
+                flex min-h-[calc(100dvh-var(--hero-banner-offset,0px))] flex-col justify-center"
 >
   <!-- #background: z-0 -->
   <div class="relative z-10 mx-auto w-full max-w-[…] px-[var(--spacing-xl)] py-[var(--spacing-xl)]">
@@ -92,17 +92,17 @@ frame read as _drawn on_ the page rather than as a card sitting on it.
 </section>
 ```
 
-**`variant="screen"` fills exactly one screen.** It subtracts `--banner-offset` from `100dvh`, so a banner
+**`variant="screen"` fills exactly one screen.** It subtracts `--hero-banner-offset` from `100dvh`, so a banner
 mounted under fixed chrome still measures one viewport. The page passes the chrome height in:
 
 ```html
 <!-- docs: top bar + page bar folded into one offset -->
-class="[--banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem))]"
+class="[--hero-banner-offset:calc(var(--bar-height,3.5rem)+var(--page-bar-height,3rem))]"
 ```
 
 Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
 ([`hero.vue:123-126`](../../packages/webkit/src/components/marketing/hero/hero.vue#L123-L126): the `offset` prop sets
-`--banner-offset`, and `variant="screen"` subtracts it.)
+`--hero-banner-offset`, and `variant="screen"` subtracts it.)
 
 **`#background` is z-0, copy is z-10.** A backdrop is named on the container
 with the `texture` prop (a `Texture` kind) or filled through the `#background` slot

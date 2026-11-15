@@ -121,17 +121,17 @@
     :data-align="align"
     :style="{
       '--hero-banner-offset': offset || undefined,
-      '--banner-bottom-height': bottomHeight || undefined
+      '--hero-banner-bottom-height': bottomHeight || undefined
     }"
     class="relative isolate w-full overflow-clip bg-(--bg-canvas) data-[bordered]:border-b data-[bordered]:border-(--border-default) data-[variant=screen]:flex data-[variant=screen]:min-h-[calc(100dvh-var(--hero-banner-offset,0rem))] data-[variant=screen]:flex-col"
   >
     <div
       v-if="hasBackdrop()"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 overflow-hidden [z-index:var(--banner-z-background,0)]"
+      class="pointer-events-none absolute inset-0 overflow-hidden [z-index:var(--hero-banner-z-background,0)]"
     >
       <div
-        class="absolute inset-0 [--texture-fade-lead:transparent] [translate:var(--banner-background-x,0)_var(--banner-background-y,0)]"
+        class="absolute inset-0 [--texture-fade-lead:transparent] [translate:var(--hero-banner-background-x,0)_var(--hero-banner-background-y,0)]"
       >
         <Texture
           v-if="texture !== 'none'"
@@ -147,9 +147,9 @@
     <div
       v-if="slots.top"
       aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 top-0 overflow-hidden [height:var(--banner-top-height,auto)] [z-index:var(--banner-z-top,1)]"
+      class="pointer-events-none absolute inset-x-0 top-0 overflow-hidden [height:var(--hero-banner-top-height,auto)] [z-index:var(--hero-banner-z-top,1)]"
     >
-      <div class="[translate:var(--banner-top-x,0)_var(--banner-top-y,0)]">
+      <div class="[translate:var(--hero-banner-top-x,0)_var(--hero-banner-top-y,0)]">
         <slot name="top" />
       </div>
     </div>
@@ -160,7 +160,7 @@
       :data-padded="props.padded || null"
       :data-size="size"
       :data-align="align"
-      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
+      class="relative mx-auto w-full px-(--layout-boundary-inline) [z-index:var(--hero-banner-z-content,10)] data-[variant=screen]:flex data-[variant=screen]:flex-1 data-[variant=screen]:flex-col data-[variant=screen]:data-[align=start]:justify-start data-[variant=screen]:data-[align=center]:justify-center data-[variant=screen]:data-[align=end]:justify-end data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none data-[padded]:data-[size=medium]:py-(--spacing-2xl) data-[padded]:data-[size=large]:py-[calc(var(--spacing-2xl)*2)]"
     >
       <div
         v-if="hasMedia()"
@@ -183,23 +183,23 @@
 
     <div
       v-if="slots.bottom || hasFloorTexture || marquee"
-      class="relative w-full shrink-0 [background-color:var(--banner-floor-bg,transparent)] [z-index:var(--banner-z-bottom,1)]"
+      class="relative w-full shrink-0 [background-color:var(--hero-banner-floor-bg,transparent)] [z-index:var(--hero-banner-z-bottom,1)]"
     >
       <div
         v-if="slots.bottom || hasFloorTexture"
         :data-floor="hasFloorTexture || null"
-        class="relative w-full overflow-hidden [height:var(--banner-bottom-height,auto)] data-[floor]:[height:var(--banner-bottom-height,clamp(9rem,30dvh,34rem))]"
+        class="relative w-full overflow-hidden [height:var(--hero-banner-bottom-height,auto)] data-[floor]:[height:var(--hero-banner-bottom-height,clamp(9rem,30dvh,34rem))]"
       >
         <Texture
           v-if="hasFloorTexture"
           :variant="floorTexture"
           :size="floorTextureSize"
-          class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--banner-floor-ink,0.6)]"
+          class="[mask-image:linear-gradient(to_right,black_0%,color-mix(in_srgb,black_30%,transparent)_40%,color-mix(in_srgb,black_30%,transparent)_62%,black_100%)] [mask-mode:alpha] [opacity:var(--hero-banner-floor-ink,0.6)]"
         />
 
         <div
           v-if="slots.bottom"
-          class="[translate:var(--banner-bottom-x,0)_var(--banner-bottom-y,0)]"
+          class="[translate:var(--hero-banner-bottom-x,0)_var(--hero-banner-bottom-y,0)]"
         >
           <slot name="bottom" />
         </div>
@@ -207,7 +207,7 @@
 
       <div
         v-if="marquee"
-        class="w-full [background-color:var(--banner-floor-bg,var(--bg-canvas))]"
+        class="w-full [background-color:var(--hero-banner-floor-bg,var(--bg-canvas))]"
       >
         <Marquee
           :data-width="maxWidth"

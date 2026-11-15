@@ -139,9 +139,9 @@ describe('ConsoleMockup', () => {
       const plated = await windowOf(view)
       const body = within(plated).getByTestId(BODY_TESTID)
 
-      expect(body.style.getPropertyValue('--mockup-fade-color')).toBe('var(--bg-canvas)')
-      expect(body.style.getPropertyValue('--mockup-fade-start')).toBe('initial')
-      expect(plated.style.getPropertyValue('--mockup-fade-start')).toBe('80%')
+      expect(body.style.getPropertyValue('--console-mockup-fade-color')).toBe('var(--bg-canvas)')
+      expect(body.style.getPropertyValue('--console-mockup-fade-start')).toBe('initial')
+      expect(plated.style.getPropertyValue('--console-mockup-fade-start')).toBe('80%')
     })
 
     it('draws a fragment the registry plates bare without a window', async () => {
