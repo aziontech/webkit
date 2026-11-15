@@ -3,9 +3,9 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: d4e92edfbdc15260cec026ce2d638bf01a7c538ac0930a8fe895f9131ea4885d
+checksum: 51f1ed22884f65d5bf3b0f7b970cb43843f64568a89c739d35e8f140b8a92ed9
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ Command Menu is a ⌘K command palette: a modal overlay with a search input and 
 
 - `dialog` — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.
 - `kbd` — renders each item's keyboard-shortcut hint and the ⌘K affordance.
-- `dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger.
+- `dropdown-menu` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger.
 
 ## Best practices
 

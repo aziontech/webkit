@@ -3,9 +3,9 @@ name: gauge-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 016d16faabc6361c54cfb92b55d657c01f73fd591acef424d664e5fe5187601f
+checksum: 99cc056c2574ad1b5334ade7c8a7b917d90a921cfbe7b5edcf9230f1aee39430
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ One reading against a known range, drawn as a half-circle dial with the value un
 
 - `stat-tile` — one figure with a delta and a sparkline, for a KPI row.
 - `chart-card` — the box a dashboard gauge sits in; the gauge takes its accessible name from the card title.
-- `progress-bar` — completion of a task, not a reading.
+- `progress` — completion of a task, not a reading.
 
 ## Best practices
 

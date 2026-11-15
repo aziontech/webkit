@@ -3,8 +3,8 @@ name: section-gap
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 2df77df3a1200a5384e80e6f2e3359b337a4d023b02cd60ba708cc3f1c0d6c9b
+spec_version: 6
+checksum: 28e81097de777e486209a50bcac6826c12e2fcc31a21b6694769eb619ef4997d
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
@@ -36,7 +36,7 @@ The empty registration frame that divides two page sections. On a page with no m
 - `frame-box` — the frame this component configures; reach for it directly when the gap needs content or different rules.
 - `texture-material` — the layer that paints the ruling, composed here at its `lines` kind.
 - `section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.
-- `divider` — a hairline with no vertical air.
+- `separator` — a hairline with no vertical air.
 
 ## Best practices
 

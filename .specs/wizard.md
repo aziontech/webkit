@@ -3,8 +3,8 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: d9150aebc9040b76ed15854d465c1995642669d512c37bca68802e64ccd5c9b8
-spec_version: 4
+checksum: 2f990b5301d3d52b030e79035627cc4da88bcfd8066f5c155a593742912a4fe8
+spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ completion.
 - `tabs` — unordered peer views with no completion state.
 - `dialog` — a single, short decision on an overlay.
 - `drawer` — a single-step create or edit form beside the page.
-- `message` — the inline error to show inside a step when Next is blocked.
+- `alert` — the inline error to show inside a step when Next is blocked.
 
 ## Best practices
 
@@ -56,7 +56,7 @@ completion.
   field that lives only in the DOM is lost when the reader leaves its step.
 - Validate in the `next` handler and call `event.preventDefault()` synchronously to block the move. For
   async validation, prevent first, then set the `v-model` index yourself once the check passes.
-- Show why Next was blocked inside the step (an inline `message` or the field's `invalid` +
+- Show why Next was blocked inside the step (an inline `alert` or the field's `invalid` +
   `helperText`), never only by not moving.
 - Give every step a title that names the decision (`Settings`, `Review`) and keep it short. The same
   title reads in the rail and in the step header.

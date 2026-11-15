@@ -3,11 +3,11 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 57cab9b6d76b60ef96217598fc044370729b3bb41c6c16b4b642bedbd639a220
+checksum: 5cdd9b7518447e7117f2d865b2f49b53d0589b7c230a1009c02b9623108d7d27
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `dropdown-menu`, which renders a menu of selectable options rather than free-form content.
 
 ## When to use
 
@@ -35,7 +35,7 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 ## Related
 
 - `tooltip` — plain text only and non-interactive; opens on hover and focus, not on click.
-- `dropdown` — same trigger and anchoring model, but renders option rows and emits `select`.
+- `dropdown-menu` — same trigger and anchoring model, but renders option rows and emits `select`.
 - `dialog` — modal and centered, traps focus and locks scroll; the popover does neither.
 - `drawer` — edge-anchored modal panel for longer content.
 

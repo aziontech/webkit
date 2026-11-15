@@ -3,8 +3,8 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 027290b067c4917ebd1ceae4bb5b7b5634ab78990a2afa5540c49e7fd0e8bfe8
-spec_version: 4
+checksum: 37208a5548f1d395ebf7c4993cdd1c2967399abab4188e647a2442d1deea25cb
+spec_version: 5
 created: 2026-10-20
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 - `big-numbers` — the marketing figure band, with no delta and no live data.
 - `spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - `tag` — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
-- `divider` — carries the "No data" `Tag` across the empty band.
+- `separator` — carries the "No data" `Tag` across the empty band.
 - `stat-tile-group` — one card split into cells, one per tile: the KPI strip of an overview.
 
 ## Best practices
@@ -122,7 +122,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 | unit         | `mono`: `.text-body-xs`; `sans`: `.text-body-md`; `var(--text-muted)`                                                                   |
 | delta        | `tag` at `size="small"` (`success` / `danger` / `neutral`); period in `.text-label-sm`, `var(--text-muted)`                             |
 | sparkline    | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge                                                      |
-| no-data band | `spark-chart` `color="other"` at reduced opacity, `divider`, `tag` `severity="neutral"` at `size="small"`                               |
+| no-data band | `spark-chart` `color="other"` at reduced opacity, `separator`, `tag` `severity="neutral"` at `size="small"`                               |
 | spacing      | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                          |
 
 ## Theme gaps

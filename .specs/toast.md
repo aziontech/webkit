@@ -3,13 +3,13 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 94d44a7a6410b7d827fcefa4358cfbbbe8e5e9ac29f83ae5eee8455599dd29cb
+checksum: 63ca9ce1c7c08b155c2f89d050432b5d4f1f1a2a73fe7e82ede742dc8b601088
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 ## Related
 
-- `message` — inline severity banner placed in the page flow; it stays until it is closed.
+- `alert` — inline severity banner placed in the page flow; it stays until it is closed.
 - `dialog` — blocking modal for decisions and confirmations.
 - `spinner` — rendered by the `loading` toast type.
 - `progress` — rendered under the copy of a `toast.progress` toast.
