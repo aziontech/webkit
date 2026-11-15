@@ -14,17 +14,17 @@ const ids = (rel, content) =>
     .sort()
 
 test('docFileKind resolves each population and skips non-governed paths', () => {
-  assert.deepEqual(docFileKind('.claude/skills/add-animation/SKILL.md'), {
+  assert.deepEqual(docFileKind('.claude/skills/animation-add/SKILL.md'), {
     kind: 'skill',
     variant: 'internal',
     scope: 'webkit',
-    unit: 'add-animation'
+    unit: 'animation-add'
   })
-  assert.deepEqual(docFileKind('.claude/agents/scaffolder.md'), {
+  assert.deepEqual(docFileKind('.claude/agents/component-scaffolder.md'), {
     kind: 'agent',
     variant: 'internal',
     scope: 'webkit',
-    unit: 'scaffolder'
+    unit: 'component-scaffolder'
   })
   assert.deepEqual(docFileKind('skills/webkit-usage/SKILL.md'), {
     kind: 'skill',
@@ -40,7 +40,7 @@ test('docFileKind resolves each population and skips non-governed paths', () => 
   })
   // not governed
   assert.equal(docFileKind('.claude/agents/_README.md'), null)
-  assert.equal(docFileKind('.claude/skills/add-animation/references/foo.md'), null)
+  assert.equal(docFileKind('.claude/skills/animation-add/references/foo.md'), null)
   assert.equal(docFileKind('.claude/rules/authoring-docs.md'), null)
 })
 
@@ -179,10 +179,10 @@ test('frontmatter-missing fires when there is no --- block', () => {
 })
 
 test('agents are not scanned for file-as-example refs', () => {
-  const rel = '.claude/agents/scaffolder.md'
+  const rel = '.claude/agents/component-scaffolder.md'
   const content = [
     '---',
-    'name: scaffolder',
+    'name: component-scaffolder',
     'description: writes components.',
     'scope: webkit',
     '---',

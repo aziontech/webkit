@@ -22,7 +22,7 @@
 - [ ] Budget raise justified: a `Budget-raise` line in this body, in the format of CONTRIBUTING.md (only when a `.size-limit.json` limit goes up)
 
 <!--
-  Component or block PRs (the AI flow: /webkit-new, /webkit-new-block) fill every section below;
+  Component or block PRs (the AI flow: /component-new, /block-new) fill every section below;
   the orchestrator generates them. Other PRs delete everything from here down.
 -->
 

@@ -61,7 +61,7 @@ export const STANDARDS = [
       { surface: 'ci', by: 'check-complete' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'scaffolder emits the compound + -root; check-complete fails a compound whose index.ts export has no ./<name>-root pointing at the root .vue (ratcheted by complete-baseline.json); catalog drift check + review confirm.'
+    note: 'component-scaffolder emits the compound + -root; check-complete fails a compound whose index.ts export has no ./<name>-root pointing at the root .vue (ratcheted by complete-baseline.json); catalog drift check + review confirm.'
   },
   {
     id: 'styling',

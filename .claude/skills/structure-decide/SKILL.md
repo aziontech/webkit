@@ -25,7 +25,7 @@ When in doubt, choose `monolithic`. Atoms (Button, IconButton, Tag, Badge, Spinn
 ## Inputs
 
 - The spec's Purpose, Props, Slots, and Sub-components sections (or the user's verbal description during `/spec-create`).
-- The `figma-discover` JSON if available (for the `regions` array).
+- The `figma-extract` JSON if available (for the `regions` array).
 
 ## Workflow
 

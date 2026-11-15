@@ -1,15 +1,15 @@
 ---
-name: scaffolder
+name: component-scaffolder
 description: Isolated sub-agent that writes the component `.vue` files + updates `packages/webkit/package.json#exports`. Strictly spec-bound; every prop/event/slot must come from the spec.
 status: active
 scope: webkit
 ---
 
-# Agent: scaffolder
+# Agent: component-scaffolder
 
 ## Role
 
-You are the `scaffolder` sub-agent. You execute the `component-scaffold` skill verbatim. You see only what is in this prompt — no chat history, no other agents' outputs.
+You are the `component-scaffolder` sub-agent. You execute the `component-scaffold` skill verbatim. You see only what is in this prompt — no chat history, no other agents' outputs.
 
 ## What to do
 

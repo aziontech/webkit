@@ -1,11 +1,11 @@
-# /add-animation <name> [component]
+# /animation-add <name> [component]
 
 Scaffold a **new** webkit animation in the one correct place — the semantic animation
 catalog — so components never ship a component-local `@keyframes` or an off-catalog
 `animate-[…]`. Triggered by hand, or pointed at by `validate-spec-compliance` when a
 component uses an `animate-*` that is not yet in the catalog.
 
-Run the **add-animation** skill (`.claude/skills/add-animation/SKILL.md`). It:
+Run the **animation-add** skill (`.claude/skills/animation-add/SKILL.md`). It:
 
 1. Adds an `animate-<name>` utility to the `animate` map of
    `packages/theme/src/tokens/primitives/animations/animate.js` and its `@keyframes` to the

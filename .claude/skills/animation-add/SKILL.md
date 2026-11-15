@@ -1,11 +1,11 @@
 ---
-name: add-animation
+name: animation-add
 description: Scaffold a new webkit animation into the animation catalog (theme primitives/animations/animate.js + keyframes.js) + record the Theme gap. Used when a component needs an animation the catalog lacks, instead of a component-local @keyframes or an off-catalog animate-[…].
 scope: webkit
 enforced_by: [styling, no-invention, accessibility]
 ---
 
-# Skill: add-animation
+# Skill: animation-add
 
 The animation catalog is the **single source of truth**. A component may only use an
 `animate-*` utility that exists in it. When one is missing, add it here — never inline a

@@ -1,5 +1,5 @@
 ---
-name: validate-component
+name: component-validate
 description: Run the project's pnpm checks (lint, type-check, type-coverage, server render of every example) on the freshly-written component. Pure runner; never edits code.
 status: active
 last_updated: 2026-05-22
@@ -7,7 +7,7 @@ scope: webkit
 enforced_by: [props, dependencies]
 ---
 
-# Skill: validate-component
+# Skill: component-validate
 
 ## Purpose
 

@@ -110,7 +110,7 @@ Emit this Markdown report (the semver class is always visible):
 - **Never** auto-apply a **major** bump (or a `0.x` **minor**) — ALERT and ask first.
 - Keep the diff **minimal** — bump only the offending package(s); do not opportunistically refresh the whole lockfile.
 - Apply the bump to the **owning** project's manifest, not blindly to the root, unless the dependency is the root's.
-- Branches/PRs go through [`/create-branch`](../../commands/create-branch.md) and [`/open-pr`](../../commands/open-pr.md). This skill's own file is a `.claude/skills/*` change → it ships in a **separate PR from the dependency fix** (see [`.claude/rules/git-workflow.md`](../../rules/git-workflow.md)).
+- Branches/PRs go through [`/branch-create`](../../commands/branch-create.md) and [`/pr-open`](../../commands/pr-open.md). This skill's own file is a `.claude/skills/*` change → it ships in a **separate PR from the dependency fix** (see [`.claude/rules/git-workflow.md`](../../rules/git-workflow.md)).
 - A dependency bump is commit type **`chore`** (per [`CONTRIBUTING.md`](../../../CONTRIBUTING.md) § Commit convention); honor the type→bump invariant in [`.claude/rules/release-types.md`](../../rules/release-types.md).
 
 ## Fallbacks

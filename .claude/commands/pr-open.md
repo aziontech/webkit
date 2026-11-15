@@ -3,7 +3,7 @@ description: Open a PR to `main`. Analyzes the diff to pick the Conventional Com
 argument-hint: [PR title or focus]
 ---
 
-You are running `/open-pr`. Land the current working changes as a pull request against `main`, following the repo's commit + versioning conventions end to end.
+You are running `/pr-open`. Land the current working changes as a pull request against `main`, following the repo's commit + versioning conventions end to end.
 
 **User input:** $ARGUMENTS
 
@@ -36,7 +36,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 - Ask: "Which issue does this relate to? (`ENG-1234`, or leave blank if none)". With an issue, the tag goes **in the subject, after the colon** (`fix(webkit): [ENG-1234] …`) — never before the type. **No issue → no tag** — never write `[NO-ISSUE]` (dead characters; commitlint rejects it).
 
 ### 3. Ensure a `main`-based feature branch
-- If on `main` (or not on a `main`-based feature branch), run the `/create-branch` flow (type from step 1, issue from step 2), carrying the working changes over.
+- If on `main` (or not on a `main`-based feature branch), run the `/branch-create` flow (type from step 1, issue from step 2), carrying the working changes over.
 - **Never** open a PR directly from `main`.
 
 ### 4. Commit by context
@@ -54,7 +54,7 @@ If the diff spans multiple packages, prefer **one commit per scope** (CONTRIBUTI
 - `git push -u origin <branch>`.
 - If a PR already exists for the branch, update it; otherwise `gh pr create --base main --head <branch>`.
 - **Title:** the conventional commit header (normalize `$ARGUMENTS` into that form when given). Merges are **squash merges**, so the PR title is the commit release-please parses — it must **start with the bare type**, with the ticket tag after the colon only when an issue exists (`<type>(<scope>): [<ISSUE>] <subject>`), and put `!` in the title for a breaking change.
-- **Body — fixed structure.** These three sections, in this order (the same skeleton as [`pull_request_template.md`](../../.github/pull_request_template.md)). A component or block PR from the AI flow (`/webkit-new`, `/webkit-new-block`) also fills the template's AI-flow sections (request and spec, gates, `ui-craft` review, usage check, screenshots):
+- **Body — fixed structure.** These three sections, in this order (the same skeleton as [`pull_request_template.md`](../../.github/pull_request_template.md)). A component or block PR from the AI flow (`/component-new`, `/block-new`) also fills the template's AI-flow sections (request and spec, gates, `ui-craft` review, usage check, screenshots):
 
   ```md
   ## Summary

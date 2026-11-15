@@ -155,7 +155,7 @@ The same rule applies to each sub-component. Each renders its own root with its 
 
 ## Token values: the canonical `prop-(--token)` syntax
 
-A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, scaffolder output and consumer skill or rule (`skills/`, `rules/`) now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
+A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, component-scaffolder output and consumer skill or rule (`skills/`, `rules/`) now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
 
 ```html
 <!-- ✅ canonical — paren shorthand -->
@@ -376,7 +376,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 ## Enforcement
 
-- `scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
+- `component-scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).

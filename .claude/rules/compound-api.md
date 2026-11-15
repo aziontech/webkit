@@ -108,7 +108,7 @@ Interactivity alone does not justify a sub-component. A clickable row is `@click
 
 ## Enforcement
 
-- `scaffolder` emits `index.ts` for every `structure: composition` component (the exports target plus the `Object.assign` compound), adds **both** the compound root entry (`./<name>` → `index.ts`) **and** the standalone `./<name>-root` entry (→ root `.vue`) to `packages/webkit/package.json#exports`, and writes no per-component `package.json` (see [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md)).
+- `component-scaffolder` emits `index.ts` for every `structure: composition` component (the exports target plus the `Object.assign` compound), adds **both** the compound root entry (`./<name>` → `index.ts`) **and** the standalone `./<name>-root` entry (→ root `.vue`) to `packages/webkit/package.json#exports`, and writes no per-component `package.json` (see [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md)).
 - The spec's `## Usage` block (composition) **leads with the compound dot-notation** form; the standalone imports are documented as the tree-shaking alternative. See [`.specs/_template.md`](../../.specs/_template.md).
 - `validate-references.mjs` blocks any phantom `@aziontech/webkit/*` import; the standalone sub-component paths must exist in `packages/webkit/package.json#exports`.
 - Sub-agent prompts inject this rule alongside [`no-invention.md`](./no-invention.md), [`styling.md`](./styling.md), [`dependencies.md`](./dependencies.md), and [`migration.md`](./migration.md). Any deviation surfaces as `BLOCKED:` and stops the run.

@@ -69,7 +69,7 @@ Every public prop gets a one-line JSDoc `/** ... */`. It is the source of the do
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** blocks props not in the spec, off-vocabulary names, `is`/`has` booleans, and default drift; **[`validate-tokens.mjs`](../hooks/validate-tokens.mjs)** blocks `any` / `@ts-ignore` / `class` in `defineProps`.
 - `type-coverage` (95% threshold, CI) backstops the "no `any`" rule.
-- The scaffolder emits the `interface Props` + `withDefaults` + JSDoc shape from the spec's Props table.
+- The component-scaffolder emits the `interface Props` + `withDefaults` + JSDoc shape from the spec's Props table.
 
 ## Why this rule exists
 

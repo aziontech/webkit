@@ -3,7 +3,7 @@ description: Create a new working branch from `main`. Infers the branch type fro
 argument-hint: [short description] [ENG-1234]
 ---
 
-You are running `/create-branch`. Cut a fresh branch off the latest `main`, named from the change **type** + related **issue** + a short **slug**.
+You are running `/branch-create`. Cut a fresh branch off the latest `main`, named from the change **type** + related **issue** + a short **slug**.
 
 **User input:** $ARGUMENTS
 
@@ -28,4 +28,4 @@ You are running `/create-branch`. Cut a fresh branch off the latest `main`, name
 
 - Always base on `origin/main`.
 - Branch name: lowercase kebab-case — `<type>/<ISSUE>-<slug>` (or `<type>/<slug>` when there is no issue). Example: `feat/ENG-46315-toast`.
-- Do not push or open a PR here — that is `/open-pr`'s job.
+- Do not push or open a PR here — that is `/pr-open`'s job.

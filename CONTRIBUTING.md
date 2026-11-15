@@ -42,7 +42,7 @@ spec at `.specs/<name>.md` is the contract at every stage: it changes first, and
 
 ### Add
 
-An issue from **New component** (`.github/ISSUE_TEMPLATE/new-component.yml`) → `/webkit-new <issue>`
+An issue from **New component** (`.github/ISSUE_TEMPLATE/new-component.yml`) → `/component-new <issue>`
 → spec as `draft` → review by a second agent (`spec-reviewer`), which flips it to `approved` with a
 checksum → build (component, test, examples) → machine gates → `ui-craft` review → usage check →
 PR. Each step stops the run on failure. The steps, owners and commands are in
@@ -159,21 +159,21 @@ design opens the request and approves the merge, and nobody edits the code by ha
 1. **Request.** Open an issue from **New component** or **New block**
    (`.github/ISSUE_TEMPLATE/`): intent, benchmark links (Cloudscape `index.html.md`, shadcn page),
    where it is used, surface (product / marketing / docs), acceptance criteria.
-2. **Run the flow.** An agent runs `/webkit-new <issue>` (`.claude/commands/webkit-new.md`) or
-   `/webkit-new-block <issue>` (`.claude/commands/webkit-new-block.md`). Each step stops the run on
+2. **Run the flow.** An agent runs `/component-new <issue>` (`.claude/commands/component-new.md`) or
+   `/block-new <issue>` (`.claude/commands/block-new.md`). Each step stops the run on
    failure:
 
    | Step | What happens                                                                                                                              | Owner                             |
    | ---- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
    | 1    | Read the issue                                                                                                                            | orchestrator                      |
    | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
-   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                              | `spec-author`                     |
+   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                              | `spec-creator`                     |
    | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                    | `spec-reviewer`, `spec-validator` |
    | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                            | `/component-create` sub-agents    |
    | 6    | Machine gates (below)                                                                                                                     | orchestrator                      |
    | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                             | orchestrator                      |
    | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `usage-check.mjs`                 |
-   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                      | `/open-pr`                        |
+   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                      | `/pr-open`                        |
 
 3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
    comments, never to a human fix.
@@ -325,7 +325,7 @@ step is the baseline. Baselines are committed and are valid only when taken in
 `mcr.microsoft.com/playwright:v1.62.0-noble` (the image the CI `visual` job runs in): dispatch
 `.github/workflows/visual-baselines.yml` with `update_baselines=true`
 (`pnpm visual:update:baseline`), review the `visual-baselines` artifact and commit it
-(`/regen-baselines`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
+(`/baselines-regenerate`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
 
 ## Commit convention
 

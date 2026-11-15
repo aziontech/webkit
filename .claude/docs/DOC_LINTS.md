@@ -1514,7 +1514,7 @@ feat(webkit): rework button size scale
 BREAKING CHANGE: size "xlarge" was removed; use "large".
 ```
 
-**Type → release** (must stay identical across `commitlint.config.js`, release-please's stock semantics (`release-please-config.json`), `CONTRIBUTING.md`, and the `/open-pr` / `/create-branch` flows):
+**Type → release** (must stay identical across `commitlint.config.js`, release-please's stock semantics (`release-please-config.json`), `CONTRIBUTING.md`, and the `/pr-open` / `/branch-create` flows):
 
 | Type                                                                        | Release             |
 | --------------------------------------------------------------------------- | ------------------- |

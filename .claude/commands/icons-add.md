@@ -3,7 +3,7 @@ description: Add one or more icons to `@aziontech/icons` — decides monochrome 
 argument-hint: [svg file(s) / pasted svg / names]
 ---
 
-You are running `/include-icons`. Bring new icon SVGs into the `@aziontech/icons` package the right way, then prove they render. **Never** open a PR here — that is `/open-pr`'s job.
+You are running `/icons-add`. Bring new icon SVGs into the `@aziontech/icons` package the right way, then prove they render. **Never** open a PR here — that is `/pr-open`'s job.
 
 **User input:** $ARGUMENTS
 
@@ -49,4 +49,4 @@ Detect colored automatically: the SVG has `<linearGradient>`/`<radialGradient>`,
 - **Names are one canonical kebab string** on every surface (file, class, catalog). No dots, capitals, or spaces.
 - **Do not edit `dist/`** (gitignored, generated) or hand-write any catalog/CSS — only edit sources under `src/svg-raw/` and rerun the build.
 - **Do not change webkit components** to consume an icon — a webkit `<i class="ai …">` already works once the icon exists in the package and the consumer loads `@aziontech/icons`.
-- **Do not open a PR or commit** here. Stop after verification; use `/open-pr` when the user asks.
+- **Do not open a PR or commit** here. Stop after verification; use `/pr-open` when the user asks.

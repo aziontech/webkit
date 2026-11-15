@@ -3,9 +3,9 @@ description: AI-only flow for a new WebKit block (a screen agents copy), from a 
 argument-hint: <issue number or URL>
 ---
 
-You are the orchestrator of `/webkit-new-block`. You turn one **New block** issue
+You are the orchestrator of `/block-new`. You turn one **New block** issue
 (`.github/ISSUE_TEMPLATE/new-block.yml`) into one pull request, with no human edit in between.
-It mirrors `/webkit-new` (`.claude/commands/webkit-new.md`): same ground rules, same stop rule
+It mirrors `/component-new` (`.claude/commands/component-new.md`): same ground rules, same stop rule
 (`STOPPED at step <n>: <reason>`, commented on the issue), same gates. Read that file first; only
 the differences are written here.
 
@@ -43,7 +43,7 @@ that mounts every SFC (`src/test/copyable-sfcs.test.ts`) all read these files.
 
 `gh issue view <n> --json number,title,body,labels,url`; parse category, name, intent, benchmarks,
 where it is used, surface, states, acceptance criteria. Exit condition: every required field is
-present. Create the branch with `/create-branch new block <name> #<n>`.
+present. Create the branch with `/branch-create new block <name> #<n>`.
 
 ## Step 2 — Research and reuse
 
@@ -53,7 +53,7 @@ present. Create the branch with `/create-branch new block <name> #<n>`.
    `catalog.json#patternAliases`. For each region of the screen, `suggest_component`.
 3. Exit condition: no block does the job. If one nearly does, the run adds a **variant** to it
    instead (same steps, the existing folder). If a region needs a component that does not exist,
-   stop and open a **New component** issue; the block waits for it (`/webkit-new` first).
+   stop and open a **New component** issue; the block waits for it (`/component-new` first).
 
 ## Step 3 — Block brief (draft)
 
@@ -69,7 +69,7 @@ with the MCP `get_component`, never from memory).
 ## Step 4 — Brief review by a second agent
 
 Spawn `spec-reviewer` in **block mode** (`.claude/agents/spec-reviewer.md`, "Block mode") with the
-brief, the issue and the research notes. Same loop as `/webkit-new` step 4: `return` → revise →
+brief, the issue and the research notes. Same loop as `/component-new` step 4: `return` → revise →
 fresh reviewer, three returns stop the run. Exit condition: `approve`.
 
 ## Step 5 — Build
@@ -81,7 +81,7 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    `.claude/skills/ui-craft` "Start here", and stands alone (copy one file and it runs).
 2. `pnpm --filter @aziontech/webkit catalog:build` and
    commit `catalog.json` and `catalog/`. The docs page and the visual test follow from the files;
-   baselines for a new block come from the `Visual baselines` workflow (`/regen-baselines`).
+   baselines for a new block come from the `Visual baselines` workflow (`/baselines-regenerate`).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
    `node packages/webkit/scripts/check-patterns.mjs` pass (the latter fails when `guidelines.md`
    is missing, a section is missing or empty, a building block names a component the primary SFC
@@ -89,7 +89,7 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
 
 ## Step 6 — Machine gates
 
-The `/webkit-new` step-6 commands, with the browser run narrowed to the copyable SFCs:
+The `/component-new` step-6 commands, with the browser run narrowed to the copyable SFCs:
 `cd packages/webkit && pnpm exec vitest run copyable-sfcs`. Exit condition: all exit 0.
 
 ## Step 7 — `ui-craft` review (mandatory)
@@ -107,7 +107,7 @@ the screen by its job, never by the block id. Pass: the generated `src/**/*.vue`
 
 ## Step 9 — Pull request
 
-As `/webkit-new` step 9, with the block folder in place of the spec path and screenshots of every
+As `/component-new` step 9, with the block folder in place of the spec path and screenshots of every
 variant (light, dark, RTL, mobile 320 px, wide 1920 px).
 
 ## Acknowledge before doing anything

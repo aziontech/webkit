@@ -1,10 +1,10 @@
-# /regen-baselines <branch | pr-number | pr-url> [grep]
+# /baselines-regenerate <branch | pr-number | pr-url> [grep]
 
 Regenerate the **styled visual baselines** (`apps/visual/baselines/`) for a PR branch **in CI**
 and land them on the branch. Baselines are valid only when rendered in
 `mcr.microsoft.com/playwright:v1.62.0-noble`, the image the `governance.yml` `visual` job runs in.
 
-Run the **regen-baselines** skill (`.claude/skills/regen-baselines/SKILL.md`). It:
+Run the **baselines-regenerate** skill (`.claude/skills/baselines-regenerate/SKILL.md`). It:
 
 1. Resolves the branch and confirms the state to snapshot (e.g. the `main` merge) is pushed.
 2. Dispatches `Visual baselines` (`.github/workflows/visual-baselines.yml`) with

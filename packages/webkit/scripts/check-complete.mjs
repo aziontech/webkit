@@ -183,7 +183,7 @@ export function collectFindings(root = DEFAULT_ROOT) {
         `examples/${group}`,
         'visual-baseline',
         stem
-          ? `Missing apps/visual/baselines/examples/${group}/${stem}--light-1280.png — regenerate with /regen-baselines.`
+          ? `Missing apps/visual/baselines/examples/${group}/${stem}--light-1280.png — regenerate with /baselines-regenerate.`
           : 'examples.json lists no example, so the visual suite has nothing to shoot.'
       )
     }

@@ -207,7 +207,7 @@ feat(webkit)!: drop tone prop                 ← “!” = breaking = major
 
 **Other rules:** type required and lower-case, scope lower-case, subject required, header ≤ 100 chars, subject-case unrestricted. A **leading** ticket tag (`[ENG-…] feat: …`) is rejected — release-please cannot parse it, so it would release **nothing** (the #804 incident) — and `[NO-ISSUE]` is rejected anywhere: no ticket → no tag.
 
-**The sync invariant** ([`release-types.md`](../rules/release-types.md)): this type list must stay **identical** in four places — `commitlint.config.js`, [`release-please-config.json`](../../release-please-config.json) (stock `node` release type, no per-type bump customization), `CONTRIBUTING.md`, and the `/open-pr` + `/create-branch` flows. A type added in one place and not the others produces commits that pass lint but silently don't release.
+**The sync invariant** ([`release-types.md`](../rules/release-types.md)): this type list must stay **identical** in four places — `commitlint.config.js`, [`release-please-config.json`](../../release-please-config.json) (stock `node` release type, no per-type bump customization), `CONTRIBUTING.md`, and the `/pr-open` + `/branch-create` flows. A type added in one place and not the others produces commits that pass lint but silently don't release.
 
 ---
 

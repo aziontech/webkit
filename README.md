@@ -59,7 +59,7 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
 
 1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
 2. Follow the [component lifecycle](./CONTRIBUTING.md#component-lifecycle): Add, Change,
-   Deprecate, Remove. Every component starts from a spec in `.specs/`, through `/webkit-new`.
+   Deprecate, Remove. Every component starts from a spec in `.specs/`, through `/component-new`.
 3. Every block in `packages/webkit/blocks/` is a pattern and every folder in
    `packages/webkit/examples/` documents a component. Changed one? Run
    `pnpm --filter @aziontech/webkit catalog:build`; the docs page and the styled visual test follow
@@ -154,7 +154,7 @@ Run them locally with `pnpm docs:dev`, `pnpm demos:dev` and `pnpm icons:gallery:
 The path for people and agents who maintain the design system itself.
 
 Every component moves through one practice, the
-[component lifecycle](./CONTRIBUTING.md#component-lifecycle): **Add** (an issue, `/webkit-new`, a
+[component lifecycle](./CONTRIBUTING.md#component-lifecycle): **Add** (an issue, `/component-new`, a
 spec reviewed by a second agent, the build, the gates, the `ui-craft` review, the usage check, a
 PR), **Change** (spec first, then code; a breaking change carries `!` in the PR title and a
 migration), **Deprecate** (`@deprecated` naming the replacement and the removal version, kept for

@@ -22,8 +22,8 @@ fails the build when the two mix.
 
 1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md) — monorepo rules, commands, conventions.
 2. New component or block: the AI flow, from a request issue to a PR —
-   [`/webkit-new`](./.claude/commands/webkit-new.md) (component) or
-   [`/webkit-new-block`](./.claude/commands/webkit-new-block.md) (block). It runs these steps in
+   [`/component-new`](./.claude/commands/component-new.md) (component) or
+   [`/block-new`](./.claude/commands/block-new.md) (block). It runs these steps in
    order and stops on the first failure:
    1. read the issue (`.github/ISSUE_TEMPLATE/new-component.yml` / `new-block.yml`);
    2. research the benchmarks (Cloudscape `index.html.md`, shadcn) and the catalog for reuse

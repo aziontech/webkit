@@ -177,7 +177,7 @@ to `localhost` aborted; `streaming` states run on a fake clock advanced 1.5 s. `
 Baselines (`apps/visual/baselines/`) are committed and valid only when rendered in
 `mcr.microsoft.com/playwright:v1.62.0-noble`, the image the CI job runs in. New examples, blocks
 and demo routes are picked up from the files; only their baseline is a manual step
-(`visual-baselines.yml`, `/regen-baselines`).
+(`visual-baselines.yml`, `/baselines-regenerate`).
 
 ---
 

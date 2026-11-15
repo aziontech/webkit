@@ -44,7 +44,7 @@ exists so the standard is applied _by construction_, not remembered by disciplin
 | 2   | Approve          | `spec-validate`               | `status: approved` + body checksum      | schema/Constraints invalid                        |
 | 3   | Generate         | `/component-create <name>`    | `.vue` + exports + story + Code Connect | spec missing/tampered, any phase fails            |
 | 4   | Write-time gates | every `Write`/`Edit`          | approved or `exit 2`                    | off-token, off-spec, phantom import, broken story |
-| 5   | PR + CI          | `/create-branch` + `/open-pr` | PR to `main`                            | any governance job fails                          |
+| 5   | PR + CI          | `/branch-create` + `/pr-open` | PR to `main`                            | any governance job fails                          |
 | 6   | Review           | PR                            | 2 approvals (technical + design)        | review-only surfaces off-pattern                  |
 | 7   | Release          | merge to `main`               | release-please Release PR per package   | commit type ⇄ bump divergence                     |
 
@@ -131,11 +131,11 @@ examples in `examples/<name>/`, and the Code Connect mapping. The orchestrator n
 | 1    | Spec validation      | `spec-validator`                                    | no                             | any schema/body/Constraints failure                    |
 | 2    | Discovery (parallel) | `figma-extractor` → `token-mapper`, `reuse-auditor` | no                             | — (emit JSON artifacts)                                |
 | 3    | Reconciliation       | orchestrator                                        | no                             | spec tokens/regions don't reconcile with discovery     |
-| 4    | Scaffold             | `scaffolder` + `component-scaffold` skill           | `.vue`(s), `index.ts`, exports | any hook blocks (surfaced, never worked around)        |
+| 4    | Scaffold             | `component-scaffolder` + `component-scaffold` skill           | `.vue`(s), `index.ts`, exports | any hook blocks (surfaced, never worked around)        |
 | 5    | Examples             | orchestrator (`/component-create` step 5)           | `examples/<name>/`             | catalog drift, copyable / server-render harnesses      |
 | 6    | Code Connect         | `code-connect-writer`                               | `.figma.ts` (or skip)          | — (skip becomes a pending item)                        |
 | 7    | Echo cross-check     | `echo-reporter`                                     | no                             | independent re-parse diverges from the spec            |
-| 8    | Validation           | `validate-component`                                | no                             | lint / type-check / type-coverage / server render fail |
+| 8    | Validation           | `component-validate`                                | no                             | lint / type-check / type-coverage / server render fail |
 | 9    | Finalize             | orchestrator                                        | spec status → `implemented`    | —                                                      |
 
 Key properties:
@@ -183,7 +183,7 @@ CI by the [invariant test](#the-invariant).
 
 ### Stage 5 — Pull request + CI
 
-Branches and PRs go through `/create-branch` and `/open-pr` (base `main`, Conventional
+Branches and PRs go through `/branch-create` and `/pr-open` (base `main`, Conventional
 Commits, no attribution footers). CI is the **Governance Pipeline** — the same engines the
 hooks ran, re-run over the whole repo, so an editor push that never ran a hook cannot merge
 an off-pattern change either.
@@ -285,7 +285,7 @@ The four places that carry this mapping —
 [`commitlint.config.js`](../../commitlint.config.js),
 release-please (stock `release-type: node` in `release-please-config.json`),
 [`CONTRIBUTING.md`](../../CONTRIBUTING.md), and the
-`/open-pr` + `/create-branch` flows — must be edited **in the same PR** when a type is
+`/pr-open` + `/branch-create` flows — must be edited **in the same PR** when a type is
 added or removed. release-please only counts a commit toward a package when it touches
 files under that package.
 
@@ -499,7 +499,7 @@ How **this repo** authors, documents, and releases; they never ship to consumers
 | [dependencies](../rules/dependencies.md)     | CSS-only positioning/animation; granted exceptions listed in the rule                    |
 | [migration](../rules/migration.md)           | external artifacts are rewritten to our conventions, never inherited                     |
 | [release-types](../rules/release-types.md)   | commit type ⇄ version bump identical across 4 sources                                    |
-| [git-workflow](../rules/git-workflow.md)     | branches/PRs only via `/create-branch` + `/open-pr`, base `main`                         |
+| [git-workflow](../rules/git-workflow.md)     | branches/PRs only via `/branch-create` + `/pr-open`, base `main`                         |
 | [bundle-budget](../rules/bundle-budget.md)   | size-limit per entry; tree-shaking preserved                                             |
 | [testing](../rules/testing.md)               | one `<name>.test.ts` per component — Vitest browser mode, story fixture, axe             |
 | [authoring-docs](../rules/authoring-docs.md) | skills/agents carry conforming frontmatter + `enforced_by`; no source file as an example |

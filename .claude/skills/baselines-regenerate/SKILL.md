@@ -1,5 +1,5 @@
 ---
-name: regen-baselines
+name: baselines-regenerate
 description: Regenerate the styled visual baselines (Playwright over the docs site's examples and blocks and over the demos) for a branch/PR via the CI workflow, download the artifact, mirror it into apps/visual/baselines, and commit it to the branch. Baselines come only from the Playwright container image.
 status: active
 last_updated: 2026-11-13
@@ -7,7 +7,7 @@ scope: webkit
 enforced_by: [git-workflow, release-types, review]
 ---
 
-# Skill: regen-baselines
+# Skill: baselines-regenerate
 
 ## Purpose
 

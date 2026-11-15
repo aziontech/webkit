@@ -42,7 +42,7 @@ Don't write one by hand for the first time. Run:
 /spec-create <name> --figma <url>
 ```
 
-The `spec-author` sub-agent will ask focused questions (kind options, sizes, events, slots, a11y, stories), cross-reference DESIGN.md and any Figma URL you provide, and write `.specs/<name>.md` with `status: draft`.
+The `spec-creator` sub-agent will ask focused questions (kind options, sizes, events, slots, a11y, stories), cross-reference DESIGN.md and any Figma URL you provide, and write `.specs/<name>.md` with `status: draft`.
 
 Review the draft. Edit anything that's wrong. Then mark `status: approved` and re-run `/component-create` (which will call `spec-validator` and refuse to proceed if the body and the schema disagree).
 

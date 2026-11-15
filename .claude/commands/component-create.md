@@ -35,7 +35,7 @@ Spawn the `spec-validator` sub-agent with the universal envelope (see `.claude/a
 If `--dry-run`, print the planned writes here and exit 0.
 
 ### Step 4 — Scaffold (writes)
-Spawn the `scaffolder` sub-agent. Envelope includes: spec verbatim + Constraints + the construction rules — `no-invention`, `naming`, `component-structure`, `props`, `prop-vocabulary`, `v-model`, `emits`, `event-payloads`, `slots`, `composables`, `root-element`, `component-states`, `styling`, `tokens`, `accessibility`, `testid` — + `component-scaffold` skill + canonical paths to inspect (button.vue, card-pricing.vue). Task tells it exactly which files to write.
+Spawn the `component-scaffolder` sub-agent. Envelope includes: spec verbatim + Constraints + the construction rules — `no-invention`, `naming`, `component-structure`, `props`, `prop-vocabulary`, `v-model`, `emits`, `event-payloads`, `slots`, `composables`, `root-element`, `component-states`, `styling`, `tokens`, `accessibility`, `testid` — + `component-scaffold` skill + canonical paths to inspect (button.vue, card-pricing.vue). Task tells it exactly which files to write.
 
 Hooks that fire on every Write:
 - PreToolUse: `enforce-spec-exists`, `validate-tokens`, `validate-references`, `enforce-component-create`.
@@ -56,7 +56,7 @@ Spawn the `echo-reporter` sub-agent. Independently re-parses every file written 
 - 2 — hook and echo disagree. Mark `degraded`; ask the user to review.
 
 ### Step 8 — Validation (read-only)
-Spawn the `validate-component` sub-agent. Runs `pnpm webkit:lint && type-check && type-coverage && pnpm --filter @aziontech/webkit test:ssr`. Surfaces failures.
+Spawn the `component-validate` sub-agent. Runs `pnpm webkit:lint && type-check && type-coverage && pnpm --filter @aziontech/webkit test:ssr`. Surfaces failures.
 
 ### Step 9 — Finalize
 - Flip `.specs/<name>.md` `status: approved → implemented` (or stay at `implemented` for re-runs).

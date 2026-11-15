@@ -3,7 +3,7 @@ description: AI-only flow for a new WebKit component, from a "New component" iss
 argument-hint: <issue number or URL>
 ---
 
-You are the orchestrator of `/webkit-new`. You turn one **New component** issue
+You are the orchestrator of `/component-new`. You turn one **New component** issue
 (`.github/ISSUE_TEMPLATE/new-component.yml`) into one pull request, with no human edit in
 between. You run the nine steps below **in order**. Each step has an exit condition; when it is
 not met you **stop**, print `STOPPED at step <n>: <reason>` with the failing output, comment the
@@ -32,7 +32,7 @@ same on the issue (`gh issue comment`), and do nothing else.
    criteria, notes.
 2. Exit condition: every required field is present and the name is kebab-case. Otherwise stop
    and ask, on the issue, for the missing field.
-3. Create the branch with `/create-branch new component <name> #<n>`.
+3. Create the branch with `/branch-create new component <name> #<n>`.
 
 ## Step 2 — Research and reuse
 
@@ -54,7 +54,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 
 1. Run `/spec-create <name> --category <category>` in **Mode B**, with the issue and the research
    notes as the answers to every question (or Mode A, `--figma <url>`, when the issue's Figma URL
-   field is filled). The `spec-author` sub-agent copies `.specs/_template.md`, so the spec
+   field is filled). The `spec-creator` sub-agent copies `.specs/_template.md`, so the spec
    carries `template: 2` and must fill `## Internationalization`, `## Right-to-left`,
    `## Responsive` and `## Performance`.
 2. Exit condition: `.specs/<name>.md` exists with `status: draft` and no `TBD`. An unanswerable
@@ -64,7 +64,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 
 1. Spawn the `spec-reviewer` sub-agent (`.claude/agents/spec-reviewer.md`) with the spec, the
    issue and the research notes — never with this conversation.
-2. `return` → hand the findings to `spec-author`, which revises the draft; spawn a **fresh**
+2. `return` → hand the findings to `spec-creator`, which revises the draft; spawn a **fresh**
    reviewer. Three returns on the same spec stop the run.
 3. `approve` → spawn `spec-validator` (`spec-validate` skill): schema, body, Constraints block,
    template-2 sections; it writes the checksum and flips `status: draft → approved`.
@@ -74,7 +74,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 ## Step 5 — Build
 
 1. `/component-create <name>`: scaffold (`component-scaffold`), examples, Code
-   Connect when a frame exists, echo cross-check, `validate-component`. Its hooks run on every
+   Connect when a frame exists, echo cross-check, `component-validate`. Its hooks run on every
    write.
 2. Co-located test `<name>.test.ts` (Vitest browser; `.claude/rules/testing.md`): every state,
    the keyboard map, axe, and the `dir="rtl"` case.
@@ -84,7 +84,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 4. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
 5. Regenerate: `pnpm --filter @aziontech/webkit catalog:build`. The docs page
    (`/components/<name>`, `/example?path=<name>/<file>`) and the visual test of the first example follow
-   from the files; its baseline comes from the `Visual baselines` workflow (`/regen-baselines`).
+   from the files; its baseline comes from the `Visual baselines` workflow (`/baselines-regenerate`).
 6. Exit condition: `/component-create` finished with `status: implemented` and the echo verdict
    is `parity`.
 
@@ -134,7 +134,7 @@ so a skipped one fails the PR anyway.
 ## Step 9 — Pull request
 
 1. Commit by context (Conventional Commits, `feat(webkit): <name>`), push, and open the PR with
-   `/open-pr`, body generated from `.github/pull_request_template.md`:
+   `/pr-open`, body generated from `.github/pull_request_template.md`:
    - `Closes #<n>`, the spec path, the spec-reviewer checklist and verdict;
    - the gates table printed by `gates` and the results of the other step-6 commands;
    - the `ui-craft` report and the open findings;

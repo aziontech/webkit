@@ -78,9 +78,9 @@ Every `<script setup lang="ts">` reads top-to-bottom in this fixed order. Omit a
 ## Enforcement
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** already enforces `defineOptions.name` = PascalCase(spec name) and the folder/testid derivation; a `.vue` off-layout is blocked at write.
-- **`vue/component-tags-order`** (ESLint) keeps SFC blocks ordered; the `<script setup>` internal order is checked by the scaffolder skeleton and `echo-reporter`.
-- The scaffolder writes the layout and the section order verbatim from the skeleton in [`component-scaffold`](../skills/component-scaffold/SKILL.md); this rule is the human-readable form of that skeleton. See also [`COMPONENT_REQUIREMENTS.md`](../docs/COMPONENT_REQUIREMENTS.md) § "Component Structure Order".
+- **`vue/component-tags-order`** (ESLint) keeps SFC blocks ordered; the `<script setup>` internal order is checked by the component-scaffolder skeleton and `echo-reporter`.
+- The component-scaffolder writes the layout and the section order verbatim from the skeleton in [`component-scaffold`](../skills/component-scaffold/SKILL.md); this rule is the human-readable form of that skeleton. See also [`COMPONENT_REQUIREMENTS.md`](../docs/COMPONENT_REQUIREMENTS.md) § "Component Structure Order".
 
 ## Why this rule exists
 
-`COMPONENT_REQUIREMENTS.md` described the structure order as prose in a long document; it bound nothing, so new components arranged their scripts however the author happened to. A fixed layout + fixed order is what lets a reader — or `validate-spec-compliance` — find `defineModel` or the `data-testid` fallback in the same place in every file, and what lets the scaffolder emit a skeleton that never has to be rearranged in review.
+`COMPONENT_REQUIREMENTS.md` described the structure order as prose in a long document; it bound nothing, so new components arranged their scripts however the author happened to. A fixed layout + fixed order is what lets a reader — or `validate-spec-compliance` — find `defineModel` or the `data-testid` fallback in the same place in every file, and what lets the component-scaffolder emit a skeleton that never has to be rearranged in review.

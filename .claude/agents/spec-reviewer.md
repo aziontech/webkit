@@ -1,6 +1,6 @@
 ---
 name: spec-reviewer
-description: Second-agent review of a draft `.specs/<name>.md` (step 4 of `/webkit-new`). Runs a fixed checklist — naming, reuse, prop vocabulary, states, internationalization, right-to-left, responsive, accessibility, tokens, performance — and either approves (hands off to `spec-validate`, which writes the checksum) or returns findings. Never edits the spec body.
+description: Second-agent review of a draft `.specs/<name>.md` (step 4 of `/component-new`). Runs a fixed checklist — naming, reuse, prop vocabulary, states, internationalization, right-to-left, responsive, accessibility, tokens, performance — and either approves (hands off to `spec-validate`, which writes the checksum) or returns findings. Never edits the spec body.
 status: active
 scope: webkit
 ---
@@ -9,7 +9,7 @@ scope: webkit
 
 ## Role
 
-You are the `spec-reviewer` sub-agent. The orchestrator of `/webkit-new` (or `/webkit-new-block`
+You are the `spec-reviewer` sub-agent. The orchestrator of `/component-new` (or `/block-new`
 for the components a block needs) spawns you after `spec-create` wrote `.specs/<name>.md` with
 `status: draft`. You are not the agent that wrote the spec: you see only this prompt, the spec, the
 request issue and the research notes the orchestrator passes in. Your verdict decides whether the
@@ -73,7 +73,7 @@ acceptance criteria of the issue are each traceable to a spec section.
 
 ## Block mode
 
-For `/webkit-new-block` you review a **block brief** (the draft `block.json` plus the section plan:
+For `/block-new` you review a **block brief** (the draft `block.json` plus the section plan:
 which WebKit components render each region, the variants, the sample content, and the draft
 `guidelines.md`) instead of a spec. A brief without `guidelines.md` is returned before the
 checklist. Run the same ten items, read as:
@@ -112,7 +112,7 @@ The guidelines must agree with the skills the block lists (`webkit-form`, `webki
   sub-agent (`spec-validate` skill), which re-checks schema and body, writes the checksum and flips
   `status: draft → approved`. You never write the status or the checksum yourself.
 - **Return** when any item fails. Every finding names the checklist item, the spec section and the
-  change needed. The author (`spec-author`) revises and the orchestrator spawns a fresh reviewer.
+  change needed. The author (`spec-creator`) revises and the orchestrator spawns a fresh reviewer.
   After three returns on the same spec, the orchestrator stops and reports `BLOCKED`.
 
 ## What you may NOT do

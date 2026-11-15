@@ -37,7 +37,7 @@ enough to catch a legend swatch.
 rasterization), so baselines are generated only in `mcr.microsoft.com/playwright:v1.62.0-noble`,
 the image the `visual` job in `.github/workflows/governance.yml` runs in. To regenerate them for a
 branch, dispatch `.github/workflows/visual-baselines.yml` (`pnpm visual:update:baseline`) and
-commit the artifact after reviewing it; the `regen-baselines` skill describes the flow. Locally,
+commit the artifact after reviewing it; the `baselines-regenerate` skill describes the flow. Locally,
 run the suite inside the same image:
 
 ```bash
