@@ -121,7 +121,7 @@ Each piece of the anatomy is a component — compose them, never re-type their m
 | Piece                        | Component                                                                                                                                   |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                            |
-| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="ai ai-cog"`                                        |
+| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="ai ai-settings"`                                        |
 | Row (field, switch, stacked) | `SettingRow` (`@aziontech/webkit/setting-row`) with `kind` `field`, `compact` or `stacked`                                                  |
 | Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `kind="centered"` on a create page (Cancel and Create in a raised card centred at the bottom), `kind="plain"` on an in-page form saved as one unit, `kind="fade"` on a wizard step, the floating default on settings |
 | Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                        |

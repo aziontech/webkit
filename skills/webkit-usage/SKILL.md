@@ -96,7 +96,7 @@ keeping to the guidelines. Only when no pattern fits, compose from components (b
   opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the
   guided route?" with the orange Agent setup over a halftone) above the Console, CLI and API
   `DocCard`s (`ai ai-azion`, `ai ai-azion-cli`, `ai ai-azion-api`). Framework templates use the
-  brand-colour icons (`ai-cor ai-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
+  brand-colour icons (`ai-color ai-react`). Do not substitute `DocPageHeader`, a `DocPrompt` or a
   `DocCard` with an overline for these.
 
 ## Which skill for which task
@@ -166,7 +166,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
-- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-cor ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the PrimeIcons `pi pi-check` (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-color ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the PrimeIcons `pi pi-check` (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -178,7 +178,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ❌ Hardcoded color: `#fff`, `rgb(...)`, `hsl(...)`, `text-[#1e40af]`, or raw Tailwind palette (`bg-blue-600`).
 - ❌ Restyling a webkit component: `<Button class="bg-(--primary)">`, `:class`, `style` on its tag. Use its props; put your classes on your own wrapper or in its slots. Only layout utilities may sit on the tag: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
 - ❌ An illustration, diagram, figure or mark name guessed from a file in `src/` or from the page title: an unknown illustration renders a "PLACE DESIGN ASSET" placeholder, an unknown diagram or figure draws nothing.
-- ❌ `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: neither is a class. Use `ai-cor ai-<name>`.
+- ❌ `ai-cor ai-<name>`, `ai-<name>-cor` or `ai ai-<name>-cor` for a colour icon: none is a class in WebKit 6. Use `ai-color ai-<name>`.
 - ❌ A default/namespace binding of `@aziontech/icons` (`import Icons from '@aziontech/icons'`) — it is a font; import it for side effects only.
 - ❌ A custom Button, Modal, Table, Tooltip, etc. when webkit ships one.
 - ❌ Passing a translated label to every instance (`aria-label="Fechar"` on each close button) instead of setting the locale on `WebkitProvider`.

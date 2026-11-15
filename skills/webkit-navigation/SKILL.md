@@ -117,7 +117,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
         placement="bottom"
       >
         <IconButton
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
           kind="primary"
           size="medium"
           aria-label="Create"
@@ -128,7 +128,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
         label="Create"
         kind="primary"
         size="medium"
-        icon="ai ai-plus-circle"
+        icon="ai ai-circle-plus"
       />
     </template>
 
@@ -176,7 +176,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
       {
         id: 'settings',
         label: 'Settings',
-        icon: 'ai ai-cog',
+        icon: 'ai ai-settings',
         kind: 'drill',
         groups: [
           {

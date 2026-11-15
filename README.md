@@ -166,7 +166,7 @@ Designers file the issue forms and review screenshots: see
 
 - `@aziontech/webkit`: Vue component library and UI building blocks.
 - `@aziontech/theme`: design token system, CSS variables, and Tailwind integration.
-- `@aziontech/icons`: the Azion icon font (plus the legacy PrimeIcons entry) as CSS/woff2 assets.
+- `@aziontech/icons`: the Azion icon font and colored brand icons as CSS/woff2 assets.
 - `@aziontech/webkit-mcp`: the MCP server that gives AI tools the WebKit catalog (`npx -y @aziontech/webkit-mcp`).
 - Docs site (`apps/docs`), demos (`apps/demos`) and the styled visual suite (`apps/visual`).
 - Icons Gallery app for icon exploration and QA.
