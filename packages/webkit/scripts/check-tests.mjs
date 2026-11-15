@@ -3,7 +3,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { dirname, join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { componentRootName } from '../../../.claude/hooks/_lib/spec.mjs'
+import { componentRootName } from '../../../.claude/hooks/lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = join(SCRIPT_DIR, '..', '..', '..')
@@ -13,7 +13,7 @@ const WIP = join(COMPONENTS, 'wip')
 let legacyNames = new Set()
 try {
   const legacy = JSON.parse(
-    readFileSync(join(ROOT, '.claude/hooks/_lib/legacy-components.json'), 'utf-8')
+    readFileSync(join(ROOT, '.claude/hooks/lib/legacy-components.json'), 'utf-8')
   )
   legacyNames = new Set(legacy.map((c) => c.name))
 } catch {}

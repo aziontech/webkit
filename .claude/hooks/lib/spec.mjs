@@ -360,7 +360,7 @@ export function componentRootName(relFromComponents) {
 // ---- Legacy whitelist ----
 
 export function isLegacyComponent(category, name, repoRoot) {
-  const path = resolve(repoRoot, '.claude/hooks/_lib/legacy-components.json')
+  const path = resolve(repoRoot, '.claude/hooks/lib/legacy-components.json')
   if (!existsSync(path)) return false
   try {
     const list = JSON.parse(readFileSync(path, 'utf-8'))

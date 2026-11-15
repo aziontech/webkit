@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path'
 import { formatCheck, withNavigation } from '../../src/cli/check.js'
 import { parseUrls, runNavigationCheck } from '../../src/cli/navigation-check.js'
 import { navigationFindings, routeOf } from '../../src/cli/navigation-levels.js'
-import { CLI, cleanup, makeProject, PKG_ROOT } from './_helpers/cli-project.mjs'
+import { CLI, cleanup, makeProject, PKG_ROOT } from './lib/cli-project.mjs'
 
 const FIXTURES = join(PKG_ROOT, 'test', 'cli', 'fixtures', 'navigation-levels')
 const PAGE = 'http://localhost:5173/policies/acme/private-access/access-rules'

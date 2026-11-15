@@ -16,7 +16,7 @@ standard code. This is the entry-point map; each area links to its own index.
 │   ├── validate-references.mjs       # no phantom imports / forbidden deps
 │   ├── enforce-spec-exists.mjs       # no .vue without an approved spec
 │   ├── enforce-component-create.mjs  # authoring only via the pipeline
-│   └── _lib/              # shared, single-source engines
+│   └── lib/              # shared, single-source engines
 │       ├── standards.mjs         #   the registry: rule ↔ enforcement + scope (general/webkit)
 │       ├── authoring-checks.mjs  #   construction checks (one of FOUR shared engines: authoring, token, spec, story)
 │       ├── prop-vocabulary.mjs   #   canonical prop dictionary
@@ -43,8 +43,8 @@ packages/webkit/           # the parts of the system that live in the package
 | Concern | Path |
 |---|---|
 | The standards (human) | [`rules/`](./rules/) → [`rules/README.md`](./rules/README.md) |
-| Standard ↔ enforcement (machine) | [`hooks/_lib/standards.mjs`](./hooks/_lib/standards.mjs) |
-| The check engine (hook + ratchet) | [`hooks/_lib/authoring-checks.mjs`](./hooks/_lib/authoring-checks.mjs) |
+| Standard ↔ enforcement (machine) | [`hooks/lib/standards.mjs`](./hooks/lib/standards.mjs) |
+| The check engine (hook + ratchet) | [`hooks/lib/authoring-checks.mjs`](./hooks/lib/authoring-checks.mjs) |
 | Write-time gates | [`hooks/`](./hooks/) |
 | CI ratchet + baseline | `packages/webkit/scripts/check-authoring.mjs` · `authoring-baseline.json` |
 | The invariant (anti-drift) | `packages/webkit/test/standards/invariant.test.mjs` |
@@ -56,11 +56,11 @@ packages/webkit/           # the parts of the system that live in the package
 ## The standards flow (single source, no drift)
 
 ```
-rules/<id>.md ──registered in──► hooks/_lib/standards.mjs ──scope: general|webkit
+rules/<id>.md ──registered in──► hooks/lib/standards.mjs ──scope: general|webkit
       │                                    │
       │ mechanizable check                 │ invariant test asserts the pairing
       ▼                                    ▼
-hooks/_lib/authoring-checks.mjs  ──used by──►  validate-authoring.mjs (write-time)
+hooks/lib/authoring-checks.mjs  ──used by──►  validate-authoring.mjs (write-time)
                                  └─used by──►  scripts/check-authoring.mjs (CI ratchet)
 ```
 

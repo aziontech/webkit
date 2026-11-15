@@ -27,7 +27,7 @@ import {
   LEGACY_HUSKY_HOOK_MARKER,
   planInit
 } from '../../src/cli/plan.js'
-import { PKG_ROOT } from './_helpers/cli-project.mjs'
+import { PKG_ROOT } from './lib/cli-project.mjs'
 
 const requireFromWebkit = createRequire(join(PKG_ROOT, 'package.json'))
 

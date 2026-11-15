@@ -2,7 +2,7 @@
 
 The same concept must ship under the **same prop name, type, and default** on every component. When one component calls it `variant` and another `kind`, or one spells it `closeable` and another `closable`, the consumer relearns the API per component and the AI guesses wrong. This rule fixes the canonical name for each recurring concept and makes it machine-enforced — on component **creation and on every edit**.
 
-The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs). This document is its human-readable form; the two must agree. `build-catalog.mjs` also stamps the vocabulary into `catalog.json` so the MCP steers AI-generated consumer code toward the canonical names.
+The single source of truth is [`.claude/hooks/lib/prop-vocabulary.mjs`](../hooks/lib/prop-vocabulary.mjs). This document is its human-readable form; the two must agree. `build-catalog.mjs` also stamps the vocabulary into `catalog.json` so the MCP steers AI-generated consumer code toward the canonical names.
 
 ## The dictionary
 
@@ -71,7 +71,7 @@ The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
 | `doc-card`                                                             | `overline`, `link`             | `eyebrow`, `linkLabel`         |
 | `doc-card-group`                                                       | `mobileCols`                   | `mobileColumns`                |
 
-† Added in v6. [`_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs) enforces them: the aliases are in `CONCEPTS` and the banned values of the shared-values table are in `VALUES` (checked against a `kind` / `severity` union). `error` stays allowed as a prop name (a message string or a send-failed state is a different concept), and `v-model:value` cannot be blocked by name because `value` is a legitimate prop, so those two are review-only.
+† Added in v6. [`lib/prop-vocabulary.mjs`](../hooks/lib/prop-vocabulary.mjs) enforces them: the aliases are in `CONCEPTS` and the banned values of the shared-values table are in `VALUES` (checked against a `kind` / `severity` union). `error` stays allowed as a prop name (a message string or a send-failed state is a different concept), and `v-model:value` cannot be blocked by name because `value` is a legitimate prop, so those two are review-only.
 
 **Not banned — legitimate competing uses:**
 
@@ -102,7 +102,7 @@ A component that supports only a subset declares the tokens in canonical order (
 
 ## Migration
 
-Per [`migration.md`](./migration.md), a name inherited from another design system (`variant`, `sm/md/lg`, `onValueChange`) is rewritten to ours — never carried over. Legacy components on the [`legacy-components.json`](../hooks/_lib/legacy-components.json) whitelist bypass the hook until they are migrated; migrating one includes bringing its props onto this vocabulary.
+Per [`migration.md`](./migration.md), a name inherited from another design system (`variant`, `sm/md/lg`, `onValueChange`) is rewritten to ours — never carried over. Legacy components on the [`legacy-components.json`](../hooks/lib/legacy-components.json) whitelist bypass the hook until they are migrated; migrating one includes bringing its props onto this vocabulary.
 
 ## Hard prohibitions
 
@@ -110,4 +110,4 @@ Per [`migration.md`](./migration.md), a name inherited from another design syste
 - Do not use `xs`/`sm`/`md`/`lg`/`xl` for `size`; do not reorder the `size` union.
 - Do not prefix a boolean with `is`/`has`.
 - Do not let the spec's Default column disagree with `withDefaults`.
-- Do not edit `prop-vocabulary.md` without editing `_lib/prop-vocabulary.mjs` in the same PR (and vice-versa) — they are one source in two forms.
+- Do not edit `prop-vocabulary.md` without editing `lib/prop-vocabulary.mjs` in the same PR (and vice-versa) — they are one source in two forms.

@@ -24,7 +24,7 @@ import {
   scanBuiltInStrings,
   STRING_MESSAGES
 } from './lib/built-in-strings.mjs'
-import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
+import { collectSpecViolations } from '../../../.claude/hooks/lib/spec-compliance-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }
 const DIRECTION_DIRS = ['src/components', 'blocks', 'examples']

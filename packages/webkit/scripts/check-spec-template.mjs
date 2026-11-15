@@ -11,7 +11,7 @@ import {
   parseSpecFile,
   templateSectionErrors,
   templateVersion
-} from '../../../.claude/hooks/_lib/spec.mjs'
+} from '../../../.claude/hooks/lib/spec.mjs'
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const DEFAULT_SPECS_DIR = resolve(SCRIPT_DIR, '../../../.specs')

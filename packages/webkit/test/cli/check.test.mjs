@@ -10,7 +10,7 @@ import stylelint from 'stylelint'
 import { applyPlan } from '../../src/cli/apply.js'
 import { cssScanFindings } from '../../src/cli/css-check.js'
 import { planInit } from '../../src/cli/plan.js'
-import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './_helpers/cli-project.mjs'
+import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './lib/cli-project.mjs'
 
 const BAD = `<script setup>
 import Paginator from '@aziontech/webkit/paginator'

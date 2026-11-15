@@ -1,4 +1,4 @@
-// Unit tests for the authoring-docs engine (.claude/hooks/_lib/authoring-docs-checks.mjs) —
+// Unit tests for the authoring-docs engine (.claude/hooks/lib/authoring-docs-checks.mjs) —
 // the shared definition behind the write-time hook (validate-authoring-docs.mjs) and the CI
 // ratchet (scripts/check-authoring-docs.mjs). A conforming doc must pass clean; a
 // deliberately out-of-standard doc must be flagged on every axis.
@@ -6,7 +6,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { scanDoc, docFileKind } from '../../../../.claude/hooks/_lib/authoring-docs-checks.mjs'
+import { scanDoc, docFileKind } from '../../../../.claude/hooks/lib/authoring-docs-checks.mjs'
 
 const ids = (rel, content) =>
   scanDoc(rel, content)

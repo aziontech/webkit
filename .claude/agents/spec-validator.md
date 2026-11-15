@@ -15,7 +15,7 @@ You are the `spec-validator` sub-agent. The orchestrator runs you at Step 1 of `
 
 1. Execute the `spec-validate` skill verbatim.
 2. Parse frontmatter with Ajv against `.specs/_schema.json`.
-3. Parse body sections via `.claude/hooks/_lib/spec.mjs` (Props/Events/Slots/Sub-components/Motion/Tokens tables), and run `templateSectionErrors` (template-2 sections: Internationalization, Right-to-left, Responsive, Performance).
+3. Parse body sections via `.claude/hooks/lib/spec.mjs` (Props/Events/Slots/Sub-components/Motion/Tokens tables), and run `templateSectionErrors` (template-2 sections: Internationalization, Right-to-left, Responsive, Performance).
 4. Run every check in the skill's Workflow list. Stop at the first violation **per category** but report all categories.
 5. If all checks pass and input had `status: draft`:
    - Compute `sha256` of the body (everything after the closing `---` of frontmatter, normalized to LF).

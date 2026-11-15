@@ -36,7 +36,7 @@ When the Figma frame contradicts our conventions (e.g. uses a hex color not pres
 
 ### When migrating a pre-existing `.vue` (e.g. legacy component on the whitelist)
 
-If you are asked to bring a legacy component (whitelisted in `_lib/legacy-components.json`) under spec enforcement:
+If you are asked to bring a legacy component (whitelisted in `lib/legacy-components.json`) under spec enforcement:
 
 1. **Write the spec from scratch.** Do not paste the legacy file's docstring or any CONTRACT.md. Read the `.vue` and infer the contract; restate it in our format using `.specs/_template.md` as the only template.
 2. **Rename props/events** to our conventions. If the legacy file has `variant`, the new spec has `kind`. Updating the legacy `.vue` to match the new spec is part of the same migration PR — the spec is the source of truth.
@@ -62,7 +62,7 @@ The rule wins. If the spec is harder to write because the external source uses d
 
 ## Enforcement
 
-- `spec-validator` rejects specs whose Constraints block has been altered or shortened (see [`_lib/spec.mjs`](../hooks/_lib/spec.mjs) → `constraintsBlockHasCanonicalBullets`).
+- `spec-validator` rejects specs whose Constraints block has been altered or shortened (see [`lib/spec.mjs`](../hooks/lib/spec.mjs) → `constraintsBlockHasCanonicalBullets`).
 - `validate-tokens.mjs` rejects HEX/Tailwind palette inherited from another design system.
 - `validate-references.mjs` rejects imports of any external positioning/animation lib (it's never installed).
 - Sub-agent prompts inject [`no-invention.md`](./no-invention.md) and this file verbatim. Any deviation from our patterns surfaces as `BLOCKED:` and stops the run.

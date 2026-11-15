@@ -21,13 +21,13 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { CONTENT_CHECKS, MESSAGES } from './_lib/authoring-checks.mjs'
+import { CONTENT_CHECKS, MESSAGES } from './lib/authoring-checks.mjs'
 import {
   appliesToBuiltInStrings,
   scanBuiltInStrings,
   STRING_MESSAGES
-} from './_lib/built-in-strings.mjs'
-import { scanSignatures, SIGNATURE_MESSAGES } from './_lib/signature-checks.mjs'
+} from './lib/built-in-strings.mjs'
+import { scanSignatures, SIGNATURE_MESSAGES } from './lib/signature-checks.mjs'
 
 const ROOT = process.cwd()
 const TARGET_PREFIX = 'packages/webkit/src/'

@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { cleanup, cli, cliJson, makeProject } from './_helpers/cli-project.mjs'
+import { cleanup, cli, cliJson, makeProject } from './lib/cli-project.mjs'
 
 test('search returns blocks, components and examples', () => {
   const dir = makeProject()

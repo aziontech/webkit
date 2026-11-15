@@ -12,7 +12,7 @@ import { planDoctor } from '../../src/cli/doctor.js'
 import { planInit } from '../../src/cli/plan.js'
 import { hasBundle, resolveBundleRoot } from '../../src/cli/sync.js'
 import webkitPlugin from '../../src/eslint-plugin/index.js'
-import { cli, PKG_ROOT } from './_helpers/cli-project.mjs'
+import { cli, PKG_ROOT } from './lib/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')
 

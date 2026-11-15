@@ -8,7 +8,7 @@
 import { readFileSync } from 'node:fs'
 import { relative, resolve } from 'node:path'
 
-import { TOKEN_CHECKS as VIOLATIONS, tokenChecksApply } from './_lib/token-checks.mjs'
+import { TOKEN_CHECKS as VIOLATIONS, tokenChecksApply } from './lib/token-checks.mjs'
 
 const ROOT = process.cwd()
 

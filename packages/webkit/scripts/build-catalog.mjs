@@ -4,8 +4,8 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import { parseSpecFile, getSection } from '../../../.claude/hooks/_lib/spec.mjs'
-import { vocabularySnapshot } from '../../../.claude/hooks/_lib/prop-vocabulary.mjs'
+import { parseSpecFile, getSection } from '../../../.claude/hooks/lib/spec.mjs'
+import { vocabularySnapshot } from '../../../.claude/hooks/lib/prop-vocabulary.mjs'
 import { missingComponentDocs } from './lib/component-docs.mjs'
 import { readBlocks, readExamples } from './lib/blocks.mjs'
 import {

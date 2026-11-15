@@ -14,7 +14,7 @@ import {
   SIGNATURE_RULES,
   STANDARD_BY_SIGNATURE
 } from '../../scripts/lib/signature-checks.mjs'
-import { STANDARDS_BY_ID } from '../../../../.claude/hooks/_lib/standards.mjs'
+import { STANDARDS_BY_ID } from '../../../../.claude/hooks/lib/standards.mjs'
 
 const ts = new RuleTester({
   languageOptions: { parser: tsParser, ecmaVersion: 2022, sourceType: 'module' }

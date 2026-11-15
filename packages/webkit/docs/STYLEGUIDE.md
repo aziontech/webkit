@@ -7,7 +7,7 @@ is not followed (lint at commit, hooks at write-time, CI on the PR, mandatory re
 the rest). Nothing here is a suggestion.
 
 The one-page digest is [`GUIDELINES.md`](./GUIDELINES.md); the machine-readable registry
-pairing each standard with its gate is `.claude/hooks/_lib/standards.mjs`, and each
+pairing each standard with its gate is `.claude/hooks/lib/standards.mjs`, and each
 standard's canonical rule file lives in `.claude/rules/` (shipped to consumer projects as
 `.claude/rules/webkit-*.md` by `npx @aziontech/webkit init`).
 

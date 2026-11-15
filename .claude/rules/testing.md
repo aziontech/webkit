@@ -84,14 +84,14 @@ A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **flo
 
 Existence is blocking — no advisory path:
 
-- **Write-time — existence, on create AND update.** `.claude/hooks/enforce-test-exists.mjs` (PostToolUse on `Write`/`Edit`/`MultiEdit`) blocks (exit 2) when a ROOT component `.vue` is written or edited and its co-located `<name>.test.ts` is missing. Composition sub-components are exempt (tested through their root); `wip/` and the legacy whitelist (`.claude/hooks/_lib/legacy-components.json`) are exempt.
+- **Write-time — existence, on create AND update.** `.claude/hooks/enforce-test-exists.mjs` (PostToolUse on `Write`/`Edit`/`MultiEdit`) blocks (exit 2) when a ROOT component `.vue` is written or edited and its co-located `<name>.test.ts` is missing. Composition sub-components are exempt (tested through their root); `wip/` and the legacy whitelist (`.claude/hooks/lib/legacy-components.json`) are exempt.
 - **CI — existence (mandatory).** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run test:gate`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
 - **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm webkit:test` on every PR/push touching webkit; a failing assertion fails the PR.
 - **Write-time — test integrity.** `validate-references.mjs` blocks a test whose imports don't resolve (including a mistaken alias).
 - **Publish safety.** `pnpm --filter @aziontech/webkit pack:check` must pass (the dry-run pack lists **no** `*.test.ts`) — the `files` negation keeps tests out of the published package.
 - **Review.** Reviewers confirm the behavioral surface is actually covered (the machine proves the test exists and moves with the component; the human confirms it asserts the right things).
 
-The registry pairs this rule with those gates in `.claude/hooks/_lib/standards.mjs` (`enforce[]`), and `packages/webkit/test/standards/invariant.test.mjs` fails the build if the rule and its gates ever drift apart.
+The registry pairs this rule with those gates in `.claude/hooks/lib/standards.mjs` (`enforce[]`), and `packages/webkit/test/standards/invariant.test.mjs` fails the build if the rule and its gates ever drift apart.
 
 ## Why this rule exists
 

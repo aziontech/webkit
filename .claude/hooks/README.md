@@ -4,7 +4,7 @@
 
 The hooks fail open on unexpected errors (invalid JSON input, missing files, etc.) — they never silently break the workflow.
 
-Hooks do not own their logic: the checks live in **shared engines** ([`_lib/`](./_lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `_lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`_lib/standards.mjs`](./_lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
+Hooks do not own their logic: the checks live in **shared engines** ([`lib/`](./lib/) shims re-exporting [`packages/webkit/src/eslint-plugin/*.js`](../../packages/webkit/src/eslint-plugin/), plus the DS-internal `lib/spec-compliance-checks.mjs`) that the CI ratchet ([`packages/webkit/scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs repo-wide. The rule ⇄ gate pairing is declared in [`lib/standards.mjs`](./lib/standards.mjs) and asserted in CI by [`packages/webkit/test/standards/invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).
 
 ## Hooks
 
@@ -46,7 +46,7 @@ Blocks `Write`/`Edit`/`MultiEdit` when the resulting file introduces a construct
 - A prose comment (`prose-comment`) in any non-test source under `packages/` — only component API JSDoc and tool directives are allowed ([`comments`](../rules/comments.md)); blocks when the count grows
 - A built-in string typed in a component (`i18n:hardcoded-ui-string`, `i18n:hardcoded-default-string`): a literal UI text attribute in a `src/components/**/*.vue` template, or an English prop default; the text goes to `src/i18n/messages/*.ts` ([`webkit-strings`](../../rules/webkit-strings.md)); blocks when the count grows
 
-Engine: [`_lib/authoring-checks.mjs`](./_lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run. The string check is [`_lib/built-in-strings.mjs`](./_lib/built-in-strings.mjs) → [`packages/webkit/scripts/lib/built-in-strings.mjs`](../../packages/webkit/scripts/lib/built-in-strings.mjs), shared with `scripts/check-authoring.mjs`.
+Engine: [`lib/authoring-checks.mjs`](./lib/authoring-checks.mjs) → [`packages/webkit/src/eslint-plugin/authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js) — the same module the CI ratchet and the consumer ESLint rule (`authoring-standards`) run. The string check is [`lib/built-in-strings.mjs`](./lib/built-in-strings.mjs) → [`packages/webkit/scripts/lib/built-in-strings.mjs`](../../packages/webkit/scripts/lib/built-in-strings.mjs), shared with `scripts/check-authoring.mjs`.
 
 ### [`enforce-component-create.mjs`](./enforce-component-create.mjs)
 
@@ -59,9 +59,9 @@ PreToolUse hook on `Write` of any `packages/webkit/src/components/<category>/<na
 - `.specs/<name>.md` is missing.
 - The spec's `status` is not `approved` or `implemented` (drafts cannot drive code generation; locked specs require a `spec_version` bump).
 - The body sha256 does not match the frontmatter `checksum` (tamper detection).
-- The spec is on `template: 2` (or was created on or after 2026-11-12) and one of `## Internationalization`, `## Right-to-left`, `## Responsive`, `## Performance` is missing, empty, `TBD` or still a template placeholder (`templateSectionErrors` in [`_lib/spec.mjs`](./_lib/spec.mjs); the CI twin is `pnpm --filter @aziontech/webkit run spec-template:check`).
+- The spec is on `template: 2` (or was created on or after 2026-11-12) and one of `## Internationalization`, `## Right-to-left`, `## Responsive`, `## Performance` is missing, empty, `TBD` or still a template placeholder (`templateSectionErrors` in [`lib/spec.mjs`](./lib/spec.mjs); the CI twin is `pnpm --filter @aziontech/webkit run spec-template:check`).
 
-Bypassed for components on the legacy whitelist ([`_lib/legacy-components.json`](./_lib/legacy-components.json)).
+Bypassed for components on the legacy whitelist ([`lib/legacy-components.json`](./lib/legacy-components.json)).
 
 ### [`validate-spec-compliance.mjs`](./validate-spec-compliance.mjs)
 
@@ -74,7 +74,7 @@ PostToolUse hook on `Write|Edit|MultiEdit` of the same `.vue` paths. Re-reads th
 - Animation classes in the `.vue` that aren't in the spec's "Motion & Animations" table (or vice versa).
 - Motion-bearing classes without a `motion-reduce:*` escape.
 
-Bypassed for legacy components (same whitelist). Shared parser library: [`_lib/spec.mjs`](./_lib/spec.mjs).
+Bypassed for legacy components (same whitelist). Shared parser library: [`lib/spec.mjs`](./lib/spec.mjs).
 
 ### [`enforce-test-exists.mjs`](./enforce-test-exists.mjs)
 

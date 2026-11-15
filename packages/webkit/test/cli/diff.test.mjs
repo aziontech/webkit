@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 import { lineDiff, unifiedDiff } from '../../src/cli/text-diff.js'
-import { cleanup, cli, cliJson, makeProject } from './_helpers/cli-project.mjs'
+import { cleanup, cli, cliJson, makeProject } from './lib/cli-project.mjs'
 
 const BLOCK = 'platform/delete/delete-with-confirmation'
 

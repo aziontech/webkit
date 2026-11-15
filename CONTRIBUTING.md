@@ -59,7 +59,7 @@ from step 2, with the existing spec:
   the code. Bump `spec_version` for any API change, and move the spec to `template: 2`. The
   spec stays `implemented`; recompute its `checksum` after the edit:
   ```bash
-  node -e "import('./.claude/hooks/_lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
+  node -e "import('./.claude/hooks/lib/spec.mjs').then((m) => console.log(m.bodyChecksum(m.parseSpecFile('.specs/<name>.md').body)))"
   ```
   The PR title is `feat(webkit): …` for an addition (minor) or `fix(webkit): …` for a fix (patch).
 - **Breaking** (a removed or renamed prop, event, slot, value or export; a changed default or
@@ -237,7 +237,7 @@ Spec first, then code; a shipped spec stays `implemented`. The steps, including 
 
 ### Legacy components
 
-Components in [`.claude/hooks/_lib/legacy-components.json`](./.claude/hooks/_lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./.claude/rules/migration.md)) — do not paste from the legacy file.
+Components in [`.claude/hooks/lib/legacy-components.json`](./.claude/hooks/lib/legacy-components.json) predate the pipeline. When migrating one under enforcement, rewrite the spec from scratch (see [`migration.md`](./.claude/rules/migration.md)) — do not paste from the legacy file.
 
 ## What to update when WebKit changes
 
