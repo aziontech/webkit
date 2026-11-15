@@ -386,7 +386,7 @@
         :key="region.position"
         :dir="portalLocale.dir"
         :lang="portalLocale.lang"
-        :data-testid="`${testId}-${region.position}`"
+        :data-testid="`${testId}__${region.position}`"
         :data-position="region.position"
         :data-expanded="isExpanded(region) || null"
         data-toast-region

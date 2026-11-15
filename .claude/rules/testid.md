@@ -31,6 +31,7 @@ Every component root carries a **`data-testid`** with a name derived from the co
 - Do not hard-code the testid to a literal that disagrees with `<category>-<name>` / `input-<name>`.
 - Do not ignore a consumer-supplied `data-testid` (it must win over the fallback).
 - Do not apply the same testid to two elements, or leave a test-critical sub-element unaddressable.
+- Do not join a part to its root with a single hyphen (`actions-button-loading`); the part separator is `__` (`actions-button__loading`).
 
 ## Enforcement
 

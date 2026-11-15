@@ -48,7 +48,7 @@
         type="button"
         :aria-pressed="!entry.hidden"
         :data-hidden="entry.hidden || null"
-        :data-testid="`${testId}-item`"
+        :data-testid="`${testId}__item`"
         class="relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
         @click="ctx.toggleSeries($event, entry.id)"
         @pointerenter="ctx.setEmphasized(entry.hidden ? null : entry.id)"

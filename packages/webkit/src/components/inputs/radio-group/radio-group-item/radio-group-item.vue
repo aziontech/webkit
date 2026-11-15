@@ -58,7 +58,7 @@
       :name="ctx.name.value"
       :disabled="inactive"
       :model-value="ctx.value.value"
-      :data-testid="`${testId}-control`"
+      :data-testid="`${testId}__control`"
       @update:model-value="select"
     />
     <span class="min-w-0"><slot /></span>

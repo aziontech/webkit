@@ -37,7 +37,7 @@ const mountToaster = async (props: Record<string, unknown> = {}) => {
 const regionFor = async (position: string) => {
   await nextTick()
   await nextTick()
-  return document.body.querySelector<HTMLElement>(`[data-testid="feedback-toast-${position}"]`)
+  return document.body.querySelector<HTMLElement>(`[data-testid="feedback-toast__${position}"]`)
 }
 
 describe('Toast (composition + imperative store)', () => {
@@ -104,7 +104,7 @@ describe('Toast (composition + imperative store)', () => {
       toast.dismiss(id)
       // Item stays in DOM through the exit transition, then unmounts.
       await vi.waitFor(() => {
-        region = document.body.querySelector('[data-testid="feedback-toast-bottom-right"]')
+        region = document.body.querySelector('[data-testid="feedback-toast__bottom-right"]')
         expect(region === null || within(region).queryByText('Removable') === null).toBe(true)
       })
     })
@@ -219,7 +219,7 @@ describe('Toast (composition + imperative store)', () => {
       // dismiss -> store.remove -> onClose invoked, then card unmounts after exit.
       await vi.waitFor(() => {
         expect(onClose).toHaveBeenCalledTimes(1)
-        region = document.body.querySelector('[data-testid="feedback-toast-bottom-right"]')
+        region = document.body.querySelector('[data-testid="feedback-toast__bottom-right"]')
         expect(region === null || within(region).queryByText('Closable toast') === null).toBe(true)
       })
     })
@@ -322,7 +322,7 @@ describe('Toast (composition + imperative store)', () => {
       // The slot's `dismiss` closure drives the SAME store: clicking removes it.
       slotBtn.click()
       await vi.waitFor(() => {
-        const r = document.body.querySelector('[data-testid="feedback-toast-bottom-right"]')
+        const r = document.body.querySelector('[data-testid="feedback-toast__bottom-right"]')
         expect(r === null || within(r).queryByText(/^slot:via imperative fn/) === null).toBe(true)
       })
     })

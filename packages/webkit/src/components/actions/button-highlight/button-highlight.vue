@@ -48,7 +48,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-button-highlight'
   )
 
-  const loadingTestId = computed(() => `${testId.value}-loading`)
+  const loadingTestId = computed(() => `${testId.value}__loading`)
 
   const isInactive = computed(() => props.disabled || props.loading)
 

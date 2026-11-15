@@ -24,7 +24,7 @@
   const context = useKeyValuePairsContext()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId.value}-group`
+    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId.value}__group`
   )
 </script>
 

@@ -32,7 +32,7 @@
   const context = useKeyValuePairsContext()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId.value}-item`
+    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId.value}__item`
   )
 
   const hasValue = () => hasRenderedContent(slots['default']?.() ?? [])

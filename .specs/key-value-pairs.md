@@ -4,7 +4,7 @@ category: content
 structure: composition
 status: implemented
 checksum: c2e51b8dc14b387f9e2f4f1ca6a36271a320daa8a92c518d32d614c27a48cf36
-spec_version: 1
+spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-12
 ---
@@ -126,13 +126,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   - Events: _none_.
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
   - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
-  - `data-testid` fallback `${rootTestId}-item`; a consumer `data-testid` on the Item wins.
+  - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
 - `key-value-pairs-group/key-value-pairs-group.vue` — a titled column: `<div>` → `<dt>` (title) + `<dd>` → nested `<dl>` stacking its Items in one column.
   - Props: `title: string` (required — the group's term, shown above its Items).
   - Events: _none_.
   - Slots: `default` — the group's `KeyValuePairs.Item` children.
   - Occupies one cell of the root grid, so `columns` sets how many groups sit side by side.
-  - `data-testid` fallback `${rootTestId}-group`; a consumer `data-testid` on the Group wins.
+  - `data-testid` fallback `${rootTestId}__group`; a consumer `data-testid` on the Group wins.
 
 <!-- Resulting layout:
 
@@ -240,7 +240,7 @@ Decisions taken while drafting (non-interactive run):
 - **Empty value.** Fallback inside the default slot: `—` hidden from assistive tech plus a `sr-only` "Not set". The announced text is a fixed English string; open: expose it for localisation (an `emptyLabel` prop would need a spec revision).
 - **Key typography.** Keys use `.text-body-sm` muted per the brief; the `ResourceSummary` template this replaces uses `.text-label-sm` muted. Open: confirm which one, since migrating the templates will shift the key style otherwise.
 - **Responsive columns use viewport breakpoints** (`md`, `lg`) per the brief. Open: a KeyValuePairs inside a drawer or a narrow card on a wide screen would keep 3–4 columns; container queries would need a wrapper element around the `<dl>`.
-- **Repeated test ids.** Every Item shares `${rootTestId}-item` (as table rows share theirs); tests target one by text or by a consumer-supplied `data-testid`.
+- **Repeated test ids.** Every Item shares `${rootTestId}__item` (as table rows share theirs); tests target one by text or by a consumer-supplied `data-testid`.
 - **`aria-label` on `<dl>`.** Verify in the axe test that naming a `<dl>` passes; if axe flags it, fall back to `aria-labelledby` from a visible heading.
 
 ## Constraints — DO NOT

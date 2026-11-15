@@ -20,7 +20,7 @@ const stubClipboard = (writeText = vi.fn().mockResolvedValue(undefined)) => {
 
 // The tooltip Teleports to the body, so it is outside the render container by design.
 const copyTip = () =>
-  document.body.querySelector('[data-testid="documentation-doc-prose-copy-tip"]')
+  document.body.querySelector('[data-testid="documentation-doc-prose__copy-tip"]')
 
 afterEach(() => {
   vi.unstubAllGlobals()

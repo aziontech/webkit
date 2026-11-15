@@ -43,7 +43,7 @@ const Grouped = defineComponent({
 })
 
 const itemsOf = (view: ReturnType<typeof render>) =>
-  view.getAllByTestId('content-key-value-pairs-item')
+  view.getAllByTestId('content-key-value-pairs__item')
 
 describe('KeyValuePairs', () => {
   describe('compound API', () => {
@@ -83,7 +83,7 @@ describe('KeyValuePairs', () => {
       })
       const view = render(Custom)
 
-      expect(view.getByTestId('facts-item')).toBeInTheDocument()
+      expect(view.getByTestId('facts__item')).toBeInTheDocument()
       expect(view.getByTestId('name-pair')).toBeInTheDocument()
     })
 
@@ -171,7 +171,7 @@ describe('KeyValuePairs', () => {
   describe('groups', () => {
     it('renders each Group as a dt title and a dd holding a nested dl of Items', () => {
       const view = render(Grouped)
-      const groups = view.getAllByTestId('content-key-value-pairs-group')
+      const groups = view.getAllByTestId('content-key-value-pairs__group')
 
       expect(groups).toHaveLength(1)
       const group = groups[0]
@@ -182,7 +182,7 @@ describe('KeyValuePairs', () => {
 
       const nested = group.querySelector(':scope > dd > dl')
       expect(nested).not.toBeNull()
-      const item = nested?.querySelector('[data-testid="content-key-value-pairs-item"]')
+      const item = nested?.querySelector('[data-testid="content-key-value-pairs__item"]')
       expect(item?.parentElement).toBe(nested)
       expect(item?.textContent).toContain('Active')
     })

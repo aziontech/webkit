@@ -112,7 +112,7 @@ describe('Chart', () => {
       'var(--chart-series-6)',
       'var(--chart-series-other)'
     ])
-    const items = view.getAllByTestId('chart-chart__legend-item')
+    const items = view.getAllByTestId('chart-chart__legend__item')
     expect(items).toHaveLength(7)
     expect(items[6]?.textContent).toContain('Other')
   })
@@ -151,7 +151,7 @@ describe('Chart', () => {
   it('toggles a series from the legend and keeps the others painted the same', async () => {
     const view = mount()
     await nextTick()
-    const [allowed] = view.getAllByTestId('chart-chart__legend-item')
+    const [allowed] = view.getAllByTestId('chart-chart__legend__item')
     expect(allowed?.getAttribute('aria-pressed')).toBe('true')
     await fireEvent.click(allowed as Element)
     expect(allowed?.getAttribute('aria-pressed')).toBe('false')
@@ -168,7 +168,7 @@ describe('Chart', () => {
   it('dims the other legend keys with their marks while one entry is emphasized', async () => {
     const view = mount()
     await nextTick()
-    const items = view.getAllByTestId('chart-chart__legend-item')
+    const items = view.getAllByTestId('chart-chart__legend__item')
     const keys = () => items.map((item) => item.querySelector('[data-dimmed]') !== null)
     expect(keys()).toEqual([false, false, false])
     await fireEvent.pointerEnter(items[0] as Element)
@@ -198,7 +198,7 @@ describe('Chart', () => {
           { default: () => [h(ChartLine), h(ChartLegend)] }
         )
     })
-    const items = view.getAllByTestId('chart-chart__legend-item')
+    const items = view.getAllByTestId('chart-chart__legend__item')
     await fireEvent.click(items[1] as Element)
     expect(hidden.value).toEqual(['blocked'])
     expect(toggles).toHaveLength(1)
@@ -536,13 +536,13 @@ describe('Chart table twin on devices', () => {
 describe('ChartLegend total', () => {
   it('shows the totals with total, and not with the removed totals', () => {
     const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
-    const withTotal = next.getAllByTestId('chart-chart__legend-item')[0]!.textContent
+    const withTotal = next.getAllByTestId('chart-chart__legend__item')[0]!.textContent
     next.unmount()
     const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
-    expect(legacy.getAllByTestId('chart-chart__legend-item')[0]!.textContent).not.toBe(withTotal)
+    expect(legacy.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
     legacy.unmount()
     const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
-    expect(none.getAllByTestId('chart-chart__legend-item')[0]!.textContent).not.toBe(withTotal)
+    expect(none.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
   })
 })
 
