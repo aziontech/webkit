@@ -1207,7 +1207,16 @@
     "kind": "variant"
   },
   "kbd": {
-    "kind": "variant"
+    "kind": "variant",
+    "keyName": {
+      "to": "keyName",
+      "values": {
+        "arrow-up": "arrowUp",
+        "arrow-down": "arrowDown",
+        "arrow-left": "arrowLeft",
+        "arrow-right": "arrowRight"
+      }
+    }
   },
   "key-value-pairs": {
     "kind": "variant"
