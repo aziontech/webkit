@@ -1,15 +1,31 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import Checkbox from '@aziontech/webkit/checkbox'
+  import DrawerContent from '@aziontech/webkit/drawer-content'
+  import Drawer from '@aziontech/webkit/drawer-root'
+  import DrawerTitle from '@aziontech/webkit/drawer-title'
+  import FeatureList, { type FeatureListItem } from '@aziontech/webkit/feature-list'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
-  import Progress from '@aziontech/webkit/progress'
-  import RadioGroup from '@aziontech/webkit/radio-group'
-  import { computed, ref } from 'vue'
+  import Link from '@aziontech/webkit/link'
+  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelFooter from '@aziontech/webkit/panel-footer'
+  import PanelHeader from '@aziontech/webkit/panel-header'
+  import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
+  import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import Separator from '@aziontech/webkit/separator'
+  import Switch from '@aziontech/webkit/switch'
+  import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import Wizard from '@aziontech/webkit/wizard'
+  import { computed, reactive, ref, watch } from 'vue'
 
   interface Accent {
     value: string
@@ -67,7 +83,7 @@
   const fullName = ref('')
   const organizationName = ref('')
   const accent = ref('orange')
-  const submitted = ref(false)
+  const organizationSubmitted = ref(false)
 
   const accountInitials = (name: string) => {
     const words = String(name ?? '')
@@ -83,6 +99,314 @@
   const accentColors = computed(
     () => (accents.find((item) => item.value === accent.value) ?? accents[0]).colors
   )
+
+  type BillingPeriod = 'monthly' | 'yearly'
+
+  interface PlanItem {
+    value: string
+    label: string
+    description: string
+    ariaLabel: string
+    name: string
+    severity: TagSeverity
+    price: string
+  }
+
+  interface PlanCharge {
+    rows: { label: string; value: string; suffix?: string }[]
+    total: { value: string; suffix: string }
+  }
+
+  interface PlanUpgrade {
+    name: string
+    features: { title: string; detail?: string }[]
+    charge: Record<BillingPeriod, PlanCharge>
+  }
+
+  interface BillingAddress {
+    country: string | undefined
+    postalCode: string
+    state: string | undefined
+    city: string | undefined
+    line1: string
+    line2: string
+  }
+
+  const plans: PlanItem[] = [
+    {
+      value: 'free',
+      label: "I'm working on personal projects",
+      description: 'Start free for personal projects and experimentation',
+      ariaLabel: "I'm working on personal projects. Free plan, Free.",
+      name: 'Free',
+      severity: 'contrast',
+      price: 'Free'
+    },
+    {
+      value: 'pro',
+      label: "I'm working on commercial projects",
+      description: 'For growing projects with higher usage demand',
+      ariaLabel: "I'm working on commercial projects. Pro plan, From $20/mo.",
+      name: 'Pro',
+      severity: 'info',
+      price: 'From $20/mo'
+    },
+    {
+      value: 'enterprise',
+      label: "I'm running production at scale",
+      description: 'Optimize costs with usage or spend commitments',
+      ariaLabel: "I'm running production at scale. Enterprise plan, From $2,000/mo.",
+      name: 'Enterprise',
+      severity: 'primary',
+      price: 'From $2,000/mo'
+    }
+  ]
+  const upgrades: Partial<Record<string, PlanUpgrade>> = {
+    pro: {
+      name: 'Pro',
+      features: [
+        { title: '100 resources', detail: 'then $0.10 per resource per month' },
+        { title: '10M requests', detail: 'then as low as $0.90 per 1M' },
+        { title: '50 hours of compute time', detail: 'then $0.18 per hour' },
+        { title: '10 GB of event log storage', detail: 'then $0.10 per GB-month' },
+        {
+          title: '100 GB of file storage',
+          detail: 'then as low as $0.021 per GB-month'
+        },
+        { title: '1 GB of database storage', detail: 'then $0.75 per GB-month' },
+        {
+          title: '100M security rule evaluations',
+          detail: 'then as low as $0.30 per 1M'
+        },
+        { title: 'DDoS protection included' },
+        { title: 'PCI DSS 4.0.1 Level 1' },
+        { title: 'SOC 2 Type 2 / SOC 3' },
+        { title: 'Data migration assistance' }
+      ],
+      charge: {
+        monthly: {
+          rows: [
+            { label: 'Next charge', value: '$200' },
+            { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
+          ],
+          total: { value: '$3,000', suffix: 'per year' }
+        },
+        yearly: {
+          rows: [
+            { label: 'Next charge', value: '$200' },
+            { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
+            { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
+          ],
+          total: { value: '$2,200', suffix: 'per year' }
+        }
+      }
+    },
+    enterprise: {
+      name: 'Enterprise',
+      features: [
+        { title: 'Unlimited resources' },
+        { title: '1B requests', detail: 'then as low as $0.60 per 1M' },
+        { title: '500 hours of compute time', detail: 'then $0.12 per hour' },
+        { title: '1 TB of event log storage', detail: 'then $0.08 per GB-month' },
+        {
+          title: '10 TB of file storage',
+          detail: 'then as low as $0.015 per GB-month'
+        },
+        { title: '100 GB of database storage', detail: 'then $0.50 per GB-month' },
+        {
+          title: '1B security rule evaluations',
+          detail: 'then as low as $0.20 per 1M'
+        },
+        { title: 'DDoS protection included' },
+        { title: 'PCI DSS 4.0.1 Level 1' },
+        { title: 'SOC 2 Type 2 / SOC 3' },
+        { title: 'Data migration assistance' },
+        { title: '99.99% uptime SLA' },
+        { title: 'Named account team' }
+      ],
+      charge: {
+        monthly: {
+          rows: [
+            { label: 'Next charge', value: '$2,000' },
+            { label: 'Subtotal', value: '$24,000', suffix: 'per month' }
+          ],
+          total: { value: '$24,000', suffix: 'per year' }
+        },
+        yearly: {
+          rows: [
+            { label: 'Next charge', value: '$2,000' },
+            { label: 'Subtotal', value: '$24,000', suffix: 'per month' },
+            { label: 'Yearly discount', value: '$4,800', suffix: 'per month' }
+          ],
+          total: { value: '$19,200', suffix: 'per year' }
+        }
+      }
+    }
+  }
+  const pricingLinks = [
+    {
+      label: 'Learn more about pricing',
+      href: 'https://example.com/pricing'
+    },
+    {
+      label: 'Compare plans',
+      href: 'https://example.com/pricing#comparison'
+    }
+  ]
+  const periods: { value: BillingPeriod; label: string }[] = [
+    { value: 'monthly', label: 'Monthly' },
+    { value: 'yearly', label: 'Yearly' }
+  ]
+  const countryOptions: SelectOptionItem[] = [
+    { value: 'Brazil', label: 'Brazil' },
+    { value: 'Canada', label: 'Canada' },
+    { value: 'Germany', label: 'Germany' },
+    { value: 'Japan', label: 'Japan' },
+    { value: 'United Kingdom', label: 'United Kingdom' },
+    { value: 'United States', label: 'United States' }
+  ]
+  const stateOptions: SelectOptionItem[] = [
+    { value: 'California', label: 'California' },
+    { value: 'New York', label: 'New York' },
+    { value: 'Texas', label: 'Texas' },
+    { value: 'Washington', label: 'Washington' }
+  ]
+  const cityOptions: SelectOptionItem[] = [
+    { value: 'Los Angeles', label: 'Los Angeles' },
+    { value: 'San Diego', label: 'San Diego' },
+    { value: 'San Francisco', label: 'San Francisco' }
+  ]
+  const accountAddress: BillingAddress = {
+    country: 'United States',
+    postalCode: '94105',
+    state: 'California',
+    city: 'San Francisco',
+    line1: '100 Market Street',
+    line2: 'Suite 400'
+  }
+  const blankAddress: BillingAddress = {
+    country: undefined,
+    postalCode: '',
+    state: undefined,
+    city: undefined,
+    line1: '',
+    line2: ''
+  }
+  const blankCard = {
+    holder: '',
+    country: undefined as string | undefined,
+    number: '',
+    expiry: '',
+    code: ''
+  }
+
+  const plan = ref<string>()
+  const pendingPlanId = ref('')
+  const upgradeOpen = ref(false)
+  const planSubmitted = ref(false)
+  const period = ref<BillingPeriod>('yearly')
+  const editing = ref(false)
+  const card = reactive({ last4: '8888', ...blankCard })
+  const address = reactive({ useAccountInformation: true, ...accountAddress })
+
+  const upgrade = computed(() => upgrades[pendingPlanId.value])
+  const upgradeFeatures = computed<FeatureListItem[]>(() =>
+    (upgrade.value?.features ?? []).map((feature) => ({
+      label: feature.title,
+      description: feature.detail
+    }))
+  )
+  const charge = computed(() => upgrade.value?.charge[period.value] ?? null)
+
+  watch(
+    () => address.useAccountInformation,
+    (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress)
+  )
+
+  const selectPlan = (value: string | undefined) => {
+    if (!value) return
+    planSubmitted.value = false
+    if (value === 'free') {
+      plan.value = value
+      return
+    }
+    pendingPlanId.value = value
+    period.value = 'yearly'
+    editing.value = false
+    Object.assign(address, { useAccountInformation: true, ...accountAddress })
+    upgradeOpen.value = true
+  }
+
+  const onOpenChange = (isOpen: boolean) => {
+    upgradeOpen.value = isOpen
+    if (!isOpen) pendingPlanId.value = ''
+  }
+
+  const confirmUpgrade = () => {
+    plan.value = pendingPlanId.value
+    onOpenChange(false)
+  }
+
+  const startEditing = () => {
+    Object.assign(card, blankCard)
+    editing.value = true
+  }
+
+  const updateCard = () => {
+    const digits = card.number.replace(/\D/g, '')
+    if (digits.length >= 4) card.last4 = digits.slice(-4)
+    editing.value = false
+  }
+
+  const usageOptions = [
+    { value: 'personal', label: 'Personal' },
+    { value: 'work', label: 'Work' },
+    { value: 'study', label: 'Study' }
+  ]
+  const roleOptions = [
+    { value: 'software_developer', label: 'Software developer' },
+    { value: 'devops_engineer', label: 'DevOps engineer' },
+    { value: 'infrastructure_analyst', label: 'Infrastructure analyst' },
+    { value: 'network_engineer', label: 'Network engineer' },
+    { value: 'security_specialist', label: 'Security specialist' },
+    { value: 'data_engineer', label: 'Data engineer' },
+    { value: 'ai_ml_engineer', label: 'AI/ML engineer' },
+    { value: 'iot_engineer', label: 'IoT engineer' },
+    { value: 'team_lead', label: 'Team lead' },
+    { value: 'other', label: 'Other' }
+  ]
+
+  const usage = ref<string>()
+  const role = ref<string>()
+  const session = ref(false)
+  const profileSubmitted = ref(false)
+  const creating = ref(false)
+  const outcome = ref('')
+
+  const createOrganization = () => {
+    if (creating.value) return
+    profileSubmitted.value = true
+    outcome.value = ''
+    if (!usage.value || !role.value) return
+    creating.value = true
+    setTimeout(() => {
+      creating.value = false
+      outcome.value = navigator.onLine ? 'created' : 'failed'
+    }, 900)
+  }
+
+  const step = ref(0)
+
+  const onNext = (event: MouseEvent, position: number) => {
+    if (position === 0) {
+      organizationSubmitted.value = true
+      if (!fullName.value.trim() || !organizationName.value.trim()) event.preventDefault()
+    }
+    if (position === 1) {
+      planSubmitted.value = true
+      if (!plan.value) event.preventDefault()
+    }
+  }
 </script>
 
 <template>
@@ -125,123 +449,660 @@
             class="w-full"
           >
             <template #content>
-              <Progress
-                :value="1"
-                :max="3"
-                size="small"
-                kind="flat"
-                class="shrink-0"
-                aria-label="Step 1 of 3"
-              />
-
-              <div
-                class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
-              >
-                <form
-                  class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)"
-                  aria-labelledby="onboarding-title"
-                  novalidate
-                  @submit.prevent="submitted = true"
+              <div class="p-(--spacing-md)">
+                <h1 class="sr-only">Set up your organization</h1>
+                <Wizard
+                  v-model="step"
+                  aria-label="Set up your organization"
+                  submit-label="Create Organization"
+                  :loading="creating"
+                  @next="onNext"
+                  @submit="createOrganization"
                 >
-                  <header class="flex flex-col gap-(--spacing-xs)">
-                    <div class="flex flex-col gap-(--spacing-xxs)">
-                      <p class="text-label-sm text-(--text-muted)">Step 1 of 3</p>
-                      <h1
-                        id="onboarding-title"
-                        tabindex="-1"
-                        class="text-heading-sm text-(--text-default) focus:outline-none"
-                      >
-                        Create your organization
-                      </h1>
-                    </div>
-                    <p class="text-body-sm text-(--text-muted)">
-                      Everything you deploy lives inside an organization. Yours is created once,
-                      here, and you can invite people into it afterwards.
-                    </p>
-                  </header>
+                  <Wizard.Step
+                    title="Create your organization"
+                    description="Everything you deploy lives inside an organization. Yours is created once, here, and you can invite people into it afterwards."
+                  >
+                    <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
+                      <legend class="sr-only">Create your organization</legend>
 
-                  <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
-                    <legend class="sr-only">Create your organization</legend>
+                      <div class="animate-fade-in motion-reduce:animate-none">
+                        <div class="flex flex-col gap-(--spacing-lg)">
+                          <Field :required="organizationSubmitted && !fullName.trim()">
+                            <Field.Label>Your full name</Field.Label>
+                            <Input
+                              v-model="fullName"
+                              name="fullName"
+                              size="large"
+                              placeholder="Jane Doe"
+                              autocomplete="name"
+                            />
+                            <Field.Description>{{
+                              organizationSubmitted && !fullName.trim()
+                                ? 'This field is required.'
+                                : 'How the app will greet you.'
+                            }}</Field.Description>
+                          </Field>
 
-                    <div class="animate-fade-in motion-reduce:animate-none">
-                      <div class="flex flex-col gap-(--spacing-lg)">
-                        <Field :required="submitted && !fullName.trim()">
-                          <Field.Label>Your full name</Field.Label>
-                          <Input
-                            v-model="fullName"
-                            name="fullName"
-                            size="large"
-                            placeholder="Jane Doe"
-                            autocomplete="name"
-                          />
-                          <Field.Description>{{
-                            submitted && !fullName.trim()
-                              ? 'This field is required.'
-                              : 'How the app will greet you.'
-                          }}</Field.Description>
-                        </Field>
+                          <Field :required="organizationSubmitted && !organizationName.trim()">
+                            <Field.Label>Organization name</Field.Label>
+                            <Input
+                              v-model="organizationName"
+                              name="organizationName"
+                              size="large"
+                              placeholder="Acme Inc."
+                            />
+                            <Field.Description>{{
+                              organizationSubmitted && !organizationName.trim()
+                                ? 'This field is required.'
+                                : 'Usually your company. Everyone you invite will see it.'
+                            }}</Field.Description>
+                          </Field>
 
-                        <Field :required="submitted && !organizationName.trim()">
-                          <Field.Label>Organization name</Field.Label>
-                          <Input
-                            v-model="organizationName"
-                            name="organizationName"
-                            size="large"
-                            placeholder="Acme Inc."
-                          />
-                          <Field.Description>{{
-                            submitted && !organizationName.trim()
-                              ? 'This field is required.'
-                              : 'Usually your company. Everyone you invite will see it.'
-                          }}</Field.Description>
-                        </Field>
+                          <fieldset
+                            class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                          >
+                            <Field.Legend kind="label">Organization mark</Field.Legend>
+                            <RadioGroup
+                              v-model="accent"
+                              kind="card"
+                              orientation="horizontal"
+                              :options="accents"
+                              aria-label="Organization mark"
+                              class="w-full"
+                            >
+                              <template #option="{ option }">
+                                <span class="flex flex-col items-center gap-(--spacing-xs)">
+                                  <Avatar
+                                    :label="previewName"
+                                    :alt="option.label"
+                                    :colors="option.colors"
+                                    pattern="marble"
+                                    size="medium"
+                                    kind="square"
+                                  />
+                                  <span class="text-body-xs text-(--text-muted)">{{
+                                    option.label
+                                  }}</span>
+                                </span>
+                              </template>
+                            </RadioGroup>
+                            <HelperText
+                              label="Generated from the organization's name. Select its color."
+                            />
+                          </fieldset>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </Wizard.Step>
+                  <Wizard.Step
+                    title="Select your plan"
+                    description="What you are building decides the plan. You can change it later from Billing. Nothing here is locked in."
+                  >
+                    <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
+                      <legend class="sr-only">Select your plan</legend>
 
-                        <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                          <Field.Legend kind="label">Organization mark</Field.Legend>
+                      <div class="animate-fade-in motion-reduce:animate-none">
+                        <div class="flex flex-col gap-(--spacing-xs)">
                           <RadioGroup
-                            v-model="accent"
+                            :model-value="pendingPlanId || plan"
                             kind="card"
                             orientation="horizontal"
-                            :options="accents"
-                            aria-label="Organization mark"
-                            class="w-full"
+                            :options="plans"
+                            aria-label="Plan"
+                            @update:model-value="selectPlan"
                           >
                             <template #option="{ option }">
-                              <span class="flex flex-col items-center gap-(--spacing-xs)">
-                                <Avatar
-                                  :label="previewName"
-                                  :alt="option.label"
-                                  :colors="option.colors"
-                                  pattern="marble"
-                                  size="medium"
-                                  kind="square"
-                                />
-                                <span class="text-body-xs text-(--text-muted)">{{
-                                  option.label
-                                }}</span>
-                              </span>
+                              <div
+                                class="flex w-full items-center justify-between gap-(--spacing-sm)"
+                              >
+                                <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                                  <span class="text-body-sm text-(--text-default)">{{
+                                    option.label
+                                  }}</span>
+                                  <span class="text-body-xs text-(--text-muted)">{{
+                                    option.description
+                                  }}</span>
+                                </div>
+                                <div class="flex shrink-0 flex-col items-end gap-(--spacing-xxs)">
+                                  <Tag
+                                    :label="option.name"
+                                    :severity="option.severity"
+                                    size="small"
+                                    rounded
+                                  />
+                                  <span class="text-label-sm text-(--text-muted)">
+                                    {{ option.price }}
+                                  </span>
+                                </div>
+                              </div>
                             </template>
                           </RadioGroup>
-                          <HelperText
-                            label="Generated from the organization's name. Select its color."
-                          />
-                        </fieldset>
-                      </div>
-                    </div>
-                  </fieldset>
 
-                  <div class="flex items-center gap-(--spacing-sm)">
-                    <div class="flex flex-1">
-                      <Button
-                        label="Continue"
-                        kind="primary"
-                        size="large"
-                        class="w-full"
-                        type="submit"
-                      />
-                    </div>
-                  </div>
-                </form>
+                          <HelperText
+                            v-if="planSubmitted && !plan"
+                            kind="required"
+                            label="Select a plan to continue."
+                          />
+
+                          <Drawer
+                            :open="upgradeOpen"
+                            size="large"
+                            side="right"
+                            @update:open="onOpenChange"
+                          >
+                            <DrawerContent>
+                              <form
+                                class="flex min-h-0 flex-1 flex-col"
+                                :aria-label="upgrade ? 'Upgrade to ' + upgrade.name : 'Upgrade'"
+                                novalidate
+                                @submit.prevent="confirmUpgrade"
+                              >
+                                <PanelHeader class="w-full">
+                                  <DrawerTitle>Upgrade to {{ upgrade?.name }}</DrawerTitle>
+                                </PanelHeader>
+
+                                <PanelContent>
+                                  <div
+                                    class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
+                                  >
+                                    <aside
+                                      v-if="upgrade"
+                                      class="flex flex-col gap-(--spacing-md)"
+                                    >
+                                      <div class="flex flex-col gap-(--spacing-xs)">
+                                        <h3
+                                          class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:py-(--spacing-sm)"
+                                        >
+                                          What's included
+                                        </h3>
+
+                                        <div class="px-(--spacing-xs)">
+                                          <FeatureList :items="upgradeFeatures" />
+                                        </div>
+                                      </div>
+
+                                      <div class="flex flex-col gap-(--spacing-xs)">
+                                        <Separator />
+                                        <div
+                                          v-for="link in pricingLinks"
+                                          :key="link.label"
+                                          class="ms-(--spacing-xs) w-fit"
+                                        >
+                                          <Link
+                                            :label="link.label"
+                                            :href="link.href"
+                                            target="_blank"
+                                            size="small"
+                                            class="w-full"
+                                          />
+                                        </div>
+                                      </div>
+                                    </aside>
+
+                                    <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                                      <Card :padded="false">
+                                        <template #header>
+                                          <p class="text-label-lg text-(--text-default)">Charged</p>
+                                          <ToggleGroup
+                                            v-model="period"
+                                            :options="periods"
+                                            aria-label="Billing period"
+                                          />
+                                        </template>
+
+                                        <template #content>
+                                          <div
+                                            v-if="charge"
+                                            class="flex flex-col"
+                                          >
+                                            <div
+                                              class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
+                                            >
+                                              <div
+                                                v-for="row in charge.rows"
+                                                :key="row.label"
+                                                class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
+                                              >
+                                                <span class="text-body-sm text-(--text-muted)">{{
+                                                  row.label
+                                                }}</span>
+                                                <span
+                                                  class="flex items-baseline gap-(--spacing-xs)"
+                                                >
+                                                  <span
+                                                    class="text-label-md text-(--text-default)"
+                                                    >{{ row.value }}</span
+                                                  >
+                                                  <span
+                                                    v-if="row.suffix"
+                                                    class="text-body-sm text-(--text-muted)"
+                                                    >{{ row.suffix }}</span
+                                                  >
+                                                </span>
+                                              </div>
+                                            </div>
+
+                                            <Separator />
+
+                                            <div
+                                              class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
+                                            >
+                                              <span class="text-heading-xs text-(--text-default)"
+                                                >Total</span
+                                              >
+                                              <span class="flex items-baseline gap-(--spacing-xs)">
+                                                <span
+                                                  class="text-heading-xs text-(--text-default)"
+                                                  >{{ charge.total.value }}</span
+                                                >
+                                                <span class="text-body-sm text-(--text-muted)">{{
+                                                  charge.total.suffix
+                                                }}</span>
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </template>
+                                      </Card>
+
+                                      <Card
+                                        title="Payment method"
+                                        :padded="false"
+                                      >
+                                        <template #content>
+                                          <div
+                                            class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
+                                          >
+                                            <div
+                                              v-if="!editing"
+                                              class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
+                                            >
+                                              <PaymentBrand brand="visa" />
+                                              <p
+                                                class="min-w-0 flex-1 text-label-md text-(--text-default)"
+                                              >
+                                                Ending in {{ card.last4 }}
+                                              </p>
+                                              <Button
+                                                label="Change"
+                                                kind="outlined"
+                                                size="small"
+                                                @click="startEditing"
+                                              />
+                                            </div>
+
+                                            <template v-else>
+                                              <fieldset
+                                                class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+                                              >
+                                                <legend class="sr-only">Payment method</legend>
+
+                                                <Field>
+                                                  <Field.Label>Cardholder name</Field.Label>
+                                                  <Input
+                                                    v-model="card.holder"
+                                                    name="cardholderName"
+                                                    size="large"
+                                                    placeholder="Jane A. Doe"
+                                                    autocomplete="cc-name"
+                                                  />
+                                                </Field>
+
+                                                <Field>
+                                                  <Field.Label>Country or region</Field.Label>
+                                                  <Select
+                                                    v-model="card.country"
+                                                    placeholder="Select an option"
+                                                    size="large"
+                                                  >
+                                                    <Select.Trigger />
+                                                    <Select.Content>
+                                                      <Select.Option
+                                                        v-for="option in countryOptions"
+                                                        :key="String(option.value)"
+                                                        :value="option.value"
+                                                        :disabled="option.disabled"
+                                                      >
+                                                        {{ option.label }}
+                                                      </Select.Option>
+                                                    </Select.Content>
+                                                  </Select>
+                                                </Field>
+
+                                                <Field>
+                                                  <Field.Label>Card number</Field.Label>
+                                                  <Input
+                                                    v-model="card.number"
+                                                    name="cardNumber"
+                                                    size="large"
+                                                    placeholder="1234 5678 9012 3456"
+                                                    autocomplete="cc-number"
+                                                    inputmode="numeric"
+                                                  />
+                                                </Field>
+
+                                                <div
+                                                  class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
+                                                >
+                                                  <Field>
+                                                    <Field.Label>Expiration date</Field.Label>
+                                                    <Input
+                                                      v-model="card.expiry"
+                                                      name="cardExpiry"
+                                                      size="large"
+                                                      placeholder="MM / YY"
+                                                      autocomplete="cc-exp"
+                                                      inputmode="numeric"
+                                                    />
+                                                    <Field.Description
+                                                      >Month and year, as MM/YY.</Field.Description
+                                                    >
+                                                  </Field>
+                                                  <Field>
+                                                    <Field.Label>Security code</Field.Label>
+                                                    <Input
+                                                      v-model="card.code"
+                                                      name="cardSecurityCode"
+                                                      size="large"
+                                                      placeholder="123"
+                                                      autocomplete="cc-csc"
+                                                      inputmode="numeric"
+                                                    />
+                                                    <Field.Description
+                                                      >3 or 4 digits on the back.</Field.Description
+                                                    >
+                                                  </Field>
+                                                </div>
+
+                                                <Alert
+                                                  severity="info"
+                                                  size="small"
+                                                  label="Sensitive data is handled by a PCI-compliant payment partner."
+                                                />
+                                              </fieldset>
+
+                                              <div
+                                                class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end"
+                                              >
+                                                <div class="w-full sm:w-fit">
+                                                  <Button
+                                                    class="w-full"
+                                                    label="Cancel"
+                                                    kind="outlined"
+                                                    size="medium"
+                                                    @click="editing = false"
+                                                  />
+                                                </div>
+                                                <div class="w-full sm:w-fit">
+                                                  <Button
+                                                    class="w-full"
+                                                    label="Update"
+                                                    kind="primary"
+                                                    size="medium"
+                                                    @click="updateCard"
+                                                  />
+                                                </div>
+                                              </div>
+                                            </template>
+                                          </div>
+                                        </template>
+                                      </Card>
+
+                                      <Card
+                                        title="Address information"
+                                        :padded="false"
+                                      >
+                                        <template #content>
+                                          <fieldset
+                                            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
+                                          >
+                                            <legend class="sr-only">Address information</legend>
+
+                                            <Field orientation="horizontal">
+                                              <Checkbox
+                                                v-model="address.useAccountInformation"
+                                                name="useAccountInformation"
+                                              />
+                                              <Field.Content>
+                                                <Field.Label
+                                                  >Use the same information as my
+                                                  account</Field.Label
+                                                >
+                                                <Field.Description
+                                                  >Uncheck to bill this organization at a different
+                                                  address.</Field.Description
+                                                >
+                                              </Field.Content>
+                                            </Field>
+
+                                            <div
+                                              class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
+                                            >
+                                              <Field>
+                                                <Field.Label>Country</Field.Label>
+                                                <Select
+                                                  v-model="address.country"
+                                                  placeholder="Select an option"
+                                                  size="large"
+                                                >
+                                                  <Select.Trigger />
+                                                  <Select.Content>
+                                                    <Select.Option
+                                                      v-for="option in countryOptions"
+                                                      :key="String(option.value)"
+                                                      :value="option.value"
+                                                      :disabled="option.disabled"
+                                                    >
+                                                      {{ option.label }}
+                                                    </Select.Option>
+                                                  </Select.Content>
+                                                </Select>
+                                              </Field>
+                                              <Field>
+                                                <Field.Label>Postal code</Field.Label>
+                                                <Input
+                                                  v-model="address.postalCode"
+                                                  name="postalCode"
+                                                  size="large"
+                                                  autocomplete="postal-code"
+                                                />
+                                              </Field>
+                                              <Field>
+                                                <Field.Label>State or region</Field.Label>
+                                                <Select
+                                                  v-model="address.state"
+                                                  placeholder="Select an option"
+                                                  size="large"
+                                                >
+                                                  <Select.Trigger />
+                                                  <Select.Content>
+                                                    <Select.Option
+                                                      v-for="option in stateOptions"
+                                                      :key="String(option.value)"
+                                                      :value="option.value"
+                                                      :disabled="option.disabled"
+                                                    >
+                                                      {{ option.label }}
+                                                    </Select.Option>
+                                                  </Select.Content>
+                                                </Select>
+                                              </Field>
+                                              <Field>
+                                                <Field.Label>City</Field.Label>
+                                                <Select
+                                                  v-model="address.city"
+                                                  placeholder="Select an option"
+                                                  size="large"
+                                                >
+                                                  <Select.Trigger />
+                                                  <Select.Content>
+                                                    <Select.Option
+                                                      v-for="option in cityOptions"
+                                                      :key="String(option.value)"
+                                                      :value="option.value"
+                                                      :disabled="option.disabled"
+                                                    >
+                                                      {{ option.label }}
+                                                    </Select.Option>
+                                                  </Select.Content>
+                                                </Select>
+                                              </Field>
+                                            </div>
+
+                                            <Field>
+                                              <Field.Label>Address</Field.Label>
+                                              <Input
+                                                v-model="address.line1"
+                                                name="addressLine1"
+                                                size="large"
+                                                autocomplete="address-line1"
+                                              />
+                                            </Field>
+                                            <Field>
+                                              <Field.Label>Address line 2</Field.Label>
+                                              <Input
+                                                v-model="address.line2"
+                                                name="addressLine2"
+                                                size="large"
+                                                autocomplete="address-line2"
+                                              />
+                                              <Field.Description
+                                                >Optional. Apartment, suite or
+                                                floor.</Field.Description
+                                              >
+                                            </Field>
+                                          </fieldset>
+                                        </template>
+                                      </Card>
+                                    </div>
+                                  </div>
+                                </PanelContent>
+
+                                <PanelFooter>
+                                  <div
+                                    class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+                                  >
+                                    <div class="w-full md:w-fit">
+                                      <Button
+                                        class="w-full"
+                                        type="button"
+                                        label="Cancel"
+                                        kind="outlined"
+                                        size="medium"
+                                        @click="onOpenChange(false)"
+                                      />
+                                    </div>
+                                    <div class="w-full md:w-fit">
+                                      <Button
+                                        class="w-full"
+                                        label="Upgrade"
+                                        kind="primary"
+                                        size="medium"
+                                        type="submit"
+                                      />
+                                    </div>
+                                  </div>
+                                </PanelFooter>
+                              </form>
+                            </DrawerContent>
+                          </Drawer>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </Wizard.Step>
+                  <Wizard.Step
+                    title="Tell us about your work"
+                    description="Two answers, and they only shape what we recommend you next. Neither changes your plan or what you can do."
+                  >
+                    <Alert
+                      v-if="outcome === 'failed'"
+                      key="failed"
+                      severity="danger"
+                      size="small"
+                      label="The organization wasn't created. Check your connection, then retry. Your answers are kept."
+                    >
+                      <template #action>
+                        <Button
+                          label="Retry"
+                          kind="secondary"
+                          size="small"
+                          @click="createOrganization"
+                        />
+                      </template>
+                    </Alert>
+                    <Alert
+                      v-else-if="outcome === 'created'"
+                      key="created"
+                      severity="success"
+                      size="small"
+                      label="Organization created."
+                    />
+
+                    <fieldset
+                      class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+                      :disabled="creating"
+                    >
+                      <legend class="sr-only">Tell us about your work</legend>
+
+                      <div class="animate-fade-in motion-reduce:animate-none">
+                        <div class="flex flex-col gap-(--spacing-lg)">
+                          <fieldset
+                            class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                          >
+                            <Field.Legend kind="label"
+                              >How are you planning to use the platform?</Field.Legend
+                            >
+                            <RadioGroup
+                              v-model="usage"
+                              kind="card"
+                              orientation="horizontal"
+                              :options="usageOptions"
+                              aria-label="How are you planning to use the platform?"
+                            />
+                            <HelperText
+                              v-if="profileSubmitted && !usage"
+                              kind="required"
+                              label="Select one to continue."
+                            />
+                          </fieldset>
+
+                          <fieldset
+                            class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                          >
+                            <Field.Legend kind="label">What best describes your role?</Field.Legend>
+                            <RadioGroup
+                              v-model="role"
+                              kind="card"
+                              orientation="horizontal"
+                              :options="roleOptions"
+                              aria-label="What best describes your role?"
+                            />
+                            <HelperText
+                              v-if="profileSubmitted && !role"
+                              kind="required"
+                              label="Select one to continue."
+                            />
+                          </fieldset>
+
+                          <Field.Label>
+                            <Field orientation="horizontal">
+                              <Switch v-model="session" />
+                              <Field.Content>
+                                <Field.Title
+                                  >Schedule an onboarding session with an expert</Field.Title
+                                >
+                                <Field.Description
+                                  >A 30-minute call to create your first project. We'll email you to
+                                  schedule it.</Field.Description
+                                >
+                              </Field.Content>
+                            </Field>
+                          </Field.Label>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </Wizard.Step>
+                </Wizard>
               </div>
             </template>
           </Card>

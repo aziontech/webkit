@@ -25,15 +25,15 @@ In the bar, linked home with `aria-label="Azion home"`.
 
 ### C. Actions — `Button` (required)
 
-Documentation in the bar; the step's `Continue` (primary, large, `type="submit"`). Later steps add `Back`, and the last step ends on `Create Organization`.
+Documentation in the bar. The step's actions are the `Wizard` footer: Cancel, Previous from step 2 on, and Next, which becomes `Create Organization` on the last step.
 
 ### D. Step card — `Card` (required)
 
-Flush card capped at `--container-xl`, holding the progress bar and the form.
+Flush card capped at `--container-xl`, holding the `Wizard`.
 
-### E. Progress — `Progress` (required)
+### E. Steps — `Wizard` (required)
 
-Flat, small, `value` of `max` steps, with `aria-label="Step 1 of 3"`. The visible `Step 1 of 3` line repeats it in text.
+One `Wizard` (`aria-label="Set up your organization"`, `submit-label="Create Organization"`, `loading` bound to the create request) with three `Wizard.Step`s: Create your organization, Select your plan, Tell us about your work. It owns the step state, the `Step 1 of 3` line, the step heading and the footer; the card is narrower than the Wizard's rail breakpoint, so the rail stays hidden and only the step line shows. Next is gated in the `next` handler: it calls `preventDefault()` while a required answer is missing and the step shows why.
 
 ### F. Fields — `Field` (required)
 
@@ -59,18 +59,26 @@ Square avatars: `pattern="marble"` seeded by the organization name with the card
 
 Under the picker: `Generated from the organization's name. Select its color.`
 
+### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
+
+The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `platform/account/change-plan-drawer` (What's included as a `FeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
+
+### M. Work step — `Switch`, `Alert` (required)
+
+The usage and role questions as `RadioGroup` cards, a `Field.Label` choice card around a `Switch` for the onboarding session, and one `Alert` in the card for the create outcome.
+
 ## Do
 
-- Validate on submit, not on every keystroke; required fields show the amber prompt, not the red error.
+- Validate on Next, not on every keystroke; required fields show the amber prompt, not the red error.
 - Explain the step under its heading before the fields (what an organization is, that it is created once).
-- Keep every value when the user goes Back.
+- Keep every value when the user goes to the previous step; the three steps share one component state.
 - Hide the wireframe below `lg`; it is decoration (`aria-hidden`).
 
 ## Don't
 
 - Don't toast on this screen; a server failure creating the organization lands in one `Alert` in the card, as on the auth screens.
 - Don't ask for anything the console can ask later.
-- Don't show the stepper as navigation; steps are reached by Continue and Back only.
+- Don't build the step counter, heading or footer by hand; the `Wizard` owns them.
 
 ## Copy
 
@@ -81,9 +89,9 @@ Under the picker: `Generated from the organization's name. Select its color.`
 
 ## Accessibility
 
-- The form is labelled by the step heading (`aria-labelledby`); on step change move focus to the heading (it has `tabindex="-1"`).
+- The page `h1` is visually hidden (`Set up your organization`); each step heading is the Wizard's `h2`, and the Wizard moves focus to it on every step change.
 - The fields sit in a `fieldset` with a hidden legend.
-- The progress bar's label and the visible step line say the same thing.
+- The Wizard's `Step 1 of 3` line is a polite live region, so the step change is announced.
 
 ## States
 
