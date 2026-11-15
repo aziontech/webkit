@@ -37,7 +37,7 @@
     items: HubItem[]
   }
 
-  const breadcrumb = [{ label: 'Creation Center', current: true }]
+  const breadcrumb = [{ label: 'Creation Center', active: true }]
   const ACCOUNTS: Account[] = [
     { label: 'jane-doe', value: 'jane-doe' },
     { label: 'acme', value: 'acme' },
@@ -661,7 +661,7 @@
                         @update:model-value="onSelectScope"
                       >
                         <Select.Trigger>
-                          <template #prefix>
+                          <template #leading>
                             <i
                               class="ai ai-github text-body-md leading-none shrink-0 text-(--text-default)"
                               aria-hidden="true"
@@ -694,7 +694,7 @@
                         aria-label="Search repositories or paste a repository URL"
                         class="w-full"
                       >
-                        <template #prefix>
+                        <template #leading>
                           <i class="ai ai-search" />
                         </template>
                       </Input>
@@ -706,7 +706,7 @@
                       :padded="false"
                       class="w-full"
                     >
-                      <template #content>
+                      <template #default>
                         <div class="overflow-y-auto overscroll-contain lg:min-h-0">
                           <div
                             v-if="reposFailed"
@@ -865,7 +865,7 @@
                       aria-label="Search templates"
                       class="w-full"
                     >
-                      <template #prefix>
+                      <template #leading>
                         <i class="ai ai-search" />
                       </template>
                     </Input>
@@ -936,7 +936,7 @@
                               class="flex group relative min-h-(--size-44)"
                             >
                               <Card class="w-full">
-                                <template #content>
+                                <template #default>
                                   <div class="isolate flex flex-1 flex-col">
                                     <span
                                       aria-hidden="true"

@@ -227,7 +227,7 @@
                   :key="card.title"
                   class="min-h-(--size-44)"
                 >
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col items-start gap-(--spacing-md) text-start">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -263,7 +263,7 @@
                   :data-hovered="(frame.hovered && template.key === 'ai-inference-starter') || null"
                   class="transition-colors duration-moderate-01 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
                 >
-                  <template #content>
+                  <template #default>
                     <div class="flex items-start gap-(--spacing-md)">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -295,7 +295,7 @@
                   v-for="framework in ALL_FRAMEWORKS"
                   :key="framework.title"
                 >
-                  <template #content>
+                  <template #default>
                     <div class="flex items-start gap-(--spacing-md)">
                       <span
                         class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"

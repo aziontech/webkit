@@ -14,7 +14,7 @@
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SeverityTag, { type SeverityTagSeverity } from '@aziontech/webkit/severity-tag'
+  import SeverityTag, { type SeverityTagLevel } from '@aziontech/webkit/severity-tag'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -29,7 +29,7 @@
     actor: string
     outcome: Outcome
     category: string
-    severity: SeverityTagSeverity
+    severity: SeverityTagLevel
     destination: string
     method: string
     rule: string
@@ -297,7 +297,7 @@
       accessorKey: 'time',
       header: 'Time',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: true
     },
     {
@@ -305,7 +305,7 @@
       accessorKey: 'actor',
       header: 'Actor',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: false
     },
     {
@@ -313,7 +313,7 @@
       accessorKey: 'outcome',
       header: 'Outcome',
       align: 'start',
-      enableSorting: false,
+      sortable: false,
       principal: false
     },
     {
@@ -321,7 +321,7 @@
       accessorKey: 'category',
       header: 'Category',
       align: 'start',
-      enableSorting: false,
+      sortable: false,
       principal: false
     },
     {
@@ -329,7 +329,7 @@
       accessorKey: 'severity',
       header: 'Severity',
       align: 'start',
-      enableSorting: false,
+      sortable: false,
       principal: false
     },
     {
@@ -337,7 +337,7 @@
       accessorKey: 'destination',
       header: 'Destination',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: false
     },
     {
@@ -345,7 +345,7 @@
       accessorKey: 'method',
       header: 'Method',
       align: 'start',
-      enableSorting: false,
+      sortable: false,
       principal: false
     },
     {
@@ -353,7 +353,7 @@
       accessorKey: 'rule',
       header: 'Rule',
       align: 'start',
-      enableSorting: false,
+      sortable: false,
       principal: false
     }
   ]
@@ -691,7 +691,7 @@
               :loading="loading"
             >
               <template #aside>
-                <Hint :text="figure.description" />
+                <Hint :content="figure.description" />
               </template>
             </StatTile>
           </li>
@@ -705,7 +705,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Outcomes over time</ChartCard.Title>
-              <Hint text="Requests per hour, stacked by the outcome the rules gave them." />
+              <Hint content="Requests per hour, stacked by the outcome the rules gave them." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -744,7 +744,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Actors</ChartCard.Title>
-              <Hint text="Requests per actor, every outcome included." />
+              <Hint content="Requests per actor, every outcome included." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -762,7 +762,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Categories</ChartCard.Title>
-              <Hint text="Requests per category of action, every outcome included." />
+              <Hint content="Requests per category of action, every outcome included." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -781,7 +781,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Destinations</ChartCard.Title>
-              <Hint text="Requests per destination host, every outcome included." />
+              <Hint content="Requests per destination host, every outcome included." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -801,7 +801,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Requests</ChartCard.Title>
               <Hint
-                text="The latest requests, newest first, with the rule that decided each one."
+                content="The latest requests, newest first, with the rule that decided each one."
               />
             </span>
             <ChartCard.Action>
@@ -819,7 +819,7 @@
               :data="filteredRows"
               :columns="columns"
               row-key="id"
-              enable-sorting
+              sortable
               paginated
               :page-size="10"
               :page-size-options="[10, 25, 50]"

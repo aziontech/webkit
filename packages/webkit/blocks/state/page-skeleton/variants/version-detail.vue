@@ -39,7 +39,7 @@
           height="1rem"
         />
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div class="flex flex-col divide-y divide-(--border-default)">
               <div
                 v-for="(width, index) in section.rows"

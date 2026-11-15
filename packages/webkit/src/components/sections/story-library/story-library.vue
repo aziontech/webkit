@@ -297,7 +297,7 @@
               :aria-label="searchAriaLabel || undefined"
               class="min-w-0 flex-1"
             >
-              <template #prefix>
+              <template #leading>
                 <i class="ai ai-search text-(--text-muted)" />
               </template>
             </Input>
@@ -333,7 +333,7 @@
                     "
                     @update:model-value="setOptionQuery(facet.id, $event)"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"

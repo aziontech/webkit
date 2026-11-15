@@ -20,13 +20,13 @@
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Suggestions">
+      <CommandGroup label="Suggestions">
         <CommandItem value="deploy">Deploy Project</CommandItem>
         <CommandItem value="new-app">Create Application</CommandItem>
         <CommandItem value="settings">Go to Settings</CommandItem>
       </CommandGroup>
       <CommandSeparator />
-      <CommandGroup heading="Commands">
+      <CommandGroup label="Commands">
         <CommandItem
           value="search"
           shortcut="meta+k"

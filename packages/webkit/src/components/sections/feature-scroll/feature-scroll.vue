@@ -177,7 +177,7 @@
                 >
                   <CodeBlock
                     :tabs="sampleTabs(item.code)"
-                    line-numbers
+                    show-line-numbers
                     :copy-aria-label="item.code.copyAriaLabel || undefined"
                   />
                 </div>
@@ -226,7 +226,7 @@
                   >
                     <CodeBlock
                       :tabs="sampleTabs(items[index].code)"
-                      line-numbers
+                      show-line-numbers
                       v-bind="{ animateLines: true }"
                       :copy-aria-label="items[index].code.copyAriaLabel || undefined"
                     />

@@ -130,7 +130,7 @@
           class="contents [--section-title-headline-span:2] [--section-title-headline-max:var(--container-xl)]"
         >
           <SectionTitle
-            kind="horizontal"
+            kind="split"
             padding="small"
             :eyebrow="eyebrow"
             :title="title"
@@ -182,7 +182,7 @@
           >
             <CodeBlock
               :tabs="tabs"
-              :line-numbers="false"
+              :show-line-numbers="false"
               v-bind="{ animateLines: true }"
               :copy-aria-label="copyAriaLabel || undefined"
             />

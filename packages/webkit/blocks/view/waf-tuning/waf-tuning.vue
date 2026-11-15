@@ -93,12 +93,12 @@
     {
       accessorKey: 'ruleId',
       header: 'Rule ID',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false
     },
     { accessorKey: 'threat', header: 'Threat', grow: 2 },
-    { accessorKey: 'hits', header: 'Hits', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'hits', header: 'Hits', sortable: true, minWidth: 80 },
     { accessorKey: 'ips', header: 'Top IP addresses', grow: 3 },
     { accessorKey: 'countries', header: 'Top countries', grow: 2 },
     { accessorKey: 'paths', header: 'Top paths', grow: 3 }
@@ -275,7 +275,7 @@
               class="w-full"
               :disabled="loading"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -283,7 +283,7 @@
               </template>
             </Input>
           </div>
-          <Tooltip text="Refresh">
+          <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
               kind="outlined"
@@ -306,7 +306,7 @@
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <EmptyState
               v-if="!INITIAL_ROWS.length"
               icon="ai ai-shield"
@@ -322,8 +322,8 @@
               :data="rows"
               :columns="columns"
               row-key="ruleId"
-              enable-row-selection
-              enable-sorting
+              selectable
+              sortable
               :bordered="false"
               :loading="loading"
               export-filename="waf-tuning.csv"

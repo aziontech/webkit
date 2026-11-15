@@ -20,7 +20,7 @@
     required: boolean
   }
 
-  const breadcrumb = [{ label: 'Start from a template' }, { label: 'Origin Proxy', current: true }]
+  const breadcrumb = [{ label: 'Start from a template' }, { label: 'Origin Proxy', active: true }]
   const service = 'service-01'
   const settings: TemplateSetting[] = [
     {
@@ -114,7 +114,7 @@
         class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-2xl)"
       >
         <Card class="w-full">
-          <template #content>
+          <template #default>
             <div class="flex w-full items-start gap-(--spacing-md)">
               <span
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -160,7 +160,7 @@
           class="flex w-full flex-col items-center gap-(--spacing-xl)"
         >
           <Card class="w-full">
-            <template #content>
+            <template #default>
               <div class="flex flex-col gap-(--spacing-lg)">
                 <div class="flex flex-col gap-(--spacing-2xs)">
                   <h1 class="text-heading-xs text-(--text-default)">Configure Origin Proxy</h1>
@@ -195,7 +195,7 @@
             title="What gets added"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <p
                 class="border-b border-(--border-default) p-(--spacing-md) text-body-sm text-(--text-muted)"
               >

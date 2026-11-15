@@ -63,7 +63,7 @@
         size="small"
       />
       <Card :padded="false">
-        <template #content>
+        <template #default>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="savingGeneral"
@@ -149,7 +149,7 @@
         size="small"
       />
       <Card :padded="false">
-        <template #content>
+        <template #default>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="savingNotifications"

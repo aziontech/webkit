@@ -109,9 +109,9 @@
     total.value === 0 ? 0 : Math.min(furthest.value, total.value - 1)
   )
 
-  const railState = (step: WizardStepRecord, index: number): 'error' | 'complete' | 'upcoming' => {
+  const railState = (step: WizardStepRecord, index: number): 'error' | 'success' | 'pending' => {
     if (step.invalid) return 'error'
-    return index < reached.value && index !== current.value ? 'complete' : 'upcoming'
+    return index < reached.value && index !== current.value ? 'success' : 'pending'
   }
 
   const isLast = computed<boolean>(() => mounted.value && current.value === total.value - 1)
@@ -204,7 +204,7 @@
           :key="step.id"
           :value="String(index)"
           :title="step.title"
-          :state="railState(step, index)"
+          :status="railState(step, index)"
           :disabled="loading || index > reached"
           :data-invalid="step.invalid || null"
         >

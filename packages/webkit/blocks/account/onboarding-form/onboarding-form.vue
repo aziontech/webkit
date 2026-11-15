@@ -464,7 +464,7 @@
             :padded="false"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <div class="p-(--spacing-md)">
                 <h1 class="sr-only">Set up your organization</h1>
                 <Wizard
@@ -606,7 +606,7 @@
                           <Drawer
                             :open="upgradeOpen"
                             size="large"
-                            side="right"
+                            side="end"
                             @update:open="onOpenChange"
                           >
                             <DrawerContent>
@@ -669,7 +669,7 @@
                                           />
                                         </template>
 
-                                        <template #content>
+                                        <template #default>
                                           <div
                                             v-if="charge"
                                             class="flex flex-col"
@@ -727,7 +727,7 @@
                                         title="Payment method"
                                         :padded="false"
                                       >
-                                        <template #content>
+                                        <template #default>
                                           <div
                                             class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
                                           >
@@ -870,7 +870,7 @@
                                         title="Address information"
                                         :padded="false"
                                       >
-                                        <template #content>
+                                        <template #default>
                                           <fieldset
                                             class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
                                           >
@@ -1039,7 +1039,7 @@
                       size="small"
                       label="The organization wasn't created. Check your connection, then retry. Your answers are kept."
                     >
-                      <template #action>
+                      <template #actions>
                         <Button
                           label="Retry"
                           kind="secondary"

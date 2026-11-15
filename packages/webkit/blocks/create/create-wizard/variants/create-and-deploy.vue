@@ -758,7 +758,7 @@
                 :padded="false"
                 title="Project"
               >
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md) pb-0">
                     <p class="text-body-sm text-(--text-muted)">
                       What this service serves on each environment, so one service can serve
@@ -815,7 +815,7 @@
                         placeholder="Search projects"
                         aria-label="Search projects"
                       >
-                        <template #prefix>
+                        <template #leading>
                           <i
                             class="ai ai-search"
                             aria-hidden="true"
@@ -934,7 +934,7 @@
                   title="Cache Settings"
                   :padded="false"
                 >
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <Item
                         v-for="policy in cachePolicies"
@@ -957,8 +957,8 @@
 
                           <div
                             v-if="policy.fields.length"
-                            :data-open="scratch.cache[policy.value].enabled || null"
-                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+                            :data-state="scratch.cache[policy.value].enabled ? 'open' : 'closed'"
+                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
                           >
                             <div
                               class="min-w-0 overflow-hidden"
@@ -1000,7 +1000,7 @@
                 </Card>
 
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Add an origin"
@@ -1015,8 +1015,8 @@
                     </Item.List>
 
                     <div
-                      :data-open="scratch.origin.enabled || null"
-                      class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-open:grid-rows-[1fr] motion-reduce:transition-none"
+                      :data-state="scratch.origin.enabled ? 'open' : 'closed'"
+                      class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
                     >
                       <div
                         class="min-w-0 overflow-hidden"
@@ -1127,7 +1127,7 @@
           >
             <div class="mb-(--layout-section-gap)">
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <Item size="small">
                       <Item.Media>
@@ -1164,7 +1164,7 @@
                 :padded="false"
                 title="Domain"
               >
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
                     <ToggleGroup
                       v-model="form.domainType"
@@ -1184,7 +1184,7 @@
                         size="large"
                         placeholder="my-first-app"
                       >
-                        <template #suffix>
+                        <template #trailing>
                           <span
                             class="whitespace-nowrap text-label-sm text-(--text-muted)"
                             aria-hidden="true"
@@ -1268,7 +1268,7 @@
 
               <div class="mt-(--layout-section-gap)">
                 <Card title="Environment and certificate">
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col gap-(--spacing-lg)">
                       <fieldset
                         class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
@@ -1279,7 +1279,7 @@
                         >
                           <span class="inline-flex items-center gap-(--spacing-2xs)">
                             Environment
-                            <Hint text="Which environment this binding lands on." />
+                            <Hint content="Which environment this binding lands on." />
                           </span>
                         </Field.Legend>
                         <RadioGroup
@@ -1339,7 +1339,7 @@
                   :padded="false"
                   title="Deployment"
                 >
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md) pb-0">
                       <p class="text-body-sm text-(--text-muted)">
                         The deployment settings the first release is cut against: what it binds, and
@@ -1401,7 +1401,7 @@
                           placeholder="Search deployments"
                           aria-label="Search deployments"
                         >
-                          <template #prefix>
+                          <template #leading>
                             <i
                               class="ai ai-search"
                               aria-hidden="true"
@@ -1521,7 +1521,7 @@
                 collapsible
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <div class="p-(--spacing-md)">
                       <Field>
                         <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">

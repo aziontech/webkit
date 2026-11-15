@@ -735,7 +735,7 @@
         @focus="open = true"
         @blur="onBlur"
       >
-        <template #prefix>
+        <template #leading>
           <i
             class="ai ai-filter text-(--text-muted)"
             aria-hidden="true"

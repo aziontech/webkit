@@ -52,9 +52,9 @@
             <Command v-model:open="paletteOpen">
               <CommandInput placeholder="Search navigation and commands" />
               <CommandList>
-                <CommandGroup heading="Build">
+                <CommandGroup label="Build">
                   <CommandItem value="nav:applications">
-                    <template #prefix
+                    <template #leading
                       ><i
                         class="ai ai-edge-application"
                         aria-hidden="true"
@@ -62,7 +62,7 @@
                     Applications
                   </CommandItem>
                   <CommandItem value="nav:variables">
-                    <template #prefix
+                    <template #leading
                       ><i
                         class="ai ai-variables"
                         aria-hidden="true"
@@ -73,9 +73,9 @@
 
                 <CommandSeparator />
 
-                <CommandGroup heading="Account">
+                <CommandGroup label="Account">
                   <CommandItem value="cmd:settings">
-                    <template #prefix
+                    <template #leading
                       ><i
                         class="ai ai-settings"
                         aria-hidden="true"
@@ -96,7 +96,7 @@
               label="Home"
               icon="ai ai-home"
               href="/"
-              selected
+              active
             />
             <SidebarMenuItem
               label="Marketplace"
@@ -197,7 +197,7 @@
                   />
                 </DropdownMenuTrigger>
                 <DropdownMenuGroup>
-                  <template #top>
+                  <template #header>
                     <div class="flex min-w-0 flex-col">
                       <span class="truncate text-label-md text-(--text-default)">Alex Morgan</span>
                       <span class="truncate text-body-xs text-(--text-muted)"

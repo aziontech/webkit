@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-05-24
 last_updated: 2026-11-15
-checksum: 58eba95b5a7417f6c110b0c942f8168f3219865824966dd5d55a8a9692cfab67
+checksum: ef16d004b2ba7caef96b04c8b6a49555f8846a487b5dedc1861c32de1dc44cbe
 ---
 
 # Item — Component Spec
@@ -89,7 +89,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
   </Item.Group>
 
   <Card :padded="false">
-    <template #content>
+    <template #default>
       <Item.List>
         <Item>
           <Item.Content>

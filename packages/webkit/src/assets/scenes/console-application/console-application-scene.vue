@@ -214,7 +214,7 @@
               aria-label="Search"
               class="min-w-36 grow basis-(--container-2xs)"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -237,7 +237,7 @@
             :data-testid="`${testId}__table`"
             row-key="id"
             density="compact"
-            enable-sorting
+            sortable
             :aria-label="step.heading"
           >
             <template
@@ -265,7 +265,7 @@
             :style="bandDelay(index)"
             class="data-animated:animate-content-enter motion-reduce:animate-none"
           >
-            <template #content>
+            <template #default>
               <ItemList>
                 <SettingRow
                   v-for="row in band.rows"

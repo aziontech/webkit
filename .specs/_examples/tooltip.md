@@ -23,41 +23,47 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ```vue
 <script setup>
-import Tooltip from '@aziontech/webkit/tooltip'
-import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
-  <Tooltip text="Delete" placement="top">
-    <IconButton icon="ai ai-trash" aria-label="Delete" />
+  <Tooltip
+    content="Delete"
+    placement="top"
+  >
+    <IconButton
+      icon="ai ai-trash"
+      aria-label="Delete"
+    />
   </Tooltip>
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `text` | `string` | `''` | yes | Plain text shown inside the tooltip. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | no | Anchor side relative to the trigger. |
-| `delay` | `number` | `200` | no | Hover-open delay in milliseconds. |
-| `disabled` | `boolean` | `false` | no | Disables tooltip activation. |
-| `open` | `boolean` | `undefined` | no | Controlled open state. Use with `v-model:open`. |
-| `defaultOpen` | `boolean` | `false` | no | Initial open state when uncontrolled. |
+| Prop          | Type                                     | Default     | Required | JSDoc                                           |
+| ------------- | ---------------------------------------- | ----------- | -------- | ----------------------------------------------- |
+| `text`        | `string`                                 | `''`        | yes      | Plain text shown inside the tooltip.            |
+| `placement`   | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'`     | no       | Anchor side relative to the trigger.            |
+| `delay`       | `number`                                 | `200`       | no       | Hover-open delay in milliseconds.               |
+| `disabled`    | `boolean`                                | `false`     | no       | Disables tooltip activation.                    |
+| `open`        | `boolean`                                | `undefined` | no       | Controlled open state. Use with `v-model:open`. |
+| `defaultOpen` | `boolean`                                | `false`     | no       | Initial open state when uncontrolled.           |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `update:open` | `boolean` | v-model:open. Fires on open and close. |
-| `show` | `void` | Emitted right after the open transition starts. |
-| `hide` | `void` | Emitted right after the close transition starts. |
+| Event         | Payload   | Notes                                            |
+| ------------- | --------- | ------------------------------------------------ |
+| `update:open` | `boolean` | v-model:open. Fires on open and close.           |
+| `show`        | `void`    | Emitted right after the open transition starts.  |
+| `hide`        | `void`    | Emitted right after the close transition starts. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The trigger element. Tooltip anchors to its bounding box. |
+| Slot      | Scope | Notes                                                     |
+| --------- | ----- | --------------------------------------------------------- |
+| `default` | —     | The trigger element. Tooltip anchors to its bounding box. |
 
 ## States
 
@@ -68,30 +74,30 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| open | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
-| close | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
+| Trigger | Animation / Transition    | Token                           | Reduced-motion fallback                |
+| ------- | ------------------------- | ------------------------------- | -------------------------------------- |
+| open    | `animate-popup-scale-in`  | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
+| close   | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
 
 `--popup-origin` is set per instance based on `placement` (e.g. `top` → `bottom center`).
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-label-sm` |
-| surface | `var(--bg-canvas-inverted)` |
-| text | `var(--text-default-inverted)` |
-| padding.x | `var(--spacing-2)` |
-| padding.y | `var(--spacing-1)` |
-| shape | `var(--shape-control)` |
-| shadow | `var(--shadow-md)` |
-| ring | `var(--ring-color)` |
+| Region             | Token (DESIGN.md)              |
+| ------------------ | ------------------------------ |
+| typography (label) | `.text-label-sm`               |
+| surface            | `var(--bg-canvas-inverted)`    |
+| text               | `var(--text-default-inverted)` |
+| padding.x          | `var(--spacing-2)`             |
+| padding.y          | `var(--spacing-1)`             |
+| shape              | `var(--shape-control)`         |
+| shadow             | `var(--shadow-md)`             |
+| ring               | `var(--ring-color)`            |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable       | Temporary primitive                  | Follow-up                                                                  |
+| -------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
 | `tooltip/arrow-fill` | inherits `bg-(--bg-canvas-inverted)` | `TODO: tokenizar` (add `--tooltip-arrow` if it ever diverges from surface) |
 
 ## Accessibility (WCAG 2.1 AA)

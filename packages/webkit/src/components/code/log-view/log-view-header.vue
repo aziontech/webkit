@@ -112,7 +112,7 @@
             :data-testid="`${testId}__search`"
             @update:model-value="ctx.setSearch"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"

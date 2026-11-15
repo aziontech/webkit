@@ -562,7 +562,7 @@
     <Drawer
       v-model:open="open"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerTrigger>
         <Button
@@ -594,7 +594,7 @@
                 hint="The service version this deployment sends live, and the version of every module and integration it references."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <template
                       v-for="(row, index) in resources"
                       :key="row.key"
@@ -650,7 +650,7 @@
                                 :disabled="!row.versions.length"
                               />
                             </DropdownMenu.Trigger>
-                            <template #top>
+                            <template #header>
                               <div
                                 class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                               >
@@ -663,7 +663,7 @@
                                   placeholder="Search versions"
                                   aria-label="Search versions"
                                 >
-                                  <template #prefix>
+                                  <template #leading>
                                     <i
                                       class="ai ai-search"
                                       aria-hidden="true"
@@ -810,7 +810,7 @@
                                           <Item.Title>{{ dependency.name }}</Item.Title>
                                           <Tooltip
                                             v-if="dependency.sharedWith.length"
-                                            :text="`Also referenced by ${listFormat(dependency.sharedWith)}.`"
+                                            :content="`Also referenced by ${listFormat(dependency.sharedWith)}.`"
                                           >
                                             <span
                                               tabindex="0"
@@ -866,7 +866,7 @@
                                               :disabled="!dependency.versions.length"
                                             />
                                           </DropdownMenu.Trigger>
-                                          <template #top>
+                                          <template #header>
                                             <div
                                               class="flex flex-col gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xs)"
                                             >
@@ -879,7 +879,7 @@
                                                 placeholder="Search versions"
                                                 aria-label="Search versions"
                                               >
-                                                <template #prefix>
+                                                <template #leading>
                                                   <i
                                                     class="ai ai-search"
                                                     aria-hidden="true"
@@ -977,7 +977,7 @@
                       class="w-full"
                     />
                   </template>
-                  <template #content>
+                  <template #default>
                     <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                       <Item
                         kind="outlined"
@@ -1024,7 +1024,7 @@
                               />
                               <div class="flex min-w-0">
                                 <Tooltip
-                                  :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                  :content="`Open ${domainGroup.domains[0]} in a new tab`"
                                   class="w-full"
                                 >
                                   <Link
@@ -1064,7 +1064,7 @@
                                       placeholder="Search domains"
                                       aria-label="Search domains"
                                     >
-                                      <template #prefix>
+                                      <template #leading>
                                         <i
                                           class="ai ai-search"
                                           aria-hidden="true"
@@ -1243,7 +1243,7 @@
                                 />
                                 <div class="flex min-w-0">
                                   <Tooltip
-                                    :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                    :content="`Open ${domainGroup.domains[0]} in a new tab`"
                                     class="w-full"
                                   >
                                     <Link
@@ -1283,7 +1283,7 @@
                                         placeholder="Search domains"
                                         aria-label="Search domains"
                                       >
-                                        <template #prefix>
+                                        <template #leading>
                                           <i
                                             class="ai ai-search"
                                             aria-hidden="true"

@@ -42,7 +42,7 @@
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Projects">
+      <CommandGroup label="Projects">
         <CommandItem
           value="switch-project"
           page="projects"
@@ -53,9 +53,9 @@
       </CommandGroup>
       <CommandPage
         name="projects"
-        heading="Switch project"
+        title="Switch project"
       >
-        <CommandGroup heading="Acme Inc.">
+        <CommandGroup label="Acme Inc.">
           <CommandItem value="acme-store">acme-store</CommandItem>
           <CommandItem value="docs-site">docs-site</CommandItem>
           <CommandItem value="site-assets">site-assets</CommandItem>

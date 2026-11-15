@@ -105,7 +105,7 @@
       :padded="false"
       title="Project"
     >
-      <template #content>
+      <template #default>
         <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md) pb-0">
           <p class="text-body-sm text-(--text-muted)">
             What this service serves on each environment, so one service can serve different
@@ -169,7 +169,7 @@
               placeholder="Search projects"
               aria-label="Search projects"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"

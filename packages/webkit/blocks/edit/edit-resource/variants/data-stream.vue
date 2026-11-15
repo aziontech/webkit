@@ -352,7 +352,7 @@
           anchor="general"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -407,7 +407,7 @@
           anchor="source"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -509,7 +509,7 @@
             />
           </div>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -547,7 +547,7 @@
                       :disabled="saving"
                       @update:model-value="clear('samplingRate')"
                     >
-                      <template #suffix>%</template>
+                      <template #trailing>%</template>
                     </NumberInput>
                     <HelperText
                       v-if="errors.samplingRate"
@@ -568,7 +568,7 @@
           anchor="template"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -697,7 +697,7 @@
                 severity="danger"
                 :label="destinationError"
               >
-                <template #action>
+                <template #actions>
                   <Button
                     type="button"
                     label="Send test record"
@@ -711,7 +711,7 @@
             </div>
           </Transition>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"

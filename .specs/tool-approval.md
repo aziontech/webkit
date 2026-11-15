@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 6baf0c6fdb3e71e328636b5a236d717adc52eb59cec06de426725f53cd51735a
+checksum: 8c3aa136610b4c69c07c31d509275882cbe096c9b8759040d59d20bf9f16462a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -77,7 +77,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
       :tabs="[
         { label: 'Shell', value: 'cmd', code: 'azion deploy --env production', language: 'bash' }
       ]"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </ToolApproval>
 </template>

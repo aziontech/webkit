@@ -81,7 +81,7 @@
       >
         <span>Type</span>
         <Tooltip
-          text="Copy to clipboard"
+          content="Copy to clipboard"
           class="max-w-full"
         >
           <button
@@ -97,8 +97,8 @@
               aria-hidden="true"
             />
             <span
-              :data-shown="copied || null"
-              class="grid min-w-0 grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-shown:grid-cols-[1fr] motion-reduce:transition-none"
+              :data-state="copied ? 'open' : 'closed'"
+              class="grid min-w-0 grid-cols-[0fr] transition-[grid-template-columns] duration-moderate-01 ease-productive-entrance data-[state=open]:grid-cols-[1fr] motion-reduce:transition-none"
             >
               <span class="min-w-0 overflow-hidden">
                 <span

@@ -1126,7 +1126,7 @@
               class="w-full"
               :disabled="loading"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -1143,19 +1143,19 @@
         />
 
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <Accordion
               v-model="openPhases"
               type="multiple"
               size="large"
-              arrow-position="left"
+              icon-position="leading"
             >
               <Accordion.Item
                 v-for="group in groups"
                 :key="group.value"
                 :value="group.value"
               >
-                <Accordion.Trigger :level="2">
+                <Accordion.Trigger :heading-level="2">
                   <span class="flex min-w-0 items-center gap-(--spacing-sm)">
                     <span class="truncate">{{ group.label }} phase</span>
                     <span
@@ -1451,7 +1451,7 @@
     <Drawer
       v-model:open="builderOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form
@@ -1516,7 +1516,7 @@
                 hint="When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                       <div class="flex flex-col gap-(--spacing-xs)">
                         <RadioGroup
@@ -1630,7 +1630,7 @@
                 hint="What the rule does when its criteria are met, run top to bottom in this order."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <div
                       class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
                     >
@@ -1673,7 +1673,7 @@
                                       aria-label="Search behaviors"
                                       @keydown.stop
                                     >
-                                      <template #prefix>
+                                      <template #leading>
                                         <i
                                           class="ai ai-search"
                                           aria-hidden="true"
@@ -1801,7 +1801,7 @@
                                   aria-hidden="true"
                                 />
                               </span>
-                              <Tooltip text="Move behavior up">
+                              <Tooltip content="Move behavior up">
                                 <IconButton
                                   icon="ai ai-chevron-up"
                                   kind="outlined"
@@ -1811,7 +1811,7 @@
                                   @click="moveBehavior(bIdx, -1)"
                                 />
                               </Tooltip>
-                              <Tooltip text="Move behavior down">
+                              <Tooltip content="Move behavior down">
                                 <IconButton
                                   icon="ai ai-chevron-down"
                                   kind="outlined"
@@ -1821,7 +1821,7 @@
                                   @click="moveBehavior(bIdx, 1)"
                                 />
                               </Tooltip>
-                              <Tooltip text="Remove behavior">
+                              <Tooltip content="Remove behavior">
                                 <IconButton
                                   icon="ai ai-trash"
                                   kind="outlined"
@@ -1867,7 +1867,7 @@
                 hint="An inactive rule stays in the list and in its place in the order, but is skipped at runtime."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"

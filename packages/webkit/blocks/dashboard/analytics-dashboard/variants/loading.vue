@@ -233,7 +233,7 @@
       accessorKey: 'host',
       header: 'Host',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: true
     },
     {
@@ -241,14 +241,14 @@
       accessorKey: 'service',
       header: 'Service',
       align: 'start',
-      enableSorting: true
+      sortable: true
     },
     {
       id: 'requests',
       accessorKey: 'requests',
       header: 'Requests',
       align: 'end',
-      enableSorting: true
+      sortable: true
     }
   ]
 
@@ -404,7 +404,7 @@
             :loading="loading"
           >
             <template #aside>
-              <Hint :text="figure.description" />
+              <Hint :content="figure.description" />
             </template>
           </StatTile>
         </li>
@@ -417,7 +417,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Requests over time</ChartCard.Title>
-              <Hint text="Sum of requests served by every service, per interval." />
+              <Hint content="Sum of requests served by every service, per interval." />
             </span>
             <ChartCard.Action>
               <span
@@ -444,7 +444,7 @@
                   aria-label="Chart form for Requests over time"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -505,7 +505,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Status codes</ChartCard.Title>
-              <Hint text="Sum of requests per status class. Switch to Bar to stack the classes." />
+              <Hint
+                content="Sum of requests per status class. Switch to Bar to stack the classes."
+              />
             </span>
             <ChartCard.Action>
               <span
@@ -531,7 +533,7 @@
                   aria-label="Chart form for Status codes"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -595,7 +597,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Requests by country</ChartCard.Title>
-              <Hint text="Sum of requests per country of origin, top countries first." />
+              <Hint content="Sum of requests per country of origin, top countries first." />
             </span>
             <ChartCard.Action>
               <span
@@ -608,7 +610,7 @@
                   icon="ai ai-calculator"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -657,7 +659,7 @@
               <Chart.Grid />
               <Chart.Axis kind="y" />
               <Chart.Axis kind="x" />
-              <Chart.Bar labeled />
+              <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>
           </ChartCard.Content>
@@ -667,7 +669,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Top hosts</ChartCard.Title>
-              <Hint text="Hosts that served the most requests in the period, with their service." />
+              <Hint
+                content="Hosts that served the most requests in the period, with their service."
+              />
             </span>
             <ChartCard.Action>
               <span
@@ -681,7 +685,7 @@
                   icon="ai ai-calculator"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -726,7 +730,7 @@
                     placeholder="Search hosts or services"
                     aria-label="Search hosts or services"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"
@@ -741,7 +745,7 @@
                 :data="hosts"
                 :columns="hostColumns"
                 row-key="id"
-                enable-sorting
+                sortable
                 paginated
                 :page-size="5"
                 :page-size-options="[5, 10, 25]"

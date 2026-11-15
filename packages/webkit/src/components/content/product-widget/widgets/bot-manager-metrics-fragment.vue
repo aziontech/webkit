@@ -92,7 +92,7 @@
               v-for="metric in BIG_NUMBERS"
               :key="metric.label"
             >
-              <template #content>
+              <template #default>
                 <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="flex items-center gap-(--spacing-xs)">
                     <span class="min-w-0 truncate text-label-sm text-(--text-default)">
@@ -115,7 +115,7 @@
             class="col-start-1 row-start-1 flex translate-y-1 flex-col gap-(--spacing-sm) opacity-0 transition-[translate,opacity] duration-moderate-02 ease-productive-entrance data-active:translate-y-0 data-active:opacity-100 motion-reduce:transition-none"
           >
             <Card>
-              <template #content>
+              <template #default>
                 <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                   <span class="text-label-sm text-(--text-default)">Impacted URLs</span>
                   <span class="text-heading-sm text-(--text-default)">38</span>
@@ -126,7 +126,7 @@
               </template>
             </Card>
             <Card>
-              <template #content>
+              <template #default>
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                   <span class="text-label-sm text-(--text-default)">Top Impacted URLs</span>
                   <ul class="flex flex-col gap-(--spacing-xs)">

@@ -40,7 +40,7 @@ A small `EmptyState` titled with the resource ("Ask about storefront") and three
 
 ### F. Message log — `Conversation`
 
-`alignment="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
+`layout="start"`: every message at the inline start, distinguished by avatar and author line, as Cloudscape asks for dense side panels. It is the only part of the drawer that scrolls.
 
 ### G. Messages — `ChatMessage`, `Reasoning`, `StreamingResponse`, `Sources`, `CopyButton`
 
@@ -59,7 +59,7 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 - Write support prompts and the placeholder about the resource on screen.
 - Keep the page visible and unchanged while the drawer is open.
 - Keep the conversation when the drawer closes and reopens during the visit.
-- Use `alignment="start"` for every message in the drawer.
+- Use `layout="start"` for every message in the drawer.
 
 ## Don't
 

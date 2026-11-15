@@ -317,7 +317,7 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 ## References
 
 - **Surfaces** (resolve each via the MCP / catalog — see "How to find the components"):
-  `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#action` slot, default slot for
+  `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#actions` slot, default slot for
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
   `closable`, `action`), the `@aziontech/webkit/field` compound + `/helper-text` (the field's own
   required / invalid state).

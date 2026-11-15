@@ -44,7 +44,7 @@
     <ChartCard.Header>
       <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Threats vs requests</ChartCard.Title>
-        <Hint text="Requests WAF analyzed, split into blocked, logged and allowed." />
+        <Hint content="Requests WAF analyzed, split into blocked, logged and allowed." />
       </span>
     </ChartCard.Header>
     <ChartCard.Content>

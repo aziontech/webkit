@@ -136,7 +136,7 @@
       </h2>
       <Hint
         v-if="hint"
-        :text="hint"
+        :content="hint"
         class="shrink-0"
       />
     </div>

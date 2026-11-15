@@ -326,7 +326,7 @@
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -378,7 +378,7 @@
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip text="Back to web-app versions">
+      <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
           kind="transparent"
@@ -410,7 +410,7 @@
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -552,7 +552,7 @@
                             anchor="general"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     title="Name"
@@ -586,7 +586,7 @@
                             anchor="modules"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     v-for="mod in defaultModules"
@@ -611,7 +611,7 @@
                             anchor="subscription-modules"
                           >
                             <Card :padded="false">
-                              <template #content>
+                              <template #default>
                                 <Item.List>
                                   <SettingRow
                                     title="WebSocket Proxy"
@@ -633,7 +633,7 @@
                                         />
                                       </a>
                                     </template>
-                                    <Tooltip text="Contact sales to activate this module.">
+                                    <Tooltip content="Contact sales to activate this module.">
                                       <Switch
                                         v-model="settings.modules.web_socket_proxy"
                                         disabled
@@ -813,7 +813,7 @@
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:expanded="historyExpanded"
+          v-model:open="historyExpanded"
           collapsible
           :min="280"
           :max="560"

@@ -175,7 +175,7 @@
               aria-label="Search Deployment Settings"
               class="min-w-0 grow basis-(--container-2xs)"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"

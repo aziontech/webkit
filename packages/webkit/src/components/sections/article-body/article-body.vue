@@ -540,7 +540,7 @@
                 >
                   <p class="m-0 text-heading-xs text-(--text-default)">{{ share.title }}</p>
                   <div class="flex items-center gap-(--spacing-sm)">
-                    <Tooltip :text="share.copyLink">
+                    <Tooltip :content="share.copyLink">
                       <IconButton
                         kind="outlined"
                         size="medium"
@@ -561,7 +561,7 @@
                         @click="copyFeed"
                       />
                     </Tooltip>
-                    <Tooltip :text="share.shareX">
+                    <Tooltip :content="share.shareX">
                       <IconButton
                         kind="outlined"
                         size="medium"
@@ -571,7 +571,7 @@
                         target="_blank"
                       />
                     </Tooltip>
-                    <Tooltip :text="share.shareLinkedIn">
+                    <Tooltip :content="share.shareLinkedIn">
                       <IconButton
                         kind="outlined"
                         size="medium"

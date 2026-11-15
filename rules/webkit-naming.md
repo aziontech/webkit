@@ -34,7 +34,7 @@ them, and `npx @aziontech/webkit migrate` rewrites them for you.
 | Where an icon sits in the control | `icon-position="leading\|trailing"`                            | `left`, `right`                                          |
 | Sides and alignment               | `align="start\|center\|end"`, `side="start\|end"`              | `left`, `right`, `top`, `bottom` for alignment           |
 | Optional part on or off           | `show-header`, `show-line-numbers`                             | `hide-header`                                            |
-| A capability                      | `sortable`, `copyable`, `closable`                             | `enable-sorting`                                         |
+| A capability                      | `sortable`, `copyable`, `closable`                             | `sortable`                                               |
 
 The full dictionary is [`webkit-prop-vocabulary.md`](./webkit-prop-vocabulary.md).
 

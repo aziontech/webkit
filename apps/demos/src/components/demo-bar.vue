@@ -88,7 +88,7 @@
       @select="onFlow"
     >
       <DropdownMenu.Trigger>
-        <Tooltip :text="t.flows">
+        <Tooltip :content="t.flows">
           <IconButton
             icon="ai ai-compass"
             kind="outlined"
@@ -139,7 +139,7 @@
         :display-value="localeLabel"
       >
         <Select.Trigger :aria-label="t.language">
-          <template #prefix>
+          <template #leading>
             <i
               class="ai ai-globe text-(--text-muted)"
               aria-hidden="true"

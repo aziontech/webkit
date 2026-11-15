@@ -187,7 +187,7 @@
             anchor="general"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -229,7 +229,7 @@
             anchor="browser-cache"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -263,7 +263,7 @@
                       key="browserMaxAge"
                       title="Maximum TTL in seconds"
                       description="Up to 31536000 seconds, one year."
-                      :level="1"
+                      :depth="1"
                     >
                       <NumberInput
                         id="cache-browserMaxAge"
@@ -287,7 +287,7 @@
             anchor="edge-cache"
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -321,7 +321,7 @@
                       key="edgeMaxAge"
                       title="Maximum TTL in seconds"
                       description="From 60 to 31536000 seconds."
-                      :level="1"
+                      :depth="1"
                     >
                       <NumberInput
                         id="cache-edgeMaxAge"
@@ -374,7 +374,7 @@
                       key="largeFileOffset"
                       title="Fragment size in kB"
                       description="Each fragment requested from the origin. 1024 kB is the default."
-                      :level="1"
+                      :depth="1"
                     >
                       <NumberInput
                         id="cache-largeFileOffset"
@@ -403,7 +403,7 @@
                       key="tieredTopology"
                       title="Topology"
                       description="Where the second layer sits. Pin a region only when the origin is fixed to one."
-                      :level="1"
+                      :depth="1"
                     >
                       <Select
                         v-model="form.tieredTopology"
@@ -436,7 +436,7 @@
             collapsible
           >
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <Item.List>
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
@@ -494,7 +494,7 @@
                       key="queryStringFields"
                       title="Query string fields"
                       description="Comma separated and case sensitive: utm_source and UTM_SOURCE are two fields."
-                      :level="1"
+                      :depth="1"
                     >
                       <Input
                         id="cache-queryStringFields"
@@ -547,7 +547,7 @@
                       key="cookieNames"
                       title="Cookie names"
                       description="Comma separated. A name ending in * matches every cookie that starts with it."
-                      :level="1"
+                      :depth="1"
                     >
                       <Input
                         id="cache-cookieNames"

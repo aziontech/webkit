@@ -307,7 +307,7 @@ describe('SitePage', () => {
     ],
     ['article-index-blog', {}, 'article-index', { filters: 'category-search' }],
     ['article-index-resource-hub', {}, 'article-index', { filters: 'facets' }],
-    ['use-case-links', { items: [] }, 'capability-grid', { titleKind: 'left' }],
+    ['use-case-links', { items: [] }, 'capability-grid', { titleKind: 'start' }],
     [
       'resource-grid',
       { items: [{ title: 'A' }, {}] },

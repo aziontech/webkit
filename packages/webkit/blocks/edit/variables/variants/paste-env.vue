@@ -416,7 +416,7 @@
   <Drawer
     v-model:open="drawerOpen"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <div class="w-full md:w-fit">
@@ -600,7 +600,7 @@
                             />
                             <Tooltip
                               v-if="removable"
-                              text="Remove variable"
+                              content="Remove variable"
                             >
                               <IconButton
                                 icon="ai ai-trash"
@@ -659,7 +659,7 @@
                               />
                             </Tooltip>
                             <InputGroupAddon>
-                              <Tooltip :text="secretTooltip(entries[index])">
+                              <Tooltip :content="secretTooltip(entries[index])">
                                 <Field orientation="horizontal">
                                   <Field.Label :for="fieldId(entries[index], 'secret')"
                                     >Secret</Field.Label
@@ -776,7 +776,7 @@
                               aria-label="Search"
                               @keydown.stop
                             >
-                              <template #prefix>
+                              <template #leading>
                                 <i
                                   class="ai ai-search"
                                   aria-hidden="true"

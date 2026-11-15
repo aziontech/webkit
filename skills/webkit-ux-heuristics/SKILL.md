@@ -153,7 +153,7 @@ Behavior:
     <div class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)">
       <p class="text-label-sm text-(--text-muted)">{{ summary }}</p>
       <Input v-if="items.length > 7" v-model="query" size="medium" placeholder="Search domains" aria-label="Search domains">
-        <template #prefix><i class="ai ai-search" aria-hidden="true" /></template>
+        <template #leading><i class="ai ai-search" aria-hidden="true" /></template>
       </Input>
     </div>
     <div class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)">

@@ -60,7 +60,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 
 ## Do
 
-- Run the whole list on one `useCollection` call with `selection: { mode: 'multi' }` and bind `cardListProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
+- Run the whole list on one `useCollection` call with `selection: { mode: 'multiple' }` and bind `cardListProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
 - Keep the controls row, the cards and the pagination in one band at the group gap; the heading sits one section step above.
 - Name every card with a link to the resource in the `header` slot, and keep its fields to the few that tell one item from another.
 - Render the fields from `preferences.columns`, so the order and visibility set in the dialog reach every card.

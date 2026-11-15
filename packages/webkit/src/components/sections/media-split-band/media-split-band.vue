@@ -262,7 +262,7 @@
             <CodeBlock
               :tabs="tabs"
               :default-value="openFile"
-              line-numbers
+              show-line-numbers
               :bordered="false"
               v-bind="{ animateLines: true }"
               :copy-aria-label="copyAriaLabel || undefined"

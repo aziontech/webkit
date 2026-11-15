@@ -50,7 +50,7 @@
               class="w-full"
               disabled
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"

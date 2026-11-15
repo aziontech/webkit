@@ -31,7 +31,7 @@
                 label="Home"
                 icon="ai ai-home"
                 href="#"
-                selected
+                active
               />
               <SidebarMenuItem
                 label="Services"
@@ -77,7 +77,7 @@
             <Command.Input placeholder="Search the console" />
             <Command.List>
               <Command.Empty>No page matches your search.</Command.Empty>
-              <Command.Group heading="Pages">
+              <Command.Group label="Pages">
                 <Command.Item
                   v-for="page in searchPages"
                   :key="page"

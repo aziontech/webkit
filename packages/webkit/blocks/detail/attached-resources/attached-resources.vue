@@ -51,7 +51,7 @@
 
 <template>
   <Card :padded="false">
-    <template #content>
+    <template #default>
       <div class="flex min-w-0 flex-col">
         <DataTable
           :data="domains"

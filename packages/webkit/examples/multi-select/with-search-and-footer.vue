@@ -45,7 +45,7 @@
             size="small"
             placeholder="Search"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"

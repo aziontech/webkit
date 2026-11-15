@@ -151,7 +151,7 @@
             @select="onSelect"
           >
             <DropdownMenuTrigger>
-              <Tooltip :text="bindLabel">
+              <Tooltip :content="bindLabel">
                 <IconButton
                   :icon="bound ? 'ai ai-pencil' : 'ai ai-plus'"
                   kind="outlined"
@@ -186,7 +186,7 @@
           </DropdownMenu>
           <Tooltip
             v-if="bound && node.removable"
-            :text="removeLabel"
+            :content="removeLabel"
           >
             <IconButton
               icon="ai ai-x"

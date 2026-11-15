@@ -47,7 +47,7 @@
 
   <Tooltip
     v-else-if="node.kind === 'tile'"
-    :text="node.title"
+    :content="node.title"
   >
     <FrameBox
       borders="none"

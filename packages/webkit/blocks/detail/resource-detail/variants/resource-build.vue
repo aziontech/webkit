@@ -91,7 +91,7 @@
                   anchor="git-repository"
                 >
                   <Card>
-                    <template #content>
+                    <template #default>
                       <div
                         class="flex rounded-(--shape-card) border border-dashed border-(--border-default) bg-(--bg-surface-raised) lg:min-h-0 lg:flex-1"
                       >
@@ -151,7 +151,7 @@
                     @submit.prevent="save"
                   >
                     <Card :padded="false">
-                      <template #content>
+                      <template #default>
                         <fieldset
                           class="m-0 flex min-w-0 flex-col border-0 p-0"
                           :disabled="saving"
@@ -229,7 +229,7 @@
                   anchor="deployment"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           title="API token"

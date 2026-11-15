@@ -79,7 +79,7 @@
     filtering: { fields: ['name', 'domain', 'owner'] },
     propertyFiltering: { properties },
     pagination: { pageSize: 12, pageSizeOptions: [12, 24, 48] },
-    selection: { mode: 'multi' },
+    selection: { mode: 'multiple' },
     preferences: {
       storageKey: 'applications-cards',
       defaults: { columns: [{ id: 'owner', visible: false }] }
@@ -230,7 +230,7 @@
             v-if="status === 'empty'"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <EmptyState
                 size="medium"
                 icon="ai ai-layout-grid"

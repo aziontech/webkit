@@ -205,7 +205,7 @@
         >
           <ShellMockupPart :order="1">
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <div
                   class="flex min-h-14 items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-xs)"
                 >
@@ -338,7 +338,7 @@
                   :padded="false"
                   class="overflow-hidden bg-(--bg-surface-raised)"
                 >
-                  <template #content>
+                  <template #default>
                     <div
                       class="grid grid-cols-[1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem] p-(--spacing-md)"
                     >

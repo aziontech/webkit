@@ -81,7 +81,7 @@
             <slot name="title">{{ title }}</slot>
             <Hint
               v-if="hint"
-              :text="hint"
+              :content="hint"
               :data-testid="`${testId}__hint`"
             />
           </ItemTitle>

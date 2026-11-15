@@ -179,7 +179,7 @@
         <template #actions="{ node }">
           <Tooltip
             v-if="node.id === 'domains'"
-            text="Add domain"
+            content="Add domain"
           >
             <IconButton
               icon="ai ai-plus"

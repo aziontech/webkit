@@ -119,9 +119,9 @@
   )
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'permissionNames', header: 'Permissions', grow: 2 },
-    { accessorKey: 'members', header: 'Members', enableSorting: true, minWidth: 100 },
+    { accessorKey: 'members', header: 'Members', sortable: true, minWidth: 100 },
     { accessorKey: 'status', header: 'Status', minWidth: 110 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -244,7 +244,7 @@
           </div>
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -257,7 +257,7 @@
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -281,7 +281,7 @@
           severity="danger"
         >
           The teams could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -296,7 +296,7 @@
           v-else-if="!loading && status === 'empty'"
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <EmptyState
               size="medium"
               icon="ai ai-users"
@@ -321,12 +321,12 @@
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="teamsTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Teams"
             >

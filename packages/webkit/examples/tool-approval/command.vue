@@ -25,7 +25,7 @@
             language: 'bash'
           }
         ]"
-        :line-numbers="false"
+        :show-line-numbers="false"
       />
     </ToolApproval>
   </div>

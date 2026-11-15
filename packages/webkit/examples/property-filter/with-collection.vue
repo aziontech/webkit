@@ -26,10 +26,10 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true },
-    { accessorKey: 'status', header: 'Status', enableSorting: true },
+    { accessorKey: 'name', header: 'Name', sortable: true },
+    { accessorKey: 'status', header: 'Status', sortable: true },
     { accessorKey: 'region', header: 'Region' },
-    { accessorKey: 'requests', header: 'Requests', enableSorting: true, align: 'end' }
+    { accessorKey: 'requests', header: 'Requests', sortable: true, align: 'end' }
   ]
 
   const { propertyFilterProps, tableProps } = useCollection({

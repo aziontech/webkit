@@ -118,7 +118,7 @@
         v-else-if="block.type === 'code' && (block.closed || !streaming)"
         :code="block.value"
         :language="block.language"
-        :line-numbers="false"
+        :show-line-numbers="false"
         dir="ltr"
       />
       <pre

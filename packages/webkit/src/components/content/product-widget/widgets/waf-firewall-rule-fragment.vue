@@ -161,7 +161,7 @@
                 value="Request Uri"
                 aria-label="Variable"
               >
-                <template #prefix>
+                <template #leading>
                   <span class="text-body-sm text-(--text-muted)">$</span>
                 </template>
               </MockupSelect>

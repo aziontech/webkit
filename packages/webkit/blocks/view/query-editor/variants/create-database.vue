@@ -174,7 +174,7 @@
                 hint="The only field this endpoint requires."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -214,7 +214,7 @@
                 collapsible
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"

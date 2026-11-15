@@ -99,7 +99,7 @@
         >
           <template #default="{ index }">
             <Card>
-              <template #content>
+              <template #default>
                 <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
                   <div class="flex min-w-0 items-baseline justify-between gap-(--spacing-xs)">
                     <span class="min-w-0 truncate text-label-md text-(--text-default)">

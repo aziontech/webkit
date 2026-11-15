@@ -5,18 +5,18 @@
   const MAX_ROWS = 50
 
   const files = ref<UploadProgressItem[]>([
-    { id: 'package.json', name: 'package.json', size: 1229, status: 'done' },
-    { id: 'app.config.js', name: 'app.config.js', size: 640, status: 'done' },
+    { id: 'package.json', name: 'package.json', size: 1229, status: 'success' },
+    { id: 'app.config.js', name: 'app.config.js', size: 640, status: 'success' },
     { id: 'src/index.ts', name: 'src/index.ts', size: 3482, status: 'running', progress: 60 },
-    { id: 'src/routes/api.ts', name: 'src/routes/api.ts', size: 2150, status: 'queued' },
-    { id: 'public/index.html', name: 'public/index.html', size: 860, status: 'queued' }
+    { id: 'src/routes/api.ts', name: 'src/routes/api.ts', size: 2150, status: 'pending' },
+    { id: 'public/index.html', name: 'public/index.html', size: 860, status: 'pending' }
   ])
 
-  const doneCount = computed(() => files.value.filter((file) => file.status === 'done').length)
+  const doneCount = computed(() => files.value.filter((file) => file.status === 'success').length)
   const shownFiles = computed(() =>
     files.value.length <= MAX_ROWS
       ? files.value
-      : files.value.filter((file) => file.status !== 'done').slice(0, MAX_ROWS)
+      : files.value.filter((file) => file.status !== 'success').slice(0, MAX_ROWS)
   )
   const totalSize = computed(() => files.value.reduce((sum, file) => sum + (file.size ?? 0), 0))
 
@@ -30,7 +30,7 @@
 
   const cancel = (_event: MouseEvent, id?: string) => {
     files.value = files.value.map((file) =>
-      (file.status === 'queued' || file.status === 'running') && (!id || file.id === id)
+      (file.status === 'pending' || file.status === 'running') && (!id || file.id === id)
         ? { ...file, status: 'canceled' }
         : file
     )

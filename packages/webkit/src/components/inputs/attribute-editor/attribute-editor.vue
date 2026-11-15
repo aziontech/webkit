@@ -758,7 +758,7 @@
                       >
                         <Tooltip
                           v-if="removable(item)"
-                          :text="removeLabel(position(index, grouped ? groupIndex : undefined))"
+                          :content="removeLabel(position(index, grouped ? groupIndex : undefined))"
                         >
                           <IconButton
                             icon="ai ai-trash"

@@ -127,7 +127,7 @@
               :loading="loading"
             >
               <template #aside>
-                <Hint :text="figure.description" />
+                <Hint :content="figure.description" />
               </template>
             </StatTile>
           </li>
@@ -141,7 +141,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Alerts per day</ChartCard.Title>
-              <Hint text="Alerts raised each day, stacked by severity level." />
+              <Hint content="Alerts raised each day, stacked by severity level." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -156,7 +156,7 @@
 
         <div class="lg:col-span-4">
           <Card title="Open by severity">
-            <template #content>
+            <template #default>
               <Alert
                 severity="danger"
                 label="Couldn't load open alerts by severity. Check your connection and retry."
@@ -171,7 +171,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>By type</ChartCard.Title>
-              <Hint text="Alerts raised in the period, by the kind of behavior that raised them." />
+              <Hint
+                content="Alerts raised in the period, by the kind of behavior that raised them."
+              />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -189,7 +191,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Highest risk</ChartCard.Title>
               <Hint
-                text="The entities with the highest risk score, from the severity and number of their open alerts."
+                content="The entities with the highest risk score, from the severity and number of their open alerts."
               />
             </span>
           </ChartCard.Header>
@@ -207,7 +209,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Open alerts</ChartCard.Title>
-              <Hint text="Every open alert, most severe first." />
+              <Hint content="Every open alert, most severe first." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>

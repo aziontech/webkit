@@ -43,7 +43,7 @@
           :aria-label="t.iconsSearch"
           size="medium"
         >
-          <template #prefix>
+          <template #leading>
             <i
               class="ai ai-search text-(--text-muted)"
               aria-hidden="true"

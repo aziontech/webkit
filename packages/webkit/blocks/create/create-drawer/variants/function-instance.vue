@@ -281,7 +281,7 @@
       />
     </div>
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <Item.List aria-label="Function instances">
           <Item
             v-for="instance in instances"
@@ -310,7 +310,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form

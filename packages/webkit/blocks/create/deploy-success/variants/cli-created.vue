@@ -187,7 +187,7 @@ jobs:
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Resources</h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <Item
                       v-for="resource in resources"
@@ -279,7 +279,7 @@ jobs:
                       :padded="false"
                       class="w-full"
                     >
-                      <template #content>
+                      <template #default>
                         <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <span
@@ -297,7 +297,7 @@ jobs:
                           <div class="mt-(--spacing-2xs) min-w-0">
                             <CodeBlock
                               :tabs="step.tabs"
-                              :line-numbers="false"
+                              :show-line-numbers="false"
                               :copy-aria-label="`Copy the commands for ${step.title}`"
                               class="w-full"
                             />

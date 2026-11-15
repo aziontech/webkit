@@ -159,7 +159,7 @@
         #header
       >
         <SectionTitle
-          kind="left"
+          kind="start"
           :eyebrow="eyebrow"
           :title="title"
         />
@@ -275,7 +275,7 @@
                 :key="platform"
                 class="border-b border-s border-(--border-default) px-(--spacing-xs) py-(--spacing-md) text-center align-middle group-data-[last]/row:border-b-0 sm:px-(--spacing-md)"
               >
-                <Tooltip :text="labelOf(item[platform])">
+                <Tooltip :content="labelOf(item[platform])">
                   <i
                     :data-support="item[platform] ?? 'none'"
                     :class="iconOf(item[platform])"

@@ -65,7 +65,7 @@
                 class="w-full max-w-(--container-sm)"
                 :padded="false"
               >
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-lg)">
                     <PageHeader
                       title="Check your inbox"

@@ -518,7 +518,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <div class="w-full md:w-fit">
@@ -604,7 +604,7 @@
               hint="When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave."
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
                     <div class="flex flex-col gap-(--spacing-xs)">
                       <RadioGroup
@@ -719,7 +719,7 @@
               hint="What the rule does when its criteria are met, run top to bottom in this order."
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <div
                     class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
                   >
@@ -764,7 +764,7 @@
                                   aria-label="Search behaviors"
                                   @keydown.stop
                                 >
-                                  <template #prefix>
+                                  <template #leading>
                                     <i
                                       class="ai ai-search"
                                       aria-hidden="true"
@@ -878,7 +878,7 @@
               hint="An inactive rule stays in the list and in its place in the order, but is skipped at runtime."
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Active"

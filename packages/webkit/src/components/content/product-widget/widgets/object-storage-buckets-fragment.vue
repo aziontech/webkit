@@ -139,7 +139,7 @@
             aria-label="Search buckets"
             class="w-full"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"
@@ -151,7 +151,7 @@
 
       <ShellMockupPart :order="1">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               :data="rows"
               :columns="COLUMNS"

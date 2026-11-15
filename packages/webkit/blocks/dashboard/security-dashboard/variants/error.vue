@@ -177,7 +177,7 @@
           >
             <template #aside>
               <Hint
-                text="Requests a security rule identified as attacks and blocked before they reached a service."
+                content="Requests a security rule identified as attacks and blocked before they reached a service."
               />
             </template>
           </StatTile>
@@ -190,7 +190,7 @@
             :delta-label="periodComparison"
           >
             <template #aside>
-              <Hint text="Requests checked against security rules across every service." />
+              <Hint content="Requests checked against security rules across every service." />
             </template>
           </StatTile>
         </li>
@@ -203,7 +203,7 @@
             inverse
           >
             <template #aside>
-              <Hint text="Share of inspected requests blocked as attacks." />
+              <Hint content="Share of inspected requests blocked as attacks." />
             </template>
           </StatTile>
         </li>
@@ -215,7 +215,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Matched requests over time</ChartCard.Title>
-              <Hint text="Requests that matched a rule: blocked, or logged and allowed through." />
+              <Hint
+                content="Requests that matched a rule: blocked, or logged and allowed through."
+              />
             </span>
             <ChartCard.Action>
               <span
@@ -240,7 +242,7 @@
                   aria-label="Chart form for Matched requests over time"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -288,7 +290,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Needs attention</ChartCard.Title>
-              <Hint text="Settings and traffic on your services that ask for a decision." />
+              <Hint content="Settings and traffic on your services that ask for a decision." />
             </span>
             <ChartCard.Action>
               <Tag
@@ -312,7 +314,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
               <Hint
-                text="Blocked requests, broken down by the attack category of the rule they matched."
+                content="Blocked requests, broken down by the attack category of the rule they matched."
               />
             </span>
             <ChartCard.Action>
@@ -332,7 +334,7 @@
                   size="small"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -380,7 +382,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Blocked requests by country</ChartCard.Title>
-              <Hint text="Blocked requests, broken down by the country they came from." />
+              <Hint content="Blocked requests, broken down by the country they came from." />
             </span>
             <ChartCard.Action>
               <span
@@ -399,7 +401,7 @@
                   size="small"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -447,7 +449,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
-              <Hint text="The addresses blocked most often, with their network and main attack." />
+              <Hint
+                content="The addresses blocked most often, with their network and main attack."
+              />
             </span>
             <ChartCard.Action>
               <span
@@ -467,7 +471,7 @@
                   size="small"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"

@@ -3,7 +3,7 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: e312a4c77ee06000c7cf235e8df35a6aca06e99b5b0e106d17ca3b5505f6d724
+checksum: 43dc74e96a7451f2aae651afc52a8cdb58e95ebc6b15044822ce922e408346fe
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -62,7 +62,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
     anchor="general"
   >
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <Item.List>
           <SettingRow
             title="Name"

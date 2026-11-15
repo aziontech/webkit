@@ -98,7 +98,7 @@
       accessorKey: 'remoteAddress',
       header: 'IP address',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: true
     },
     {
@@ -106,7 +106,7 @@
       accessorKey: 'asn',
       header: 'Network',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: false
     },
     {
@@ -114,7 +114,7 @@
       accessorKey: 'country',
       header: 'Country',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: false
     },
     {
@@ -122,7 +122,7 @@
       accessorKey: 'category',
       header: 'Main attack',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: false
     },
     {
@@ -130,7 +130,7 @@
       accessorKey: 'requests',
       header: 'Blocked requests',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       principal: false
     }
   ]
@@ -313,7 +313,7 @@
           >
             <template #aside>
               <Hint
-                text="Requests a security rule identified as attacks and blocked before they reached a service."
+                content="Requests a security rule identified as attacks and blocked before they reached a service."
               />
             </template>
           </StatTile>
@@ -329,7 +329,7 @@
             loading
           >
             <template #aside>
-              <Hint text="Requests checked against security rules across every service." />
+              <Hint content="Requests checked against security rules across every service." />
             </template>
           </StatTile>
         </li>
@@ -345,7 +345,7 @@
             loading
           >
             <template #aside>
-              <Hint text="Share of inspected requests blocked as attacks." />
+              <Hint content="Share of inspected requests blocked as attacks." />
             </template>
           </StatTile>
         </li>
@@ -357,7 +357,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Matched requests over time</ChartCard.Title>
-              <Hint text="Requests that matched a rule: blocked, or logged and allowed through." />
+              <Hint
+                content="Requests that matched a rule: blocked, or logged and allowed through."
+              />
             </span>
             <ChartCard.Action>
               <span
@@ -382,7 +384,7 @@
                   aria-label="Chart form for Matched requests over time"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -445,7 +447,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Needs attention</ChartCard.Title>
-              <Hint text="Settings and traffic on your services that ask for a decision." />
+              <Hint content="Settings and traffic on your services that ask for a decision." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -472,7 +474,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Blocked requests by attack category</ChartCard.Title>
               <Hint
-                text="Blocked requests, broken down by the attack category of the rule they matched."
+                content="Blocked requests, broken down by the attack category of the rule they matched."
               />
             </span>
             <ChartCard.Action>
@@ -492,7 +494,7 @@
                   size="small"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -541,7 +543,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Blocked requests by country</ChartCard.Title>
-              <Hint text="Blocked requests, broken down by the country they came from." />
+              <Hint content="Blocked requests, broken down by the country they came from." />
             </span>
             <ChartCard.Action>
               <span
@@ -560,7 +562,7 @@
                   size="small"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -609,7 +611,9 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Top source IPs by blocked requests</ChartCard.Title>
-              <Hint text="The addresses blocked most often, with their network and main attack." />
+              <Hint
+                content="The addresses blocked most often, with their network and main attack."
+              />
             </span>
             <ChartCard.Action>
               <span
@@ -629,7 +633,7 @@
                   size="small"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -674,7 +678,7 @@
                     placeholder="Search addresses, networks or attacks"
                     aria-label="Search addresses, networks or attacks"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"
@@ -688,7 +692,7 @@
                 :data="ipRows"
                 :columns="ipColumns"
                 row-key="id"
-                enable-sorting
+                sortable
                 paginated
                 :page-size="5"
                 :page-size-options="[5, 10, 25]"

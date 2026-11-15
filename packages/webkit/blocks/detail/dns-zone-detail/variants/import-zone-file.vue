@@ -136,11 +136,11 @@
     POLICY_TYPES.find((policy) => policy.value === value)?.label ?? ''
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
-    { accessorKey: 'id', header: 'ID', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'type', header: 'Type', enableSorting: true, minWidth: 104 },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
+    { accessorKey: 'id', header: 'ID', sortable: true, minWidth: 80 },
+    { accessorKey: 'type', header: 'Type', sortable: true, minWidth: 104 },
     { accessorKey: 'value', header: 'Value', grow: 2 },
-    { accessorKey: 'ttl', header: 'TTL (seconds)', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'ttl', header: 'TTL (seconds)', sortable: true, minWidth: 80 },
     { accessorKey: 'policy', header: 'Policy', minWidth: 80 },
     { accessorKey: 'weight', header: 'Weight', minWidth: 80 },
     { accessorKey: 'description', header: 'Description', grow: 2 },
@@ -489,7 +489,7 @@ legacy  IN HINFO "PC" "Linux"`
                 anchor="general"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Name"
@@ -547,7 +547,7 @@ legacy  IN HINFO "PC" "Linux"`
                 anchor="configure-your-nameserver"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Nameservers"
@@ -594,7 +594,7 @@ legacy  IN HINFO "PC" "Linux"`
                 anchor="dnssec"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Enable DNSSEC"
@@ -647,7 +647,7 @@ legacy  IN HINFO "PC" "Linux"`
                 anchor="status"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <ItemList>
                       <SettingRow
                         title="Active"
@@ -747,7 +747,7 @@ legacy  IN HINFO "PC" "Linux"`
               </div>
               <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                 <Tooltip
-                  text="Refresh"
+                  content="Refresh"
                   class="shrink-0"
                 >
                   <IconButton
@@ -760,7 +760,7 @@ legacy  IN HINFO "PC" "Linux"`
                   />
                 </Tooltip>
                 <Tooltip
-                  text="Download CSV"
+                  content="Download CSV"
                   class="shrink-0"
                 >
                   <IconButton
@@ -779,12 +779,12 @@ legacy  IN HINFO "PC" "Linux"`
               </div>
             </header>
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <DataTable
                   ref="tableRef"
                   v-bind="tableProps"
                   :loading="loading || fetching"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                 >
                   <template #cell-name="{ value }">
@@ -902,7 +902,7 @@ legacy  IN HINFO "PC" "Linux"`
 
     <Drawer
       v-model:open="importOpen"
-      side="right"
+      side="end"
       size="large"
     >
       <DrawerContent>
@@ -1003,7 +1003,7 @@ legacy  IN HINFO "PC" "Linux"`
                 The ready records still import; fix the rest in the file and import it again.
               </Alert>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <DataTable
                     :data="parsed.lines"
                     :columns="previewColumns"

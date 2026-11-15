@@ -7,7 +7,7 @@
   <HeroTitle
     eyebrow="Edge platform"
     eyebrow-prefix="//"
-    highlight="Build anything."
+    title-highlight="Build anything."
     title="Run it everywhere."
     description="Ship applications, security and observability from one platform."
   >

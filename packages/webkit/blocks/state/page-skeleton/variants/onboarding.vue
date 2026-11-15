@@ -35,7 +35,7 @@
           :key="door"
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
                 class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"

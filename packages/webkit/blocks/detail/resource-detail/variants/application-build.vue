@@ -319,7 +319,7 @@
               anchor="git-repository"
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Connected repository"
@@ -387,7 +387,7 @@
               anchor="build-configuration"
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="Build command"
@@ -428,7 +428,7 @@
               anchor="deployment"
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <SettingRow
                       title="API token"
@@ -500,7 +500,7 @@
           class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-section-gap)"
         >
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <div
                 class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
               >
@@ -513,7 +513,7 @@
                   />
                   <div class="flex min-w-0">
                     <Tooltip
-                      :text="`Open ${APP.host} in a new tab`"
+                      :content="`Open ${APP.host} in a new tab`"
                       class="w-full"
                     >
                       <a
@@ -545,7 +545,7 @@
                   />
                   <DropdownMenu placement="bottom-end">
                     <DropdownMenu.Trigger>
-                      <Tooltip text="Application actions">
+                      <Tooltip content="Application actions">
                         <IconButton
                           icon="ai ai-ellipsis"
                           kind="outlined"
@@ -719,7 +719,7 @@
             </template>
           </SectionHeader>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 :data="versions"
                 :columns="versionColumns"
@@ -770,7 +770,7 @@
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <DataTable
                 :data="deployments"
                 :columns="deploymentColumns"
@@ -803,7 +803,7 @@
 
     <Drawer
       v-model:open="deployOpen"
-      side="right"
+      side="end"
       size="large"
     >
       <DrawerContent>

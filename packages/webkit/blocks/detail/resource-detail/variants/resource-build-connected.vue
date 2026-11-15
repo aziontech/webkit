@@ -96,7 +96,7 @@
                   anchor="git-repository"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <fieldset
                         class="m-0 flex min-w-0 flex-col border-0 p-0"
                         :disabled="saving"
@@ -113,7 +113,7 @@
                                   class="ai ai-github shrink-0"
                                   aria-hidden="true"
                                 />
-                                <Tooltip :text="`Open ${repository} on GitHub`">
+                                <Tooltip :content="`Open ${repository} on GitHub`">
                                   <a
                                     :href="`https://github.com/${repository}`"
                                     target="_blank"
@@ -193,7 +193,7 @@
                     @submit.prevent="save"
                   >
                     <Card :padded="false">
-                      <template #content>
+                      <template #default>
                         <fieldset
                           class="m-0 flex min-w-0 flex-col border-0 p-0"
                           :disabled="saving"
@@ -271,7 +271,7 @@
                   anchor="deployment"
                 >
                   <Card :padded="false">
-                    <template #content>
+                    <template #default>
                       <Item.List>
                         <SettingRow
                           title="API token"

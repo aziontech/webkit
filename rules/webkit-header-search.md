@@ -39,7 +39,7 @@ groups go in their `search` slot; a page opens the console palette with
       <Command v-model:open="searchOpen">
         <Command.Input placeholder="Search…" />
         <Command.List>
-          <Command.Group heading="Pages">
+          <Command.Group label="Pages">
             <Command.Item value="applications">Applications</Command.Item>
           </Command.Group>
           <Command.Empty>No results.</Command.Empty>

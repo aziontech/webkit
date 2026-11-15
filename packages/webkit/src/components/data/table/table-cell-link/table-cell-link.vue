@@ -99,7 +99,7 @@
       aria-hidden="true"
     />
     <Tooltip
-      :text="tooltip"
+      :content="tooltip"
       :disabled="!isLink"
       class="min-w-0 shrink!"
     >

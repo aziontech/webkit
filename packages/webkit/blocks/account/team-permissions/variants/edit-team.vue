@@ -309,7 +309,7 @@
                 hint="The name is the only required field."
               >
                 <Card>
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col gap-(--spacing-lg)">
                       <Field :required="!!errors.name">
                         <Field.Label for="team-name">Name</Field.Label>
@@ -344,7 +344,7 @@
                 :hint="`People in this team get its permissions. ${members.length} ${members.length === 1 ? 'member' : 'members'}.`"
               >
                 <Card>
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col gap-(--spacing-md)">
                       <Field :invalid="!!errors.member">
                         <Field.Label for="team-add-member">Add member</Field.Label>
@@ -428,7 +428,7 @@
                 :hint="`What this team can see and change. ${selected.length} of ${allIds.length} selected.`"
               >
                 <Card>
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-col gap-(--spacing-md)">
                       <div class="flex flex-wrap items-center gap-(--spacing-xs)">
                         <div class="min-w-0 grow basis-(--container-3xs)">
@@ -439,7 +439,7 @@
                             aria-label="Filter permissions"
                             class="w-full"
                           >
-                            <template #prefix>
+                            <template #leading>
                               <i
                                 class="ai ai-search"
                                 aria-hidden="true"
@@ -564,7 +564,7 @@
                 hint="Inactive teams keep their permissions but grant nothing to their members."
               >
                 <Card>
-                  <template #content>
+                  <template #default>
                     <Field orientation="horizontal">
                       <Field.Label>
                         <span class="text-label-md">Active</span>
@@ -580,7 +580,7 @@
                 hint="Members lose the permissions this team grants. Their user accounts stay."
               >
                 <Card>
-                  <template #content>
+                  <template #default>
                     <div class="flex flex-wrap items-center justify-between gap-(--spacing-md)">
                       <p class="m-0 text-body-sm text-(--text-default)">
                         Deleting cannot be undone.

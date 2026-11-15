@@ -132,7 +132,7 @@
       <DocPageHeader
         title="Applications"
         description="Route requests to your origins, cache responses, and run code with the rules of an Application."
-        :breadcrumb="crumbs"
+        :breadcrumbs="crumbs"
         last-updated="2026-11-11"
         :meta-actions="metaActions"
       />
@@ -220,7 +220,7 @@
           >
         </DocCardGroup>
       </DocProse>
-      <DocPrevNext :next="{ title: 'Quickstart', href: '/docs/applications/quickstart' }" />
+      <DocPrevNext :next="{ label: 'Quickstart', href: '/docs/applications/quickstart' }" />
     </article>
 
     <template #actions>

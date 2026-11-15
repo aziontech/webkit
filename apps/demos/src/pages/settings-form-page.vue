@@ -86,7 +86,7 @@
         <section class="flex flex-col gap-(--layout-group-gap)">
           <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Full name"
@@ -150,7 +150,7 @@
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
           <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Preferences</p>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Timezone"
@@ -216,7 +216,7 @@
         <section class="layout-section-start flex flex-col gap-(--layout-group-gap)">
           <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Notifications</p>
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Product updates"

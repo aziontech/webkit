@@ -997,7 +997,7 @@
               :display-value="viewLabel"
             >
               <Select.Trigger aria-label="Dashboard">
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-chart-bar text-(--text-muted)"
                     aria-hidden="true"
@@ -1039,7 +1039,7 @@
           />
 
           <div class="ms-auto flex shrink-0 items-center">
-            <Tooltip text="Refresh">
+            <Tooltip content="Refresh">
               <IconButton
                 icon="ai ai-refresh"
                 kind="outlined"
@@ -1085,7 +1085,7 @@
               :loading="loading"
             >
               <template #aside>
-                <Hint :text="figure.hint" />
+                <Hint :content="figure.hint" />
               </template>
             </StatTile>
           </li>
@@ -1098,7 +1098,7 @@
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ active.chart.title }}</ChartCard.Title>
-                <Hint :text="active.chart.hint" />
+                <Hint :content="active.chart.hint" />
               </span>
             </ChartCard.Header>
             <ChartCard.Content>
@@ -1141,7 +1141,7 @@
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ active.breakdown.title }}</ChartCard.Title>
-                <Hint :text="active.breakdown.hint" />
+                <Hint :content="active.breakdown.hint" />
               </span>
             </ChartCard.Header>
             <ChartCard.Content>

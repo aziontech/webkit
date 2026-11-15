@@ -192,7 +192,7 @@
             </span>
             <CodeBlock
               :tabs="ARGUMENTS"
-              line-numbers
+              show-line-numbers
               copy-aria-label="Copy the function arguments"
             />
             <HelperText

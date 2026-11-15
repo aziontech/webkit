@@ -29,11 +29,11 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'id', header: 'ID', minWidth: 80 },
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
+    { accessorKey: 'lastModified', header: 'Last Modified', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -119,7 +119,7 @@
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Tooltip
-                text="Refresh"
+                content="Refresh"
                 class="shrink-0"
               >
                 <IconButton
@@ -132,7 +132,7 @@
                 />
               </Tooltip>
               <Tooltip
-                text="Download CSV"
+                content="Download CSV"
                 class="shrink-0"
               >
                 <IconButton
@@ -156,7 +156,7 @@
               v-if="status === 'empty'"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <EmptyState
                   size="medium"
                   icon="ai ai-box"
@@ -190,12 +190,12 @@
               v-else
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   ref="resourcesTable"
                   v-bind="tableProps"
                   :loading="loading || fetching"
-                  enable-sorting
+                  sortable
                   :bordered="false"
                 >
                   <template #cell-name="{ row }">

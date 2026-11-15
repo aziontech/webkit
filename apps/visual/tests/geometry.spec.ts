@@ -70,7 +70,7 @@ for (const theme of THEMES) {
       await settle(page)
       const start = async (id: string) => {
         const box = await preview
-          .locator(`[data-tree-row="${id}"] [data-tree-gutter] + span`)
+          .locator(`[data-tree-row="${id}"] [data-slot="tree-gutter"] + span`)
           .boundingBox()
         if (!box) throw new Error(`no name for ${id}`)
         return dir === 'rtl' ? -(box.x + box.width) : box.x

@@ -1,6 +1,6 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, enableSorting, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.Chips and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.Chips and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
 last_updated: 2026-11-15
 scope: general
@@ -110,7 +110,7 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
     :columns="columns"
     :filter-fields="filterFields"
     row-key="id"
-    enable-sorting
+    sortable
     paginated
     :page-size="8"
     :bordered="false"
@@ -144,7 +144,7 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
   body scroll inside the table. See "Scroll the body internally".
 - `row-key` is the stable id accessor; `@row-click` opens the detail view (see the `@click.stop`
   discipline below so cell controls don't trigger it).
-- `enable-sorting` + per-column `enableSorting: true` turns on the sort affordance for that column.
+- `sortable` + per-column `sortable: true` turns on the sort affordance for that column.
 - `paginated` + `:page-size` paginates client-side; `:bordered="false"` for a flush table inside a `Card`.
 
 ### Column model
@@ -153,12 +153,12 @@ One flat `columns` array. Each column is `{ accessorKey, header }` plus the opti
 
 ```js
 const columns = [
-  { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true },
+  { accessorKey: 'name', header: 'Name', sortable: true, principal: true },
   { accessorKey: 'repository', header: 'Repository', grow: 2 },
-  { accessorKey: 'id', header: 'ID', enableSorting: true },
+  { accessorKey: 'id', header: 'ID', sortable: true },
   { accessorKey: 'domainName', header: 'Domain Name', grow: 3 },
-  { accessorKey: 'status', header: 'Status', enableSorting: true },
-  { accessorKey: 'lastModified', header: 'Last Modified', enableSorting: true, grow: 2 },
+  { accessorKey: 'status', header: 'Status', sortable: true },
+  { accessorKey: 'lastModified', header: 'Last Modified', sortable: true, grow: 2 },
   { id: 'actions', kind: 'action', hideable: false } // auto-pinned to the right edge
 ]
 ```
@@ -168,7 +168,7 @@ const columns = [
   long-content columns (repository, domain, timestamps).
 - **`kind: 'action'`** is the trailing actions column; it auto-pins to the right edge. Pair with
   `hideable: false` so CollectionPreferences lists it locked.
-- **`enableSorting: true`** per sortable column (with `enable-sorting` on the root).
+- **`sortable: true`** per sortable column (with `sortable` on the root).
 
 ### Toolbar + applied filters
 
@@ -253,7 +253,7 @@ chain, not a fixed pixel height:
 ```vue
 <section class="flex min-h-0 flex-1 flex-col">
   <Card :padded="false" class="h-full">
-    <template #content>
+    <template #default>
       <Table … max-height="100%" class="h-full">…</Table>
     </template>
   </Card>

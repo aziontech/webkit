@@ -178,7 +178,7 @@
                   aria-label="Search results"
                   :disabled="!frame.results"
                 >
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-search"
                       aria-hidden="true"

@@ -137,7 +137,7 @@
                 hint="The two fields a resource requires: what it is called here, and the hostname it answers for."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -199,7 +199,7 @@
                 collapsible
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="DNSSEC"

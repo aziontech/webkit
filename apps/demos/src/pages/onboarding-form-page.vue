@@ -123,7 +123,7 @@
             :padded="false"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <Progress
                 :value="1"
                 :max="3"

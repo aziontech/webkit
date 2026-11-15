@@ -53,7 +53,7 @@
           :padded="false"
           title="How do you want to start?"
         >
-          <template #content>
+          <template #default>
             <Item.List>
               <Item
                 v-for="method in METHODS"

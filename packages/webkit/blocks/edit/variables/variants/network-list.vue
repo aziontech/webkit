@@ -260,7 +260,7 @@
   <Drawer
     v-model:open="drawerOpen"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <div class="w-full md:w-fit">

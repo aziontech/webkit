@@ -81,7 +81,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerTrigger>
       <div class="w-full md:w-fit">
@@ -182,7 +182,7 @@
                     <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Binding policy
                       <Hint
-                        text="Defines whether each version locks its resource IDs or allows them to change."
+                        content="Defines whether each version locks its resource IDs or allows them to change."
                       />
                     </span>
                   </Field.Legend>
@@ -206,7 +206,7 @@
                   <Field.Legend kind="label">
                     <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Deployment version policy
-                      <Hint text="Defines how many versions can receive traffic." />
+                      <Hint content="Defines how many versions can receive traffic." />
                     </span>
                   </Field.Legend>
                   <RadioGroup

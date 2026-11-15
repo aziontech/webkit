@@ -826,7 +826,7 @@
   const toColumn = (field: EventField): TableColumn => ({
     accessorKey: field.id,
     header: field.label,
-    enableSorting: true,
+    sortable: true,
     ...(field.principal ? { principal: true } : {}),
     ...(field.grow ? { grow: field.grow } : {}),
     ...(field.minWidth ? { minWidth: field.minWidth } : {}),
@@ -848,11 +848,11 @@
 
   const statusField = eventField('status')
 
-  const statusTone = (status: unknown) => {
+  const statusSeverity = (status: unknown) => {
     if (typeof status !== 'number') return null
-    if (status >= 500) return 'error'
-    if (status >= 400) return 'warn'
-    return 'ok'
+    if (status >= 500) return 'danger'
+    if (status >= 400) return 'warning'
+    return 'success'
   }
 
   const selectedId = ref('')
@@ -1089,7 +1089,7 @@
             size="small"
           >
             <Popover.Trigger>
-              <Tooltip text="Saved queries">
+              <Tooltip content="Saved queries">
                 <IconButton
                   icon="ai ai-bookmark"
                   kind="outlined"
@@ -1133,7 +1133,7 @@
                         </span>
                       </span>
                     </Item>
-                    <Tooltip text="Delete">
+                    <Tooltip content="Delete">
                       <IconButton
                         icon="ai ai-trash"
                         kind="transparent"
@@ -1189,7 +1189,7 @@
             size="small"
           >
             <Popover.Trigger>
-              <Tooltip text="Recent queries">
+              <Tooltip content="Recent queries">
                 <IconButton
                   icon="ai ai-history"
                   kind="outlined"
@@ -1258,7 +1258,7 @@
             </Popover.Content>
           </Popover>
           <Tooltip
-            text="Refresh"
+            content="Refresh"
             class="shrink-0"
           >
             <IconButton
@@ -1272,7 +1272,7 @@
             />
           </Tooltip>
           <Tooltip
-            text="Download CSV"
+            content="Download CSV"
             class="shrink-0"
           >
             <IconButton
@@ -1332,7 +1332,7 @@
                       placeholder="Search fields"
                       aria-label="Search fields"
                     >
-                      <template #prefix>
+                      <template #leading>
                         <i
                           class="ai ai-search"
                           aria-hidden="true"
@@ -1450,7 +1450,7 @@
                       v-model="openCategories"
                       type="multiple"
                       size="medium"
-                      arrow-position="left"
+                      icon-position="leading"
                     >
                       <Accordion.Item
                         v-for="category in fieldCategories"
@@ -1645,7 +1645,7 @@
                     :data="matchedEvents"
                     :columns="columns"
                     row-key="id"
-                    enable-sorting
+                    sortable
                     paginated
                     :page-size="25"
                     :bordered="false"
@@ -1692,8 +1692,8 @@
 
                     <template #cell-status="{ value }">
                       <span
-                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-foreground) data-[tone=warn]:text-(--warning-foreground)"
-                        :data-tone="statusTone(value)"
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[severity=danger]:text-(--danger-foreground) data-[severity=warning]:text-(--warning-foreground)"
+                        :data-severity="statusSeverity(value)"
                       >
                         {{ formatEventValue(statusField, value) }}
                       </span>
@@ -1751,7 +1751,7 @@
         />
         <Resizable.Pane
           v-model:basis="documentWidth"
-          v-model:expanded="documentPaneExpanded"
+          v-model:open="documentPaneExpanded"
           collapsible
           :min="320"
           :max="512"
@@ -1771,7 +1771,7 @@
               >
                 Event
               </h2>
-              <Tooltip text="Close">
+              <Tooltip content="Close">
                 <IconButton
                   icon="ai ai-x"
                   kind="transparent"
@@ -1834,7 +1834,7 @@
                       <CodeBlock
                         :tabs="documentTabs"
                         :bordered="false"
-                        line-numbers
+                        show-line-numbers
                         copy-aria-label="Copy the event document as JSON"
                         class="w-full"
                       />
@@ -1851,7 +1851,7 @@
     <Drawer
       v-model:open="documentDrawerOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <PanelHeader class="w-full">
@@ -1907,7 +1907,7 @@
                 <CodeBlock
                   :tabs="documentTabs"
                   :bordered="false"
-                  line-numbers
+                  show-line-numbers
                   copy-aria-label="Copy the event document as JSON"
                   class="w-full"
                 />

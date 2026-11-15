@@ -238,7 +238,7 @@
       accessorKey: 'project',
       header: 'Project',
       align: 'start',
-      enableSorting: true,
+      sortable: true,
       principal: true
     },
     {
@@ -246,7 +246,7 @@
       accessorKey: 'requests',
       header: 'Requests',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       principal: false
     },
     {
@@ -254,7 +254,7 @@
       accessorKey: 'dataTransferred',
       header: 'Data transferred',
       align: 'end',
-      enableSorting: true,
+      sortable: true,
       principal: false
     }
   ]
@@ -484,7 +484,7 @@
             :loading="loading"
           >
             <template #aside>
-              <Hint :text="figure.description" />
+              <Hint :content="figure.description" />
             </template>
           </StatTile>
         </li>
@@ -498,7 +498,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Data transferred, this period vs previous</ChartCard.Title>
               <Hint
-                text="Data delivered by every project in the selected period, drawn over the same span of the previous period."
+                content="Data delivered by every project in the selected period, drawn over the same span of the previous period."
               />
             </span>
             <ChartCard.Action>
@@ -526,7 +526,7 @@
                   aria-label="Chart form for Data transferred, this period vs previous"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -591,7 +591,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Data transferred by project</ChartCard.Title>
-              <Hint text="The projects that delivered the most data in the period." />
+              <Hint content="The projects that delivered the most data in the period." />
             </span>
             <ChartCard.Action>
               <span
@@ -604,7 +604,7 @@
                   icon="ai ai-calculator"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -654,7 +654,7 @@
               <Chart.Grid />
               <Chart.Axis kind="y" />
               <Chart.Axis kind="x" />
-              <Chart.Bar labeled />
+              <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>
           </ChartCard.Content>
@@ -664,7 +664,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Usage by project</ChartCard.Title>
-              <Hint text="Requests and data transferred per project in the period." />
+              <Hint content="Requests and data transferred per project in the period." />
             </span>
             <ChartCard.Action>
               <span
@@ -677,7 +677,7 @@
                   icon="ai ai-calculator"
                 />
               </span>
-              <Tooltip text="Expand">
+              <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
                   kind="transparent"
@@ -723,7 +723,7 @@
                     placeholder="Search projects"
                     aria-label="Search projects"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"
@@ -738,7 +738,7 @@
                 :data="rows"
                 :columns="columns"
                 row-key="id"
-                enable-sorting
+                sortable
                 paginated
                 :page-size="5"
                 :page-size-options="[5, 10, 25]"
@@ -832,7 +832,7 @@
               <Chart.Grid />
               <Chart.Axis kind="y" />
               <Chart.Axis kind="x" />
-              <Chart.Bar labeled />
+              <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>
             <DataTable
@@ -840,7 +840,7 @@
               :data="rows"
               :columns="columns"
               row-key="id"
-              enable-sorting
+              sortable
               paginated
               :page-size="10"
               density="compact"

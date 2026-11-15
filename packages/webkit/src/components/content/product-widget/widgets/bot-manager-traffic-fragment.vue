@@ -72,7 +72,7 @@
     <div class="py-(--spacing-xs)">
       <ShellMockupPart :order="0">
         <Card>
-          <template #content>
+          <template #default>
             <div class="flex flex-col gap-(--spacing-md)">
               <div class="flex flex-col gap-(--spacing-2xs)">
                 <span class="flex items-center gap-(--spacing-xs)">

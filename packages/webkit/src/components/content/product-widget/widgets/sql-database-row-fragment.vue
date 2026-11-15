@@ -149,7 +149,7 @@
                 placeholder="Filter by id, name, email… or ask AI"
                 aria-label="Filter rows"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"

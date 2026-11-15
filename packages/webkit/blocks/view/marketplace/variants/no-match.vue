@@ -399,7 +399,7 @@
                   :installed="item.status === 'installed'"
                   @select="openDetail(item.id)"
                 >
-                  <template #action>
+                  <template #actions>
                     <Button
                       :label="item.status === 'installed' ? 'Configure' : 'Install'"
                       :aria-label="`${item.status === 'installed' ? 'Configure' : 'Install'} ${item.name}`"
@@ -419,7 +419,7 @@
     <Drawer
       v-model:open="detailOpen"
       size="large"
-      side="right"
+      side="end"
     >
       <DrawerContent>
         <form

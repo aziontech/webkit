@@ -428,7 +428,7 @@
           @click="openDelete(selected)"
         />
         <div class="ms-auto flex items-center gap-(--spacing-xs)">
-          <Tooltip text="Refresh">
+          <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
               kind="outlined"
@@ -476,7 +476,7 @@
             severity="danger"
           >
             The resources could not be loaded. Nothing was changed; try again.
-            <template #action>
+            <template #actions>
               <Button
                 label="Retry"
                 kind="secondary"
@@ -491,7 +491,7 @@
             v-else-if="!loading && !resources.length"
             :padded="false"
           >
-            <template #content>
+            <template #default>
               <EmptyState
                 size="medium"
                 icon="ai ai-sitemap"
@@ -518,7 +518,7 @@
               aria-label="Search resources"
               class="w-full"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -531,7 +531,7 @@
               v-if="needle && !visibleTree.length"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <EmptyState
                   size="small"
                   icon="ai ai-search"
@@ -555,7 +555,7 @@
               v-else
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <DataTable
                   v-model:expanded="tableExpanded"
                   v-model:row-selection="selection"
@@ -566,7 +566,7 @@
                   :get-sub-rows="(row) => row.children"
                   :loading="loading || refreshing"
                   row-key="id"
-                  enable-row-selection
+                  selectable
                   :bordered="false"
                   :aria-labelledby="`${uid}-resources`"
                 >
@@ -589,7 +589,7 @@
                       }}</span>
                       <Tooltip
                         v-if="row.id === currentId"
-                        text="Current workspace"
+                        content="Current workspace"
                       >
                         <i
                           class="ai ai-check shrink-0 text-body-xs text-(--text-muted)"
@@ -639,7 +639,7 @@
                   <template #header-charges>
                     <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Charges
-                      <Tooltip text="Estimated month-to-date charges.">
+                      <Tooltip content="Estimated month-to-date charges.">
                         <i
                           class="ai ai-circle-help text-body-xs text-(--text-muted)"
                           role="img"
@@ -706,7 +706,7 @@
           class="w-full shrink-0 2xl:w-(--container-xs)"
         >
           <Card>
-            <template #content>
+            <template #default>
               <div class="flex flex-col gap-(--spacing-md)">
                 <h2
                   :id="`${uid}-details-heading`"

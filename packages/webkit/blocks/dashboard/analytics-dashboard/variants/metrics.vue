@@ -98,7 +98,7 @@
     accessorKey: id,
     header,
     align,
-    enableSorting: true,
+    sortable: true,
     principal: id === 'status' || id === 'remoteAddress'
   })
 
@@ -1014,7 +1014,7 @@
               :trend="tile.trend"
             >
               <template #aside>
-                <Hint :text="tile.description" />
+                <Hint :content="tile.description" />
               </template>
             </StatTile>
           </li>
@@ -1031,7 +1031,7 @@
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ panel.title }}</ChartCard.Title>
-                <Hint :text="panel.hint" />
+                <Hint :content="panel.hint" />
               </span>
               <ChartCard.Action>
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex">
@@ -1100,7 +1100,7 @@
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ breakdown.title }}</ChartCard.Title>
-                <Hint :text="breakdown.hint" />
+                <Hint :content="breakdown.hint" />
               </span>
               <ChartCard.Action>
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex">
@@ -1146,7 +1146,7 @@
                       :placeholder="breakdown.search"
                       :aria-label="breakdown.search"
                     >
-                      <template #prefix>
+                      <template #leading>
                         <i
                           class="ai ai-search"
                           aria-hidden="true"
@@ -1169,7 +1169,7 @@
                   :data="breakdownRows(breakdown)"
                   :columns="breakdown.columns"
                   row-key="id"
-                  enable-sorting
+                  sortable
                   paginated
                   :page-size="5"
                   :page-size-options="[5, 10, 25]"

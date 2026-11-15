@@ -12,7 +12,7 @@
 
 <template>
   <Card :padded="false">
-    <template #content>
+    <template #default>
       <div
         class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
       >
@@ -23,7 +23,7 @@
           />
           <div class="flex min-w-0">
             <Tooltip
-              text="Open web-app-y6u7i8.example.com in a new tab"
+              content="Open web-app-y6u7i8.example.com in a new tab"
               class="w-full"
             >
               <a
@@ -58,7 +58,7 @@
 
           <DropdownMenu placement="bottom-end">
             <DropdownMenu.Trigger>
-              <Tooltip text="Resource actions">
+              <Tooltip content="Resource actions">
                 <IconButton
                   icon="ai ai-ellipsis"
                   kind="outlined"
@@ -107,7 +107,7 @@
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <div class="flex min-w-0">
               <Tooltip
-                text="Open 1213284258 in Deployments"
+                content="Open 1213284258 in Deployments"
                 class="w-full"
               >
                 <Link
@@ -131,7 +131,7 @@
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <div class="flex min-w-0">
               <Tooltip
-                text="Open web-app-y6u7i8.example.com in a new tab"
+                content="Open web-app-y6u7i8.example.com in a new tab"
                 class="w-full"
               >
                 <a
@@ -191,7 +191,7 @@
               />
               <div class="flex min-w-0">
                 <Tooltip
-                  text="Open acme/web-app in a new tab"
+                  content="Open acme/web-app in a new tab"
                   class="w-full"
                 >
                   <a

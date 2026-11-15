@@ -117,7 +117,7 @@
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Full name"
@@ -184,7 +184,7 @@
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Timezone"
@@ -253,7 +253,7 @@
             size="small"
           />
           <Card :padded="false">
-            <template #content>
+            <template #default>
               <Item.List>
                 <SettingRow
                   title="Product updates"

@@ -143,7 +143,7 @@
                 :model-value="frame.open"
                 type="multiple"
                 size="large"
-                arrow-position="left"
+                icon-position="leading"
               >
                 <Accordion.Item
                   v-for="(phase, phaseIndex) in PHASES"

@@ -547,7 +547,7 @@
           :data-testid="`${testId}__search`"
           class="w-full"
         >
-          <template #prefix>
+          <template #leading>
             <i
               class="ai ai-search text-(--text-muted)"
               aria-hidden="true"

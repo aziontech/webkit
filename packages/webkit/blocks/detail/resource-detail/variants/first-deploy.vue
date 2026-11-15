@@ -40,7 +40,7 @@
 <template>
   <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <div
           class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
         >
@@ -55,7 +55,7 @@
           <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
-                <Tooltip text="Resource actions">
+                <Tooltip content="Resource actions">
                   <IconButton
                     icon="ai ai-ellipsis"
                     kind="outlined"
@@ -177,7 +177,7 @@
       :key="service.id"
       :padded="false"
     >
-      <template #content>
+      <template #default>
         <div
           class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
         >
@@ -188,7 +188,7 @@
             />
             <div class="flex min-w-0">
               <Tooltip
-                :text="`Open ${service.domain} in a new tab`"
+                :content="`Open ${service.domain} in a new tab`"
                 class="w-full"
               >
                 <a
@@ -222,7 +222,7 @@
 
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
-                <Tooltip text="Service actions">
+                <Tooltip content="Service actions">
                   <IconButton
                     icon="ai ai-ellipsis"
                     kind="outlined"

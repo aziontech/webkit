@@ -162,7 +162,7 @@
               kind="primary"
               size="small"
               :data-testid="`${testId}__next`"
-              @click="context?.next()"
+              @click="(event: Event) => context?.next(event)"
             />
           </PopoverFooter>
         </div>

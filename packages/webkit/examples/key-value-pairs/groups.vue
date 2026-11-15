@@ -38,7 +38,7 @@
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Region">
         <template #info>
-          <Hint text="Where the workload was first provisioned." />
+          <Hint content="Where the workload was first provisioned." />
         </template>
         US East (Virginia)
       </KeyValuePairs.Item>

@@ -56,7 +56,7 @@
     :aria-label="ariaLabel || t('tableSearch.label')"
     @update:model-value="setFilter"
   >
-    <template #prefix>
+    <template #leading>
       <i
         class="ai ai-search text-button-md"
         aria-hidden="true"

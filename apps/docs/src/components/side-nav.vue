@@ -51,7 +51,7 @@
         :key="item.to"
         :label="item.label"
         :href="item.to"
-        :selected="current === item.to"
+        :active="current === item.to"
       />
     </SidebarMenuGroup>
   </SidebarMenuRoot>

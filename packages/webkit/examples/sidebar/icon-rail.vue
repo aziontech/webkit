@@ -30,7 +30,7 @@
               label="Home"
               icon="ai ai-home"
               href="/"
-              selected
+              active
             />
             <SidebarMenuItem
               label="Marketplace"

@@ -194,7 +194,7 @@
                 hint="How this rule set is identified across the console."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -230,7 +230,7 @@
                 hint="Whether the rule set inspects traffic, and what it does with what it matches."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"
@@ -277,7 +277,7 @@
                 hint="The threat families this rule set inspects for, and how strictly each one is applied. Higher sensitivity catches more attacks and more legitimate requests."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List
                       :aria-label="`Threats, ${enabledCount} of ${form.threats.length} on`"
                     >

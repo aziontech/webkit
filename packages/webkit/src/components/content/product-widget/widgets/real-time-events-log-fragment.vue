@@ -191,7 +191,7 @@
             aria-label="Search events"
             class="min-w-0 grow"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"

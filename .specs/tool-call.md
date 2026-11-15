@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: b5581e4df4b3b6d4b7b73b4083c025046a8dbefa2564ef65745c9256b338d0e5
+checksum: 89f6919feceb2a17cffe91fef2b83325a92f0a9cd91d3fff05b7093fb223945c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -61,7 +61,7 @@ collapsible panel. It is the record of what the agent did; authorization before 
         :tabs="[
           { label: 'JSON', value: 'in', code: '{ &quot;limit&quot;: 10 }', language: 'json' }
         ]"
-        :line-numbers="false"
+        :show-line-numbers="false"
       />
     </template>
   </ToolCall>

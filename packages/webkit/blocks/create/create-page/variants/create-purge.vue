@@ -221,7 +221,7 @@
                 hint="Where the objects are evicted from, and how this purge identifies them."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Layer"
@@ -280,7 +280,7 @@
                 :hint="'The ' + selectedType.noun + 's to purge, one per line.'"
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="List"

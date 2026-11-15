@@ -128,13 +128,13 @@
     {
       accessorKey: 'name',
       header: 'Name',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false,
       grow: 3
     },
-    { accessorKey: 'bytes', header: 'Size', enableSorting: true, minWidth: 80 },
-    { accessorKey: 'modifiedAt', header: 'Last modified', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
+    { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -324,11 +324,11 @@
   }
 
   const transfer = ref<TransferItem[]>([
-    { id: 'u-1', name: 'index.html', size: 6175, status: 'done', target: '' },
+    { id: 'u-1', name: 'index.html', size: 6175, status: 'success', target: '' },
     { id: 'u-2', name: 'app.js', size: 248_320, status: 'running', progress: 46, target: '' },
     { id: 'u-3', name: 'styles.css', size: 52_100, status: 'running', progress: 12, target: '' },
-    { id: 'u-4', name: 'intro.mp4', size: 96_400_000, status: 'queued', target: '' },
-    { id: 'u-5', name: 'hero.webp', size: 1_482_000, status: 'queued', target: '' }
+    { id: 'u-4', name: 'intro.mp4', size: 96_400_000, status: 'pending', target: '' },
+    { id: 'u-5', name: 'hero.webp', size: 1_482_000, status: 'pending', target: '' }
   ])
   const transferExpanded = ref(true)
   const retried = new Set<string>()
@@ -355,23 +355,23 @@
       }
     }
     added.value = next
-    return { ...item, status: 'done', progress: 100 }
+    return { ...item, status: 'success', progress: 100 }
   }
 
   const openFolder = (target: string) => {
     folderPath.value = target ? (target.match(/[^/]+\//g) ?? []) : []
   }
   const lastTarget = computed(
-    () => transfer.value.find((item) => item.status === 'done')?.target ?? ''
+    () => transfer.value.find((item) => item.status === 'success')?.target ?? ''
   )
 
-  const isActive = (item: TransferItem) => item.status === 'running' || item.status === 'queued'
+  const isActive = (item: TransferItem) => item.status === 'running' || item.status === 'pending'
 
   const report = () => {
-    const done = transfer.value.filter((item) => item.status === 'done').length
+    const done = transfer.value.filter((item) => item.status === 'success').length
     const failed = transfer.value.filter((item) => item.status === 'error').length
     if (!done && !failed) return
-    const where = transfer.value.find((item) => item.status === 'done')?.target ?? ''
+    const where = transfer.value.find((item) => item.status === 'success')?.target ?? ''
     const folder = where || rootName
     if (failed) {
       toast.error(`${failed} of ${done + failed} files weren't uploaded.`, {
@@ -396,7 +396,7 @@
         const progress = Math.min(100, (item.progress ?? 0) + 14)
         return progress >= 100 ? settle(item) : { ...item, progress }
       }
-      if (item.status === 'queued' && starting > 0) {
+      if (item.status === 'pending' && starting > 0) {
         starting -= 1
         return { ...item, status: 'running', progress: 0 }
       }
@@ -418,7 +418,7 @@
       id: `u-${(seq += 1)}`,
       name: file.webkitRelativePath || file.name,
       size: file.size,
-      status: 'queued',
+      status: 'pending',
       target
     }))
     const kept = transfer.value.some(isActive) ? transfer.value : []
@@ -460,7 +460,7 @@
     transfer.value = transfer.value.map((item): TransferItem => {
       if (item.status !== 'error' || (id !== undefined && item.id !== id)) return item
       retried.add(item.id)
-      return { ...item, status: 'queued', error: undefined, progress: 0 }
+      return { ...item, status: 'pending', error: undefined, progress: 0 }
     })
     toast.dismiss('file-browser-upload')
     run()
@@ -490,7 +490,7 @@
           @drop="onPageDrop"
         />
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               ref="tableRef"
               v-model:sorting="sorting"
@@ -498,7 +498,7 @@
               :data="sortedRows"
               :columns="columns"
               row-key="id"
-              enable-sorting
+              sortable
               manual-sorting
               paginated
               :page-size="50"
@@ -529,7 +529,7 @@
                       />
                     </div>
                     <Tooltip
-                      text="Refresh"
+                      content="Refresh"
                       class="shrink-0"
                     >
                       <IconButton
@@ -542,7 +542,7 @@
                       />
                     </Tooltip>
                     <Tooltip
-                      text="Download CSV"
+                      content="Download CSV"
                       class="shrink-0"
                     >
                       <IconButton
@@ -869,7 +869,7 @@
     </Dialog>
     <UploadProgress
       v-if="transfer.length"
-      v-model:expanded="transferExpanded"
+      v-model:open="transferExpanded"
       :items="transfer"
       @cancel="(_event, id) => cancel(id)"
       @retry="(_event, id) => retry(id)"
@@ -877,7 +877,7 @@
     >
       <template #actions>
         <Button
-          v-if="transfer.some((item) => item.status === 'done')"
+          v-if="transfer.some((item) => item.status === 'success')"
           label="Open folder"
           kind="secondary"
           size="small"

@@ -184,7 +184,7 @@
                   placeholder="Filter period…"
                   aria-label="Search Period values"
                 >
-                  <template #prefix>
+                  <template #leading>
                     <i
                       class="ai ai-search"
                       aria-hidden="true"
@@ -251,7 +251,7 @@
               class="grid"
             >
               <Card>
-                <template #content>
+                <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
                       {{ metric.label }}

@@ -143,7 +143,7 @@
             aria-label="Search workloads"
             class="w-60 max-md:flex-1"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"
@@ -169,7 +169,7 @@
           :padded="false"
           class="h-full overflow-hidden"
         >
-          <template #content>
+          <template #default>
             <div
               :class="ROW_GRID"
               class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs) text-label-sm text-(--text-muted)"

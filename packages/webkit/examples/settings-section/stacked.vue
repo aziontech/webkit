@@ -34,7 +34,7 @@
       anchor="general"
     >
       <Card :padded="false">
-        <template #content>
+        <template #default>
           <Item.List>
             <SettingRow
               title="Name"
@@ -67,7 +67,7 @@
       anchor="features"
     >
       <Card :padded="false">
-        <template #content>
+        <template #default>
           <Item.List>
             <SettingRow
               v-for="feature in defaultFeatures"

@@ -191,7 +191,7 @@
     >
       <ShellMockupPart :order="0">
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <DataTable
               :data="rows"
               :columns="COLUMNS"
@@ -217,7 +217,7 @@
                     aria-label="Search in folder"
                     class="w-full"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"

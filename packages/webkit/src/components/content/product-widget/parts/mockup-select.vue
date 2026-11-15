@@ -66,7 +66,7 @@
       >
         <template
           v-if="$slots['leading']"
-          #prefix
+          #leading
         >
           <slot name="leading" />
         </template>

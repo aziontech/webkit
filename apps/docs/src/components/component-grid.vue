@@ -45,7 +45,7 @@
         size="medium"
         :aria-label="t.filter"
       >
-        <template #prefix>
+        <template #leading>
           <i
             class="ai ai-filter text-(--text-muted)"
             aria-hidden="true"

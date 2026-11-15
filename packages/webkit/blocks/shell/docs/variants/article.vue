@@ -177,7 +177,7 @@
       <DocPageHeader
         title="First deploy in a few minutes"
         description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain."
-        :breadcrumb="crumbs"
+        :breadcrumbs="crumbs"
         last-updated="2026-11-11"
         :meta-actions="metaActions"
       />
@@ -258,14 +258,14 @@
             <CodeBlock
               :tabs="installTabs"
               default-value="shell"
-              :line-numbers="false"
+              :show-line-numbers="false"
             />
           </DocStep>
           <DocStep title="Log in and deploy">
             <CodeBlock
               :tabs="deployTabs"
               default-value="shell"
-              :line-numbers="false"
+              :show-line-numbers="false"
             />
           </DocStep>
         </DocSteps>
@@ -315,8 +315,8 @@
         </FrameBox>
       </DocProse>
       <DocPrevNext
-        :previous="{ title: 'Create an account', href: '/docs/get-started/create-an-account' }"
-        :next="{ title: 'Migrate to Azion', href: '/docs/get-started/migrate-to-azion' }"
+        :previous="{ label: 'Create an account', href: '/docs/get-started/create-an-account' }"
+        :next="{ label: 'Migrate to Azion', href: '/docs/get-started/migrate-to-azion' }"
       />
     </article>
 

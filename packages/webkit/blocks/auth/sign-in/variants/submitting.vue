@@ -264,7 +264,7 @@
               class="w-full max-w-(--container-sm)"
               :padded="false"
             >
-              <template #content>
+              <template #default>
                 <div class="p-(--spacing-lg)">
                   <div
                     :style="cardHeight ? { height: `${cardHeight}px` } : undefined"
@@ -295,7 +295,7 @@
                       >
                         <template
                           v-if="cardNotice.retry"
-                          #action
+                          #actions
                         >
                           <Button
                             label="Retry"
@@ -369,7 +369,7 @@
                           class="flex flex-col gap-(--spacing-lg)"
                         >
                           <div class="flex items-center gap-(--spacing-sm)">
-                            <Tooltip text="Change email">
+                            <Tooltip content="Change email">
                               <IconButton
                                 icon="ai ai-chevron-left"
                                 aria-label="Change email"
@@ -417,7 +417,7 @@
                           class="flex flex-col gap-(--spacing-lg)"
                         >
                           <div class="flex items-center gap-(--spacing-sm)">
-                            <Tooltip text="Back to sign in">
+                            <Tooltip content="Back to sign in">
                               <IconButton
                                 icon="ai ai-chevron-left"
                                 aria-label="Back to sign in"

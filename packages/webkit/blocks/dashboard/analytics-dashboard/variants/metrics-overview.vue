@@ -416,7 +416,7 @@
               </Select.Option>
             </Select.Content>
           </Select>
-          <Tooltip text="Refresh">
+          <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
               kind="outlined"
@@ -465,7 +465,7 @@
             <ChartCard.Header>
               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ card.title }}</ChartCard.Title>
-                <Hint :text="card.hint" />
+                <Hint :content="card.hint" />
               </span>
               <ChartCard.Action>
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex">
@@ -482,7 +482,7 @@
                     :aria-label="`Chart form for ${card.title}`"
                   />
                 </span>
-                <Tooltip text="Expand">
+                <Tooltip content="Expand">
                   <IconButton
                     icon="ai ai-window-maximize"
                     kind="transparent"

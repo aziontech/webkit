@@ -48,7 +48,7 @@
     :disabled="isDisabled"
     @click="onClick"
   >
-    <template #prefix>
+    <template #leading>
       <span
         aria-hidden="true"
         :data-live="isLive || undefined"

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 1fd548399cc0191ed7d08c3bc9ba6daa4a46eb08e6f9e26efbfa37c285ef2197
+checksum: 0e29ba6e4ac591fc7d5d30edd8ffdceb3a19febb37a9545c4a495233d6a9dddc
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -103,7 +103,7 @@ The deployment topology of a resource as a left-to-right diagram: each column is
     <template #actions="{ node }">
       <Tooltip
         v-if="node.id === 'domains'"
-        text="Add domain"
+        content="Add domain"
       >
         <IconButton
           icon="ai ai-plus"

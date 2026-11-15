@@ -29,7 +29,7 @@
           <p class="text-heading-xs text-(--text-default)">Deployment details</p>
 
           <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-            <Tooltip text="Available once the deployment is live">
+            <Tooltip content="Available once the deployment is live">
               <Button
                 label="Visit"
                 kind="secondary"
@@ -41,7 +41,7 @@
 
             <DropdownMenu placement="bottom-end">
               <DropdownMenu.Trigger>
-                <Tooltip text="Deployment actions">
+                <Tooltip content="Deployment actions">
                   <IconButton
                     icon="ai ai-ellipsis"
                     kind="outlined"
@@ -91,14 +91,14 @@
           </div>
         </template>
 
-        <template #content>
+        <template #default>
           <div
             class="grid grid-cols-1 gap-(--spacing-lg) p-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3"
           >
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Created</span>
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <Tooltip text="Taylor Reed · November 5, 2026, 9:12:40 AM">
+                <Tooltip content="Taylor Reed · November 5, 2026, 9:12:40 AM">
                   <Avatar
                     alt="Taylor Reed"
                     label="Taylor Reed"
@@ -141,7 +141,7 @@
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Service</span>
-              <Tooltip text="Open web-app in Services">
+              <Tooltip content="Open web-app in Services">
                 <a
                   href="/services/1784675753"
                   class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -158,7 +158,7 @@
             </div>
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Resource</span>
-              <Tooltip text="Open web-app in Resources">
+              <Tooltip content="Open web-app in Resources">
                 <a
                   href="/resources/1784552864"
                   class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -176,7 +176,7 @@
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Triggered by</span>
               <div class="flex min-w-0 items-center">
-                <Tooltip text="platform deploy --auto --local">
+                <Tooltip content="platform deploy --auto --local">
                   <Tag
                     severity="neutral"
                     size="medium"
@@ -189,7 +189,7 @@
             <div class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-sm text-(--text-muted)">Preset</span>
               <div class="flex min-w-0 items-center">
-                <Tooltip text="build.preset in platform.config.js">
+                <Tooltip content="build.preset in platform.config.js">
                   <Tag
                     severity="neutral"
                     size="medium"
@@ -224,7 +224,7 @@
                   class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
                   aria-hidden="true"
                 />
-                <Tooltip text="Open web-app-mh2saq.example.com in a new tab">
+                <Tooltip content="Open web-app-mh2saq.example.com in a new tab">
                   <a
                     href="https://web-app-mh2saq.example.com"
                     target="_blank"
@@ -256,12 +256,12 @@
           >
             <Accordion
               type="single"
-              arrow-position="left"
+              icon-position="leading"
               collapsible
             >
               <Accordion.Item value="deployment-settings">
                 <div class="relative">
-                  <Accordion.Trigger :level="3">
+                  <Accordion.Trigger :heading-level="3">
                     <span class="flex min-h-12 items-center">
                       <span class="text-label-md text-(--text-default)">Deployment Settings</span>
                     </span>
@@ -271,7 +271,7 @@
                     class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                   >
                     <div class="pointer-events-auto">
-                      <Tooltip text="Open Default in Build and deployment settings">
+                      <Tooltip content="Open Default in Build and deployment settings">
                         <a
                           href="/account/build-deployment"
                           class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
@@ -360,7 +360,7 @@
           />
         </template>
 
-        <template #content>
+        <template #default>
           <div class="py-(--spacing-xl)">
             <EmptyState
               icon="ai ai-clock"

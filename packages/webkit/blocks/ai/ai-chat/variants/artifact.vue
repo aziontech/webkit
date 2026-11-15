@@ -4,7 +4,7 @@
   import Button from '@aziontech/webkit/button'
   import ChatMessage, {
     type ChatMessageFeedbackValue,
-    type ChatMessageState
+    type ChatMessageStatus
   } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
@@ -12,7 +12,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import PromptInput, { type PromptInputState } from '@aziontech/webkit/prompt-input'
+  import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
@@ -35,7 +35,7 @@
   interface AssistantTurn {
     id: number
     from: 'assistant'
-    state: ChatMessageState
+    status: ChatMessageStatus
     content: string
     version: number
     feedback: ChatMessageFeedbackValue | null
@@ -76,7 +76,7 @@
   const paneCanvas = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const drawerCanvas = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
-  const state = ref<PromptInputState>('ready')
+  const state = ref<PromptInputStatus>('ready')
   const composer = ref<InstanceType<typeof PromptInput> | null>(null)
 
   const turns = ref<Turn[]>(
@@ -85,7 +85,7 @@
       reactive<AssistantTurn>({
         id: index * 2 + 2,
         from: 'assistant',
-        state: 'complete',
+        status: 'success',
         content: draft.reply,
         version: index,
         feedback: null,
@@ -157,20 +157,20 @@
     const turn = reactive<AssistantTurn>({
       id: nextId++,
       from: 'assistant',
-      state: 'pending',
+      status: 'pending',
       content: '',
       version: versions.value.length,
       feedback: null,
       time: '10:13'
     })
     turns.value.push(turn)
-    state.value = 'submitted'
+    state.value = 'pending'
     generating.value = true
     versions.value = [...versions.value, '']
     version.value = turn.version
     if (!narrow.value) canvasOpen.value = true
     timer = setTimeout(() => {
-      turn.state = 'streaming'
+      turn.status = 'streaming'
       state.value = 'streaming'
       let index = 0
       timer = setInterval(() => {
@@ -182,7 +182,7 @@
         )
         if (index >= draft.sql.length) {
           stopTimers()
-          turn.state = 'complete'
+          turn.status = 'success'
           state.value = 'ready'
           generating.value = false
           composer.value?.focus()
@@ -195,7 +195,7 @@
     stopTimers()
     const turn = turns.value[turns.value.length - 1]
     if (turn?.from === 'assistant') {
-      turn.state = 'complete'
+      turn.status = 'success'
       turn.stopped = true
     }
     state.value = 'ready'
@@ -247,14 +247,14 @@
                 v-for="turn in turns"
                 :key="turn.id"
                 :from="turn.from"
-                :state="turn.from === 'user' ? 'complete' : turn.state"
+                :state="turn.from === 'user' ? 'success' : turn.status"
                 :timestamp="turn.time"
               >
                 <template v-if="turn.from === 'user'">{{ turn.text }}</template>
                 <template v-else>
                   <StreamingResponse
                     :content="turn.content"
-                    :streaming="turn.state === 'streaming'"
+                    :streaming="turn.status === 'streaming'"
                   />
                   <p
                     v-if="turn.stopped"
@@ -302,7 +302,7 @@
             <PromptInput
               ref="composer"
               v-model="prompt"
-              :state="state"
+              :status="state"
               :max-length="4000"
               placeholder="Ask for a change to the query"
               @submit="(_event, { value }) => send(value)"
@@ -350,7 +350,7 @@
     <Drawer
       v-if="narrow"
       v-model:open="drawerOpen"
-      side="right"
+      side="end"
       size="large"
     >
       <DrawerContent>

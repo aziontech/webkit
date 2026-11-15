@@ -11,7 +11,7 @@
       v-model="password"
       placeholder="Enter your password"
     >
-      <template #prefix>
+      <template #leading>
         <i class="ai ai-lock" />
       </template>
     </PasswordInput>

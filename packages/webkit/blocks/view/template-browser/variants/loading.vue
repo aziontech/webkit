@@ -66,7 +66,7 @@
               class="flex min-w-0"
             >
               <Card class="w-full">
-                <template #content>
+                <template #default>
                   <div class="flex flex-col items-start gap-(--spacing-md)">
                     <Skeleton
                       width="2.5rem"

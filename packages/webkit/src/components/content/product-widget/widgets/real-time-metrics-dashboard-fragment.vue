@@ -173,7 +173,7 @@
                 v-for="item in group.items"
                 :key="item.id"
                 :label="item.label"
-                :selected="frame.selected === item.id"
+                :active="frame.selected === item.id"
                 :data-cursor="item.id"
               />
             </SidebarMenu.Group>

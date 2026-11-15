@@ -21,7 +21,7 @@
     <div class="flex h-full min-h-0 flex-col">
       <section class="flex min-h-0 flex-col">
         <Card>
-          <template #content>
+          <template #default>
             <div class="flex w-full flex-col gap-(--spacing-sm)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
@@ -40,7 +40,7 @@
                   />
                 </div>
                 <div class="flex shrink-0 items-center gap-(--spacing-xs)">
-                  <Tooltip text="Refresh">
+                  <Tooltip content="Refresh">
                     <IconButton
                       icon="ai ai-refresh"
                       kind="outlined"

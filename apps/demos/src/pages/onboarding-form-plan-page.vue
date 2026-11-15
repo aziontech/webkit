@@ -284,7 +284,7 @@
             :padded="false"
             class="w-full"
           >
-            <template #content>
+            <template #default>
               <Progress
                 :value="2"
                 :max="3"
@@ -370,7 +370,7 @@
                         <Drawer
                           :open="upgradeOpen"
                           size="large"
-                          side="right"
+                          side="end"
                           @update:open="onOpenChange"
                         >
                           <DrawerContent>
@@ -452,7 +452,7 @@
                                         />
                                       </template>
 
-                                      <template #content>
+                                      <template #default>
                                         <div
                                           v-if="charge"
                                           class="flex flex-col"
@@ -506,7 +506,7 @@
                                       title="Payment method"
                                       :padded="false"
                                     >
-                                      <template #content>
+                                      <template #default>
                                         <div
                                           class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
                                         >
@@ -649,7 +649,7 @@
                                       title="Address information"
                                       :padded="false"
                                     >
-                                      <template #content>
+                                      <template #default>
                                         <fieldset
                                           class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
                                         >

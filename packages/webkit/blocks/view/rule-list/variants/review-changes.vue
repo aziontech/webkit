@@ -430,7 +430,7 @@
               class="w-full"
               :disabled="loading"
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -447,19 +447,19 @@
         />
 
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <Accordion
               v-model="openPhases"
               type="multiple"
               size="large"
-              arrow-position="left"
+              icon-position="leading"
             >
               <Accordion.Item
                 v-for="group in groups"
                 :key="group.value"
                 :value="group.value"
               >
-                <Accordion.Trigger :level="2">
+                <Accordion.Trigger :heading-level="2">
                   <span class="flex min-w-0 items-center gap-(--spacing-sm)">
                     <span class="truncate">{{ group.label }} phase</span>
                     <span

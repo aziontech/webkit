@@ -29,13 +29,13 @@
     {
       accessorKey: 'name',
       header: 'Version',
-      enableSorting: true,
+      sortable: true,
       principal: true,
       hideable: false
     },
     { accessorKey: 'description', header: 'Description', grow: 2 },
-    { accessorKey: 'state', header: 'Status', enableSorting: true, minWidth: 104 },
-    { accessorKey: 'createdAt', header: 'Created', enableSorting: true, minWidth: 80 },
+    { accessorKey: 'state', header: 'Status', sortable: true, minWidth: 104 },
+    { accessorKey: 'createdAt', header: 'Created', sortable: true, minWidth: 80 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
 
@@ -242,7 +242,7 @@
                       aria-label="Search versions"
                       class="w-full"
                     >
-                      <template #prefix>
+                      <template #leading>
                         <i
                           class="ai ai-search"
                           aria-hidden="true"
@@ -253,7 +253,7 @@
                 </div>
                 <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                   <Tooltip
-                    text="Refresh"
+                    content="Refresh"
                     class="shrink-0"
                   >
                     <IconButton
@@ -266,7 +266,7 @@
                     />
                   </Tooltip>
                   <Tooltip
-                    text="Download CSV"
+                    content="Download CSV"
                     class="shrink-0"
                   >
                     <IconButton
@@ -279,7 +279,7 @@
                     />
                   </Tooltip>
                   <Tooltip
-                    text="Columns"
+                    content="Columns"
                     class="shrink-0"
                   >
                     <IconButton
@@ -293,7 +293,7 @@
               </header>
 
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <DataTable
                     ref="tableRef"
                     v-model:pagination="pagination"
@@ -302,7 +302,7 @@
                     :data="versions"
                     :columns="columns"
                     row-key="id"
-                    enable-sorting
+                    sortable
                     paginated
                     :page-size="10"
                     :bordered="false"
@@ -339,7 +339,7 @@
 
                     <template #cell-createdAt="{ row }">
                       <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                        <Tooltip :text="row.author">
+                        <Tooltip :content="row.author">
                           <Avatar
                             :alt="row.author"
                             :label="row.author"
@@ -356,7 +356,7 @@
                     <template #cell-actions="{ row }">
                       <DropdownMenu placement="bottom-end">
                         <DropdownMenu.Trigger>
-                          <Tooltip text="Version actions">
+                          <Tooltip content="Version actions">
                             <IconButton
                               icon="ai ai-ellipsis"
                               kind="outlined"

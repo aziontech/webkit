@@ -121,7 +121,7 @@
             />
           </template>
 
-          <template #content>
+          <template #default>
             <Transition
               mode="out-in"
               leave-to-class="opacity-0"

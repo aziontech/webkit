@@ -44,7 +44,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 
 - **Console:** `ConsoleLayout` — navigation rows `{ id, label, icon, href }` (an in-app `href` is
   followed with the app's router, no `@navigate` wiring needed) and the active row follows the
-  route; `actions`, `account-menu`, `search`, `header-start`, `breadcrumbs`, `notifications` and `tools` slots. A page
+  route; `actions`, `account-menu`, `search`, `header-leading`, `breadcrumbs`, `notifications` and `tools` slots. A page
   opens the shared palette with `useConsoleLayout().openSearch()`
   (`@aziontech/webkit/use-console-layout`); a body that also renders on its own calls
   `useConsoleLayout({ optional: true })`, which returns `null` outside a layout. Bind `v-model:navigation-open` to persist the rail or

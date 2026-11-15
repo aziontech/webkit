@@ -5,13 +5,13 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolApproval, { type ToolApprovalState } from '@aziontech/webkit/tool-approval'
-  import ToolCall, { type ToolCallState } from '@aziontech/webkit/tool-call'
+  import ToolApproval, { type ToolApprovalStatus } from '@aziontech/webkit/tool-approval'
+  import ToolCall, { type ToolCallStatus } from '@aziontech/webkit/tool-call'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const command = 'azion delete domain --name old.example.com'
-  const decision = ref<ToolApprovalState>('pending')
-  const run = ref<ToolCallState | ''>('')
+  const decision = ref<ToolApprovalStatus>('pending')
+  const run = ref<ToolCallStatus | ''>('')
   const prompt = ref('')
   let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -69,7 +69,7 @@
         <ToolCall
           name="get_domain_traffic"
           title="Reading the traffic of old.example.com"
-          state="success"
+          status="success"
         />
         <StreamingResponse
           content="old.example.com had no requests in the last 30 days. Deleting it needs your approval, and you need to type its name."
@@ -80,20 +80,20 @@
           approve-label="Delete"
           kind="danger"
           confirmation-phrase="old.example.com"
-          :state="decision"
+          :status="decision"
           @approve="approve"
           @deny="deny"
         >
           <CodeBlock
             :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
-            :line-numbers="false"
+            :show-line-numbers="false"
           />
         </ToolApproval>
         <ToolCall
           v-if="run"
           name="delete_domain"
           title="Deleting old.example.com"
-          :state="run"
+          :status="run"
         />
       </ChatMessage>
       <ChatMessage
@@ -114,7 +114,7 @@
     <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
       <PromptInput
         v-model="prompt"
-        :state="composerState"
+        :status="composerState"
         @stop="stop"
       >
         <template #hint>

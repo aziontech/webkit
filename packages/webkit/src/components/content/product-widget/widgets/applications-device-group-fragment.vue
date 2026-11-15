@@ -101,7 +101,7 @@
           <div class="flex items-center gap-(--spacing-2xs)">
             <span class="text-heading-2xs text-(--text-default)">General</span>
             <Hint
-              text="Names the group in the rules that reference it, so renaming it later means revisiting every rule that uses it."
+              content="Names the group in the rules that reference it, so renaming it later means revisiting every rule that uses it."
             />
           </div>
           <div class="flex flex-col gap-(--spacing-xs)">
@@ -126,7 +126,7 @@
           <div class="flex items-center gap-(--spacing-2xs)">
             <span class="text-heading-2xs text-(--text-default)">Match to User-Agent</span>
             <Hint
-              text="Every request whose User-Agent header matches this expression belongs to the group."
+              content="Every request whose User-Agent header matches this expression belongs to the group."
             />
           </div>
           <div class="flex flex-col gap-(--spacing-xs)">

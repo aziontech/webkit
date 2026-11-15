@@ -71,7 +71,7 @@
           >
             <template #aside>
               <Hint
-                text="Requests a security rule identified as attacks and blocked before they reached a service."
+                content="Requests a security rule identified as attacks and blocked before they reached a service."
               />
             </template>
           </StatTile>
@@ -84,7 +84,7 @@
             :delta-label="periodComparison"
           >
             <template #aside>
-              <Hint text="Requests checked against security rules across every service." />
+              <Hint content="Requests checked against security rules across every service." />
             </template>
           </StatTile>
         </li>
@@ -97,7 +97,7 @@
             inverse
           >
             <template #aside>
-              <Hint text="Share of inspected requests blocked as attacks." />
+              <Hint content="Share of inspected requests blocked as attacks." />
             </template>
           </StatTile>
         </li>

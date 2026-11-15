@@ -149,11 +149,11 @@
     (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
 
   const columns: TableColumn[] = [
-    { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },
+    { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
     { accessorKey: 'email', header: 'Email', grow: 2, minWidth: 220 },
-    { accessorKey: 'role', header: 'Role', enableSorting: true, minWidth: 120 },
+    { accessorKey: 'role', header: 'Role', sortable: true, minWidth: 120 },
     { accessorKey: 'teams', header: 'Teams', grow: 2, minWidth: 220 },
-    { accessorKey: 'status', header: 'Status', enableSorting: true, minWidth: 110 },
+    { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { accessorKey: 'lastActive', header: 'Last active', minWidth: 160 },
     { id: 'actions', kind: 'action', hideable: false }
   ]
@@ -379,7 +379,7 @@
           </div>
           <div class="flex shrink-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tooltip
-              text="Refresh"
+              content="Refresh"
               class="shrink-0"
             >
               <IconButton
@@ -392,7 +392,7 @@
               />
             </Tooltip>
             <Tooltip
-              text="Download CSV"
+              content="Download CSV"
               class="shrink-0"
             >
               <IconButton
@@ -416,7 +416,7 @@
           severity="danger"
         >
           The users could not be loaded. Nothing was changed; try again.
-          <template #action>
+          <template #actions>
             <Button
               label="Retry"
               kind="secondary"
@@ -430,12 +430,12 @@
           v-else
           :padded="false"
         >
-          <template #content>
+          <template #default>
             <DataTable
               ref="usersTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
-              enable-sorting
+              sortable
               :bordered="false"
               aria-label="Users"
             >
@@ -597,7 +597,7 @@
 
     <Drawer
       v-model:open="inviteOpen"
-      side="right"
+      side="end"
       size="large"
       :dismissible="!sending"
       :closable="!sending"

@@ -55,9 +55,9 @@ Any other class on the same tag still fails, and so does a bound `:class` or a v
   <Button kind="primary" label="Create account" @click="submit" />
 </div>
 
-<!-- layout utilities only: fill the column, cap the width; content in a named slot -->
+<!-- layout utilities only: fill the column, cap the width; content in the default slot -->
 <Card class="w-full max-w-(--container-sm)">
-  <template #content>…</template>
+  …
 </Card>
 
 <!-- a styleSeam component accepts consumer classes by design -->

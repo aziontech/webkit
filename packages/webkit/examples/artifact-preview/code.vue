@@ -29,7 +29,7 @@
     >
       <CodeBlock
         :tabs="[{ label: 'JSON', value: 'json', code: rules, language: 'json' }]"
-        :line-numbers="false"
+        :show-line-numbers="false"
         :copyable="false"
         :bordered="false"
       />

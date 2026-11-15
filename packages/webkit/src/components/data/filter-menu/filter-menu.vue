@@ -403,7 +403,7 @@
                     :placeholder="searchPlaceholder"
                     :aria-label="searchLabel"
                   >
-                    <template #prefix>
+                    <template #leading>
                       <i
                         class="ai ai-search"
                         aria-hidden="true"

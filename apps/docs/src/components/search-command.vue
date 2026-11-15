@@ -73,7 +73,7 @@
       <CommandGroup
         v-for="group in groups"
         :key="group.heading"
-        :heading="group.heading"
+        :label="group.heading"
       >
         <CommandItem
           v-for="item in group.items"

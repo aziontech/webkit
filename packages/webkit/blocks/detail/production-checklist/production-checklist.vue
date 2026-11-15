@@ -69,7 +69,7 @@
       </div>
 
       <Tooltip
-        text="Expand"
+        content="Expand"
         class="shrink-0"
       >
         <IconButton
@@ -82,7 +82,7 @@
       </Tooltip>
     </template>
 
-    <template #content>
+    <template #default>
       <div
         v-if="!complete"
         class="flex flex-col"
@@ -129,7 +129,7 @@
   <Drawer
     v-model:open="open"
     size="large"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <PanelHeader class="w-full">

@@ -445,7 +445,7 @@ export async function handleRequest(request, args = {}) {
                       >
                         <ResizablePane
                           v-model:basis="schemaWidth"
-                          v-model:expanded="schemaExpanded"
+                          v-model:open="schemaExpanded"
                           collapsible
                           :min="280"
                           :max="720"
@@ -509,7 +509,7 @@ export async function handleRequest(request, args = {}) {
                               :disabled="saving"
                             >
                               <Card :padded="false">
-                                <template #content>
+                                <template #default>
                                   <Item.List>
                                     <div
                                       class="relative flex w-full flex-col *:data-[slot=item]:rounded-none *:data-[slot=item]:border-b-(--border-muted) [&>[data-slot=item]:last-child]:border-b-transparent"
@@ -579,7 +579,7 @@ export async function handleRequest(request, args = {}) {
                                                 severity="warning"
                                                 size="small"
                                               />
-                                              <Tooltip text="Duplicate this field">
+                                              <Tooltip content="Duplicate this field">
                                                 <IconButton
                                                   icon="ai ai-copy"
                                                   kind="outlined"
@@ -590,7 +590,7 @@ export async function handleRequest(request, args = {}) {
                                                   @click="duplicateField(index)"
                                                 />
                                               </Tooltip>
-                                              <Tooltip text="Remove this field">
+                                              <Tooltip content="Remove this field">
                                                 <IconButton
                                                   icon="ai ai-trash"
                                                   kind="outlined"
@@ -622,8 +622,8 @@ export async function handleRequest(request, args = {}) {
                                           </div>
                                           <div
                                             :id="formId + '-body-' + field.id"
-                                            :data-expanded="isExpanded(field.id) || null"
-                                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance data-expanded:grid-rows-[1fr] motion-reduce:transition-none"
+                                            :data-state="isExpanded(field.id) ? 'open' : 'closed'"
+                                            class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-moderate-01 ease-productive-entrance data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
                                           >
                                             <div class="overflow-hidden">
                                               <div
@@ -974,7 +974,7 @@ export async function handleRequest(request, args = {}) {
             >
               <SettingsSection title="General">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Name"
@@ -1005,7 +1005,7 @@ export async function handleRequest(request, args = {}) {
 
               <SettingsSection title="Runtime">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Runtime"
@@ -1019,7 +1019,7 @@ export async function handleRequest(request, args = {}) {
                           readonly
                           disabled
                         >
-                          <template #suffix>
+                          <template #trailing>
                             <i
                               class="ai ai-lock"
                               aria-hidden="true"
@@ -1037,7 +1037,7 @@ export async function handleRequest(request, args = {}) {
                 hint="Where in the request path the service runs, each stage handing the code a different request."
               >
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Runs on"
@@ -1068,7 +1068,7 @@ export async function handleRequest(request, args = {}) {
 
               <SettingsSection title="Status">
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <Item.List>
                       <SettingRow
                         title="Active"

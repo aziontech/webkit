@@ -26,7 +26,7 @@
     loading?: boolean
   }
 
-  /** Selection model: single writes v-model:selected, multiple writes v-model:selected-ids. */
+  /** Selection model: single writes v-model:selected, multiple writes v-model:selected-keys. */
   export type TreeSelectable = 'single' | 'multiple'
 
   /** Payload of the rename event: the node and its new, trimmed label. */
@@ -35,7 +35,7 @@
   interface Props {
     /** Nodes to render; a node with a non-empty children array is a parent. */
     items?: TreeItem[]
-    /** Enables selection: true or single writes one id to v-model:selected; multiple writes ids to v-model:selected-ids. */
+    /** Enables selection: true or single writes one id to v-model:selected; multiple writes ids to v-model:selected-keys. */
     selectable?: boolean | TreeSelectable
     /** Lets the user rename a node in place with F2, or through the exposed startRename. */
     editable?: boolean

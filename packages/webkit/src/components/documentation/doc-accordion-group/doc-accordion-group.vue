@@ -74,7 +74,7 @@
           class="contents"
         >
           <AccordionTrigger
-            :level="3"
+            :heading-level="3"
             class="py-(--spacing-xs) focus-visible:ring-inset [&>span]:text-heading-xs [&>span]:[text-wrap-style:pretty]"
             >{{ entry.title }}</AccordionTrigger
           >

@@ -3,7 +3,7 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 9aa88f53f5a781a10f282c0d64d55369d3a3b7d23df0245ecc8270d449fa38ac
+checksum: 992fb7f4ee05da7769383973841c25532c5b4f8cd921fffb3ecef4d89495c000
 spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -96,7 +96,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Region">
         <template #info>
-          <Hint text="Where the workload was first provisioned." />
+          <Hint content="Where the workload was first provisioned." />
         </template>
         US East (Virginia)
       </KeyValuePairs.Item>
@@ -152,12 +152,12 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 
 ## Props
 
-| Prop        | Type               | Default | Required | JSDoc                                                                                       |
-| ----------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------- |
-| `kind`      | `'stacked' \| 'split'` | `'stacked'` | false | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
-| `columns`   | `1 \| 2 \| 3 \| 4` | `1`     | false    | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`. |
-| `loading`   | `boolean`          | `false` | false    | Replaces every value with a skeleton while the data loads; labels stay visible.             |
-| `ariaLabel` | `string`           | `''`    | false    | Accessible name of the list when no visible heading names it.                               |
+| Prop        | Type                   | Default     | Required | JSDoc                                                                                                                                        |
+| ----------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind`      | `'stacked' \| 'split'` | `'stacked'` | false    | How each pair is laid out: `stacked` puts the label over the value, `split` puts the label at the start and the value at the end of one row. |
+| `columns`   | `1 \| 2 \| 3 \| 4`     | `1`         | false    | Columns at full width; fewer columns when a cell would get narrower than `--container-3xs`.                                                  |
+| `loading`   | `boolean`              | `false`     | false    | Replaces every value with a skeleton while the data loads; labels stay visible.                                                              |
+| `ariaLabel` | `string`               | `''`        | false    | Accessible name of the list when no visible heading names it.                                                                                |
 
 ## Events
 

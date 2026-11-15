@@ -125,7 +125,7 @@
             </div>
 
             <Card :padded="false">
-              <template #content>
+              <template #default>
                 <div
                   class="flex items-center gap-(--spacing-md) border-b-(length:--border-width-default) border-(--border-default) px-(--spacing-md) py-(--spacing-md)"
                 >

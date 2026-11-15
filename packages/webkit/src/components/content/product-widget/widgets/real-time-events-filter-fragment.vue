@@ -160,7 +160,7 @@
             aria-label="Search events"
             class="min-w-0 grow"
           >
-            <template #prefix>
+            <template #leading>
               <i
                 class="ai ai-search"
                 aria-hidden="true"
@@ -187,7 +187,7 @@
                 placeholder="Filter by…"
                 aria-label="Search filter fields"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -242,7 +242,7 @@
                 placeholder="Filter source…"
                 aria-label="Search Source values"
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"

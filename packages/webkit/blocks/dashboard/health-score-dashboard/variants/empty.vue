@@ -150,7 +150,7 @@
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Overall score</ChartCard.Title>
               <Hint
-                text="Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50."
+                content="Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50."
               />
             </span>
             <ChartCard.Action>
@@ -212,7 +212,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Score per application</ChartCard.Title>
-              <Hint text="Lowest first, with the cause of most poor samples." />
+              <Hint content="Lowest first, with the cause of most poor samples." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -231,7 +231,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Score per location</ChartCard.Title>
-              <Hint text="Lowest first, with the cause of most poor samples." />
+              <Hint content="Lowest first, with the cause of most poor samples." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -251,7 +251,7 @@
           <ChartCard.Header>
             <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Hourly score</ChartCard.Title>
-              <Hint text="One block per hour for each application, colored by its band." />
+              <Hint content="One block per hour for each application, colored by its band." />
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
@@ -319,7 +319,7 @@
         title="Open incidents"
         :padded="false"
       >
-        <template #content>
+        <template #default>
           <Item.List
             key="item.list-1"
             v-if="loading"

@@ -383,7 +383,7 @@
               aria-label="Search versions"
               @keydown.stop
             >
-              <template #prefix>
+              <template #leading>
                 <i
                   class="ai ai-search"
                   aria-hidden="true"
@@ -436,7 +436,7 @@
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
     >
-      <Tooltip text="Back to web-app versions">
+      <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
           kind="transparent"
@@ -468,7 +468,7 @@
                 aria-label="Search versions"
                 @keydown.stop
               >
-                <template #prefix>
+                <template #leading>
                   <i
                     class="ai ai-search"
                     aria-hidden="true"
@@ -619,7 +619,7 @@
                             aria-label="Search in folder"
                             class="w-full"
                           >
-                            <template #prefix>
+                            <template #leading>
                               <i
                                 class="ai ai-search"
                                 aria-hidden="true"
@@ -629,7 +629,7 @@
                         </div>
                         <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                           <Tooltip
-                            text="Refresh"
+                            content="Refresh"
                             class="shrink-0"
                           >
                             <IconButton
@@ -642,7 +642,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Download CSV"
+                            content="Download CSV"
                             class="shrink-0"
                           >
                             <IconButton
@@ -655,7 +655,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Columns"
+                            content="Columns"
                             class="shrink-0"
                           >
                             <IconButton
@@ -666,7 +666,7 @@
                             />
                           </Tooltip>
                           <Tooltip
-                            text="Open in Object Storage"
+                            content="Open in Object Storage"
                             class="shrink-0"
                           >
                             <IconButton
@@ -685,7 +685,7 @@
                         @navigate="onCrumb"
                       />
                       <Card :padded="false">
-                        <template #content>
+                        <template #default>
                           <DataTable
                             ref="tableRef"
                             v-model:globalFilter="search"
@@ -870,7 +870,7 @@
         />
         <Resizable.Pane
           v-model:basis="historyBasis"
-          v-model:expanded="historyExpanded"
+          v-model:open="historyExpanded"
           collapsible
           :min="280"
           :max="560"

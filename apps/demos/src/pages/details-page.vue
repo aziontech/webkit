@@ -180,7 +180,7 @@ jobs:
               class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-section-gap)"
             >
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <div
                     class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
                   >
@@ -193,7 +193,7 @@ jobs:
                       />
                       <div class="flex min-w-0">
                         <Tooltip
-                          :text="`Open ${host} in a new tab`"
+                          :content="`Open ${host} in a new tab`"
                           class="w-full"
                         >
                           <a
@@ -229,7 +229,7 @@ jobs:
                         @select="onResourceAction"
                       >
                         <DropdownMenu.Trigger>
-                          <Tooltip text="Resource actions">
+                          <Tooltip content="Resource actions">
                             <IconButton
                               icon="ai ai-ellipsis"
                               kind="outlined"
@@ -303,7 +303,7 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            text="Open 1213275262 in Deployments"
+                            content="Open 1213275262 in Deployments"
                             class="w-full"
                           >
                             <a
@@ -335,7 +335,7 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            :text="`Open ${host} in a new tab`"
+                            :content="`Open ${host} in a new tab`"
                             class="w-full"
                           >
                             <a
@@ -477,7 +477,7 @@ jobs:
                         :padded="false"
                         class="w-full"
                       >
-                        <template #content>
+                        <template #default>
                           <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                               <span
@@ -495,7 +495,7 @@ jobs:
                             <div class="mt-(--spacing-2xs) min-w-0">
                               <CodeBlock
                                 :tabs="step.tabs"
-                                :line-numbers="false"
+                                :show-line-numbers="false"
                                 :copy-aria-label="`Copy the commands for ${step.title}`"
                                 class="w-full"
                               />

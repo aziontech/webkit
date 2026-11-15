@@ -75,7 +75,7 @@
         class="animate-content-enter motion-reduce:animate-none grid grid-cols-1 gap-(--spacing-lg) md:grid-cols-3 [--content-enter-delay:var(--transition-duration-fast-01)]"
       >
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
                 class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -105,7 +105,7 @@
           </template>
         </Card>
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
                 class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
@@ -199,7 +199,7 @@
           </template>
         </Card>
         <Card :padded="false">
-          <template #content>
+          <template #default>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
                 class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"

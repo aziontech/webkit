@@ -24,9 +24,9 @@
   >
     <CommandInput placeholder="Search commands…" />
     <CommandList>
-      <CommandGroup heading="Actions">
+      <CommandGroup label="Actions">
         <CommandItem value="deploy">
-          <template #prefix
+          <template #leading
             ><i
               class="ai ai-cloud-upload"
               aria-hidden="true"
@@ -36,9 +36,9 @@
         <CommandItem value="new-app">Create Application</CommandItem>
       </CommandGroup>
       <CommandSeparator />
-      <CommandGroup heading="Navigation">
+      <CommandGroup label="Navigation">
         <CommandItem value="settings">
-          <template #prefix
+          <template #leading
             ><i
               class="ai ai-settings"
               aria-hidden="true"
@@ -47,9 +47,9 @@
         </CommandItem>
         <CommandItem value="billing">Go to Billing</CommandItem>
       </CommandGroup>
-      <CommandGroup heading="Account">
+      <CommandGroup label="Account">
         <CommandItem value="profile">
-          <template #prefix
+          <template #leading
             ><i
               class="ai ai-user"
               aria-hidden="true"

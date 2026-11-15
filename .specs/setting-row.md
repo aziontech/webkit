@@ -3,7 +3,7 @@ name: setting-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: 231ce9d39e50f7d6729be7969bf24b4cad9581a887f784c757c4188a94a40451
+checksum: 3df5a80e7db5211ae448bf430fe42087c8fe05649487949ef8343860ec86057d
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -61,7 +61,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 
 <template>
   <Card :padded="false">
-    <template #content>
+    <template #default>
       <Item.List>
         <SettingRow
           title="Name"

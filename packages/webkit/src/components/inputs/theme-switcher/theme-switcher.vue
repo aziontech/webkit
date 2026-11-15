@@ -174,7 +174,7 @@
     <Tooltip
       v-for="(mode, index) in MODES"
       :key="mode.value"
-      :text="t(mode.key)"
+      :content="t(mode.key)"
       placement="bottom"
     >
       <button

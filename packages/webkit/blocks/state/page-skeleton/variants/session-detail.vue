@@ -142,7 +142,7 @@
                   height="1rem"
                 />
                 <Card :padded="false">
-                  <template #content>
+                  <template #default>
                     <div
                       v-for="(field, index) in formRows"
                       :key="index"

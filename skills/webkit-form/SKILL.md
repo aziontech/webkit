@@ -251,7 +251,7 @@ link on the left and Save on the right. Canonical pattern:
     title="Azion Toolbar"
     class="w-full"
   >
-    <template #content>
+    <template #default>
       <!-- body rhythm: fields are --spacing-lg apart; each field triad is --spacing-xs -->
       <div class="flex flex-col gap-(--spacing-lg)">
         <p class="text-body-sm text-(--text-muted)">
@@ -533,7 +533,7 @@ Canonical pattern:
   <Drawer
     v-model:open="childOpen"
     size="medium"
-    side="right"
+    side="end"
   >
     <DrawerContent>
       <form
@@ -623,7 +623,7 @@ Canonical pattern:
     anchor="general"
   >
     <Card :padded="false">
-      <template #content>
+      <template #default>
         <Item.List>
           <SettingRow
             title="Name"
@@ -670,7 +670,7 @@ Canonical pattern:
 Rules:
 
 - **`SettingsSection` + `Card :padded="false"` + `Item.List`** — one box per band, dividers from the
-  list, no box-in-box. The card is header-less (only `#content`); the band's title is the section's.
+  list, no box-in-box. The card is header-less (only its default slot); the band's title is the section's.
 - **Every row is a `SettingRow`.** Do not hand-write the `Item` / `Item.Content` / `Item.Actions`
   markup of a settings row; the row owns its density (`Item size="small"`) and the control placement.
 - **`title` is the label; the control takes an `aria-label`** with the same text. No `<Field.Label>` inside a
@@ -1002,7 +1002,7 @@ form does four things, and never toasts:
    that nothing else was lost, and what to do, as separate sentences: `Origin "web-origin-prod" no
 longer exists. Another user deleted it while you were filling in this form, so the service wasn't
 created. Nothing else was lost: reload the origin list and select another one.`
-2. **The recovery action on that `Alert`** (`#action` slot, `kind="secondary"`): `Reload origins`,
+2. **The recovery action on that `Alert`** (`#actions` slot, `kind="secondary"`): `Reload origins`,
    with `loading` while it runs; meanwhile the field gives way to a `Skeleton` and Save is disabled.
 3. **The field turns `invalid`** with its own one-line reason under it (`This origin no longer
 exists.`), wired by `aria-describedby`. After the reload clears the stale value it turns `required`

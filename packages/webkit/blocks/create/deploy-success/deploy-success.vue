@@ -100,7 +100,7 @@
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
           >
             <Card>
-              <template #content>
+              <template #default>
                 <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
                   <div
                     aria-hidden="true"
@@ -152,7 +152,7 @@
                           />
                           <div class="min-w-0">
                             <Tooltip
-                              text="Open web-app-k3x9q2.example.com in a new tab"
+                              content="Open web-app-k3x9q2.example.com in a new tab"
                               class="w-full"
                             >
                               <Link
@@ -180,7 +180,7 @@
                           />
                           <div class="min-w-0">
                             <Tooltip
-                              text="Open acme/web-app in a new tab"
+                              content="Open acme/web-app in a new tab"
                               class="w-full"
                             >
                               <Link
@@ -209,7 +209,7 @@
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Resources</h2>
               <Card :padded="false">
-                <template #content>
+                <template #default>
                   <Item.List>
                     <Item
                       v-for="resource in resources"

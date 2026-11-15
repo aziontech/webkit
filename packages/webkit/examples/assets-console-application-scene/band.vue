@@ -24,7 +24,7 @@
 <template>
   <MediaTabs
     :items="tabs"
-    position="right"
+    tabs-side="end"
     size="large"
     :autoplay-interval="4600"
   >

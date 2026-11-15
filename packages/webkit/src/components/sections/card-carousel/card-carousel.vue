@@ -77,7 +77,7 @@
         #header
       >
         <SectionTitle
-          kind="left"
+          kind="start"
           size="small"
           :framed="false"
           :eyebrow="eyebrow"
