@@ -3,10 +3,10 @@ name: photo-marquee
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-04
-last_updated: 2026-11-14
-checksum: 7d0b97c7cdc996c1eba0a3c8d451cb0df3a5f65ab11b336c9d5fee37b93c1472
+last_updated: 2026-11-15
+checksum: 4d98144981091d829655542568547196a9d64ab648269aa5a30be279de32c4db
 template: 2
 ---
 
@@ -14,10 +14,11 @@ template: 2
 
 ## Purpose
 
-The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover or focus. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.
+The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.
 
 ## When to use
 
+- Use PhotoMarquee for a decorative moving strip of photos.
 - To show a place or a team in pictures without a grid.
 
 ## When NOT to use
@@ -76,15 +77,15 @@ The office band of the careers page: a horizontal section title over a framed st
 
 ## States
 
-- Visual states: `default`, paused while the strip is hovered or holds focus
+- Visual states: `default`, paused while the strip is hovered or holds focus, or while its pause control is pressed (the track carries `data-paused`)
 - Empty: when `photos` is empty the band renders nothing
 - The list is rendered twice for a seamless loop; the duplicate is `aria-hidden`, its photos carry an empty `alt`, and it is hidden under reduced motion, where the region scrolls by hand instead
 
 ## Motion & Animations
 
-| Trigger                        | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                 |
-| ------------------------------ | ----------------------- | ------------------------------------------------- | ----------------------------------------------------------------------- |
-| continuous scroll of the strip | `animate-brand-marquee` | semantic (brand-marquee)                          | `motion-reduce:animate-none` (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                            |
+| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
+| continuous scroll of the strip | the brand marquee of the internal loop it shares with `ticker` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
 
 ## Tokens
 
@@ -104,7 +105,7 @@ The office band of the careers page: a horizontal section title over a framed st
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: the scrolling region is focusable and carries `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`.
-- Keyboard map: `Tab` reaches the region, which pauses the loop; under reduced motion arrow keys scroll it.
+- Keyboard map: `Tab` reaches the region, which pauses the loop, then the pause control (`Enter` / `Space` toggles it, WCAG 2.2.2); under reduced motion the control is hidden and arrow keys scroll the region.
 - ARIA: the band is a `<section>` named by its title (`aria-label`); the strip is a `region` named by `ariaLabel`; every photo carries its `alt` once — the duplicate copy is `aria-hidden` with empty `alt`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`.
 - `motion-reduce:animate-none` on the strip; the duplicate list is hidden so nothing moves and nothing repeats.

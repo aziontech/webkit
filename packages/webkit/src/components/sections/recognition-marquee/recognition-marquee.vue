@@ -5,6 +5,7 @@
   import Quote from '../../marketing/quote/quote.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
+  import TickerLoop from '../../marketing/ticker/ticker-loop.vue'
 
   defineOptions({
     name: 'RecognitionMarquee',
@@ -90,69 +91,61 @@
         borders="y"
         marks="all"
       >
-        <div
-          role="region"
-          :aria-label="ariaLabel || undefined"
-          tabindex="0"
-          class="group/loop overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:overflow-x-auto"
+        <TickerLoop
+          v-slot="{ duplicate }"
+          :duration="loopDuration"
+          :aria-label="ariaLabel"
         >
-          <div
-            :style="{ animationDuration: `${loopDuration}s` }"
-            class="flex w-max animate-brand-marquee rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0 group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:animate-none"
+          <ul
+            :data-duplicate="duplicate || null"
+            :aria-hidden="duplicate ? 'true' : undefined"
+            class="m-0 flex w-max shrink-0 list-none p-0 motion-reduce:data-[duplicate]:hidden"
           >
-            <ul
-              v-for="copy in 2"
-              :key="copy"
-              :data-duplicate="copy === 2 || null"
-              :aria-hidden="copy === 2 ? 'true' : undefined"
-              class="m-0 flex w-max shrink-0 list-none p-0 motion-reduce:data-[duplicate]:hidden"
+            <li
+              v-for="(item, index) in items"
+              :key="index"
+              class="flex w-[85vw] max-w-(--container-md) shrink-0 sm:w-(--container-md)"
             >
-              <li
-                v-for="(item, index) in items"
-                :key="index"
-                class="flex w-[85vw] max-w-(--container-md) shrink-0 sm:w-(--container-md)"
+              <FrameBox
+                borders="right"
+                marks="all"
+                class="w-full bg-(--bg-surface)"
               >
-                <FrameBox
-                  borders="right"
-                  marks="all"
-                  class="w-full bg-(--bg-surface)"
+                <Quote
+                  kind="signed"
+                  :text="item.text"
+                  :name="item.reportName"
+                  :job-title="item.date"
+                  class="p-(--spacing-xl)"
                 >
-                  <Quote
-                    kind="signed"
-                    :text="item.text"
-                    :name="item.reportName"
-                    :job-title="item.date"
-                    class="p-(--spacing-xl)"
-                  >
-                    <template #mark>
-                      <template v-if="item.logoLight">
-                        <img
-                          :src="item.logo"
-                          :alt="item.firmName"
-                          decoding="async"
-                          class="h-8 w-auto max-w-40 object-contain hidden [[data-theme=dark]_&]:block"
-                        />
-                        <img
-                          :src="item.logoLight"
-                          :alt="item.firmName"
-                          decoding="async"
-                          class="h-8 w-auto max-w-40 object-contain block [[data-theme=dark]_&]:hidden"
-                        />
-                      </template>
+                  <template #mark>
+                    <template v-if="item.logoLight">
                       <img
-                        v-else
                         :src="item.logo"
                         :alt="item.firmName"
                         decoding="async"
-                        class="h-8 w-auto max-w-40 object-contain"
+                        class="h-8 w-auto max-w-40 object-contain hidden [[data-theme=dark]_&]:block"
+                      />
+                      <img
+                        :src="item.logoLight"
+                        :alt="item.firmName"
+                        decoding="async"
+                        class="h-8 w-auto max-w-40 object-contain block [[data-theme=dark]_&]:hidden"
                       />
                     </template>
-                  </Quote>
-                </FrameBox>
-              </li>
-            </ul>
-          </div>
-        </div>
+                    <img
+                      v-else
+                      :src="item.logo"
+                      :alt="item.firmName"
+                      decoding="async"
+                      class="h-8 w-auto max-w-40 object-contain"
+                    />
+                  </template>
+                </Quote>
+              </FrameBox>
+            </li>
+          </ul>
+        </TickerLoop>
       </FrameBox>
     </SectionModule>
   </section>

@@ -1,20 +1,9 @@
 <script setup lang="ts">
-  import {
-    type Component,
-    computed,
-    markRaw,
-    onScopeDispose,
-    ref,
-    shallowRef,
-    useAttrs,
-    watch
-  } from 'vue'
+  import { type Component, computed, markRaw, ref, shallowRef, useAttrs, watch } from 'vue'
 
-  import { useTranslate } from '../../../composables/use-locale/use-translate'
-  import * as en from '../../../i18n/messages/en'
   import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
   import Overline from '../../content/overline/overline.vue'
+  import TickerLoop from './ticker-loop.vue'
 
   defineOptions({ name: 'Ticker', inheritAttrs: false })
 
@@ -60,33 +49,20 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-ticker')
 
   const SECONDS_PER_MARK = 2
   const SECONDS_PER_ITEM = 6
 
-  const loop = ref<globalThis.HTMLElement | null>(null)
-  const track = ref<globalThis.HTMLElement | null>(null)
-  const repeats = ref(1)
-  const copies = computed(() => repeats.value * 2)
-
   const isItems = computed(() => props.items.length > 0)
-
-  const paused = ref(false)
-  const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeScrolling') : t('autoplayControl.pauseScrolling')
-  )
 
   const passDuration = computed(
     () =>
-      Math.round(
-        (props.duration ||
-          (isItems.value
-            ? props.items.length * SECONDS_PER_ITEM
-            : props.marks.length * SECONDS_PER_MARK)) * repeats.value
-      ) || 1
+      props.duration ||
+      (isItems.value
+        ? props.items.length * SECONDS_PER_ITEM
+        : props.marks.length * SECONDS_PER_MARK)
   )
 
   const artwork = shallowRef(new Map<string, Component>())
@@ -134,28 +110,6 @@
     },
     { immediate: true }
   )
-
-  const firstRow = computed(
-    () => (track.value?.firstElementChild as globalThis.HTMLElement | null) ?? null
-  )
-
-  const measureRepeats = () => {
-    const strip = loop.value?.clientWidth ?? 0
-    const row = firstRow.value?.offsetWidth ?? 0
-    repeats.value = row > 0 ? Math.max(1, Math.ceil(strip / row)) : 1
-  }
-
-  let observer: globalThis.ResizeObserver | null = null
-
-  watch([loop, firstRow], (elements) => {
-    observer?.disconnect()
-    observer = new globalThis.ResizeObserver(measureRepeats)
-    for (const element of elements) {
-      if (element) observer.observe(element)
-    }
-  })
-
-  onScopeDispose(() => observer?.disconnect())
 </script>
 
 <template>
@@ -174,72 +128,54 @@
       >{{ label }}</Overline
     >
 
-    <div
+    <TickerLoop
       v-if="resolved.length || isItems"
-      class="relative w-full"
+      v-slot="{ copy, duplicate }"
+      :duration="passDuration"
+      :loading="!ready"
+      fill
+      faded
+      reduced="wrap"
     >
-      <div
-        ref="loop"
-        class="group/loop relative w-full overflow-hidden mask-[linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]"
+      <ul
+        :data-size="size"
+        :data-content="isItems ? 'items' : 'marks'"
+        :data-duplicate="duplicate || null"
+        :aria-label="!duplicate && ariaLabel ? ariaLabel : undefined"
+        :aria-hidden="duplicate ? 'true' : undefined"
+        class="m-0 flex w-max shrink-0 list-none items-center p-0 data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pe-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pe-(--spacing-10) md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) data-[content=items]:data-[size]:gap-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
       >
-        <div
-          ref="track"
-          :style="{ animationDuration: `${passDuration}s` }"
-          :data-loading="!ready || null"
-          :data-paused="paused || null"
-          class="flex w-max animate-brand-marquee data-[paused]:[animation-play-state:paused] rtl:translate-x-1/2 rtl:[animation-direction:reverse] motion-reduce:rtl:translate-x-0 data-[loading]:invisible data-[loading]:[animation-play-state:paused] group-focus-within/loop:[animation-play-state:paused] group-hover/loop:[animation-play-state:paused] motion-reduce:w-full motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center"
+        <li
+          v-for="(item, index) in items"
+          :key="`${copy}-item-${index}`"
+          class="flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) group-data-[size=small]/strip:text-body-sm"
         >
-          <ul
-            v-for="copy in copies"
-            :key="copy"
-            :data-size="size"
-            :data-content="isItems ? 'items' : 'marks'"
-            :data-duplicate="copy > 1 || null"
-            :aria-label="copy === 1 && ariaLabel ? ariaLabel : undefined"
-            :aria-hidden="copy > 1 ? 'true' : undefined"
-            class="m-0 flex w-max shrink-0 list-none items-center p-0 data-[size=medium]:gap-(--spacing-4) data-[size=medium]:pe-(--spacing-4) data-[size=small]:gap-(--spacing-10) data-[size=small]:pe-(--spacing-10) md:data-[size=medium]:gap-(--spacing-8) md:data-[size=medium]:pe-(--spacing-8) data-[content=items]:data-[size]:gap-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] data-[content=items]:data-[size]:pe-[max(var(--spacing-xxl),calc(var(--spacing-xl)*2))] motion-reduce:data-[content=items]:data-[size]:gap-(--spacing-md) motion-reduce:data-[content=items]:data-[size]:pe-0 motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:gap-(--spacing-md) motion-reduce:data-[duplicate]:hidden"
+          <span
+            v-if="item.icon"
+            aria-hidden="true"
+            :class="item.icon"
+          />
+          {{ item.label }}
+        </li>
+        <li
+          v-for="mark in resolved"
+          :key="`${copy}-${mark.name}`"
+          :title="mark.label"
+          class="flex w-(--brand-cell) shrink-0 items-center group-data-[size=small]/strip:w-auto justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-100 motion-reduce:transition-none"
+        >
+          <component
+            :is="mark.art"
+            v-if="mark.art"
+            :data-mark="mark.name"
+            class="h-(--brand-mark) w-auto max-w-(--brand-cell) object-contain"
+          />
+          <span
+            v-else
+            class="whitespace-nowrap text-heading-xxs"
+            >{{ mark.label }}</span
           >
-            <li
-              v-for="(item, index) in items"
-              :key="`${copy}-item-${index}`"
-              class="flex shrink-0 items-center gap-(--spacing-xs) whitespace-nowrap text-body-md text-(--text-default) group-data-[size=small]/strip:text-body-sm"
-            >
-              <span
-                v-if="item.icon"
-                aria-hidden="true"
-                :class="item.icon"
-              />
-              {{ item.label }}
-            </li>
-            <li
-              v-for="mark in resolved"
-              :key="`${copy}-${mark.name}`"
-              :title="mark.label"
-              class="flex w-(--brand-cell) shrink-0 items-center group-data-[size=small]/strip:w-auto justify-center text-(--text-default) opacity-70 transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-100 motion-reduce:transition-none"
-            >
-              <component
-                :is="mark.art"
-                v-if="mark.art"
-                :data-mark="mark.name"
-                class="h-(--brand-mark) w-auto max-w-(--brand-cell) object-contain"
-              />
-              <span
-                v-else
-                class="whitespace-nowrap text-heading-xxs"
-                >{{ mark.label }}</span
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-      <IconButton
-        :icon="paused ? 'pi pi-play' : 'pi pi-pause'"
-        :aria-label="pauseLabel"
-        kind="outlined"
-        size="small"
-        class="absolute end-0 top-1/2 z-10 -translate-y-1/2 motion-reduce:hidden"
-        @click="paused = !paused"
-      />
-    </div>
+        </li>
+      </ul>
+    </TickerLoop>
   </div>
 </template>

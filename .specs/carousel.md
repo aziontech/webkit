@@ -3,11 +3,11 @@ name: carousel
 category: marketing
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: ee8065eb67b6165dadf899de2b8df7a71e9f1406b9eda67ec823cf99205a6d1c
+checksum: 43a24539fed8450d56fd6e373dbbd659e29bde3866743d9e39984f399552f259
 created: 2026-09-22
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # Carousel — Component Spec
@@ -22,6 +22,7 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 
 ## When to use
 
+- Use Carousel when the reader steps through cards themself.
 - When a set of cards, quotes, logos or figures is longer than the row it sits in and the reader chooses how far to go.
 - For a peek-and-swipe row on narrow screens where a grid would stack into a very long column.
 - Whenever the content is browsable rather than essential — a reader must never have to scroll a carousel to reach something they need.

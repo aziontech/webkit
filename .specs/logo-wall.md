@@ -3,10 +3,10 @@ name: logo-wall
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 0d27386278c5141ca854eb4fd322a4287e28a17d9993dfff7bb4bab9d8c32bf3
+spec_version: 4
+checksum: 0f3a5e5a2ea01b30a324440f5ea04716d6ea67f3b5e72f7ede00fc7f20187369
 created: 2026-09-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Logo Wall — Component Spec
@@ -19,6 +19,7 @@ The cells are `card-grid` frame cells, so the wall draws the same hairlines and 
 
 ## When to use
 
+- Use LogoWall for a static grid of customer marks.
 - To show who already uses the product, as the proof band under a hero or section, with each mark leading to that customer's success case.
 - Wherever a set of partner, customer or certification marks is the message.
 - When the marks are recognisable enough that names are unnecessary.

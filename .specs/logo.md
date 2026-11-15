@@ -3,11 +3,11 @@ name: logo
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 354a34f87e423b8574527fc29d3e27d0415b8c3a0f2ac02ef9832cd74c134eda
+checksum: cb13dfbbdb9c2d92df21a757ae429ef6dc0f74be740702517d1c490b82ad3f26
 created: 2026-11-14
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Logo — Component Spec
@@ -18,6 +18,7 @@ A third-party mark (a client, a competitor, an analyst firm, a standard or certi
 
 ## When to use
 
+- Use Logo for any other company's mark (client, competitor, agent, certification).
 - A logo wall, a trust strip, a client story card, a quote attribution, a comparison column head: any place that shows another company's mark.
 - The coding agents a prompt works with (Claude, Codex, Gemini, Cursor), drawn in the ink of the surface they sit on.
 - A list of standards or analyst firms (SOC, PCI DSS, Gartner, Forrester).

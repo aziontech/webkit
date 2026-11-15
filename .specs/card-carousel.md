@@ -3,9 +3,9 @@ name: card-carousel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 04558193f5b29007993d296cff92d9b12be7dd2183cdff9dd93e5a2235e4f00b
+checksum: b726c6def6ad453e69175bece5ecbb062ae3dc778d0caaa5fb785872e2655621
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -20,6 +20,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 
 ## When to use
 
+- Use CardCarousel for four or more marketing cards the reader steps through.
 - Four or more cases, industries or examples of equal weight that do not all need to be seen: the reader steps through them.
 - When each case is a short card (overline, heading, one or two sentences) that may link to its own page or example.
 
