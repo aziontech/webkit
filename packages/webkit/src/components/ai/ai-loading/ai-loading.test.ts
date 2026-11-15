@@ -36,8 +36,8 @@ describe('AiLoading', () => {
     const inline = render(AiLoading, { props: { delay: 0 } })
     expect(inline.getByTestId('ai-ai-loading__dots')).toHaveAttribute('aria-hidden', 'true')
     inline.unmount()
-    const bar = render(AiLoading, { props: { delay: 0, kind: 'bar' } })
-    expect(bar.getByTestId('ai-ai-loading')).toHaveAttribute('data-kind', 'bar')
+    const bar = render(AiLoading, { props: { delay: 0, variant: 'bar' } })
+    expect(bar.getByTestId('ai-ai-loading')).toHaveAttribute('data-variant', 'bar')
     expect(bar.getByTestId('ai-ai-loading__bar')).toHaveAttribute('aria-hidden', 'true')
     expect(bar.queryByTestId('ai-ai-loading__dots')).toBeNull()
   })
@@ -64,7 +64,7 @@ describe('AiLoading', () => {
   })
 
   it('has no axe violations', async () => {
-    const { container } = render(AiLoading, { props: { delay: 0, kind: 'bar' } })
+    const { container } = render(AiLoading, { props: { delay: 0, variant: 'bar' } })
     await expectNoA11yViolations(container)
   })
 })

@@ -107,7 +107,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:80%]"
     :chrome="false"
@@ -135,7 +135,7 @@
           <div :data-cursor="`option-${option.value}`">
             <RadioGroup
               :model-value="frame.access"
-              kind="card"
+              variant="card"
               name="object-storage-workloads-access"
             >
               <RadioGroupItem

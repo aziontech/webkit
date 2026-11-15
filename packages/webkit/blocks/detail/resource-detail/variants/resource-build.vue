@@ -78,7 +78,7 @@
                   <Button
                     label="Deploy"
                     icon="ai ai-cloud-upload"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                   />
                 </template>
@@ -125,7 +125,7 @@
                             <Button
                               label="Continue with GitHub"
                               icon="ai ai-github"
-                              kind="secondary"
+                              variant="secondary"
                               size="large"
                             />
                             <Link
@@ -249,7 +249,7 @@
                                 />
                               </div>
                               <CopyButton
-                                kind="transparent"
+                                variant="ghost"
                                 value="analytics-app build token"
                                 aria-label="Copy API token"
                                 size="small"
@@ -279,14 +279,14 @@
                   <Button
                     type="button"
                     label="Discard"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="saving"
                     @click="discard"
                   />
                   <Button
                     label="Save"
-                    kind="primary"
+                    variant="primary"
                     size="medium"
                     :loading="saving"
                     @click="save"
@@ -313,7 +313,7 @@
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`/resources/analytics-app/${activeTab}`"
               />

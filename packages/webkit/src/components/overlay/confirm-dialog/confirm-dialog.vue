@@ -14,7 +14,7 @@
   import PanelHeader from '../panel/panel-header.vue'
 
   /** Kind of the confirm button: `danger` for a removal or a discard, `primary` for a commit. */
-  export type ConfirmDialogKind = 'danger' | 'primary'
+  export type ConfirmDialogVariant = 'danger' | 'primary'
   /** Width of the dialog: small for a sentence, medium when the body holds a field or an alert. */
   export type ConfirmDialogSize = 'small' | 'medium'
 
@@ -33,7 +33,7 @@
     /** Label of the cancel button. Empty uses the locale catalog (`Cancel`). */
     cancelLabel?: string
     /** Kind of the confirm button. */
-    kind?: ConfirmDialogKind
+    variant?: ConfirmDialogVariant
     /** Width of the dialog. */
     size?: ConfirmDialogSize
     /** Shows a spinner on the confirm button while the action runs. */
@@ -48,7 +48,7 @@
     description: '',
     confirmLabel: '',
     cancelLabel: '',
-    kind: 'danger',
+    variant: 'danger',
     size: 'medium',
     loading: false,
     disabled: false,
@@ -135,7 +135,7 @@
               :data-testid="`${testId}__cancel`"
               data-autofocus
               :label="cancelLabel || t('confirmDialog.cancel')"
-              kind="transparent"
+              variant="ghost"
               size="medium"
               :disabled="loading"
               @click="cancel"
@@ -143,7 +143,7 @@
             <Button
               :data-testid="`${testId}__confirm`"
               :label="confirmLabel || t('confirmDialog.confirm')"
-              :kind="kind"
+              :variant="variant"
               :loading="loading"
               :disabled="disabled"
               size="medium"

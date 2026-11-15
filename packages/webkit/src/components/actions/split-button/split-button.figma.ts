@@ -5,10 +5,10 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   primary: 'primary',
   secondary: 'secondary',
-  outlined: 'outlined'
+  outlined: 'outline'
 })
 const size = instance.getEnum('size', {
   large: 'large',
@@ -27,10 +27,10 @@ export default {
   icon="ai ai-plus"`
       : ''
   }${
-    kind === 'primary'
+    variant === 'primary'
       ? ''
       : figma.code`
-  kind="${kind}"`
+  variant="${variant}"`
   }${
     size === 'large'
       ? ''

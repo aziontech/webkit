@@ -14,7 +14,7 @@
     },
     {
       "name": "Screen",
-      "summary": "With `kind=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
+      "summary": "With `variant=\"screen\"` the band measures one viewport, minus whatever `--hero-banner-offset` a sticky bar above it declares.",
       "file": "screen.vue"
     },
     {

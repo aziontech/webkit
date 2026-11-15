@@ -45,19 +45,19 @@ describe('ClosingCallToAction', () => {
   })
 
   it.each(['split', 'panel'] as const)(
-    'mirrors kind=%s on the band and its call to action',
-    (kind) => {
-      const { getByTestId } = band({ kind })
+    'mirrors variant=%s on the band and its call to action',
+    (variant) => {
+      const { getByTestId } = band({ variant })
 
-      expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
-      expect(getByTestId('marketing-call-to-action').getAttribute('data-kind')).toBe(kind)
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+      expect(getByTestId('marketing-call-to-action').getAttribute('data-variant')).toBe(variant)
     }
   )
 
-  it('defaults to the split kind', () => {
+  it('defaults to the split variant', () => {
     const { getByTestId } = band()
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('split')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('split')
   })
 
   it('sets the anchor as the band id', () => {
@@ -86,12 +86,12 @@ describe('ClosingCallToAction', () => {
     expect(getByRole('heading', { level: 2 }).textContent).toContain(TITLE_MUTED)
     unmount()
 
-    const panel = band({ kind: 'panel' })
+    const panel = band({ variant: 'panel' })
     expect(panel.getByRole('heading', { level: 2 }).textContent).not.toContain(TITLE_MUTED)
   })
 
-  it.each(['split', 'panel', 'primary'] as const)('renders both actions in %s', (kind) => {
-    const { getByRole } = band({ kind })
+  it.each(['split', 'panel', 'primary'] as const)('renders both actions in %s', (variant) => {
+    const { getByRole } = band({ variant })
 
     expect(getByRole('link', { name: primaryAction.label }).getAttribute('href')).toBe(
       primaryAction.href
@@ -101,23 +101,23 @@ describe('ClosingCallToAction', () => {
     )
   })
 
-  it('mirrors kind=primary on data-kind and draws neither the eyebrow nor the muted line', () => {
-    const { getByTestId, getByRole, queryByText } = band({ kind: 'primary' })
+  it('mirrors variant=primary on data-variant and draws neither the eyebrow nor the muted line', () => {
+    const { getByTestId, getByRole, queryByText } = band({ variant: 'primary' })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('primary')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('primary')
     expect(getByRole('heading', { level: 2 }).textContent).toContain(TITLE)
     expect(getByRole('heading', { level: 2 }).textContent).not.toContain(TITLE_MUTED)
     expect(queryByText('Build')).toBeNull()
   })
 
   it('paints the pixelated texture behind the copy only in primary', () => {
-    const primary = band({ kind: 'primary' })
-    const textures = primary.getByTestId(TESTID).querySelectorAll('[data-kind="pixelate"]')
+    const primary = band({ variant: 'primary' })
+    const textures = primary.getByTestId(TESTID).querySelectorAll('[data-variant="pixelate"]')
     expect(textures.length).toBeGreaterThan(0)
     primary.unmount()
 
-    const panel = band({ kind: 'panel' })
-    expect(panel.getByTestId(TESTID).querySelectorAll('[data-kind="pixelate"]')).toHaveLength(0)
+    const panel = band({ variant: 'panel' })
+    expect(panel.getByTestId(TESTID).querySelectorAll('[data-variant="pixelate"]')).toHaveLength(0)
   })
 
   it('renders no action when none is given', () => {
@@ -148,25 +148,27 @@ describe('ClosingCallToAction', () => {
   })
 
   it('draws only the closing frame in frame, with no copy or action', () => {
-    const { getByTestId, queryByRole } = band({ kind: 'frame' })
+    const { getByTestId, queryByRole } = band({ variant: 'frame' })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'frame')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'frame')
     expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
     expect(queryByRole('heading')).toBeNull()
     expect(queryByRole('link')).toBeNull()
   })
 
   it('draws the frame in frame even with no title and hatch off', () => {
-    const { getByTestId } = render(ClosingCallToAction, { props: { kind: 'frame', hatch: false } })
+    const { getByTestId } = render(ClosingCallToAction, {
+      props: { variant: 'frame', hatch: false }
+    })
 
     expect(getByTestId(TESTID).querySelector('[data-hatch="true"]')).not.toBeNull()
   })
 
   it.each(['split', 'panel', 'primary'] as const)(
     'renders the command as a copyable shell line before the actions in %s',
-    async (kind) => {
+    async (variant) => {
       const { findByRole, getByRole, getAllByRole } = band({
-        kind,
+        variant,
         command: 'npm create azion@latest'
       })
 
@@ -185,17 +187,23 @@ describe('ClosingCallToAction', () => {
   })
 
   it('has no a11y violations with a command line', async () => {
-    const { container, findByRole } = band({ kind: 'primary', command: 'npm create azion@latest' })
+    const { container, findByRole } = band({
+      variant: 'primary',
+      command: 'npm create azion@latest'
+    })
 
     await findByRole('textbox', { name: 'Command' })
     await expectNoA11yViolations(container)
   })
 
-  it.each(['split', 'panel', 'primary'] as const)('has no a11y violations in %s', async (kind) => {
-    const { container } = band({ kind })
+  it.each(['split', 'panel', 'primary'] as const)(
+    'has no a11y violations in %s',
+    async (variant) => {
+      const { container } = band({ variant })
 
-    await expectNoA11yViolations(container)
-  })
+      await expectNoA11yViolations(container)
+    }
+  )
 
   const PROMPT = 'Connect Azion MCP: https://mcp.azion.com'
   const SENTENCE = 'A person and an agent ship the same way.'
@@ -205,8 +213,8 @@ describe('ClosingCallToAction', () => {
       value: 'humans',
       label: 'For humans',
       actions: [
-        { label: 'Start for free', href: '/signup', kind: 'secondary', trailing: true },
-        { label: 'Talk to a specialist', href: '/site/contact', kind: 'outlined', trailing: true }
+        { label: 'Start for free', href: '/signup', variant: 'secondary', trailing: true },
+        { label: 'Talk to a specialist', href: '/site/contact', variant: 'outline', trailing: true }
       ]
     },
     {
@@ -218,7 +226,7 @@ describe('ClosingCallToAction', () => {
   ]
 
   const audienceProps = {
-    kind: 'primary',
+    variant: 'primary',
     anchor: 'contact',
     title: 'Built by you, or your agents.',
     typedLead: 'Drive one platform from the',
@@ -325,7 +333,7 @@ describe('ClosingCallToAction', () => {
 
     it('ignores audiences outside the primary close', () => {
       const { queryByRole, getByRole } = audienceBand({
-        kind: 'panel',
+        variant: 'panel',
         primaryAction: { label: 'Sign up', href: '/sign-up' }
       })
 

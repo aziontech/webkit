@@ -22,18 +22,18 @@
         </p>
       </div>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Deploy in seconds</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">No capacity planning</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Observe every request</h3>
     </BentoGridCell>
     <BentoGridCell
       rows="2"
-      kind="none"
+      variant="none"
       :padded="false"
     >
       <a
@@ -47,13 +47,13 @@
         >
       </a>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">One console</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Logs in real time</h3>
     </BentoGridCell>
-    <BentoGridCell kind="canvas">
+    <BentoGridCell variant="canvas">
       <h3 class="m-0 text-heading-xs text-(--text-default)">Rollback in one click</h3>
     </BentoGridCell>
   </BentoGridRoot>

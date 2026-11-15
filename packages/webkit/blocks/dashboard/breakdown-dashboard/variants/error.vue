@@ -137,7 +137,7 @@
           <Button
             label="Export CSV"
             icon="ai ai-download"
-            kind="outlined"
+            variant="outline"
             size="medium"
             disabled
           />
@@ -189,7 +189,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Spend by category"
                   />
@@ -225,7 +225,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Current split"
                   />
@@ -263,7 +263,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top contributors"
                   />

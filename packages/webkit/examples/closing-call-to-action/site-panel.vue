@@ -15,7 +15,7 @@
     <SectionGap hatch />
 
     <ClosingCallToAction
-      kind="panel"
+      variant="panel"
       title="Ready to join us?"
       description="See our open positions and find the right fit."
       :primary-action="primaryAction"

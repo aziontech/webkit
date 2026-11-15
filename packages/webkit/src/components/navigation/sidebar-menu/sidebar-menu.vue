@@ -207,7 +207,7 @@
 
   const renderNode = (node: SidebarMenuNode): VNode => {
     const children = node.children ?? []
-    const isDrill = (node.kind ?? 'inline') === 'drill'
+    const isDrill = (node.type ?? 'inline') === 'drill'
     const levelGroups = isDrill ? node.groups : undefined
 
     if (children.length === 0 && !levelGroups?.length) {
@@ -235,7 +235,7 @@
         default: () => [
           h(SidebarMenuSubTrigger, {
             label: node.label,
-            kind: node.kind ?? 'inline',
+            type: node.type ?? 'inline',
             icon: node.icon ?? '',
             href: node.href ?? '',
             disabled: node.disabled ?? false,

@@ -119,7 +119,7 @@
         marks="none"
       >
         <CardGrid
-          kind="divider"
+          variant="divider"
           layout="fixed"
           :columns="3"
           :mobile-columns="1"
@@ -170,7 +170,7 @@
             class="min-w-0 bg-(--bg-surface-raised) sm:col-span-2"
           >
             <CallToAction
-              kind="lead"
+              variant="lead"
               class="h-full"
               :eyebrow="closing.eyebrow ?? ''"
               :title="closing.title"
@@ -187,7 +187,7 @@
                   :label="closing.primaryAction.label"
                   :href="closing.primaryAction.href"
                   :target="closing.primaryAction.target"
-                  kind="secondary"
+                  variant="secondary"
                   size="large"
                   :icon="closing.primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
@@ -199,7 +199,7 @@
                   :label="closing.secondaryAction.label"
                   :href="closing.secondaryAction.href"
                   :target="closing.secondaryAction.target"
-                  kind="outlined"
+                  variant="outline"
                   size="large"
                   :icon="closing.secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"

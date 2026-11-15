@@ -523,7 +523,7 @@
             <Tooltip :content="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
               <IconButton
                 icon="ai ai-chevron-up"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 data-reorder="group-up"
                 :ariaLabel="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })"
@@ -535,7 +535,7 @@
             <Tooltip :content="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })">
               <IconButton
                 icon="ai ai-chevron-down"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 data-reorder="group-down"
                 :ariaLabel="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })"
@@ -706,7 +706,7 @@
                         >
                           <IconButton
                             icon="ai ai-chevron-up"
-                            kind="outlined"
+                            variant="outline"
                             :size="size"
                             data-reorder="up"
                             :ariaLabel="
@@ -728,7 +728,7 @@
                         >
                           <IconButton
                             icon="ai ai-chevron-down"
-                            kind="outlined"
+                            variant="outline"
                             :size="size"
                             data-reorder="down"
                             :ariaLabel="
@@ -762,7 +762,7 @@
                         >
                           <IconButton
                             icon="ai ai-trash"
-                            kind="outlined"
+                            variant="outline"
                             :size="size"
                             :ariaLabel="
                               removeLabel(position(index, grouped ? groupIndex : undefined))
@@ -791,7 +791,7 @@
             <Button
               :label="addLabel"
               icon="ai ai-plus"
-              kind="outlined"
+              variant="outline"
               size="small"
               :disabled="disabled || addDisabled || atLimit(group)"
               :data-testid="`${testId}__add`"
@@ -815,7 +815,7 @@
           ref="addEl"
           :label="addLabel"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="disabled || addDisabled || atLimit(items)"
           :data-testid="`${testId}__add`"
@@ -827,7 +827,7 @@
           ref="addEl"
           :label="groupAddLabel"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="!canAddGroup"
           :data-testid="`${testId}__add-group`"

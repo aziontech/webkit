@@ -60,7 +60,7 @@
           <Button
             label="Create new item"
             icon="ai ai-circle-plus"
-            kind="transparent"
+            variant="ghost"
             size="small"
             class="w-full"
             @click="onCreate"

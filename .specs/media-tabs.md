@@ -3,11 +3,11 @@ name: media-tabs
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: efe6e435b21a79ac472b8a217f6af1e5114de250f50e164d52525dd6d3163f75
+checksum: d30761d8e18d98373ff713965e103cd3a2d66d843831b3651132f7558ec1d1f6
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -94,7 +94,7 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 | `autoplay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                    |
 | `autoplayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |
 | `showProgress`     | `boolean`                                | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                          |
-| `texture`          | `TextureMaterialKind`                    | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                     |
+| `texture`          | `TextureMaterialVariant`                    | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                     |
 | `textureSize`      | `TextureMaterialSize`                    | `'medium'`   | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                           |
 | `textureFade`      | `TextureMaterialFade`                    | `'vignette'` | false    | How the ground fades out before the column's edges.                                                                                                                                                   |
 

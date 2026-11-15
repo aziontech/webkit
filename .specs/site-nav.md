@@ -3,10 +3,10 @@ name: site-nav
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 83f31963230d5549fcc265211a8729fa0a930fb5dc6d580ee21b44d22a244230
+checksum: f9cdf03667babfa49f58f9e3c0fc6c62ce5adc8bb8f7ee3a97c99498eeee89fb
 template: 2
 ---
 
@@ -39,7 +39,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 - Give every entry an `href`; an entry without one links to `#`.
 - Listen to `search` and open the page's `Command` from it (`@search="searchOpen = true"` beside `<Command v-model:open="searchOpen">`); the trigger already carries ⌘K / Ctrl K.
 - Leave `secondaryActionOnPhones` off: on a phone the bar keeps the menu button, the mark, the call to action and search, as azion.com does, and Login stays in the sheet footer.
-- The bar is `--layout-header-height` tall: `HeroBand` already takes it out of a screen-filling band; a bare `Hero kind="screen"` takes `offset="var(--layout-header-height)"`, never a literal length.
+- The bar is `--layout-header-height` tall: `HeroBand` already takes it out of a screen-filling band; a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`, never a literal length.
 - Don't wrap the bar, add a second search button beside it, or bind ⌘K yourself.
 
 ## Usage

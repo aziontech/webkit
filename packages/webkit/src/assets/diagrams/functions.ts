@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: run a function on /account',
       icon: 'ai ai-rules-engine',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'function',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Functions',
       title: 'auth-handler',
       icon: 'ai ai-edge-functions',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'response',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Answered here',
       title: 'Response from the edge',
       icon: 'ai ai-check',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'Your API',
       icon: 'ai ai-database'

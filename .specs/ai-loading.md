@@ -3,9 +3,9 @@ name: ai-loading
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 132ff429be3da6f90cb6d0f45ddfa00a41800787d8e81f1abc31083592f877b6
+checksum: 3b624f2493c81a7cd9fecb7b725ae53db263d456dbfdff5aee3b1554a0805bbc
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -54,20 +54,20 @@ response that arrives within a second never flickers a loading state.
 
 <template>
   <AiLoading />
-  <AiLoading kind="bar" label="Generating a table of cache hits" />
+  <AiLoading variant="bar" label="Generating a table of cache hits" />
 </template>
 ```
 
 ## Sub-components
 
-_None. Exports: `"./ai-loading"`; type `AiLoadingKind`. Composed DS components: `progress`._
+_None. Exports: `"./ai-loading"`; type `AiLoadingVariant`. Composed DS components: `progress`._
 
 ## Props
 
 | Prop    | Type                | Default    | Required | JSDoc                                                                                                                         |
 | ------- | ------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `label` | `string`            | `''`       | false    | Visible loading text, `Generating <what>` or `Loading <what>`, with no end punctuation. Empty uses the locale catalog (`Generating a response`). |
-| `kind`  | `'inline' \| 'bar'` | `'inline'` | false    | `inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
+| `variant`  | `'inline' \| 'bar'` | `'inline'` | false    | `inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. |
 | `delay` | `number`            | `1000`     | false    | Milliseconds to wait before showing anything, so a fast response never flickers a loading state.                              |
 
 ## Events
@@ -80,7 +80,7 @@ _No slots._
 
 ## States
 
-- `data-kind`; `data-state="closed"` until the delay has passed, then `data-state="open"`. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
+- `data-variant`; `data-state="closed"` until the delay has passed, then `data-state="open"`. Before that the `role="status"` region exists but is empty, so the text is announced when it appears.
 
 ## Motion & Animations
 

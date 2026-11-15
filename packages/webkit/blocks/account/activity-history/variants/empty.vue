@@ -251,7 +251,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/activity-history"
             target="_blank"
@@ -281,7 +281,7 @@
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="loading"
                 aria-label="Refresh"
@@ -294,7 +294,7 @@
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -316,7 +316,7 @@
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="load"
             />
@@ -345,7 +345,7 @@
               >
                 <Button
                   :label="widenLabel"
-                  kind="secondary"
+                  variant="secondary"
                   size="small"
                   @click="widenRange"
                 />
@@ -391,7 +391,7 @@
                     >{{ value }}</span
                   >
                   <CopyButton
-                    kind="outlined"
+                    variant="outline"
                     :value="value"
                     aria-label="Copy IP address"
                     size="small"
@@ -411,7 +411,7 @@
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />

@@ -15,7 +15,7 @@
     <template #actions>
       <Button
         label="Get started"
-        kind="primary"
+        variant="primary"
         size="large"
         href="#"
       />

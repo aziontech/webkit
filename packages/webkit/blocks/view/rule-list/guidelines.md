@@ -46,7 +46,7 @@ Any move or status change raises a `SaveBar` counting the changes, with Discard 
 
 Loading: triggers read Loading, the search and Add Rule are disabled and each `DataTable` shows its skeleton rows (`loading`). Load failure: the heading and the disabled search stay and a danger `Alert`, "Couldn't load the rules. Check your connection and retry.", with Retry takes the phases' place. Empty phase: a small `EmptyState` ("No request rules yet") with an outlined Add Rule. No match in a phase: a small `EmptyState` in the table's `empty` slot, "No request rule matches “cache”", with an outlined Clear search.
 
-A rule's name is a `Button kind="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/rule-builder` from it, as EditRule shows.
+A rule's name is a `Button variant="link"` named "Edit <rule>" that emits `edit` with the event and the rule; the page opens `edit/rule-builder` from it, as EditRule shows.
 
 Each phase renders every rule, unpaged: paging an ordered list would hide the neighbours a move lands between. A phase is sized for the tens of rules people manage by hand; past about 200 rules, split them across phases or rule sets rather than paging one phase.
 

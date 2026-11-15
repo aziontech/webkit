@@ -3,11 +3,11 @@ name: logo-wall-quote
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: af72120a884ba8c5af03ea798936fa74ce921348445f030204e3657d517be00a
+checksum: 6013e0a040a86b47f21eeaf31e8fce44e792332ebe9a414f2961bc7014623dee
 ---
 
 # LogoWallQuote — Component Spec
@@ -37,7 +37,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 - Pass client registry entries (`@aziontech/webkit/assets/client-registry`) as they stand: each carries `name`, `logo` and either `logoLight` (a light-theme drawing) or `artwork` (which theme a single file must be inverted on), and every mark renders through `Logo`.
 - Without a registry entry, set `logoTreatment` per mark: `monochrome` for a mark drawn in one ink that must follow the theme, `invert-light` for a reversed mark that must flip on the light theme, `as-is` for a colour mark; give a `logoLight` file instead when the light theme needs a different drawing.
 - Give the quote's company mark a `logoLight` (or an `artwork`) the same way, so it stays legible on both themes.
-- Keep to one or two actions under the quote: the primary (`secondary` kind) and an optional outlined `secondaryAction`.
+- Keep to one or two actions under the quote: the primary (`secondary` variant) and an optional outlined `secondaryAction`.
 
 ## Usage
 
@@ -79,18 +79,18 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 ## Props
 
-| Prop              | Type                     | Default     | Required | JSDoc                                                                                                                                                                                                                                      |
-| ----------------- | ------------------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `kind`            | `LogoWallQuoteKind`      | `'wall'`    | false    | Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos.                                                      |
-| `quoteKind`       | `LogoWallQuoteQuoteKind` | `'signed'`  | false    | Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence.                                                                                                                                 |
-| `anchor`          | `string`                 | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                   |
-| `eyebrow`         | `string`                 | `''`        | false    | Overline above the section title.                                                                                                                                                                                                          |
-| `title`           | `string`                 | `''`        | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                                                                                    |
-| `ariaLabel`       | `string`                 | `''`        | false    | Accessible name of the logo wall.                                                                                                                                                                                                          |
-| `logos`           | `LogoWallQuoteLogo[]`    | `[]`        | false    | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'` and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
-| `quote`           | `LogoWallQuoteQuote`     | `undefined` | false    | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent.                                                                                                                |
-| `primaryAction`   | `LogoWallQuoteAction`    | `undefined` | false    | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                        |
-| `secondaryAction` | `LogoWallQuoteAction`    | `undefined` | false    | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                        |
+| Prop              | Type                        | Default     | Required | JSDoc                                                                                                                                                                                                                                      |
+| ----------------- | --------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `variant`         | `LogoWallQuoteVariant`      | `'wall'`    | false    | Layout of the band: `wall` sets the client marks with the quote in their aside, `quote` sets the quote alone as a full-width band (the design sample's QuoteBand) and needs no logos.                                                      |
+| `quoteVariant`    | `LogoWallQuoteQuoteVariant` | `'signed'`  | false    | Register of the quote in the `quote` layout: the featured `highlight` or the band-sized `signed` sentence.                                                                                                                                 |
+| `anchor`          | `string`                    | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                                   |
+| `eyebrow`         | `string`                    | `''`        | false    | Overline above the section title.                                                                                                                                                                                                          |
+| `title`           | `string`                    | `''`        | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                                                                                    |
+| `ariaLabel`       | `string`                    | `''`        | false    | Accessible name of the logo wall.                                                                                                                                                                                                          |
+| `logos`           | `LogoWallQuoteLogo[]`       | `[]`        | false    | The client marks, in order; each is `{ name, logo, logoLight?, logoTreatment?, artwork?, href? }` where `logoTreatment` is `'as-is'`, `'monochrome'` or `'invert-light'` and `artwork` is the registry's `'color'`, `'light'` or `'dark'`. |
+| `quote`           | `LogoWallQuoteQuote`        | `undefined` | false    | The signed quote in the wall's aside; `{ text, name, jobTitle, logo, logoAlt, logoLight?, artwork? }`. Omitted when absent.                                                                                                                |
+| `primaryAction`   | `LogoWallQuoteAction`       | `undefined` | false    | Button under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                                                        |
+| `secondaryAction` | `LogoWallQuoteAction`       | `undefined` | false    | Outlined button beside the primary one under the quote; `{ label, href, trailing?, target? }`. Omitted when absent.                                                                                                                        |
 
 ## Events
 
@@ -104,7 +104,7 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 - Visual states: `default`
 - Empty: when `logos` is empty the band renders nothing
-- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `as-is`), `data-kind`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
+- Each mark is a `Logo` carrying `data-treatment` (the `logoTreatment`, default `as-is`), `data-variant`, `data-artwork` and `data-route` (`pair`, `single` or `wordmark`), so the theme-following inks are driven by data attributes
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed`
 
 ## Motion & Animations
@@ -161,7 +161,7 @@ No built-in strings: the title, the quote, the client names and the action label
 ## Examples
 
 - Default
-- Quote band — `kind="quote"`, the quote alone as a full-width band.
+- Quote band — `variant="quote"`, the quote alone as a full-width band.
 - Registry — the wall and the quote mark built from client registry entries, and both actions; it shows the props this change adds.
 
 ## Constraints — DO NOT

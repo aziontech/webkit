@@ -10,13 +10,13 @@
     <CardGridRoot
       v-for="count in counts"
       :key="count"
-      kind="frame"
+      variant="frame"
       :columns="3"
     >
       <CardGridCell
         v-for="index in count"
         :key="index"
-        kind="canvas"
+        variant="canvas"
       >
         <span class="text-body-md text-(--text-muted)">{{ index }} of {{ count }}</span>
       </CardGridCell>

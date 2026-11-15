@@ -168,7 +168,7 @@
 
 <template>
   <SiteFooter
-    kind="site"
+    variant="site"
     aria-label="Footer"
     home="#"
     home-aria-label="Azion home"

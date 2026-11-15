@@ -3,9 +3,9 @@ name: console-panel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 83267672a87deb5cab696fab4c8c0a0abe06cc10dbc6b7da655625abeb4e5d20
+checksum: 70621a89b799b7d925b88a5a307d01e12a4b2e4d867993285d03ecd48c137294
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
+A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` variant the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
 
 ## When to use
 
@@ -65,21 +65,21 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 | Prop              | Type                     | Default      | Required | JSDoc                                                                                                                                                                                                                              |
 | ----------------- | ------------------------ | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`            | `'console' \| 'diagram'` | `'console'`  | false    | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height.                                                                                                     |
-| `titleKind`       | `SectionTitleKind`       | `'center'` | false    | Layout of the headline block.                                                                                                                                                                                                      |
+| `variant`            | `'console' \| 'diagram'` | `'console'`  | false    | What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height.                                                                                                     |
+| `titleVariant`       | `SectionTitleVariant`       | `'center'` | false    | Layout of the headline block.                                                                                                                                                                                                      |
 | `titlePadding`    | `SectionTitlePadding`    | `'medium'`   | false    | Vertical padding of the headline block.                                                                                                                                                                                            |
 | `size`            | `SectionTitleSize`       | `'medium'`   | false    | Step of the headline on the heading scale.                                                                                                                                                                                         |
 | `anchor`          | `string`                 | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                           |
 | `eyebrow`         | `string`                 | `''`         | false    | Overline above the title.                                                                                                                                                                                                          |
 | `title`           | `string`                 | `''`         | false    | Headline of the band, rendered as its `h2`.                                                                                                                                                                                        |
 | `description`     | `string`                 | `''`         | false    | One or two sentences under the headline.                                                                                                                                                                                           |
-| `texture`         | `TextureMaterialKind`    | `'pixelate'` | false    | Texture the panel is grounded with.                                                                                                                                                                                                |
+| `texture`         | `TextureMaterialVariant`    | `'pixelate'` | false    | Texture the panel is grounded with.                                                                                                                                                                                                |
 | `textureFade`     | `TextureMaterialFade`    | `'top'`      | false    | Axis the texture fades out along.                                                                                                                                                                                                  |
 | `tabs`            | `ConsolePanelTab[]`      | `[]`         | false    | Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene.                                                                                                                                                |
 | `tabsAriaLabel`   | `string`                 | `''`         | false    | Accessible name of the tab control; empty uses the built-in "Console views".                                                                                                                                                       |
 | `crop`            | `number`                 | `0`          | false    | Share of the scene height clipped off its bottom, from 0 to 0.5, from the medium breakpoint up.                                                                                                                                    |
 | `primaryAction`   | `ConsolePanelAction`     | `undefined`  | false    | First button under the headline, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                                                                           |
-| `secondaryAction` | `ConsolePanelAction`     | `undefined`  | false    | Second button under the headline, `outlined`; same shape. Shown only with a label and a link.                                                                                                                                      |
+| `secondaryAction` | `ConsolePanelAction`     | `undefined`  | false    | Second button under the headline, `outline`; same shape. Shown only with a label and a link.                                                                                                                                      |
 
 ## Events
 
@@ -93,7 +93,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 ## States
 
-- `data-kind` mirrors `kind`.
+- `data-variant` mirrors `variant`.
 - The first tab is selected on render.
 - `--mockup-fade-start` / `--mockup-fade-end` are set for a `ProductWidget` scene when cropped.
 
@@ -148,7 +148,7 @@ None of its own; `TextureMaterial` stops under reduced motion.
 ## Examples
 
 - Default — a console scene with two tabs.
-- Diagram — `kind="diagram"` with a diagram at its own height.
+- Diagram — `variant="diagram"` with a diagram at its own height.
 
 ## Constraints — DO NOT
 

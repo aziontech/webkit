@@ -156,7 +156,7 @@ describe('Combobox', () => {
     await fireEvent.focus(input)
     await fireEvent.update(input, 'FEATURE_FLAG')
     const custom = document.body.querySelector<HTMLElement>(
-      '[data-testid="input-combobox__option"][data-kind="custom"]'
+      '[data-testid="input-combobox__option"][data-type="custom"]'
     )
     expect(custom).toBeTruthy()
     await fireEvent.click(custom!)

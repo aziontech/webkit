@@ -3,8 +3,8 @@ name: diagram
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 548204887630c7b4053df1b53056ac09f40d7531991c9bbde4e88999f012e439
+spec_version: 5
+checksum: 4e251348fda113c2d7030c49ec72030ece4914b5567bed1127a4d58437889a3c
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -55,10 +55,10 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
   const spec = {
     nodes: [
-      { key: 'client', kind: 'pill', title: 'Client', icon: 'ai ai-user', active: true },
+      { key: 'client', type: 'pill', title: 'Client', icon: 'ai ai-user', active: true },
       {
         key: 'app',
-        kind: 'card',
+        type: 'card',
         title: 'Application',
         eyebrow: 'Workload',
         icon: 'ai ai-globe',
@@ -66,14 +66,14 @@ A node-and-connector diagram for marketing pages: the request path of an archite
       },
       {
         key: 'firewall',
-        kind: 'card',
+        type: 'card',
         title: 'Firewall',
         eyebrow: 'Product',
         icon: 'ai ai-shield',
         lit: true,
         active: true
       },
-      { key: 'origin', kind: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'ai ai-server' }
+      { key: 'origin', type: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'ai ai-server' }
     ],
     layout: {
       row: [{ node: 'client' }, { node: 'app' }, { node: 'firewall' }, { node: 'origin' }],
@@ -109,8 +109,8 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
 - `DiagramName` — the union of library names above.
 - `DiagramSpec` — `{ ariaLabel?: string; nodes: DiagramNode[]; layout: DiagramLayoutItem; edges: DiagramEdge[] }`.
-- `DiagramNode` — `key`, `kind` (`DiagramNodeKind`: `'card' | 'pill' | 'tile' | 'app' | 'item'`), `title`, and optional `eyebrow`, `status` (`DiagramNodeStatus`: `{ label, severity }` with a `tag` severity), `icon` (icon class), `logo` (full-colour mark URL), `mark` (single-ink mark URL, drawn in the current text colour), `active`, `lit`.
-- `DiagramLayoutItem` — one of `{ node }`, `{ row, align?, gap? }` (`DiagramRowAlign`: `'start' | 'center'`; `DiagramRowGap`: `'default' | 'wide'`), `{ branches }`, `{ grid, columns? }` (`2 | 3`), `{ group, label, kind?, fill?, content }` (`DiagramGroupKind`: `'solid' | 'dashed'`; `DiagramGroupFill`: `'none' | 'primary' | 'secondary'`).
+- `DiagramNode` — `key`, `type` (`DiagramNodeType`: `'card' | 'pill' | 'tile' | 'app' | 'item'`), `title`, and optional `eyebrow`, `status` (`DiagramNodeStatus`: `{ label, severity }` with a `tag` severity), `icon` (icon class), `logo` (full-colour mark URL), `mark` (single-ink mark URL, drawn in the current text colour), `active`, `lit`.
+- `DiagramLayoutItem` — one of `{ node }`, `{ row, align?, gap? }` (`DiagramRowAlign`: `'start' | 'center'`; `DiagramRowGap`: `'default' | 'wide'`), `{ branches }`, `{ grid, columns? }` (`2 | 3`), `{ group, label, variant?, fill?, content }` (`DiagramGroupVariant`: `'solid' | 'dashed'`; `DiagramGroupFill`: `'none' | 'primary' | 'secondary'`).
 - `DiagramEdge` — `from`, `to` (a node or group key), optional `label`, `active`.
 
 ## Events
@@ -130,8 +130,8 @@ _None — every node is drawn from `spec`._
 - **Ready.** The canvas sets `data-ready` once the first measure lands and fades in from transparent, so a diagram never shows unconnected nodes.
 - **Active.** An `active` edge, its ports and its label chip are drawn in the accent colour and painted above the rest; an `active` node is part of the highlighted path.
 - **Lit.** A `lit` card, item or pill gets a primary edge and a primary-and-accent glow; a `lit` tile gets a primary edge.
-- **Groups.** A `group` draws its content inside a registration frame with a small label above it; `kind: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
-- **Node kinds.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
+- **Groups.** A `group` draws its content inside a registration frame with a small label above it; `variant: 'dashed'` dashes its edge and `fill` tints it with the primary or secondary mask.
+- **Node types.** `card` — header row (mark, logo or icon, eyebrow, status tag) over the title, clamped to two lines. `item` — a leading mark, logo or icon, the title with the eyebrow in a mono line under it, and an optional trailing status tag. `pill` — a rounded chip with an optional icon. `tile` — an icon-only cell inside a registration frame, its title shown in a tooltip. `app` — a quiet window placeholder (three dots, the title, placeholder bars) that fades out at the bottom.
 - **Test ids.** Root fallback `marketing-diagram` (consumer override wins); `${testId}__canvas` on the measured canvas.
 
 ## Motion & Animations
@@ -187,11 +187,11 @@ _None — every node is drawn from `spec`._
 
 - Default — a named diagram from the library (`name`), with Controls to switch between every registered name.
 - Spec — a one-off request path passed as `spec`, from a client through an application to the lit product and its outcomes, with labelled, active edges. Justified addition: `spec` is the second way in, for a diagram the library does not have, and Default shows only `name`.
-- NodeKinds — composite story drawing one node of each kind (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node kind is the component's one visual axis, carried in the data rather than a `kind` prop, so no Types story covers it.
+- NodeKinds — composite story drawing one node of each type (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node type is the component's one visual axis, carried in the data rather than a `type` prop, so no Types story covers it.
 - Groups — a framed group with a grid of tiles and a dashed, tinted group, connected to the nodes beside them. Justified addition: groups and grids are the layout primitives a Default row does not show.
 - Flow — a five-node vertical flow in a 640 px docs column (terminal → project folder → CLI → API → account resources) with a labelled `azion deploy` edge. Justified addition: it is the centred stacked geometry — connectors through each node's centre, the chip centred on its line — that the docs use and no other example reaches (Spec stacks as a tree).
 
-<!-- Types/Sizes omitted: Diagram has no `kind` or `size` prop. Loading/Disabled omitted: it declares neither prop. -->
+<!-- Types/Sizes omitted: Diagram has no `type` or `size` prop. Loading/Disabled omitted: it declares neither prop. -->
 
 ## Constraints — DO NOT
 

@@ -99,7 +99,7 @@ describe('ArticleIndex', () => {
     it('renders one linked row per article, in order, in the byline layout', () => {
       const { getByRole } = band()
 
-      expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('byline')
+      expect(getByRole('list', { name: LIST }).getAttribute('data-variant')).toBe('byline')
       expect(headlines(getByRole)).toEqual(items.map((item) => item.title))
       expect(getByRole('link', { name: items[0]?.title }).getAttribute('href')).toBe(items[0]?.href)
     })
@@ -205,10 +205,10 @@ describe('ArticleIndex', () => {
       expect(getByRole('region', { name: 'All articles' })).toBeInTheDocument()
     })
 
-    it('mirrors rowKind on the list', () => {
-      const { getByRole } = band({ rowKind: 'center' })
+    it('mirrors rowVariant on the list', () => {
+      const { getByRole } = band({ rowVariant: 'center' })
 
-      expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('center')
+      expect(getByRole('list', { name: LIST }).getAttribute('data-variant')).toBe('center')
     })
 
     it('draws the client mark when a row has no cover, and an author photo when given', () => {
@@ -402,7 +402,7 @@ describe('ArticleIndex', () => {
       it('renders one linked row per resource, in order, in the centered layout', () => {
         const { getByRole } = band()
 
-        expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('center')
+        expect(getByRole('list', { name: LIST }).getAttribute('data-variant')).toBe('center')
         expect(headlines(getByRole)).toEqual(items.map((item) => item.title))
         expect(getByRole('link', { name: items[1]?.title }).getAttribute('href')).toBe(
           items[1]?.href
@@ -510,10 +510,10 @@ describe('ArticleIndex', () => {
         expect(await screen.findByRole('textbox', { name: 'Search topic' })).toBeInTheDocument()
       })
 
-      it('mirrors rowKind on the list', () => {
-        const { getByRole } = band({ rowKind: 'byline' })
+      it('mirrors rowVariant on the list', () => {
+        const { getByRole } = band({ rowVariant: 'byline' })
 
-        expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('byline')
+        expect(getByRole('list', { name: LIST }).getAttribute('data-variant')).toBe('byline')
       })
 
       it('draws the client mark when a row has no cover and opens an external row in a new tab', () => {
@@ -566,16 +566,16 @@ describe('ArticleIndex', () => {
 
       const list = getByRole('list', { name: LIST })
       expect(list.getAttribute('data-filters')).toBe('facets')
-      expect(list.getAttribute('data-kind')).toBe('center')
+      expect(list.getAttribute('data-variant')).toBe('center')
       expect(getByRole('combobox', { name: 'Topic' })).toBeInTheDocument()
       expect(queryByRole('radiogroup', { name: 'Category' })).toBeNull()
       expect(queryByRole('textbox', { name: SEARCH.searchAriaLabel })).toBeNull()
     })
 
-    it('keeps an explicit rowKind over the filter default', () => {
-      const { getByRole } = band({ filters: 'facets', facets: [facet], rowKind: 'byline' })
+    it('keeps an explicit rowVariant over the filter default', () => {
+      const { getByRole } = band({ filters: 'facets', facets: [facet], rowVariant: 'byline' })
 
-      expect(getByRole('list', { name: LIST }).getAttribute('data-kind')).toBe('byline')
+      expect(getByRole('list', { name: LIST }).getAttribute('data-variant')).toBe('byline')
     })
   })
 })

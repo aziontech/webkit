@@ -2,7 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h } from 'vue'
 
-import KindsExample from '../../../../examples/stat-tile/kinds.vue'
+import KindsExample from '../../../../examples/stat-tile/variants.vue'
 import BesideCardExample from '../../../../examples/stat-tile-group/beside-card.vue'
 import DefaultExample from '../../../../examples/stat-tile-group/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'

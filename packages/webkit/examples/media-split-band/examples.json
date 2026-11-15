@@ -14,7 +14,7 @@
     },
     {
       "name": "Code",
-      "summary": "The Application Accelerator band: the claim beside a one-file code sample (`codeTabs`), drawn with a filename bar, and a quiet \"Learn more\" text button (`kind: 'transparent'`). A band showing code never links to its lone action, since the sample holds tabs and a copy button.",
+      "summary": "The Application Accelerator band: the claim beside a one-file code sample (`codeTabs`), drawn with a filename bar, and a quiet \"Learn more\" text button (`variant: 'ghost'`). A band showing code never links to its lone action, since the sample holds tabs and a copy button.",
       "file": "code.vue"
     },
     {

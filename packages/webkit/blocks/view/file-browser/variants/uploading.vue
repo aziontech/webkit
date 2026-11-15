@@ -135,7 +135,7 @@
     },
     { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const addToFilesActions = [
@@ -484,7 +484,7 @@
     <div class="flex h-full min-h-0 flex-col">
       <section class="relative flex min-h-0 flex-col">
         <FileDropzone
-          kind="overlay"
+          variant="overlay"
           :title="`Drop files to upload them to ${folderPath.length ? folderPath.at(-1) : rootName}`"
           description="Up to 300 MB per file."
           @drop="onPageDrop"
@@ -534,7 +534,7 @@
                     >
                       <IconButton
                         icon="ai ai-refresh"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         :loading="loading"
                         aria-label="Refresh"
@@ -547,7 +547,7 @@
                     >
                       <IconButton
                         icon="ai ai-download"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         :disabled="!tableEl"
                         aria-label="Download CSV"
@@ -575,7 +575,7 @@
                       <SplitButton
                         label="Add to files"
                         icon="ai ai-plus"
-                        kind="primary"
+                        variant="primary"
                         size="medium"
                         :items="addToFilesActions"
                         @click="onAddClick"
@@ -607,7 +607,7 @@
                   <Button
                     key="button-1"
                     v-if="row.kind === 'parent'"
-                    kind="link"
+                    variant="link"
                     label=".."
                     aria-label="Go up to the parent folder"
                     @click.stop="goUp"
@@ -615,7 +615,7 @@
                   <Button
                     key="button-2"
                     v-else-if="row.kind === 'folder'"
-                    kind="link"
+                    variant="link"
                     :label="value"
                     class="min-w-0"
                     @click.stop="enterFolder(row.name)"
@@ -699,7 +699,7 @@
                   <template #actions>
                     <Button
                       label="Clear search"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="search = ''"
                     />
@@ -716,7 +716,7 @@
                     <SplitButton
                       label="Add to files"
                       icon="ai ai-plus"
-                      kind="secondary"
+                      variant="secondary"
                       size="medium"
                       :items="addToFilesActions"
                       @click="onAddClick"
@@ -764,13 +764,13 @@
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="close"
         />
         <Button
           :label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           @click="confirmDelete"
@@ -806,7 +806,7 @@
                 key="button-1"
                 v-if="uploadMode === 'folder'"
                 label="Browse folder"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
                 icon="ai ai-folder-open"
                 @click="folderInputEl?.click()"
@@ -815,7 +815,7 @@
                 key="button-2"
                 v-else
                 label="Browse files"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
                 @click="pickerInputEl?.click()"
               />
@@ -851,13 +851,13 @@
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               @click="uploadOpen = false"
             />
             <Button
               :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
-              kind="primary"
+              variant="primary"
               size="medium"
               icon="ai ai-upload"
               :disabled="!pickable.length"
@@ -879,7 +879,7 @@
         <Button
           v-if="transfer.some((item) => item.status === 'success')"
           label="Open folder"
-          kind="secondary"
+          variant="secondary"
           size="small"
           @click="openFolder(lastTarget)"
         />

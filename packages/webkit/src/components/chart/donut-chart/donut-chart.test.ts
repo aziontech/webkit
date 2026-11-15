@@ -26,9 +26,9 @@ describe('DonutChart', () => {
     expect(mount({ 'data-testid': 'countries' }).getByTestId('countries')).toBeTruthy()
   })
 
-  it('maps kind and size to data attributes', () => {
-    const root = mount({ kind: 'pie', size: 'large' }).getByTestId('chart-donut-chart')
-    expect(root.getAttribute('data-kind')).toBe('pie')
+  it('maps type and size to data attributes', () => {
+    const root = mount({ type: 'pie', size: 'large' }).getByTestId('chart-donut-chart')
+    expect(root.getAttribute('data-type')).toBe('pie')
     expect(root.getAttribute('data-size')).toBe('large')
   })
 
@@ -157,7 +157,7 @@ describe('DonutChart', () => {
   })
 
   it('has no a11y violations in the ring, pie and table views', async () => {
-    for (const props of [{}, { kind: 'pie' }, { tableView: true }, { loading: true }]) {
+    for (const props of [{}, { type: 'pie' }, { tableView: true }, { loading: true }]) {
       const view = mount(props)
       await expectNoA11yViolations(view.container)
       view.unmount()

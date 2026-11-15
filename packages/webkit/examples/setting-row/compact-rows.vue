@@ -16,7 +16,7 @@
         <SettingRow
           title="Allow social login"
           description="Users linked to the account can log in with their social network credentials."
-          kind="compact"
+          variant="compact"
         >
           <Switch
             v-model="form.allowSocialLogin"
@@ -26,7 +26,7 @@
         <SettingRow
           title="Enforce multi-factor authentication"
           description="MFA is required on login for every user linked to this account."
-          kind="compact"
+          variant="compact"
         >
           <Switch
             v-model="form.enforceMfa"
@@ -36,12 +36,12 @@
         <SettingRow
           title="Authenticator devices"
           description="Manage the devices and recovery codes registered for this account."
-          kind="compact"
+          variant="compact"
         >
           <Button
             type="button"
             label="Manage"
-            kind="outlined"
+            variant="outline"
             size="medium"
           />
         </SettingRow>

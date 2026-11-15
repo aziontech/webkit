@@ -38,7 +38,7 @@
   })
 
   interface Props {
-    /** Fields the menu lists, in order, each with its kind and values. */
+    /** Fields the menu lists, in order, each with its type and values. */
     fields?: FilterMenuField[]
     /** Text of the trigger button. Empty uses the locale catalog (`Filter`). */
     label?: string
@@ -307,7 +307,7 @@
       <Button
         :label="triggerLabel"
         :aria-label="triggerName"
-        kind="outlined"
+        variant="outline"
         :size="size"
         :disabled="disabled"
         icon="ai ai-filter"
@@ -365,7 +365,7 @@
                 <IconButton
                   :data-testid="`${testId}__back`"
                   icon="ai ai-chevron-left"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   :aria-label="customField ? t('filterMenu.backToPeriods') : t('filterMenu.back')"
                   @click="customField ? leaveCustom() : back()"
@@ -463,7 +463,7 @@
                         :alt="option.label"
                         :label="option.label"
                         size="small"
-                        kind="square"
+                        variant="square"
                         class="shrink-0"
                       />
                       <bdi class="grow truncate">{{ option.label }}</bdi>

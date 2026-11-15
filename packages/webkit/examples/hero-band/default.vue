@@ -4,7 +4,7 @@
 
 <template>
   <HeroBand
-    kind="title-band"
+    variant="title-band"
     size="large"
     eyebrow="Cache"
     title="Deliver content fast, worldwide"

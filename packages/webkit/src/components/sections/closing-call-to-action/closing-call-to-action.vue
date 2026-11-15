@@ -13,7 +13,7 @@
   })
 
   /** Layout of the band. */
-  export type ClosingCallToActionKind = 'split' | 'panel' | 'primary' | 'frame'
+  export type ClosingCallToActionVariant = 'split' | 'panel' | 'primary' | 'frame'
 
   /** One call to action of the band. */
   export type ClosingCallToActionAction = {
@@ -26,7 +26,7 @@
   }
 
   /** Visual weight of an audience action. */
-  export type ClosingCallToActionAudienceActionKind = 'secondary' | 'outlined'
+  export type ClosingCallToActionAudienceActionVariant = 'secondary' | 'outline'
 
   /** One action of an audience. */
   export type ClosingCallToActionAudienceAction = {
@@ -34,8 +34,8 @@
     label: string
     /** Destination the action links to. */
     href: string
-    /** Visual weight: `secondary` is the white pill, `outlined` the quiet one; defaults to `outlined`. */
-    kind?: ClosingCallToActionAudienceActionKind
+    /** Visual weight: `secondary` is the white pill, `outline` the quiet one; defaults to `outline`. */
+    variant?: ClosingCallToActionAudienceActionVariant
     /** Closes the label on a trailing chevron that reads as "go". */
     trailing?: boolean
   }
@@ -64,7 +64,7 @@
 
   interface Props {
     /** Layout of the band: `split` is a raised lead cell beside an aside cell over a tall closing frame, `panel` one surface over a short closing frame, `primary` a centred ask under a pixelated texture over a tall closing frame, `frame` the tall closing frame alone. */
-    kind?: ClosingCallToActionKind
+    variant?: ClosingCallToActionVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Short overline above the headline; not drawn in `primary`. */
@@ -83,7 +83,7 @@
     command?: string
     /** Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. */
     hatch?: boolean
-    /** The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, kind?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. */
+    /** The ways in of the `primary` close, in switch order; each is `{ value, label, copy?, actions? }` (`copy` is `{ label, text, shell? }`, `shell` drawing the `$` prompt; an action is `{ label, href, variant?, trailing? }`) and the first one opens. Replaces the command and the two actions; the switch renders only with two or more. */
     audiences?: ClosingCallToActionAudience[]
     /** Fixed opening of the typed line under the audiences, before the typed word. */
     typedLead?: string
@@ -96,7 +96,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'split',
+    variant: 'split',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -127,13 +127,13 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-closing-call-to-action'
   )
 
-  const isSplit = computed(() => props.kind === 'split')
+  const isSplit = computed(() => props.variant === 'split')
 
-  const isPrimary = computed(() => props.kind === 'primary')
+  const isPrimary = computed(() => props.variant === 'primary')
 
-  const isFrame = computed(() => props.kind === 'frame')
+  const isFrame = computed(() => props.variant === 'frame')
 
-  const bandKind = computed(() => (props.kind === 'frame' ? 'split' : props.kind))
+  const bandKind = computed(() => (props.variant === 'frame' ? 'split' : props.variant))
 
   const hasAudiences = computed(() => isPrimary.value && props.audiences.length > 0)
 
@@ -152,7 +152,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     class="group scroll-mt-(--spacing-2xl)"
   >
     <template v-if="title && !isFrame">
@@ -162,7 +162,7 @@
       >
         <CallToAction
           framed
-          :kind="bandKind"
+          :variant="bandKind"
           :eyebrow="isPrimary ? '' : eyebrow"
           :title="title"
           :title-muted="isSplit ? titleMuted : ''"
@@ -173,7 +173,7 @@
             #background
           >
             <TextureMaterial
-              kind="pixelate"
+              variant="pixelate"
               size="small"
               fade="bottom"
             />
@@ -200,7 +200,7 @@
                 v-if="primaryAction"
                 :label="primaryAction.label"
                 :href="primaryAction.href"
-                kind="secondary"
+                variant="secondary"
                 size="large"
                 :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
@@ -211,7 +211,7 @@
                 v-if="!isSplit && secondaryAction"
                 :label="secondaryAction.label"
                 :href="secondaryAction.href"
-                kind="outlined"
+                variant="outline"
                 size="large"
                 :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
@@ -226,7 +226,7 @@
             <Button
               :label="secondaryAction.label"
               :href="secondaryAction.href"
-              kind="outlined"
+              variant="outline"
               size="large"
               :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
@@ -241,9 +241,9 @@
       borders="none"
       marks="all"
       data-hatch="true"
-      class="h-[calc(var(--spacing-2xl)*2)] group-data-[kind=panel]:h-(--spacing-2xl)"
+      class="h-[calc(var(--spacing-2xl)*2)] group-data-[variant=panel]:h-(--spacing-2xl)"
     >
-      <TextureMaterial kind="lines" />
+      <TextureMaterial variant="lines" />
     </FrameBox>
   </div>
 </template>

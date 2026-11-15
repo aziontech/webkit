@@ -11,7 +11,7 @@
     <template #actions>
       <Button label="Start for free" />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Talk to a specialist"
       />
     </template>

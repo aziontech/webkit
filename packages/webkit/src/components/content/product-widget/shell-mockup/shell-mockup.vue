@@ -7,7 +7,7 @@
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import TextureMaterial, {
     type TextureMaterialFade,
-    type TextureMaterialKind
+    type TextureMaterialVariant
   } from '../../../marketing/texture-material/texture-material.vue'
   import Avatar from '../../avatar/avatar.vue'
   import Brand from '../../brand/brand.vue'
@@ -17,7 +17,7 @@
   defineOptions({ name: 'ShellMockup', inheritAttrs: false })
 
   /** How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. */
-  export type ShellMockupKind = 'window' | 'bare'
+  export type ShellMockupVariant = 'window' | 'bare'
   /** Console generation the shell draws: the current one, or the previous one with its top bar. */
   export type ShellMockupShell = 'console' | 'legacy'
   /** Edge the mockup fades out along; y fades top and bottom. */
@@ -28,7 +28,7 @@
 
   interface Props {
     /** How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. */
-    kind?: ShellMockupKind
+    variant?: ShellMockupVariant
     /** Console generation the shell draws: the current one, or the previous one with its top bar. */
     shell?: ShellMockupShell
     /** Design width of the frame from `md` up; the frame scales to fit its host. */
@@ -44,7 +44,7 @@
     /** Active entry of the console's side rail; empty renders no rail. */
     rail?: string
     /** Texture the frame is grounded with, behind the body. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** How the frame's texture fades out before its edges. */
     textureFade?: TextureMaterialFade
     /** Duration token of each part's travel. */
@@ -60,7 +60,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'window',
+    variant: 'window',
     shell: 'console',
     width: 860,
     mobileWidth: 390,
@@ -249,17 +249,17 @@
     :inert="interactive ? undefined : true"
     :aria-hidden="interactive ? undefined : 'true'"
     :data-interactive="interactive || null"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-fade="fade"
-    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip data-[kind=window]:rounded-(--shape-card) data-[kind=window]:bg-(--bg-canvas) data-[kind=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[kind=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[kind=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[kind=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]"
+    class="relative m-0 h-full w-full min-w-0 overflow-hidden select-none pointer-events-none data-interactive:pointer-events-auto data-interactive:select-auto data-[variant=bare]:overflow-x-visible data-[variant=bare]:overflow-y-clip data-[variant=window]:rounded-(--shape-card) data-[variant=window]:bg-(--bg-canvas) data-[variant=window]:[background-clip:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[variant=window]:[background-image:linear-gradient(var(--bg-canvas),var(--bg-canvas)),var(--illustration-rim,linear-gradient(135deg,var(--border-default)_0%,var(--border-default)_18%,transparent_45%,transparent_55%,var(--border-default)_82%,var(--border-default)_100%)),linear-gradient(var(--bg-canvas),var(--bg-canvas))] data-[variant=window]:[background-origin:var(--illustration-rim-boxes,padding-box,border-box,border-box)] data-[variant=window]:[border:var(--illustration-rim-width-hairline,var(--border-width-default))_solid_transparent]"
   >
     <div
-      :data-kind="kind"
-      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[kind=window]:bg-(--bg-canvas)"
+      :data-variant="variant"
+      class="absolute top-0 start-0 flex origin-top-left rtl:origin-top-right flex-col data-[variant=window]:bg-(--bg-canvas)"
       :style="frameStyle"
     >
       <TextureMaterial
-        :kind="texture"
+        :variant="texture"
         size="small"
         :fade="textureFade"
       />
@@ -272,7 +272,7 @@
       >
         <span class="inline-flex shrink-0 items-center">
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </span>
@@ -289,7 +289,7 @@
           <Avatar
             label="myemail@example.com"
             size="small"
-            kind="square"
+            variant="square"
           />
         </span>
       </div>
@@ -302,18 +302,18 @@
       >
         <IconButton
           icon="ai ai-menu"
-          kind="outlined"
+          variant="outline"
           size="small"
           ariaLabel="Open navigation"
         />
         <Brand
-          kind="default"
+          variant="default"
           size="small"
         />
         <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
           <Button
             label="Create"
-            kind="primary"
+            variant="primary"
             size="small"
             icon="ai ai-plus"
           />
@@ -324,19 +324,19 @@
           />
           <Button
             label="Feedback"
-            kind="outlined"
+            variant="outline"
             size="small"
             icon="ai ai-flag"
           />
           <IconButton
             icon="ai ai-circle-help"
-            kind="outlined"
+            variant="outline"
             size="small"
             ariaLabel="Help"
           />
           <IconButton
             icon="ai ai-user"
-            kind="outlined"
+            variant="outline"
             size="small"
             ariaLabel="Account"
           />
@@ -352,7 +352,7 @@
         >
           <div class="flex h-14 shrink-0 items-center px-(--spacing-md)">
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </div>
@@ -430,7 +430,7 @@
               </span>
               <Button
                 label="Create"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 icon="ai ai-circle-plus"
               />
@@ -442,14 +442,14 @@
               <Avatar
                 label="myemail@example.com"
                 size="small"
-                kind="square"
+                variant="square"
               />
             </div>
           </div>
 
           <div
-            :data-kind="kind"
-            class="min-h-0 min-w-0 flex-1 overflow-hidden data-[kind=bare]:overflow-x-visible data-[kind=bare]:overflow-y-clip"
+            :data-variant="variant"
+            class="min-h-0 min-w-0 flex-1 overflow-hidden data-[variant=bare]:overflow-x-visible data-[variant=bare]:overflow-y-clip"
           >
             <slot />
           </div>

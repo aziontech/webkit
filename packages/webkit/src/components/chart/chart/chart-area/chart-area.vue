@@ -35,7 +35,7 @@
 
   onScopeDispose(
     ctx.registerMark(() => ({
-      kind: 'area',
+      type: 'area',
       stacked: props.stacked,
       labeled: false,
       ids: ids.value

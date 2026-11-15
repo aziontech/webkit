@@ -5,7 +5,7 @@ import type { ListboxFocusIntent } from '../../../composables/use-listbox-conten
 export type MultiSelectSize = 'small' | 'medium' | 'large'
 
 /** How the trigger shows the selection: joined labels or one removable chip per value. */
-export type MultiSelectKind = 'summary' | 'chips'
+export type MultiSelectVariant = 'summary' | 'chips'
 
 export type MultiSelectCommitEvent = MouseEvent | KeyboardEvent
 
@@ -50,7 +50,7 @@ export interface MultiSelectContext {
   labelsPending: ComputedRef<boolean>
   /** Recorded label of a value, or the value as text. */
   labelOf: (value: unknown) => string
-  kind: ComputedRef<MultiSelectKind>
+  variant: ComputedRef<MultiSelectVariant>
   chipLimit: ComputedRef<number>
   searchable: ComputedRef<boolean>
   allowCustom: ComputedRef<boolean>

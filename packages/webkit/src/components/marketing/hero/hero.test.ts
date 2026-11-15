@@ -14,7 +14,7 @@ describe('Hero', () => {
 
     expect(root).toBeInTheDocument()
     expect(root.tagName).toBe('SECTION')
-    expect(root).toHaveAttribute('data-kind', 'band')
+    expect(root).toHaveAttribute('data-variant', 'band')
     expect(root).toHaveAttribute('data-width', '7xl')
     expect(root).toHaveAttribute('data-bordered')
     expect(root).toHaveAttribute('data-padded')
@@ -42,9 +42,9 @@ describe('Hero', () => {
     }
   )
 
-  it.each(['band', 'screen'] as const)('mirrors the %s kind onto data-kind', (kind) => {
-    const { getByTestId } = render(Hero, { props: { kind } })
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+  it.each(['band', 'screen'] as const)('mirrors the %s variant onto data-variant', (variant) => {
+    const { getByTestId } = render(Hero, { props: { variant: variant } })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
   })
 
   it('exposes offset and bottomHeight as custom properties on the root', () => {
@@ -97,7 +97,7 @@ describe('Hero', () => {
       })
       const layer = getByTestId('marketing-texture-material')
 
-      expect(layer).toHaveAttribute('data-kind', texture)
+      expect(layer).toHaveAttribute('data-variant', texture)
       expect(layer.closest('[aria-hidden="true"]')).not.toBeNull()
     }
   )
@@ -121,7 +121,7 @@ describe('Hero', () => {
   it.each(['start', 'center', 'end'] as const)(
     'carries the %s content alignment on data-align',
     (align) => {
-      const { getByTestId } = render(Hero, { props: { kind: 'screen', align } })
+      const { getByTestId } = render(Hero, { props: { variant: 'screen', align } })
       expect(getByTestId(TESTID)).toHaveAttribute('data-align', align)
     }
   )
@@ -148,7 +148,7 @@ describe('Hero', () => {
   })
 
   it('centers its content by default', () => {
-    const { getByTestId } = render(Hero, { props: { kind: 'screen' } })
+    const { getByTestId } = render(Hero, { props: { variant: 'screen' } })
     expect(getByTestId(TESTID)).toHaveAttribute('data-align', 'center')
   })
 
@@ -224,7 +224,7 @@ describe('Hero', () => {
       })
       const layer = getByTestId('marketing-texture-material')
 
-      expect(layer).toHaveAttribute('data-kind', floorTexture)
+      expect(layer).toHaveAttribute('data-variant', floorTexture)
       expect(layer.closest('[data-floor]')).not.toBeNull()
     }
   )
@@ -244,9 +244,9 @@ describe('Hero', () => {
     })
     const [backdrop, floor] = getAllByTestId('marketing-texture-material')
 
-    expect(backdrop).toHaveAttribute('data-kind', 'dots')
+    expect(backdrop).toHaveAttribute('data-variant', 'dots')
     expect(backdrop.closest('[data-floor]')).toBeNull()
-    expect(floor).toHaveAttribute('data-kind', 'pixelate')
+    expect(floor).toHaveAttribute('data-variant', 'pixelate')
     expect(floor.closest('[data-floor]')).not.toBeNull()
   })
 
@@ -383,7 +383,7 @@ describe('Hero', () => {
 
   it('has no accessibility violations with both asset windows filled', async () => {
     const { container } = render(Hero, {
-      props: { kind: 'screen', texture: 'dots', textureFade: 'bottom' },
+      props: { variant: 'screen', texture: 'dots', textureFade: 'bottom' },
       slots: {
         top: '<div>scene</div>',
         bottom: '<div>carousel</div>',

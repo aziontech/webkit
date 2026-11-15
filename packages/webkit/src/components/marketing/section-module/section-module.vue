@@ -9,7 +9,7 @@
   })
 
   /** Layout of the default header row. */
-  export type SectionModuleKind = 'center' | 'start' | 'split'
+  export type SectionModuleVariant = 'center' | 'start' | 'split'
 
   interface Props {
     /** Headline of the module's header row, rendered as its `h2`. */
@@ -19,7 +19,7 @@
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
     /** Layout of the default header row. */
-    kind?: SectionModuleKind
+    variant?: SectionModuleVariant
     /** Draw the top rule that divides this module from the one above it. */
     divided?: boolean
     /** Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. */
@@ -30,7 +30,7 @@
     title: '',
     description: '',
     eyebrow: '',
-    kind: 'start',
+    variant: 'start',
     divided: true,
     padded: true
   })
@@ -53,7 +53,7 @@
   <section
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-divided="props.divided || null"
     :data-padded="props.padded || null"
     class="w-full data-[divided]:border-t data-[divided]:border-(--border-default)"
@@ -63,7 +63,7 @@
       name="header"
     >
       <SectionTitle
-        :kind="kind"
+        :variant="variant"
         :title="title"
         :description="description"
         :eyebrow="eyebrow"

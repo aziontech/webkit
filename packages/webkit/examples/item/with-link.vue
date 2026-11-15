@@ -5,7 +5,7 @@
 <template>
   <div class="flex w-full flex-col gap-(--spacing-4)">
     <Item
-      kind="outlined"
+      variant="outline"
       href="#"
     >
       <Item.Content>
@@ -20,11 +20,11 @@
       </Item.Actions>
     </Item>
     <Item
-      kind="outlined"
+      variant="outline"
       size="small"
       href="#"
     >
-      <Item.Media kind="icon">
+      <Item.Media type="icon">
         <i
           class="ai ai-verified text-[length:inherit] leading-none"
           aria-hidden="true"

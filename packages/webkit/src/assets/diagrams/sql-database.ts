@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'function',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Functions',
       title: 'orders-api',
       icon: 'ai ai-edge-functions',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'sql',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'SQL Database',
       title: 'orders, replicated',
       icon: 'ai ai-edge-sql',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'replica',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Read replica',
       title: 'Nearest data center',
       icon: 'ai ai-edge-nodes',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'primary',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Primary',
       title: 'Writes applied once',
       icon: 'ai ai-database'

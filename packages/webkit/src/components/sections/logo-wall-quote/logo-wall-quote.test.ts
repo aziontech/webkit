@@ -117,7 +117,7 @@ describe('LogoWallQuote', () => {
       ]
     })
 
-    expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('data-kind', 'monochrome')
+    expect(getByRole('img', { name: 'Banco' })).toHaveAttribute('data-variant', 'monochrome')
     expect(getByRole('img', { name: 'Itau' })).toHaveAttribute('data-artwork', 'light')
   })
 
@@ -193,10 +193,10 @@ describe('LogoWallQuote', () => {
   describe('quote band', () => {
     it('renders the quote alone with no logos', () => {
       const { getByTestId, getByText } = render(LogoWallQuote, {
-        props: { kind: 'quote', quote, anchor: 'quote' }
+        props: { variant: 'quote', quote, anchor: 'quote' }
       })
       const root = getByTestId(TESTID)
-      expect(root).toHaveAttribute('data-kind', 'quote')
+      expect(root).toHaveAttribute('data-variant', 'quote')
       expect(root).toHaveAttribute('id', 'quote')
       expect(getByText(quote.text)).toBeInTheDocument()
     })
@@ -204,7 +204,7 @@ describe('LogoWallQuote', () => {
     it('signs the quote band with the theme-aware company mark and both actions', () => {
       const { getByRole } = render(LogoWallQuote, {
         props: {
-          kind: 'quote',
+          variant: 'quote',
           quote: { ...quote, artwork: 'light' },
           primaryAction,
           secondaryAction: { label: 'Talk to sales', href: '/contact' }
@@ -216,7 +216,7 @@ describe('LogoWallQuote', () => {
     })
 
     it('renders nothing in the quote layout without a quote', () => {
-      const { queryByTestId } = render(LogoWallQuote, { props: { kind: 'quote' } })
+      const { queryByTestId } = render(LogoWallQuote, { props: { variant: 'quote' } })
       expect(queryByTestId(TESTID)).toBeNull()
     })
 

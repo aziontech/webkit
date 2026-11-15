@@ -397,7 +397,7 @@
     filterFields.value.map((field) => ({
       id: field.id,
       label: field.label,
-      kind: field.kind === 'range' ? 'date' : 'multiple',
+      type: field.kind === 'range' ? 'date' : 'multiple',
       options: (field.options ?? [])
         .filter((option) => !option.custom)
         .map((option) => ({ value: option.value as string | number, label: option.label }))
@@ -741,7 +741,7 @@
           >
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :loading="loading"
               aria-label="Refresh"
@@ -755,7 +755,7 @@
           >
             <IconButton
               icon="ai ai-download"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="!tableEl"
               aria-label="Download CSV"
@@ -875,7 +875,7 @@
                             v-for="entry in topFieldValues(field.id)"
                             :key="String(entry.value)"
                             clickable
-                            kind="option"
+                            variant="option"
                             :aria-pressed="isValueApplied(field.id, entry.value)"
                             @click="toggleFieldValue(field.id, entry.value)"
                           >
@@ -994,7 +994,7 @@
                                     v-for="entry in topFieldValues(field.id)"
                                     :key="String(entry.value)"
                                     clickable
-                                    kind="option"
+                                    variant="option"
                                     :aria-pressed="isValueApplied(field.id, entry.value)"
                                     @click="toggleFieldValue(field.id, entry.value)"
                                   >
@@ -1092,7 +1092,7 @@
               <Tooltip content="Close">
                 <IconButton
                   icon="ai ai-x"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Close the event document"
                   @click="closeDocument"

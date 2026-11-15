@@ -15,11 +15,11 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 
 ### A. Site chrome — `SiteLayout` (required)
 
-Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `kind: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
+Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 
 ### B. Opening band — `Hero` (required)
 
-`kind="band"`, `size="large"`, `max-width="site"`; `Hero.Title` carries the eyebrow, title, description and the two actions, centred.
+`variant="band"`, `size="large"`, `max-width="site"`; `Hero.Title` carries the eyebrow, title, description and the two actions, centred.
 
 ### C. Actions — `Button` (required)
 
@@ -47,7 +47,7 @@ A row of headline figures inside a `FrameBox`.
 
 ### I. Texture — `TextureMaterial` (optional)
 
-`kind="lines"`, the decorative fill of the closing frame.
+`variant="lines"`, the decorative fill of the closing frame.
 
 ## Do
 

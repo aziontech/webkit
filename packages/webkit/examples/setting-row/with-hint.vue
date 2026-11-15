@@ -31,7 +31,7 @@
           title="Serve stale content"
           description="Keep answering with the cached copy while the origin is down."
           hint="When the origin times out or returns a 5xx error, the edge answers with the last cached copy instead of the error. The copy is refreshed as soon as the origin responds again."
-          kind="compact"
+          variant="compact"
         >
           <Switch
             v-model="form.stale"

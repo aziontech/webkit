@@ -5,7 +5,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <ClosingCallToAction
-      kind="split"
+      variant="split"
       anchor="contact"
       eyebrow="Build"
       title="Build once."
@@ -22,13 +22,13 @@
       }"
     />
     <ClosingCallToAction
-      kind="panel"
+      variant="panel"
       title="Ready to join us?"
       description="See our open positions and find the right fit."
       :primary-action="{ label: 'See open roles', href: '/en/careers/jobs/', trailing: true }"
     />
     <ClosingCallToAction
-      kind="primary"
+      variant="primary"
       title="Build, run, and protect applications everywhere."
       description="Get faster launches, lower latency, and less infrastructure overhead from day one."
       :primary-action="{ label: 'Start for free', href: '/signup' }"

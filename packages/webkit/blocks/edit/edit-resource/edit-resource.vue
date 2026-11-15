@@ -178,7 +178,7 @@
                             <HelperText
                               v-if="nameError"
                               id="resource-name-message"
-                              kind="required"
+                              type="required"
                               label="This field is required."
                             />
                           </div>
@@ -186,7 +186,7 @@
                         <SettingRow
                           title="Active"
                           description="When disabled, the project stops serving traffic."
-                          kind="compact"
+                          variant="compact"
                         >
                           <Switch
                             v-model="form.active"
@@ -212,7 +212,7 @@
                           :key="mod.key"
                           :title="mod.title"
                           :description="mod.description"
-                          kind="compact"
+                          variant="compact"
                         >
                           <Switch
                             v-model="form.modules[mod.key]"
@@ -237,7 +237,7 @@
                           v-for="mod in subscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
-                          kind="compact"
+                          variant="compact"
                         >
                           <template #description>
                             {{ mod.description }}
@@ -279,14 +279,14 @@
                   <Button
                     type="button"
                     label="Discard"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="saving"
                     @click="discard"
                   />
                   <Button
                     label="Save"
-                    kind="primary"
+                    variant="primary"
                     size="medium"
                     :loading="saving"
                     @click="save"

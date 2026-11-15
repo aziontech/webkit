@@ -126,7 +126,7 @@
     },
     { accessorKey: 'bytes', header: 'Size', sortable: true, minWidth: 80 },
     { accessorKey: 'modifiedAt', header: 'Last modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const addToFilesActions = [
@@ -472,7 +472,7 @@
                     >
                       <IconButton
                         icon="ai ai-refresh"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         :loading="loading"
                         aria-label="Refresh"
@@ -485,7 +485,7 @@
                     >
                       <IconButton
                         icon="ai ai-download"
-                        kind="outlined"
+                        variant="outline"
                         size="large"
                         :disabled="!tableEl"
                         aria-label="Download CSV"
@@ -507,7 +507,7 @@
                     >
                     <Button
                       label="Clear selection"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       @click="clearSelection()"
                     />
@@ -515,7 +515,7 @@
                       <Button
                         label="Move"
                         icon="ai ai-arrow-right-left"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :disabled="!hasSelectedFiles(selectedRows)"
                         @click="openMoveSelection(selectedRows)"
@@ -534,7 +534,7 @@
                     <SplitButton
                       label="Add to files"
                       icon="ai ai-plus"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       :items="addToFilesActions"
                       class="shrink-0"
@@ -564,7 +564,7 @@
                   <Button
                     key="button-1"
                     v-if="row.kind === 'parent'"
-                    kind="link"
+                    variant="link"
                     label=".."
                     aria-label="Go up to the parent folder"
                     @click.stop="goUp"
@@ -572,7 +572,7 @@
                   <Button
                     key="button-2"
                     v-else-if="row.kind === 'folder'"
-                    kind="link"
+                    variant="link"
                     :label="value"
                     class="min-w-0"
                     @click.stop="enterFolder(row.name)"
@@ -668,7 +668,7 @@
                   <template #actions>
                     <Button
                       label="Clear search"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="search = ''"
                     />
@@ -685,7 +685,7 @@
                     <SplitButton
                       label="Add to files"
                       icon="ai ai-plus"
-                      kind="secondary"
+                      variant="secondary"
                       size="medium"
                       :items="addToFilesActions"
                     />
@@ -731,13 +731,13 @@
       <template #actions="{ close }">
         <Button
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="close"
         />
         <Button
           :label="pending?.kind === 'folder' ? 'Delete folder' : 'Delete file'"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           @click="confirmDelete"
@@ -803,13 +803,13 @@
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               @click="moveOpen = false"
             />
             <Button
               :label="moving.length === 1 ? 'Move file' : `Move ${moving.length} files`"
-              kind="primary"
+              variant="primary"
               size="medium"
               @click="confirmMove"
             />

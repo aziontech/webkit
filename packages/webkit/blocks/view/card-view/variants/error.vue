@@ -51,7 +51,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/applications"
             target="_blank"
@@ -59,7 +59,7 @@
           <Button
             label="Create Application"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
           />
         </template>
@@ -79,7 +79,7 @@
               <Button
                 label="Delete"
                 icon="ai ai-trash"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 disabled
               />

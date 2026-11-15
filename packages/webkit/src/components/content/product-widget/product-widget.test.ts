@@ -4,7 +4,7 @@ import { computed, createSSRApp, defineComponent, h, nextTick, onMounted, provid
 import { renderToString, type SSRContext } from 'vue/server-renderer'
 
 import Default from '../../../../examples/product-widget/default.vue'
-import Types from '../../../../examples/product-widget/types.vue'
+import Types from '../../../../examples/product-widget/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { useHydrationHost } from '../../../test/hydration-shared'
 import { ProductWidgetInjectionKey } from './injection-key'
@@ -75,20 +75,20 @@ describe('ProductWidget', () => {
       expect(view.queryByTestId(TESTID)).toBeNull()
     })
 
-    it('keeps the widget plating when kind is unset', async () => {
+    it('keeps the widget plating when variant is unset', async () => {
       const framed = render(host({ name: 'workloads-list' }))
-      expect((await frameOf(framed)).getAttribute('data-kind')).toBe('window')
+      expect((await frameOf(framed)).getAttribute('data-variant')).toBe('window')
       framed.unmount()
 
       const bare = render(host({ name: 'workload-rollout-rows' }))
-      expect((await frameOf(bare)).getAttribute('data-kind')).toBe('bare')
+      expect((await frameOf(bare)).getAttribute('data-variant')).toBe('bare')
     })
 
-    it('forwards kind and fade to a widget that declares them', async () => {
-      const view = render(host({ name: 'workloads-list', kind: 'bare', fade: 'bottom' }))
+    it('forwards variant and fade to a widget that declares them', async () => {
+      const view = render(host({ name: 'workloads-list', variant: 'bare', fade: 'bottom' }))
       const frame = await frameOf(view)
 
-      expect(frame.getAttribute('data-kind')).toBe('bare')
+      expect(frame.getAttribute('data-variant')).toBe('bare')
       expect(frame.getAttribute('data-fade')).toBe('bottom')
     })
 
@@ -100,9 +100,11 @@ describe('ProductWidget', () => {
           () =>
             Array.from(view.container.querySelectorAll(`[data-testid="${TESTID}"]`)).map((root) => [
               root.getAttribute('data-name'),
-              root.getAttribute('data-kind'),
-              root.querySelector(`[data-testid="${WINDOW_TESTID}"]`)?.getAttribute('data-kind') ??
-                root.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
+              root.getAttribute('data-variant'),
+              root
+                .querySelector(`[data-testid="${WINDOW_TESTID}"]`)
+                ?.getAttribute('data-variant') ??
+                root.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-variant')
             ]),
           { timeout: 3000 }
         )
@@ -119,8 +121,8 @@ describe('ProductWidget', () => {
       const plated = await windowOf(view)
       const root = view.getByTestId(TESTID)
 
-      expect(root.getAttribute('data-kind')).toBe('window')
-      expect(plated.getAttribute('data-kind')).toBe('window')
+      expect(root.getAttribute('data-variant')).toBe('window')
+      expect(plated.getAttribute('data-variant')).toBe('window')
       expect(plated.getAttribute('data-fade')).toBe('bottom')
       expect(plated.hasAttribute('inert')).toBe(true)
       expect(plated.getAttribute('aria-hidden')).toBe('true')
@@ -146,20 +148,20 @@ describe('ProductWidget', () => {
       const view = render(host({ name: 'waf-threat' }))
       await frameOf(view)
 
-      expect(view.getByTestId(TESTID).getAttribute('data-kind')).toBe('bare')
+      expect(view.getByTestId(TESTID).getAttribute('data-variant')).toBe('bare')
       expect(view.queryByTestId(WINDOW_TESTID)).toBeNull()
     })
 
-    it('lets kind override the plating of a fragment either way', async () => {
-      const bare = render(host({ name: 'data-stream-source', kind: 'bare' }))
+    it('lets variant override the plating of a fragment either way', async () => {
+      const bare = render(host({ name: 'data-stream-source', variant: 'bare' }))
       await frameOf(bare)
-      expect(bare.getByTestId(TESTID).getAttribute('data-kind')).toBe('bare')
+      expect(bare.getByTestId(TESTID).getAttribute('data-variant')).toBe('bare')
       expect(bare.queryByTestId(WINDOW_TESTID)).toBeNull()
       bare.unmount()
 
-      const framed = render(host({ name: 'waf-threat', kind: 'window' }))
+      const framed = render(host({ name: 'waf-threat', variant: 'window' }))
       const plated = await windowOf(framed)
-      expect(framed.getByTestId(TESTID).getAttribute('data-kind')).toBe('window')
+      expect(framed.getByTestId(TESTID).getAttribute('data-variant')).toBe('window')
       expect(barText(plated)).toContain('WAF')
     })
 
@@ -170,17 +172,17 @@ describe('ProductWidget', () => {
       expect(barText(plated)).not.toContain('Edge DNS')
     })
 
-    it('leaves data-kind off the root of a workload screen and never frames one', async () => {
+    it('leaves data-variant off the root of a workload screen and never frames one', async () => {
       const view = render(host({ name: 'workloads-list' }))
       await frameOf(view)
 
-      expect(view.getByTestId(TESTID).hasAttribute('data-kind')).toBe(false)
+      expect(view.getByTestId(TESTID).hasAttribute('data-variant')).toBe(false)
       expect(view.queryByTestId(WINDOW_TESTID)).toBeNull()
     })
 
-    it('does not warn when kind and chrome plate a fragment', async () => {
+    it('does not warn when variant and chrome plate a fragment', async () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-      const view = render(host({ name: 'waf-threat', kind: 'window', chrome: false }))
+      const view = render(host({ name: 'waf-threat', variant: 'window', chrome: false }))
       await windowOf(view)
 
       expect(warn.mock.calls.flat().join(' ')).not.toContain('no effect')
@@ -213,7 +215,7 @@ describe('ProductWidget', () => {
         template: '<div style="width: 860px; height: 480px"><ProductWidget :name="name" /></div>'
       })
       const view = render(Host)
-      expect((await frameOf(view)).getAttribute('data-kind')).toBe('window')
+      expect((await frameOf(view)).getAttribute('data-variant')).toBe('window')
 
       name.value = 'workload-rollout-rows'
       await nextTick()
@@ -221,7 +223,9 @@ describe('ProductWidget', () => {
       expect(view.getByTestId(TESTID).getAttribute('data-name')).toBe('workload-rollout-rows')
       await expect
         .poll(() =>
-          view.container.querySelector(`[data-testid="${FRAME_TESTID}"]`)?.getAttribute('data-kind')
+          view.container
+            .querySelector(`[data-testid="${FRAME_TESTID}"]`)
+            ?.getAttribute('data-variant')
         )
         .toBe('bare')
     })
@@ -293,7 +297,7 @@ describe('ProductWidget', () => {
     it('does not warn when the widget reads every plating prop it is given', async () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       const view = render(
-        host({ name: 'workloads-list', kind: 'bare', fade: 'bottom', width: 720 })
+        host({ name: 'workloads-list', variant: 'bare', fade: 'bottom', width: 720 })
       )
       await frameOf(view)
 

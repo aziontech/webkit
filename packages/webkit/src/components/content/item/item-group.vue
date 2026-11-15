@@ -18,7 +18,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'content-item-group'
   )
 
-  provide(ItemContainerInjectionKey, { forceKind: 'inline' })
+  provide(ItemContainerInjectionKey, { forceVariant: 'inline' })
   provide(ItemListMemberInjectionKey, true)
 </script>
 

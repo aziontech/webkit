@@ -74,7 +74,7 @@
             <CopyButton
               :value="anchorUrl"
               :data-testid="`${testId}__copy-link`"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :aria-label="t('sectionHeader.copyLink', { title })"
               :copied-label="t('sectionHeader.linkCopied')"

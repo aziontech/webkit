@@ -277,20 +277,20 @@ describe('Carousel', () => {
     it('lays the row out as a ruled strip by default', () => {
       const { container, getByTestId, getAllByTestId } = render(host())
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'strip')
-      expect(container.querySelector('ul')).toHaveAttribute('data-kind', 'strip')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'strip')
+      expect(container.querySelector('ul')).toHaveAttribute('data-variant', 'strip')
       for (const item of getAllByTestId(ITEM_TESTID)) {
-        expect(item).toHaveAttribute('data-kind', 'strip')
+        expect(item).toHaveAttribute('data-variant', 'strip')
       }
     })
 
     it('hands the cards layout down to every item', () => {
-      const { container, getByTestId, getAllByTestId } = render(host({ kind: 'cards' }))
+      const { container, getByTestId, getAllByTestId } = render(host({ variant: 'cards' }))
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'cards')
-      expect(container.querySelector('ul')).toHaveAttribute('data-kind', 'cards')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'cards')
+      expect(container.querySelector('ul')).toHaveAttribute('data-variant', 'cards')
       for (const item of getAllByTestId(ITEM_TESTID)) {
-        expect(item).toHaveAttribute('data-kind', 'cards')
+        expect(item).toHaveAttribute('data-variant', 'cards')
       }
     })
 
@@ -359,7 +359,7 @@ describe('Carousel', () => {
     })
 
     it('has no a11y violations as titled cards', async () => {
-      const { container } = render(host({ ariaLabel: 'Customer stories', kind: 'cards' }))
+      const { container } = render(host({ ariaLabel: 'Customer stories', variant: 'cards' }))
 
       await expectNoA11yViolations(container)
     })

@@ -18,7 +18,7 @@
   })
 
   /** Which floor closes the band. */
-  export type NetworkSectionKind = 'outcomes' | 'benefits' | 'stats'
+  export type NetworkSectionVariant = 'outcomes' | 'benefits' | 'stats'
 
   /** How a client mark is rendered: `monochrome` flattens it and inverts it in the dark theme, `as-is` keeps its colours. */
   export type NetworkSectionLogoTreatment = 'monochrome' | 'as-is'
@@ -69,7 +69,7 @@
 
   interface Props {
     /** Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures. */
-    kind?: NetworkSectionKind
+    variant?: NetworkSectionVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Overline above the headline. */
@@ -89,7 +89,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'outcomes',
+    variant: 'outcomes',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -124,7 +124,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title || undefined"
     class="scroll-mt-(--spacing-2xl)"
   >
@@ -158,7 +158,7 @@
           >
             <SectionTitle
               :framed="false"
-              kind="start"
+              variant="start"
               size="small"
               :eyebrow="eyebrow"
               :title="title"
@@ -206,16 +206,16 @@
 
           <CardGrid
             key="card-grid-1"
-            v-if="kind === 'outcomes' && outcomes.length"
+            v-if="variant === 'outcomes' && outcomes.length"
             flush
-            kind="frame"
+            variant="frame"
             :columns="outcomeColumns"
             class="border-t border-(--border-default)"
           >
             <CardGridCell
               v-for="outcome in outcomes"
               :key="outcome.logoAlt || outcome.text"
-              kind="canvas"
+              variant="canvas"
             >
               <Quote
                 :text="outcome.text"
@@ -240,16 +240,16 @@
 
           <CardGrid
             key="card-grid-2"
-            v-else-if="kind === 'benefits' && benefits.length"
+            v-else-if="variant === 'benefits' && benefits.length"
             flush
-            kind="frame"
+            variant="frame"
             :columns="3"
             class="border-t border-(--border-default)"
           >
             <CardGridCell
               v-for="benefit in benefits"
               :key="benefit.title"
-              kind="canvas"
+              variant="canvas"
             >
               <Topic
                 :heading-level="3"
@@ -261,7 +261,7 @@
           </CardGrid>
 
           <BigNumbers
-            v-else-if="kind === 'stats' && stats.length"
+            v-else-if="variant === 'stats' && stats.length"
             key="big-numbers"
             :items="stats"
             class="border-t border-(--border-default)"

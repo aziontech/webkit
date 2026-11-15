@@ -3,7 +3,7 @@
 
   import { cn } from '../../../../utils/cn'
   import { useSidebarMenuContext } from '../composables/use-sidebar-menu-context'
-  import { SidebarMenuSubInjectionKey, type SidebarMenuSubKind } from '../injection-key'
+  import { SidebarMenuSubInjectionKey, type SidebarMenuSubType } from '../injection-key'
 
   defineOptions({
     name: 'SidebarMenuSub',
@@ -39,11 +39,11 @@
   const id = (attrs['data-node-id'] as string | undefined) || uid
   const level = (parentSub?.level ?? -1) + 1
 
-  const kind = ref<SidebarMenuSubKind>('inline')
+  const type = ref<SidebarMenuSubType>('inline')
   const label = ref('')
   const triggerEl = shallowRef<globalThis.HTMLElement | null>(null)
 
-  const isDrill = computed(() => kind.value === 'drill')
+  const isDrill = computed(() => type.value === 'drill')
 
   ctx.registerExpandable(id, openBinding.value ?? props.defaultOpen)
   watch(openBinding, (value) => {
@@ -71,14 +71,14 @@
   }
 
   const registerTrigger = (
-    nextKind: SidebarMenuSubKind,
+    nextType: SidebarMenuSubType,
     nextLabel: string,
     el: globalThis.HTMLElement | null
   ) => {
-    kind.value = nextKind
+    type.value = nextType
     label.value = nextLabel
     triggerEl.value = el
-    if (nextKind === 'drill') ctx.registerLevel(id, nextLabel, el)
+    if (nextType === 'drill') ctx.registerLevel(id, nextLabel, el)
   }
 
   provide(SidebarMenuSubInjectionKey, {
@@ -87,7 +87,7 @@
     triggerId: `${uid}-trigger`,
     contentId: `${uid}-content`,
     open,
-    kind: computed(() => kind.value),
+    type: computed(() => type.value),
     label: computed(() => label.value),
     registerTrigger,
     toggle,

@@ -69,7 +69,7 @@
     class="scroll-mt-(--spacing-2xl) p-(--spacing-lg)"
   >
     <Carousel
-      kind="cards"
+      variant="cards"
       :aria-label="rowName"
     >
       <template
@@ -77,7 +77,7 @@
         #header
       >
         <SectionTitle
-          kind="start"
+          variant="start"
           size="small"
           :framed="false"
           :eyebrow="eyebrow"

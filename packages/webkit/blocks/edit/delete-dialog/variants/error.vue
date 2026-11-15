@@ -61,7 +61,7 @@
     <template #trigger>
       <Button
         label="Delete resource"
-        kind="danger"
+        variant="danger"
         size="medium"
       />
     </template>

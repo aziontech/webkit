@@ -13,7 +13,7 @@ export default BentoGridRoot
 export { BentoGridCell }
 export type { BentoGridColumns, BentoGridMobileColumns } from './bento-grid.vue'
 export type {
-  BentoGridCellKind,
   BentoGridCellRows,
-  BentoGridCellSpan
+  BentoGridCellSpan,
+  BentoGridCellVariant
 } from './bento-grid-cell/bento-grid-cell.vue'

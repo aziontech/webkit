@@ -130,7 +130,7 @@
           class="contents [--section-title-headline-span:2] [--section-title-headline-max:var(--container-xl)]"
         >
           <SectionTitle
-            kind="split"
+            variant="split"
             padding="small"
             :eyebrow="eyebrow"
             :title="title"
@@ -143,7 +143,7 @@
               <Button
                 :label="primaryAction.label"
                 :href="primaryAction.href"
-                kind="outlined"
+                variant="outline"
                 size="large"
                 :target="primaryAction.target"
                 :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
@@ -164,7 +164,7 @@
           class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-16) md:pt-(--spacing-32) [--texture-wave-gain:1.8] [--texture-wave-pace:5] [--texture-pool-a:50%_100%] [--texture-pool-b:50%_0%]"
         >
           <TextureMaterial
-            kind="pixelate"
+            variant="pixelate"
             size="small"
             fade="none"
           />

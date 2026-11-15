@@ -7,7 +7,7 @@
   })
 
   /** Which texture to paint. */
-  export type TextureMaterialKind = 'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'
+  export type TextureMaterialVariant = 'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'
 
   /** Pitch step; each texture sets its own measured geometry per step. */
   export type TextureMaterialSize = 'small' | 'medium' | 'large'
@@ -18,7 +18,7 @@
 
   interface Props {
     /** Which texture to paint; `none` renders the layer with no texture at all. */
-    kind?: TextureMaterialKind
+    variant?: TextureMaterialVariant
     /** Pitch of the tiling — how far apart the cells sit. */
     size?: TextureMaterialSize
     /** Fades the layer out along an axis so it meets content without a hard edge. */
@@ -26,7 +26,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'dots',
+    variant: 'dots',
     size: 'medium',
     fade: 'none'
   })
@@ -46,19 +46,19 @@
 
   const ditherPlanes = BAYER.flatMap((row, y) => row.map((rank, x) => ({ rank, x, y })))
 
-  const isDither = computed(() => props.kind === 'dither')
-  const isPixelate = computed(() => props.kind === 'pixelate')
+  const isDither = computed(() => props.variant === 'dither')
+  const isPixelate = computed(() => props.variant === 'pixelate')
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-fade="fade"
     aria-hidden="true"
-    class="pointer-events-none absolute inset-0 z-0 overflow-hidden data-[fade=bottom]:[mask-image:linear-gradient(to_bottom,var(--texture-fade-lead,black)_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=top]:[mask-image:linear-gradient(to_top,var(--texture-fade-lead,black)_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=left]:[mask-image:linear-gradient(to_left,black_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=right]:[mask-image:linear-gradient(to_right,black_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=edges]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--texture-fade-start,12%),black_calc(100%-var(--texture-fade-start,12%)),transparent_100%)] data-[fade=vignette]:[mask-image:radial-gradient(closest-side,black_var(--texture-fade-start,40%),transparent_var(--texture-fade-end,100%))] data-[fade=bottom]:[mask-mode:alpha] data-[fade=top]:[mask-mode:alpha] data-[fade=left]:[mask-mode:alpha] data-[fade=right]:[mask-mode:alpha] data-[fade=edges]:[mask-mode:alpha] data-[fade=vignette]:[mask-mode:alpha] [--texture-scale:1] data-[size=large]:[--texture-scale:2] data-[size=small]:[--texture-scale:0.5] data-[kind=dither]:[--texture-cell:calc(6px*var(--texture-scale))] data-[kind=dither]:[--texture-pitch:calc(24px*var(--texture-scale))] data-[kind=dots]:[--texture-dot-ink:color-mix(in_srgb,var(--text-default)_30%,transparent)] data-[kind=dots]:data-[size=small]:[--texture-cell:2px] data-[kind=dots]:data-[size=small]:[--texture-pitch:14px] data-[kind=dots]:data-[size=medium]:[--texture-cell:3px] data-[kind=dots]:data-[size=medium]:[--texture-pitch:22px] data-[kind=dots]:data-[size=large]:[--texture-cell:4px] data-[kind=dots]:data-[size=large]:[--texture-pitch:32px] data-[kind=grid]:[--texture-pitch:calc(48px*var(--texture-scale))] data-[kind=lines]:data-[size=small]:[--texture-pitch:6px] data-[kind=lines]:data-[size=medium]:[--texture-pitch:8px] data-[kind=lines]:data-[size=large]:[--texture-pitch:14px] data-[kind=pixelate]:[--texture-cell:calc(5px*var(--texture-scale))] data-[kind=pixelate]:[--texture-pitch:calc(15px*var(--texture-scale))] data-[kind=dots]:[background-image:conic-gradient(at_var(--texture-cell)_var(--texture-cell),transparent_0_75%,var(--texture-ink,var(--texture-dot-ink))_75%_100%)] data-[kind=dots]:[background-position:calc(var(--texture-cell)/-2)_calc(var(--texture-cell)/-2)] data-[kind=dots]:[background-size:var(--texture-pitch)_var(--texture-pitch)] data-[kind=grid]:[background-image:linear-gradient(to_right,var(--texture-ink,color-mix(in_srgb,var(--text-default)_22%,transparent))_1px,transparent_1px),linear-gradient(to_bottom,var(--texture-ink,color-mix(in_srgb,var(--text-default)_22%,transparent))_1px,transparent_1px)] data-[kind=grid]:[background-size:var(--texture-pitch)_var(--texture-pitch)] data-[kind=lines]:[background-image:linear-gradient(to_right,var(--texture-ink,color-mix(in_srgb,var(--text-default)_6%,transparent))_1px,transparent_1px)] data-[kind=lines]:[background-size:var(--texture-pitch)_100%]"
+    class="pointer-events-none absolute inset-0 z-0 overflow-hidden data-[fade=bottom]:[mask-image:linear-gradient(to_bottom,var(--texture-fade-lead,black)_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=top]:[mask-image:linear-gradient(to_top,var(--texture-fade-lead,black)_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=left]:[mask-image:linear-gradient(to_left,black_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=right]:[mask-image:linear-gradient(to_right,black_0,black_var(--texture-fade-start,16%),transparent_var(--texture-fade-end,55%))] data-[fade=edges]:[mask-image:linear-gradient(to_right,transparent_0,black_var(--texture-fade-start,12%),black_calc(100%-var(--texture-fade-start,12%)),transparent_100%)] data-[fade=vignette]:[mask-image:radial-gradient(closest-side,black_var(--texture-fade-start,40%),transparent_var(--texture-fade-end,100%))] data-[fade=bottom]:[mask-mode:alpha] data-[fade=top]:[mask-mode:alpha] data-[fade=left]:[mask-mode:alpha] data-[fade=right]:[mask-mode:alpha] data-[fade=edges]:[mask-mode:alpha] data-[fade=vignette]:[mask-mode:alpha] [--texture-scale:1] data-[size=large]:[--texture-scale:2] data-[size=small]:[--texture-scale:0.5] data-[variant=dither]:[--texture-cell:calc(6px*var(--texture-scale))] data-[variant=dither]:[--texture-pitch:calc(24px*var(--texture-scale))] data-[variant=dots]:[--texture-dot-ink:color-mix(in_srgb,var(--text-default)_30%,transparent)] data-[variant=dots]:data-[size=small]:[--texture-cell:2px] data-[variant=dots]:data-[size=small]:[--texture-pitch:14px] data-[variant=dots]:data-[size=medium]:[--texture-cell:3px] data-[variant=dots]:data-[size=medium]:[--texture-pitch:22px] data-[variant=dots]:data-[size=large]:[--texture-cell:4px] data-[variant=dots]:data-[size=large]:[--texture-pitch:32px] data-[variant=grid]:[--texture-pitch:calc(48px*var(--texture-scale))] data-[variant=lines]:data-[size=small]:[--texture-pitch:6px] data-[variant=lines]:data-[size=medium]:[--texture-pitch:8px] data-[variant=lines]:data-[size=large]:[--texture-pitch:14px] data-[variant=pixelate]:[--texture-cell:calc(5px*var(--texture-scale))] data-[variant=pixelate]:[--texture-pitch:calc(15px*var(--texture-scale))] data-[variant=dots]:[background-image:conic-gradient(at_var(--texture-cell)_var(--texture-cell),transparent_0_75%,var(--texture-ink,var(--texture-dot-ink))_75%_100%)] data-[variant=dots]:[background-position:calc(var(--texture-cell)/-2)_calc(var(--texture-cell)/-2)] data-[variant=dots]:[background-size:var(--texture-pitch)_var(--texture-pitch)] data-[variant=grid]:[background-image:linear-gradient(to_right,var(--texture-ink,color-mix(in_srgb,var(--text-default)_22%,transparent))_1px,transparent_1px),linear-gradient(to_bottom,var(--texture-ink,color-mix(in_srgb,var(--text-default)_22%,transparent))_1px,transparent_1px)] data-[variant=grid]:[background-size:var(--texture-pitch)_var(--texture-pitch)] data-[variant=lines]:[background-image:linear-gradient(to_right,var(--texture-ink,color-mix(in_srgb,var(--text-default)_6%,transparent))_1px,transparent_1px)] data-[variant=lines]:[background-size:var(--texture-pitch)_100%]"
   >
     <span
       v-for="plane in isDither ? ditherPlanes : []"

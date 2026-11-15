@@ -117,7 +117,7 @@
             <Button
               v-if="run === 'error'"
               label="Retry"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-refresh"
               @click="approve"

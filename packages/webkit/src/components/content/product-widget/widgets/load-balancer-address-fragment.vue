@@ -116,7 +116,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
     class="[--mockup-fade-edge:16%] [--mockup-fade-start:80%]"
@@ -156,7 +156,7 @@
           </span>
           <IconButton
             icon="ai ai-trash"
-            kind="outlined"
+            variant="outline"
             size="small"
             ariaLabel="Remove address"
           />

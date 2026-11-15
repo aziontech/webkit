@@ -27,7 +27,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   `SiteNav` drops Login from the bar on a phone, as azion.com does; leave
   `secondaryActionOnPhones` off. `SiteFooter` draws its own top rule, frame and closing bottom rule.
 - Size a screen-filling hero under `SiteNav` with the `--layout-header-height` token: `HeroBand`
-  takes it out of the screen by default, and a bare `Hero kind="screen"` takes
+  takes it out of the screen by default, and a bare `Hero variant="screen"` takes
   `offset="var(--layout-header-height)"`. Never a literal (`56px`, `3.5rem`).
 - End the page column on a closing section (`ClosingCallToAction` and its `-newsletter`,
   `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
@@ -35,7 +35,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   `FrameBox` of `shell/site`.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
-  `MediaSplitBand` action `kind` (`transparent` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link
+  `MediaSplitBand` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link
   `external`, `CapabilityGrid` items with `href` for a linked grid, `ProcessScroll` `pinned`
   (a band that pins while its tall cards slide sideways), a `HeroForm` field's
   `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without

@@ -5,7 +5,7 @@
 
 <template>
   <Item
-    kind="outlined"
+    variant="outline"
     size="small"
   >
     <Item.Content>
@@ -15,7 +15,7 @@
     <Item.Actions>
       <Button
         label="Action"
-        kind="outlined"
+        variant="outline"
         size="small"
       />
     </Item.Actions>

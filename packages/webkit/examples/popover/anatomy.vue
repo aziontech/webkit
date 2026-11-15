@@ -15,7 +15,7 @@
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Full"
         />
       </PopoverTrigger>
@@ -30,7 +30,7 @@
         </div>
         <PopoverFooter>
           <Button
-            kind="secondary"
+            variant="secondary"
             size="medium"
             label="Confirm"
           />
@@ -41,7 +41,7 @@
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Title only"
         />
       </PopoverTrigger>
@@ -57,7 +57,7 @@
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>
         <Button
-          kind="secondary"
+          variant="secondary"
           label="Body only"
         />
       </PopoverTrigger>

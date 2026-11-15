@@ -231,9 +231,9 @@ A repeated condition in a `v-if` / `v-else-if` chain makes the later branch unre
 
 ```vue
 <template>
-  <PrimaryBadge v-if="kind === 'primary'" />
-  <DangerBadge v-else-if="kind === 'danger'" />
-  <NeutralBadge v-else-if="kind === 'primary'" />
+  <PrimaryBadge v-if="variant === 'primary'" />
+  <DangerBadge v-else-if="variant === 'danger'" />
+  <NeutralBadge v-else-if="variant === 'primary'" />
   <!-- never renders -->
 </template>
 ```
@@ -242,8 +242,8 @@ A repeated condition in a `v-if` / `v-else-if` chain makes the later branch unre
 
 ```vue
 <template>
-  <PrimaryBadge v-if="kind === 'primary'" />
-  <DangerBadge v-else-if="kind === 'danger'" />
+  <PrimaryBadge v-if="variant === 'primary'" />
+  <DangerBadge v-else-if="variant === 'danger'" />
   <NeutralBadge v-else />
 </template>
 ```
@@ -294,7 +294,7 @@ The same attribute twice on one element is a bug — one silently wins. Exceptio
 ```vue
 <script setup lang="ts">
   // type-only exports are fine — this is the real pattern in button.vue
-  export type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text' | 'danger'
+  export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
   export type ButtonSize = 'small' | 'medium' | 'large'
 </script>
 ```
@@ -601,7 +601,7 @@ Every optional prop declares its default — the spec's Props table made executa
 ```vue
 <script setup lang="ts">
   interface Props {
-    kind?: ButtonKind
+    variant?: ButtonVariant
     disabled?: boolean
   }
 
@@ -615,13 +615,13 @@ Every optional prop declares its default — the spec's Props table made executa
 <script setup lang="ts">
   interface Props {
     /** Visual variant. */
-    kind?: ButtonKind
+    variant?: ButtonVariant
     /** Disables interaction. */
     disabled?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'primary',
+    variant: 'primary',
     disabled: false
   })
 </script>
@@ -1303,7 +1303,7 @@ const label = computed(() => {
 <template>
   <Button
     label="Deploy"
-    kind="primary"
+    variant="primary"
     size="large"
     :loading="loading"
   />
@@ -1316,7 +1316,7 @@ const label = computed(() => {
 <template>
   <Button
     label="Deploy"
-    kind="primary"
+    variant="primary"
     size="large"
     :loading="loading"
   />
@@ -1393,8 +1393,8 @@ Every code path returns explicitly.
 **❌ Wrong**
 
 ```ts
-function confirmLabel(kind: ButtonKind) {
-  if (kind === 'danger') {
+function confirmLabel(variant: ButtonVariant) {
+  if (variant === 'danger') {
     return 'Delete'
   }
   // falls off the end returning undefined implicitly
@@ -1404,8 +1404,8 @@ function confirmLabel(kind: ButtonKind) {
 **✅ Correct**
 
 ```ts
-function confirmLabel(kind: ButtonKind): string {
-  if (kind === 'danger') {
+function confirmLabel(variant: ButtonVariant): string {
+  if (variant === 'danger') {
     return 'Delete'
   }
   return 'Confirm'

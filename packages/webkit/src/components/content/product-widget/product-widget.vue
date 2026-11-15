@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { type Component, computed, markRaw, provide, shallowRef, useAttrs, watch } from 'vue'
 
-  import type { TextureMaterialKind } from '../../marketing/texture-material/texture-material.vue'
+  import type { TextureMaterialVariant } from '../../marketing/texture-material/texture-material.vue'
   import { ProductWidgetInjectionKey } from './injection-key'
   import type * as Plates from './plates'
   import { resolveProductWidget } from './registry'
-  import type { ShellMockupFade, ShellMockupKind } from './shell-mockup/shell-mockup.vue'
+  import type { ShellMockupFade, ShellMockupVariant } from './shell-mockup/shell-mockup.vue'
 
   defineOptions({ name: 'ProductWidget', inheritAttrs: false })
 
@@ -102,7 +102,7 @@
     /** Whether the pointer is over the host; a fragment plays its beat while it is. */
     hovered?: boolean
     /** How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating. */
-    kind?: ShellMockupKind
+    variant?: ShellMockupVariant
     /** Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it. */
     chrome?: boolean
     /** Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. */
@@ -110,7 +110,7 @@
     /** Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. */
     fade?: ShellMockupFade
     /** Texture a full-screen widget is grounded with. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Tab a tabbed widget plays (workload-overview, application-version, functions-start); other widgets ignore it, and unset plays the first tab. */
     tab?: ProductWidgetTab
     /** Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it. */
@@ -122,7 +122,7 @@
   const props = withDefaults(defineProps<Props>(), {
     active: true,
     hovered: false,
-    kind: undefined,
+    variant: undefined,
     chrome: undefined,
     width: undefined,
     fade: 'none',
@@ -151,14 +151,14 @@
       ]
   )
 
-  const plating = computed(() => plate.value && (props.kind ?? plate.value.kind))
+  const plating = computed(() => plate.value && (props.variant ?? plate.value.variant))
 
   provide(ProductWidgetInjectionKey, { cursor: computed(() => props.cursor) })
 
   function warnIgnored(name: ProductWidgetName, keys: string[]) {
     if (!dev) return
     const set: Record<string, boolean> = {
-      kind: props.kind !== undefined,
+      variant: props.variant !== undefined,
       chrome: props.chrome !== undefined,
       width: props.width !== undefined,
       fade: props.fade !== 'none',
@@ -166,13 +166,13 @@
       tab: props.tab !== undefined,
       autoplayInterval: props.autoplayInterval !== undefined
     }
-    const plated = plating.value ? ['kind', plating.value === 'window' ? 'chrome' : ''] : []
+    const plated = plating.value ? ['variant', plating.value === 'window' ? 'chrome' : ''] : []
     const ignored = Object.keys(set).filter(
       (key) => set[key] && !keys.includes(key) && !plated.includes(key)
     )
     if (!ignored.length) return
     console.warn(
-      `[webkit] <ProductWidget name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments keep their own width and fade and take only kind, and chrome while framed; the workload screens take kind, chrome, width and fade (see the product-widget spec).`
+      `[webkit] <ProductWidget name="${name}">: ${ignored.join(', ')} ${ignored.length > 1 ? 'have' : 'has'} no effect on this widget. Fragments keep their own width and fade and take only variant, and chrome while framed; the workload screens take variant, chrome, width and fade (see the product-widget spec).`
     )
   }
 
@@ -208,13 +208,13 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-name="name"
-    :data-kind="plating"
+    :data-variant="plating"
     class="h-full w-full min-w-0"
   >
     <component
       :is="plates.ProductWidgetPlate"
       v-if="widget && plates"
-      v-bind="{ testId, kind: plating, plate, widget, declared, values: props }"
+      v-bind="{ testId, variant: plating, plate, widget, declared, values: props }"
     />
   </div>
 </template>

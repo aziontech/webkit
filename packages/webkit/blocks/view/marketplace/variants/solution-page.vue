@@ -147,7 +147,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/marketplace/waiting-room"
             target="_blank"
@@ -274,7 +274,7 @@
                         <Button
                           v-if="outdated(row.application)"
                           :label="`Update to ${integration.version}`"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           :loading="running === row.application"
                           :disabled="Boolean(running) && running !== row.application"
@@ -343,7 +343,7 @@
                 <Button
                   type="submit"
                   :label="form.application && outdated(form.application) ? 'Update' : 'Install'"
-                  kind="primary"
+                  variant="primary"
                   :loading="Boolean(running)"
                 />
               </form>

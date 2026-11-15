@@ -3,9 +3,9 @@ name: tutorial-panel
 category: content
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 7998e6a380d5c2b967a0b9ed6606c0cbe1ea6caaab03439d7b78a51a7ca19476
+checksum: 4864a6c883e72b110d15f7be219ad20bd3e159f7b64e853a72d255073be1c8c1
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -108,7 +108,7 @@ Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit p
       <Hotspot hotspot-id="deploy">
         <Button
           label="Deploy"
-          kind="primary"
+          variant="primary"
         />
       </Hotspot>
     </main>

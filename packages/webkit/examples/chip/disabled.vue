@@ -6,13 +6,13 @@
   <div class="flex flex-wrap items-center gap-(--spacing-xs)">
     <Chip
       label="region: us-east"
-      kind="filled"
+      variant="filled"
       removable
       disabled
     />
     <Chip
       label="Status"
-      kind="outlined"
+      variant="outline"
       clickable
       disabled
     />

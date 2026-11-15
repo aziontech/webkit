@@ -52,7 +52,7 @@
                   v-if="compact"
                   icon="ai ai-menu"
                   aria-label="Open navigation"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   @click="openNavigation"
                 />
@@ -67,7 +67,7 @@
               <IconButton
                 icon="ai ai-circle-help"
                 aria-label="Help"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 @click="toggleTools"
               />

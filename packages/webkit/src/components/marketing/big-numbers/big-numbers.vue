@@ -72,7 +72,7 @@
   >
     <CardGrid
       v-if="hasItems"
-      kind="divider"
+      variant="divider"
       :columns="columns"
       :mobile-columns="mobileColumns"
     >

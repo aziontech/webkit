@@ -91,7 +91,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     fade="bottom"
     class="[--mockup-fade-start:80%]"
@@ -130,7 +130,7 @@
               </span>
               <IconButton
                 icon="ai ai-trash"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 ariaLabel="Remove address"
               />
@@ -173,7 +173,7 @@
                 </span>
                 <IconButton
                   icon="ai ai-trash"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   ariaLabel="Remove address"
                 />
@@ -191,7 +191,7 @@
           >
             <Button
               label="Add Address"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-circle-plus"
             />

@@ -161,7 +161,7 @@
       >
         <template v-if="dataDriven">
           <PaginationButton
-            kind="previous"
+            type="previous"
             :aria-label="t('pagination.previous')"
             :disabled="currentPage <= 1"
             @click="onPrevious"
@@ -169,7 +169,7 @@
           <PaginationButton
             v-for="item in pageItems"
             :key="item.key"
-            :kind="item.type === 'more' ? 'more' : 'number'"
+            :type="item.type === 'more' ? 'more' : 'number'"
             :active="item.type === 'page' && item.value === currentPage"
             :aria-label="
               item.type === 'page' ? t('pagination.page', { page: item.value }) : undefined
@@ -179,7 +179,7 @@
             {{ item.type === 'page' ? item.value : '' }}
           </PaginationButton>
           <PaginationButton
-            kind="next"
+            type="next"
             :aria-label="t('pagination.next')"
             :disabled="currentPage >= pageCount"
             @click="onNext"

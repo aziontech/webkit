@@ -3,11 +3,11 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 9cc8fa3055e57032035ba19201c594202f9d2f84108b6e2e9c137a8071381af9
+checksum: fc8ccf3c3368f2abe90fc20175760b22358309b8d347c39291132b15e6437072
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -61,7 +61,7 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 <template>
   <Popover>
     <Popover.Trigger>
-      <Button kind="secondary">Open popover</Button>
+      <Button variant="secondary">Open popover</Button>
     </Popover.Trigger>
 
     <Popover.Content>
@@ -261,7 +261,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 ## Examples
 
-Canonical layout — composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta. Popover is a composition overlay whose visual identity lives in placement and optional regions, not in a `kind`/`size` axis, so the extra stories below are justified per axis.
+Canonical layout — composite stories render every variant of one axis side-by-side in a single frame; state stories use the reusable `Template` with an args delta. Popover is a composition overlay whose visual identity lives in placement and optional regions, not in a `variant`/`size` axis, so the extra stories below are justified per axis.
 
 - Default — one `Button` trigger that opens the popover, and a `Popover.Content` with a `Popover.Header` (`Popover.Title` + `Popover.Close`) and a free-form body. The canonical minimal usage: a button that calls a popover whose contents are composed by part.
 - Placements — composite story rendering the four vertical corners (`bottom-start`, `bottom-end`, `top-start`, `top-end`) and two side placements (`right-start`, `left-start`) side-by-side. Required because `placement` is a multi-value prop axis with no other coverage; consumers need to see how each placement anchors against its trigger.

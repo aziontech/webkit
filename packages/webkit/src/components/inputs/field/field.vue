@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, provide, ref, useAttrs, useId } from 'vue'
 
-  import { FieldInjectionKey, type FieldOrientation, type FieldPartKind } from './injection-key'
+  import { FieldInjectionKey, type FieldOrientation, type FieldPartType } from './injection-key'
 
   defineOptions({
     name: 'Field',
@@ -39,7 +39,7 @@
   const errors = ref<string[]>([])
   const titles = ref<string[]>([])
 
-  const register = (kind: FieldPartKind, id: string) => {
+  const register = (kind: FieldPartType, id: string) => {
     const list = { description: descriptions, error: errors, title: titles }[kind]
     list.value = [...list.value, id]
     return () => {

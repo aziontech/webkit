@@ -27,14 +27,14 @@ describe('Ticker', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
   })
 
-  it.each(['plain', 'band'] as const)('carries the %s fill on data-kind', (kind) => {
-    const { getByTestId } = render(Ticker, { props: { kind, marks: MARKS } })
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+  it.each(['plain', 'band'] as const)('carries the %s fill on data-variant', (variant) => {
+    const { getByTestId } = render(Ticker, { props: { variant: variant, marks: MARKS } })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
   })
 
   it('paints no surface of its own by default', () => {
     const { getByTestId } = render(Ticker, { props: { marks: MARKS } })
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'plain')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'plain')
   })
 
   it('lets a consumer data-testid win over the fallback', () => {

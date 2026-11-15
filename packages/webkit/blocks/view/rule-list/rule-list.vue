@@ -395,7 +395,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
             target="_blank"
@@ -403,7 +403,7 @@
           <Button
             label="Add Rule"
             icon="ai ai-plus"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="loading"
           />
@@ -524,7 +524,7 @@
                           <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="ai ai-chevron-up"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               data-control="up"
                               :aria-label="
@@ -539,7 +539,7 @@
                           <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="ai ai-chevron-down"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               data-control="down"
                               :aria-label="
@@ -556,7 +556,7 @@
                       <template #cell-name="{ row }">
                         <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <Button
-                            kind="link"
+                            variant="link"
                             :label="row.name"
                             data-rule-name
                             :aria-label="`Edit ${row.name}`"
@@ -609,7 +609,7 @@
                           <template #actions>
                             <Button
                               label="Clear search"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               @click="search = ''"
                             />
@@ -627,7 +627,7 @@
                         <Button
                           label="Add Rule"
                           icon="ai ai-plus"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                         />
                       </template>
@@ -656,7 +656,7 @@
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
@@ -664,7 +664,7 @@
           <Button
             type="button"
             label="Review changes"
-            kind="primary"
+            variant="primary"
             size="medium"
             :disabled="saving"
             @click="openReview"
@@ -727,7 +727,7 @@
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 :disabled="saving"
                 @click="reviewOpen = false"
               />
@@ -737,7 +737,7 @@
                 class="w-full"
                 type="button"
                 :label="saveFailed ? 'Save again' : 'Save'"
-                kind="primary"
+                variant="primary"
                 :loading="saving"
                 @click="save"
               />

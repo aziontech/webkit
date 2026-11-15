@@ -8,21 +8,21 @@
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
-    SectionTitleKind,
     SectionTitlePadding,
-    SectionTitleSize
+    SectionTitleSize,
+    SectionTitleVariant
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import type {
     TextureMaterialFade,
-    TextureMaterialKind
+    TextureMaterialVariant
   } from '../../marketing/texture-material/texture-material.vue'
   import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
 
   defineOptions({ name: 'ConsolePanel', inheritAttrs: false })
 
   /** What the panel frames: `console` crops and fades a console mock at a fixed aspect, `diagram` lets a scene keep its own height. */
-  export type ConsolePanelKind = 'console' | 'diagram'
+  export type ConsolePanelVariant = 'console' | 'diagram'
 
   /** One tab over the frame; the scene slot receives its `value`. */
   export type ConsolePanelTab = {
@@ -32,8 +32,8 @@
     title: string
   }
 
-  /** Button kind of an action. */
-  export type ConsolePanelActionKind = 'secondary' | 'outlined'
+  /** Button variant of an action. */
+  export type ConsolePanelActionVariant = 'secondary' | 'outline'
 
   /** A button under the headline. */
   export type ConsolePanelAction = {
@@ -45,15 +45,15 @@
     trailing?: boolean
     /** Link target of the action. */
     target?: '_blank' | '_self'
-    /** Button kind; the panel draws the primary action `secondary` and the secondary `outlined`. */
-    kind?: ConsolePanelActionKind
+    /** Button variant; the panel draws the primary action `secondary` and the secondary `outline`. */
+    variant?: ConsolePanelActionVariant
   }
 
   interface Props {
     /** What the panel frames. */
-    kind?: ConsolePanelKind
+    variant?: ConsolePanelVariant
     /** Layout of the headline block. */
-    titleKind?: SectionTitleKind
+    titleVariant?: SectionTitleVariant
     /** Vertical padding of the headline block. */
     titlePadding?: SectionTitlePadding
     /** Step of the headline on the heading scale. */
@@ -67,7 +67,7 @@
     /** One or two sentences under the headline. */
     description?: string
     /** Texture the panel is grounded with. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Axis the texture fades out along. */
     textureFade?: TextureMaterialFade
     /** Tabs over the frame, each `{ value, title }`; each plays its own beat of the scene. */
@@ -83,8 +83,8 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'console',
-    titleKind: 'center',
+    variant: 'console',
+    titleVariant: 'center',
     titlePadding: 'medium',
     size: 'medium',
     anchor: '',
@@ -121,8 +121,8 @@
 
   const buttons = computed<ConsolePanelAction[]>(() => {
     const named: ConsolePanelAction[] = []
-    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, kind: 'secondary' })
-    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, kind: 'outlined' })
+    if (shown(props.primaryAction)) named.push({ ...props.primaryAction, variant: 'secondary' })
+    if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, variant: 'outline' })
     return named
   })
 
@@ -145,7 +145,7 @@
     :id="anchor || undefined"
     class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title || undefined"
   >
     <SectionModule
@@ -158,7 +158,7 @@
       >
         <SectionTitle
           class="[--section-title-headline-max:var(--container-xl)] [--section-title-headline-span:2]"
-          :kind="titleKind"
+          :variant="titleVariant"
           :padding="titlePadding"
           :size="size"
           :eyebrow="eyebrow"
@@ -175,7 +175,7 @@
               :label="action.label"
               :href="action.href"
               :target="action.target"
-              :kind="action.kind"
+              :variant="action.variant"
               size="large"
               :icon="action.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
@@ -201,13 +201,13 @@
           class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-md) pb-(--spacing-xl) md:pb-0"
         >
           <TextureMaterial
-            :kind="texture"
+            :variant="texture"
             size="small"
             :fade="textureFade"
           />
           <div
-            :data-kind="kind"
-            class="relative z-10 w-full data-[kind=console]:aspect-square data-[kind=diagram]:flex data-[kind=diagram]:min-h-(--size-96) data-[kind=diagram]:items-center data-[kind=diagram]:justify-center md:data-[kind=console]:-mb-(--console-panel-crop) md:data-[kind=console]:aspect-[1.9/1] md:data-[kind=console]:[--mockup-fade-end:var(--console-panel-fade-end)] md:data-[kind=console]:[--mockup-fade-start:var(--console-panel-fade-start)]"
+            :data-variant="variant"
+            class="relative z-10 w-full data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center md:data-[variant=console]:-mb-(--console-panel-crop) md:data-[variant=console]:aspect-[1.9/1] md:data-[variant=console]:[--mockup-fade-end:var(--console-panel-fade-end)] md:data-[variant=console]:[--mockup-fade-start:var(--console-panel-fade-start)]"
             :style="cropStyle"
           >
             <slot

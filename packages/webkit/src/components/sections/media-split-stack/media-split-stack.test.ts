@@ -37,7 +37,7 @@ const run = (props: Record<string, unknown> = {}) =>
 
 const bandSides = (container: HTMLElement) =>
   Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`)).map((band) =>
-    band.getAttribute('data-kind')
+    band.getAttribute('data-variant')
   )
 
 describe('MediaSplitStack', () => {
@@ -54,21 +54,24 @@ describe('MediaSplitStack', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['media-end', 'alternating'] as const)('mirrors kind=%s on data-kind', (kind) => {
-    const { getByTestId } = run({ kind })
+  it.each(['media-end', 'alternating'] as const)(
+    'mirrors variant=%s on data-variant',
+    (variant) => {
+      const { getByTestId } = run({ variant })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
-  })
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+    }
+  )
 
-  it('defaults to the media-end kind with every picture at the closing end', () => {
+  it('defaults to the media-end variant with every picture at the closing end', () => {
     const { container, getByTestId } = run()
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('media-end')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('media-end')
     expect(bandSides(container)).toEqual(['media-end', 'media-end', 'media-end'])
   })
 
   it('alternates the media side band by band, starting at the opening end', () => {
-    const { container } = run({ kind: 'alternating' })
+    const { container } = run({ variant: 'alternating' })
 
     expect(bandSides(container)).toEqual(['media-start', 'media-end', 'media-start'])
   })
@@ -192,14 +195,14 @@ describe('MediaSplitStack', () => {
     expect(queryAllByTestId(BAND_TESTID)).toHaveLength(0)
   })
 
-  it('has no a11y violations with the media-end kind', async () => {
+  it('has no a11y violations with the media-end variant', async () => {
     const { container } = run()
 
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations with the alternating kind and a header', async () => {
-    const { container } = run({ kind: 'alternating', eyebrow: EYEBROW, title: TITLE })
+  it('has no a11y violations with the alternating variant and a header', async () => {
+    const { container } = run({ variant: 'alternating', eyebrow: EYEBROW, title: TITLE })
 
     await expectNoA11yViolations(container)
   })

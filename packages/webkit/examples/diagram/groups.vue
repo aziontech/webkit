@@ -5,39 +5,39 @@
     nodes: [
       {
         key: 'user',
-        kind: 'pill',
+        type: 'pill',
         title: 'User',
         icon: 'ai ai-user',
         active: true
       },
       {
         key: 'functions',
-        kind: 'tile',
+        type: 'tile',
         title: 'Functions',
         icon: 'ai ai-edge-functions',
         lit: true
       },
       {
         key: 'cache',
-        kind: 'tile',
+        type: 'tile',
         title: 'Cache',
         icon: 'ai ai-tiered-cache'
       },
       {
         key: 'firewall',
-        kind: 'tile',
+        type: 'tile',
         title: 'Firewall',
         icon: 'ai ai-edge-firewall'
       },
       {
         key: 'storage',
-        kind: 'tile',
+        type: 'tile',
         title: 'Object Storage',
         icon: 'ai ai-edge-storage'
       },
       {
         key: 'origin',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
         icon: 'ai ai-database'
@@ -72,7 +72,7 @@
         {
           group: 'backend',
           label: 'Your backend',
-          kind: 'dashed',
+          variant: 'dashed',
           fill: 'secondary',
           content: {
             node: 'origin'

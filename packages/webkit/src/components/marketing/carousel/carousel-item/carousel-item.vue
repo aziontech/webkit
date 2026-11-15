@@ -38,8 +38,8 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    :data-kind="context.kind.value"
-    class="grid w-[85vw] shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) data-[kind=cards]:rounded-(--shape-card) data-[kind=strip]:not-last:-me-px data-[size=large]:max-w-(--container-md) data-[size=medium]:max-w-(--container-sm) data-[size=small]:max-w-(--container-2xs) sm:data-[size=large]:w-(--container-md) sm:data-[size=medium]:w-(--container-sm) sm:data-[size=small]:w-(--container-2xs)"
+    :data-variant="context.variant.value"
+    class="grid w-[85vw] shrink-0 snap-start border border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) data-[variant=cards]:rounded-(--shape-card) data-[variant=strip]:not-last:-me-px data-[size=large]:max-w-(--container-md) data-[size=medium]:max-w-(--container-sm) data-[size=small]:max-w-(--container-2xs) sm:data-[size=large]:w-(--container-md) sm:data-[size=medium]:w-(--container-sm) sm:data-[size=small]:w-(--container-2xs)"
   >
     <slot />
   </li>

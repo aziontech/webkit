@@ -106,7 +106,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-severity="severity"
-    :data-kind="shape ? (shape.band ? 'band' : 'line') : null"
+    :data-type="shape ? (shape.band ? 'band' : 'line') : null"
     aria-hidden="true"
     direction="ltr"
     :width="ctx.size.value.width"

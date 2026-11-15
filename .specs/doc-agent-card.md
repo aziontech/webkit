@@ -3,9 +3,9 @@ name: doc-agent-card
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 0957e5c880b38e2c073c359f7daa55288fd61bf9fa80625e0f6a6319f093c8ee
+checksum: ba8c9799e9abf01ba5d94fddb1dd9f3b553887c46d189d8c5d2f869acdab8022
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 ## When NOT to use
 
 - To show the prompt text itself → use `DocPrompt`.
-- As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `CallToAction` (`kind="announcement"`).
+- As a generic two-column banner → use `DocCard`, `DocCallToAction` or a marketing `CallToAction` (`variant="announcement"`).
 - On an article page → put `CopyPromptButton` in `DocPageHeader`'s meta actions instead.
 
 ## Related
@@ -101,7 +101,7 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 | title   | `.text-heading-lg`, `var(--text-default)`                                           |
 | text    | `.text-body-md`, `var(--text-muted)`                                                |
 | aside   | `.text-heading-md`, `var(--text-default)`                                           |
-| art     | `TextureMaterial kind="dither"` inked with `var(--primary)` at 70 %                 |
+| art     | `TextureMaterial variant="dither"` inked with `var(--primary)` at 70 %              |
 | spacing | `var(--spacing-xl)` padding, `var(--spacing-sm)` / `var(--spacing-md)` inner rhythm |
 
 ## Theme gaps

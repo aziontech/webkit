@@ -11,7 +11,7 @@
   })
 
   /** Layout of the band. */
-  export type CallToActionKind = 'panel' | 'split' | 'lead' | 'primary' | 'announcement'
+  export type CallToActionVariant = 'panel' | 'split' | 'lead' | 'primary' | 'announcement'
 
   interface Props {
     /** Headline of the band, rendered as its `h2`. */
@@ -23,7 +23,7 @@
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
     /** Layout of the band: `panel` sets the copy and its controls on one surface, `split` divides it into a raised lead cell and an aside that each floor their own control, `lead` is that lead cell standing alone with every control in it, `primary` is a centred ask on the canvas lit by a pixelated, waving primary texture, with a floor, `announcement` is a mid-page announcement with its actions in a wide leading column and the supporting note on a raised trailing column. */
-    kind?: CallToActionKind
+    variant?: CallToActionVariant
     /** Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. */
     framed?: boolean
   }
@@ -32,7 +32,7 @@
     titleMuted: '',
     description: '',
     eyebrow: '',
-    kind: 'panel',
+    variant: 'panel',
     framed: false
   })
 
@@ -69,7 +69,7 @@
   <section
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-label="title"
   >
     <component
@@ -78,7 +78,7 @@
       class="h-full"
     >
       <div
-        v-if="kind === 'split'"
+        v-if="variant === 'split'"
         class="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]"
       >
         <div
@@ -129,7 +129,7 @@
       </div>
 
       <div
-        v-else-if="kind === 'lead'"
+        v-else-if="variant === 'lead'"
         class="flex h-full flex-col justify-center gap-(--spacing-xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
       >
         <div class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg)">
@@ -164,7 +164,7 @@
       </div>
 
       <div
-        v-else-if="kind === 'primary'"
+        v-else-if="variant === 'primary'"
         class="relative isolate overflow-clip bg-(--bg-canvas)"
       >
         <div class="relative">
@@ -180,7 +180,7 @@
           >
             <SectionTitle
               :framed="false"
-              kind="center"
+              variant="center"
               size="large"
               :title="title"
               :description="description"
@@ -210,7 +210,7 @@
       </div>
 
       <div
-        v-else-if="kind === 'announcement'"
+        v-else-if="variant === 'announcement'"
         class="flex flex-col md:flex-row"
       >
         <div
@@ -218,7 +218,7 @@
         >
           <SectionTitle
             :framed="false"
-            kind="start"
+            variant="start"
             :title="title"
             :eyebrow="eyebrow"
           />
@@ -247,7 +247,7 @@
       >
         <SectionTitle
           :framed="false"
-          kind="start"
+          variant="start"
           :title="title"
           :eyebrow="eyebrow"
           :description="description"

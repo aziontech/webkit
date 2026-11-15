@@ -344,7 +344,7 @@ export async function handleRequest(request) {
                       class="px-(--spacing-sm) py-(--spacing-xs)"
                     >
                       <HelperText
-                        kind="invalid"
+                        type="invalid"
                         :label="codeError"
                       />
                     </div>
@@ -364,7 +364,7 @@ export async function handleRequest(request) {
                       <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                         <Button
                           label="Add field"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-plus"
                           :disabled="saving"
@@ -372,7 +372,7 @@ export async function handleRequest(request) {
                         />
                         <Button
                           label="Remove form"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-x"
                           :disabled="saving"
@@ -427,7 +427,7 @@ export async function handleRequest(request) {
                                 <template #actions>
                                   <Button
                                     label="Add field"
-                                    kind="secondary"
+                                    variant="secondary"
                                     size="medium"
                                     icon="ai ai-plus"
                                     @click="addField"
@@ -473,7 +473,7 @@ export async function handleRequest(request) {
                                               <IconButton
                                                 :id="`${formId}-up-${field.id}`"
                                                 icon="ai ai-arrow-up"
-                                                kind="transparent"
+                                                variant="ghost"
                                                 size="small"
                                                 :disabled="index === 0"
                                                 :aria-label="'Move ' + fieldName(field) + ' up'"
@@ -482,7 +482,7 @@ export async function handleRequest(request) {
                                               <IconButton
                                                 :id="`${formId}-down-${field.id}`"
                                                 icon="ai ai-arrow-down"
-                                                kind="transparent"
+                                                variant="ghost"
                                                 size="small"
                                                 :disabled="index === fields.length - 1"
                                                 :aria-label="'Move ' + fieldName(field) + ' down'"
@@ -524,7 +524,7 @@ export async function handleRequest(request) {
                                               <Tooltip content="Duplicate this field">
                                                 <IconButton
                                                   icon="ai ai-copy"
-                                                  kind="outlined"
+                                                  variant="outline"
                                                   size="small"
                                                   :aria-label="
                                                     'Duplicate ' + (field.key || 'this field')
@@ -535,7 +535,7 @@ export async function handleRequest(request) {
                                               <Tooltip content="Remove this field">
                                                 <IconButton
                                                   icon="ai ai-trash"
-                                                  kind="outlined"
+                                                  variant="outline"
                                                   size="small"
                                                   :aria-label="
                                                     'Remove ' + (field.key || 'this field')
@@ -549,7 +549,7 @@ export async function handleRequest(request) {
                                                     ? 'ai ai-chevron-up'
                                                     : 'ai ai-chevron-down'
                                                 "
-                                                kind="outlined"
+                                                variant="outline"
                                                 size="small"
                                                 :aria-expanded="isExpanded(field.id)"
                                                 :aria-controls="formId + '-body-' + field.id"
@@ -598,7 +598,7 @@ export async function handleRequest(request) {
                                                     <HelperText
                                                       v-if="keyError(field)"
                                                       :id="formId + '-message-' + field.id"
-                                                      kind="required"
+                                                      type="required"
                                                       :label="keyError(field)"
                                                     />
                                                   </SettingRow>
@@ -656,7 +656,7 @@ export async function handleRequest(request) {
                                                   <SettingRow
                                                     title="Required"
                                                     description="The form refuses to save without it."
-                                                    kind="compact"
+                                                    variant="compact"
                                                   >
                                                     <Switch
                                                       v-model="field.required"
@@ -794,7 +794,7 @@ export async function handleRequest(request) {
                                                     v-if="field.type === 'string'"
                                                     title="Pattern"
                                                     description="A regular expression the value has to match."
-                                                    kind="stacked"
+                                                    variant="stacked"
                                                   >
                                                     <div class="contents font-code">
                                                       <Input
@@ -847,7 +847,7 @@ export async function handleRequest(request) {
                                                     v-if="field.type === 'select'"
                                                     title="Choices"
                                                     description="One per line. These are the values the form offers."
-                                                    kind="stacked"
+                                                    variant="stacked"
                                                   >
                                                     <div class="contents font-code">
                                                       <Textarea
@@ -936,7 +936,7 @@ export async function handleRequest(request) {
                         <HelperText
                           v-if="nameError"
                           :id="nameMessageId"
-                          kind="required"
+                          type="required"
                           :label="nameError"
                         />
                       </SettingRow>
@@ -983,11 +983,11 @@ export async function handleRequest(request) {
                     <Item.List>
                       <SettingRow
                         title="Runs on"
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <RadioGroup
                           v-model="form.executionEnvironment"
-                          kind="card"
+                          variant="card"
                           :name="groupName"
                           aria-label="Execution environment"
                         >
@@ -1015,7 +1015,7 @@ export async function handleRequest(request) {
                       <SettingRow
                         title="Active"
                         description="An inactive service keeps its code and stops running."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -1055,14 +1055,14 @@ export async function handleRequest(request) {
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
             size="medium"
             :loading="saving"
             @click="save"

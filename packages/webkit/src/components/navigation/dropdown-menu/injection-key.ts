@@ -14,7 +14,7 @@ export type DropdownMenuPlacementInput = DropdownMenuPlacement | 'auto'
 export type DropdownMenuOptionValue = MenuOptionValue
 
 /** Item role of an option: a plain action, an on/off setting, or one choice of a group. */
-export type DropdownMenuOptionKind = 'default' | 'checkbox' | 'radio'
+export type DropdownMenuOptionType = 'default' | 'checkbox' | 'radio'
 
 export type DropdownMenuContext = MenuContext
 

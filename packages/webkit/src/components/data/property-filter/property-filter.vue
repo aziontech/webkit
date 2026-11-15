@@ -866,7 +866,7 @@
           :id="errorId"
           :label="queryError"
           :data-testid="`${testId}__error`"
-          kind="invalid"
+          type="invalid"
         />
       </div>
       <span
@@ -897,7 +897,7 @@
           :label="labelOf(token)"
           :disabled="disabled"
           :data-testid="`${testId}__token`"
-          kind="filled"
+          variant="filled"
           size="medium"
           removable
           class="max-w-full"
@@ -934,7 +934,7 @@
               :label="labelOf(token)"
               :disabled="disabled"
               :data-testid="`${testId}__token`"
-              kind="filled"
+              variant="filled"
               size="medium"
               removable
               class="max-w-full"
@@ -962,7 +962,7 @@
         <Chip
           :label="t('propertyFilter.newGroup')"
           :data-testid="`${testId}__pending-group`"
-          kind="dashed"
+          variant="dashed"
           size="medium"
         />
       </template>
@@ -972,7 +972,7 @@
         :disabled="disabled"
         :data-testid="`${testId}__add-group`"
         icon="ai ai-plus"
-        kind="transparent"
+        variant="ghost"
         size="small"
         @click="startGroup"
       />
@@ -990,7 +990,7 @@
         :label="t('propertyFilter.clear')"
         :disabled="disabled"
         :data-testid="`${testId}__clear`"
-        kind="transparent"
+        variant="ghost"
         size="small"
         @click="clearAll"
       />

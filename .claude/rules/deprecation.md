@@ -9,11 +9,11 @@ Removing or renaming a public part (a component, a prop, an event, a slot) is a 
 ```ts
 interface Props {
   /**
-   * @deprecated since 4.2 — use `kind` instead. Removed in 5.0.
+   * @deprecated since 4.2 — use `variant` instead. Removed in 5.0.
    */
-  variant?: string
+  kind?: string
   /** Visual variant. */
-  kind?: ButtonKind
+  variant?: ButtonVariant
 }
 ```
 

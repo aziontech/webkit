@@ -17,7 +17,7 @@
     <template #trigger>
       <Button
         label="Remove domain"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

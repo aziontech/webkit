@@ -4,19 +4,19 @@
 </script>
 
 <template>
-  <SaveBar kind="docked">
+  <SaveBar variant="docked">
     Project settings changed.
     <span class="text-(--text-muted)">Saving publishes them on the next deployment.</span>
     <template #actions>
       <Button
         type="button"
         label="Discard"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>

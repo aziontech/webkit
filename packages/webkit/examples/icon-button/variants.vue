@@ -5,27 +5,27 @@
 <template>
   <div class="flex flex-wrap items-center gap-4">
     <IconButton
-      kind="primary"
+      variant="primary"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="secondary"
+      variant="secondary"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="outlined"
+      variant="outline"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="transparent"
+      variant="ghost"
       icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
-      kind="danger"
+      variant="danger"
       icon="ai ai-trash"
       aria-label="Delete"
     />

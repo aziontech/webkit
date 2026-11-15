@@ -30,7 +30,7 @@
     v-bind="attrs"
     icon="ai ai-x"
     :ariaLabel="t('popover.close')"
-    kind="outlined"
+    variant="outline"
     size="small"
     :data-testid="testId"
     @click="onClick"

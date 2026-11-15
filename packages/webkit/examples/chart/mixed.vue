@@ -36,8 +36,8 @@
     aria-label="Requests and cache hits"
   >
     <Chart.Grid />
-    <Chart.Axis kind="y" />
-    <Chart.Axis kind="x" />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
     <Chart.Bar :ids="['requests']" />
     <Chart.Line :ids="['cached']" />
     <Chart.Crosshair />

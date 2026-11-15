@@ -79,7 +79,7 @@ break: it removed every old name outright, and apps migrate once with `MIGRATION
 1. Mark the part `@deprecated` in its JSDoc (a prop) or on `defineOptions` (a component), naming
    the **replacement** and the **removal version**:
    ```ts
-   /** @deprecated since 6.2 — use `kind` instead. Removed in 7.0. */
+   /** @deprecated since 6.2 — use `variant` instead. Removed in 7.0. */
    ```
 2. For a whole component, set `deprecated: true` and `replaced_by: <name>` in the spec frontmatter.
    `build:catalog` carries the flag to `catalog.json`, the MCP steers agents off it, and the

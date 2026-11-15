@@ -3,9 +3,9 @@ name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 8c3aa136610b4c69c07c31d509275882cbe096c9b8759040d59d20bf9f16462a
+checksum: 44f3ca9d1769828ad295e139549b3588a2fa46979753a48194548156025467db
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -20,7 +20,7 @@ delete — and the reader approves or denies it before anything runs. The card s
 question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a
 `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once
 decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the
-decision stays in the thread. Irreversible actions (`kind="danger"`) turn Approve destructive and can
+decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can
 require typing a phrase first.
 
 It is a card in the conversation, not a dialog: it does not trap focus and does not take initial
@@ -85,7 +85,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 
 ## Sub-components
 
-_None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalKind`.
+_None. Exports: `"./tool-approval"`; types `ToolApprovalStatus`, `ToolApprovalVariant`.
 Composed DS components: `button`, `status-indicator`; the title and description reuse
 `StreamingResponse`'s inline renderer so backticks render as code (no HTML). Exposes `focus()`._
 
@@ -96,7 +96,7 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 | `title`              | `string`                                           | —           | true     | The question, naming the action: ``Allow `npm test`?``, `Approve deployment to production?`. Backticks render as code.      |
 | `description`        | `string`                                           | `''`        | false    | One or two sentences on what will happen and to what; backticks render as code.                                             |
 | `status`             | `'pending' \| 'approved' \| 'denied' \| 'expired'` | `'pending'` | false    | `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text.                            |
-| `kind`               | `'default' \| 'danger'`                            | `'default'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
+| `variant`            | `'default' \| 'danger'`                            | `'default'` | false    | `danger` for an action that cannot be undone: the approve button turns destructive.                                         |
 | `confirmationPhrase` | `string`                                           | `''`        | false    | A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. |
 | `approveLabel`       | `string`                                           | `''`        | false    | Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`).          |
 | `denyLabel`          | `string`                                           | `''`        | false    | Text of the deny button. Empty uses the locale catalog (`Deny`).                                                            |
@@ -117,8 +117,8 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## States
 
-- `data-status` mirrors `status`; `data-kind`.
-- `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `kind="danger"`); Approve disabled until the phrase matches.
+- `data-status` mirrors `status`; `data-variant`.
+- `pending`: phrase field (when `confirmationPhrase`), Deny (outlined) and Approve (primary, or danger with `variant="danger"`); Approve disabled until the phrase matches.
 - `approved` (success), `denied` (warning), `expired` (neutral): a `StatusIndicator` with the outcome; the typed phrase resets when the card returns to `pending`.
 
 ## Motion & Animations

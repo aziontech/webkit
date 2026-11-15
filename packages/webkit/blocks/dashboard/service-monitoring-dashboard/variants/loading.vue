@@ -521,8 +521,8 @@
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Line />
                 <Chart.Crosshair />
                 <Chart.Tooltip />
@@ -550,8 +550,8 @@
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Line />
                 <Chart.Crosshair />
                 <Chart.Tooltip />

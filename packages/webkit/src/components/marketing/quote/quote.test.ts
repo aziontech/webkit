@@ -97,11 +97,11 @@ describe('Quote', () => {
   it('carries its register on the root', () => {
     const { getByTestId } = render(Quote, { props })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'inline')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'inline')
   })
 
   it('sets the speaker apart from the role in the signed register', () => {
-    const { container } = render(Quote, { props: { ...props, kind: 'signed' } })
+    const { container } = render(Quote, { props: { ...props, variant: 'signed' } })
     const caption = container.querySelector('figcaption')
 
     expect(caption).toHaveTextContent(props.name)
@@ -110,8 +110,8 @@ describe('Quote', () => {
 
   it.each(['signed', 'highlight'] as const)(
     'leads the %s register with the quotation mark and no typed quote character',
-    (kind) => {
-      const { getByTestId, container } = render(Quote, { props: { ...props, kind } })
+    (variant) => {
+      const { getByTestId, container } = render(Quote, { props: { ...props, variant: variant } })
       const mark = getByTestId(TESTID).querySelector('svg')
 
       expect(mark).toBeInTheDocument()
@@ -128,12 +128,12 @@ describe('Quote', () => {
 
   it('draws the likeness in the highlight register only when a photo is given', () => {
     const photo = '/people/allan.jpg'
-    const without = render(Quote, { props: { ...props, kind: 'highlight' } })
+    const without = render(Quote, { props: { ...props, variant: 'highlight' } })
 
     expect(without.container.querySelector('figcaption img')).toBeNull()
     without.unmount()
 
-    const { container } = render(Quote, { props: { ...props, kind: 'highlight', photo } })
+    const { container } = render(Quote, { props: { ...props, variant: 'highlight', photo } })
 
     expect(container.querySelector('figcaption img')).toHaveAttribute('src', photo)
   })
@@ -203,7 +203,7 @@ describe('Quote', () => {
 
   it('has no a11y violations in the signed register', async () => {
     const { container } = render(Quote, {
-      props: { ...props, kind: 'signed', logo },
+      props: { ...props, variant: 'signed', logo },
       slots: { actions: '<a href="/clients">Clients</a>' }
     })
 
@@ -211,7 +211,7 @@ describe('Quote', () => {
   })
 
   it('has no a11y violations in the highlight register', async () => {
-    const { container } = render(Quote, { props: { ...props, kind: 'highlight', logo } })
+    const { container } = render(Quote, { props: { ...props, variant: 'highlight', logo } })
 
     await expectNoA11yViolations(container)
   })

@@ -144,7 +144,7 @@
     { accessorKey: 'policy', header: 'Policy', minWidth: 80 },
     { accessorKey: 'weight', header: 'Weight', minWidth: 80 },
     { accessorKey: 'description', header: 'Description', grow: 2 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const rows = ref<DnsRecord[]>([
@@ -509,7 +509,7 @@ legacy  IN HINFO "PC" "Linux"`
                         <HelperText
                           v-if="errors.name"
                           :id="nameMessageId"
-                          kind="required"
+                          type="required"
                           :label="errors.name"
                         />
                       </SettingRow>
@@ -532,7 +532,7 @@ legacy  IN HINFO "PC" "Linux"`
                         <HelperText
                           v-if="errors.domain"
                           :id="domainMessageId"
-                          kind="required"
+                          type="required"
                           :label="errors.domain"
                         />
                       </SettingRow>
@@ -570,7 +570,7 @@ legacy  IN HINFO "PC" "Linux"`
                               />
                             </div>
                             <CopyButton
-                              kind="transparent"
+                              variant="ghost"
                               :value="ns"
                               :aria-label="'Copy nameserver ' + (index + 1)"
                               size="small"
@@ -579,7 +579,7 @@ legacy  IN HINFO "PC" "Linux"`
                         </div>
                         <HelperText
                           :id="nameserverMessageId"
-                          kind="helper"
+                          type="helper"
                           label="Add the nameservers in your domain provider."
                         />
                       </SettingRow>
@@ -599,7 +599,7 @@ legacy  IN HINFO "PC" "Linux"`
                       <SettingRow
                         title="Enable DNSSEC"
                         description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="settings.dnssec"
@@ -628,7 +628,7 @@ legacy  IN HINFO "PC" "Linux"`
                               />
                             </div>
                             <CopyButton
-                              kind="transparent"
+                              variant="ghost"
                               :value="key.value"
                               :aria-label="'Copy ' + key.label"
                               size="small"
@@ -652,7 +652,7 @@ legacy  IN HINFO "PC" "Linux"`
                       <SettingRow
                         title="Active"
                         description="When active, the zone answers authoritative DNS queries for the domain."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="settings.active"
@@ -675,7 +675,7 @@ legacy  IN HINFO "PC" "Linux"`
         >
           <SaveBar
             v-if="dirty || saving"
-            kind="docked"
+            variant="docked"
           >
             You have unsaved changes.
 
@@ -683,7 +683,7 @@ legacy  IN HINFO "PC" "Linux"`
               <Button
                 type="button"
                 label="Discard"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="saving"
                 @click="discard"
@@ -691,7 +691,7 @@ legacy  IN HINFO "PC" "Linux"`
               <Button
                 type="submit"
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="saving"
               />
@@ -715,7 +715,7 @@ legacy  IN HINFO "PC" "Linux"`
             <Button
               label="Documentation"
               icon="ai ai-book"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="https://example.com/docs/records"
               target="_blank"
@@ -723,14 +723,14 @@ legacy  IN HINFO "PC" "Linux"`
             <Button
               label="Import zone file"
               icon="ai ai-file-import"
-              kind="outlined"
+              variant="outline"
               size="medium"
               @click="importOpen = true"
             />
             <Button
               label="Add Record"
               icon="ai ai-plus"
-              kind="outlined"
+              variant="outline"
               size="medium"
             />
           </template>
@@ -752,7 +752,7 @@ legacy  IN HINFO "PC" "Linux"`
                 >
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh"
@@ -765,7 +765,7 @@ legacy  IN HINFO "PC" "Linux"`
                 >
                   <IconButton
                     icon="ai ai-download"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="!matchingItems.length"
                     aria-label="Download CSV"
@@ -859,7 +859,7 @@ legacy  IN HINFO "PC" "Linux"`
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />
@@ -878,13 +878,13 @@ legacy  IN HINFO "PC" "Linux"`
                           <Button
                             label="Add Record"
                             icon="ai ai-plus"
-                            kind="secondary"
+                            variant="secondary"
                             size="small"
                           />
                           <Button
                             label="Import zone file"
                             icon="ai ai-upload"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="importOpen = true"
                           />
@@ -938,7 +938,7 @@ legacy  IN HINFO "PC" "Linux"`
               >
                 <Button
                   label="Browse files"
-                  kind="secondary"
+                  variant="secondary"
                   size="medium"
                   @click="fileInputEl?.click()"
                 />
@@ -954,7 +954,7 @@ legacy  IN HINFO "PC" "Linux"`
               />
               <HelperText
                 v-if="dropError"
-                kind="invalid"
+                type="invalid"
                 :label="dropError"
               />
               <Field>
@@ -1052,14 +1052,14 @@ legacy  IN HINFO "PC" "Linux"`
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               @click="importOpen = false"
             />
             <Button
               :label="
                 readyLines.length === 1 ? 'Import 1 record' : `Import ${readyLines.length} records`
               "
-              kind="primary"
+              variant="primary"
               :disabled="!readyLines.length"
               :loading="importing"
               @click="runImport"

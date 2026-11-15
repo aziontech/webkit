@@ -5,10 +5,10 @@
 <template>
   <Item.Group>
     <Item
-      kind="inline"
+      variant="inline"
       size="small"
     >
-      <Item.Media kind="icon">
+      <Item.Media type="icon">
         <i
           class="ai ai-domains text-[length:inherit] leading-none"
           aria-hidden="true"
@@ -24,10 +24,10 @@
       />
     </Item>
     <Item
-      kind="inline"
+      variant="inline"
       size="small"
     >
-      <Item.Media kind="icon">
+      <Item.Media type="icon">
         <i
           class="ai ai-network-lists text-[length:inherit] leading-none"
           aria-hidden="true"
@@ -43,10 +43,10 @@
       />
     </Item>
     <Item
-      kind="inline"
+      variant="inline"
       size="small"
     >
-      <Item.Media kind="icon">
+      <Item.Media type="icon">
         <i
           class="ai ai-real-time-metrics text-[length:inherit] leading-none"
           aria-hidden="true"

@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
 
-  export type ProgressKind = 'rounded' | 'flat'
+  export type ProgressVariant = 'rounded' | 'flat'
   export type ProgressSize = 'small' | 'medium' | 'large'
 
   defineOptions({
@@ -18,7 +18,7 @@
     /** Upper bound; percentage = `value / max * 100`. */
     max?: number
     /** Track and fill corner-radius variant. */
-    kind?: ProgressKind
+    variant?: ProgressVariant
     /** Bar height token. */
     size?: ProgressSize
     /** Loading state; animates a sliding segment and ignores `value`. */
@@ -28,7 +28,7 @@
   const props = withDefaults(defineProps<Props>(), {
     value: 0,
     max: 100,
-    kind: 'flat',
+    variant: 'flat',
     size: 'medium',
     indeterminate: false
   })
@@ -54,14 +54,14 @@
     role="progressbar"
     :aria-label="accessibleName"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-indeterminate="indeterminate || null"
     :aria-valuemin="indeterminate ? undefined : 0"
     :aria-valuemax="indeterminate ? undefined : max"
     :aria-valuenow="indeterminate ? undefined : value"
     :aria-busy="indeterminate || undefined"
-    class="relative block w-full overflow-hidden bg-(--bg-placeholder) data-[size=small]:h-2 data-[size=medium]:h-3 data-[size=large]:h-4 data-[kind=rounded]:rounded-(--shape-control) data-[kind=flat]:rounded-(--shape-flat)"
+    class="relative block w-full overflow-hidden bg-(--bg-placeholder) data-[size=small]:h-2 data-[size=medium]:h-3 data-[size=large]:h-4 data-[variant=rounded]:rounded-(--shape-control) data-[variant=flat]:rounded-(--shape-flat)"
   >
     <div
       :data-indeterminate="indeterminate || null"

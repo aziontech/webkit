@@ -11,7 +11,7 @@
       :delta="12.4"
     />
     <StatTile
-      kind="sans"
+      variant="sans"
       label="Requests"
       :value="48.2"
       unit="M"

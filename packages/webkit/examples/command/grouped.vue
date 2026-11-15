@@ -14,7 +14,7 @@
 <template>
   <Button
     label="Open grouped palette"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 

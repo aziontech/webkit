@@ -3,11 +3,11 @@ name: skeleton
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 87c40a57372988a368e3ed4b89be6e6f1782aacb4926f47cdebd36efad5a314a
+checksum: 4fc52bf24319cda45a7129d3c030b4393197650bbb4d585d6de3d1a7db80b7e3
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 ## When to use
 
 - Content is loading and its final layout is known: text lines, cards, media blocks.
-- Avatar and icon placeholders, with `kind="circle"`.
+- Avatar and icon placeholders, with `variant="circle"`.
 
 ## When NOT to use
 
@@ -42,7 +42,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 ## Best practices
 
 - Size each skeleton like the content it stands in for (`width`, `height`) so nothing shifts when the data arrives.
-- For `kind="circle"`, set `width` and `height` to the same value.
+- For `variant="circle"`, set `width` and `height` to the same value.
 - The skeleton is `aria-hidden`. Mark the container you own with `aria-busy="true"` while it loads.
 - Keep `animated` on (the default). The shimmer already turns off under reduced motion; use `:animated="false"` only for static captures.
 
@@ -59,7 +59,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
     height="100px"
   />
   <Skeleton
-    kind="circle"
+    variant="circle"
     width="100px"
     height="100px"
   />
@@ -70,7 +70,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 | Prop       | Type                  | Default   | Required | JSDoc                                                        |
 | ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------ |
-| `kind`     | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
+| `variant`     | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
 | `width`    | `string`              | `'100%'`  | false    | CSS width (any length).                                      |
 | `height`   | `string`              | `'1rem'`  | false    | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean`             | `true`    | false    | Shimmer while loading; suppressed under reduced motion.      |
@@ -86,7 +86,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors `kind` (`rectangle` | `circle`)
+- `data-variant` mirrors `variant` (`rectangle` | `circle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Motion & Animations
@@ -120,7 +120,7 @@ A loading placeholder that reserves the space of content while it loads, gently 
 This component has no `size` axis, so the canonical Sizes story does not apply.
 
 - Default
-- Types — composite story rendering both `kind` values (`rectangle`, `circle`) side-by-side.
+- Types — composite story rendering both `variant` values (`rectangle`, `circle`) side-by-side.
 - Static — `animated: false`; demonstrates the non-shimmering placeholder. Justified because `animated` is a distinct state of the component and the shimmer cannot be seen in a static screenshot.
 
 ## Constraints — DO NOT

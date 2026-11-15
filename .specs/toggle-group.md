@@ -3,12 +3,12 @@ name: toggle-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 5d68ef992e3263275ff7173a763ba92160176ededdfcb2eceae7dfd3e7351c51
+checksum: 0e2c8126414268bc705b360e2ad24b18d44ddb5dd6a2904f342d52e102eb62ca
 created: 2026-11-09
 last_updated: 2026-11-15
 ---
@@ -29,7 +29,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 ## When NOT to use
 
 - The choice switches between content panels that belong to the control → use `tabs`.
-- The choice is a form field with a label, helper text or validation → use `radio-group` (`kind="card"` when each option needs a description).
+- The choice is a form field with a label, helper text or validation → use `radio-group` (`variant="card"` when each option needs a description).
 - The value is a binary on/off setting → use `switch` (in a horizontal `field` inside a form).
 - The user can pick more than one option → use `checkbox` (in a horizontal `field`).
 - The control triggers an action instead of holding a value → use `button` or `split-button`.
@@ -37,7 +37,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 ## Related
 
 - `tabs` — tabs that own their panels; reach for it when each option reveals its own content region.
-- `radio-group` — the form-field single choice; `kind="card"` when each option carries a description.
+- `radio-group` — the form-field single choice; `variant="card"` when each option carries a description.
 - `theme-switcher` — the system / light / dark choice in app chrome.
 - `switch` — a single boolean toggle.
 - `button` — a lone action; the segments here hold a value instead of firing one.

@@ -549,7 +549,7 @@
     <DrawerTrigger>
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />
@@ -583,7 +583,7 @@
                   >
                     <Separator v-if="index" />
                     <Item
-                      kind="inline"
+                      variant="inline"
                       size="small"
                     >
                       <Item.Media>
@@ -625,7 +625,7 @@
                             <Button
                               label="Change version"
                               :aria-label="`Change version of ${row.name}`"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               icon="ai ai-chevron-down"
                               icon-position="trailing"
@@ -668,7 +668,7 @@
                                   :alt="entry.author"
                                   :label="entry.author"
                                   size="small"
-                                  kind="square"
+                                  variant="square"
                                 />
                               </template>
                               <span class="inline-flex min-w-0 items-center gap-(--spacing-xs)">
@@ -697,7 +697,7 @@
                             >
                               <Button
                                 :label="`Load ${Math.min(row.versions.length, row.total - row.versions.length)} more`"
-                                kind="transparent"
+                                variant="ghost"
                                 size="small"
                                 class="w-full"
                               />
@@ -729,7 +729,7 @@
                                 <Item
                                   v-for="dependency in row.dependencies"
                                   :key="dependency.key"
-                                  kind="inline"
+                                  variant="inline"
                                   size="small"
                                 >
                                   <Item.Media>
@@ -773,7 +773,7 @@
                                         <Button
                                           label="Change version"
                                           :aria-label="`Change version of ${dependency.name}`"
-                                          kind="outlined"
+                                          variant="outline"
                                           size="small"
                                           icon="ai ai-chevron-down"
                                           icon-position="trailing"
@@ -816,7 +816,7 @@
                                               :alt="entry.author"
                                               :label="entry.author"
                                               size="small"
-                                              kind="square"
+                                              variant="square"
                                             />
                                           </template>
                                           <span
@@ -847,7 +847,7 @@
                                         >
                                           <Button
                                             :label="`Load ${Math.min(dependency.versions.length, dependency.total - dependency.versions.length)} more`"
-                                            kind="transparent"
+                                            variant="ghost"
                                             size="small"
                                             class="w-full"
                                           />
@@ -889,7 +889,7 @@
                 <template #default>
                   <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
                     <Item
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                     >
                       <Item.Media>
@@ -1005,7 +1005,7 @@
                                 >
                                   <Button
                                     :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                    kind="transparent"
+                                    variant="ghost"
                                     size="small"
                                     class="w-full"
                                   />
@@ -1030,7 +1030,7 @@
                           <DropdownMenu.Trigger>
                             <Button
                               label="Change"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               icon="ai ai-chevron-down"
                               icon-position="trailing"
@@ -1069,7 +1069,7 @@
             >
               <RadioGroup
                 v-model="environment"
-                kind="card"
+                variant="card"
                 name="service-deploy-environment"
                 aria-label="Environment"
               >
@@ -1114,7 +1114,7 @@
                       class="min-w-0"
                     >
                       <Item
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                       >
                         <Item.Media>
@@ -1224,7 +1224,7 @@
                                   >
                                     <Button
                                       :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                      kind="transparent"
+                                      variant="ghost"
                                       size="small"
                                       class="w-full"
                                     />
@@ -1270,7 +1270,7 @@
             <span v-else />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               type="submit"
             />

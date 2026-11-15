@@ -6,11 +6,11 @@
   <div class="flex w-[320px] flex-col gap-4">
     <Progress
       :value="60"
-      kind="rounded"
+      variant="rounded"
     />
     <Progress
       :value="60"
-      kind="flat"
+      variant="flat"
     />
   </div>
 </template>

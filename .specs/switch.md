@@ -3,11 +3,11 @@ name: switch
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 15
+spec_version: 16
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 35d04b11395aa84f083dfa9124789660adcc1a513c2655d7c1975caf91484646
+checksum: 3df629d664c02e320a85b4689f105cc6b173ac8d297b9327535ca637743cffd0
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 - Use Switch for any on/off setting that applies at once — the answer for 'toggle'. For an on/off choice submitted with a form use Checkbox; to switch a view or mode in place use ToggleGroup.
 - An on/off setting that takes effect as soon as it flips (enable a feature, turn a rule on).
 - A row that already names the setting outside the control, such as an `item` row whose title is the label.
-- A visibility or access toggle: `kind="privacy"` shows a closed lock when off and an open lock when on.
+- A visibility or access toggle: `variant="privacy"` shows a closed lock when off and an open lock when on.
 
 ## When NOT to use
 
@@ -44,7 +44,7 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 - The switch renders no text: give it an accessible name with `aria-label`, or `aria-labelledby` pointing at the visible label.
 - Set `disabled` on the switch itself; it renders a native disabled button, so it leaves the tab order and ignores clicks and keys.
 - Use `autofocus` to focus the switch when it mounts (a dialog whose first control it is).
-- Keep `kind="default"` unless the setting is about visibility or access.
+- Keep `variant="default"` unless the setting is about visibility or access.
 
 ## Usage
 
@@ -59,7 +59,7 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 <template>
   <Switch
     v-model="enabled"
-    kind="default"
+    variant="default"
   />
 </template>
 ```
@@ -68,7 +68,7 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 
 | Prop        | Type                     | Default     | Required | JSDoc                                                                                                                                                                                        |
 | ----------- | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`      | `'default' \| 'privacy'` | `'default'` | false    | Visual variant (`SwitchKind`). `privacy` renders a lock icon inside the handle (closed when off, open when on).                 |
+| `variant`      | `'default' \| 'privacy'` | `'default'` | false    | Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on).                 |
 | `autofocus` | `boolean`                | `false`     | false    | Moves focus to the switch once, when it mounts.                                                                                                                                              |
 | `disabled`  | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                                                                                                                        |
 | `invalid`   | `boolean`                | `false`     | false    | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too.                                                              |
@@ -92,7 +92,7 @@ _none_
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `checked`, `disabled`
 - `data-checked` mirrors the `modelValue` prop (toggled-on state)
-- `data-kind` mirrors the `kind` prop (`default` | `privacy`)
+- `data-variant` mirrors the `variant` prop (`default` | `privacy`)
 - `data-disabled` mirrors the `disabled` prop; the root is also natively `<button disabled>`, so it leaves the tab order and neither click nor `Space`/`Enter` emits `update:modelValue`. The disabled treatment is the `--bg-disabled` track + `--text-disabled` handle + `cursor-not-allowed` — token surfaces, never an opacity wash. It wins over the checked tokens, so a disabled switch reads locked in both the off and on positions.
 - `data-invalid` mirrors `invalid` (own prop or the enclosing `Field`); with `aria-invalid` on the control, it paints the danger border while unchecked
 - Hover applies an inset `var(--bg-hover)` overlay on both off and on tracks; disabled suppresses that overlay (`data-[disabled]:hover:shadow-none`) while keeping the element hit-testable so `cursor-not-allowed` is what the pointer shows
@@ -138,7 +138,7 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` focuses; `Space` / `Enter` toggles. When `disabled`, the native `<button disabled>` root is skipped by `Tab` and both keys are inert.
-- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `kind="privacy"` is decorative — `aria-hidden="true"`.
+- ARIA: `role="switch"` on the root; `aria-checked` mirrors `data-checked`; `aria-disabled` mirrors `data-disabled`. The lock icon in `variant="privacy"` is decorative — `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons).
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the control itself is 36×20 — the consumer is responsible for placing it inside a ≥40×40 hit area (typically a horizontal `Field`, whose label extends the target). The component still exposes a clickable root.

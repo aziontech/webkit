@@ -29,7 +29,7 @@
           />
           <HelperText
             id="resource-name-message"
-            kind="required"
+            type="required"
             label="This field is required."
           />
         </SettingRow>

@@ -145,7 +145,7 @@
           />
         </div>
         <CardGrid
-          kind="divider"
+          variant="divider"
           :columns="3"
         >
           <CardPricing
@@ -154,7 +154,7 @@
             equal-height
             animated
             actions-position="middle"
-            kind="transparent"
+            variant="ghost"
             :data-highlighted="plan.highlighted || null"
             class="bg-(--bg-canvas) data-[highlighted]:bg-(--bg-surface)"
             :title="plan.name"
@@ -200,7 +200,7 @@
             >
               <Button
                 :label="plan.action?.label ?? ''"
-                :kind="plan.highlighted ? 'secondary' : 'outlined'"
+                :variant="plan.highlighted ? 'secondary' : 'outline'"
                 size="large"
                 class="w-full"
                 :href="plan.action?.href ?? ''"

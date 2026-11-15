@@ -38,7 +38,7 @@
     </Footer.Column>
     <template #social>
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-github"
         aria-label="Azion on GitHub"
@@ -46,7 +46,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-linkedin"
         aria-label="Azion on LinkedIn"
@@ -54,7 +54,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-youtube"
         aria-label="Azion on YouTube"
@@ -62,7 +62,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-x-brand"
         aria-label="Azion on X"
@@ -70,7 +70,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-instagram"
         aria-label="Azion on Instagram"
@@ -78,7 +78,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-discord"
         aria-label="Azion on Discord"
@@ -86,7 +86,7 @@
         target="_blank"
       />
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-reddit"
         aria-label="Azion on Reddit"

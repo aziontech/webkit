@@ -22,4 +22,4 @@ const GlobalHeader = Object.assign(GlobalHeaderRoot, {
 }) as CompoundGlobalHeader
 
 export default GlobalHeader
-export type { GlobalHeaderKind } from './global-header.vue'
+export type { GlobalHeaderVariant } from './global-header.vue'

@@ -641,7 +641,7 @@
           </div>
           <IconButton
             icon="ai ai-refresh"
-            kind="outlined"
+            variant="outline"
             size="medium"
             aria-label="Refresh"
             @click="(event: MouseEvent) => emit('refresh', event)"
@@ -724,14 +724,14 @@
               >
                 <Button
                   label="Clear filters"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="clearFilters"
                 />
               </template>
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar stacked />
               <Chart.Crosshair />
               <Chart.Tooltip />
@@ -854,7 +854,7 @@
               <template #actions>
                 <Button
                   label="Clear filters"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="clearFilters"
                 />

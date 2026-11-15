@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'requests',
-      kind: 'pill',
+      type: 'pill',
       title: 'Requests',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'runtime',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Azion Runtime',
       title: 'Isolate per request',
       icon: 'ai ai-edge-functions',
@@ -26,21 +26,21 @@ const spec: DiagramSpec = {
     },
     {
       key: 'first',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Isolate',
       title: 'Request 1',
       active: true
     },
     {
       key: 'second',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Isolate',
       title: 'Request 2',
       active: true
     },
     {
       key: 'third',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Isolate',
       title: 'Request 3',
       active: true

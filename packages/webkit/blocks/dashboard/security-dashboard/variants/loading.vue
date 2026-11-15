@@ -387,7 +387,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
                   disabled
@@ -400,7 +400,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Matched requests over time"
                   />
@@ -430,8 +430,8 @@
               loading
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="form === 'bar'"
                 stacked
@@ -497,7 +497,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
                   disabled
@@ -510,7 +510,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
                   />
@@ -565,7 +565,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
                   disabled
@@ -578,7 +578,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by country"
                   />
@@ -636,7 +636,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
                   disabled
@@ -649,7 +649,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
                   />

@@ -253,7 +253,7 @@
                   <Button
                     type="button"
                     label="Retry"
-                    kind="secondary"
+                    variant="secondary"
                     size="small"
                     @click="retryLoad"
                   />
@@ -295,7 +295,7 @@
                           <HelperText
                             v-if="errors.accountName"
                             id="profile-accountName-error"
-                            kind="required"
+                            type="required"
                             :label="errors.accountName"
                           />
                         </div>
@@ -353,7 +353,7 @@
                       <SettingRow
                         title="Billing emails"
                         description="Invoices go to every address listed here. Separate addresses with a semicolon."
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <Textarea
@@ -373,7 +373,7 @@
                           <HelperText
                             v-if="errors.billingEmails"
                             id="profile-billingEmails-error"
-                            :kind="form.billingEmails.trim() ? 'invalid' : 'required'"
+                            :type="form.billingEmails.trim() ? 'invalid' : 'required'"
                             :label="errors.billingEmails"
                           />
                         </div>
@@ -467,7 +467,7 @@
                       <SettingRow
                         title="Allow social login"
                         description="Users linked to the account can log in with their social network credentials."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.allowSocialLogin"
@@ -478,11 +478,11 @@
                       <SettingRow
                         title="Multi-factor authentication"
                         description="Require MFA for everyone in the account, see who has set it up and reset a lost device on the MFA management page."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Button
                           label="Manage MFA"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           href="/account/security/mfa"
                         />
@@ -530,7 +530,7 @@
                           <Button
                             :label="provider.action"
                             :aria-label="`${provider.action} ${provider.name}`"
-                            kind="outlined"
+                            variant="outline"
                             size="medium"
                             :icon="
                               provider.connected || !provider.href.startsWith('http')
@@ -622,12 +622,12 @@
                       <SettingRow
                         title="Delete personal account"
                         description="Permanently deletes this personal account and all its data. It cannot be undone."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Button
                           type="button"
                           label="Delete account"
-                          kind="danger"
+                          variant="danger"
                           size="medium"
                           icon="ai ai-trash"
                           @click="openDelete"
@@ -653,14 +653,14 @@
               <Button
                 type="button"
                 label="Discard"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="saving"
                 @click="discard"
               />
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="saving"
                 @click="save"
@@ -673,7 +673,7 @@
 
     <ConfirmDialog
       v-model:open="deleteOpen"
-      kind="danger"
+      variant="danger"
       title="Delete account"
       size="medium"
     >
@@ -704,7 +704,7 @@
         <Button
           type="button"
           label="Cancel"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="deleting"
           @click="close"
@@ -712,7 +712,7 @@
         <Button
           type="button"
           label="Delete account"
-          kind="danger"
+          variant="danger"
           size="medium"
           :disabled="!canDelete"
           :loading="deleting"

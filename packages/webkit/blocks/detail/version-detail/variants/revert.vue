@@ -306,7 +306,7 @@
       ]"
     >
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="versionId"
         :display-value="(id) => versions.find((entry) => entry.id === id)?.name ?? String(id ?? '')"
@@ -381,7 +381,7 @@
       <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           href="/resources/1784552864?tab=versions"
           aria-label="Back to web-app versions"
@@ -490,7 +490,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       aria-label="Version actions"
                     />
@@ -568,7 +568,7 @@
                                   <SettingRow
                                     title="Active"
                                     description="When disabled, the resource stops serving traffic."
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <Switch
                                       v-model="settings.active"
@@ -593,7 +593,7 @@
                                     :key="mod.key"
                                     :title="mod.title"
                                     :description="mod.description"
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <Switch
                                       v-model="settings.modules[mod.key]"
@@ -615,7 +615,7 @@
                                 <Item.List>
                                   <SettingRow
                                     title="WebSocket Proxy"
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <template #description>
                                       Enhance real-time data exchange between your resource and
@@ -667,7 +667,7 @@
                     <template #actions>
                       <Button
                         :label="`Open ${tabLabel}`"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`/resources/web-app/${activeTab}`"
                       />
@@ -725,7 +725,7 @@
                     >
                       <Button
                         label="Add Version"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-plus"
                       />
@@ -733,7 +733,7 @@
                     <Button
                       v-if="viewedDeployed"
                       label="Redeploy"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       icon="ai ai-refresh"
                       @click="run"
@@ -744,14 +744,14 @@
                       :title="`Revert to ${VIEWED}?`"
                       :description="`Reverting deploys ${VIEWED} to Production in place of AEO25I38. AEO25I38 stays in the version history, so you can redeploy it later.`"
                       :confirm-label="`Revert to ${VIEWED}`"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       @confirm="confirmRevert"
                     >
                       <template #trigger>
                         <Button
                           :label="`Revert to ${VIEWED}`"
-                          kind="primary"
+                          variant="primary"
                           size="medium"
                           icon="ai ai-undo"
                           :loading="reverting"
@@ -837,7 +837,7 @@
               </h2>
               <IconButton
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Close version history"
                 @click="historyExpanded = false"
@@ -885,7 +885,7 @@
                           :alt="version.author"
                           :label="version.author"
                           size="small"
-                          kind="square"
+                          variant="square"
                         />
                       </span>
                       <span class="truncate">{{ version.author }} · {{ version.createdAgo }}</span>
@@ -950,7 +950,7 @@
                             :alt="entry.author"
                             :label="entry.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
@@ -966,7 +966,7 @@
               >
                 <Button
                   label="Show older"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="shown += 5"
                 />

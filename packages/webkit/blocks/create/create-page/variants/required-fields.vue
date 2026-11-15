@@ -153,7 +153,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Services"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -163,7 +163,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -180,7 +180,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -228,7 +228,7 @@
                           <HelperText
                             v-if="errors.name"
                             id="app-name-error"
-                            kind="required"
+                            type="required"
                             :label="errors.name"
                           />
                         </div>
@@ -250,7 +250,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.protocolUsage"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="protocolUsage"
                           aria-label="Protocol usage"
@@ -297,7 +297,7 @@
                           <HelperText
                             v-if="errors.httpPorts"
                             id="app-httpPorts-error"
-                            kind="required"
+                            type="required"
                             :label="errors.httpPorts"
                           />
                         </div>
@@ -360,7 +360,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.protocolPolicy"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="protocolPolicy"
                           aria-label="Protocol policy"
@@ -393,7 +393,7 @@
                           <HelperText
                             v-if="errors.address"
                             id="app-address-error"
-                            kind="required"
+                            type="required"
                             :label="errors.address"
                           />
                         </div>
@@ -419,7 +419,7 @@
                           <HelperText
                             v-if="errors.hostHeader"
                             id="app-hostHeader-error"
-                            kind="required"
+                            type="required"
                             :label="errors.hostHeader"
                           />
                         </div>
@@ -441,7 +441,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.browserCache"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="browserCache"
                           aria-label="Browser cache settings"
@@ -474,7 +474,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.cache"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="cache"
                           aria-label="Cache Settings"
@@ -516,7 +516,7 @@
                     <SettingRow
                       title="Active"
                       description="Rules that were successfully executed will be listed in the request logs and in the trace of each event."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.debugRules"
@@ -530,18 +530,18 @@
           </fieldset>
         </div>
 
-        <SaveBar kind="centered">
+        <SaveBar variant="centered">
           <template #actions>
             <Button
               type="button"
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="submitting"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               @click="submit"

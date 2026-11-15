@@ -53,10 +53,10 @@
       :height="120"
       aria-label="Event volume by level"
     >
-      <Chart.Axis kind="x" />
+      <Chart.Axis type="x" />
       <Chart.Brush />
       <Chart.Bar
-        kind="histogram"
+        type="histogram"
         stacked
       />
       <Chart.Tooltip />

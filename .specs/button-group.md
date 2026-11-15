@@ -3,9 +3,9 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: 69a33003837ecbb8f6ce68cc899a720833f9a8a199a6d16263f7901b892d68a2
+checksum: e74036619102388c82f08ff072de626875070e1434d9a7d0edcff11ebb652b97
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 - Keep the most used actions first; `visibleCount` moves the tail into More actions, never the head.
 - Use a toggle only for a state the user can see change (wrapped lines); flip `pressed` in your `@toggle` handler — the component never stores it.
 - Set `loading` on an action while its request runs instead of disabling the whole group.
-- Use `kind="transparent"` on a surface that already has a border (a panel header) and `outlined` on the canvas.
+- Use `variant="ghost"` on a surface that already has a border (a panel header) and `outline` on the canvas.
 - Do not mix text buttons into the group; a text action belongs beside it as its own `Button`.
 
 ## Usage
@@ -98,14 +98,14 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 ## Props
 
-| Prop            | Type                             | Default         | Required | JSDoc                                                                                                                                                     |
-| --------------- | -------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`         | `ButtonGroupItem[]`              | `[]`            | false    | Actions, toggles and menus, in reading order.                                                                                                             |
-| `ariaLabel`     | `string`                         | `''`            | false    | Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders. |
-| `kind`          | `'transparent' \| 'outlined'`    | `'transparent'` | false    | Visual variant of every button.                                                                                                                           |
-| `size`          | `'small' \| 'medium' \| 'large'` | `'large'`       | false    | Size token of every button.                                                                                                                               |
-| `visibleCount`  | `number`                         | `undefined`     | false    | Items shown as buttons; the rest go into the More actions menu. Unset shows every item.                                                                   |
-| `overflowLabel` | `string`                         | `''`            | false    | Label of the overflow button. Empty uses the locale catalog (`More actions`).                                                                             |
+| Prop            | Type                             | Default     | Required | JSDoc                                                                                                                                                     |
+| --------------- | -------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`         | `ButtonGroupItem[]`              | `[]`        | false    | Actions, toggles and menus, in reading order.                                                                                                             |
+| `ariaLabel`     | `string`                         | `''`        | false    | Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders. |
+| `variant`       | `'ghost' \| 'outline'`           | `'ghost'`   | false    | Visual variant of every button.                                                                                                                           |
+| `size`          | `'small' \| 'medium' \| 'large'` | `'large'`   | false    | Size token of every button.                                                                                                                               |
+| `visibleCount`  | `number`                         | `undefined` | false    | Items shown as buttons; the rest go into the More actions menu. Unset shows every item.                                                                   |
+| `overflowLabel` | `string`                         | `''`        | false    | Label of the overflow button. Empty uses the locale catalog (`More actions`).                                                                             |
 
 Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted or `'icon-button'`), `{ type: 'toggle', id, label, icon, pressedIcon?, pressed?, disabled? }`, `{ type: 'menu', id, label, icon, options: { id, label, disabled? }[], disabled? }`.
 
@@ -123,7 +123,7 @@ Item shapes: `{ id, label, icon, disabled?, loading? }` (action, `type` omitted 
 ## States
 
 - Visual states per item: `default`, `hover`, `focus-visible`, `pressed` (toggle, `data-pressed`, `--bg-selected`), `loading` (action), `disabled`.
-- Root data attributes: `data-kind`, `data-size`; each item `data-slot="button-group-item"` with `data-id="<id>"`.
+- Root data attributes: `data-variant`, `data-size`; each item `data-slot="button-group-item"` with `data-id="<id>"`.
 - Overflow: a pressed toggle shows a check and a hidden "On" in the More actions menu; a menu item becomes a labelled group of its options.
 
 ## Motion & Animations
@@ -136,7 +136,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 | ------------------- | -------------------------------------------- |
 | gap between buttons | `var(--spacing-2xs)`                         |
 | pressed fill / text | `var(--bg-selected)` / `var(--text-default)` |
-| buttons             | `IconButton` tokens per `kind` and `size`    |
+| buttons             | `IconButton` tokens per `variant` and `size` |
 | overflow check      | `var(--text-default)`                        |
 
 ## Theme gaps
@@ -185,7 +185,7 @@ _none_ — tooltips, menus and the loading spinner bring their own motion with `
 - Default — an editor toolbar: two actions, a toggle and a menu.
 - WithOverflow — `visibleCount` with the rest in More actions, including a disabled action and a pressed toggle.
 
-Justification: `kind` and `size` are shown through Default's controls; the overflow is a distinct anatomy the consumer must see.
+Justification: `variant` and `size` are shown through Default's controls; the overflow is a distinct anatomy the consumer must see.
 
 ## Decisions and open questions
 

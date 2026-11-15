@@ -16,7 +16,7 @@ const buttons = instance
         hover: false,
         selected: true
       })
-      const kind = selected
+      const type = selected
         ? 'number'
         : node.getEnum('kind', {
             previous: 'previous',
@@ -26,17 +26,17 @@ const buttons = instance
           })
       const number = node.findText('99')
       const page = number.type === 'TEXT' ? number.textContent : '1'
-      if (kind === 'previous') {
+      if (type === 'previous') {
         return figma.code`${acc}
-  <Pagination.Button kind="previous" aria-label="Previous page" />`
+  <Pagination.Button type="previous" aria-label="Previous page" />`
       }
-      if (kind === 'next') {
+      if (type === 'next') {
         return figma.code`${acc}
-  <Pagination.Button kind="next" aria-label="Next page" />`
+  <Pagination.Button type="next" aria-label="Next page" />`
       }
-      if (kind === 'more') {
+      if (type === 'more') {
         return figma.code`${acc}
-  <Pagination.Button kind="more" />`
+  <Pagination.Button type="more" />`
       }
       return figma.code`${acc}
   <Pagination.Button${selected ? figma.code` active` : ''}>${page}</Pagination.Button>`

@@ -42,7 +42,7 @@ not apply is `pass` with the reason (e.g. "no built-in strings").
    component beats a new prop or a new block. Composition reuses existing parts (`Field`, `Button`,
    `Popover`, ...) instead of re-implementing them.
 3. **Prop vocabulary.** Every prop follows `.claude/rules/prop-vocabulary.md` (the consumer copy is
-   `rules/webkit-prop-vocabulary.md`): `kind`, `size` (`small | medium | large`), `disabled`,
+   `rules/webkit-prop-vocabulary.md`): `variant`, `size` (`small | medium | large`), `disabled`,
    `readonly`, `loading`, `invalid`, `modelValue`/`v-model:<x>`, no `is`/`has` prefix, no synonym of
    a vocabulary name. Defaults follow the template's Props rules.
 4. **States.** `## States` covers every state the component can be in among `loading`, `empty`,

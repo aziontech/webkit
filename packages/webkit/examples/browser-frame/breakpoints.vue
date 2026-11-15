@@ -32,14 +32,14 @@
             >
               <template #header>
                 <SectionTitle
-                  kind="split"
+                  variant="split"
                   eyebrow="Platform"
                   title="Build, secure and deliver from one platform"
                   description="Run your applications, protect them and cache their responses on the same distributed network."
                 >
                   <template #actions>
                     <Button
-                      kind="outlined"
+                      variant="outline"
                       label="See all products"
                     />
                   </template>
@@ -52,11 +52,11 @@
               >
                 <CardGrid
                   flush
-                  kind="frame"
+                  variant="frame"
                   :columns="3"
                   :mobile-columns="1"
                 >
-                  <CardGrid.Cell kind="canvas">
+                  <CardGrid.Cell variant="canvas">
                     <Topic
                       :heading-level="3"
                       icon="ai ai-edge-application"
@@ -64,7 +64,7 @@
                       description="Deploy web apps and APIs close to every user, with no servers to provision."
                     />
                   </CardGrid.Cell>
-                  <CardGrid.Cell kind="canvas">
+                  <CardGrid.Cell variant="canvas">
                     <Topic
                       :heading-level="3"
                       icon="ai ai-edge-firewall"
@@ -72,7 +72,7 @@
                       description="Stop DDoS, bots and injection attacks before a request reaches your origin."
                     />
                   </CardGrid.Cell>
-                  <CardGrid.Cell kind="canvas">
+                  <CardGrid.Cell variant="canvas">
                     <Topic
                       :heading-level="3"
                       icon="ai ai-tiered-cache"
@@ -93,7 +93,7 @@
             >
               <CallToAction
                 framed
-                kind="split"
+                variant="split"
                 eyebrow="Get started"
                 title="Deploy your first application."
                 title-muted="Run it everywhere."
@@ -101,13 +101,13 @@
               >
                 <template #actions>
                   <Button
-                    kind="secondary"
+                    variant="secondary"
                     label="Start for free"
                   />
                 </template>
                 <template #aside>
                   <Button
-                    kind="outlined"
+                    variant="outline"
                     label="Talk to a specialist"
                   />
                 </template>
@@ -138,14 +138,14 @@
             >
               <template #header>
                 <SectionTitle
-                  kind="split"
+                  variant="split"
                   eyebrow="Platform"
                   title="Build, secure and deliver from one platform"
                   description="Run your applications, protect them and cache their responses on the same distributed network."
                 >
                   <template #actions>
                     <Button
-                      kind="outlined"
+                      variant="outline"
                       label="See all products"
                     />
                   </template>
@@ -158,11 +158,11 @@
               >
                 <CardGrid
                   flush
-                  kind="frame"
+                  variant="frame"
                   :columns="3"
                   :mobile-columns="1"
                 >
-                  <CardGrid.Cell kind="canvas">
+                  <CardGrid.Cell variant="canvas">
                     <Topic
                       :heading-level="3"
                       icon="ai ai-edge-application"
@@ -170,7 +170,7 @@
                       description="Deploy web apps and APIs close to every user, with no servers to provision."
                     />
                   </CardGrid.Cell>
-                  <CardGrid.Cell kind="canvas">
+                  <CardGrid.Cell variant="canvas">
                     <Topic
                       :heading-level="3"
                       icon="ai ai-edge-firewall"
@@ -178,7 +178,7 @@
                       description="Stop DDoS, bots and injection attacks before a request reaches your origin."
                     />
                   </CardGrid.Cell>
-                  <CardGrid.Cell kind="canvas">
+                  <CardGrid.Cell variant="canvas">
                     <Topic
                       :heading-level="3"
                       icon="ai ai-tiered-cache"
@@ -199,7 +199,7 @@
             >
               <CallToAction
                 framed
-                kind="split"
+                variant="split"
                 eyebrow="Get started"
                 title="Deploy your first application."
                 title-muted="Run it everywhere."
@@ -207,13 +207,13 @@
               >
                 <template #actions>
                   <Button
-                    kind="secondary"
+                    variant="secondary"
                     label="Start for free"
                   />
                 </template>
                 <template #aside>
                   <Button
-                    kind="outlined"
+                    variant="outline"
                     label="Talk to a specialist"
                   />
                 </template>
@@ -244,14 +244,14 @@
         >
           <template #header>
             <SectionTitle
-              kind="split"
+              variant="split"
               eyebrow="Platform"
               title="Build, secure and deliver from one platform"
               description="Run your applications, protect them and cache their responses on the same distributed network."
             >
               <template #actions>
                 <Button
-                  kind="outlined"
+                  variant="outline"
                   label="See all products"
                 />
               </template>
@@ -264,11 +264,11 @@
           >
             <CardGrid
               flush
-              kind="frame"
+              variant="frame"
               :columns="3"
               :mobile-columns="1"
             >
-              <CardGrid.Cell kind="canvas">
+              <CardGrid.Cell variant="canvas">
                 <Topic
                   :heading-level="3"
                   icon="ai ai-edge-application"
@@ -276,7 +276,7 @@
                   description="Deploy web apps and APIs close to every user, with no servers to provision."
                 />
               </CardGrid.Cell>
-              <CardGrid.Cell kind="canvas">
+              <CardGrid.Cell variant="canvas">
                 <Topic
                   :heading-level="3"
                   icon="ai ai-edge-firewall"
@@ -284,7 +284,7 @@
                   description="Stop DDoS, bots and injection attacks before a request reaches your origin."
                 />
               </CardGrid.Cell>
-              <CardGrid.Cell kind="canvas">
+              <CardGrid.Cell variant="canvas">
                 <Topic
                   :heading-level="3"
                   icon="ai ai-tiered-cache"
@@ -305,7 +305,7 @@
         >
           <CallToAction
             framed
-            kind="split"
+            variant="split"
             eyebrow="Get started"
             title="Deploy your first application."
             title-muted="Run it everywhere."
@@ -313,13 +313,13 @@
           >
             <template #actions>
               <Button
-                kind="secondary"
+                variant="secondary"
                 label="Start for free"
               />
             </template>
             <template #aside>
               <Button
-                kind="outlined"
+                variant="outline"
                 label="Talk to a specialist"
               />
             </template>

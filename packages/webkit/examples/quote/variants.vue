@@ -7,21 +7,21 @@
 <template>
   <div class="flex flex-col gap-(--spacing-2xl)">
     <Quote
-      kind="inline"
+      variant="inline"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
       name="Allan Monteiro"
       job-title="CISO & Head of Technology at Magalu"
       :logo="magaluLogo"
     />
     <Quote
-      kind="signed"
+      variant="signed"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
       name="Allan Monteiro"
       job-title="CISO & Head of Technology at Magalu"
       :logo="magaluLogo"
     />
     <Quote
-      kind="highlight"
+      variant="highlight"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."
       name="Allan Monteiro"
       job-title="CISO & Head of Technology at Magalu"

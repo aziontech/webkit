@@ -3,8 +3,8 @@ name: ticker
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: ac99f2ae364b590b44d81e3006b8d804b5303c196c70110dd8d3fd04d86b722a
+spec_version: 4
+checksum: 41fcc222e0216cf489292294fc00e12592e698cd547f4d23cef0b8233aa8ff0f
 created: 2026-09-23
 last_updated: 2026-11-15
 ---
@@ -66,7 +66,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 | Prop        | Type                  | Default    | Required | JSDoc                                                                                                                                                                                        |
 | ----------- | --------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`      | `'plain' \| 'band'`   | `'plain'`  | false    | Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. |
+| `variant`   | `'plain' \| 'band'`   | `'plain'`  | false    | Whether the strip paints its own ground; `band` fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. |
 | `marks`     | `string[]`            | `[]`       | false    | Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete.                                           |
 | `items`     | `TickerItem[]`        | `[]`       | false    | Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered.                                                 |
 | `label`     | `string`              | `''`       | false    | Overline above the row, stating the claim the marks make.                                                                                                                                    |
@@ -87,7 +87,7 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`; an item is real text and rests at full ink
 - `data-size` mirrors the `size` prop and is what drives the mark height, the cell width and the row gap
 - `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-2xl` (never under twice `--spacing-xl`, so a phone keeps room between claims), and the label steps down to `text-body-sm` under `size="small"`
-- `data-kind` mirrors the `kind` prop; `band` paints the page canvas and the strip's own vertical rhythm so nothing behind it shows through while the fill still matches the band it floors, `plain` leaves it transparent over whatever it sits on
+- `data-variant` mirrors the `variant` prop; `band` paints the page canvas and the strip's own vertical rhythm so nothing behind it shows through while the fill still matches the band it floors, `plain` leaves it transparent over whatever it sits on
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same
 - Empty: when `marks` and `items` are both empty the row renders nothing, so a page with no marks to name shows no empty band

@@ -12,21 +12,21 @@
     <Chip
       v-model:selected="production"
       label="Production"
-      kind="outlined"
+      variant="outline"
       size="medium"
       selectable
     />
     <Chip
       v-model:selected="staging"
       label="Staging"
-      kind="outlined"
+      variant="outline"
       size="medium"
       selectable
     />
     <Chip
       v-model:selected="preview"
       label="Preview"
-      kind="outlined"
+      variant="outline"
       size="medium"
       selectable
     />

@@ -6,12 +6,12 @@
 
 <template>
   <Hero
-    kind="band"
+    variant="band"
     size="large"
     max-width="site"
   >
     <template #background>
-      <BannerArt kind="map" />
+      <BannerArt variant="map" />
     </template>
     <HeroTitle
       eyebrow="Network"

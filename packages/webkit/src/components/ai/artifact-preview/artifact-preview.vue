@@ -111,7 +111,7 @@
         <IconButton
           v-if="downloadHref"
           icon="ai ai-download"
-          kind="transparent"
+          variant="ghost"
           size="small"
           :href="downloadHref"
           :ariaLabel="t('artifactPreview.download', { title })"
@@ -122,7 +122,7 @@
           v-if="openable"
           :label="t('artifactPreview.open')"
           :aria-label="t('artifactPreview.openLabel', { title })"
-          kind="outlined"
+          variant="outline"
           size="small"
           icon="ai ai-external-link"
           icon-position="trailing"

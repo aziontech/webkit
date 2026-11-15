@@ -84,7 +84,7 @@ const secondaryAction = { label: 'Docs', href: '/docs', trailing: true }
 const band = (props: Record<string, unknown> = {}) =>
   render(HeroBand, {
     props: {
-      kind: 'title-band',
+      variant: 'title-band',
       eyebrow: EYEBROW,
       title: TITLE,
       description: DESCRIPTION,
@@ -112,26 +112,26 @@ describe('HeroBand', () => {
   })
 
   it.each(['center', 'title-band', 'pixel-floor', 'copy-beside-art'] as const)(
-    'mirrors kind=%s on data-kind',
-    (kind) => {
-      const { getByTestId } = band({ kind })
+    'mirrors variant=%s on data-variant',
+    (variant) => {
+      const { getByTestId } = band({ variant })
 
-      expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
     }
   )
 
-  it('defaults to the title-band kind as a band-height hero', () => {
+  it('defaults to the title-band variant as a band-height hero', () => {
     const { getByTestId } = render(HeroBand, { props: { title: TITLE } })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('title-band')
-    expect(getByTestId(HERO_TESTID).getAttribute('data-kind')).toBe('band')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('title-band')
+    expect(getByTestId(HERO_TESTID).getAttribute('data-variant')).toBe('band')
     expect(getByTestId(HERO_TESTID).getAttribute('data-size')).toBe('medium')
   })
 
   it('takes the site header token out of a screen-filling band, and nothing out of a band', async () => {
-    const { getByTestId, rerender } = band({ kind: 'center' })
+    const { getByTestId, rerender } = band({ variant: 'center' })
 
-    expect(getByTestId(HERO_TESTID).getAttribute('data-kind')).toBe('screen')
+    expect(getByTestId(HERO_TESTID).getAttribute('data-variant')).toBe('screen')
     expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe(
       'var(--layout-header-height)'
     )
@@ -139,21 +139,21 @@ describe('HeroBand', () => {
     await rerender({ headerOffset: '' })
     expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe('')
 
-    await rerender({ kind: 'title-band', headerOffset: 'var(--layout-header-height)' })
+    await rerender({ variant: 'title-band', headerOffset: 'var(--layout-header-height)' })
     expect(getByTestId(HERO_TESTID).style.getPropertyValue('--hero-banner-offset')).toBe('')
   })
 
   it('sets a short headline on the narrow measure in the centered layouts only', () => {
-    for (const kind of ['center', 'title-band', 'center-band']) {
-      const { getByTestId, unmount } = band({ kind })
+    for (const variant of ['center', 'title-band', 'center-band']) {
+      const { getByTestId, unmount } = band({ variant })
       expect(getByTestId(TESTID)).toHaveAttribute('data-title-measure', 'narrow')
       unmount()
     }
     for (const props of [
-      { kind: 'center', titleLength: 'long' },
-      { kind: 'compact-band' },
-      { kind: 'copy-beside-art' },
-      { kind: 'pixel-floor' }
+      { variant: 'center', titleLength: 'long' },
+      { variant: 'compact-band' },
+      { variant: 'copy-beside-art' },
+      { variant: 'pixel-floor' }
     ]) {
       const { getByTestId, unmount } = band(props)
       expect(getByTestId(TESTID)).not.toHaveAttribute('data-title-measure')
@@ -180,13 +180,13 @@ describe('HeroBand', () => {
   })
 
   it('sets the centered headline in the narrow column by default', () => {
-    const { getByTestId } = band({ kind: 'center' })
+    const { getByTestId } = band({ variant: 'center' })
 
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('xl')
   })
 
   it('widens the centered headline column with titleLength=long', () => {
-    const { getByTestId } = band({ kind: 'center', titleLength: 'long' })
+    const { getByTestId } = band({ variant: 'center', titleLength: 'long' })
 
     expect(getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe('3xl')
   })
@@ -194,21 +194,21 @@ describe('HeroBand', () => {
   it.each([
     ['pixel-floor', '4xl'],
     ['copy-beside-art', 'xl']
-  ] as const)('ignores titleLength with kind=%s', (kind, width) => {
-    const short = band({ kind, titleLength: 'short' })
+  ] as const)('ignores titleLength with variant=%s', (variant, width) => {
+    const short = band({ variant, titleLength: 'short' })
     expect(short.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
     short.unmount()
 
-    const long = band({ kind, titleLength: 'long' })
+    const long = band({ variant, titleLength: 'long' })
     expect(long.getByTestId(HERO_TITLE_TESTID).getAttribute('data-width')).toBe(width)
   })
 
   it.each(['center', 'pixel-floor', 'copy-beside-art'] as const)(
-    'fills a screen with kind=%s',
-    (kind) => {
-      const { getByTestId } = band({ kind })
+    'fills a screen with variant=%s',
+    (variant) => {
+      const { getByTestId } = band({ variant })
 
-      expect(getByTestId(HERO_TESTID).getAttribute('data-kind')).toBe('screen')
+      expect(getByTestId(HERO_TESTID).getAttribute('data-variant')).toBe('screen')
     }
   )
 
@@ -277,7 +277,7 @@ describe('HeroBand', () => {
   })
 
   it('renders the illustration only in the copy-beside-art layout', () => {
-    const beside = band({ kind: 'copy-beside-art', illustration: 'global-network' })
+    const beside = band({ variant: 'copy-beside-art', illustration: 'global-network' })
     expect(beside.getByTestId(HERO_TESTID).getAttribute('data-media-align')).toBe('end')
     beside.unmount()
 
@@ -285,7 +285,7 @@ describe('HeroBand', () => {
     expect(titleBand.getByTestId(HERO_TESTID).hasAttribute('data-media')).toBe(false)
     titleBand.unmount()
 
-    const bare = band({ kind: 'copy-beside-art' })
+    const bare = band({ variant: 'copy-beside-art' })
     expect(bare.getByTestId(HERO_TESTID).hasAttribute('data-media')).toBe(false)
   })
 
@@ -319,7 +319,7 @@ describe('HeroBand', () => {
 
   it('sizes a known illustration from its drawn bounds and any other from the default bounds', () => {
     const art = (illustration: string) => {
-      const view = band({ kind: 'copy-beside-art', illustration })
+      const view = band({ variant: 'copy-beside-art', illustration })
       const box = view
         .getByTestId(HERO_TESTID)
         .querySelector<HTMLElement>('[style*="--hero-art-width"]')
@@ -336,7 +336,7 @@ describe('HeroBand', () => {
 
   it('sets an image beside the copy when no illustration is given, marking a portrait one', () => {
     const portrait = { src: '/team.jpg', alt: 'The team at the office', width: 900, height: 1600 }
-    const { getByRole, unmount } = band({ kind: 'copy-beside-art', image: portrait })
+    const { getByRole, unmount } = band({ variant: 'copy-beside-art', image: portrait })
 
     const img = getByRole('img', { name: portrait.alt })
     expect(img).toHaveAttribute('src', '/team.jpg')
@@ -344,7 +344,7 @@ describe('HeroBand', () => {
     unmount()
 
     const landscape = band({
-      kind: 'copy-beside-art',
+      variant: 'copy-beside-art',
       image: { ...portrait, width: 1600, height: 900 }
     })
     expect(landscape.getByRole('img', { name: portrait.alt })).not.toHaveAttribute(
@@ -354,13 +354,13 @@ describe('HeroBand', () => {
 
   it('fills a screen with centered copy and the top scene in copy-on-top-art', () => {
     const { getByTestId } = render(HeroBand, {
-      props: { kind: 'copy-on-top-art', title: TITLE },
+      props: { variant: 'copy-on-top-art', title: TITLE },
       slots: { top: '<div data-testid="scene">scene</div>' }
     })
 
     const hero = getByTestId(HERO_TESTID)
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'copy-on-top-art')
-    expect(hero).toHaveAttribute('data-kind', 'screen')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'copy-on-top-art')
+    expect(hero).toHaveAttribute('data-variant', 'screen')
     expect(hero).not.toHaveAttribute('data-padded')
     expect(hero).toContainElement(getByTestId('scene'))
     expect(getByTestId('marketing-hero-title')).toHaveAttribute('data-align', 'center')
@@ -376,7 +376,7 @@ describe('HeroBand', () => {
 
   it('has no a11y violations with an image beside the copy', async () => {
     const { container } = band({
-      kind: 'copy-beside-art',
+      variant: 'copy-beside-art',
       image: { src: '/team.jpg', alt: 'The team at the office', width: 900, height: 1600 }
     })
 
@@ -384,12 +384,12 @@ describe('HeroBand', () => {
   })
 
   it.each(['center', 'title-band', 'pixel-floor', 'copy-beside-art', 'copy-on-top-art'] as const)(
-    'has no a11y violations with kind=%s',
-    async (kind) => {
+    'has no a11y violations with variant=%s',
+    async (variant) => {
       const { container } = band({
-        kind,
-        titleHighlight: kind === 'center' ? HIGHLIGHT : '',
-        illustration: kind === 'copy-beside-art' ? 'global-network' : '',
+        variant,
+        titleHighlight: variant === 'center' ? HIGHLIGHT : '',
+        illustration: variant === 'copy-beside-art' ? 'global-network' : '',
         illustrationAriaLabel: 'A global network'
       })
 
@@ -400,16 +400,16 @@ describe('HeroBand', () => {
   describe('sample opening bands', () => {
     it.each(['center-band', 'compact-band'] as const)(
       'renders %s as a band, not a screen',
-      (kind) => {
-        const { getByTestId } = render(HeroBand, { props: { kind, title: TITLE } })
-        expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
-        expect(getByTestId(HERO_TESTID)).toHaveAttribute('data-kind', 'band')
+      (variant) => {
+        const { getByTestId } = render(HeroBand, { props: { variant: variant, title: TITLE } })
+        expect(getByTestId(TESTID)).toHaveAttribute('data-variant', variant)
+        expect(getByTestId(HERO_TESTID)).toHaveAttribute('data-variant', 'band')
       }
     )
 
     it('renders the top and bottom scene slots', () => {
       const { getByText } = render(HeroBand, {
-        props: { kind: 'center', title: TITLE },
+        props: { variant: 'center', title: TITLE },
         slots: { top: '<p>Top scene</p>', bottom: '<p>Bottom scene</p>' }
       })
       expect(getByText('Top scene')).toBeInTheDocument()
@@ -424,7 +424,7 @@ describe('HeroBand', () => {
 
     describe('levels topology', () => {
       const topology = (props: Record<string, unknown> = {}) =>
-        band({ kind: 'copy-on-top-art', levels, ...props })
+        band({ variant: 'copy-on-top-art', levels, ...props })
 
       it('draws one column per level and one card per node, in order', async () => {
         const { container, findAllByTestId } = topology()
@@ -470,12 +470,12 @@ describe('HeroBand', () => {
       })
 
       it('draws nothing in other layouts or when a scene slot is given', () => {
-        const other = band({ kind: 'center', levels })
+        const other = band({ variant: 'center', levels })
         expect(other.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
         other.unmount()
 
         const slotted = render(HeroBand, {
-          props: { kind: 'copy-on-top-art', title: TITLE, levels },
+          props: { variant: 'copy-on-top-art', title: TITLE, levels },
           slots: { bottom: '<div>scene</div>' }
         })
         expect(slotted.getByText('scene')).toBeInTheDocument()
@@ -483,7 +483,7 @@ describe('HeroBand', () => {
         slotted.unmount()
 
         const top = render(HeroBand, {
-          props: { kind: 'copy-on-top-art', title: TITLE, levels },
+          props: { variant: 'copy-on-top-art', title: TITLE, levels },
           slots: { top: '<div>top scene</div>' }
         })
         expect(top.queryAllByTestId(NODE_TESTID)).toHaveLength(0)

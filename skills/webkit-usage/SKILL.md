@@ -56,7 +56,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
   `actions`, `navigation-footer`, `aside`, `footer` slots. The document scrolls. A drill row
-  (`kind: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
+  (`type: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
   never add a hand-made Back row.
 
 The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts with
@@ -166,7 +166,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
-- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-color ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the PrimeIcons `pi pi-check` (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`variant`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-color ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the PrimeIcons `pi pi-check` (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have
@@ -188,7 +188,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 ### Import + tokens
 
 Tokens style **your own** markup around a component. The component keeps its own look and changes
-it only through its props (`kind`, `size`); a class or style on its tag is restyling it (rule
+it only through its props (`variant`, `size`); a class or style on its tag is restyling it (rule
 `webkit-style-override`):
 
 ```vue
@@ -202,7 +202,7 @@ it only through its props (`kind`, `size`); a class or style on its tag is resty
   >
     <p class="text-body-sm text-(--text-muted)">Changes apply to every domain.</p>
     <Button
-      kind="primary"
+      variant="primary"
       label="Save"
     />
   </section>
@@ -236,7 +236,7 @@ const Dialog = defineAsyncComponent(() => import('@aziontech/webkit/dialog'))
   `output` field, drawn as a separate muted "Output" block with no copy control, or in prose. Never
   write output into the command as `# HTTP/2 200` (lint `webkit/no-output-in-command`, rule
   `webkit-code-samples`).
-- A standalone printout (a deploy log) is `<DocCodeGroup kind="output" …>`, not a "Text" sample.
+- A standalone printout (a deploy log) is `<DocCodeGroup type="output" …>`, not a "Text" sample.
 - A flow diagram in a docs column is `Diagram` with one `row`: in the docs column it stacks, the
   nodes are centred, connectors run through the centre of each node and an edge label sits on its
   line. Do not offset nodes or labels to fake that.

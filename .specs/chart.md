@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: 277992bd8b41fc01f0b26b41697fdd70101d326f4e2ddc55df116cad3e6acbe0
-spec_version: 10
+checksum: 83df513c68814470d4d0978ff24aecf9b40d546ba87c54b85d199134b1364b26
+spec_version: 11
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -56,7 +56,7 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
 - Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`.
 - Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.
-- Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
+- Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar type="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
 ## Usage
 
@@ -84,8 +84,8 @@ A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, a
     aria-label="Threats vs requests"
   >
     <Chart.Grid />
-    <Chart.Axis kind="y" />
-    <Chart.Axis kind="x" />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
     <Chart.Brush />
     <Chart.Area :ids="['allowed']" />
     <Chart.Bar :ids="['threat']" />
@@ -123,7 +123,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_.
   - Slots: _none_.
 - `chart-axis/chart-axis.vue` — one axis: tick labels in `.text-label-sm` / `var(--chart-label)`, the baseline rule in `var(--chart-axis)`. Registers itself so the root reserves its inset.
-  - Props: `kind: 'x' | 'y'` (required — which axis), `ticks?: number` (default `6` — the most category labels drawn; the rest are thinned).
+  - Props: `type: 'x' | 'y'` (required — which axis), `ticks?: number` (default `6` — the most category labels drawn; the rest are thinned).
   - Events: _none_.
   - Slots: _none_.
 - `chart-line/chart-line.vue` — one 2px line per selected series, round joins, a marker (r 4, 2px `var(--bg-surface)` ring) on every series at the active index.
@@ -134,8 +134,8 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `curve?: 'linear' | 'monotone'` (default `'linear'`).
   - Events: _none_.
   - Slots: _none_.
-- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal. `kind="histogram"` draws solid columns instead: each column fills its category band less a 1px gap, stacked segments touch with no surface gap, both ends are square, and the value axis ends at the tallest column (no nice-ceiling headroom) unless the root sets `max`.
-  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `showLabels?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `kind?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
+- `chart-bar/chart-bar.vue` — bars at most 24px thick, a rounded data end and a square baseline, a 2px surface gap between touching bars; grouped or stacked; horizontal when the root is horizontal. `type="histogram"` draws solid columns instead: each column fills its category band less a 1px gap, stacked segments touch with no surface gap, both ends are square, and the value axis ends at the tallest column (no nice-ceiling headroom) unless the root sets `max`.
+  - Props: `ids?: string[]` (default `[]`), `stacked?: boolean` (default `false`), `showLabels?: boolean` (default `false` — the formatted value at each bar end, for ordered bars), `type?: 'default' | 'histogram'` (default `'default'` — `histogram` for event volume over contiguous time buckets).
   - Events: _none_.
   - Slots: _none_.
 - `chart-scatter/chart-scatter.vue` — one dot per value (r 4, a 1.5px `var(--bg-surface)` ring), r 6 at the active index; no connecting line. With `labelScale="linear"` the dots sit at their label value, so it reads as a scatter plot.
@@ -158,7 +158,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Props: `total?: boolean` (default `false` — a Total row summing the visible series under the rows).
   - Events: _none_.
   - Slots: `footer` (a hint line under the rows, in `.text-body-sm` / `var(--chart-tooltip-muted)`; the tooltip is `aria-hidden`, so the same hint must also be reachable elsewhere, such as the chart `ariaLabel`).
-- `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark kind), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
+- `chart-legend/chart-legend.vue` — one toggle button per series (`aria-pressed`), a square key in the series color (the same key for every mark type), the name, and the series total. Hover and focus emphasize the series; the other keys dim with their marks. Renders nothing for a single series.
   - Props: `total?: boolean` (default `false` — show each series total beside its name, the same name as `Chart.Tooltip`'s `total`). The legend buttons draw 24 px but take pointer input over 40 px (a transparent `before:` hit area).
   - Events: _none_ (toggles flow through the root's `legend-toggle` and `v-model:hiddenSeries`).
   - Slots: _none_.
@@ -351,7 +351,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Horizontal — ordered horizontal bars with value labels (top countries).
 - Mixed — requests as bars and cached requests as a line on one axis.
 - Scatter — response time by object size on a linear label scale.
-- Brush — a stacked event-volume histogram (`Chart.Bar kind="histogram" stacked`) whose selected span filters a log.
+- Brush — a stacked event-volume histogram (`Chart.Bar type="histogram" stacked`) whose selected span filters a log.
 - Threshold — p95 latency with an SLO reference line in `danger` and the normal range as a band (`Chart.Reference`).
 - TooltipTotal — the event-volume histogram coloured from the severity ramp, its tooltip with a Total row and a footer hint (`Chart.Tooltip total` + `#footer`).
 - Loading — `loading`.
@@ -360,7 +360,7 @@ The stories share one WAF fixture so every canvas tells the same story.
 - Refetching — `refetching`, the previous render held.
 - TableView — `tableView`, the accessible twin made visible.
 
-Justification: a chart has no `kind` / `size` axis; its axes are the mark form and the four mutually exclusive data states, and each state is its own story per the component-states rule.
+Justification: a chart has no `type` / `size` axis; its axes are the mark form and the four mutually exclusive data states, and each state is its own story per the component-states rule.
 
 ## Constraints — DO NOT
 

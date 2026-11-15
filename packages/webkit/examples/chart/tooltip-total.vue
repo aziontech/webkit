@@ -60,12 +60,12 @@
       aria-label="Event volume by level. Use the arrow keys to read each bucket and Enter to filter the log to it."
     >
       <Chart.Axis
-        kind="x"
+        type="x"
         :ticks="3"
       />
       <Chart.Brush />
       <Chart.Bar
-        kind="histogram"
+        type="histogram"
         stacked
       />
       <Chart.Crosshair />

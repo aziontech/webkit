@@ -3,8 +3,8 @@ name: quote
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: bedd4eaea1c7e09e9df66d9c1ffbff7ce13501dd801be7875f70d921289dd2d6
+spec_version: 5
+checksum: 53105b60a5fea5d76463dd31628b68f1671afc3a2e9540ec2c3c8135c96a31ff
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -72,16 +72,16 @@ The register changes the weight and the arrangement, never the anatomy: every re
 
 ## Props
 
-| Prop         | Type        | Default    | Required | JSDoc                                                                                                                                                                                                                                   |
-| ------------ | ----------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `text`       | `string`    | `—`        | true     | The quotation itself, rendered as the `blockquote` body; overridden by the default slot.                                                                                                                                                |
-| `name`       | `string`    | `''`       | false    | Who said it — the attribution's lead, set in the accent.                                                                                                                                                                                |
-| `jobTitle`   | `string`    | `''`       | false    | Their role and company, as one line — the attribution's second part. Named `jobTitle`, not `role`, because `role` is the ARIA attribute and a prop of that name reads as one to both tooling and the consumer.                          |
-| `photo`      | `string`    | `''`       | false    | URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone.                                                                                                                    |
-| `logo`       | `string`    | `''`       | false    | URL of the company mark; ignored when the `mark` slot is filled.                                                                                                                                                                        |
-| `logoAlt`    | `string`    | `''`       | false    | Alternative text for the mark; falls back to `jobTitle` when empty.                                                                                                                                                                     |
-| `highlights` | `string[]`  | `[]`       | false    | Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. |
-| `kind`       | `QuoteKind` | `'inline'` | false    | Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one.                                                                                          |
+| Prop         | Type           | Default    | Required | JSDoc                                                                                                                                                                                                                                   |
+| ------------ | -------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `text`       | `string`       | `—`        | true     | The quotation itself, rendered as the `blockquote` body; overridden by the default slot.                                                                                                                                                |
+| `name`       | `string`       | `''`       | false    | Who said it — the attribution's lead, set in the accent.                                                                                                                                                                                |
+| `jobTitle`   | `string`       | `''`       | false    | Their role and company, as one line — the attribution's second part. Named `jobTitle`, not `role`, because `role` is the ARIA attribute and a prop of that name reads as one to both tooling and the consumer.                          |
+| `photo`      | `string`       | `''`       | false    | URL of the person's likeness, drawn beside the attribution by `highlight`; without one the attribution stands alone.                                                                                                                    |
+| `logo`       | `string`       | `''`       | false    | URL of the company mark; ignored when the `mark` slot is filled.                                                                                                                                                                        |
+| `logoAlt`    | `string`       | `''`       | false    | Alternative text for the mark; falls back to `jobTitle` when empty.                                                                                                                                                                     |
+| `highlights` | `string[]`     | `[]`       | false    | Phrases of `text` kept in the default ink while the rest of the quotation recedes to the muted one; each is matched verbatim, and an empty list leaves the whole quotation in the default ink. Ignored when the default slot is filled. |
+| `variant`    | `QuoteVariant` | `'inline'` | false    | Register of the quote: `inline` is the quiet unit inside a larger band, `signed` the band-sized client sentence, `highlight` the featured one.                                                                                          |
 
 ## Events
 
@@ -98,7 +98,7 @@ The register changes the weight and the arrangement, never the anatomy: every re
 ## States
 
 - Visual states: `default`
-- Register: `data-kind="inline" | "signed" | "highlight"` on the root
+- Register: `data-variant="inline" | "signed" | "highlight"` on the root
 - No mark is rendered when neither `logo` nor the `mark` slot is given, and the quotation moves up to lead the block
 - No `figcaption` is rendered when neither `name` nor `jobTitle` is given
 - Highlighted: when `highlights` matches at least one phrase of `text`, the `blockquote` carries `data-highlighted` and its text recedes to the muted ink; each matched phrase is a `data-slot="highlight"` span in the default ink. A phrase absent from `text` is skipped, and when none match the quotation renders unhighlighted

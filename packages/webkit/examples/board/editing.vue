@@ -44,14 +44,14 @@
       <Button
         v-if="customized"
         label="Reset layout"
-        kind="transparent"
+        variant="ghost"
         size="medium"
         icon="ai ai-replay"
         @click="reset"
       />
       <Button
         :label="editing ? 'Done' : 'Edit layout'"
-        :kind="editing ? 'primary' : 'outlined'"
+        :variant="editing ? 'primary' : 'outline'"
         size="medium"
         :icon="editing ? 'ai ai-check' : 'ai ai-layout-grid'"
         :aria-pressed="editing"
@@ -90,8 +90,8 @@
               :labels="labels"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Line />
               <Chart.Tooltip />
             </Chart>

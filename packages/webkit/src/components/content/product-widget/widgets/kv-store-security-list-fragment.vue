@@ -32,7 +32,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :chrome="false"
     :active="active"

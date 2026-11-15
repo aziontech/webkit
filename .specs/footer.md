@@ -3,11 +3,11 @@ name: footer
 category: layout
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 786b47ff494fb54e58aa0abb84aa5c7c7d3817996155f3f6b7bf4d77f9ed22fd
+checksum: 4ba05a57f1c83a6c08e27b9e94709d2c3dd9a4c13ae6cdaaf6943d4ec6e21421
 created: 2026-08-10
 last_updated: 2026-11-15
 ---
@@ -20,7 +20,7 @@ Page footer for marketing and product surfaces: the bottom-of-page counterpart t
 
 **Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks).
 
-**Two placements, chosen with `kind` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`).
+**Two placements, chosen with `variant` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`).
 
 The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges.
 
@@ -56,7 +56,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 ## Best practices
 
-- Compose every band from existing DS components (`Brand`, `IconButton kind="transparent" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
+- Compose every band from existing DS components (`Brand`, `IconButton variant="ghost" size="small"`, `StatusIndicator`, `Select`); never rebuild them inside the slots.
 - Keep column titles short (one or two words) — they are group labels, not headings for prose.
 - Give every social `IconButton` an `ariaLabel`; the footer cannot name them for you.
 - Keep the social `IconButton`s at `size="small"`: a 28px box holds the brand mark and seven icons in 356px, which fits beside the status pair in the narrowest zone a shell gives the footer (the docs reading column at `lg`, 724px wide). At `large` the same row is 440px and wraps there.
@@ -81,10 +81,10 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 </script>
 
 <template>
-  <!-- `kind="site"` closes a framed marketing page; omit it for the default `content`
+  <!-- `variant="site"` closes a framed marketing page; omit it for the default `content`
        placement, which runs the bands full bleed across the zone that holds them. -->
   <Footer
-    kind="site"
+    variant="site"
     aria-label="Footer"
   >
     <Footer.Column title="Products">
@@ -97,7 +97,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
     </Footer.Column>
     <template #social>
       <IconButton
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-github"
         ariaLabel="Azion on GitHub"
@@ -151,7 +151,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 | ----------- | ----------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ariaLabel` | `string`                | `''`        | false    | Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`).                                                                                                                                                                                                                                                                                      |
 | `signature` | `'always' \| 'compact'` | `'always'`  | false    | Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same.                                                                                                                         |
-| `kind`      | `'content' \| 'site'`   | `'content'` | false    | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
+| `variant`   | `'content' \| 'site'`   | `'content'` | false    | Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. |
 
 ## Events
 
@@ -175,7 +175,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 ## States
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
-- Placement: `data-kind="content" | "site"` on the root (from `kind`); the bands read it through `group-data-[kind=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
+- Placement: `data-variant="content" | "site"` on the root (from `variant`); the bands read it through `group-data-[variant=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
 - Signature placement: `data-signature="always" | "compact"` on the root (from `signature`); in `compact` the signature band carries `group-data-[signature=compact]:lg:hidden`.
 - Each band renders exactly when its slot renders, read at render time rather than cached: a slot behind a `v-if` that turns off — or a slot the server rendered and the client does not — takes its band with it, so no empty bordered band is ever left under the bottom bar.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
@@ -188,33 +188,33 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 
 ## Tokens
 
-| Region                               | Token (DESIGN.md)                                                                                     |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| shell surface                        | `var(--bg-canvas)`                                                                                    |
-| content column (`kind="site"`)       | `layout-column-site` — caps at `--layout-measure-site`, insets by `--layout-boundary-inline` below it |
-| content max-width (`kind="content"`) | _none_ — full bleed across the zone                                                                   |
-| band inset (`kind="content"`)        | `var(--spacing-lg)`, carried inside each band — equal to `var(--layout-boundary-inline)`              |
-| columns row gap (mobile 2-row wrap)  | `var(--spacing-lg)`                                                                                   |
-| column padding                       | `var(--spacing-lg)`                                                                                   |
-| column divider (border-right, `md`+) | `var(--border-width-default)` / `var(--border-default)`                                               |
-| column internal gap (title → links)  | `var(--spacing-md)`                                                                                   |
-| link stack gap                       | `var(--spacing-xs)`                                                                                   |
-| measure side rules                   | `var(--border-width-default)` / `var(--border-default)`                                               |
-| band border (top, every band)        | `var(--border-width-default)` / `var(--border-default)`                                               |
-| band height floor (`md`+)            | `min-h-14` (56px)                                                                                     |
-| band padding-y (stacked)             | `var(--spacing-md)`                                                                                   |
-| band padding-x                       | `var(--spacing-lg)`                                                                                   |
-| social icon gap                      | `var(--spacing-2xs)`                                                                                  |
-| status ↔ language gap                | `var(--spacing-lg)`                                                                                   |
-| signature box padding                | `var(--spacing-sm)` inline / `var(--spacing-xl)` block                                                |
-| signature inner padding              | `var(--spacing-lg)`                                                                                   |
-| signature brand ↔ tagline gap        | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md`                                           |
-| tagline typography / color           | `.text-heading-xl` / `var(--text-default)`                                                            |
-| gutter texture                       | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`)                                 |
-| column title typography / color      | `.text-label-sm` / `var(--text-muted)`                                                                |
-| link typography / color              | `.text-label-sm` / `var(--text-default)`                                                              |
-| link hover color                     | `var(--text-muted)`                                                                                   |
-| ring (link focus)                    | `var(--ring-color)`                                                                                   |
+| Region                                  | Token (DESIGN.md)                                                                                     |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| shell surface                           | `var(--bg-canvas)`                                                                                    |
+| content column (`variant="site"`)       | `layout-column-site` — caps at `--layout-measure-site`, insets by `--layout-boundary-inline` below it |
+| content max-width (`variant="content"`) | _none_ — full bleed across the zone                                                                   |
+| band inset (`variant="content"`)        | `var(--spacing-lg)`, carried inside each band — equal to `var(--layout-boundary-inline)`              |
+| columns row gap (mobile 2-row wrap)     | `var(--spacing-lg)`                                                                                   |
+| column padding                          | `var(--spacing-lg)`                                                                                   |
+| column divider (border-right, `md`+)    | `var(--border-width-default)` / `var(--border-default)`                                               |
+| column internal gap (title → links)     | `var(--spacing-md)`                                                                                   |
+| link stack gap                          | `var(--spacing-xs)`                                                                                   |
+| measure side rules                      | `var(--border-width-default)` / `var(--border-default)`                                               |
+| band border (top, every band)           | `var(--border-width-default)` / `var(--border-default)`                                               |
+| band height floor (`md`+)               | `min-h-14` (56px)                                                                                     |
+| band padding-y (stacked)                | `var(--spacing-md)`                                                                                   |
+| band padding-x                          | `var(--spacing-lg)`                                                                                   |
+| social icon gap                         | `var(--spacing-2xs)`                                                                                  |
+| status ↔ language gap                   | `var(--spacing-lg)`                                                                                   |
+| signature box padding                   | `var(--spacing-sm)` inline / `var(--spacing-xl)` block                                                |
+| signature inner padding                 | `var(--spacing-lg)`                                                                                   |
+| signature brand ↔ tagline gap           | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md`                                           |
+| tagline typography / color              | `.text-heading-xl` / `var(--text-default)`                                                            |
+| gutter texture                          | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`)                                 |
+| column title typography / color         | `.text-label-sm` / `var(--text-muted)`                                                                |
+| link typography / color                 | `.text-label-sm` / `var(--text-default)`                                                              |
+| link hover color                        | `var(--text-muted)`                                                                                   |
+| ring (link focus)                       | `var(--ring-color)`                                                                                   |
 
 ## Theme gaps
 

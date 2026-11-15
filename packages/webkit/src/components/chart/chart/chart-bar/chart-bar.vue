@@ -8,7 +8,7 @@
   defineOptions({ name: 'ChartBar', inheritAttrs: false })
 
   /** Bar form: `default` draws separate rounded bars, `histogram` solid columns that fill their bucket. */
-  export type ChartBarKind = 'default' | 'histogram'
+  export type ChartBarType = 'default' | 'histogram'
 
   interface Props {
     /** Ids of the series drawn as bars; empty draws every visible series. */
@@ -18,14 +18,14 @@
     /** Draws the formatted value at each bar end, for ordered bars. */
     showLabels?: boolean
     /** Bar form. `histogram` fills each category band less 1px, stacks segments with no gap, squares both ends and ends the value axis at the tallest column, for event volume over time buckets. */
-    kind?: ChartBarKind
+    type?: ChartBarType
   }
 
   const props = withDefaults(defineProps<Props>(), {
     ids: () => [],
     stacked: false,
     showLabels: false,
-    kind: 'default'
+    type: 'default'
   })
 
   const attrs = useAttrs()
@@ -34,11 +34,11 @@
 
   onScopeDispose(
     ctx.registerMark(() => ({
-      kind: 'bar',
+      type: 'bar',
       stacked: props.stacked,
       labeled: props.showLabels,
       ids: ids.value,
-      fit: props.kind === 'histogram'
+      fit: props.type === 'histogram'
     }))
   )
 
@@ -51,7 +51,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__bar`
   )
   const vertical = computed(() => ctx.orientation.value === 'vertical')
-  const histogram = computed(() => props.kind === 'histogram')
+  const histogram = computed(() => props.type === 'histogram')
 
   interface BarMark {
     key: string
@@ -192,7 +192,7 @@
   <svg
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     aria-hidden="true"
     direction="ltr"
     :width="ctx.size.value.width"

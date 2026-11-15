@@ -30,7 +30,7 @@ export type {
   ChartCurve,
   ChartLabel,
   ChartLabelScale,
-  ChartMarkKind,
+  ChartMarkType,
   ChartPoint,
   ChartPosition,
   ChartRange,

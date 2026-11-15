@@ -12,7 +12,7 @@
     <template #actions>
       <Button label="Start for free" />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Docs"
       />
     </template>

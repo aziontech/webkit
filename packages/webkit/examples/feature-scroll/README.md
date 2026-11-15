@@ -28,7 +28,7 @@ Site JSON: [`site-default.json`](./site-default.json)
 
 ### Code
 
-From the Web Apps page: five capabilities, each pinning the one file you would write for it (`code`: `fileName`, `code`, `language`, `fileIcon`, `copyAriaLabel`), with a docs button under the open step; an action's `kind` and `target` are optional.
+From the Web Apps page: five capabilities, each pinning the one file you would write for it (`code`: `fileName`, `code`, `language`, `fileIcon`, `copyAriaLabel`), with a docs button under the open step; an action's `type` and `target` are optional.
 
 Example: [`site-code.vue`](./site-code.vue)
 

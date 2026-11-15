@@ -5,9 +5,9 @@
   import { FieldInjectionKey } from '../field/injection-key'
   import {
     RadioGroupInjectionKey,
-    type RadioGroupKind,
     type RadioGroupOption,
-    type RadioGroupOrientation
+    type RadioGroupOrientation,
+    type RadioGroupVariant
   } from './injection-key'
   import RadioGroupItem from './radio-group-item/radio-group-item.vue'
 
@@ -23,7 +23,7 @@
       /** Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way. */
       orientation?: RadioGroupOrientation
       /** Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). */
-      kind?: RadioGroupKind
+      variant?: RadioGroupVariant
       /** Options rendered as RadioGroup.Item rows, in place of composed items; extra fields reach the option and tag slots. Empty renders the default slot. */
       options?: TOption[]
       /** Disables every option and applies the disabled tokens. */
@@ -36,7 +36,7 @@
     {
       name: '',
       orientation: 'vertical',
-      kind: 'default',
+      variant: 'default',
       options: () => [],
       disabled: false,
       required: false,
@@ -84,7 +84,7 @@
   provide(RadioGroupInjectionKey, {
     name: computed(() => props.name || generatedName),
     value: computed(() => model.value),
-    kind: computed(() => props.kind),
+    variant: computed(() => props.variant),
     disabled: field.disabled,
     testId,
     select: (value: string) => {
@@ -96,10 +96,10 @@
 
 <script lang="ts">
   export type {
-    RadioGroupKind,
     RadioGroupOption,
     RadioGroupOrientation,
-    RadioGroupProps
+    RadioGroupProps,
+    RadioGroupVariant
   } from './injection-key'
 </script>
 
@@ -114,11 +114,11 @@
     :aria-invalid="field.invalid.value || undefined"
     :data-testid="testId"
     :data-orientation="orientation"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-disabled="field.disabled.value || null"
     :data-required="field.required.value || null"
     :data-invalid="field.invalid.value || null"
-    class="group/radio-group flex data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-(--spacing-sm) data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-(--spacing-md) data-[orientation=horizontal]:gap-y-(--spacing-sm) data-[kind=card]:data-[orientation=vertical]:gap-(--spacing-xs) data-[kind=card]:data-[orientation=horizontal]:gap-x-(--spacing-xs) data-[kind=card]:data-[orientation=horizontal]:gap-y-(--spacing-xs) data-[kind=card]:data-[orientation=horizontal]:items-stretch"
+    class="group/radio-group flex data-[orientation=vertical]:flex-col data-[orientation=vertical]:gap-(--spacing-sm) data-[orientation=horizontal]:flex-row data-[orientation=horizontal]:flex-wrap data-[orientation=horizontal]:gap-x-(--spacing-md) data-[orientation=horizontal]:gap-y-(--spacing-sm) data-[variant=card]:data-[orientation=vertical]:gap-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:gap-x-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:gap-y-(--spacing-xs) data-[variant=card]:data-[orientation=horizontal]:items-stretch"
   >
     <slot v-if="!options.length" />
     <RadioGroupItem

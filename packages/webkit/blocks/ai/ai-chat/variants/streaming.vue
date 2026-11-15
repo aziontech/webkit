@@ -263,7 +263,7 @@
       </div>
       <Button
         label="New chat"
-        kind="transparent"
+        variant="ghost"
         size="small"
         icon="ai ai-plus"
         :disabled="!turns.length"
@@ -337,7 +337,7 @@
               <IconButton
                 icon="ai ai-refresh"
                 aria-label="Regenerate response"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :disabled="state !== 'ready'"
                 @click="retry(turn)"

@@ -7,7 +7,7 @@
   <Hero max-width="site">
     <template #background>
       <TextureMaterial
-        kind="dots"
+        variant="dots"
         size="medium"
       />
     </template>

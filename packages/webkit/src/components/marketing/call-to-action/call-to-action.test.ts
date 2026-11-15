@@ -122,18 +122,18 @@ describe('CallToAction', () => {
   it('carries its register on the root', () => {
     const { getByTestId } = render(CallToAction, { props: { title: TITLE } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'panel')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'panel')
   })
 
   it('carries the split register on the root when asked for it', () => {
-    const { getByTestId } = render(CallToAction, { props: { title: TITLE, kind: 'split' } })
+    const { getByTestId } = render(CallToAction, { props: { title: TITLE, variant: 'split' } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'split')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'split')
   })
 
   it('reads the two-tone headline as one heading', () => {
     const { getByRole } = render(CallToAction, {
-      props: { title: 'Build once.', titleMuted: 'Run anywhere.', kind: 'split' }
+      props: { title: 'Build once.', titleMuted: 'Run anywhere.', variant: 'split' }
     })
     const headings = getByRole('heading', { level: 2 })
 
@@ -142,14 +142,14 @@ describe('CallToAction', () => {
   })
 
   it('renders no muted line when titleMuted is not set', () => {
-    const { getByRole } = render(CallToAction, { props: { title: TITLE, kind: 'split' } })
+    const { getByRole } = render(CallToAction, { props: { title: TITLE, variant: 'split' } })
 
     expect(getByRole('heading', { level: 2 }).querySelectorAll('span')).toHaveLength(1)
   })
 
   it('renders the aside control in the split register', () => {
     const { getByRole } = render(CallToAction, {
-      props: { title: TITLE, kind: 'split' },
+      props: { title: TITLE, variant: 'split' },
       slots: { aside: '<button type="button">Talk to our team</button>' }
     })
 
@@ -167,7 +167,12 @@ describe('CallToAction', () => {
 
   it('floors both controls in the split register', () => {
     const { getByRole } = render(CallToAction, {
-      props: { title: TITLE, titleMuted: 'Run anywhere.', kind: 'split', description: DESCRIPTION },
+      props: {
+        title: TITLE,
+        titleMuted: 'Run anywhere.',
+        variant: 'split',
+        description: DESCRIPTION
+      },
       slots: {
         actions: '<button type="button">Start for free</button>',
         aside: '<button type="button">Talk to our team</button>'
@@ -179,20 +184,20 @@ describe('CallToAction', () => {
   })
 
   it('renders no aside paragraph when the split register carries no description', () => {
-    const { container } = render(CallToAction, { props: { title: TITLE, kind: 'split' } })
+    const { container } = render(CallToAction, { props: { title: TITLE, variant: 'split' } })
 
     expect(container.querySelector('p')).toBeNull()
   })
 
   it('carries the lead register on the root when asked for it', () => {
-    const { getByTestId } = render(CallToAction, { props: { title: TITLE, kind: 'lead' } })
+    const { getByTestId } = render(CallToAction, { props: { title: TITLE, variant: 'lead' } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'lead')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'lead')
   })
 
   it('reads the two-tone headline as one heading in the lead register', () => {
     const { getByRole } = render(CallToAction, {
-      props: { title: 'Built by you,', titleMuted: 'or your agents.', kind: 'lead' }
+      props: { title: 'Built by you,', titleMuted: 'or your agents.', variant: 'lead' }
     })
     const heading = getByRole('heading', { level: 2 })
 
@@ -203,7 +208,7 @@ describe('CallToAction', () => {
 
   it('renders the description under the headline in the lead register', () => {
     const { getByText } = render(CallToAction, {
-      props: { title: TITLE, description: DESCRIPTION, kind: 'lead' }
+      props: { title: TITLE, description: DESCRIPTION, variant: 'lead' }
     })
 
     expect(getByText(DESCRIPTION)).toBeInTheDocument()
@@ -211,7 +216,7 @@ describe('CallToAction', () => {
 
   it('renders every control from the actions slot in the lead register', () => {
     const { getByRole } = render(CallToAction, {
-      props: { title: TITLE, kind: 'lead' },
+      props: { title: TITLE, variant: 'lead' },
       slots: {
         actions:
           '<button type="button">Deploy now</button><button type="button">Read the docs</button>'
@@ -224,7 +229,7 @@ describe('CallToAction', () => {
 
   it('ignores the aside slot in the lead register', () => {
     const { queryByRole } = render(CallToAction, {
-      props: { title: TITLE, kind: 'lead' },
+      props: { title: TITLE, variant: 'lead' },
       slots: { aside: '<button type="button">Talk to our team</button>' }
     })
 
@@ -238,7 +243,7 @@ describe('CallToAction', () => {
         titleMuted: 'or your agents.',
         description: DESCRIPTION,
         eyebrow: EYEBROW,
-        kind: 'lead'
+        variant: 'lead'
       },
       slots: { actions: '<button type="button">Deploy now</button>' }
     })
@@ -253,7 +258,7 @@ describe('CallToAction', () => {
         titleMuted: 'Run anywhere.',
         description: DESCRIPTION,
         eyebrow: EYEBROW,
-        kind: 'split'
+        variant: 'split'
       },
       slots: {
         actions: '<button type="button">Start for free</button>',
@@ -266,14 +271,14 @@ describe('CallToAction', () => {
 
   describe('primary', () => {
     it('carries the primary register on the root', () => {
-      const { getByTestId } = render(CallToAction, { props: { title: TITLE, kind: 'primary' } })
+      const { getByTestId } = render(CallToAction, { props: { title: TITLE, variant: 'primary' } })
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'primary')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'primary')
     })
 
     it('renders the title as the band heading and the description under it', () => {
       const { getByRole, getByText } = render(CallToAction, {
-        props: { title: TITLE, description: DESCRIPTION, kind: 'primary' }
+        props: { title: TITLE, description: DESCRIPTION, variant: 'primary' }
       })
 
       expect(getByRole('heading', { level: 2 })).toHaveTextContent(TITLE)
@@ -282,7 +287,7 @@ describe('CallToAction', () => {
 
     it('does not draw the eyebrow', () => {
       const { queryByText } = render(CallToAction, {
-        props: { title: TITLE, eyebrow: EYEBROW, kind: 'primary' }
+        props: { title: TITLE, eyebrow: EYEBROW, variant: 'primary' }
       })
 
       expect(queryByText(EYEBROW)).toBeNull()
@@ -290,7 +295,7 @@ describe('CallToAction', () => {
 
     it('renders the controls from the actions slot', () => {
       const { getByRole } = render(CallToAction, {
-        props: { title: TITLE, kind: 'primary' },
+        props: { title: TITLE, variant: 'primary' },
         slots: { actions: '<button type="button">Start free</button>' }
       })
 
@@ -299,7 +304,7 @@ describe('CallToAction', () => {
 
     it('renders the background and bottom slots', () => {
       const { getByText } = render(CallToAction, {
-        props: { title: TITLE, kind: 'primary' },
+        props: { title: TITLE, variant: 'primary' },
         slots: { background: '<i>texture</i>', bottom: '<p>floor strip</p>' }
       })
 
@@ -319,7 +324,7 @@ describe('CallToAction', () => {
 
     it('has no a11y violations', async () => {
       const { container } = render(CallToAction, {
-        props: { title: TITLE, description: DESCRIPTION, kind: 'primary' },
+        props: { title: TITLE, description: DESCRIPTION, variant: 'primary' },
         slots: { actions: '<button type="button">Start free</button>' }
       })
 
@@ -350,15 +355,20 @@ describe('CallToAction', () => {
 
     it('carries the announcement register on the root when asked for it', () => {
       const { getByTestId } = render(CallToAction, {
-        props: { title: TITLE, kind: 'announcement' }
+        props: { title: TITLE, variant: 'announcement' }
       })
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'announcement')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-variant', 'announcement')
     })
 
     it('renders the announcement, its eyebrow, its actions and its note in the announcement register', () => {
       const { getByRole, getByText } = render(CallToAction, {
-        props: { title: TITLE, eyebrow: EYEBROW, description: DESCRIPTION, kind: 'announcement' },
+        props: {
+          title: TITLE,
+          eyebrow: EYEBROW,
+          description: DESCRIPTION,
+          variant: 'announcement'
+        },
         slots: { actions: '<button type="button">Read the announcement</button>' }
       })
 
@@ -370,7 +380,7 @@ describe('CallToAction', () => {
 
     it('lets the default slot replace the note in the announcement register', () => {
       const { getByRole, queryByText } = render(CallToAction, {
-        props: { title: TITLE, description: DESCRIPTION, kind: 'announcement' },
+        props: { title: TITLE, description: DESCRIPTION, variant: 'announcement' },
         slots: { default: '<a href="https://example.com/changelog">the rollout schedule</a>' }
       })
 
@@ -379,14 +389,21 @@ describe('CallToAction', () => {
     })
 
     it('renders no note column in the announcement register without a description', () => {
-      const { container } = render(CallToAction, { props: { title: TITLE, kind: 'announcement' } })
+      const { container } = render(CallToAction, {
+        props: { title: TITLE, variant: 'announcement' }
+      })
 
       expect(container.querySelector('p')).toBeNull()
     })
 
     it('has no a11y violations in the announcement register', async () => {
       const { container } = render(CallToAction, {
-        props: { title: TITLE, eyebrow: EYEBROW, description: DESCRIPTION, kind: 'announcement' },
+        props: {
+          title: TITLE,
+          eyebrow: EYEBROW,
+          description: DESCRIPTION,
+          variant: 'announcement'
+        },
         slots: { actions: '<button type="button">Read the announcement</button>' }
       })
 

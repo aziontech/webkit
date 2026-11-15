@@ -7,9 +7,9 @@ export default Object.assign(RadioGroup, {
 
 export { RadioGroupItem }
 export type {
-  RadioGroupKind,
   RadioGroupOption,
   RadioGroupOrientation,
-  RadioGroupProps
+  RadioGroupProps,
+  RadioGroupVariant
 } from './injection-key'
 export type { RadioGroupItemProps } from './radio-group-item/radio-group-item.vue'

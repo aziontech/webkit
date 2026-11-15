@@ -20,13 +20,13 @@ const fields: FilterMenuField[] = [
   {
     id: 'status',
     label: 'Status',
-    kind: 'single',
+    type: 'single',
     options: [
       { value: 'live', label: 'Live' },
       { value: 'inactive', label: 'Inactive' }
     ]
   },
-  { id: 'modified', label: 'Last modified', kind: 'date' }
+  { id: 'modified', label: 'Last modified', type: 'date' }
 ]
 
 const WAIT = { timeout: 3000 }

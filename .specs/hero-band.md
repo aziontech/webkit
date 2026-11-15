@@ -3,10 +3,10 @@ name: hero-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 31592610f68268dd1342ca997d52dfbd9705318b3a242000922a22bce26b8ab4
+checksum: 5e11ff96817f008751e38bd6cd8cf93d2c96e128a3740ba5c7e39a539d38e9b1
 template: 2
 ---
 
@@ -14,12 +14,12 @@ template: 2
 
 ## Purpose
 
-The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `kind` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
+The opening band of a marketing page: the page `h1` with its overline, accent phrase, sentence and up to two actions, full width above the page column, with an optional client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-band', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `button` and `illustration`, plus `flow` and `tag` for the topology and `section-container`, `section-module`, `frame-box`, `card-grid`, `topic` and `section-gap` for the argument grid. `variant` picks the layout only: `center` fills a screen over a dot field with the copy centered, `title-band` is a padded band with the copy centered, `pixel-floor` sets the copy at the start over an animated pixel floor, `copy-beside-art` sets an illustration (or an `image`) beside the copy, sized from that illustration's own drawn bounds so it bleeds past the column edge and trims its empty top and bottom, and `copy-on-top-art` fills a screen with the copy centered over a scene in its `top` or `bottom` slot, unpadded so the scene reaches the band's edges, and draws a `Flow` topology from `levels` in the bottom window when neither slot is given, so page JSON can carry the scene as data; every layout takes the same copy, actions and client strip, and any layout can set a framed grid of arguments (`items`, three to a row, each a `Topic`) under the band. The client strip's overline falls back to the locale catalog (`Proven on mission-critical workloads`).
 
 ## When to use
 
-- Use HeroBand for every marketing page opening; pick the layout with `kind`.
-- To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `kind="copy-on-top-art"` for a topology under the copy.
+- Use HeroBand for every marketing page opening; pick the layout with `variant`.
+- To open a home, solution, product, listing or contact page with its headline and main actions; add `items` for a grid of arguments under it, or `levels` with `variant="copy-on-top-art"` for a topology under the copy.
 - Rendering page JSON, or you need a whole band with no custom content → the section (`hero-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
 
 ## When NOT to use
@@ -52,7 +52,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 <template>
   <HeroBand
-    kind="title-band"
+    variant="title-band"
     size="large"
     eyebrow="Cache"
     title="Deliver content fast, worldwide"
@@ -67,7 +67,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 | Prop                    | Type                     | Default                         | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | ----------------------- | ------------------------ | ------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `kind`                  | `HeroBandKind`           | `'title-band'`                  | false    | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
+| `variant`                  | `HeroBandVariant`           | `'title-band'`                  | false    | Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. |
 | `size`                  | `HeroBandSize`           | `'medium'`                      | false    | Vertical rhythm of the band; `large` is the opening a product page leads with.                                                                                                                                                                                                                                                                                                                                                                                          |
 | `eyebrow`               | `string`                 | `''`                            | false    | Short overline above the headline.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `titleHighlight`        | `string`                 | `''`                            | false    | Opening words of the headline, painted in the brand accent; reads as one sentence with `title`.                                                                                                                                                                                                                                                                                                                                                                         |
@@ -102,7 +102,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop and drives the hero's height, width, backdrop and the copy alignment
+- `data-variant` mirrors the `variant` prop and drives the hero's height, width, backdrop and the copy alignment
 - `data-title-measure="narrow"` on the root when the headline is set on the narrow measure (`titleLength: 'short'` in the `center`, `title-band` and `center-band` layouts); the headline then caps at `--container-lg` while the description keeps the column
 - Empty: when `title` is empty the band renders nothing but its root
 - The client strip renders only when `tickerMarks` has marks; each action renders only with a label and a link; the art renders only in the `copy-beside-art` layout with `illustration` or `image` set (`illustration` wins when both are given)
@@ -171,7 +171,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 ## Examples
 
 - Default
-- Types — composite story rendering every `kind` stacked.
+- Types — composite story rendering every `variant` stacked.
 - Image — justification: `image` is a part no other example shows (an image beside the copy instead of an illustration, with a custom `eyebrowPrefix`).
 - Topology — justification: `levels` is a part no other example shows (the `copy-on-top-art` scene drawn from data).
 - Arguments — justification: `items` is a part no other example shows (the argument grid under the band).

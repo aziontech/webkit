@@ -389,7 +389,7 @@
                 v-if="!compact"
                 icon="ai ai-window-maximize"
                 :ariaLabel="t('appLayout.showAtSide')"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :data-testid="`${testId}__split-position`"
                 @click="togglePosition"
@@ -397,7 +397,7 @@
               <IconButton
                 icon="ai ai-x"
                 :ariaLabel="t('appLayout.closeSplitPanel')"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :data-testid="`${testId}__split-close`"
                 @click="splitOpen = false"
@@ -450,7 +450,7 @@
             <IconButton
               icon="ai ai-window-minimize"
               :ariaLabel="t('appLayout.showAtBottom')"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :data-testid="`${testId}__split-position`"
               @click="togglePosition"
@@ -458,7 +458,7 @@
             <IconButton
               icon="ai ai-x"
               :ariaLabel="t('appLayout.closeSplitPanel')"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :data-testid="`${testId}__split-close`"
               @click="splitOpen = false"
@@ -493,7 +493,7 @@
             <IconButton
               icon="ai ai-x"
               :ariaLabel="t('appLayout.closeTools')"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :data-testid="`${testId}__tools-close`"
               @click="toolsOpen = false"

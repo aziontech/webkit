@@ -4,7 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import NumberInput from '@aziontech/webkit/number-input'
@@ -19,7 +19,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, nextTick, reactive, ref } from 'vue'
 
-  type FieldProblem = { kind: HelperTextKind; message: string }
+  type FieldProblem = { type: HelperTextType; message: string }
   type LabeledOption = SelectOptionItem
 
   const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
@@ -199,7 +199,7 @@
 
   const required = (id: keyof typeof form) => {
     if (!String(form[id] ?? '').trim()) {
-      errors[id] = { kind: 'required', message: 'This field is required.' }
+      errors[id] = { type: 'required', message: 'This field is required.' }
       return false
     }
     return true
@@ -208,20 +208,20 @@
   const validate = () => {
     Object.keys(errors).forEach((key) => delete errors[key])
     if (required('name') && form.name.trim().length > 250)
-      errors.name = { kind: 'invalid', message: 'Use at most 250 characters.' }
+      errors.name = { type: 'invalid', message: 'Use at most 250 characters.' }
     if (
       form.scope === 'filtered' &&
       required('workloads') &&
       !WORKLOADS_PATTERN.test(form.workloads.trim())
     )
       errors.workloads = {
-        kind: 'invalid',
+        type: 'invalid',
         message: 'Remove the empty lines. Every line holds one workload.'
       }
     if (form.scope === 'all' && form.sampling) {
       const rate = Number(form.samplingRate)
       if (!Number.isFinite(rate) || rate < 1 || rate > 100)
-        errors.samplingRate = { kind: 'invalid', message: 'Enter a rate from 1 to 100.' }
+        errors.samplingRate = { type: 'invalid', message: 'Enter a rate from 1 to 100.' }
     }
     if (form.template === 'custom') {
       required('templateName')
@@ -233,10 +233,10 @@
           parsed = null
         }
         if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed))
-          errors.dataSet = { kind: 'invalid', message: 'Write the data set as a JSON object.' }
+          errors.dataSet = { type: 'invalid', message: 'Write the data set as a JSON object.' }
         else if (!Object.keys(parsed).length)
           errors.dataSet = {
-            kind: 'invalid',
+            type: 'invalid',
             message: 'Add at least one variable to the data set.'
           }
       }
@@ -244,21 +244,21 @@
     if (form.connector === 'standard') {
       if (required('url') && !URL_PATTERN.test(form.url.trim()))
         errors.url = {
-          kind: 'invalid',
+          type: 'invalid',
           message: 'Enter a valid URL. Example: https://collector.example.com/ingest.'
         }
       required('payloadFormat')
       required('lineSeparator')
       if (form.headers.trim() && !HEADERS_PATTERN.test(form.headers.trim()))
         errors.headers = {
-          kind: 'invalid',
+          type: 'invalid',
           message: 'Write up to 5 headers, one per line, in the Key:Value format.'
         }
     }
     if (form.connector === 'kafka') {
       if (required('bootstrapServers') && !SERVERS_PATTERN.test(form.bootstrapServers.trim()))
         errors.bootstrapServers = {
-          kind: 'invalid',
+          type: 'invalid',
           message: 'Separate the servers with a comma and no space.'
         }
       required('topic')
@@ -272,7 +272,7 @@
     if (form.connector === 'analytics') {
       if (required('analyticsUrl') && !URL_PATTERN.test(form.analyticsUrl.trim()))
         errors.analyticsUrl = {
-          kind: 'invalid',
+          type: 'invalid',
           message: 'Enter a valid URL. Example: https://logs.example.com/api/v2/logs.'
         }
       required('apiKey')
@@ -308,7 +308,7 @@
         destinationError.value =
           'The endpoint did not answer the test record, so the stream was not saved. Your other changes are still here.'
         errors[target] = {
-          kind: 'invalid',
+          type: 'invalid',
           message: 'The endpoint did not answer within 10 seconds.'
         }
         nextTick(() => document.getElementById('destination')?.scrollIntoView({ block: 'start' }))
@@ -370,8 +370,8 @@
                       aria-label="Name"
                       placeholder="my-data-stream"
                       autocomplete="off"
-                      :required="errors.name?.kind === 'required'"
-                      :invalid="errors.name?.kind === 'invalid'"
+                      :required="errors.name?.type === 'required'"
+                      :invalid="errors.name?.type === 'invalid'"
                       :aria-describedby="errors.name ? 'data-stream-name-message' : undefined"
                       :disabled="saving"
                       @update:model-value="clear('name')"
@@ -379,7 +379,7 @@
                     <HelperText
                       v-if="errors.name"
                       id="data-stream-name-message"
-                      :kind="errors.name.kind"
+                      :type="errors.name.type"
                       :label="errors.name.message"
                     />
                   </SettingRow>
@@ -387,7 +387,7 @@
                     key="active"
                     title="Active"
                     description="When off, the stream stops collecting records and nothing is sent to the destination."
-                    kind="compact"
+                    variant="compact"
                   >
                     <Switch
                       v-model="form.active"
@@ -440,11 +440,11 @@
                   <SettingRow
                     key="scope"
                     title="Workloads"
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <RadioGroup
                       v-model="form.scope"
-                      kind="card"
+                      variant="card"
                       name="data-stream-scope"
                       aria-label="Workloads"
                       :disabled="saving"
@@ -463,7 +463,7 @@
                     key="workloads"
                     title="Selected workloads"
                     description="One workload per line. Only their records are sent to the destination."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <Textarea
                       id="data-stream-workloads"
@@ -472,8 +472,8 @@
                       :rows="4"
                       aria-label="Selected workloads"
                       placeholder="storefront&#10;checkout-api"
-                      :required="errors.workloads?.kind === 'required'"
-                      :invalid="errors.workloads?.kind === 'invalid'"
+                      :required="errors.workloads?.type === 'required'"
+                      :invalid="errors.workloads?.type === 'invalid'"
                       :aria-describedby="
                         errors.workloads ? 'data-stream-workloads-message' : undefined
                       "
@@ -483,7 +483,7 @@
                     <HelperText
                       v-if="errors.workloads"
                       id="data-stream-workloads-message"
-                      :kind="errors.workloads.kind"
+                      :type="errors.workloads.type"
                       :label="errors.workloads.message"
                     />
                   </SettingRow>
@@ -518,7 +518,7 @@
                     key="sampling"
                     title="Sampling"
                     description="Collect a share of the records instead of all of them, to save resources."
-                    kind="compact"
+                    variant="compact"
                   >
                     <Switch
                       v-model="form.sampling"
@@ -552,7 +552,7 @@
                     <HelperText
                       v-if="errors.samplingRate"
                       id="data-stream-samplingRate-message"
-                      :kind="errors.samplingRate.kind"
+                      :type="errors.samplingRate.type"
                       :label="errors.samplingRate.message"
                     />
                   </SettingRow>
@@ -612,8 +612,8 @@
                       aria-label="Template name"
                       placeholder="my-custom-template"
                       autocomplete="off"
-                      :required="errors.templateName?.kind === 'required'"
-                      :invalid="errors.templateName?.kind === 'invalid'"
+                      :required="errors.templateName?.type === 'required'"
+                      :invalid="errors.templateName?.type === 'invalid'"
                       :aria-describedby="
                         errors.templateName ? 'data-stream-templateName-message' : undefined
                       "
@@ -623,7 +623,7 @@
                     <HelperText
                       v-if="errors.templateName"
                       id="data-stream-templateName-message"
-                      :kind="errors.templateName.kind"
+                      :type="errors.templateName.type"
                       :label="errors.templateName.message"
                     />
                   </SettingRow>
@@ -632,7 +632,7 @@
                     key="dataSet"
                     title="Data set"
                     description="The variables sent to the destination, as a JSON object. Each value is a variable such as $host or $status."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <div class="flex w-full flex-col">
                       <CodeEditor
@@ -654,7 +654,7 @@
                     <HelperText
                       v-if="errors.dataSet"
                       id="data-stream-dataSet-message"
-                      :kind="errors.dataSet.kind"
+                      :type="errors.dataSet.type"
                       :label="errors.dataSet.message"
                     />
                   </SettingRow>
@@ -663,7 +663,7 @@
                     key="preset"
                     title="Data set"
                     description="The variables this template sends. A preset cannot be edited; choose Custom template to pick the variables yourself."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <div class="w-full min-w-0">
                       <CodeBlock
@@ -701,7 +701,7 @@
                   <Button
                     type="button"
                     label="Send test record"
-                    kind="secondary"
+                    variant="secondary"
                     size="medium"
                     :loading="saving"
                     @click="save"
@@ -759,8 +759,8 @@
                       aria-label="URL"
                       placeholder="https://collector.example.com/ingest"
                       autocomplete="off"
-                      :required="errors.url?.kind === 'required'"
-                      :invalid="errors.url?.kind === 'invalid'"
+                      :required="errors.url?.type === 'required'"
+                      :invalid="errors.url?.type === 'invalid'"
                       :aria-describedby="errors.url ? 'data-stream-url-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('url')"
@@ -768,7 +768,7 @@
                     <HelperText
                       v-if="errors.url"
                       id="data-stream-url-message"
-                      :kind="errors.url.kind"
+                      :type="errors.url.type"
                       :label="errors.url.message"
                     />
                   </SettingRow>
@@ -786,8 +786,8 @@
                       aria-label="Payload format"
                       placeholder="$dataset"
                       autocomplete="off"
-                      :required="errors.payloadFormat?.kind === 'required'"
-                      :invalid="errors.payloadFormat?.kind === 'invalid'"
+                      :required="errors.payloadFormat?.type === 'required'"
+                      :invalid="errors.payloadFormat?.type === 'invalid'"
                       :aria-describedby="
                         errors.payloadFormat ? 'data-stream-payloadFormat-message' : undefined
                       "
@@ -797,7 +797,7 @@
                     <HelperText
                       v-if="errors.payloadFormat"
                       id="data-stream-payloadFormat-message"
-                      :kind="errors.payloadFormat.kind"
+                      :type="errors.payloadFormat.type"
                       :label="errors.payloadFormat.message"
                     />
                   </SettingRow>
@@ -815,8 +815,8 @@
                       aria-label="Log line separator"
                       placeholder="\n"
                       autocomplete="off"
-                      :required="errors.lineSeparator?.kind === 'required'"
-                      :invalid="errors.lineSeparator?.kind === 'invalid'"
+                      :required="errors.lineSeparator?.type === 'required'"
+                      :invalid="errors.lineSeparator?.type === 'invalid'"
                       :aria-describedby="
                         errors.lineSeparator ? 'data-stream-lineSeparator-message' : undefined
                       "
@@ -826,7 +826,7 @@
                     <HelperText
                       v-if="errors.lineSeparator"
                       id="data-stream-lineSeparator-message"
-                      :kind="errors.lineSeparator.kind"
+                      :type="errors.lineSeparator.type"
                       :label="errors.lineSeparator.message"
                     />
                   </SettingRow>
@@ -835,7 +835,7 @@
                     key="headers"
                     title="Custom headers"
                     description="Sent with every request. One per line, up to 5, in the Key:Value format."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <div class="flex w-full font-code">
                       <Textarea
@@ -845,8 +845,8 @@
                         :rows="3"
                         aria-label="Custom headers"
                         placeholder="header-name:value"
-                        :required="errors.headers?.kind === 'required'"
-                        :invalid="errors.headers?.kind === 'invalid'"
+                        :required="errors.headers?.type === 'required'"
+                        :invalid="errors.headers?.type === 'invalid'"
                         :aria-describedby="
                           errors.headers ? 'data-stream-headers-message' : undefined
                         "
@@ -857,7 +857,7 @@
                     <HelperText
                       v-if="errors.headers"
                       id="data-stream-headers-message"
-                      :kind="errors.headers.kind"
+                      :type="errors.headers.type"
                       :label="errors.headers.message"
                     />
                   </SettingRow>
@@ -866,7 +866,7 @@
                     key="bootstrapServers"
                     title="Bootstrap servers"
                     description="The hosts and ports of the Kafka cluster, separated by a comma and no space."
-                    kind="stacked"
+                    variant="stacked"
                   >
                     <div class="flex w-full font-code">
                       <Textarea
@@ -876,8 +876,8 @@
                         :rows="2"
                         aria-label="Bootstrap servers"
                         placeholder="host1:9092,host2:9092"
-                        :required="errors.bootstrapServers?.kind === 'required'"
-                        :invalid="errors.bootstrapServers?.kind === 'invalid'"
+                        :required="errors.bootstrapServers?.type === 'required'"
+                        :invalid="errors.bootstrapServers?.type === 'invalid'"
                         :aria-describedby="
                           errors.bootstrapServers
                             ? 'data-stream-bootstrapServers-message'
@@ -890,7 +890,7 @@
                     <HelperText
                       v-if="errors.bootstrapServers"
                       id="data-stream-bootstrapServers-message"
-                      :kind="errors.bootstrapServers.kind"
+                      :type="errors.bootstrapServers.type"
                       :label="errors.bootstrapServers.message"
                     />
                   </SettingRow>
@@ -908,8 +908,8 @@
                       aria-label="Topic"
                       placeholder="edge-records"
                       autocomplete="off"
-                      :required="errors.topic?.kind === 'required'"
-                      :invalid="errors.topic?.kind === 'invalid'"
+                      :required="errors.topic?.type === 'required'"
+                      :invalid="errors.topic?.type === 'invalid'"
                       :aria-describedby="errors.topic ? 'data-stream-topic-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('topic')"
@@ -917,7 +917,7 @@
                     <HelperText
                       v-if="errors.topic"
                       id="data-stream-topic-message"
-                      :kind="errors.topic.kind"
+                      :type="errors.topic.type"
                       :label="errors.topic.message"
                     />
                   </SettingRow>
@@ -935,8 +935,8 @@
                       aria-label="Bucket"
                       placeholder="my-records-bucket"
                       autocomplete="off"
-                      :required="errors.bucket?.kind === 'required'"
-                      :invalid="errors.bucket?.kind === 'invalid'"
+                      :required="errors.bucket?.type === 'required'"
+                      :invalid="errors.bucket?.type === 'invalid'"
                       :aria-describedby="errors.bucket ? 'data-stream-bucket-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('bucket')"
@@ -944,7 +944,7 @@
                     <HelperText
                       v-if="errors.bucket"
                       id="data-stream-bucket-message"
-                      :kind="errors.bucket.kind"
+                      :type="errors.bucket.type"
                       :label="errors.bucket.message"
                     />
                   </SettingRow>
@@ -962,8 +962,8 @@
                       aria-label="Region"
                       placeholder="us-east-1"
                       autocomplete="off"
-                      :required="errors.region?.kind === 'required'"
-                      :invalid="errors.region?.kind === 'invalid'"
+                      :required="errors.region?.type === 'required'"
+                      :invalid="errors.region?.type === 'invalid'"
                       :aria-describedby="errors.region ? 'data-stream-region-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('region')"
@@ -971,7 +971,7 @@
                     <HelperText
                       v-if="errors.region"
                       id="data-stream-region-message"
-                      :kind="errors.region.kind"
+                      :type="errors.region.type"
                       :label="errors.region.message"
                     />
                   </SettingRow>
@@ -989,8 +989,8 @@
                       aria-label="Access key"
                       placeholder="AKIAEXAMPLE"
                       autocomplete="off"
-                      :required="errors.accessKey?.kind === 'required'"
-                      :invalid="errors.accessKey?.kind === 'invalid'"
+                      :required="errors.accessKey?.type === 'required'"
+                      :invalid="errors.accessKey?.type === 'invalid'"
                       :aria-describedby="
                         errors.accessKey ? 'data-stream-accessKey-message' : undefined
                       "
@@ -1000,7 +1000,7 @@
                     <HelperText
                       v-if="errors.accessKey"
                       id="data-stream-accessKey-message"
-                      :kind="errors.accessKey.kind"
+                      :type="errors.accessKey.type"
                       :label="errors.accessKey.message"
                     />
                   </SettingRow>
@@ -1017,8 +1017,8 @@
                       aria-label="Secret key"
                       placeholder="Enter the secret key"
                       autocomplete="off"
-                      :required="errors.secretKey?.kind === 'required'"
-                      :invalid="errors.secretKey?.kind === 'invalid'"
+                      :required="errors.secretKey?.type === 'required'"
+                      :invalid="errors.secretKey?.type === 'invalid'"
                       :aria-describedby="
                         errors.secretKey ? 'data-stream-secretKey-message' : undefined
                       "
@@ -1028,7 +1028,7 @@
                     <HelperText
                       v-if="errors.secretKey"
                       id="data-stream-secretKey-message"
-                      :kind="errors.secretKey.kind"
+                      :type="errors.secretKey.type"
                       :label="errors.secretKey.message"
                     />
                   </SettingRow>
@@ -1047,8 +1047,8 @@
                       aria-label="Intake URL"
                       placeholder="https://logs.example.com/api/v2/logs"
                       autocomplete="off"
-                      :required="errors.analyticsUrl?.kind === 'required'"
-                      :invalid="errors.analyticsUrl?.kind === 'invalid'"
+                      :required="errors.analyticsUrl?.type === 'required'"
+                      :invalid="errors.analyticsUrl?.type === 'invalid'"
                       :aria-describedby="
                         errors.analyticsUrl ? 'data-stream-analyticsUrl-message' : undefined
                       "
@@ -1058,7 +1058,7 @@
                     <HelperText
                       v-if="errors.analyticsUrl"
                       id="data-stream-analyticsUrl-message"
-                      :kind="errors.analyticsUrl.kind"
+                      :type="errors.analyticsUrl.type"
                       :label="errors.analyticsUrl.message"
                     />
                   </SettingRow>
@@ -1075,8 +1075,8 @@
                       aria-label="API key"
                       placeholder="Enter the API key"
                       autocomplete="off"
-                      :required="errors.apiKey?.kind === 'required'"
-                      :invalid="errors.apiKey?.kind === 'invalid'"
+                      :required="errors.apiKey?.type === 'required'"
+                      :invalid="errors.apiKey?.type === 'invalid'"
                       :aria-describedby="errors.apiKey ? 'data-stream-apiKey-message' : undefined"
                       :disabled="saving"
                       @update:model-value="onDestinationChange('apiKey')"
@@ -1084,7 +1084,7 @@
                     <HelperText
                       v-if="errors.apiKey"
                       id="data-stream-apiKey-message"
-                      :kind="errors.apiKey.kind"
+                      :type="errors.apiKey.type"
                       :label="errors.apiKey.message"
                     />
                   </SettingRow>
@@ -1110,14 +1110,14 @@
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
             size="medium"
             :loading="saving"
             @click="save"

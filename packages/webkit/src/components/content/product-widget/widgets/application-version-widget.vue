@@ -4,7 +4,7 @@
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
+  import type { TextureMaterialVariant } from '../../../marketing/texture-material/texture-material.vue'
   import Tag from '../../tag/tag.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
   import ShellMockup, { type ShellMockupFade } from '../shell-mockup/shell-mockup.vue'
@@ -21,7 +21,7 @@
     /** Edge the mockup fades out along. */
     fade?: ShellMockupFade
     /** Texture the frame is grounded with. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Whether this widget is the one showing. */
     active?: boolean
   }
@@ -322,7 +322,7 @@
                   <span class="inline-flex w-fit">
                     <Button
                       label="Contact sales"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       icon="ai ai-shopping-cart"
                     />
@@ -356,19 +356,19 @@
                 <span class="ms-auto inline-flex gap-(--spacing-xs)">
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     ariaLabel="Refresh"
                   />
                   <IconButton
                     icon="ai ai-download"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     ariaLabel="Export"
                   />
                   <IconButton
                     icon="ai ai-column"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     ariaLabel="Columns"
                   />
@@ -508,13 +508,13 @@
           <span class="ms-auto inline-flex shrink-0 items-center gap-(--spacing-sm)">
             <Button
               label="New Version"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-plus"
             />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="small"
               icon="ai ai-cloud-upload"
             />

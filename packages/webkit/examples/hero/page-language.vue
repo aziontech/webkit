@@ -7,7 +7,7 @@
 <template>
   <div>
     <Hero
-      kind="screen"
+      variant="screen"
       max-width="site"
       texture="dots"
     >

@@ -12,7 +12,7 @@
   })
 
   /** Where the footer sits. */
-  export type FooterKind = 'content' | 'site'
+  export type FooterVariant = 'content' | 'site'
   /** Widths at which the signature band renders. */
   export type FooterSignature = 'always' | 'compact'
 
@@ -20,14 +20,14 @@
     /** Accessible name for the contentinfo landmark. Empty uses the locale catalog (`Footer`). */
     ariaLabel?: string
     /** Where the footer sits: `content` is the default — the bands run full bleed across whatever zone holds the footer, opening on the page boundary; `site` closes a framed marketing page instead, capping the bands at the site measure and drawing the frame that page carries: the side rules, the hatched gutters and the corner marks, closing on a full-bleed bottom rule. */
-    kind?: FooterKind
+    variant?: FooterVariant
     /** Widths at which the signature band renders: `always`, or `compact` for below `lg` only, where a footer whose brand leads the social row from `lg` moves it into the band. Decided in CSS, so the server HTML and the hydrated page lay out the same. */
     signature?: FooterSignature
   }
 
   withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    kind: 'content',
+    variant: 'content',
     signature: 'always'
   })
 
@@ -65,15 +65,15 @@
     v-bind="$attrs"
     :aria-label="ariaLabel || t('footer.label')"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-signature="signature"
     class="group flex w-full flex-col bg-(--bg-canvas)"
   >
     <div
-      class="flex w-full items-stretch justify-center group-data-[kind=site]:border-b group-data-[kind=site]:border-b-(length:--border-width-default) group-data-[kind=site]:border-b-(--border-default)"
+      class="flex w-full items-stretch justify-center group-data-[variant=site]:border-b group-data-[variant=site]:border-b-(length:--border-width-default) group-data-[variant=site]:border-b-(--border-default)"
     >
       <FrameBox
-        v-if="kind === 'site'"
+        v-if="variant === 'site'"
         key="gutter-start"
         :borders="['left']"
         marks="all"
@@ -82,10 +82,10 @@
         class="hidden flex-1 2xl:block"
       />
       <FrameBox
-        :borders="kind === 'site' ? 'x' : 'none'"
-        :marks="kind === 'site' ? 'all' : 'none'"
+        :borders="variant === 'site' ? 'x' : 'none'"
+        :marks="variant === 'site' ? 'all' : 'none'"
         :data-testid="`${testId}__frame`"
-        class="w-full shrink-0 group-data-[kind=site]:layout-column-site"
+        class="w-full shrink-0 group-data-[variant=site]:layout-column-site"
       >
         <div class="grid w-full grid-cols-1 md:grid-cols-[auto_auto]">
           <div
@@ -136,7 +136,7 @@
       </FrameBox>
 
       <FrameBox
-        v-if="kind === 'site'"
+        v-if="variant === 'site'"
         key="gutter-end"
         :borders="['right']"
         marks="all"

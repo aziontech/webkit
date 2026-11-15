@@ -49,7 +49,7 @@
     },
     {
       "name": "CheckableOptions",
-      "summary": "`kind=\"checkbox\"` and `kind=\"radio\"` turn options into `menuitemcheckbox` / `menuitemradio` items with a check or dot and `aria-checked`. They keep the panel open on activation, so several columns can be toggled in a row; `selected` comes from your own state in the `select` handler.",
+      "summary": "`type=\"checkbox\"` and `type=\"radio\"` turn options into `menuitemcheckbox` / `menuitemradio` items with a check or dot and `aria-checked`. They keep the panel open on activation, so several columns can be toggled in a row; `selected` comes from your own state in the `select` handler.",
       "file": "checkable-options.vue"
     },
     {

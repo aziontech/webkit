@@ -699,14 +699,14 @@
             <div class="flex items-center justify-end gap-(--spacing-xs)">
               <Button
                 :label="t('dateRangePicker.cancel')"
-                kind="transparent"
+                variant="ghost"
                 :size="size"
                 :data-testid="`${testId}__cancel`"
                 @click="close"
               />
               <Button
                 :label="t('dateRangePicker.apply')"
-                kind="primary"
+                variant="primary"
                 :size="size"
                 :data-testid="`${testId}__apply`"
                 @click="apply"

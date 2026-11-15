@@ -53,11 +53,11 @@ describe('ShellMockup', () => {
       expect(queryByTestId(TESTID)).toBeNull()
     })
 
-    it('mirrors kind and fade on the root', () => {
-      const { getByTestId } = render(host({ kind: 'bare', fade: 'y' }))
+    it('mirrors variant and fade on the root', () => {
+      const { getByTestId } = render(host({ variant: 'bare', fade: 'y' }))
       const root = getByTestId(TESTID)
 
-      expect(root.getAttribute('data-kind')).toBe('bare')
+      expect(root.getAttribute('data-variant')).toBe('bare')
       expect(root.getAttribute('data-fade')).toBe('y')
     })
 

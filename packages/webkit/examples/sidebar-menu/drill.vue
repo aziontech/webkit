@@ -22,7 +22,7 @@
         <SidebarMenuSub>
           <SidebarMenuSubTrigger
             label="Settings"
-            kind="drill"
+            type="drill"
           />
           <SidebarMenuSubContent>
             <SidebarMenuItem

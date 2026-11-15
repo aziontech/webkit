@@ -160,7 +160,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     fade="bottom"
     class="[--mockup-fade-start:72%]"
@@ -219,7 +219,7 @@
                 <span class="h-0 flex-1 border-t border-dashed border-(--border-default)" />
                 <IconButton
                   icon="ai ai-trash"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   ariaLabel="Remove condition"
                 />
@@ -261,14 +261,14 @@
           >
             <Button
               label="And"
-              kind="outlined"
+              variant="outline"
               size="small"
               icon="ai ai-circle-plus"
             />
           </span>
           <Button
             label="Or"
-            kind="outlined"
+            variant="outline"
             size="small"
             icon="ai ai-circle-plus"
           />

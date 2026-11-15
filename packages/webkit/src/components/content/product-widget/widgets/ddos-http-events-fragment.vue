@@ -88,7 +88,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :chrome="false"
     :active="active"
@@ -101,7 +101,7 @@
           <span class="flex items-center gap-(--spacing-xs)">
             <IconButton
               icon="ai ai-filter"
-              kind="outlined"
+              variant="outline"
               size="small"
               ariaLabel="Filter"
             />
@@ -127,7 +127,7 @@
             <Button
               label="Refresh"
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="small"
             />
             <span

@@ -29,7 +29,7 @@
     },
     {
       "name": "WithButton",
-      "summary": "`<Button>` as a direct child on the right. The Button keeps its own API (`label`, `kind`, `size`, `@click`) — the group only joins the border/seam.",
+      "summary": "`<Button>` as a direct child on the right. The Button keeps its own API (`label`, `variant`, `size`, `@click`) — the group only joins the border/seam.",
       "file": "with-button.vue"
     },
     {

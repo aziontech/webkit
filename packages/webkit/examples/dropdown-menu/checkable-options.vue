@@ -19,7 +19,7 @@
   >
     <DropdownMenu.Trigger>
       <Button
-        kind="secondary"
+        variant="secondary"
         icon="ai ai-sliders-horizontal"
         label="View"
       />
@@ -29,19 +29,19 @@
       <DropdownMenu.Item
         value="status"
         label="Status"
-        kind="checkbox"
+        type="checkbox"
         :selected="columns.status"
       />
       <DropdownMenu.Item
         value="region"
         label="Region"
-        kind="checkbox"
+        type="checkbox"
         :selected="columns.region"
       />
       <DropdownMenu.Item
         value="updated"
         label="Last updated"
-        kind="checkbox"
+        type="checkbox"
         :selected="columns.updated"
       />
     </DropdownMenu.Group>
@@ -50,13 +50,13 @@
       <DropdownMenu.Item
         value="comfortable"
         label="Comfortable"
-        kind="radio"
+        type="radio"
         :selected="density === 'comfortable'"
       />
       <DropdownMenu.Item
         value="compact"
         label="Compact"
-        kind="radio"
+        type="radio"
         :selected="density === 'compact'"
       />
     </DropdownMenu.Group>

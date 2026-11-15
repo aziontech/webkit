@@ -122,13 +122,13 @@
     <template #actions="{ close }">
       <Button
         label="Cancel"
-        kind="outlined"
+        variant="outline"
         size="medium"
         @click="close"
       />
       <Button
         label="Delete resource"
-        kind="danger"
+        variant="danger"
         size="medium"
         :disabled="!canDelete"
         @click="confirm"

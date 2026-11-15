@@ -28,13 +28,13 @@
       >
         <CardGrid
           flush
-          kind="frame"
+          variant="frame"
           :columns="3"
         >
           <CardGridCell
             v-for="item in items"
             :key="item.title"
-            kind="canvas"
+            variant="canvas"
           >
             <Topic
               :heading-level="2"

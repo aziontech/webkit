@@ -4,8 +4,8 @@
 </script>
 
 <template>
-  <Item kind="outlined">
-    <Item.Media kind="icon">
+  <Item variant="outline">
+    <Item.Media type="icon">
       <i
         class="ai ai-edge-firewall text-[length:inherit] leading-none"
         aria-hidden="true"
@@ -18,7 +18,7 @@
     <Item.Actions>
       <Button
         label="Review"
-        kind="outlined"
+        variant="outline"
         size="small"
       />
     </Item.Actions>

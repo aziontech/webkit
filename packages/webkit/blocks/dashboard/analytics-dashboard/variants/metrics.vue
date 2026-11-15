@@ -1004,7 +1004,7 @@
             class="flex min-w-0 flex-col"
           >
             <StatTile
-              kind="sans"
+              variant="sans"
               :label="tile.label"
               :value="tile.value"
               :format-value="formatters[tile.format]"
@@ -1049,7 +1049,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       :aria-label="`More options for ${panel.title}`"
                     />
@@ -1077,8 +1077,8 @@
                 empty-description="Metrics appear here once this product serves requests."
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="panel.form === 'stacked'"
                   stacked
@@ -1118,7 +1118,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       :aria-label="`More options for ${breakdown.title}`"
                     />

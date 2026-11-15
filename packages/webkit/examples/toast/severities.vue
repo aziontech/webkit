@@ -8,7 +8,7 @@
   <div class="flex flex-wrap justify-center gap-2">
     <Button
       label="Default"
-      kind="secondary"
+      variant="secondary"
       @click="
         () =>
           toast('Event has been created', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
@@ -16,7 +16,7 @@
     />
     <Button
       label="Success"
-      kind="primary"
+      variant="primary"
       @click="
         () =>
           toast.success('Event has been created', {
@@ -26,7 +26,7 @@
     />
     <Button
       label="Info"
-      kind="outlined"
+      variant="outline"
       @click="
         () =>
           toast.info('Event has been created', {
@@ -36,7 +36,7 @@
     />
     <Button
       label="Warning"
-      kind="outlined"
+      variant="outline"
       @click="
         () =>
           toast.warning('Event has been created', {
@@ -46,7 +46,7 @@
     />
     <Button
       label="Error"
-      kind="danger"
+      variant="danger"
       @click="
         () =>
           toast.error('Event has been created', {
@@ -56,7 +56,7 @@
     />
     <Button
       label="Loading"
-      kind="transparent"
+      variant="ghost"
       @click="
         () => toast.loading('Loading…', { description: 'Sunday, December 03, 2023 at 9:00 AM' })
       "

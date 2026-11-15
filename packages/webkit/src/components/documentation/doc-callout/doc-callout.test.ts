@@ -4,20 +4,20 @@ import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 
 import Default from '../../../../examples/doc-callout/default.vue'
-import Kinds from '../../../../examples/doc-callout/kinds.vue'
+import Kinds from '../../../../examples/doc-callout/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocCallout from './doc-callout.vue'
 
 // Browser mode loads no Tailwind, so per-kind colours are unverifiable here;
-// asserted instead: the severity/glyph each kind resolves to, testid, and copy.
+// asserted instead: the severity/glyph each variant resolves to, testid, and copy.
 
-const KINDS = [
-  { kind: 'note', severity: 'info', icon: 'ai ai-circle-info', neutral: false },
-  { kind: 'info', severity: 'info', icon: 'ai ai-circle-info', neutral: false },
-  { kind: 'tip', severity: 'info', icon: 'ai ai-lightbulb', neutral: true },
-  { kind: 'check', severity: 'success', icon: 'ai ai-circle-check', neutral: false },
-  { kind: 'warning', severity: 'warning', icon: 'ai ai-triangle-alert', neutral: false },
-  { kind: 'danger', severity: 'danger', icon: 'ai ai-circle-x', neutral: false }
+const VARIANTS = [
+  { variant: 'note', severity: 'info', icon: 'ai ai-circle-info', neutral: false },
+  { variant: 'info', severity: 'info', icon: 'ai ai-circle-info', neutral: false },
+  { variant: 'tip', severity: 'info', icon: 'ai ai-lightbulb', neutral: true },
+  { variant: 'check', severity: 'success', icon: 'ai ai-circle-check', neutral: false },
+  { variant: 'warning', severity: 'warning', icon: 'ai ai-triangle-alert', neutral: false },
+  { variant: 'danger', severity: 'danger', icon: 'ai ai-circle-x', neutral: false }
 ] as const
 
 describe('DocCallout', () => {
@@ -51,9 +51,12 @@ describe('DocCallout', () => {
       // closed by the parser at the ul, pushing the list beside the text (see Alert).
       const app = createSSRApp({
         render: () =>
-          h(DocCallout, { kind: 'note' }, () => [
+          h(DocCallout, { variant: 'note' }, () => [
             h('p', 'It will be necessary to take the following actions:'),
-            h('ul', [h('li', 'Migrate to the new chain.'), h('li', 'No action for other kinds.')])
+            h('ul', [
+              h('li', 'Migrate to the new chain.'),
+              h('li', 'No action for other variants.')
+            ])
           ])
       })
       const html = await renderToString(app)
@@ -67,21 +70,21 @@ describe('DocCallout', () => {
     })
   })
 
-  describe('kinds', () => {
-    it.each(KINDS)('kind=$kind resolves severity $severity and its glyph', (entry) => {
+  describe('variants', () => {
+    it.each(VARIANTS)('variant=$variant resolves severity $severity and its glyph', (entry) => {
       const { getByTestId, container } = render(DocCallout, {
-        props: { kind: entry.kind },
+        props: { variant: entry.variant },
         slots: { default: 'Copy.' }
       })
       const root = getByTestId('documentation-doc-callout')
-      expect(root.getAttribute('data-kind')).toBe(entry.kind)
+      expect(root.getAttribute('data-variant')).toBe(entry.variant)
       expect(container.querySelector(`i.${entry.icon.split(' ').join('.')}`)).toBeInTheDocument()
     })
 
-    it('marks only the tip kind as neutral', () => {
-      for (const entry of KINDS) {
+    it('marks only the tip variant as neutral', () => {
+      for (const entry of VARIANTS) {
         const { getByTestId, unmount } = render(DocCallout, {
-          props: { kind: entry.kind },
+          props: { variant: entry.variant },
           slots: { default: 'Copy.' }
         })
         const root = getByTestId('documentation-doc-callout')
@@ -90,10 +93,10 @@ describe('DocCallout', () => {
       }
     })
 
-    it('falls back to note for an unknown kind', () => {
+    it('falls back to note for an unknown variant', () => {
       const { getByTestId, container } = render(DocCallout, {
         // @ts-expect-error — deliberately out of the union, to pin the runtime fallback
-        props: { kind: 'nonsense' },
+        props: { variant: 'nonsense' },
         slots: { default: 'Copy.' }
       })
       expect(getByTestId('documentation-doc-callout').hasAttribute('data-neutral')).toBe(false)
@@ -116,7 +119,7 @@ describe('DocCallout', () => {
       await expectNoA11yViolations(container)
     })
 
-    it('has no violations across all six kinds', async () => {
+    it('has no violations across all six variants', async () => {
       const { container } = render(Kinds)
       await expectNoA11yViolations(container)
     })

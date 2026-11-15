@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <Item kind="muted">
+  <Item variant="muted">
     <Item.Content>
       <Item.Title>Basic Item</Item.Title>
       <Item.Description>A simple item with title and description.</Item.Description>
@@ -12,7 +12,7 @@
     <Item.Actions>
       <Button
         label="Action"
-        kind="outlined"
+        variant="outline"
         size="small"
       />
     </Item.Actions>

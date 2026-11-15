@@ -3,9 +3,9 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
-checksum: 7931ce8542d8bbdebe9f1d48d6bcf5c529c94bce2f18ac10450d15fb911fe606
+checksum: fa606544e49fb74c9b073a0cf5c87684b4ceeb3f94fb9b4b375f05d3c1316356
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -296,7 +296,7 @@ _none_
 
 ## Examples
 
-Composition component with no `kind`/`size` axis. Every story starts **closed** and ships its own opening affordance, matching the `dialog` story pattern: the panel teleports to `document.body`, so a story that forced `open` would stack its panel on top of every other story's panel on the Docs page (leaving each story canvas empty). Only `Default` keeps the global `shortcut`; the remaining stories pass `shortcut=""` so the Docs page has a single ⌘K owner.
+Composition component with no `variant`/`size` axis. Every story starts **closed** and ships its own opening affordance, matching the `dialog` story pattern: the panel teleports to `document.body`, so a story that forced `open` would stack its panel on top of every other story's panel on the Docs page (leaving each story canvas empty). Only `Default` keeps the global `shortcut`; the remaining stories pass `shortcut=""` so the Docs page has a single ⌘K owner.
 
 - Default — the intended entry point: a large read-only search `Input` carrying a ⌘K `Kbd` hint that opens the palette via `v-model:open` (the global `meta+k` shortcut opens it too), containing one input, two groups, a separator, and items with and without `shortcut` hints. Covers the "Best practices" controlled `v-model:open` pattern alongside the default composition.
 - Grouped — composite story with three `<Command.Group>`, only the first pair separated by a `<Command.Separator>`, and half the items carrying a `leading` icon. Required because grouping + separators are central anatomy not covered by `Default`; the three-group shape shows both spacings (around a separator and between two bare groups) in one frame, and the mixed icons are the only coverage of the `leading` slot and of the fact that an icon-less row renders no box.

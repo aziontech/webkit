@@ -36,7 +36,7 @@
       </Field>
       <Field.Separator />
       <Field.Set>
-        <Field.Legend kind="label">Plan</Field.Legend>
+        <Field.Legend type="label">Plan</Field.Legend>
         <RadioGroup
           v-model="plan"
           name="plan"

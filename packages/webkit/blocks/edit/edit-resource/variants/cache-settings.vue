@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -15,7 +15,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
-  type FieldProblem = { kind: HelperTextKind; message: string }
+  type FieldProblem = { type: HelperTextType; message: string }
   type LabeledOption = SelectOptionItem
 
   const browserBehaviors = [
@@ -76,29 +76,29 @@
   const validate = () => {
     Object.keys(errors).forEach((key) => delete errors[key])
     if (!form.name.trim()) {
-      errors.name = { kind: 'required', message: 'Enter a name for this cache setting.' }
+      errors.name = { type: 'required', message: 'Enter a name for this cache setting.' }
     } else if (!/^[a-z0-9-]+$/.test(form.name.trim())) {
       errors.name = {
-        kind: 'invalid',
+        type: 'invalid',
         message: 'Use lowercase letters, numbers and hyphens only.'
       }
     }
     if (form.edgeBehavior === 'override' && form.edgeMaxAge < 60) {
       errors.edgeMaxAge = {
-        kind: 'invalid',
+        type: 'invalid',
         message: 'The edge keeps an object for at least 60 seconds.'
       }
     }
     if (['allowlist', 'denylist'].includes(form.queryStringBehavior)) {
       if (!form.queryStringFields.trim()) {
         errors.queryStringFields = {
-          kind: 'required',
+          type: 'required',
           message: 'List at least one query string field.'
         }
       }
     }
     if (['allowlist', 'denylist'].includes(form.cookieBehavior) && !form.cookieNames.trim()) {
-      errors.cookieNames = { kind: 'required', message: 'List at least one cookie name.' }
+      errors.cookieNames = { type: 'required', message: 'List at least one cookie name.' }
     }
     return Object.keys(errors).length === 0
   }
@@ -205,8 +205,8 @@
                         aria-label="Name"
                         placeholder="static-assets"
                         autocomplete="off"
-                        :required="errors.name?.kind === 'required'"
-                        :invalid="errors.name?.kind === 'invalid'"
+                        :required="errors.name?.type === 'required'"
+                        :invalid="errors.name?.type === 'invalid'"
                         :aria-describedby="errors.name ? 'cache-name-message' : undefined"
                         :disabled="saving"
                         @update:model-value="clear('name')"
@@ -214,7 +214,7 @@
                       <HelperText
                         v-if="errors.name"
                         id="cache-name-message"
-                        :kind="errors.name.kind"
+                        :type="errors.name.type"
                         :label="errors.name.message"
                       />
                     </SettingRow>
@@ -341,7 +341,7 @@
                       <HelperText
                         v-if="errors.edgeMaxAge"
                         id="cache-edgeMaxAge-message"
-                        :kind="errors.edgeMaxAge.kind"
+                        :type="errors.edgeMaxAge.type"
                         :label="errors.edgeMaxAge.message"
                       />
                     </SettingRow>
@@ -349,7 +349,7 @@
                       key="staleCache"
                       title="Stale cache"
                       description="Keep serving the expired object while the origin is unreachable, instead of answering with an error."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.staleCache"
@@ -361,7 +361,7 @@
                       key="largeFileCache"
                       title="Large file optimization"
                       description="Fetch and cache large objects in fragments, so a partial request does not wait for the whole file."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.largeFileCache"
@@ -390,7 +390,7 @@
                       key="tieredCache"
                       title="Tiered cache"
                       description="Add a second cache layer between the edge and your origin, so an edge miss can still be answered without reaching it."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.tieredCache"
@@ -504,8 +504,8 @@
                         aria-label="Query string fields"
                         placeholder="page, sort, lang"
                         autocomplete="off"
-                        :required="errors.queryStringFields?.kind === 'required'"
-                        :invalid="errors.queryStringFields?.kind === 'invalid'"
+                        :required="errors.queryStringFields?.type === 'required'"
+                        :invalid="errors.queryStringFields?.type === 'invalid'"
                         :aria-describedby="
                           errors.queryStringFields ? 'cache-queryStringFields-message' : undefined
                         "
@@ -515,7 +515,7 @@
                       <HelperText
                         v-if="errors.queryStringFields"
                         id="cache-queryStringFields-message"
-                        :kind="errors.queryStringFields.kind"
+                        :type="errors.queryStringFields.type"
                         :label="errors.queryStringFields.message"
                       />
                     </SettingRow>
@@ -557,8 +557,8 @@
                         aria-label="Cookie names"
                         placeholder="session_id, ab_*"
                         autocomplete="off"
-                        :required="errors.cookieNames?.kind === 'required'"
-                        :invalid="errors.cookieNames?.kind === 'invalid'"
+                        :required="errors.cookieNames?.type === 'required'"
+                        :invalid="errors.cookieNames?.type === 'invalid'"
                         :aria-describedby="
                           errors.cookieNames ? 'cache-cookieNames-message' : undefined
                         "
@@ -568,7 +568,7 @@
                       <HelperText
                         v-if="errors.cookieNames"
                         id="cache-cookieNames-message"
-                        :kind="errors.cookieNames.kind"
+                        :type="errors.cookieNames.type"
                         :label="errors.cookieNames.message"
                       />
                     </SettingRow>
@@ -594,14 +594,14 @@
             <Button
               type="button"
               label="Discard"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="saving"
               @click="discard"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="saving"
               @click="save"

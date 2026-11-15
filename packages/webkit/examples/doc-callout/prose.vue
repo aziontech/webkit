@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <DocCallout kind="warning">
+  <DocCallout variant="warning">
     <p>
       Certificates cross-signed by the retired root stop validating on older devices. It will be
       necessary to take the following actions:

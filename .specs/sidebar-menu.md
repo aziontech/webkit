@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: ca4d30593a969093f2e624533c20e965fd6dd1b9273034b41850780851d773dd
+checksum: 48d7d16ac1c6d9d8120913bca85082b83a008a2cec463e7b8d2454da7a21c07d
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -119,7 +119,7 @@ is the shape every story below uses.
           <SidebarMenu.SubTrigger
             label="Getting started"
             icon="ai ai-book"
-            kind="inline"
+            type="inline"
           />
           <SidebarMenu.SubContent>
             <SidebarMenu.Item
@@ -133,7 +133,7 @@ is the shape every story below uses.
           <SidebarMenu.SubTrigger
             label="Settings"
             icon="ai ai-settings"
-            kind="drill"
+            type="drill"
           />
           <SidebarMenu.SubContent>
             <SidebarMenu.Item
@@ -188,7 +188,7 @@ element instead of three.
   - **A root group plays the rail's own entrance** when the menu mounts with an empty stack and the root's `enterOnMount` is set — the case where the reader travelled _back out_ of a level and the host remounted, leaving the group no rendered off-canvas position to slide from. A group behind a _pushed_ level does not (it should stay put, not animate in behind the level), and a **nested** group never travels on its own: the level carries it.
   - Slots: `default` — the group's rows; `label` — replaces the header text.
 - `sidebar-menu-sub/sidebar-menu-sub.vue` — The `<li>` that owns a row plus that row's children. Provides the sub context (open state, generated trigger/content ids, nesting level derived from any ancestor sub) so its trigger and content need no wiring.
-  - Props: `defaultOpen?: boolean` (default `false` — initial state when uncontrolled; ignored for `kind="drill"`, whose visibility is the root's stack).
+  - Props: `defaultOpen?: boolean` (default `false` — initial state when uncontrolled; ignored for `type="drill"`, whose visibility is the root's stack).
   - Model: `open` — `boolean`, default `undefined` (unbound: uncontrolled, starts at `defaultOpen`). Controlled via `v-model:open`; `@update:open` is typed `(value: boolean) => void`.
   - Slots: `default` — exactly one `SubTrigger` and one `SubContent`.
 - `sidebar-menu-sub-trigger/sidebar-menu-sub-trigger.vue` — The row that owns children, and a **heading for them**.
@@ -200,19 +200,19 @@ element instead of three.
     - **Without one** the label is a `<button>` that **reveals the children too**, so the whole row does. There is no destination to protect, and leaving the arrow as the only live target is a 28 px box — **7 % of the row's area**, with the other 93 % doing nothing — which on a phone reads as a broken menu. This is the shape most containers have (a console module's settings drill, every one of the 28 container rows in the sample's docs tree), so it is the one that must be right by default.
     - `href` is the signal rather than a boolean because it is the same data every other row in this menu uses to say where it goes, and because it makes the behaviour fall out of the tree in data-driven mode: `SidebarMenuNode.href` already exists. It also follows [`root-element.md`](../.claude/rules/root-element.md) — the root switches element on a **data** prop, never an `as`/`is` string.
     - The **link** is an `<a href>` carrying `sub.triggerId`, the icon column and the row's typography (`min-w-0 flex-1`, so it fills what the arrow leaves). A real anchor, so middle-click and open-in-new-tab work; the consumer intercepts a plain left click for SPA routing. It announces its activation through `click` and does **nothing else** — it neither expands nor pushes. **A disabled row drops its `href` outright** (an anchor with no destination is not a link) and takes `tabindex="-1"` + `aria-disabled`.
-    - The **arrow** is an `IconButton kind="transparent" size="small"` (28 px box, 12 px glyph), on every row. With `kind="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `kind="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
+    - The **arrow** is an `IconButton variant="ghost" size="small"` (28 px box, 12 px glyph), on every row. With `type="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `type="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
     - **`aria-expanded` / `aria-controls` sit on whichever control expands the children, and on exactly one of them.** With a link that is the arrow. Without one the **label** already reveals, so it carries them and the arrow becomes a **redundant pointer affordance** for the same action: `tabindex="-1"` + `aria-hidden="true"`, so it leaves the tab order and the accessibility tree rather than announcing a second control for one thing. One tab stop per row either way.
     - **The arrow keys work from the row's own control**: `ArrowRight` expands / pushes and `ArrowLeft` collapses, so a keyboard reader reaches the children without first tabbing to an arrow.
     - Focus returns, on pop, to **whichever control pushed the level** — the arrow when the label is a link, the label otherwise.
-  - **An inline trigger carries no icon; a drill trigger may.** An inline row is a separator for the rows it expands _beneath itself_, in their own column — a glyph there competes with the rows it owns, so the column belongs to them and only the arrow sits on the trailing edge. A drill row has nothing beneath it (it **replaces** the menu), so it is read as one of the destinations it is listed among and takes an icon for the same reason they do. The component **enforces** this rather than trusting the caller: `showIcon` is `icon && kind === 'drill'`, so an inline trigger handed an `icon` still renders none. When shown, the glyph uses `SidebarMenu.Item`'s own box (32 px, `pl-(--spacing-2xs)`, `size-4` glyph, muted → default on hover) so it lands on the same content column as the leaves around it.
-  - **A trigger announces a navigation only when it has one to announce.** In data-driven mode a node with children emits `navigate` `(event, node)` from its **link**, which exists only when the node carries an `href` — so a container that is not a destination emits nothing at all, of either kind. Revealing the children never emits: that is a move inside the menu, not a navigation.
-  - Props: `label?: string` (default `''` — visible row text), `kind?: 'inline' | 'drill'` (default `'inline'` — whether children expand in place or replace the menu), `icon?: string` (default `''` — leading glyph; honoured for `kind="drill"` only, see above), `href?: string` (default `''` — the row's own destination, and the switch between the split and unsplit shapes above), `disabled?: boolean` (default `false` — blocks revealing and navigating; suppresses **every** control of the row).
+  - **An inline trigger carries no icon; a drill trigger may.** An inline row is a separator for the rows it expands _beneath itself_, in their own column — a glyph there competes with the rows it owns, so the column belongs to them and only the arrow sits on the trailing edge. A drill row has nothing beneath it (it **replaces** the menu), so it is read as one of the destinations it is listed among and takes an icon for the same reason they do. The component **enforces** this rather than trusting the caller: `showIcon` is `icon && type === 'drill'`, so an inline trigger handed an `icon` still renders none. When shown, the glyph uses `SidebarMenu.Item`'s own box (32 px, `pl-(--spacing-2xs)`, `size-4` glyph, muted → default on hover) so it lands on the same content column as the leaves around it.
+  - **A trigger announces a navigation only when it has one to announce.** In data-driven mode a node with children emits `navigate` `(event, node)` from its **link**, which exists only when the node carries an `href` — so a container that is not a destination emits nothing at all, of either type. Revealing the children never emits: that is a move inside the menu, not a navigation.
+  - Props: `label?: string` (default `''` — visible row text), `type?: 'inline' | 'drill'` (default `'inline'` — whether children expand in place or replace the menu), `icon?: string` (default `''` — leading glyph; honoured for `type="drill"` only, see above), `href?: string` (default `''` — the row's own destination, and the switch between the split and unsplit shapes above), `disabled?: boolean` (default `false` — blocks revealing and navigating; suppresses **every** control of the row).
   - Events: `click` `(event: MouseEvent, item: { label: string; href: string })` — `item` carries the row's `label` and `href`, as on `SidebarMenu.Item`; the **link** was activated, so it cannot fire on a row with nowhere to go. Declared rather than left to `$attrs` fallthrough: in the split shape the root is a box holding two controls, so a fallthrough listener would sit on that box and fire for the arrow too, making "reveal the children" also trigger the consumer's navigation.
   - Slots: `default` — replaces the label text.
-- `sidebar-menu-sub-content/sidebar-menu-sub-content.vue` — The children of a sub, in one of two shapes depending on its trigger's `kind`.
-  - `kind="inline"` — a nested bare `<ul>` (`relative m-0 list-none p-0 flex flex-col`) whose `padding-left` is `calc(var(--spacing-sm) * 2)`, with the connector rail drawn on its `li` children. **Kumo indents with padding alone and draws no rail; we keep the rail** — the one place this component deliberately adds to the reference, because the Figma frame specifies it and it is what makes a three-level docs tree readable.
+- `sidebar-menu-sub-content/sidebar-menu-sub-content.vue` — The children of a sub, in one of two shapes depending on its trigger's `type`.
+  - `type="inline"` — a nested bare `<ul>` (`relative m-0 list-none p-0 flex flex-col`) whose `padding-left` is `calc(var(--spacing-sm) * 2)`, with the connector rail drawn on its `li` children. **Kumo indents with padding alone and draws no rail; we keep the rail** — the one place this component deliberately adds to the reference, because the Figma frame specifies it and it is what makes a three-level docs tree readable.
   - It renders the anchor `SidebarMenu.Back` teleports into, at the top of its own box (see `sidebar-menu-back`).
-  - `kind="drill"` — **a second-level menu with the same anatomy as the root**, not a flat row list: a `<div role="group">` labelled by its trigger, so it holds `SidebarMenu.Group`s exactly like the root does. It therefore follows the root's composition rule — rows live inside a `SidebarMenu.Group` (an unlabeled one for a flat level), because a `<ul>` here could never contain a group's `<section>`. It mounts only while its sub is on the stack, draws no rail (a pushed level is not indented), and its own mount is the one phase CSS cannot tween, so a `<Transition>` supplies the from-frame. **That Transition must always exist before its child does**, so the level is withheld for one tick after its Teleport becomes renderable and every arrival — a live push and a restored stack alike — takes the same `enter` path. `appear` is deliberately **not** used: the Teleport's target is the root's level host, a ref the root sets in _its_ `onMounted`, which runs after this component's (children mount first) — so on a restored stack the Transition and its child would first render together and the appear hooks would not play, making the entrance depend on where the reader happened to come from.
+  - `type="drill"` — **a second-level menu with the same anatomy as the root**, not a flat row list: a `<div role="group">` labelled by its trigger, so it holds `SidebarMenu.Group`s exactly like the root does. It therefore follows the root's composition rule — rows live inside a `SidebarMenu.Group` (an unlabeled one for a flat level), because a `<ul>` here could never contain a group's `<section>`. It mounts only while its sub is on the stack, draws no rail (a pushed level is not indented), and its own mount is the one phase CSS cannot tween, so a `<Transition>` supplies the from-frame. **That Transition must always exist before its child does**, so the level is withheld for one tick after its Teleport becomes renderable and every arrival — a live push and a restored stack alike — takes the same `enter` path. `appear` is deliberately **not** used: the Teleport's target is the root's level host, a ref the root sets in _its_ `onMounted`, which runs after this component's (children mount first) — so on a restored stack the Transition and its child would first render together and the appear hooks would not play, making the entrance depend on where the reader happened to come from.
   - A `SidebarMenu.Group` nested inside a drilled level is part of that level and never steps aside on its own — the level slides as one piece. Only a **root-level** group translates out on a push.
   - Slots: `default` — the nested rows.
 - `sidebar-menu-back/sidebar-menu-back.vue` — The way out of a drill level. **It renders inside the current level, not where it is declared:** the level exposes an anchor through the root context and Back teleports into it. That placement is load-bearing on two counts — the level's own slide animates Back for free (no second transition to keep in sync), and Back never occupies the root's flow, so popping cannot shift the menu it returns to. Held in the root's flow it reserved a 32 px row plus its margin for the whole exit, pushing the returning menu down and snapping it back at the end. A level claims the anchor when it becomes current and releases it only when it **unmounts**, so a level still sliding out keeps its Back; a pop between levels hands the button to the level it landed on. It carries `mb-(--spacing-sm)` so it reads as heading the level rather than as the first row of the level's first group. Context-aware: it reads the root's stack and **renders nothing at the root level**, so it can be declared unconditionally.
@@ -290,11 +290,11 @@ export type SidebarMenuNode = {
   target?: '_self' | '_blank'
   tagValue?: string
   disabled?: boolean
-  kind?: 'inline' | 'drill'
+  type?: 'inline' | 'drill'
   defaultOpen?: boolean
   children?: SidebarMenuNode[]
   // A drill level is a menu, so it is described by the SAME shape the root takes.
-  // `kind: 'drill'` only; ignored on an inline row, which is a list and not a level.
+  // `type: 'drill'` only; ignored on an inline row, which is a list and not a level.
   // Takes precedence over `children` when both are set.
   groups?: SidebarMenuGroupNode[]
 }
@@ -329,7 +329,7 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 
 | Event      | Payload                                      | Notes                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | ---------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigate` | `(event: MouseEvent, node: SidebarMenuNode)` | A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check. |
+| `navigate` | `(event: MouseEvent, node: SidebarMenuNode)` | A leaf row — or the **label** of a row that owns children, of either type, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check. |
 
 ## Slots
 
@@ -347,7 +347,7 @@ say) can persist the list and hand it back, which per-sub local state cannot sur
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `current page` (the `active` prop), `disabled`
 - `data-state` values: `open` | `closed` — on `Sub`, `SubTrigger` and `SubContent`. A `Group` has none: it never closes.
-- `data-kind` values: `inline` | `drill` — on `SubTrigger` and `SubContent`. On a trigger they sit on its root, which is always the row **box** holding its label control and its arrow.
+- `data-type` values: `inline` | `drill` — on `SubTrigger` and `SubContent`. On a trigger they sit on its root, which is always the row **box** holding its label control and its arrow.
 - `data-active` mirrors the `active` prop on `SidebarMenu.Item` (on the `li` and on its link or button, which also carries `data-disabled` and, with an `icon`, `data-icon`; the row styles switch on these, not on class bindings)
 - `data-disabled` mirrors the `disabled` prop on `SidebarMenu.Item` and `SubTrigger` (on the row box and on its label alike, so a test can read it from either)
 - `data-level` on `SubContent` — nesting depth, drives the indent step
@@ -535,7 +535,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-cont
 ## Examples
 
 - Default — a console-style menu inside a `Sidebar` host: two titled `Group`s with an active row.
-- Types — composite story rendering both `SubTrigger` `kind` values side-by-side, so the `chevron-down` and `chevron-right` affordances are directly comparable.
+- Types — composite story rendering both `SubTrigger` `type` values side-by-side, so the `chevron-down` and `chevron-right` affordances are directly comparable.
 - Condensed — **justified addition.** A three-level recursive tree with the nested indent rail. `Default` renders flat groups and cannot show the rail's nesting, which is the primary reason this component exists over a flat list of groups.
 - Drill — **justified addition.** The view stack is stateful: pushing a level, the `Back` row, and focus restoration on pop cannot be shown by any static args delta.
 - Disabled — a disabled `SidebarMenu.Item` and a disabled `SubTrigger`, demonstrating that activation is suppressed.

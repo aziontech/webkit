@@ -28,13 +28,13 @@
     '09:00'
   ]
 
-  type CardKind = 'area' | 'donut' | 'line' | 'bar' | 'bar-list'
+  type CardVariant = 'area' | 'donut' | 'line' | 'bar' | 'bar-list'
   type CardFormat = 'count' | 'bytes' | 'ms'
 
   interface DashboardCard {
     title: string
     hint: string
-    kind: CardKind
+    kind: CardVariant
     format: CardFormat
     series: ChartSeries[]
     items?: BarListItem[]
@@ -162,14 +162,14 @@
           <Button
             v-if="customized"
             label="Reset layout"
-            kind="transparent"
+            variant="ghost"
             size="medium"
             icon="ai ai-replay"
             @click="reset"
           />
           <Button
             :label="editing ? 'Done' : 'Edit layout'"
-            :kind="editing ? 'primary' : 'outlined'"
+            :variant="editing ? 'primary' : 'outline'"
             size="medium"
             :icon="editing ? 'ai ai-check' : 'ai ai-layout-grid'"
             :aria-pressed="editing"
@@ -239,8 +239,8 @@
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
+                <Chart.Axis type="y" />
+                <Chart.Axis type="x" />
                 <Chart.Bar
                   v-if="cards[card.id].kind === 'bar'"
                   stacked

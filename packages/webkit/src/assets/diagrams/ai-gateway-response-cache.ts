@@ -6,18 +6,18 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'app',
-      kind: 'app',
+      type: 'app',
       title: 'App'
     },
     {
       key: 'hit',
-      kind: 'pill',
+      type: 'pill',
       title: 'Cached response?',
       active: true
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Cache API',
       title: 'Stored response',
       icon: 'ai ai-tiered-cache',
@@ -30,7 +30,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'model',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'AI Inference',
       title: 'Model call',
       icon: 'ai ai-edge-ai'

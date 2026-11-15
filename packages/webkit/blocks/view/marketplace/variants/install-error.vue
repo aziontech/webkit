@@ -324,7 +324,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/marketplace"
             target="_blank"
@@ -353,7 +353,7 @@
               >
                 <Card
                   class="w-full"
-                  kind="integration"
+                  variant="integration"
                   featured
                   :title="item.name"
                   :vendor="item.vendor"
@@ -393,7 +393,7 @@
               <template #actions>
                 <Button
                   label="Clear filters"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="clearFilters"
                 />
@@ -411,7 +411,7 @@
               >
                 <Card
                   class="w-full"
-                  kind="integration"
+                  variant="integration"
                   :title="item.name"
                   :vendor="item.vendor"
                   :logo="item.logo"
@@ -424,7 +424,7 @@
                     <Button
                       :label="item.status === 'installed' ? 'Configure' : 'Install'"
                       :aria-label="`${item.status === 'installed' ? 'Configure' : 'Install'} ${item.name}`"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="openDetail(item.id)"
                     />
@@ -614,7 +614,7 @@
                 v-if="selected.installedOn.length"
                 label="Configure"
                 icon="ai ai-settings"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :href="`/marketplace/${selected.id}/configure`"
               />
@@ -622,7 +622,7 @@
                 key="button-2"
                 v-if="available.length"
                 label="Install"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="run.state === 'running'"

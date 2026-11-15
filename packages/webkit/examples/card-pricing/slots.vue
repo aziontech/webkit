@@ -8,7 +8,7 @@
     title="Pro"
     pricing-details="Billed annually or $25/mo billed monthly."
     actions-position="middle"
-    kind="contained"
+    variant="contained"
     show-tag
     tag-label="Popular"
     value="20"
@@ -48,7 +48,7 @@
     <template #actions>
       <Button
         label="Start with Pro"
-        kind="primary"
+        variant="primary"
         size="large"
         class="w-full"
       />

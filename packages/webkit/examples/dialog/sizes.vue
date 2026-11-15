@@ -38,7 +38,7 @@
       <DialogTrigger>
         <Button
           :label="sizeLabels[size]"
-          kind="outlined"
+          variant="outline"
         />
       </DialogTrigger>
       <DialogContent>
@@ -54,7 +54,7 @@
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button
               label="Close"
-              kind="outlined"
+              variant="outline"
               @click="openBySize[size] = false"
             />
           </div>

@@ -18,7 +18,7 @@
     {
       _id: 'closing-call-to-action',
       props: {
-        kind: 'panel',
+        variant: 'panel',
         title: 'Ready to join us?',
         description: 'See our open positions and find the right fit.',
         primaryAction: { label: 'See open roles', href: '/careers/jobs', trailing: true }
@@ -27,7 +27,7 @@
     {
       _id: 'closing-call-to-action',
       props: {
-        kind: 'primary',
+        variant: 'primary',
         anchor: 'contact',
         title: 'Build, run, and protect applications everywhere.',
         description: 'Get faster launches, lower latency, and less infrastructure overhead.',
@@ -50,7 +50,7 @@
         ]
       }
     },
-    { _id: 'closing-call-to-action', props: { kind: 'frame' } }
+    { _id: 'closing-call-to-action', props: { variant: 'frame' } }
   ]
 </script>
 

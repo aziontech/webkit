@@ -205,7 +205,7 @@
           <Button
             label="Export to CSV"
             icon="ai ai-download"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="!rows.length || loading || loadFailed"
             @click="exportCsv"
@@ -213,7 +213,7 @@
           <Button
             :label="selected.length ? `Allow ${selected.length} selected` : 'Allow selected'"
             icon="ai ai-check"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="!selected.length || loading"
             @click="openAllow"
@@ -286,7 +286,7 @@
           <Tooltip content="Refresh">
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               aria-label="Refresh matched requests"
               :disabled="loading"
@@ -364,7 +364,7 @@
                   <template #actions>
                     <Button
                       label="Clear search"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="search = ''"
                     />
@@ -456,7 +456,7 @@
                   class="w-full"
                   type="button"
                   label="Cancel"
-                  kind="outlined"
+                  variant="outline"
                   :disabled="allowing"
                   @click="allowOpen = false"
                 />
@@ -466,7 +466,7 @@
                   class="w-full"
                   type="submit"
                   :label="allowFailed ? 'Try again' : 'Allow rules'"
-                  kind="primary"
+                  variant="primary"
                   :loading="allowing"
                 />
               </div></div

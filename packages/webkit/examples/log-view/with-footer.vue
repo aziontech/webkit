@@ -21,7 +21,7 @@
         <span class="text-(--text-muted)">Finished in 11 s</span>
         <Button
           label="Open site"
-          kind="secondary"
+          variant="secondary"
           size="small"
           href="https://app.example.com"
         />

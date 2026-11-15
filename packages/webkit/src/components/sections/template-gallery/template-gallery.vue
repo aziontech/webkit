@@ -130,13 +130,13 @@
             >
               <CardGrid
                 flush
-                kind="frame"
+                variant="frame"
                 :columns="2"
               >
                 <CardGridCell
                   v-for="(template, index) in cards"
                   :key="`${template.title}-${index}`"
-                  kind="none"
+                  variant="none"
                   :padded="false"
                 >
                   <div
@@ -175,7 +175,7 @@
                     <Button
                       v-if="deployLabel && template.href"
                       :label="deployLabel"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       icon="ai ai-chevron-right"
                       icon-position="trailing"
@@ -210,7 +210,7 @@
             :label="primaryAction.label"
             :href="primaryAction.href"
             :target="primaryAction.target"
-            kind="secondary"
+            variant="secondary"
             size="large"
             :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
             icon-position="trailing"
@@ -222,7 +222,7 @@
             :label="secondaryAction.label"
             :href="secondaryAction.href"
             :target="secondaryAction.target"
-            kind="outlined"
+            variant="outline"
             size="large"
             :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
             icon-position="trailing"
@@ -253,7 +253,7 @@
       data-hatch="true"
       class="h-[calc(var(--spacing-2xl)*2)]"
     >
-      <TextureMaterial kind="lines" />
+      <TextureMaterial variant="lines" />
     </FrameBox>
   </div>
 </template>

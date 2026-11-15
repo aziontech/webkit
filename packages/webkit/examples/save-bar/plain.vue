@@ -4,17 +4,17 @@
 </script>
 
 <template>
-  <SaveBar kind="plain">
+  <SaveBar variant="plain">
     <template #actions>
       <Button
         type="button"
         label="Cancel"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>

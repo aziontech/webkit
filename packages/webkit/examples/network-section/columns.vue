@@ -76,7 +76,7 @@
     <NetworkSection
       v-for="count in counts"
       :key="`outcomes-${count}`"
-      kind="outcomes"
+      variant="outcomes"
       eyebrow="Region: Earth."
       :title="`${count} outcomes set the floor in ${count} columns`"
       claims-eyebrow="Built around your users. Distributed around your data."
@@ -86,7 +86,7 @@
     <NetworkSection
       v-for="count in benefitCounts"
       :key="`benefits-${count}`"
-      kind="benefits"
+      variant="benefits"
       eyebrow="Region: Earth."
       :title="`${count} benefits balanced on up to three columns`"
       claims-eyebrow="Built around your users. Distributed around your data."

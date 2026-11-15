@@ -131,7 +131,7 @@ Fixed by [`.claude/rules/testing.md`](../rules/testing.md); this is the **floor*
 | #   | Surface          | Assertion                                                                   |
 | --- | ---------------- | --------------------------------------------------------------------------- |
 | 1   | Render           | mounts; `data-testid` fallback present; consumer override wins              |
-| 2   | Props / variants | each `kind` / `size` / … maps to its `data-*` attribute                     |
+| 2   | Props / variants | each `variant` / `size` / … maps to its `data-*` attribute                  |
 | 3   | Events           | every spec'd event fires with the right payload on real user action         |
 | 4   | Suppression      | `disabled` / `loading` / `readonly` → action **not** emitted                |
 | 5   | v-model          | drive the input, assert `update:modelValue` with the exact value            |

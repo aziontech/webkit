@@ -9,11 +9,11 @@
   })
 
   /** Register of the tile. */
-  export type MediaTileKind = 'frame' | 'plain'
+  export type MediaTileVariant = 'frame' | 'plain'
 
   interface Props {
     /** Register of the tile: frame draws the page's frame around the media alone, plain draws no rules and makes the tile itself the cell a divider grid separates. */
-    kind?: MediaTileKind
+    variant?: MediaTileVariant
     /** The caption's run-in lead, naming what the panel above it shows. */
     title: string
     /** The sentence continuing the caption after the lead; overridden by the default slot. */
@@ -31,7 +31,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'frame',
+    variant: 'frame',
     description: '',
     src: '',
     alt: '',
@@ -66,18 +66,18 @@
   <figure
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-media="hasMedia() || null"
     :data-described="hasDescription() || null"
     :data-padded="padded || null"
-    class="m-0 flex h-full flex-col gap-(--spacing-lg) data-[kind=plain]:bg-(--bg-canvas)"
+    class="m-0 flex h-full flex-col gap-(--spacing-lg) data-[variant=plain]:bg-(--bg-canvas)"
   >
     <component
-      :is="kind === 'frame' ? FrameBox : 'div'"
+      :is="variant === 'frame' ? FrameBox : 'div'"
       :data-testid="`${testId}__frame`"
-      :data-kind="kind"
+      :data-variant="variant"
       :data-padded="padded || null"
-      class="overflow-hidden data-[kind=frame]:min-h-64 data-[kind=plain]:min-h-32 [--product-widget-fill:var(--bg-canvas)] data-[kind=frame]:bg-(--bg-canvas) data-[kind=frame]:data-[padded]:p-(--spacing-xl) data-[kind=plain]:data-[padded]:px-(--spacing-lg) data-[kind=plain]:data-[padded]:pt-(--spacing-lg)"
+      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 [--product-widget-fill:var(--bg-canvas)] data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
     >
       <div
         :data-testid="`${testId}__media`"
@@ -100,8 +100,8 @@
     </component>
 
     <figcaption
-      :data-kind="kind"
-      class="m-0 text-pretty text-body-md text-(--text-muted) data-[kind=plain]:px-(--spacing-lg) data-[kind=plain]:pb-(--spacing-lg)"
+      :data-variant="variant"
+      class="m-0 text-pretty text-body-md text-(--text-muted) data-[variant=plain]:px-(--spacing-lg) data-[variant=plain]:pb-(--spacing-lg)"
     >
       <strong class="font-medium text-(--text-default)">{{ title }}</strong>
       <template v-if="hasDescription()"

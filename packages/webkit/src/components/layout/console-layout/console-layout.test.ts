@@ -37,7 +37,7 @@ const navigation: ConsoleLayoutNavGroup[] = [
       {
         id: 'settings',
         label: 'Settings',
-        kind: 'drill',
+        type: 'drill',
         groups: [
           {
             label: 'Settings',

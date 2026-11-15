@@ -44,7 +44,7 @@
   >
     <TextureMaterial
       v-if="hatch"
-      kind="lines"
+      variant="lines"
       :data-testid="`${testId}__hatch`"
     />
   </FrameBox>

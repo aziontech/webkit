@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'App',
       icon: 'ai ai-comments',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: run the model',
       icon: 'ai ai-rules-engine',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'inference',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'AI Inference',
       title: 'Mistral 3 Small on Azion',
       icon: 'ai ai-edge-ai',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'vector',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'SQL Database',
       title: 'Vector search for context',
       icon: 'ai ai-edge-sql',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'lora',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'LoRA',
       title: 'Your fine-tuned adapter',
       icon: 'ai ai-lora'

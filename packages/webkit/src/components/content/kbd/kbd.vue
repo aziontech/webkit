@@ -10,7 +10,7 @@
 
   export type KbdKeyName = keyof typeof en.kbd
 
-  export type KbdKind = 'combined' | 'separate'
+  export type KbdVariant = 'combined' | 'separate'
 
   interface Props {
     /** Prepend the meta/command modifier glyph (⌘ on macOS, Ctrl elsewhere). */
@@ -28,7 +28,7 @@
     /** A key sequence drawn after the modifier props and keyName; modifier and named keys print from the catalog. */
     keys?: string[]
     /** Visual variant: one keycap holding every key, or one keycap per key. */
-    kind?: KbdKind
+    variant?: KbdVariant
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -39,7 +39,7 @@
     size: 'medium',
     keyName: '',
     keys: () => [],
-    kind: 'combined'
+    variant: 'combined'
   })
 
   defineSlots<{
@@ -91,11 +91,11 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    :data-kind="kind"
+    :data-variant="variant"
     :class="attrs.class"
-    class="inline-flex items-center justify-center gap-(--spacing-2xs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 data-[kind=separate]:bg-transparent data-[kind=separate]:border-0 data-[kind=separate]:shadow-none data-[kind=separate]:px-0 data-[kind=separate]:min-w-0"
+    class="inline-flex items-center justify-center gap-(--spacing-2xs) tabular-nums leading-none bg-(--bg-surface) text-(--text-default) border border-b-2 border-(--border-default) rounded-(--shape-control) shadow-(--shadow-sm) px-(--spacing-xs) data-[size=medium]:text-overline-md data-[size=medium]:h-6 data-[size=medium]:min-w-6 data-[size=small]:text-overline-sm data-[size=small]:h-5 data-[size=small]:min-w-5 data-[variant=separate]:bg-transparent data-[variant=separate]:border-0 data-[variant=separate]:shadow-none data-[variant=separate]:px-0 data-[variant=separate]:min-w-0"
   >
-    <template v-if="kind === 'separate'">
+    <template v-if="variant === 'separate'">
       <kbd
         v-for="cap in caps"
         :key="cap.id"

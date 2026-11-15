@@ -8,7 +8,7 @@ const instance = figma.selectedInstance
 const title = instance.getString('title')
 const showSubtitle = instance.getBoolean('showSubtitle')
 const description = showSubtitle ? instance.getString('description') : ''
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   horizontal: 'split',
   left: 'start',
   centered: 'center'
@@ -39,9 +39,9 @@ export default {
   eyebrow="${eyebrow}"`
       : ''
   }${
-    kind && kind !== 'center'
+    variant && variant !== 'center'
       ? figma.code`
-  kind="${kind}"`
+  variant="${variant}"`
       : ''
   }
 >${

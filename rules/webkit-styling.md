@@ -11,9 +11,9 @@ enforced in code review.
 ## Do
 
 - Put **all** utilities inline on the root's single `class` attribute.
-- Mirror props as `data-*` attributes (`data-kind`, `data-size`, `data-disabled`,
+- Mirror props as `data-*` attributes (`data-variant`, `data-size`, `data-disabled`,
   `data-state`) and let Tailwind variants do the switching:
-  `data-[kind=primary]:bg-(--primary)` is one utility, not a JS branch.
+  `data-[variant=primary]:bg-(--primary)` is one utility, not a JS branch.
 - Use `v-bind="$attrs"` so a caller-passed `class` merges onto the root (Vue merges
   class strings automatically). When caller classes must **win** over internal ones, use
   `cn` from `@aziontech/webkit/utils/cn` (clsx + tailwind-merge) — the only acceptable
@@ -27,7 +27,7 @@ enforced in code review.
 
 ## Do not
 
-- No class-preset objects in the script: `const kindClasses = {...}`,
+- No class-preset objects in the script: `const variantClasses = {...}`,
   `const sizeClasses = {...}`, `const sharedClasses = [...]`, or a
   `const rootClasses = computed(...)` that only composes classes.
 - No `<style>` blocks (scoped or not), no `.css`/`.scss` files next to a component,
@@ -60,15 +60,15 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 <template>
   <button
     v-bind="$attrs"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-disabled="disabled || null"
     :disabled="disabled"
     class="
       inline-flex items-center justify-center rounded-(--shape-button)
       transition-colors duration-150 ease-out motion-reduce:transition-none
-      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
-      data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
+      data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+      data-[variant=outline]:border data-[variant=outline]:border-(--border-default) data-[variant=outline]:bg-transparent
       data-[size=small]:h-7 data-[size=small]:px-(--spacing-xs)
       data-[size=large]:h-10 data-[size=large]:px-(--spacing-md)
       data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled)
@@ -84,12 +84,12 @@ Two cases **stay in brackets** — the paren form silently emits no CSS for them
 <!-- prettier-ignore -->
 ```vue
 <script setup>
-  const kindClasses = {
+  const variantClasses = {
     primary: 'bg-(--primary) text-(--primary-foreground)',
     outlined: 'border border-(--border-default) bg-transparent'
   }
   const sizeClasses = { small: 'h-7 px-(--spacing-xs)', large: 'h-10 px-(--spacing-md)' }
-  const rootClasses = computed(() => [kindClasses[props.kind], sizeClasses[props.size]])
+  const rootClasses = computed(() => [variantClasses[props.variant], sizeClasses[props.size]])
 </script>
 
 <template>

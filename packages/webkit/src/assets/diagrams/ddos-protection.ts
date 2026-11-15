@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Users and attackers',
       icon: 'ai ai-triangle-alert',
       active: true
     },
     {
       key: 'ddos',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'DDoS Protection',
       title: 'Always-on mitigation',
       icon: 'ai ai-shield',
@@ -26,7 +26,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'workload',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Workload',
       title: 'shop.example.com',
       icon: 'ai ai-workloads',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'absorbed',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Flood',
       title: 'Absorbed at the edge',
       icon: 'ai ai-ban'

@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Requests',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
       icon: 'ai ai-workloads',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'stream',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Data Stream',
       title: 'HTTP, firewall and function logs',
       icon: 'ai ai-data-stream',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'siem',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'SIEM',
       title: 'Splunk, Datadog',
       icon: 'ai ai-chart-bar',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'lake',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Data lake',
       title: 'S3, Kafka, Elasticsearch',
       icon: 'ai ai-database'

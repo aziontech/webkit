@@ -56,7 +56,7 @@
     <SectionGap hatch />
 
     <MediaSplitStack
-      kind="alternating"
+      variant="alternating"
       eyebrow="Managed Infrastructure"
       title="Stop managing regions and capacity by hand"
       :bands="bands"

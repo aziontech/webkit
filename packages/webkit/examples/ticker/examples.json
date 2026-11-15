@@ -29,7 +29,7 @@
     },
     {
       "name": "Band",
-      "summary": "On the floor of a textured band the strip needs a ground of its own, or the marks read through the lattice behind them. `kind=\"band\"` gives it its own fill and vertical rhythm so it lands as a band, which is how a page composes it into `Hero`’s `bottom` slot.",
+      "summary": "On the floor of a textured band the strip needs a ground of its own, or the marks read through the lattice behind them. `variant=\"band\"` gives it its own fill and vertical rhythm so it lands as a band, which is how a page composes it into `Hero`’s `bottom` slot.",
       "file": "band.vue"
     }
   ]

@@ -24,7 +24,7 @@
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="top-left"
           />
         </PopoverTrigger>
@@ -45,7 +45,7 @@
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="top-right"
           />
         </PopoverTrigger>
@@ -66,7 +66,7 @@
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="bottom-left"
           />
         </PopoverTrigger>
@@ -87,7 +87,7 @@
       >
         <PopoverTrigger>
           <Button
-            kind="secondary"
+            variant="secondary"
             label="bottom-right"
           />
         </PopoverTrigger>

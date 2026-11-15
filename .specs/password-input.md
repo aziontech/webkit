@@ -3,11 +3,11 @@ name: password-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10788&m=dev
   node_id: 3714:10788
-checksum: 85a438e26d58d1e4d32df19164f6862e8040dd7d5f1ddfac5568d3dc4cf587e2
+checksum: c653b36b53771bb05c8d30d65b526179aa17a1bf5dd65c78dc4b7252307c59bd
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -125,25 +125,25 @@ _none_
 
 ## Tokens
 
-| Region                               | Token (DESIGN.md)                                                          |
-| ------------------------------------ | -------------------------------------------------------------------------- |
-| typography                           | `.text-label-sm`                                                           |
-| typography (`monospace`)             | `.text-label-code-sm`                                                      |
-| surface                              | `var(--bg-surface)`                                                        |
-| surface (disabled)                   | `var(--bg-disabled)`                                                       |
-| text                                 | `var(--text-default)`                                                      |
-| text (placeholder/muted)             | `var(--text-muted)`                                                        |
-| text (disabled)                      | `var(--text-disabled)`                                                     |
-| border (default)                     | `var(--border-default)`                                                    |
-| border (hover)                       | `var(--border-strong)`                                                     |
-| border (invalid)                     | `var(--danger-border)`                                                     |
-| border (required)                    | `var(--warning-border)`                                                    |
-| ring (focus)                         | `var(--ring-color)`                                                        |
-| spacing (padding-left)               | `var(--spacing-md)`                                                        |
-| spacing (padding-right)              | `var(--spacing-xs)`                                                        |
-| spacing (gap between icon and input) | `var(--spacing-xs)`                                                        |
-| shape                                | `var(--shape-control)`                                                     |
-| visibility toggle                    | `IconButton` `kind="transparent"` `size="small"` (28 px — `var(--size-7)`) |
+| Region                               | Token (DESIGN.md)                                                       |
+| ------------------------------------ | ----------------------------------------------------------------------- |
+| typography                           | `.text-label-sm`                                                        |
+| typography (`monospace`)             | `.text-label-code-sm`                                                   |
+| surface                              | `var(--bg-surface)`                                                     |
+| surface (disabled)                   | `var(--bg-disabled)`                                                    |
+| text                                 | `var(--text-default)`                                                   |
+| text (placeholder/muted)             | `var(--text-muted)`                                                     |
+| text (disabled)                      | `var(--text-disabled)`                                                  |
+| border (default)                     | `var(--border-default)`                                                 |
+| border (hover)                       | `var(--border-strong)`                                                  |
+| border (invalid)                     | `var(--danger-border)`                                                  |
+| border (required)                    | `var(--warning-border)`                                                 |
+| ring (focus)                         | `var(--ring-color)`                                                     |
+| spacing (padding-left)               | `var(--spacing-md)`                                                     |
+| spacing (padding-right)              | `var(--spacing-xs)`                                                     |
+| spacing (gap between icon and input) | `var(--spacing-xs)`                                                     |
+| shape                                | `var(--shape-control)`                                                  |
+| visibility toggle                    | `IconButton` `variant="ghost"` `size="small"` (28 px — `var(--size-7)`) |
 
 ## Theme gaps
 
@@ -194,7 +194,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

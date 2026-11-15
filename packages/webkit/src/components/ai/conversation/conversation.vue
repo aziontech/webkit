@@ -163,7 +163,7 @@
     >
       <IconButton
         icon="ai ai-arrow-down"
-        kind="outlined"
+        variant="outline"
         size="medium"
         class="pointer-events-auto bg-(--bg-surface) shadow-(--shadow-sm)"
         :ariaLabel="t('conversation.scrollToLatest')"

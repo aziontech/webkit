@@ -24,7 +24,7 @@ export interface ChartThreshold {
   label?: string
 }
 
-export type ChartMarkKind = 'line' | 'area' | 'bar' | 'scatter'
+export type ChartMarkType = 'line' | 'area' | 'bar' | 'scatter'
 
 export type ChartLabelScale = 'category' | 'linear'
 

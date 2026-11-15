@@ -806,24 +806,24 @@ describe('CodeBlock', () => {
       })
     })
 
-    describe('output kind', () => {
+    describe('output type', () => {
       const output = [
         { label: 'Text', value: 'out', language: 'bash', code: 'HTTP/2 200\nx-cache: HIT' }
       ]
 
       it('labels the block Output, drops the copy control and marks the root', () => {
         const { getByTestId, queryByTestId } = render(CodeBlock, {
-          props: { tabs: output, kind: 'output' }
+          props: { tabs: output, type: 'output' }
         })
         const root = getByTestId('code-code-block')
-        expect(root.getAttribute('data-kind')).toBe('output')
+        expect(root.getAttribute('data-type')).toBe('output')
         expect(root.hasAttribute('data-copyable')).toBe(false)
         expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
         expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Output')
       })
 
       it('draws every line flat, without syntax tokens', () => {
-        const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, kind: 'output' } })
+        const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, type: 'output' } })
         for (const line of getAllByTestId('code-code-block__line-content')) {
           expect(line.children).toHaveLength(1)
         }
@@ -831,14 +831,14 @@ describe('CodeBlock', () => {
 
       it('keeps a copy control when copyable is set explicitly', () => {
         const { getByTestId } = render(CodeBlock, {
-          props: { tabs: output, kind: 'output', copyable: true }
+          props: { tabs: output, type: 'output', copyable: true }
         })
         expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
       })
 
       it('a code block stays copyable by default', () => {
         const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
-        expect(getByTestId('code-code-block').getAttribute('data-kind')).toBe('code')
+        expect(getByTestId('code-code-block').getAttribute('data-type')).toBe('code')
         expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
       })
 
@@ -846,7 +846,7 @@ describe('CodeBlock', () => {
         const { container } = render({
           components: { CodeBlock },
           setup: () => ({ shell, output }),
-          template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" kind="output" data-testid="out" /></div>`
+          template: `<div><CodeBlock :tabs="shell" show-label /><CodeBlock :tabs="output" type="output" data-testid="out" /></div>`
         })
         await expectNoA11yViolations(container)
       })

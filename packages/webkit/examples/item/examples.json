@@ -24,7 +24,7 @@
     },
     {
       "name": "WithIconMedia",
-      "summary": "ItemMedia with kind icon frames a leading icon before title and description.",
+      "summary": "ItemMedia with type icon frames a leading icon before title and description.",
       "file": "with-icon-media.vue"
     },
     {
@@ -34,7 +34,7 @@
     },
     {
       "name": "WithImageMedia",
-      "summary": "ItemMedia with kind image crops a thumbnail; a second ItemContent column can show metadata.",
+      "summary": "ItemMedia with type image crops a thumbnail; a second ItemContent column can show metadata.",
       "file": "with-image-media.vue"
     },
     {
@@ -54,17 +54,17 @@
     },
     {
       "name": "WithListLinks",
-      "summary": "Link rows inside an ItemList: each whole row is an anchor set by href (data-kind forced to default by the list), separated by full-width dividers, with row-level hover and a focus-visible ring on Tab.",
+      "summary": "Link rows inside an ItemList: each whole row is an anchor set by href (data-variant forced to default by the list), separated by full-width dividers, with row-level hover and a focus-visible ring on Tab.",
       "file": "with-list-links.vue"
     },
     {
       "name": "Inline",
-      "summary": "kind=\"inline\" removes the outer padding so items sit flush; placed in a gapped ItemGroup directly on the page (no card, no dividers).",
+      "summary": "variant=\"inline\" removes the outer padding so items sit flush; placed in a gapped ItemGroup directly on the page (no card, no dividers).",
       "file": "inline.vue"
     },
     {
       "name": "Option",
-      "summary": "`kind=\"option\"` rows under a search field: the 38 px chooser row of a create flow (a workload, a host). Each row is a `clickable` Item, so the row is a native button; the pressed one fills with the selected surface and shows a check. The kind sets its own density, so `size` does not change it.",
+      "summary": "`variant=\"option\"` rows under a search field: the 38 px chooser row of a create flow (a workload, a host). Each row is a `clickable` Item, so the row is a native button; the pressed one fills with the selected surface and shows a check. The variant sets its own density, so `size` does not change it.",
       "file": "option.vue"
     }
   ]

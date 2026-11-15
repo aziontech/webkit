@@ -190,7 +190,7 @@
                 v-if="agent.logo"
                 :name="agent.name"
                 :src="agent.logo"
-                kind="current"
+                variant="current"
                 decorative
                 :data-agent="agent.name"
                 class="size-5"
@@ -213,7 +213,7 @@
     >
       <IconButton
         icon="ai ai-x"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :aria-label="t('copyPromptButton.dismiss')"
         :data-testid="`${testId}__close`"

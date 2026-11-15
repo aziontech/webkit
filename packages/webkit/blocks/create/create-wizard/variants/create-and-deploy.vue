@@ -698,7 +698,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Services"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -708,7 +708,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -725,7 +725,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -825,7 +825,7 @@
 
                       <HelperText
                         v-if="projectPicker.message"
-                        kind="required"
+                        type="required"
                         >{{ projectPicker.message }}</HelperText
                       >
                     </div>
@@ -872,7 +872,7 @@
                           >
                             <Item.Media>
                               <Skeleton
-                                kind="rectangle"
+                                variant="rectangle"
                                 width="2rem"
                                 height="2rem"
                               />
@@ -900,7 +900,7 @@
                         <Button
                           type="button"
                           :label="'Load ' + projectPicker.nextBatch + ' more'"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           class="w-full"
                           :loading="projectPicker.loading"
@@ -1005,7 +1005,7 @@
                       <SettingRow
                         title="Add an origin"
                         description="Where the project fetches from when the cache does not already hold the answer. Add one now, or bind one later."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="scratch.origin.enabled"
@@ -1034,7 +1034,7 @@
                             </p>
                             <RadioGroup
                               v-model="scratch.origin.type"
-                              kind="card"
+                              variant="card"
                               orientation="horizontal"
                               :options="originTypes"
                               aria-labelledby="origin-type-label"
@@ -1042,7 +1042,7 @@
                             />
                             <HelperText
                               id="origin-type-help"
-                              kind="helper"
+                              type="helper"
                               label="Decides what the origin is addressed by: a host, a storage location, or a region."
                             />
                           </div>
@@ -1089,7 +1089,7 @@
                               </Select>
                               <HelperText
                                 :id="'origin-' + field.name + '-helper'"
-                                :kind="errors['origin.' + field.name] ? 'required' : 'helper'"
+                                :type="errors['origin.' + field.name] ? 'required' : 'helper'"
                               >
                                 {{ errors['origin.' + field.name] || field.description }}
                               </HelperText>
@@ -1148,7 +1148,7 @@
                         <Button
                           type="button"
                           label="Change"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           @click="stepIndex = 0"
                         />
@@ -1275,7 +1275,7 @@
                       >
                         <Field.Legend
                           id="environment-label"
-                          kind="label"
+                          type="label"
                         >
                           <span class="inline-flex items-center gap-(--spacing-2xs)">
                             Environment
@@ -1284,7 +1284,7 @@
                         </Field.Legend>
                         <RadioGroup
                           v-model="form.environment"
-                          kind="card"
+                          variant="card"
                           orientation="horizontal"
                           :options="environments"
                           aria-labelledby="environment-label"
@@ -1292,7 +1292,7 @@
                         />
                         <HelperText
                           id="environment-helper"
-                          kind="helper"
+                          type="helper"
                         >
                           The domain answers on the environment it is bound to.
                         </HelperText>
@@ -1411,7 +1411,7 @@
 
                         <HelperText
                           v-if="deploymentPicker.message"
-                          kind="required"
+                          type="required"
                           >{{ deploymentPicker.message }}</HelperText
                         >
                       </div>
@@ -1458,7 +1458,7 @@
                             >
                               <Item.Media>
                                 <Skeleton
-                                  kind="rectangle"
+                                  variant="rectangle"
                                   width="2rem"
                                   height="2rem"
                                 />
@@ -1486,7 +1486,7 @@
                           <Button
                             type="button"
                             :label="'Load ' + deploymentPicker.nextBatch + ' more'"
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             class="w-full"
                             :loading="deploymentPicker.loading"
@@ -1589,7 +1589,7 @@
                     <Item.List>
                       <SettingRow
                         title="Allow the platform domain"
-                        kind="compact"
+                        variant="compact"
                       >
                         <template #description>
                           Serve traffic on the provisioned
@@ -1606,7 +1606,7 @@
                       <SettingRow
                         title="Active"
                         description="When disabled, the service is created but does not serve traffic."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"

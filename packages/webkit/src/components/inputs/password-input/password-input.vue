@@ -175,7 +175,7 @@
 
     <IconButton
       v-if="toggleable"
-      kind="transparent"
+      variant="ghost"
       size="small"
       :icon="toggleIcon"
       :ariaLabel="toggleLabel"

@@ -78,7 +78,7 @@
     { accessorKey: 'project', header: 'Project', sortable: true, grow: 2 },
     { accessorKey: 'environment', header: 'Environment', sortable: true, minWidth: 104 },
     { accessorKey: 'deployedAt', header: 'Deployed', sortable: true, minWidth: 120 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const referenceTime = Date.UTC(2026, 10, 10, 12)
@@ -228,7 +228,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/deployments"
             target="_blank"
@@ -252,7 +252,7 @@
               >
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :loading="loading"
                   aria-label="Refresh"
@@ -265,7 +265,7 @@
               >
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
                   aria-label="Download CSV"
@@ -295,7 +295,7 @@
                     <Button
                       label="Documentation"
                       icon="ai ai-book"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       href="https://example.com/docs/deployments"
                       target="_blank"
@@ -426,7 +426,7 @@
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />

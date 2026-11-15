@@ -33,7 +33,7 @@ export interface UnsavedChangesDialogProps {
   open: boolean
   title: string
   description: string
-  kind: 'danger' | 'primary'
+  variant: 'danger' | 'primary'
   loading: boolean
   'onUpdate:open': (open: boolean) => void
 }
@@ -144,7 +144,7 @@ export function useUnsavedChanges<T>(
     description: savable.value
       ? t('unsavedChanges.descriptionSavable')
       : t('unsavedChanges.description'),
-    kind: 'danger',
+    variant: 'danger',
     loading: saving.value,
     'onUpdate:open': (next: boolean) => {
       if (next) return

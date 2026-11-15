@@ -32,7 +32,7 @@ Each read-only call it made, as a completed `ToolCall` with the tool name in cod
 
 ### D. Authorization card — `ToolApproval`, `CodeBlock`
 
-The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the exact command in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `kind="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved, Denied or Request expired.
+The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the exact command in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `variant="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved, Denied or Request expired.
 
 ### E. The action running — `ToolCall`
 

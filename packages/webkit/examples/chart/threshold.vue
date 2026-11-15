@@ -33,8 +33,8 @@
     aria-label="p95 latency against the SLO"
   >
     <Chart.Grid />
-    <Chart.Axis kind="y" />
-    <Chart.Axis kind="x" />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
     <Chart.Reference
       :from="200"
       :to="260"

@@ -40,7 +40,7 @@ If `--figma` is absent, you are in **Mode B** — do not quietly infer from inte
 
 - **One file only.** This command writes nothing besides `.specs/<name>.md`. No `.vue`, no `package.json`, no story file.
 - **Status starts at `draft`.** Only `spec-validator` may flip to `approved` — and only after the body satisfies every rule.
-- **Stories are minimal.** Default lists only Default + per `kind` + per `size` + Disabled. Adding LightDark/Accessibility (play)/Playground requires explicit justification in the spec.
+- **Stories are minimal.** Default lists only Default + per `variant` + per `size` + Disabled. Adding LightDark/Accessibility (play)/Playground requires explicit justification in the spec.
 - **Animations come from `packages/theme/src/tokens/primitives/animations/animate.js` (keyframes in the sibling `keyframes.js`).** No component-local `@keyframes`. Every motion class pairs with `motion-reduce:*`.
 - **If anything is ambiguous,** the agent emits `BLOCKED: <reason>` and writes nothing.
 - **Mode B is stricter than Mode A.** Without a Figma source there is nothing to fall back on, so: never infer a prop/event/slot/token; ask for each; and refuse to write (`BLOCKED:`) rather than leave a mandatory section as `TBD`. `TBD` + `status: draft` is tolerated only in Mode A when the frame genuinely cannot express a section.

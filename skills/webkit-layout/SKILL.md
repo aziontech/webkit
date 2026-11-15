@@ -183,7 +183,7 @@ This is automatic, and it is the reason a sticky bar works:
     class="layout-column-form layout-boundary-inline sticky bottom-0 flex justify-end gap-(--spacing-sm) py-(--spacing-md)"
   >
     <Button
-      kind="transparent"
+      variant="ghost"
       label="Cancel"
     />
     <Button label="Save" />
@@ -192,7 +192,7 @@ This is automatic, and it is the reason a sticky bar works:
 ```
 
 Same column class, same inline boundary, on both — so the bar's buttons land inside the form's own
-right edge by construction. `SaveBar kind="plain"` (`@aziontech/webkit/save-bar`) is this footer,
+right edge by construction. `SaveBar variant="plain"` (`@aziontech/webkit/save-bar`) is this footer,
 already carrying `layout-column-form layout-boundary-inline`; reach for it instead of writing the bar. Naming the inline half is what lets the measure rule see a self-inset
 band and treat it exactly like the scrolling body it sits under.
 
@@ -269,7 +269,7 @@ by retuning the bar.
 
 The bar is **`--layout-header-height`** tall (56px, the `GlobalHeader` height). A band that fills the
 first screen under it takes that token out of the screen: `HeroBand` does by default (`headerOffset`),
-and a bare `Hero kind="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
+and a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
 built on it) takes `columns` as the most a row may hold, not how many it must: by default

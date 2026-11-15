@@ -5,7 +5,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -110,7 +110,7 @@
     companySize: '',
     industry: ''
   })
-  const errors = reactive<{ name: string; nameKind: HelperTextKind; workspace: string }>({
+  const errors = reactive<{ name: string; nameKind: HelperTextType; workspace: string }>({
     name: '',
     nameKind: 'required',
     workspace: ''
@@ -188,7 +188,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to console"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -198,7 +198,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -216,7 +216,7 @@
             label="JD"
             alt="Jane Doe"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -275,19 +275,19 @@
                         <HelperText
                           v-if="errors.name"
                           id="create-organization-name-message"
-                          :kind="errors.nameKind"
+                          :type="errors.nameKind"
                           :label="errors.name"
                         />
                       </SettingRow>
                       <SettingRow
                         title="Mark"
                         description="How the organization is identified in the header and the switcher."
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
                           <RadioGroup
                             v-model="form.mark"
-                            kind="card"
+                            variant="card"
                             orientation="horizontal"
                             :options="MARKS"
                             :disabled="submitting"
@@ -302,7 +302,7 @@
                                   :colors="option.colors"
                                   pattern="marble"
                                   size="medium"
-                                  kind="square"
+                                  variant="square"
                                 />
                                 <span class="text-body-xs text-(--text-muted)">{{
                                   option.label
@@ -325,7 +325,7 @@
                                   :colors="markColors"
                                   pattern="marble"
                                   size="small"
-                                  kind="square"
+                                  variant="square"
                                 />
                               </span>
                               <span class="min-w-0 truncate text-label-sm text-(--text-default)">
@@ -353,7 +353,7 @@
                             :label="initials(OWNER.name)"
                             :alt="OWNER.name"
                             size="medium"
-                            kind="square"
+                            variant="square"
                           />
                         </Item.Media>
                         <Item.Content>
@@ -407,7 +407,7 @@
                         <HelperText
                           v-if="errors.workspace"
                           id="create-organization-workspace-message"
-                          kind="required"
+                          type="required"
                           :label="errors.workspace"
                         />
                       </SettingRow>
@@ -459,18 +459,18 @@
               </SettingsSection>
             </fieldset>
           </div>
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template #actions>
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="submitting"
               />
               <Button
                 label="Create Organization"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"

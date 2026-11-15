@@ -496,7 +496,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Home"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -506,7 +506,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -523,7 +523,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -542,13 +542,13 @@
               Start from a repository or use a framework template. You can also upload your project:
               select a
               <Button
-                kind="link"
+                variant="link"
                 label="file"
                 @click="openFilePicker"
               />
               or a
               <Button
-                kind="link"
+                variant="link"
                 label="folder"
                 @click="openFolderPicker"
               />.
@@ -619,7 +619,7 @@
                       <Button
                         label="Continue with GitHub"
                         icon="ai ai-github"
-                        kind="secondary"
+                        variant="secondary"
                         size="large"
                         class="self-center"
                         :loading="connecting"
@@ -739,7 +739,7 @@
                               >
                                 <Item.Media>
                                   <Skeleton
-                                    kind="rectangle"
+                                    variant="rectangle"
                                     width="1.75rem"
                                     height="1.75rem"
                                   />
@@ -803,7 +803,7 @@
                                 <Item.Actions>
                                   <Button
                                     label="Import"
-                                    kind="secondary"
+                                    variant="secondary"
                                     size="small"
                                     :aria-label="`Import ${repo.name}`"
                                   />
@@ -816,7 +816,7 @@
                             >
                               <Button
                                 :label="`Load more (${hiddenRepoCount})`"
-                                kind="transparent"
+                                variant="ghost"
                                 size="small"
                                 @click="showMoreRepos"
                               />
@@ -832,7 +832,7 @@
                             <template #actions>
                               <Button
                                 label="Clear search"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="clearSearch"
                               />
@@ -891,7 +891,7 @@
                         <template #actions>
                           <Button
                             label="Clear search"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearTemplateSearch"
                           />
@@ -917,7 +917,7 @@
                             <Card
                               v-for="item in section.items"
                               :key="item.slug"
-                              kind="integration"
+                              variant="integration"
                               :title="item.title"
                               :logo="`${item.icon} ${item.markClass}`.trim()"
                               :vendor="item.vendor ?? ''"

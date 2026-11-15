@@ -46,7 +46,7 @@
     <template #title>Workloads</template>
     <template #toolbar>
       <Table.Filter
-        kind="property"
+        type="property"
         title="Filter workloads"
       />
     </template>

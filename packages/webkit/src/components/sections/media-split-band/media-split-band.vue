@@ -8,7 +8,7 @@
   import type { DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
-  import type { TextureMaterialKind } from '../../marketing/texture-material/texture-material.vue'
+  import type { TextureMaterialVariant } from '../../marketing/texture-material/texture-material.vue'
 
   defineOptions({
     name: 'MediaSplitBand',
@@ -46,8 +46,8 @@
     framed?: boolean
   }
 
-  /** Button kind of an action, overriding the one the band draws. */
-  export type MediaSplitBandActionKind = 'secondary' | 'outlined' | 'transparent'
+  /** Button variant of an action, overriding the one the band draws. */
+  export type MediaSplitBandActionVariant = 'secondary' | 'outline' | 'ghost'
 
   /** A call to action under the copy. */
   export type MediaSplitBandAction = {
@@ -61,8 +61,8 @@
     icon?: string
     /** Link target of the action. */
     target?: '_blank' | '_self'
-    /** Button kind; wins over the kind the band draws, and transparent draws a quiet text button. */
-    kind?: MediaSplitBandActionKind
+    /** Button variant; wins over the variant the band draws, and transparent draws a quiet text button. */
+    variant?: MediaSplitBandActionVariant
   }
 
   /** One file of the code sample drawn in the media cell. */
@@ -97,7 +97,7 @@
     /** Axis the band splits on; `vertical` stacks the media under the copy for a wide scene. */
     orientation?: MediaSplitBandOrientation
     /** Texture painted under the media: `dots`, `grid`, `lines`, `dither`, `pixelate` or `none`. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Links the whole band to a lone action; turn it off when the media holds controls of its own. */
     linked?: boolean
     /** Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media. */
@@ -118,9 +118,9 @@
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, icon?, target?, kind? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `kind` overrides the drawn kind. */
+    /** First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `variant` overrides the drawn variant. */
     primaryAction?: MediaSplitBandAction
-    /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, kind? }`. With two actions the band stays unlinked. */
+    /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked. */
     secondaryAction?: MediaSplitBandAction
   }
 
@@ -332,7 +332,7 @@
             :label="lone.label"
             :href="lone.href"
             :target="lone.target"
-            :kind="lone.kind ?? 'outlined'"
+            :variant="lone.variant ?? 'outline'"
             size="medium"
             :icon="lone.icon && !lone.trailing ? lone.icon : 'ai ai-chevron-right'"
             :icon-position="lone.icon && !lone.trailing ? 'leading' : 'trailing'"
@@ -344,7 +344,7 @@
             :label="primary.label"
             :href="primary.href"
             :target="primary.target"
-            :kind="primary.kind ?? 'secondary'"
+            :variant="primary.variant ?? 'secondary'"
             size="medium"
             :icon="actionIcon(primary)"
             :icon-position="primary.trailing ? 'trailing' : 'leading'"
@@ -356,7 +356,7 @@
             :label="secondary.label"
             :href="secondary.href"
             :target="secondary.target"
-            :kind="secondary.kind ?? 'outlined'"
+            :variant="secondary.variant ?? 'outline'"
             size="medium"
             :icon="actionIcon(secondary)"
             :icon-position="secondary.trailing ? 'trailing' : 'leading'"

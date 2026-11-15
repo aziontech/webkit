@@ -29,13 +29,13 @@ const columns = instance
   .reduce(
     (acc, node) => {
       if (node.type !== 'INSTANCE') return acc
-      const kind = node.getEnum('kind', {
+      const type = node.getEnum('kind', {
         default: 'default',
         checkbox: 'checkbox',
         slot: 'slot'
       })
       const content = node.findText('Cell Content')
-      if (kind !== 'default' || content.type !== 'TEXT') return acc
+      if (type !== 'default' || content.type !== 'TEXT') return acc
       const sortable = node.getEnum('sortable', {
         default: false,
         true: true

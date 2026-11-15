@@ -4,7 +4,7 @@
 
 <template>
   <HeroBand
-    kind="title-band"
+    variant="title-band"
     size="medium"
     eyebrow="Contact"
     title="Contact us"

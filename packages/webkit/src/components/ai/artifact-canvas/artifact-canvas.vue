@@ -7,7 +7,7 @@
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import ResponseBranches from '../response-branches/response-branches.vue'
 
-  export type ArtifactCanvasKind = 'code' | 'table' | 'document'
+  export type ArtifactCanvasType = 'code' | 'table' | 'document'
 
   defineOptions({
     name: 'ArtifactCanvas',
@@ -19,8 +19,8 @@
     title: string
     /** Facts that help recognize it, after the title: language, size, rows (`SQL · 12 lines`). */
     meta?: string
-    /** What the artifact is; picks the icon and `data-kind`. The body is always the owner's slot. */
-    kind?: ArtifactCanvasKind
+    /** What the artifact is; picks the icon and `data-type`. The body is always the owner's slot. */
+    type?: ArtifactCanvasType
     /** How many versions exist. With more than one, the toolbar shows the `ResponseBranches` pager. */
     versions?: number
     /** Text the Copy control puts on the clipboard, of the version shown. Empty hides Copy. */
@@ -33,7 +33,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     meta: '',
-    kind: 'document',
+    type: 'document',
     versions: 1,
     copyValue: '',
     downloadHref: '',
@@ -66,7 +66,7 @@
   )
   const icon = computed<string>(
     () =>
-      ({ code: 'ai ai-code', table: 'ai ai-table', document: 'ai ai-file' })[props.kind] ??
+      ({ code: 'ai ai-code', table: 'ai ai-table', document: 'ai ai-file' })[props.type] ??
       'ai ai-file'
   )
   const hasToolbar = () =>
@@ -90,7 +90,7 @@
     v-bind="$attrs"
     :aria-labelledby="titleId"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-streaming="streaming || null"
     class="flex h-full w-full min-w-0 flex-col overflow-hidden border-s border-(--border-default) bg-(--bg-surface)"
     @keydown="onKeydown"
@@ -124,7 +124,7 @@
       </div>
       <IconButton
         icon="ai ai-x"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :ariaLabel="t('artifactCanvas.close', { title })"
         :data-testid="`${testId}__close`"
@@ -156,7 +156,7 @@
         <IconButton
           v-if="downloadHref"
           icon="ai ai-download"
-          kind="transparent"
+          variant="ghost"
           size="small"
           :href="downloadHref"
           :ariaLabel="t('artifactCanvas.download', { title })"

@@ -165,7 +165,7 @@
             class="flex min-w-0 flex-col"
           >
             <StatTile
-              kind="sans"
+              variant="sans"
               :label="vital.label"
               :value="vital.value"
               :unit="vital.unit"
@@ -185,7 +185,7 @@
             class="flex min-w-0 flex-col"
           >
             <StatTile
-              kind="sans"
+              variant="sans"
               :label="panel.label"
               :value="panel.latest"
               :unit="panel.unit"

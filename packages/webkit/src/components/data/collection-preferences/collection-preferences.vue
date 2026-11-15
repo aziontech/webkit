@@ -114,12 +114,12 @@
 
   const ctx = inject(TableInjectionKey, null)
   const table = computed(() => (props.columns.length ? null : (ctx?.table.value ?? null)))
-  type ColumnMeta = { kind?: string; label?: string }
+  type ColumnMeta = { type?: string; label?: string }
   const columns = computed<CollectionPreferencesColumn[]>(() => {
     if (!table.value) return props.columns
     return table.value
       .getAllLeafColumns()
-      .filter((column) => (column.columnDef.meta as ColumnMeta | undefined)?.kind !== 'action')
+      .filter((column) => (column.columnDef.meta as ColumnMeta | undefined)?.type !== 'action')
       .map((column) => {
         const header = column.columnDef.header
         return {
@@ -274,7 +274,7 @@
     >
       <IconButton
         icon="ai ai-settings"
-        kind="outlined"
+        variant="outline"
         size="medium"
         :ariaLabel="heading"
         :disabled="disabled"
@@ -372,7 +372,7 @@
                     </label>
                     <IconButton
                       icon="ai ai-arrow-up"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       data-move="up"
                       :ariaLabel="
@@ -383,7 +383,7 @@
                     />
                     <IconButton
                       icon="ai ai-arrow-down"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       data-move="down"
                       :ariaLabel="
@@ -458,14 +458,14 @@
               <Button
                 :label="t('collectionPreferences.cancel')"
                 :data-testid="`${testId}__cancel`"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 @click="cancel"
               />
               <Button
                 :label="t('collectionPreferences.confirm')"
                 :data-testid="`${testId}__confirm`"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 @click="confirm"
               />

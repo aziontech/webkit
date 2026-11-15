@@ -17,7 +17,7 @@ const actions = instance
 export default {
   example: figma.code`<Popover>
   <Popover.Trigger>
-    <Button label="Open popover" kind="secondary" />
+    <Button label="Open popover" variant="secondary" />
   </Popover.Trigger>
   <Popover.Content>${
     showHeader

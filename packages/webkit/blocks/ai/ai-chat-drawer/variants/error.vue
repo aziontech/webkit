@@ -260,7 +260,7 @@
           <template #actions>
             <Button
               label="Agent"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-ask-azion"
               :aria-expanded="assistantOpen ? 'true' : 'false'"
@@ -316,7 +316,7 @@
               <IconButton
                 icon="ai ai-plus"
                 aria-label="New chat"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :disabled="!turns.length"
                 @click="newChat"
@@ -392,7 +392,7 @@
                     <IconButton
                       icon="ai ai-refresh"
                       aria-label="Regenerate response"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       :disabled="state !== 'ready'"
                       @click="retry(turn)"

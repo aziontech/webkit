@@ -4,19 +4,19 @@
 </script>
 
 <template>
-  <SaveBar kind="fade">
+  <SaveBar variant="fade">
     <template #leading>
       <Button
         type="button"
         label="Back"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>
     <template #actions>
       <Button
         label="Continue"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>

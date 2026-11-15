@@ -251,7 +251,7 @@
     <div class="flex flex-wrap items-center gap-(--spacing-sm)">
       <Button
         label="Show progress"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-list"
         @click="open = true"
@@ -313,7 +313,7 @@
               <Item
                 v-for="item in visibleItems"
                 :key="item.id"
-                kind="outlined"
+                variant="outline"
                 size="small"
               >
                 <Item.Media>
@@ -379,7 +379,7 @@
               <Button
                 class="w-full"
                 label="Retry failed"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="retryFailed"
@@ -389,7 +389,7 @@
               <Button
                 class="w-full"
                 :label="running ? 'Hide' : 'Close'"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 @click="open = false"
               />

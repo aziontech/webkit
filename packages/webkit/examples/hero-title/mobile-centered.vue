@@ -13,11 +13,11 @@
   >
     <template #actions>
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Start for free"
       />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Talk to a specialist"
       />
     </template>

@@ -12,13 +12,13 @@
     title="Clear cached content again?"
     description="This clears the same 2 URLs from the Edge cache again. Each object is fetched from your origin on its next request."
     confirm-label="Clear again"
-    kind="primary"
+    variant="primary"
     @confirm="open = false"
   >
     <template #trigger>
       <Button
         label="Run again"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

@@ -27,7 +27,7 @@
       <li class="inline-flex min-w-0 items-center">
         <Select
           v-model="environment"
-          kind="transparent"
+          variant="ghost"
           size="small"
         >
           <Select.Trigger aria-label="Switch environment" />

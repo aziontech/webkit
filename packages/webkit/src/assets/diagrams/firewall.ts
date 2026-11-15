@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'firewall',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Firewall',
       title: 'Rules in order, before any code',
       icon: 'ai ai-edge-firewall',
@@ -22,7 +22,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'lists',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Network lists',
       title: 'IP, ASN and country',
       icon: 'ai ai-network-lists',
@@ -30,7 +30,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'waf',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'WAF',
       title: 'Payload inspection',
       icon: 'ai ai-waf-rules',
@@ -38,7 +38,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'limit',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Rate limit',
       title: 'Requests per second',
       icon: 'ai ai-clock',
@@ -46,7 +46,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'storefront',
       icon: 'ai ai-edge-application',

@@ -587,7 +587,7 @@
     filterFields.value.map((field) => ({
       id: field.id,
       label: field.label,
-      kind: field.kind === 'range' ? 'date' : 'multiple',
+      type: field.kind === 'range' ? 'date' : 'multiple',
       options: (field.options ?? [])
         .filter((option) => !option.custom)
         .map((option) => ({ value: option.value as string | number, label: option.label }))
@@ -1089,7 +1089,7 @@
           >
             <IconButton
               icon="ai ai-refresh"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :loading="loading"
               aria-label="Refresh"
@@ -1103,7 +1103,7 @@
           >
             <IconButton
               icon="ai ai-download"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="!tableEl"
               aria-label="Download CSV"
@@ -1129,7 +1129,7 @@
         >
           <Chip
             :label="`${chip.label} is not ${chip.text}`"
-            kind="filled"
+            variant="filled"
             size="medium"
             removable
             data-testid="exclusion-chip"
@@ -1246,7 +1246,7 @@
                             v-for="entry in topFieldValues(field.id)"
                             :key="String(entry.value)"
                             clickable
-                            kind="option"
+                            variant="option"
                             :aria-pressed="isValueApplied(field.id, entry.value)"
                             @click="toggleFieldValue(field.id, entry.value)"
                           >
@@ -1365,7 +1365,7 @@
                                     v-for="entry in topFieldValues(field.id)"
                                     :key="String(entry.value)"
                                     clickable
-                                    kind="option"
+                                    variant="option"
                                     :aria-pressed="isValueApplied(field.id, entry.value)"
                                     @click="toggleFieldValue(field.id, entry.value)"
                                   >
@@ -1467,12 +1467,12 @@
                   @update:range="selectVolume"
                 >
                   <Chart.Axis
-                    kind="x"
+                    type="x"
                     :ticks="3"
                   />
                   <Chart.Brush />
                   <Chart.Bar
-                    kind="histogram"
+                    type="histogram"
                     stacked
                   />
                   <Chart.Crosshair />
@@ -1509,7 +1509,7 @@
                     <template #cell-detail="{ row }">
                       <IconButton
                         :icon="row.id === selectedId ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
                         :aria-expanded="row.id === selectedId"
@@ -1621,7 +1621,7 @@
               <Tooltip content="Close">
                 <IconButton
                   icon="ai ai-x"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Close the event document"
                   @click="closeDocument"
@@ -1679,7 +1679,7 @@
                         <Tooltip content="Copy the fields shown as JSON">
                           <CopyButton
                             :value="shownFieldsJson"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             aria-label="Copy the fields shown as JSON"
                             copied-label="Fields copied as JSON"
@@ -1729,7 +1729,7 @@
                               <Tooltip :content="`Filter by ${row.label} ${row.value}`">
                                 <IconButton
                                   icon="ai ai-zoom-in"
-                                  kind="transparent"
+                                  variant="ghost"
                                   size="small"
                                   :aria-label="`Filter by ${row.label} ${row.value}`"
                                   :aria-pressed="isIncluded(row.id, row.raw)"
@@ -1740,7 +1740,7 @@
                               <Tooltip :content="`Exclude ${row.label} ${row.value}`">
                                 <IconButton
                                   icon="ai ai-zoom-out"
-                                  kind="transparent"
+                                  variant="ghost"
                                   size="small"
                                   :aria-label="`Exclude ${row.label} ${row.value}`"
                                   :aria-pressed="isExcluded(row.id, row.raw)"
@@ -1843,7 +1843,7 @@
                   <Tooltip content="Copy the fields shown as JSON">
                     <CopyButton
                       :value="shownFieldsJson"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Copy the fields shown as JSON"
                       copied-label="Fields copied as JSON"
@@ -1893,7 +1893,7 @@
                         <Tooltip :content="`Filter by ${row.label} ${row.value}`">
                           <IconButton
                             icon="ai ai-zoom-in"
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             :aria-label="`Filter by ${row.label} ${row.value}`"
                             :aria-pressed="isIncluded(row.id, row.raw)"
@@ -1904,7 +1904,7 @@
                         <Tooltip :content="`Exclude ${row.label} ${row.value}`">
                           <IconButton
                             icon="ai ai-zoom-out"
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             :aria-label="`Exclude ${row.label} ${row.value}`"
                             :aria-pressed="isExcluded(row.id, row.raw)"

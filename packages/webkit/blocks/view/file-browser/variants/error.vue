@@ -43,7 +43,7 @@
                   <Tooltip content="Refresh">
                     <IconButton
                       icon="ai ai-refresh"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       aria-label="Refresh"
                       @click="(event: MouseEvent) => emit('retry', event)"
@@ -52,7 +52,7 @@
                   <SplitButton
                     label="Add to files"
                     icon="ai ai-plus"
-                    kind="primary"
+                    variant="primary"
                     size="medium"
                     :items="addToFilesActions"
                     disabled

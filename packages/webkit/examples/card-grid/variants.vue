@@ -6,7 +6,7 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <CardGridRoot
-      kind="gap"
+      variant="gap"
       :columns="3"
     >
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">gap</div>
@@ -14,7 +14,7 @@
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">gap</div>
     </CardGridRoot>
     <CardGridRoot
-      kind="divider"
+      variant="divider"
       :columns="3"
     >
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">divider</div>
@@ -22,12 +22,12 @@
       <div class="bg-(--bg-canvas) p-(--spacing-xl) text-body-md text-(--text-muted)">divider</div>
     </CardGridRoot>
     <CardGridRoot
-      kind="frame"
+      variant="frame"
       :columns="3"
     >
-      <CardGridCell kind="canvas">frame</CardGridCell>
-      <CardGridCell kind="canvas">frame</CardGridCell>
-      <CardGridCell kind="canvas">frame</CardGridCell>
+      <CardGridCell variant="canvas">frame</CardGridCell>
+      <CardGridCell variant="canvas">frame</CardGridCell>
+      <CardGridCell variant="canvas">frame</CardGridCell>
     </CardGridRoot>
   </div>
 </template>

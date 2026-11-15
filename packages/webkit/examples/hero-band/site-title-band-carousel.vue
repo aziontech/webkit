@@ -29,7 +29,7 @@
 
 <template>
   <HeroBand
-    kind="title-band"
+    variant="title-band"
     size="large"
     eyebrow="Resources"
     title="Learning Center"

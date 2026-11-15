@@ -9,7 +9,7 @@
   import { parseInline } from '../lib/parse-markdown'
 
   export type ToolApprovalStatus = 'pending' | 'approved' | 'denied' | 'expired'
-  export type ToolApprovalKind = 'default' | 'danger'
+  export type ToolApprovalVariant = 'default' | 'danger'
 
   defineOptions({
     name: 'ToolApproval',
@@ -24,7 +24,7 @@
     /** `pending` asks; `approved`, `denied` and `expired` replace the buttons with the outcome in text. */
     status?: ToolApprovalStatus
     /** `danger` for an action that cannot be undone: the approve button turns destructive. */
-    kind?: ToolApprovalKind
+    variant?: ToolApprovalVariant
     /** A word the reader must type before Approve enables, for irreversible actions (the resource name). Empty asks for no typing. */
     confirmationPhrase?: string
     /** Text of the approve button, the verb of the title (`Deploy`, `Delete`). Empty uses the locale catalog (`Approve`). */
@@ -38,7 +38,7 @@
   const props = withDefaults(defineProps<Props>(), {
     description: '',
     status: 'pending',
-    kind: 'default',
+    variant: 'default',
     confirmationPhrase: '',
     approveLabel: '',
     denyLabel: '',
@@ -118,13 +118,13 @@
     :aria-describedby="description ? descriptionId : undefined"
     :data-testid="testId"
     :data-status="status"
-    :data-kind="kind"
-    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) data-[kind=danger]:data-[status=pending]:border-(--danger-border)"
+    :data-variant="variant"
+    class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md) data-[variant=danger]:data-[status=pending]:border-(--danger-border)"
   >
     <div class="flex items-start gap-(--spacing-sm)">
       <i
-        :data-kind="kind"
-        class="ai ai-shield mt-0.5 shrink-0 text-(--text-muted) data-[kind=danger]:text-(--danger-foreground)"
+        :data-variant="variant"
+        class="ai ai-shield mt-0.5 shrink-0 text-(--text-muted) data-[variant=danger]:text-(--danger-foreground)"
         aria-hidden="true"
       />
       <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
@@ -178,7 +178,7 @@
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">
         <Button
           :label="denyLabel || t('toolApproval.deny')"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="loading"
           :data-testid="`${testId}__deny`"
@@ -186,7 +186,7 @@
         />
         <Button
           :label="approveLabel || t('toolApproval.approve')"
-          :kind="kind === 'danger' ? 'danger' : 'primary'"
+          :variant="variant === 'danger' ? 'danger' : 'primary'"
           size="medium"
           :disabled="!confirmed"
           :loading="loading"

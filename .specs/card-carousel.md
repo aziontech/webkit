@@ -3,9 +3,9 @@ name: card-carousel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 068feb8ec4d706a78a7de280bbd79a6cab409b4c22ae26bb2da33933e916ab01
+checksum: 76685ae3fd19e733300e1de79362a427fcb7c35b78c0a9927266089fea70e8cb
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 The titled card-carousel band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row.
 
-It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`kind="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `overline`, and owns only the card's inner layout.
+It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `overline`, and owns only the card's inner layout.
 
 ## When to use
 
@@ -118,7 +118,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 | Region                              | Token (DESIGN.md)                                                         |
 | ----------------------------------- | ------------------------------------------------------------------------- |
 | band inset                          | `var(--spacing-lg)`                                                       |
-| card surface, border, shape, gutter | owned by `carousel` (`kind="cards"`)                                      |
+| card surface, border, shape, gutter | owned by `carousel` (`variant="cards"`)                                   |
 | card stack gap                      | `var(--spacing-sm)`                                                       |
 | link label gap above                | `var(--spacing-lg)`                                                       |
 | card heading                        | `.text-heading-sm`, `var(--text-default)`                                 |

@@ -3,8 +3,8 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: fe4b1b9c4212032c209ced3b9bbe9789d88085191a16bca4110ee789b65ef575
-spec_version: 5
+checksum: bd5997d8e2da06218325f5beb73a695e1ef8f1f9c1bf57a96e713441ff1c62a6
+spec_version: 6
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -66,7 +66,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
     <template #actions>
       <Button
         label="Deploy"
-        kind="outlined"
+        variant="outline"
         size="medium"
         icon="ai ai-cloud-upload"
       />
@@ -171,7 +171,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

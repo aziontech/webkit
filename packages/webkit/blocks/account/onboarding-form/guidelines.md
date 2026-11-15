@@ -45,9 +45,9 @@ Large; full name with `autocomplete="name"`.
 
 ### H. Group label — `Field.Legend` (required)
 
-`Organization mark`, the `kind="label"` legend of the `fieldset` that holds the radio cards.
+`Organization mark`, the `type="label"` legend of the `fieldset` that holds the radio cards.
 
-### I. Mark picker — `RadioGroup` with `kind="card"` (required)
+### I. Mark picker — `RadioGroup` with `variant="card"` (required)
 
 Seven colors, `aria-label="Organization mark"`, each card showing the generated mark.
 

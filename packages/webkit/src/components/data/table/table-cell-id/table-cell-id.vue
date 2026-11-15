@@ -56,7 +56,7 @@
     >
     <CopyButton
       v-if="text"
-      kind="outlined"
+      variant="outline"
       :value="text"
       :aria-label="copyLabel"
       :data-testid="`${testId}__copy`"

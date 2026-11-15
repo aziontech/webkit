@@ -4,7 +4,7 @@ The core of a product page: a run of copy-beside-art bands, each stating one cla
 
 Every band sits on the same small pixelate texture, fading toward the top. A band with a link is a link as a whole. A single band whose picture is code is `MediaSplitBand` with `codeTabs`.
 
-The band is the `MediaSplitStack` component from `@aziontech/webkit/media-split-stack`; it composes `SectionModule`, `SectionTitle`, `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. `kind` picks the layout: `media-end` (every picture at the closing end) or `alternating` (the picture swaps sides band by band, starting at the opening end). Both use `_id: 'media-split-stack'`.
+The band is the `MediaSplitStack` component from `@aziontech/webkit/media-split-stack`; it composes `SectionModule`, `SectionTitle`, `BandStack` and `MediaSplit`, with `Illustration` scenes and `Button` actions. `variant` picks the layout: `media-end` (every picture at the closing end) or `alternating` (the picture swaps sides band by band, starting at the opening end). Both use `_id: 'media-split-stack'`.
 
 ## Examples
 
@@ -18,7 +18,7 @@ Example: [`site-solutions.vue`](./site-solutions.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` is `media-end`.
+- `variant` is `media-end`.
 - `bands` are the solutions, each a `title`, a `description`, an `action` (`label` and `href`, the button and the link the whole band follows unless the band sets its own `href`), an optional `eyebrow`, and a `scene`, an `illustration` name or an `image` with `imageAlt`.
 - `anchor` is the run's id for in-page links; `description` sits under the section title. With a title the band headlines are `h3`.
 - A band without `action` has no button and no link. A band with no picture renders without its media cell.
@@ -45,7 +45,7 @@ Example: [`site-alternating.vue`](./site-alternating.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` is `alternating`; the media side alternates on its own.
+- `variant` is `alternating`; the media side alternates on its own.
 - `eyebrow` and `title` make the heading. Without a title the heading is left out.
 - `bands` are the claims, each a `title`, a `description`, an `action` (`label` and `href`), and an `illustration` with `illustrationLabel` or an `image` with `imageAlt`.
 - A band without `action` has no button and no link. A band with no picture renders without its media cell.

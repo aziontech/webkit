@@ -12,7 +12,7 @@ const FAQ_TITLE = 'Frequently asked questions'
 const USES_TITLE = 'What teams use it for'
 
 const hero: SitePageSection[] = [
-  { _id: 'hero-band', props: { kind: 'title-band', title: HEADLINE, description: 'From data.' } }
+  { _id: 'hero-band', props: { variant: 'title-band', title: HEADLINE, description: 'From data.' } }
 ]
 
 const faq: SitePageSection = {
@@ -105,7 +105,7 @@ describe('SitePage', () => {
   it('closes a page that ends on a closing band with its frame, not a trailing gap', async () => {
     const closing: SitePageSection = {
       _id: 'closing-call-to-action',
-      props: { kind: 'panel', title: 'Ready to start?' }
+      props: { variant: 'panel', title: 'Ready to start?' }
     }
     const { findByTestId, getAllByTestId } = page({ sections: [uses, closing] })
 
@@ -117,8 +117,8 @@ describe('SitePage', () => {
   it('binds hatch off on a closing band stacked over another, so the page closes once', async () => {
     const { findAllByRole, findAllByTestId, getAllByTestId } = page({
       sections: [
-        { _id: 'closing-call-to-action', props: { kind: 'panel', title: 'Join us' } },
-        { _id: 'closing-call-to-action', props: { kind: 'primary', title: 'Start for free' } }
+        { _id: 'closing-call-to-action', props: { variant: 'panel', title: 'Join us' } },
+        { _id: 'closing-call-to-action', props: { variant: 'primary', title: 'Start for free' } }
       ]
     })
 
@@ -132,11 +132,11 @@ describe('SitePage', () => {
 
   it('draws no gap before a frame close, and no trailing gap after it', async () => {
     const { findByTestId, getAllByTestId } = page({
-      sections: [uses, { _id: 'closing-call-to-action', props: { kind: 'frame' } }]
+      sections: [uses, { _id: 'closing-call-to-action', props: { variant: 'frame' } }]
     })
 
     const frame = await findByTestId('sections-closing-call-to-action')
-    expect(frame.getAttribute('data-kind')).toBe('frame')
+    expect(frame.getAttribute('data-variant')).toBe('frame')
     expect(getAllByTestId('marketing-section-gap')).toHaveLength(1)
   })
 
@@ -173,7 +173,7 @@ describe('SitePage', () => {
       sections: [
         {
           _id: 'console-panel',
-          props: { kind: 'diagram', title: 'Requests take the shortest path' },
+          props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: {
             scene: {
               component: 'Illustration',
@@ -201,7 +201,7 @@ describe('SitePage', () => {
       sections: [
         {
           _id: 'console-panel',
-          props: { kind: 'diagram', title: 'Requests take the shortest path' },
+          props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: { scene: { component, props: { animated: false } } }
         }
       ]
@@ -217,7 +217,7 @@ describe('SitePage', () => {
       sections: [
         {
           _id: 'console-panel',
-          props: { kind: 'diagram', title: 'Requests take the shortest path' },
+          props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: { scene: { component: 'NotASceneForTheTest' } }
         }
       ]
@@ -283,13 +283,13 @@ describe('SitePage', () => {
   })
 
   it.each([
-    ['hero-copy-on-top-art', { title: 'T' }, 'hero-band', { kind: 'copy-on-top-art' }],
-    ['hero-with-opening', { title: 'T' }, 'hero-band', { kind: 'title-band', size: 'large' }],
+    ['hero-copy-on-top-art', { title: 'T' }, 'hero-band', { variant: 'copy-on-top-art' }],
+    ['hero-with-opening', { title: 'T' }, 'hero-band', { variant: 'title-band', size: 'large' }],
     [
       'closing-call-to-action-agents',
       { title: 'T' },
       'closing-call-to-action',
-      { kind: 'primary' }
+      { variant: 'primary' }
     ],
     ['closing-call-to-action-templates', { title: 'T' }, 'template-gallery', { closing: true }],
     [
@@ -307,7 +307,7 @@ describe('SitePage', () => {
     ],
     ['article-index-blog', {}, 'article-index', { filters: 'category-search' }],
     ['article-index-resource-hub', {}, 'article-index', { filters: 'facets' }],
-    ['use-case-links', { items: [] }, 'capability-grid', { titleKind: 'start' }],
+    ['use-case-links', { items: [] }, 'capability-grid', { titleVariant: 'start' }],
     [
       'resource-grid',
       { items: [{ title: 'A' }, {}] },
@@ -318,7 +318,7 @@ describe('SitePage', () => {
       'code-split',
       { primaryAction: { label: 'Go' } },
       'media-split-band',
-      { primaryAction: { kind: 'secondary', label: 'Go' } }
+      { primaryAction: { variant: 'secondary', label: 'Go' } }
     ],
     [
       'customer-spotlight',
@@ -346,7 +346,7 @@ describe('SitePage', () => {
     })
 
     const band = await findByTestId('sections-hero-band')
-    expect(band.getAttribute('data-kind')).toBe('copy-on-top-art')
+    expect(band.getAttribute('data-variant')).toBe('copy-on-top-art')
     expect(warn).not.toHaveBeenCalled()
   })
 

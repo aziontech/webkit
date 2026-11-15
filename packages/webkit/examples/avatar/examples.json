@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Variants",
       "summary": "Both shape variants side by side: circle and square at medium size.",
-      "file": "types.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Sizes",

@@ -118,7 +118,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
       >
         <IconButton
           icon="ai ai-circle-plus"
-          kind="primary"
+          variant="primary"
           size="medium"
           aria-label="Create"
         />
@@ -126,7 +126,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
       <Button
         v-else
         label="Create"
-        kind="primary"
+        variant="primary"
         size="medium"
         icon="ai ai-circle-plus"
       />
@@ -177,7 +177,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
         id: 'settings',
         label: 'Settings',
         icon: 'ai ai-settings',
-        kind: 'drill',
+        type: 'drill',
         groups: [
           {
             label: 'Settings',
@@ -216,7 +216,7 @@ What each part of the layout takes:
 
 - **`navigation`** — groups of rows `{ id, label, icon, href }`. An in-app `href` (`/workloads`) is
   followed with the app's router, a named route becomes one through `router.resolve(...).href`, an
-  external URL loads normally. `kind: 'drill'` with `groups` opens a level in place (Settings);
+  external URL loads normally. `type: 'drill'` with `groups` opens a level in place (Settings);
   `tagValue` adds a badge (`Preview`). Never `to`, `path` or `route` on a row (lint
   `webkit/prefer-href-in-menu-node`). Leave `active-id` empty: the active row follows the route.
 - **`breadcrumbs`** — the trail, `{ label, href? }[]`, derived from the route meta; empty on a
@@ -336,7 +336,7 @@ When several flows share the bar, lift it once into your own shell, copied from 
           v-if="!terminal"
           icon="ai ai-chevron-left"
           :aria-label="backLabel"
-          kind="outlined"
+          variant="outline"
           size="small"
           @click="emit('back', $event)"
         />
@@ -347,7 +347,7 @@ When several flows share the bar, lift it once into your own shell, copied from 
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -367,7 +367,7 @@ When several flows share the bar, lift it once into your own shell, copied from 
           <Avatar
             :label="account"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -479,7 +479,7 @@ narrow the list and the table they narrow.
         <template #actions>
           <Button
             label="Documentation"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-book"
             href="https://www.azion.com/en/documentation/"
@@ -487,7 +487,7 @@ narrow the list and the table they narrow.
           />
           <Button
             label="Create Application"
-            kind="primary"
+            variant="primary"
             size="large"
             icon="ai ai-plus"
           />
@@ -577,7 +577,7 @@ opens flush on the tab bar:
           :label="activeView.action.label"
           :icon="activeView.action.icon"
           :loading="actionPending"
-          kind="primary"
+          variant="primary"
           size="medium"
           @click="runTabAction"
         />
@@ -860,7 +860,7 @@ These rules hold across every row:
 5. **A switcher that ends the trail reads as a crumb.** A resource that lives in several environments
    (or versions) ends its trail on the current one as a switcher: `Workloads › workload_01 ›
 Production ⌄`. The page composes it in the default slot of its `ConsoleLayout.Breadcrumbs`
-   (never `App.vue`'s `breadcrumbs` slot): `<Select kind="transparent" size="small">` with
+   (never `App.vue`'s `breadcrumbs` slot): `<Select variant="ghost" size="small">` with
    `aria-label` on `Select.Trigger` ("Switch environment"): no border or fill until hover, sized to
    its value. Never a bordered `Select` in
    the header, and never a trigger restyled with `!` overrides.

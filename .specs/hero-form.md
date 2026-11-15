@@ -3,10 +3,10 @@ name: hero-form
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: af4b52b5974ea67ea2bdd14465dab22c23e4f2d42bfaabfc53b902a1b1110ab7
+checksum: 1a4f4e6c1de885f15024a8489b2018c8a55cb7e7c3f8b45ff7dd95dbb10785f7
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `kind`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `failed`.
+The opening band of a lead-capture page, where the form is the reason for the page: the hero copy and a list of highlights on one side, the form on the other, above the fold, with the client strip on the floor. It is a page section — the site places it from a `{ _id: 'hero-form', props }` entry and binds `props` straight onto it — and it composes `hero`, `hero-title`, `topic`, `field`, `input`, `select`, `phone-input`, `textarea`, `button` and `alert`. The fields are data: each entry of `fields` picks its control by `type`, so the Contact page and the Under attack page are the same block with different `fields`. The block never sends: it validates the fields locally (required fields and the email format, with the messages from `messages`) and on a valid submit emits `submit` with the event and the values keyed by field `name`; the site posts them and reports the outcome back through `loading`, `submitted` and `failed`.
 
 ## When to use
 
@@ -77,8 +77,8 @@ The opening band of a lead-capture page, where the form is the reason for the pa
     ]"
     form-aria-label="Contact sales"
     :fields="[
-      { name: 'firstname', kind: 'text', label: 'First name', half: true, required: true },
-      { name: 'email', kind: 'email', label: 'Work email', required: true }
+      { name: 'firstname', variant: 'text', label: 'First name', half: true, required: true },
+      { name: 'email', type: 'email', label: 'Work email', required: true }
     ]"
     submit-label="Contact sales"
     :messages="{
@@ -111,7 +111,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `anchor`           | `string`           | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                          |
 | `items`            | `HeroFormItem[]`   | `[]`        | false    | The highlights under the description, in order; each is `{ icon, title, description }`. The list renders only when there are items.                                                                                     |
 | `formAriaLabel`    | `string`           | `''`        | false    | Accessible name of the field group, read as its legend.                                                                                                                                                                 |
-| `fields`           | `HeroFormField[]`  | `[]`        | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
+| `fields`           | `HeroFormField[]`  | `[]`        | false    | The form fields in order; each is `{ name, type, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel`      | `string`           | `''`        | false    | Label of the submit button.                                                                                                                                                                                             |
 | `tickerLabel`      | `string`           | `''`        | false    | Overline above the client ticker.                                                                                                                                                                                       |
 | `tickerMarks`      | `string[]`         | `[]`        | false    | Registry names of the client marks, in order; the ticker renders only when there are marks.                                                                                                                             |
@@ -168,7 +168,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 - Visible focus: owned by the field controls and `button`.
 - Keyboard map: `Tab` reaches the inline description link and the actions under the copy, then walks the fields in order and the button; `Enter` in a text field or on the button submits.
-- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field left empty takes the field's amber `required` state (warning border, `kind=required` helper, `aria-required`), a malformed email the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
+- ARIA: the band is the `hero` `<section>` named by the title (`aria-label`); the root is a plain `div`. The fields sit in a `fieldset` whose visually hidden `legend` is `formAriaLabel`; each control is labelled through its own `Field.Label` with an id from `useId`; each label is a `Field.Label` rendered by the band, carrying the persistent Required tag of a `required` field from first render. An `email` field is an `<input type="email">` with `autocomplete="email"` and `spellcheck="false"`. Validation runs on submit only: a required field left empty takes the field's amber `required` state (warning border, `type=required` helper, `aria-required`), a malformed email the red `invalid` state (`aria-invalid`), never both at once; the message is the field's helper text, and editing the field clears it. The success message is a `status` region and the failure message an `alert`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none` on the inline description link's colour transition; the composed components carry their own fallback.
 - Touch target ≥40×40 px — the text fields and the button are large.

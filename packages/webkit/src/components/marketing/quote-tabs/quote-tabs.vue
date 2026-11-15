@@ -265,7 +265,7 @@
       v-if="autoplayEnabled"
       :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
       :aria-label="pauseLabel"
-      kind="outlined"
+      variant="outline"
       size="small"
       class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
       @click="togglePause"
@@ -291,7 +291,7 @@
           <Quote
             v-for="client in clients"
             :key="client.id"
-            kind="highlight"
+            variant="highlight"
             :data-testid="`${testId}__sizer-quote`"
             :text="client.text"
             :name="client.name"
@@ -338,7 +338,7 @@
             class="grid min-w-0"
           >
             <Quote
-              kind="highlight"
+              variant="highlight"
               :text="current.text"
               :name="current.name"
               :job-title="current.jobTitle"
@@ -385,7 +385,7 @@
     </FrameBox>
 
     <CardGrid
-      kind="frame"
+      variant="frame"
       layout="fixed"
       flush
       :columns="3"
@@ -398,7 +398,7 @@
       <CardGridCell
         v-for="(client, index) in clients"
         :key="client.id"
-        kind="surface"
+        variant="surface"
         :padded="false"
         role="presentation"
       >

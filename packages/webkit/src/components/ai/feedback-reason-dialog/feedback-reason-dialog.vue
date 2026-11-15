@@ -137,7 +137,7 @@
               :aria-describedby="missing ? `${uid}-error` : undefined"
               :disabled="loading"
             >
-              <FieldLegend kind="label">{{ t('feedbackReason.reason') }}</FieldLegend>
+              <FieldLegend type="label">{{ t('feedbackReason.reason') }}</FieldLegend>
               <RadioGroup
                 :id="`${uid}-reasons`"
                 v-model="reason"
@@ -173,7 +173,7 @@
             class="w-full md:w-auto"
             type="button"
             :label="t('feedbackReason.cancel')"
-            kind="outlined"
+            variant="outline"
             :disabled="loading"
             @click="open = false"
           />
@@ -181,7 +181,7 @@
             class="w-full md:w-auto"
             type="submit"
             :label="t('feedbackReason.send')"
-            kind="primary"
+            variant="primary"
             :loading="loading"
           />
         </PanelFooter>

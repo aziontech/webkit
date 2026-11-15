@@ -83,7 +83,7 @@ describe('CardCarousel', () => {
   it('lays the cards out as standalone medium cards', () => {
     const { getByTestId, getAllByTestId } = band()
 
-    expect(getByTestId('marketing-carousel')).toHaveAttribute('data-kind', 'cards')
+    expect(getByTestId('marketing-carousel')).toHaveAttribute('data-variant', 'cards')
     const cards = getAllByTestId('marketing-carousel-item')
     expect(cards).toHaveLength(3)
     for (const card of cards) expect(card).toHaveAttribute('data-size', 'medium')

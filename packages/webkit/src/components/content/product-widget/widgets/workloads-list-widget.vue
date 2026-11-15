@@ -8,7 +8,7 @@
   import Card from '../../card/card.vue'
   import ShellMockup, {
     type ShellMockupFade,
-    type ShellMockupKind
+    type ShellMockupVariant
   } from '../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
@@ -16,7 +16,7 @@
 
   interface Props {
     /** How the mockup is plated. */
-    kind?: ShellMockupKind
+    variant?: ShellMockupVariant
     /** Draw the console bar over the body. */
     chrome?: boolean
     /** Design width of the frame from `md` up. */
@@ -28,7 +28,7 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    kind: 'window',
+    variant: 'window',
     chrome: true,
     width: 860,
     fade: 'none',
@@ -126,7 +126,7 @@
 
 <template>
   <ShellMockup
-    :kind="kind"
+    :variant="variant"
     :chrome="chrome"
     :width="width"
     :fade="fade"
@@ -153,7 +153,7 @@
           <span class="ms-auto inline-flex shrink-0">
             <Button
               label="Create Workload"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-plus"
             />

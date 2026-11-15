@@ -45,11 +45,11 @@ least one major, then removed, and `webkit/no-deprecated-component` tells you be
 ```ts
 interface Props {
   /**
-   * @deprecated since 4.2 — use `kind` instead. Removed in 5.0.
+   * @deprecated since 4.2 — use `variant` instead. Removed in 5.0.
    */
-  variant?: string
+  kind?: string
   /** Visual variant. */
-  kind?: ButtonKind
+  variant?: ButtonVariant
 }
 ```
 
@@ -75,9 +75,9 @@ interface Props {
 
 <!-- prettier-ignore -->
 ```ts
-// Renamed `variant` to `kind` outright in a minor release — a silent breaking
+// Renamed `kind` to `variant` outright in a minor release — a silent breaking
 // change. Consumers get no migration window and no machine-readable warning.
 interface Props {
-  kind?: ButtonKind
+  variant?: ButtonVariant
 }
 ```

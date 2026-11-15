@@ -23,7 +23,7 @@ Overview and Onboarding are page bodies for the default slot of `ConsoleLayout` 
 
 ### A. Bands — `Skeleton` (required)
 
-Every text line, number, chip and avatar is a band sized like the content it stands for: a heading band, label and value bands per metric, a delta chip, `kind="rectangle"` circles for avatar stacks. Vary the widths row to row so the wire reads as text, not a grid of bars.
+Every text line, number, chip and avatar is a band sized like the content it stands for: a heading band, label and value bands per metric, a delta chip, `variant="rectangle"` circles for avatar stacks. Vary the widths row to row so the wire reads as text, not a grid of bars.
 
 ### B. Frames — `Card` (required)
 

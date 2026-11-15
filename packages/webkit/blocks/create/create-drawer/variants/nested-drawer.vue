@@ -106,7 +106,7 @@
         <Button
           label="Add Rule"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="openParent"
         />
@@ -179,7 +179,7 @@
                             <HelperText
                               v-if="errors.name"
                               id="rule-name-error"
-                              :kind="form.name.trim() ? 'invalid' : 'required'"
+                              :type="form.name.trim() ? 'invalid' : 'required'"
                               :label="errors.name"
                             />
                           </div>
@@ -241,7 +241,7 @@
                             <HelperText
                               v-if="errors.originId"
                               id="rule-origin-error"
-                              kind="required"
+                              type="required"
                               :label="errors.originId"
                             />
                           </div>
@@ -262,7 +262,7 @@
                 <Button
                   class="w-full"
                   label="Add Rule"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   :loading="submitting"
                   type="submit"
@@ -329,7 +329,7 @@
                             <HelperText
                               v-if="childErrors.name"
                               id="origin-name-error"
-                              :kind="childForm.name.trim() ? 'invalid' : 'required'"
+                              :type="childForm.name.trim() ? 'invalid' : 'required'"
                               :label="childErrors.name"
                             />
                           </div>
@@ -359,7 +359,7 @@
                             <HelperText
                               v-if="childErrors.address"
                               id="origin-address-error"
-                              :kind="childForm.address.trim() ? 'invalid' : 'required'"
+                              :type="childForm.address.trim() ? 'invalid' : 'required'"
                               :label="childErrors.address"
                             />
                           </div>
@@ -380,7 +380,7 @@
                 <Button
                   class="w-full"
                   label="Create Origin"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   :loading="childSubmitting"
                   type="submit"

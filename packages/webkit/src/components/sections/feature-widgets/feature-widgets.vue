@@ -12,7 +12,7 @@
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle, {
-    type SectionTitleKind
+    type SectionTitleVariant
   } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({
@@ -74,7 +74,7 @@
     /** Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
     secondaryAction?: FeatureWidgetsAction
     /** Alignment of the section title over the grid: `center`, `start` or `split`. */
-    titleKind?: SectionTitleKind
+    titleVariant?: SectionTitleVariant
     /** Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. */
     columns?: FeatureWidgetsColumns
     /** Label a cell's copy button shows for two seconds after a copy; empty uses the catalog's `Copied`. */
@@ -90,7 +90,7 @@
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
-    titleKind: 'center',
+    titleVariant: 'center',
     columns: 2,
     copiedLabel: '',
     items: () => []
@@ -152,7 +152,7 @@
         #header
       >
         <SectionTitle
-          :kind="titleKind"
+          :variant="titleVariant"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
@@ -162,14 +162,14 @@
               v-if="primaryAction"
               :label="primaryAction.label"
               :href="primaryAction.href"
-              kind="secondary"
+              variant="secondary"
             />
             <Button
               key="button-2"
               v-if="secondaryAction"
               :label="secondaryAction.label"
               :href="secondaryAction.href"
-              kind="outlined"
+              variant="outline"
               :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
             />
@@ -223,7 +223,7 @@
                     v-if="item.action"
                     :label="item.action.label"
                     :href="item.action.href"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     icon="ai ai-chevron-right"
                     icon-position="trailing"

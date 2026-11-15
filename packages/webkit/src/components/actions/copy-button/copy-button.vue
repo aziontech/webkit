@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
-  import type { IconButtonKind, IconButtonSize } from '../icon-button/icon-button.vue'
+  import type { IconButtonSize, IconButtonVariant } from '../icon-button/icon-button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
   defineOptions({
@@ -20,7 +20,7 @@
     /** Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). */
     copiedLabel?: string
     /** Visual variant forwarded to `IconButton`. */
-    kind?: IconButtonKind
+    variant?: IconButtonVariant
     /** Size token forwarded to `IconButton`. */
     size?: IconButtonSize
     /** Disables interaction and applies disabled tokens. */
@@ -30,7 +30,7 @@
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: '',
     copiedLabel: '',
-    kind: 'transparent',
+    variant: 'ghost',
     size: 'large',
     disabled: false
   })
@@ -113,7 +113,7 @@
       <IconButton
         :icon="icon"
         :ariaLabel="label"
-        :kind="kind"
+        :variant="variant"
         :size="size"
         :disabled="disabled"
         iconTransition

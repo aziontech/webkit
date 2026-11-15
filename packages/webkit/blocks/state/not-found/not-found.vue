@@ -26,13 +26,13 @@
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
             <Button
               label="Go to home"
-              kind="primary"
+              variant="primary"
               size="medium"
               href="/"
             />
             <Button
               label="Docs"
-              kind="outlined"
+              variant="outline"
               icon="ai ai-book"
               size="medium"
               href="https://example.com/docs"

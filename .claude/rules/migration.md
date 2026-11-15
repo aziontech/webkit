@@ -13,7 +13,7 @@ When importing a component, pattern, or any artifact from **outside** this codeb
 | Source | Their convention | Our convention |
 |---|---|---|
 | Base UI / Reka UI / Radix | `as` prop for polymorphism, `data-state` everywhere, `Slot` helper for `asChild` | Our component renders its own root (`<a>`/`<button>` polymorphism via `href` prop, not `as`). `asChild` is pending — do not import a Slot helper that does not exist (`validate-references.mjs` blocks). `data-state` only on stateful roots (overlay open/closed, switch on/off). |
-| Source | `kind` may be called `variant`, `intent`, `appearance` | Always `kind`. |
+| Source | the look may be called `kind`, `intent`, `appearance` | Always `variant`; a sort of part is `type`. |
 | Source | sizes may be `xs/sm/md/lg/xl` | Always `'small' \| 'medium' \| 'large'`. |
 | Source | events may be camelCase (`onValueChange`) | Always kebab-case (`update:value`, `value-change`). |
 | Source | boolean props may have `is`/`has` prefixes | No prefix (`disabled`, `loading`, `open`). |
@@ -26,7 +26,7 @@ When importing a component, pattern, or any artifact from **outside** this codeb
 
 The spec is **driven by Figma behavior**, not by Figma node names. The `figma-extractor` reports variables, regions, and states verbatim; **you** map them to our patterns:
 
-- Figma "Primary / Secondary / Outlined / Text" → `kind: 'primary' | 'secondary' | 'outlined' | 'text'`.
+- Figma "Primary / Secondary / Outlined / Text" → `variant: 'primary' | 'secondary' | 'outline' | 'ghost'`.
 - Figma "Size Large / Medium / Small" → `size: 'large' | 'medium' | 'small'`.
 - Figma states (`hover`, `focus`, `active`, `disabled`) → CSS pseudo-classes (`hover:`, `focus-visible:`, `active:`, `data-disabled:`).
 - Figma animation specs (`scale-in 150ms cubic-bezier(...)`) → match the existing semantic utility (`animate-popup-scale-in`); if no match exists, record a theme gap and use the closest primitive temporarily.
@@ -39,7 +39,7 @@ When the Figma frame contradicts our conventions (e.g. uses a hex color not pres
 If you are asked to bring a legacy component (whitelisted in `lib/legacy-components.json`) under spec enforcement:
 
 1. **Write the spec from scratch.** Do not paste the legacy file's docstring or any CONTRACT.md. Read the `.vue` and infer the contract; restate it in our format using `.specs/_template.md` as the only template.
-2. **Rename props/events** to our conventions. If the legacy file has `variant`, the new spec has `kind`. Updating the legacy `.vue` to match the new spec is part of the same migration PR — the spec is the source of truth.
+2. **Rename props/events** to our conventions. If the legacy file has `kind`, the new spec has `variant` (or `type` when it picks a sort of part). Updating the legacy `.vue` to match the new spec is part of the same migration PR — the spec is the source of truth.
 3. **Replace external positioning/animation libs.** If the legacy `.vue` imports `@floating-ui/vue` or similar, that import has to go. See [`dependencies.md`](./dependencies.md) for CSS-only alternatives.
 4. **Remove the entry from `legacy-components.json`** only after `/component-verify <name>` passes end-to-end.
 

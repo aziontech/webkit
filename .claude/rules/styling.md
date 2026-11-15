@@ -4,7 +4,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 
 ## The rule
 
-> **Do not create CSS class presets** (`kindClasses` / `sizeClasses` / `sharedClasses` objects in the script). **Do not create classes inside the component** (no `<style>` block, no local CSS, no custom utility). Everything goes inline on the root's `class`, using `data-*` to switch variants.
+> **Do not create CSS class presets** (`variantClasses` / `sizeClasses` / `sharedClasses` objects in the script). **Do not create classes inside the component** (no `<style>` block, no local CSS, no custom utility). Everything goes inline on the root's `class`, using `data-*` to switch variants.
 
 ## What this means in practice
 
@@ -14,7 +14,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 <!-- DO NOT DO THIS -->
 <script setup lang="ts">
   const sharedClasses = ['flex', 'items-center', 'transition-colors' /* ... */]
-  const kindClasses: Record<Kind, string> = {
+  const variantClasses: Record<Kind, string> = {
     primary: 'bg-(--primary) text-(--primary-foreground)',
     secondary: 'bg-(--secondary) text-(--secondary-foreground)',
     outlined: 'border border-(--border-default)',
@@ -27,7 +27,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
   }
   const rootClasses = computed(() => [
     sharedClasses,
-    kindClasses[props.kind],
+    variantClasses[props.variant],
     sizeClasses[props.size],
     attrs.class
   ])
@@ -63,12 +63,12 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 
   defineOptions({ name: 'Button', inheritAttrs: false })
 
-  type ButtonKind = 'primary' | 'secondary' | 'outlined' | 'text'
+  type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost'
   type ButtonSize = 'small' | 'medium' | 'large'
 
   interface Props {
     /** Visual variant. */
-    kind?: ButtonKind
+    variant?: ButtonVariant
     /** Size token. */
     size?: ButtonSize
     /** Disables interaction. */
@@ -76,7 +76,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'primary',
+    variant: 'primary',
     size: 'large',
     disabled: false
   })
@@ -89,7 +89,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
   <button
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-disabled="disabled || null"
     :disabled="disabled"
@@ -99,10 +99,10 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
       rounded-(--shape-button)
       focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)
 
-      data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
-      data-[kind=secondary]:bg-(--secondary) data-[kind=secondary]:text-(--secondary-foreground)
-      data-[kind=outlined]:border data-[kind=outlined]:border-(--border-default) data-[kind=outlined]:bg-transparent
-      data-[kind=text]:bg-transparent
+      data-[variant=primary]:bg-(--primary) data-[variant=primary]:text-(--primary-foreground)
+      data-[variant=secondary]:bg-(--secondary) data-[variant=secondary]:text-(--secondary-foreground)
+      data-[variant=outline]:border data-[variant=outline]:border-(--border-default) data-[variant=outline]:bg-transparent
+      data-[variant=text]:bg-transparent
 
       data-[size=small]:h-7 data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md
       data-[size=medium]:h-8 data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md
@@ -119,8 +119,8 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
 Key choices:
 
 - **One `class` attribute on the root.** All utilities live there.
-- **`data-*` attributes mirror props** — `data-kind`, `data-size`, `data-disabled`, `data-state`, `data-orientation`.
-- **Tailwind variants do the switching.** `data-[kind=primary]:bg-(--primary)` is one utility, not a JS branch.
+- **`data-*` attributes mirror props** — `data-variant`, `data-size`, `data-disabled`, `data-state`, `data-orientation`.
+- **Tailwind variants do the switching.** `data-[variant=primary]:bg-(--primary)` is one utility, not a JS branch.
 - **`v-bind="$attrs"`** flows consumer-passed `class` (and other attrs) onto the root; Vue merges class strings automatically. No `cn()` needed for the basic case.
 - **No `computed` returning class arrays.** Computed values are reserved for derived state (e.g. `isAnchor`, `testId`), not for styles.
 
@@ -224,7 +224,7 @@ The shorthand has no tolerance: the parens hold **exactly** `--token` or `type:-
 | `bg-( --bg-surface)` | Same — whitespace anywhere inside the parens. |
 | `min-h-[--(size-4)]` | Bracket/paren inverted. This one *does* emit a rule — `min-height: --(size-4)`, an invalid value the **browser discards at parse time**. |
 
-Both shipped: chip's `filled` kind was fully transparent in both themes from the day it shipped (the first form), and `popover-header`'s min-height was inert from the v4 sweep until 2026-08-12 (the third). Neither is a lint, type, or build error on its own, and **a visual baseline generated from the broken render encodes the bug as correct** — so nothing downstream fails either.
+Both shipped: chip's `filled` variant was fully transparent in both themes from the day it shipped (the first form), and `popover-header`'s min-height was inert from the v4 sweep until 2026-08-12 (the third). Neither is a lint, type, or build error on its own, and **a visual baseline generated from the broken render encodes the bug as correct** — so nothing downstream fails either.
 
 Two consequences worth internalizing:
 
@@ -289,7 +289,7 @@ padding: 0 var(--spacing-md);
 
 - No zero with a length unit — `0`, never `0px` / `0rem` / `0em` (in tokens, arbitrary Tailwind values, inline `style`, or authored CSS). The single exception is inside `calc()`/`min()`/`max()`/`clamp()`, where CSS requires a unit and that unit is **`rem`**.
 - No malformed token shorthand — no whitespace inside the parens (`bg-(--token )`, `bg-( --token)`) and never the inverted `[--(token)]`. The style silently never applies; blocked by `dead-token-shorthand`.
-- No `const sharedClasses = [...]`, `const kindClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
+- No `const sharedClasses = [...]`, `const variantClasses = {...}`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`. The whole "class map" pattern goes away.
 - No `<style>` blocks (scoped or unscoped).
 - No `.css` / `.scss` files inside a component directory.
 - No CSS-in-JS, no `styled()`, no `css\`\`` tagged templates.
@@ -306,7 +306,7 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
   :class="
     cn(
       `
-      data-[kind=primary]:bg-(--primary)
+      data-[variant=primary]:bg-(--primary)
       `,
       attrs.class
     )
@@ -325,7 +325,7 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
 **Fix (pick one)**
 
 1. **Plain multiline `class` on the root** (no JS quotes) + optional `:class="attrs.class"` for consumer overrides.
-2. **Single-quoted `ROOT_CLASS` in `<script setup>`** + `:class="cn(ROOT_CLASS, attrs.class)"` — one flat literal string, not a `kindClasses` / `sizeClasses` map.
+2. **Single-quoted `ROOT_CLASS` in `<script setup>`** + `:class="cn(ROOT_CLASS, attrs.class)"` — one flat literal string, not a `variantClasses` / `sizeClasses` map.
 
 `pnpm lint:webkit` and `vue-tsc` may still pass; only the SFC template compiler (`pnpm dev:docs`, `pnpm build:docs`) catches this.
 
@@ -376,7 +376,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 ## Enforcement
 
-- `component-scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
+- `component-scaffolder` (agent) refuses to emit the `variantClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
@@ -387,7 +387,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 ## Why this rule exists
 
-The old `kindClasses` Record pattern looks clean but rots over time:
+The old `variantClasses` Record pattern looks clean but rots over time:
 
 - Every new variant adds a JS branch AND a Tailwind class — duplicated edits.
 - Tailwind's `data-[attr=value]` variant compiles to the same CSS but reads in one place.

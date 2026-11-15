@@ -3,9 +3,9 @@ name: stat-tile-group
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 159f27012418d777eb7dd2cbfb70fcdc5ff58a88040edc066bdc06fae946e5a9
+checksum: 9e65599e28f34ec5baf7f721f1c58c6ef9a5e3295b31435e0fa26064c1aad942
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
 
 - Put only `StatTile`s in the default slot, in reading order.
 - Name the strip with `ariaLabel` when the page has more than one (`Usage`, `Traffic`).
-- Give every tile in a strip the same `kind` and the same period.
+- Give every tile in a strip the same `variant` and the same period.
 - Prefer four cells: they fill one row on a desktop and two rows of two on a tablet.
 - Next to a taller card in a row (a dashboard's usage band beside a chart), let the row stretch the group: it fills the height and the cells grow with it. Do not pin a height. Inside a wrapper element, give the group `h-full` (or make the wrapper a flex column) so the stretch reaches it.
 

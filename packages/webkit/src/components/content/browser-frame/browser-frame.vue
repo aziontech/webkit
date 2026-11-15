@@ -235,7 +235,7 @@
           <span class="-my-px -me-px flex shrink-0">
             <CopyButton
               :value="address"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :ariaLabel="copyAriaLabel || t('browserFrame.copyAddress')"
               :data-testid="`${testId}__copy`"

@@ -191,7 +191,7 @@
       >
       <IconButton
         :icon="isCollapsed ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :ariaLabel="isCollapsed ? t('uploadProgress.expand') : t('uploadProgress.collapse')"
         :aria-expanded="isCollapsed ? 'false' : 'true'"
@@ -202,7 +202,7 @@
       <IconButton
         v-if="status !== 'running'"
         icon="ai ai-x"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :ariaLabel="t('uploadProgress.close')"
         :data-testid="`${testId}__close`"
@@ -214,7 +214,7 @@
       v-if="status === 'running'"
       :value="percent"
       size="small"
-      kind="rounded"
+      variant="rounded"
       :aria-labelledby="titleId"
     />
 
@@ -279,7 +279,7 @@
                 key="icon-button-2"
                 v-if="cancelable && (item.status === 'pending' || item.status === 'running')"
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"
                 :data-testid="`${testId}__cancel`"
@@ -289,7 +289,7 @@
                 key="icon-button-3"
                 v-else-if="item.status === 'error'"
                 icon="ai ai-refresh"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :ariaLabel="t('uploadProgress.retryItem', { name: item.name })"
                 :data-testid="`${testId}__retry`"
@@ -306,7 +306,7 @@
               :value="item.progress ?? 0"
               :indeterminate="typeof item.progress !== 'number'"
               size="small"
-              kind="rounded"
+              variant="rounded"
               :aria-label="t('uploadProgress.itemProgress', { name: item.name })"
             />
           </li>
@@ -321,7 +321,7 @@
       <Button
         v-if="status === 'running' && cancelable"
         :label="t('uploadProgress.cancelAll')"
-        kind="outlined"
+        variant="outline"
         size="small"
         :data-testid="`${testId}__cancel-all`"
         @click="emit('cancel', $event)"
@@ -331,7 +331,7 @@
         v-if="status === 'error'"
         :label="t('uploadProgress.retryFailed')"
         icon="ai ai-refresh"
-        kind="outlined"
+        variant="outline"
         size="small"
         :data-testid="`${testId}__retry-failed`"
         @click="emit('retry', $event)"

@@ -177,7 +177,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:78%]"
     :chrome="false"
@@ -234,7 +234,7 @@
                       <SplitButton
                         label="Add to files"
                         icon="ai ai-plus"
-                        kind="primary"
+                        variant="primary"
                         size="medium"
                         :items="ADD_TO_FILES"
                       />
@@ -249,7 +249,7 @@
                   class="flex w-full min-w-0 items-center gap-(--spacing-xs)"
                 >
                   <i
-                    :data-kind="cellRow(cell).kind"
+                    :data-type="cellRow(cell).kind"
                     :class="cellRow(cell).icon"
                     class="shrink-0 text-body-lg text-(--text-muted) data-[kind=folder]:text-(--text-link)"
                     aria-hidden="true"
@@ -270,7 +270,7 @@
                   <Avatar
                     :label="cellRow(cell).author"
                     size="small"
-                    kind="square"
+                    variant="square"
                   />
                   <span class="truncate text-body-sm text-(--text-muted)">{{
                     cellValue(cell)

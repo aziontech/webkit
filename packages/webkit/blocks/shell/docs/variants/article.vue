@@ -41,7 +41,7 @@
         {
           id: 'get-started',
           label: 'Get started',
-          kind: 'inline',
+          type: 'inline',
           defaultOpen: true,
           children: [
             {
@@ -206,7 +206,7 @@
             >Build and deploy from your terminal.</DocCard
           >
         </DocCardGroup>
-        <DocCallout kind="tip">
+        <DocCallout variant="tip">
           New to Azion? Start with the template: it needs no local tooling.
         </DocCallout>
 
@@ -225,7 +225,7 @@
           :level="2"
           >Deploy a template via Console</DocHeading
         >
-        <DocCallout kind="info">
+        <DocCallout variant="info">
           Templates create the workload, the application and the domain for you.
         </DocCallout>
         <DocSteps>
@@ -323,7 +323,7 @@
     <template #actions>
       <IconButton
         icon="ai ai-github"
-        kind="outlined"
+        variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
@@ -332,7 +332,7 @@
       />
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         class="shrink-0"
         href="https://console.azion.com"
@@ -359,7 +359,7 @@
     <template #footer>
       <div class="w-full border-t border-(--border-default)">
         <Footer
-          kind="content"
+          variant="content"
           aria-label="Footer"
         >
           <Footer.Column

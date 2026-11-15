@@ -1,7 +1,7 @@
 import type { ComputedRef, InjectionKey, ShallowRef } from 'vue'
 
 /** How a sub reveals its children: expanded in place, or as a pushed level. */
-export type SidebarMenuSubKind = 'inline' | 'drill'
+export type SidebarMenuSubType = 'inline' | 'drill'
 
 /** Direction of the last drill-stack change; drives which level slide plays. */
 export type SidebarMenuMotion = 'push' | 'pop' | 'none'
@@ -23,7 +23,7 @@ export type SidebarMenuNode = {
   /** Blocks activation of the row. */
   disabled?: boolean
   /** Whether `children` expand in place or replace the menu. */
-  kind?: SidebarMenuSubKind
+  type?: SidebarMenuSubType
   /** Initial state of an inline row that owns children. */
   defaultOpen?: boolean
   /** Nested rows; a row with children renders as a sub instead of a leaf. */
@@ -104,15 +104,15 @@ export interface SidebarMenuSubContext {
   triggerId: string
   /** Id of the content list, for the trigger's `aria-controls`. */
   contentId: string
-  /** Whether the children are revealed; follows the drill stack when `kind` is `drill`. */
+  /** Whether the children are revealed; follows the drill stack when `type` is `drill`. */
   open: ComputedRef<boolean>
   /** How the children are revealed, taken from the registered trigger. */
-  kind: ComputedRef<SidebarMenuSubKind>
+  type: ComputedRef<SidebarMenuSubType>
   /** Visible label of the registered trigger. */
   label: ComputedRef<string>
-  /** Registers the trigger's kind, label and element so the sub can drive both modes. */
+  /** Registers the trigger's type, label and element so the sub can drive both modes. */
   registerTrigger: (
-    kind: SidebarMenuSubKind,
+    type: SidebarMenuSubType,
     label: string,
     el: globalThis.HTMLElement | null
   ) => void

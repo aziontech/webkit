@@ -3,10 +3,10 @@ name: feature-scroll
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 62960462c9840fd767fb971d6014711af94ea68e4840099aa93d591d64842fe1
+checksum: 47df2ba3b85bc6f1fa58b1695b0ae7dd1f906a77d011cf2e04eff448f7f96a1e
 ---
 # FeatureScroll — Component Spec
 
@@ -65,7 +65,7 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, kind? }` rendered as a small button under the step, secondary unless `kind` says otherwise. |
+| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. |
 
 ## Events
 

@@ -11,18 +11,18 @@
   })
 
   /** Where the bar sits in the app shell. */
-  export type GlobalHeaderKind = 'content' | 'site'
+  export type GlobalHeaderVariant = 'content' | 'site'
 
   interface Props {
     /** Accessible name for the header landmark. Empty uses the locale catalog (`Global header`). */
     ariaLabel?: string
     /** Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. */
-    kind?: GlobalHeaderKind
+    variant?: GlobalHeaderVariant
   }
 
   withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    kind: 'content'
+    variant: 'content'
   })
 
   defineSlots<{
@@ -47,8 +47,8 @@
     role="banner"
     :aria-label="ariaLabel || t('globalHeader.label')"
     :data-testid="testId"
-    :data-kind="kind"
-    class="flex h-(--layout-header-height) w-full min-w-0 shrink-0 items-center gap-(--spacing-md) border-b border-(--border-default) bg-(--bg-surface) data-[kind=content]:px-(--layout-boundary-inline) data-[kind=site]:px-[max(var(--layout-boundary-inline),calc((100%_-_var(--layout-measure-site-header))_/_2_+_var(--layout-boundary-inline)))]"
+    :data-variant="variant"
+    class="flex h-(--layout-header-height) w-full min-w-0 shrink-0 items-center gap-(--spacing-md) border-b border-(--border-default) bg-(--bg-surface) data-[variant=content]:px-(--layout-boundary-inline) data-[variant=site]:px-[max(var(--layout-boundary-inline),calc((100%_-_var(--layout-measure-site-header))_/_2_+_var(--layout-boundary-inline)))]"
   >
     <slot />
   </header>

@@ -86,7 +86,7 @@
 <template>
   <div class="mx-auto aspect-876/184 w-full max-w-(--container-3xl) min-w-0">
     <ShellMockup
-      kind="bare"
+      variant="bare"
       :chrome="false"
       :active="active"
       :width="876"

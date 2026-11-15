@@ -10,7 +10,7 @@
     <ToolApproval
       title="Delete the domain `www.example.com`?"
       description="The domain stops answering at once and its certificate is revoked. This cannot be undone."
-      kind="danger"
+      variant="danger"
       confirmation-phrase="www.example.com"
       approve-label="Delete"
       :status="status"

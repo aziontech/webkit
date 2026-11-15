@@ -5,7 +5,7 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const type = instance.getEnum('kind', {
   helper: 'helper',
   invalid: 'invalid',
   disabled: 'disabled',
@@ -15,7 +15,7 @@ const labelText = instance.findText('label')
 const label = labelText.type === 'TEXT' ? labelText.textContent.trim() : ''
 
 export default {
-  example: figma.code`<HelperText label="${label}"${kind === 'helper' ? '' : figma.code` kind="${kind}"`} />`,
+  example: figma.code`<HelperText label="${label}"${type === 'helper' ? '' : figma.code` type="${type}"`} />`,
   imports: ["import HelperText from '@aziontech/webkit/helper-text'"],
   id: 'helper-text',
   metadata: { nestable: true }

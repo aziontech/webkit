@@ -67,7 +67,7 @@
           class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -76,7 +76,7 @@
       <GlobalHeader.End>
         <Button
           label="Documentation"
-          kind="outlined"
+          variant="outline"
           size="medium"
           icon="ai ai-book"
           href="https://example.com/docs"
@@ -98,7 +98,7 @@
                 :value="3"
                 :max="3"
                 size="small"
-                kind="flat"
+                variant="flat"
                 class="shrink-0"
                 aria-label="Step 3 of 3"
               />
@@ -139,7 +139,7 @@
                     <template #actions>
                       <Button
                         label="Retry"
-                        kind="secondary"
+                        variant="secondary"
                         size="small"
                         @click="createOrganization"
                       />
@@ -162,35 +162,35 @@
                     <div class="animate-fade-in motion-reduce:animate-none">
                       <div class="flex flex-col gap-(--spacing-lg)">
                         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                          <Field.Legend kind="label"
+                          <Field.Legend type="label"
                             >How are you planning to use the platform?</Field.Legend
                           >
                           <RadioGroup
                             v-model="usage"
-                            kind="card"
+                            variant="card"
                             orientation="horizontal"
                             :options="usageOptions"
                             aria-label="How are you planning to use the platform?"
                           />
                           <HelperText
                             v-if="submitted && !usage"
-                            kind="required"
+                            type="required"
                             label="Select one to continue."
                           />
                         </fieldset>
 
                         <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                          <Field.Legend kind="label">What best describes your role?</Field.Legend>
+                          <Field.Legend type="label">What best describes your role?</Field.Legend>
                           <RadioGroup
                             v-model="role"
-                            kind="card"
+                            variant="card"
                             orientation="horizontal"
                             :options="roleOptions"
                             aria-label="What best describes your role?"
                           />
                           <HelperText
                             v-if="submitted && !role"
-                            kind="required"
+                            type="required"
                             label="Select one to continue."
                           />
                         </fieldset>
@@ -216,7 +216,7 @@
                   <div class="flex items-center gap-(--spacing-sm)">
                     <Button
                       label="Back"
-                      kind="outlined"
+                      variant="outline"
                       size="large"
                       :disabled="creating"
                       @click="router.push('/onboarding/plan')"
@@ -224,7 +224,7 @@
                     <div class="flex flex-1">
                       <Button
                         label="Create Organization"
-                        kind="primary"
+                        variant="primary"
                         size="large"
                         class="w-full"
                         type="submit"
@@ -265,7 +265,7 @@
                     ]"
                     alt="Your organization"
                     size="small"
-                    kind="square"
+                    variant="square"
                     class="shrink-0"
                   />
                   <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
@@ -279,7 +279,7 @@
                   <Avatar
                     label="MW"
                     size="small"
-                    kind="square"
+                    variant="square"
                     class="shrink-0"
                   />
                   <span class="min-w-0 truncate text-label-md font-medium text-(--text-default)">
@@ -364,7 +364,7 @@
                     <Avatar
                       label="MY"
                       size="medium"
-                      kind="square"
+                      variant="square"
                     />
                     <span class="flex min-w-0 flex-col">
                       <span class="truncate text-label-sm text-(--text-default)">myemail</span>

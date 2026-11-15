@@ -23,7 +23,7 @@ Not every component has every state — a `Button` has `disabled` + `loading`; a
 ```vue
 <template>
   <div :data-loading="loading || null" :data-disabled="disabled || null">
-    <Skeleton v-if="loading" kind="shape" />
+    <Skeleton v-if="loading" variant="shape" />
     <EmptyState v-else-if="isEmpty" :title="emptyTitle" />
     <slot v-else />
   </div>

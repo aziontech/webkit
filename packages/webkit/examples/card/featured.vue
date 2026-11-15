@@ -53,7 +53,7 @@
       >
         <Card
           class="w-full"
-          kind="integration"
+          variant="integration"
           featured
           :title="item.name"
           :vendor="item.vendor"

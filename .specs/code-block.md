@@ -3,12 +3,12 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 9b9a6032f729abcc0554b5207ef5ce58dfabe998922486d6ee124178be614474
+checksum: eea6e27a7f18e605f79e6df9bab9b399ccfeb67d21512f2a7dbf0c9d2f8de47a
 created: 2026-05-28
 last_updated: 2026-11-15
 ---
@@ -26,7 +26,7 @@ Read-only code viewer for docs, API examples, and configuration previews. Suppor
 3. **Diff** ([4567:29012](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-29012)) — per-line added/removed markers (`+`/`-`), semantic row backgrounds, and a 2 px leading bar; no tabs or filename bar.
 4. **Highlighted line** ([4567:31473](https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-31473)) — one active line with info background and leading bar; no tabs or filename bar.
 
-Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** kind (`kind="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks.
+Two more regions serve docs: a **label header** — a 40 px bar naming the block (`</>` + "Shell", "JavaScript", from the active tab's label or the language's readable name, or `title`) when `showLabel` is on and there is no tab strip or filename bar — and the **output** type (`type="output"`): what a command prints, drawn flat in `--text-muted` on `--bg-canvas` under an "Output" label, with no copy control by default. A command block and its output are always two blocks.
 
 The other regions render conditionally from tab data. Tab header appears when `tabs.length > 1`. Filename bar appears when the active tab sets `fileName`. Diff and highlight decorations come from `lineChanges` and `highlightedLine` on the active tab.
 
@@ -72,7 +72,7 @@ The other regions render conditionally from tab data. Tab header appears when `t
 - Prefer `original` to a hand-written `lineChanges` list whenever both versions are at hand: the diff stays right when either version changes. Keep `unified` in narrow columns and use `split` where the block has room for two columns of code.
 - Set `:copyable="false"` on decorative blocks, and `:bordered="false"` when the block sits inside a surface that already frames it.
 - Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.
-- Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `kind="output"` (or in prose).
+- Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `type="output"` (or in prose).
 - Don't: write expected output into the command, as a `# HTTP/2 200` comment or as unprompted lines after a `$ ` prompt — the reader pastes it into the terminal. The `webkit/no-output-in-command` lint warns on it.
 - Do: turn `show-label` on in docs (`DocCodeGroup` does by default) so every block is titled with its language; set `title` only when the language name is not the right title.
 
@@ -145,7 +145,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 | `showLineNumbers` | `boolean`              | `true`      | false    | Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`).                                                                                                                 |
 | `copyAriaLabel`   | `string`               | `''`        | false    | Accessible name for the copy control (forwarded to CopyButton's aria-label). Empty uses the locale catalog (`Copy code`).                                                                                                        |
 | `copyable`        | `boolean`              | `undefined` | false    | Shows the copy control. Unset, a `code` block shows it and an `output` block does not; turn it off for a decorative block nobody copies from.                                                                                    |
-| `kind`            | `'code' \| 'output'`   | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                               |
+| `type`            | `'code' \| 'output'`   | `'code'`    | false    | What the block holds: `code` the reader runs or reads, or `output` — what a command prints — drawn flat and muted under an "Output" label, without a copy control.                                                               |
 | `showLabel`       | `boolean`              | `false`     | false    | Shows a header naming the block when there is no tab strip or file name: the active tab's label, else the language's readable name (Shell, JavaScript). Docs blocks show it.                                                     |
 | `title`           | `string`               | `''`        | false    | Text of the label header; empty uses the tab label or the language name, or "Output" for an `output` block.                                                                                                                      |
 | `animateLines`    | `boolean`              | `false`     | false    | Staggered line entrance for website layouts: each line slides from `-8px` with opacity `0 → 1`, `40ms` apart.                                                                                                                    |
@@ -200,7 +200,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 - `data-state` on code lines: `default` | `added` | `removed` | `highlighted`; in the split view a side with no line opposite a change is `empty` (`var(--bg-canvas)`)
 - `data-split` on the panel when the active tab with an `original` draws side by side
 - `data-disabled` not used (tabs are not disabled in v2)
-- `data-kind` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
+- `data-type` on the root: `code` | `output`; `output` paints the shell `--bg-canvas` and every line flat in `--text-muted`
 
 ### Layout rules (derived from Figma)
 
@@ -208,7 +208,7 @@ Replace `tabs[n].code` (or `code`) or rebuild `tabs` when the source should upda
 | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
 | Tab header (`CodeBlockHeader`, 40 px strip: a 32 px tab over a 4 px inset)                                               | `tabs.length > 1`                                                        |
 | Filename bar (`FileName`, 40 px)                                                                                         | active tab has `fileName`                                                |
-| Label header (40 px, `ai ai-code` / `ai ai-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `kind="output"` |
+| Label header (40 px, `ai ai-code` / `ai ai-align-left` + label)                                                          | no tab strip, no `fileName`, and `showLabel`, `title` or `type="output"` |
 | Diff gutter (`+`/`-` + 8 px spacer on unchanged lines)                                                                   | active tab `lineChanges.length > 0`, or the active tab has an `original` |
 | Unified diff (removed lines from `original` before the added lines of `code` in each change, numbered on their own side) | active tab has an `original` and `diffView="unified"`                    |
 | Split diff (two columns, Original and Modified, rows aligned, a change paired line for line)                             | active tab has an `original` and `diffView="split"`                      |
@@ -218,7 +218,7 @@ When only one tab is provided and it has no `fileName`, the shell is code conten
 
 Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"`, capped at a `320 px` max height so shorter snippets fit their content and taller ones scroll). Lines never wrap (`whitespace-pre`); on narrow viewports the scroll region grows horizontally so long lines stay on one row.
 
-**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `kind="outlined"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
+**The shell is fluid: it takes the width its container gives it and never grows past it.** Long lines are a scroll, never a wider block — so the root is a size container (`@container`, i.e. inline-size containment) and its code width is invisible to the layout above it. Without that, the block's intrinsic width leaks upward: an `auto`-sized grid track or flex row (a one-column `grid` on mobile, a `md:grid-cols-2` panel below its breakpoint) sizes itself to the widest code line and the block overflows the viewport instead of scrolling — a consumer's `min-w-0` on the wrapper cannot fix it, because `min-width` is a floor on the intrinsic contribution, not a cap. The copy control (a `CopyButton`, `variant="outline"` `size="small"`) is absolutely positioned on the non-scrolling content shell (`__content`) so it stays pinned top-right while lines scroll. **On a single-line block it centres on that row instead** (`data-single-line` on the anchor): the shell is 44 px, the control 28 px, so the `--spacing-sm` top inset would leave it 4 px below the line's own centre. Every line reserves the control's full footprint on its right (`pr-11` = 28 px control + its 12 px inset), so a long line always scrolls clear of it rather than under it. With `copyable` off (`data-copyable` absent on the root) the control is not rendered and lines reserve only `--spacing-sm` on their right.
 
 - Computed diff: the common head and tail are trimmed, then the middle runs the Myers line diff; past 1,000 edits it falls back to the whole middle removed then added, so a rewrite stays linear. A 5,000-line pair with a few hundred edits diffs in a few milliseconds.
 
@@ -333,7 +333,7 @@ Code content scrolls inside `@aziontech/webkit/scroll-area` (`orientation="both"
 - UnevenTabs — two tabs whose snippets have different line counts; the only geometry where the shell's height changes on a swap, so it is what exercises the height transition and the per-line entrance together.
 - SingleLine — one `bash` line passed as `code` + `language` (the single-snippet API), `show-line-numbers` off, no tabs and no filename bar: the minimal shell, and the one geometry where the copy control centres on its row instead of hanging from the top inset.
 - Borderless — Default sample with `bordered={false}`; the outer card border is dropped so the block sits flush inside a surface that already frames it.
-- CommandAndOutput — a `$ `-prompted `curl -I` command with `show-label` ("Shell" header) and, under it, a second block with `kind="output"` holding `HTTP/2 200`; justified because the label header and the output kind are two rendered surfaces no other example shows, and they are the docs pattern for a command and what it prints.
+- CommandAndOutput — a `$ `-prompted `curl -I` command with `show-label` ("Shell" header) and, under it, a second block with `type="output"` holding `HTTP/2 200`; justified because the label header and the output type are two rendered surfaces no other example shows, and they are the docs pattern for a command and what it prints.
 
 ## Constraints — DO NOT
 

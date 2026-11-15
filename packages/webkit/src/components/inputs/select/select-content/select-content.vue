@@ -66,7 +66,7 @@
     isOpen: ctx.open,
     placement: 'bottom-start',
     offset: 4,
-    matchTriggerWidth: ctx.kind.value !== 'transparent'
+    matchTriggerWidth: ctx.variant.value !== 'ghost'
   })
 
   const { onKeydown } = useListboxContent({
@@ -105,8 +105,8 @@
         :data-state="ctx.open.value ? 'open' : 'closed'"
         :class="attrs.class"
         :style="panelStyle"
-        :data-kind="ctx.kind.value"
-        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[kind=transparent]:min-w-(--container-3xs)"
+        :data-variant="ctx.variant.value"
+        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[variant=ghost]:min-w-(--container-3xs)"
         @keydown="onKeydown"
       >
         <div

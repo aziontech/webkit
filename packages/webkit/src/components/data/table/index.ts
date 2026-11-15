@@ -77,7 +77,7 @@ export type {
   TableDensity,
   TableExportScope,
   TableExposed,
-  TableFilterKind,
+  TableFilterType,
   TableHeaderSlotProps,
   TableHeaderSlots,
   TableStateSnapshot,
@@ -87,14 +87,14 @@ export type {
   TableCellAlign,
   TableCellFrozen,
   TableCellGrow,
-  TableCellKind
+  TableCellType
 } from './table-cell/table-cell.vue'
 export type {
   SortDirection,
   TableHeadCellAlign,
   TableHeadCellFrozen,
   TableHeadCellGrow,
-  TableHeadCellKind
+  TableHeadCellType
 } from './table-head-cell/table-head-cell.vue'
 export type { TableHeadCellProps } from './table-head-cell/table-head-cell.vue'
 export type { TableSortButtonProps } from './table-sort-button/table-sort-button.vue'

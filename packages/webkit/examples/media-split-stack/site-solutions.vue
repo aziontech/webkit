@@ -62,7 +62,7 @@
     <SectionGap hatch />
 
     <MediaSplitStack
-      kind="media-end"
+      variant="media-end"
       :bands="bands"
     />
 

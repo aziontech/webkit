@@ -15,7 +15,7 @@
     <Dialog.Trigger>
       <Button
         label="Open dialog"
-        kind="primary"
+        variant="primary"
       />
     </Dialog.Trigger>
     <Dialog.Content>
@@ -31,12 +31,12 @@
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             @click="open = false"
           />
           <Button
             label="Save"
-            kind="primary"
+            variant="primary"
           />
         </div>
       </Dialog.Footer>

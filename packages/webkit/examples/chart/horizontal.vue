@@ -28,7 +28,7 @@
     aria-label="Top WAF threat requests by country"
   >
     <Chart.Grid />
-    <Chart.Axis kind="y" />
+    <Chart.Axis type="y" />
     <Chart.Bar show-labels />
     <Chart.Tooltip />
   </Chart>

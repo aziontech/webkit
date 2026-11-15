@@ -21,7 +21,7 @@
       <Item.Actions>
         <Button
           label="Add"
-          kind="transparent"
+          variant="ghost"
           size="small"
           icon="ai ai-plus"
         />
@@ -42,7 +42,7 @@
       <Item.Actions>
         <Button
           label="Add"
-          kind="transparent"
+          variant="ghost"
           size="small"
           icon="ai ai-plus"
         />
@@ -63,7 +63,7 @@
       <Item.Actions>
         <Button
           label="Add"
-          kind="transparent"
+          variant="ghost"
           size="small"
           icon="ai ai-plus"
         />

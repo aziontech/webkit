@@ -52,7 +52,7 @@
     <div class="flex flex-wrap items-center gap-(--spacing-xs)">
       <Button
         label="Simulate a failure"
-        kind="outlined"
+        variant="outline"
         size="medium"
         :disabled="broken"
         @click="broken = true"

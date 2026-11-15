@@ -316,14 +316,14 @@
       <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
         <Button
           label="Edit"
-          kind="outlined"
+          variant="outline"
           size="medium"
           href="/create/templates/nuxt-ecommerce"
           :disabled="redeploying"
         />
         <Button
           label="Redeploy"
-          kind="primary"
+          variant="primary"
           size="medium"
           icon="ai ai-refresh"
           :loading="redeploying"

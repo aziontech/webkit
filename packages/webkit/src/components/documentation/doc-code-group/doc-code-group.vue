@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, useAttrs, watch } from 'vue'
 
-  import CodeBlock, { type CodeBlockKind } from '../../code/code-block/code-block.vue'
+  import CodeBlock, { type CodeBlockType } from '../../code/code-block/code-block.vue'
   import { languageName } from '../../code/code-block/lib/language-name'
 
   defineOptions({ name: 'DocCodeGroup', inheritAttrs: false })
@@ -28,14 +28,14 @@
     /** Shows the label header (the sample label or the language name) on a single sample. */
     showLabel?: boolean
     /** What the samples hold: `code` the reader runs, or `output` — what a command prints — drawn muted under an "Output" label, without a copy control. */
-    kind?: CodeBlockKind
+    type?: CodeBlockType
   }
 
   const props = withDefaults(defineProps<Props>(), {
     samples: () => [],
     showLineNumbers: false,
     showLabel: true,
-    kind: 'code'
+    type: 'code'
   })
 
   const attrs = useAttrs()
@@ -85,7 +85,7 @@
       key="code"
       v-model="active"
       :tabs="tabs"
-      :kind="kind"
+      :type="type"
       :show-label="showLabel"
       :show-line-numbers="showLineNumbers"
       :data-testid="`${testId}__code`"
@@ -94,7 +94,7 @@
       v-if="outputTabs.length"
       key="output"
       :tabs="outputTabs"
-      kind="output"
+      type="output"
       :show-line-numbers="false"
       :data-testid="`${testId}__output`"
     />

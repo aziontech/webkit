@@ -178,7 +178,7 @@
                 <Button
                   label="Documentation"
                   icon="ai ai-book"
-                  kind="outlined"
+                  variant="outline"
                   href="https://example.com/docs/waf-rule-sets"
                   target="_blank"
                   size="medium"
@@ -215,7 +215,7 @@
                           <HelperText
                             v-if="nameError"
                             id="waf-name-message"
-                            kind="required"
+                            type="required"
                             label="This field is required."
                           />
                         </div>
@@ -235,7 +235,7 @@
                       <SettingRow
                         title="Active"
                         description="When off, the rule set stops inspecting requests entirely."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -336,14 +336,14 @@
                 <Button
                   type="button"
                   label="Discard"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="saving"
                   @click="discard"
                 />
                 <Button
                   label="Save"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   :loading="saving"
                   @click="save"

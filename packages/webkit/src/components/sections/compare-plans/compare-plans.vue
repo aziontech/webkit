@@ -277,7 +277,7 @@
                 <Button
                   v-if="plan.action"
                   :label="plan.action.label"
-                  :kind="plan.highlighted ? 'secondary' : 'outlined'"
+                  :variant="plan.highlighted ? 'secondary' : 'outline'"
                   size="large"
                   class="w-full max-lg:h-auto max-lg:min-h-10 max-lg:py-(--spacing-xs) max-lg:text-center max-lg:whitespace-normal"
                   :href="plan.action.href"
@@ -334,7 +334,7 @@
                       ><Popover placement="auto">
                         <PopoverTrigger>
                           <IconButton
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             icon="ai ai-circle-info"
                             :aria-label="t('comparePlans.about', { label: row.label })"

@@ -15,7 +15,7 @@
 
   export type StatTileTrend = 'good' | 'bad' | 'flat'
   /** Figure face: the big-number mono figure or the large heading figure. */
-  export type StatTileKind = 'mono' | 'sans'
+  export type StatTileVariant = 'mono' | 'sans'
 
   interface Props {
     /** Metric name, in sentence case. Fallback for the default slot. */
@@ -25,7 +25,7 @@
     /** Formats the figure. */
     formatValue?: (value: number) => string
     /** Figure face: mono is the big-number mono figure, sans the large heading figure. */
-    kind?: StatTileKind
+    variant?: StatTileVariant
     /** Unit read after the figure, smaller and in a muted sans tone. Empty hides it. */
     unit?: string
     /** Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. */
@@ -44,7 +44,7 @@
     label: '',
     value: null,
     formatValue: formatCompact,
-    kind: 'mono',
+    variant: 'mono',
     unit: '',
     delta: null,
     deltaLabel: '',
@@ -115,7 +115,7 @@
     role="group"
     :data-testid="testId"
     :data-loading="loading || null"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-grouped="group ? '' : null"
     :aria-labelledby="labelId"
     :aria-busy="loading || undefined"
@@ -150,14 +150,14 @@
         >
           <span
             :data-testid="`${testId}__value`"
-            class="text-(--text-default) group-data-[kind=mono]/stat-tile:text-big-number-sm group-data-[kind=sans]/stat-tile:text-heading-lg"
+            class="text-(--text-default) group-data-[variant=mono]/stat-tile:text-big-number-sm group-data-[variant=sans]/stat-tile:text-heading-lg"
           >
             {{ figure }}
           </span>
           <span
             v-if="unit && hasValue"
             :data-testid="`${testId}__unit`"
-            class="text-(--text-muted) group-data-[kind=mono]/stat-tile:text-body-xs group-data-[kind=sans]/stat-tile:text-body-md"
+            class="text-(--text-muted) group-data-[variant=mono]/stat-tile:text-body-xs group-data-[variant=sans]/stat-tile:text-body-md"
           >
             {{ unit }}
           </span>

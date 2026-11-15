@@ -5,15 +5,15 @@
 <template>
   <div class="flex flex-wrap items-center gap-8">
     <Brand
-      kind="default"
+      variant="default"
       size="small"
     />
     <Brand
-      kind="default"
+      variant="default"
       size="medium"
     />
     <Brand
-      kind="default"
+      variant="default"
       size="large"
     />
   </div>

@@ -214,25 +214,25 @@ describe('GlobalHeader', () => {
     })
   })
 
-  describe('kind — the two placements (data-kind drives the inset)', () => {
+  describe('variant — the two placements (data-variant drives the inset)', () => {
     it('defaults to the content placement', () => {
       const { getByTestId } = render(GlobalHeader)
-      // withDefaults: kind: 'content' — a bar with no kind reads the page boundary, so it
+      // withDefaults: variant: 'content' — a bar with no variant reads the page boundary, so it
       // cannot open on a different vertical from the page under it. The inset geometry
       // itself belongs to the visual gate; this env renders without Tailwind.
-      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('content')
+      expect(getByTestId('layout-global-header').getAttribute('data-variant')).toBe('content')
     })
 
     it('marks the content placement on the root', () => {
-      const { getByTestId } = render(GlobalHeader, { props: { kind: 'content' } })
-      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('content')
+      const { getByTestId } = render(GlobalHeader, { props: { variant: 'content' } })
+      expect(getByTestId('layout-global-header').getAttribute('data-variant')).toBe('content')
     })
 
     it('holds the regions directly — the placement changes the inset, not the anatomy', () => {
       const { getByTestId } = render({
         components: compoundComponents,
         template:
-          '<GlobalHeader kind="content"><GlobalHeaderStart>L</GlobalHeaderStart><GlobalHeaderEnd>R</GlobalHeaderEnd></GlobalHeader>'
+          '<GlobalHeader variant="content"><GlobalHeaderStart>L</GlobalHeaderStart><GlobalHeaderEnd>R</GlobalHeaderEnd></GlobalHeader>'
       })
       const root = getByTestId('layout-global-header')
       expect(getByTestId('layout-global-header__start').parentElement).toBe(root)
@@ -241,24 +241,24 @@ describe('GlobalHeader', () => {
 
     it('keeps the banner landmark in the content placement', () => {
       const { getByRole } = render(GlobalHeader, {
-        props: { kind: 'content', ariaLabel: 'Console header' }
+        props: { variant: 'content', ariaLabel: 'Console header' }
       })
       expect(getByRole('banner', { name: 'Console header' })).toBeTruthy()
     })
 
     it('marks the site placement on the root', () => {
-      const { getByTestId } = render(GlobalHeader, { props: { kind: 'site' } })
+      const { getByTestId } = render(GlobalHeader, { props: { variant: 'site' } })
       // The site inset (capped + centred at --layout-measure-site) is selected by this
       // attribute alone; the geometry itself belongs to the visual gate, since this
       // env renders without Tailwind.
-      expect(getByTestId('layout-global-header').getAttribute('data-kind')).toBe('site')
+      expect(getByTestId('layout-global-header').getAttribute('data-variant')).toBe('site')
     })
 
     it('holds the regions directly in the site placement too', () => {
       const { getByTestId } = render({
         components: compoundComponents,
         template:
-          '<GlobalHeader kind="site"><GlobalHeaderBrand>Azion</GlobalHeaderBrand><GlobalHeaderEnd>R</GlobalHeaderEnd></GlobalHeader>'
+          '<GlobalHeader variant="site"><GlobalHeaderBrand>Azion</GlobalHeaderBrand><GlobalHeaderEnd>R</GlobalHeaderEnd></GlobalHeader>'
       })
       const root = getByTestId('layout-global-header')
       expect(getByTestId('layout-global-header__brand').parentElement).toBe(root)
@@ -267,7 +267,7 @@ describe('GlobalHeader', () => {
 
     it('keeps the banner landmark in the site placement', () => {
       const { getByRole } = render(GlobalHeader, {
-        props: { kind: 'site', ariaLabel: 'Azion' }
+        props: { variant: 'site', ariaLabel: 'Azion' }
       })
       expect(getByRole('banner', { name: 'Azion' })).toBeTruthy()
     })
@@ -283,7 +283,7 @@ describe('GlobalHeader', () => {
       const { container } = render({
         components: compoundComponents,
         template: `
-          <GlobalHeader kind="content" aria-label="Console header">
+          <GlobalHeader variant="content" aria-label="Console header">
             <GlobalHeaderStart><a href="/build">Build</a></GlobalHeaderStart>
             <GlobalHeaderCenter />
             <GlobalHeaderEnd><button type="button">Create</button></GlobalHeaderEnd>
@@ -297,7 +297,7 @@ describe('GlobalHeader', () => {
       const { container } = render({
         components: compoundComponents,
         template: `
-          <GlobalHeader kind="site" aria-label="Azion">
+          <GlobalHeader variant="site" aria-label="Azion">
             <GlobalHeaderBrand><a href="/" aria-label="Azion home">Azion</a></GlobalHeaderBrand>
             <GlobalHeaderCenter><a href="/pricing">Pricing</a></GlobalHeaderCenter>
             <GlobalHeaderEnd><button type="button">Start for Free</button></GlobalHeaderEnd>
@@ -335,8 +335,8 @@ describe('GlobalHeader', () => {
     it('Content zone story renders the full-bleed content placement', () => {
       const { getByTestId } = render(ContentZone)
       const root = getByTestId('layout-global-header')
-      // data-kind is what carries the boundary inset instead of the shell step.
-      expect(root.getAttribute('data-kind')).toBe('content')
+      // data-variant is what carries the boundary inset instead of the shell step.
+      expect(root.getAttribute('data-variant')).toBe('content')
       expect(root.contains(getByTestId('layout-global-header__start'))).toBe(true)
       expect(root.contains(getByTestId('layout-global-header__end'))).toBe(true)
     })
@@ -349,7 +349,7 @@ describe('GlobalHeader', () => {
     it('Site placement story renders the capped, centred regions on the site column', () => {
       const { getByTestId } = render(SitePlacement)
       const root = getByTestId('layout-global-header')
-      expect(root.getAttribute('data-kind')).toBe('site')
+      expect(root.getAttribute('data-variant')).toBe('site')
       expect(root.contains(getByTestId('layout-global-header__brand'))).toBe(true)
       expect(root.contains(getByTestId('layout-global-header__center'))).toBe(true)
       expect(root.contains(getByTestId('layout-global-header__end'))).toBe(true)

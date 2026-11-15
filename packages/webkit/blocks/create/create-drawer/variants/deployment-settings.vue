@@ -88,7 +88,7 @@
         <Button
           label="Create Deployment Settings"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           class="w-full"
         />
@@ -178,7 +178,7 @@
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                  <Field.Legend kind="label">
+                  <Field.Legend type="label">
                     <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Binding policy
                       <Hint
@@ -203,7 +203,7 @@
                 </fieldset>
 
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                  <Field.Legend kind="label">
+                  <Field.Legend type="label">
                     <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Deployment version policy
                       <Hint content="Defines how many versions can receive traffic." />
@@ -252,7 +252,7 @@
             <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
             <Button
               label="Create Deployment Settings"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

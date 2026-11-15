@@ -95,7 +95,7 @@
           />
           <Button
             label="Deploy"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-play"
             :loading="running"
@@ -104,7 +104,7 @@
           />
           <Button
             label="Reset scenario"
-            kind="transparent"
+            variant="ghost"
             size="medium"
             :disabled="running"
             @click="resetDeploy"
@@ -125,13 +125,13 @@
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="deploy"
@@ -153,13 +153,13 @@
             <div class="flex items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="secondary"
+                variant="secondary"
                 size="medium"
                 icon="ai ai-refresh"
                 @click="deploy"
@@ -186,7 +186,7 @@
           <template #actions>
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="running"
               :disabled="running"

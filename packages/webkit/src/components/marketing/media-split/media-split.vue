@@ -6,8 +6,8 @@
   import { BandStackInjectionKey } from '../band-stack/injection-key'
   import TextureMaterial, {
     type TextureMaterialFade,
-    type TextureMaterialKind,
-    type TextureMaterialSize
+    type TextureMaterialSize,
+    type TextureMaterialVariant
   } from '../texture-material/texture-material.vue'
 
   defineOptions({
@@ -16,7 +16,7 @@
   })
 
   /** Which end of the band the media occupies. */
-  export type MediaSplitKind = 'media-end' | 'media-start'
+  export type MediaSplitVariant = 'media-end' | 'media-start'
   /** Axis the band splits on. */
   export type MediaSplitOrientation = 'horizontal' | 'vertical'
   /** The cells' fill. */
@@ -40,7 +40,7 @@
     /** Alternative text describing what the image shows. */
     alt?: string
     /** Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first. */
-    kind?: MediaSplitKind
+    variant?: MediaSplitVariant
     /** Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width. */
     orientation?: MediaSplitOrientation
     /** The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`. */
@@ -54,7 +54,7 @@
     /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a section-title has already opened with its h2, so the document outline stays in order. */
     headingLevel?: MediaSplitHeadingLevel
     /** Texture the media half is grounded with; `none` leaves the cell bare. */
-    texture?: TextureMaterialKind
+    texture?: TextureMaterialVariant
     /** Pitch of the ground's tiling — how far apart its cells sit. */
     textureSize?: TextureMaterialSize
     /** How the ground fades out before the cell's edges. */
@@ -74,7 +74,7 @@
     eyebrow: '',
     src: '',
     alt: '',
-    kind: 'media-end',
+    variant: 'media-end',
     orientation: 'horizontal',
     fill: 'canvas',
     mediaFill: 'surface',
@@ -99,7 +99,7 @@
     media?(): unknown
     /**
      * Optional controls under the copy, floored so consecutive bands align on them. Small
-     * buttons: `kind="secondary"` for the action, `kind="outlined"` for a second beside it,
+     * buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it,
      * `icon="ai ai-chevron-right"` + `icon-position="trailing"` + `animated` when it leaves the page.
      */
     actions?(): unknown
@@ -155,7 +155,7 @@
     v-bind="$attrs"
     class="group/split data-[media-href]:cursor-pointer"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-orientation="orientation"
     :data-fill="fill"
     :data-media-fill="mediaFill"
@@ -182,7 +182,7 @@
           v-bind="cellFrameProps"
           :data-testid="`${testId}__copy-cell`"
           :data-orientation="orientation"
-          class="min-w-0 group-data-[kind=media-start]/split:lg:order-last group-data-[kind=media-start]/split:data-[orientation=vertical]:order-last"
+          class="min-w-0 group-data-[variant=media-start]/split:lg:order-last group-data-[variant=media-start]/split:data-[orientation=vertical]:order-last"
         >
           <div
             class="flex h-full flex-col justify-between gap-(--spacing-2xl) p-(--spacing-xl) group-data-[size=large]/split:p-(--spacing-2xl) group-data-[fill=canvas]/split:bg-(--bg-canvas) group-data-[fill=surface]/split:bg-(--bg-surface) group-data-[align=center]/split:justify-center"
@@ -238,7 +238,7 @@
             class="group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <TextureMaterial
-              :kind="texture"
+              :variant="texture"
               :size="textureSize"
               :fade="textureFade"
             />

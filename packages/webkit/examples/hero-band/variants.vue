@@ -6,7 +6,7 @@
 <template>
   <div class="flex flex-col">
     <HeroBand
-      kind="center"
+      variant="center"
       title-highlight="Build and run applications"
       title="globally, with no ops"
       description="Run code, AI, data, and security on 100+ data centers worldwide."
@@ -16,7 +16,7 @@
       :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
-      kind="title-band"
+      variant="title-band"
       size="large"
       eyebrow="Cache"
       title="Deliver content fast, worldwide"
@@ -25,7 +25,7 @@
       :secondary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     />
     <HeroBand
-      kind="pixel-floor"
+      variant="pixel-floor"
       eyebrow="AI Inference"
       title="Build and deploy AI agents and applications in seconds"
       description="Run AI inference close to users on Azion’s distributed infrastructure."
@@ -35,7 +35,7 @@
       :ticker-marks="['global-fashion-group', 'herospark', 'itau', 'nzn', 'netshoes']"
     />
     <HeroBand
-      kind="copy-beside-art"
+      variant="copy-beside-art"
       eyebrow="AWS Alternative Comparison"
       title="AWS sells services. Your team becomes the integrator."
       description="Azion delivers one platform, distributed by default."
@@ -46,7 +46,7 @@
       :ticker-marks="['agibank', 'radware', 'america-movil', 'gpa', 'fourbank']"
     />
     <HeroBand
-      kind="copy-on-top-art"
+      variant="copy-on-top-art"
       eyebrow="Workloads"
       title="Put your application close to users in seconds"
       description="Create a workload and it is live in every data center."

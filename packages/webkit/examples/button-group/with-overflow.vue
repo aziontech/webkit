@@ -34,7 +34,7 @@
   <ButtonGroup
     :items="items"
     :visible-count="3"
-    kind="outlined"
+    variant="outline"
     size="small"
     aria-label="Record actions"
     @toggle="(event, { pressed }) => (pinned = pressed)"

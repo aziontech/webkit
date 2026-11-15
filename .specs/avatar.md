@@ -3,12 +3,12 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 0f52f19ee3fefa446a517be668309e3d3351b2c32761af7f0ec9b99ba84b3202
+checksum: ad3389307ba0930fc686c2113b4ad939f7c4a89136f2939e9f78cb82e918f8f5
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -43,7 +43,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
 - Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `ai ai-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
-- `size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
+- `size` maps to 24 / 32 / 48 px with `medium` as the default; `variant` is `circle` (default) or `square`.
 
 ## Usage
 
@@ -61,7 +61,7 @@ Identifies a person, an account or an organization with a small visual mark: the
   />
   <Avatar
     icon="ai ai-users"
-    kind="square"
+    variant="square"
     size="small"
   />
 </template>
@@ -75,7 +75,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 | `alt`     | `string`        | `''`                                                          | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
 | `label`   | `string`        | `''`                                                          | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
 | `icon`    | `string`        | `'ai ai-user'`                                                | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
-| `kind`    | `AvatarKind`    | `'circle'`                                                    | false    | Visual shape of the avatar container.                                                                            |
+| `variant` | `AvatarVariant` | `'circle'`                                                    | false    | Visual shape of the avatar container.                                                                            |
 | `size`    | `AvatarSize`    | `'medium'`                                                    | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
 | `pattern` | `AvatarPattern` | `undefined`                                                   | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |
 | `colors`  | `string[]`      | `['var(--text-primary)', 'var(--primary)', 'var(--warning)']` | false    | CSS colors the generated pattern paints with, in order; theme tokens such as `var(--primary)`.                   |
@@ -92,7 +92,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
 - Content: `image` (`src`), `pattern` (`pattern` set, no `src`), `label` (initials), `icon`. `data-pattern` mirrors `pattern` on the root while the pattern renders.
-- Root attributes: `data-kind` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
+- Root attributes: `data-variant` and `data-size` mirror the props; `data-content` names the content that renders (`image`, `pattern`, `label`, `icon`). Variants are styled from these attributes.
 - Image error: when `src` fails to load, the avatar falls back to the next content in the precedence (`pattern`, `label`, `icon`) instead of a broken image; a new `src` tries the image again. An image that already failed before hydration is detected on mount.
 - Attributes: every consumer attribute (`id`, `title`, `aria-*`, `style`, listeners) lands on the root.
 - Marble: three layers seeded by a 32-bit string hash of `label` (falling back to `alt`): a filled square, then two blurred shapes translated, rotated and scaled by the seed, the last blended with `overlay`. Each layer takes the color at `(seed + layer) % colors.length`. The same seed and colors always draw the same mark, on the server and in the browser.
@@ -158,7 +158,7 @@ _none_
 ## Examples
 
 - Default
-- Types — every `kind` side by side.
+- Types — every `variant` side by side.
 - Sizes — every `size` side by side.
 - Fallbacks — the content precedence: photo, initials, icon.
 - VariantGrid — shapes and sizes across the content modes.
@@ -178,7 +178,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

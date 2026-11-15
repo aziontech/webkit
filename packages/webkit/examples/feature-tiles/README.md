@@ -4,7 +4,7 @@ A row of reasons, each a picture over a short bold title and a sentence. Home us
 
 The tiles sit on a hairline frame grid with no padding, so the artwork runs to the rules.
 
-The band is the `FeatureTiles` component from `@aziontech/webkit/feature-tiles`; it composes `SectionModule`, `FrameBox`, `CardGrid` and `MediaTile`, with `SectionTitle` for the heading and `Illustration` where the picture is a registered illustration. `kind` picks the layout: `artwork` (four columns, marks on every corner) or `illustrated` (three columns, marks on the bottom rule).
+The band is the `FeatureTiles` component from `@aziontech/webkit/feature-tiles`; it composes `SectionModule`, `FrameBox`, `CardGrid` and `MediaTile`, with `SectionTitle` for the heading and `Illustration` where the picture is a registered illustration. `variant` picks the layout: `artwork` (four columns, marks on every corner) or `illustrated` (three columns, marks on the bottom rule).
 
 ## Examples
 
@@ -18,7 +18,7 @@ Example: [`site-artwork.vue`](./site-artwork.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` is `artwork`.
+- `variant` is `artwork`.
 - `eyebrow`, `title` and `description` make the heading. Without a title the heading is left out.
 - `tiles` are the reasons, each a `title`, a `description` and an `image` URL. Give a tile an `alt` only when its picture says something the caption does not; without one the picture stays decorative.
 
@@ -44,7 +44,7 @@ Example: [`site-illustrated.vue`](./site-illustrated.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` is `illustrated`; `anchor` is the band's id for in-page links.
+- `variant` is `illustrated`; `anchor` is the band's id for in-page links.
 - `tiles` are the reasons, each a `title`, a `description`, an `illustration` name and its `scale`.
 
 Example:

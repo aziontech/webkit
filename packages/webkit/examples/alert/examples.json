@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
+      "name": "Severities",
       "summary": "All severity variants stacked.",
-      "file": "types.vue"
+      "file": "severities.vue"
     },
     {
       "name": "Sizes",

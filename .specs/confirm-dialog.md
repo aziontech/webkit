@@ -3,8 +3,8 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: 297f651ea25dee5db864eb512257e56221ee3c5b5331db196db9b6223438d7ce
-spec_version: 6
+checksum: e1a407c1ad264993df2628014f22512cafa4b28662b2d566559aa024749c0216
+spec_version: 7
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
+A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `variant` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
 
 ## When to use
 
@@ -37,7 +37,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 ## Best practices
 
 - The confirm label repeats the verb of the title (Remove Domain, Discard changes), never OK or Yes.
-- `kind="danger"` only when the outcome removes or discards something; a commit is `primary`.
+- `variant="danger"` only when the outcome removes or discards something; a commit is `primary`.
 - Close the dialog from `@confirm` once the action has run; keep it open with `loading` while it runs.
 - Below `md` the buttons stack full width with the confirm button on top, the same order as `save-bar`.
 
@@ -63,7 +63,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
     <template #trigger>
       <Button
         label="Remove domain"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>
@@ -79,7 +79,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 | `description`  | `string`                | `''`       | false    | One sentence that says what happens on confirm.                                                                                     |
 | `confirmLabel` | `string`                | `''`       | false    | Label of the confirm button. Empty uses the locale catalog (`Confirm`).                                                             |
 | `cancelLabel`  | `string`                | `''`       | false    | Label of the cancel button. Empty uses the locale catalog (`Cancel`).                                                               |
-| `kind`         | `'danger' \| 'primary'` | `'danger'` | false    | Kind of the confirm button.                                                                                                         |
+| `variant`      | `'danger' \| 'primary'` | `'danger'` | false    | Kind of the confirm button.                                                                                                         |
 | `size`         | `'small' \| 'medium'`   | `'medium'` | false    | Width of the dialog.                                                                                                                |
 | `loading`      | `boolean`               | `false`    | false    | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled`     | `boolean`               | `false`    | false    | Disables the confirm button, for a confirmation that needs input first.                                                             |
@@ -135,7 +135,7 @@ _none_
 
 - Confirm — a removal.
 - DiscardChanges — the unsaved-changes guard.
-- RunAgain — `kind="primary"`.
+- RunAgain — `variant="primary"`.
 - SaveOrDiscard — the `actions` slot with three buttons; justified because the slot replaces the default footer.
 
 ## Constraints — DO NOT
@@ -152,7 +152,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

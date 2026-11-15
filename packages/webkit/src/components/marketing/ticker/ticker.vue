@@ -11,7 +11,7 @@
   export type TickerSize = 'small' | 'medium'
 
   /** Whether the strip paints its own ground. */
-  export type TickerKind = 'plain' | 'band'
+  export type TickerVariant = 'plain' | 'band'
 
   /** One short claim in a benefits strip. */
   export interface TickerItem {
@@ -23,7 +23,7 @@
 
   interface Props {
     /** Whether the strip paints its own ground; band fills it with the page canvas so a textured hero cannot show through the marks, and the floor still reads continuous with the band above it. */
-    kind?: TickerKind
+    variant?: TickerVariant
     /** Registry names of the marks rendered in the row, in order; an unregistered name renders as its own typographic wordmark so the row stays complete. */
     marks?: string[]
     /** Short claims printed in the row instead of marks, each with its label and an optional leading icon class; when set, `marks` is not rendered. */
@@ -39,7 +39,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'plain',
+    variant: 'plain',
     marks: () => [],
     items: () => [],
     label: '',
@@ -117,9 +117,9 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-content="isItems ? 'items' : 'marks'"
-    class="group/strip flex flex-col items-center gap-(--spacing-xl) data-[kind=band]:w-full data-[kind=band]:bg-(--bg-canvas) data-[kind=band]:py-(--spacing-xl) data-[size=medium]:[--ticker-brand-cell:150px] data-[size=medium]:[--ticker-brand-mark:32px] data-[size=small]:[--ticker-brand-cell:120px] data-[size=small]:[--ticker-brand-mark:24px] md:data-[size=medium]:[--ticker-brand-cell:200px] md:data-[size=medium]:[--ticker-brand-mark:40px] lg:data-[size=medium]:[--ticker-brand-cell:240px] lg:data-[size=medium]:[--ticker-brand-mark:48px]"
+    class="group/strip flex flex-col items-center gap-(--spacing-xl) data-[variant=band]:w-full data-[variant=band]:bg-(--bg-canvas) data-[variant=band]:py-(--spacing-xl) data-[size=medium]:[--ticker-brand-cell:150px] data-[size=medium]:[--ticker-brand-mark:32px] data-[size=small]:[--ticker-brand-cell:120px] data-[size=small]:[--ticker-brand-mark:24px] md:data-[size=medium]:[--ticker-brand-cell:200px] md:data-[size=medium]:[--ticker-brand-mark:40px] lg:data-[size=medium]:[--ticker-brand-cell:240px] lg:data-[size=medium]:[--ticker-brand-mark:48px]"
   >
     <Overline
       v-if="label"

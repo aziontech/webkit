@@ -26,15 +26,15 @@ The bar above the card, labelled `aria-label="Console"`. Brand on the start side
 
 ### B. Product mark — `Brand` (required)
 
-`kind="default"`, `size="small"`, inside a link to the home route with `aria-label="Azion home"`. The link owns the focus ring.
+`variant="default"`, `size="small"`, inside a link to the home route with `aria-label="Azion home"`. The link owns the focus ring.
 
 ### C. Actions — `Button` (required)
 
 Three roles, never more on one step:
 
-- **Documentation** in the bar: `kind="outlined"`, `size="medium"`, the only way out that needs no account.
-- **Continue with Google / GitHub** on the email step: `kind="outlined"`, `size="large"`, full width, `type="button"` so they never submit the form.
-- **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `kind="secondary"` with `Return to sign in`, because nothing is left to submit.
+- **Documentation** in the bar: `variant="outline"`, `size="medium"`, the only way out that needs no account.
+- **Continue with Google / GitHub** on the email step: `variant="outline"`, `size="large"`, full width, `type="button"` so they never submit the form.
+- **The primary action** at the foot of the card, `type="submit"`, full width, `size="large"`. Its label follows the step: `Continue with email`, `Sign in`, `Send reset link`, `Reset password`. On the `sent` step it drops to `variant="secondary"` with `Return to sign in`, because nothing is left to submit.
 
 ### D. The card — `Card` (required)
 
@@ -67,7 +67,7 @@ A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`
 
 ### I. Field message — `HelperText` (conditional)
 
-Shows only after the primary action, under the email input, with `kind="required"` when the value is empty and `kind="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
+Shows only after the primary action, under the email input, with `type="required"` when the value is empty and `type="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 
 ### J. Step hint — `Tooltip` (password and reset steps)
 
@@ -75,7 +75,7 @@ Names the icon-only back control: `Change email` on the password step, `Back to 
 
 ### K. Back control — `IconButton` (password and reset steps)
 
-`ai ai-chevron-left`, `kind="outlined"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
+`ai ai-chevron-left`, `variant="outline"`, `size="small"`, with an `aria-label` equal to its tooltip. On the password step it sits beside the email being used, so the user can see and change which account they are signing in to; going back clears the password.
 
 ### L. Password field — `Field` (password and new-password steps)
 
@@ -83,7 +83,7 @@ Wraps each `PasswordInput` with its `required` / `invalid` state and a `Field.Er
 
 ### M. Password — `PasswordInput` (password and new-password steps)
 
-`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a `Button` with `kind="link"` under the sign-in password (an in-page action, so never an anchor to `#`); it carries the email into the reset step. `Resend email` and `Set a new password` on the sent step are link buttons too.
+`autocomplete="current-password"` on sign in, `autocomplete="new-password"` on reset and sign up. Placeholders describe the expected value (`Type your password`, `Enter a new password`, `Repeat the new password`). `Forgot your password?` is a `Button` with `variant="link"` under the sign-in password (an in-page action, so never an anchor to `#`); it carries the email into the reset step. `Resend email` and `Set a new password` on the sent step are link buttons too.
 
 ### N. Password rules — `PasswordRequirements` (new-password step, sign up)
 

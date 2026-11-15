@@ -56,7 +56,7 @@
       resizable: true
     },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2, resizable: true },
-    { id: 'actions', header: '', kind: 'action', sortable: false, resizable: true }
+    { id: 'actions', header: '', type: 'action', sortable: false, resizable: true }
   ]
 
   const sorting = ref([])
@@ -107,7 +107,7 @@
           <IconButton
             icon="ai ai-ellipsis-vertical"
             aria-label="Row actions"
-            kind="transparent"
+            variant="ghost"
             size="small"
           />
         </DropdownMenuTrigger>

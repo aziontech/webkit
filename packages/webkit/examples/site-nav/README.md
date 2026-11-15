@@ -1,6 +1,6 @@
 # SiteNav
 
-The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developer, Resources) and one plain link (Pricing), then the account actions, the `Start for free` call to action and the search trigger, which emits `search` (on a click and on ⌘K / Ctrl K) so the page opens its `Command` palette. `GlobalHeader kind="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it.
+The bar above every marketing page: the Azion mark, the four mega-menus (Solutions, Products, Developer, Resources) and one plain link (Pricing), then the account actions, the `Start for free` call to action and the search trigger, which emits `search` (on a click and on ⌘K / Ctrl K) so the page opens its `Command` palette. `GlobalHeader variant="site"` keeps the surface full bleed and caps the regions at the bar’s own measure, one rung wider than the page frame under it.
 
 From `xl` the menus sit in the bar. Below it the bar keeps the menu button, the mark, `Login`, the call to action and the search trigger; on a phone (below `sm`) `Login` steps out, as on azion.com, unless `secondaryActionOnPhones` is set. The same menus open in a `Drawer`, where each mega-menu is a drill level behind a Back row, with `Login` and `Start for free` stacked full width at its foot.
 

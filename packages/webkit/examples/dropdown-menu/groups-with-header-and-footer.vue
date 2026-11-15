@@ -11,7 +11,7 @@
   <DropdownMenuRoot :open="true">
     <DropdownMenuTrigger>
       <IconButton
-        kind="outlined"
+        variant="outline"
         icon="ai ai-plus"
         aria-label="Open menu"
       />
@@ -34,7 +34,7 @@
 
       <template #footer>
         <Button
-          kind="transparent"
+          variant="ghost"
           role="menuitem"
           size="small"
           label="Manage account"
@@ -59,7 +59,7 @@
 
       <template #footer>
         <Button
-          kind="transparent"
+          variant="ghost"
           role="menuitem"
           size="small"
           label="Workspace settings"

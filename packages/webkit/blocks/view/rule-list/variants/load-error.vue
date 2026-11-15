@@ -22,7 +22,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
             target="_blank"
@@ -30,7 +30,7 @@
           <Button
             label="Add Rule"
             icon="ai ai-plus"
-            kind="outlined"
+            variant="outline"
             size="medium"
             disabled
           />

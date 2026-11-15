@@ -44,12 +44,12 @@ describe('ToolApproval', () => {
     expect(emitted('deny')![0]![0]).toBeInstanceOf(Event)
   })
 
-  it('uses the approve label and the danger kind', () => {
+  it('uses the approve label and the danger variant', () => {
     const { getByRole, getByTestId } = render(ToolApproval, {
-      props: { ...base, kind: 'danger', approveLabel: 'Delete' }
+      props: { ...base, variant: 'danger', approveLabel: 'Delete' }
     })
     expect(getByRole('button', { name: 'Delete' })).toBeTruthy()
-    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-kind', 'danger')
+    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-variant', 'danger')
   })
 
   it('keeps Approve disabled until the phrase is typed', async () => {

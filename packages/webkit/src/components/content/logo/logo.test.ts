@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/logo/default.vue'
 import Sizes from '../../../../examples/logo/sizes.vue'
-import Types from '../../../../examples/logo/types.vue'
+import Types from '../../../../examples/logo/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Logo from './logo.vue'
 
@@ -31,7 +31,7 @@ describe('Logo', () => {
     const view = render(Logo, { props: { name: 'Acme Inc.', src: DARK, srcLight: LIGHT } })
     const mark = view.getByRole('img', { name: 'Acme Inc.' })
     expect(mark).toHaveAttribute('data-route', 'pair')
-    expect(mark).toHaveAttribute('data-kind', 'color')
+    expect(mark).toHaveAttribute('data-variant', 'color')
     const files = mark.querySelectorAll('img')
     expect(files).toHaveLength(2)
     expect(mark.querySelector('[data-theme-file="dark"]')).toHaveAttribute('src', DARK)
@@ -55,20 +55,22 @@ describe('Logo', () => {
 
   it.each(['monochrome', 'knockout'] as const)(
     'draws one file for the %s ink, even with a pair',
-    (kind) => {
-      const view = render(Logo, { props: { name: 'Acme Inc.', src: DARK, srcLight: LIGHT, kind } })
+    (variant) => {
+      const view = render(Logo, {
+        props: { name: 'Acme Inc.', src: DARK, srcLight: LIGHT, variant: variant }
+      })
       const mark = view.getByRole('img', { name: 'Acme Inc.' })
       expect(mark).toHaveAttribute('data-route', 'single')
-      expect(mark).toHaveAttribute('data-kind', kind)
+      expect(mark).toHaveAttribute('data-variant', variant)
       const files = mark.querySelectorAll('img')
       expect(files).toHaveLength(1)
       expect(files[0]).toHaveAttribute('src', DARK)
-      expect(files[0]).toHaveAttribute('data-ink', kind)
+      expect(files[0]).toHaveAttribute('data-ink', variant)
     }
   )
 
   it('paints the current ink through a mask of the file', () => {
-    const view = render(Logo, { props: { name: 'Acme Inc.', srcLight: LIGHT, kind: 'current' } })
+    const view = render(Logo, { props: { name: 'Acme Inc.', srcLight: LIGHT, variant: 'current' } })
     const mark = view.getByRole('img', { name: 'Acme Inc.' })
     const layer = mark.querySelector<HTMLElement>('[data-ink-layer]')!
     expect(layer).toHaveAttribute('aria-hidden', 'true')

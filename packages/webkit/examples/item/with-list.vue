@@ -12,7 +12,7 @@
     <template #default>
       <Item.List>
         <Item>
-          <Item.Media kind="icon">
+          <Item.Media type="icon">
             <i
               class="ai ai-edge-application text-[length:inherit] leading-none"
               aria-hidden="true"
@@ -25,13 +25,13 @@
           <Item.Actions>
             <Button
               label="Action"
-              kind="outlined"
+              variant="outline"
               size="small"
             />
           </Item.Actions>
         </Item>
         <Item>
-          <Item.Media kind="icon">
+          <Item.Media type="icon">
             <i
               class="ai ai-edge-application text-[length:inherit] leading-none"
               aria-hidden="true"
@@ -44,13 +44,13 @@
           <Item.Actions>
             <Button
               label="Action"
-              kind="outlined"
+              variant="outline"
               size="small"
             />
           </Item.Actions>
         </Item>
         <Item>
-          <Item.Media kind="icon">
+          <Item.Media type="icon">
             <i
               class="ai ai-edge-application text-[length:inherit] leading-none"
               aria-hidden="true"
@@ -63,7 +63,7 @@
           <Item.Actions>
             <Button
               label="Action"
-              kind="outlined"
+              variant="outline"
               size="small"
             />
           </Item.Actions>

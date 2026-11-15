@@ -13,7 +13,7 @@
   import { DropdownMenuInjectionKey } from './injection-key'
 
   export type {
-    DropdownMenuOptionKind,
+    DropdownMenuOptionType,
     DropdownMenuOptionValue,
     DropdownMenuPlacement,
     DropdownMenuPlacementInput

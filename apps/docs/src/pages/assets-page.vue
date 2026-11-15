@@ -25,13 +25,13 @@
   })
 
   const lockups = computed(() => [
-    { kind: 'default' as const, label: 'Default', text: t.value.brandDefault },
-    { kind: 'reduced' as const, label: 'Reduced', text: t.value.brandReduced },
-    { kind: 'extended' as const, label: 'Extended', text: t.value.brandExtended }
+    { variant: 'default' as const, label: 'Default', text: t.value.brandDefault },
+    { variant: 'reduced' as const, label: 'Reduced', text: t.value.brandReduced },
+    { variant: 'extended' as const, label: 'Extended', text: t.value.brandExtended }
   ])
 
   const llms = (slug: string) => index.foundationLlms[slug]
-  const snippet = (kind: string) => `<Brand kind="${kind}" />`
+  const snippet = (variant: string) => `<Brand variant="${variant}" />`
 </script>
 
 <template>
@@ -63,7 +63,7 @@
       >
         <li
           v-for="lockup in lockups"
-          :key="lockup.kind"
+          :key="lockup.variant"
           class="relative flex min-h-60 items-center justify-center px-(--spacing-xl) pb-(--spacing-xl) pt-(--spacing-2xl)"
         >
           <div
@@ -73,10 +73,10 @@
               <h3 class="text-heading-xs">{{ lockup.label }}</h3>
               <p class="max-w-sm text-body-xs text-(--text-muted)">{{ lockup.text }}</p>
             </div>
-            <CopyChip :value="snippet(lockup.kind)" />
+            <CopyChip :value="snippet(lockup.variant)" />
           </div>
           <Brand
-            :kind="lockup.kind"
+            :variant="lockup.variant"
             size="large"
             class="[&>svg]:h-14! md:[&>svg]:h-20!"
           />
@@ -103,7 +103,7 @@
         <Button
           v-if="llms('illustrations')"
           :label="t.viewMarkdown"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           icon="ai ai-file"
           :href="llms('illustrations')"
@@ -148,7 +148,7 @@
         <Button
           v-if="llms('line-figures')"
           :label="t.viewMarkdown"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           icon="ai ai-file"
           :href="llms('line-figures')"
@@ -190,7 +190,7 @@
       <p class="text-body-sm text-(--text-muted)">{{ t.iconsAssetLead }}</p>
       <Button
         :label="t.openIcons"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         href="/foundations/icon"
         icon="ai ai-arrow-right"

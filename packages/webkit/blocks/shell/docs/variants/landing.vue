@@ -245,7 +245,7 @@
         <template #actions>
           <Button
             label="Get started"
-            kind="primary"
+            variant="primary"
             size="large"
             href="/docs/get-started"
           />
@@ -447,7 +447,7 @@
     <template #actions>
       <IconButton
         icon="ai ai-github"
-        kind="outlined"
+        variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
@@ -456,7 +456,7 @@
       />
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         class="shrink-0"
         href="https://console.azion.com"
@@ -472,7 +472,7 @@
     <template #footer>
       <div class="w-full border-t border-(--border-default)">
         <Footer
-          kind="content"
+          variant="content"
           aria-label="Footer"
         >
           <Footer.Column

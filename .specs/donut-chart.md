@@ -3,10 +3,10 @@ name: donut-chart
 category: chart
 structure: monolithic
 status: implemented
-checksum: 8185881b9eab8a4aba3942f8ee763dac2578fbcf5d3cd69092aba31a146e66b4
-spec_version: 2
+checksum: 2dc15d6ae229f1112778114c23bf01de4501dc8bcaa9f0add838993318bb47b2
+spec_version: 3
 created: 2026-10-20
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DonutChart — Component Spec
@@ -66,7 +66,7 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 | Prop               | Type                             | Default         | Required | JSDoc                                                                                                                       |
 | ------------------ | -------------------------------- | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `series`           | `ChartSeries[]`                  | `[]`            | false    | One slice per series; a slice is the sum of its values. The first six take the categorical slots, the rest fold into Other. |
-| `kind`             | `'donut' \| 'pie'`               | `'donut'`       | false    | Ring or solid disc.                                                                                                         |
+| `type`             | `'donut' \| 'pie'`               | `'donut'`       | false    | Ring or solid disc.                                                                                                         |
 | `size`             | `'small' \| 'medium' \| 'large'` | `'medium'`      | false    | Diameter of the ring: 128, 176 or 240 pixels.                                                                               |
 | `cap`              | `number`                         | `6`             | false    | Slices kept before the rest fold into Other.                                                                                |
 | `otherLabel`       | `string`                         | `''`            | false    | Name of the folded slice. Empty uses the locale catalog (`Other`).                                                          |
@@ -106,7 +106,7 @@ A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per ser
 ## States
 
 - Visual states: `default`, `loading` (circular Skeleton), `error` (Alert), `empty` (EmptyState with a chart icon, the title, the optional description and actions, holding the ring's footprint), `refetching`, `table-view`, `active` (a slice hovered or focused)
-- `data-kind`: `donut` | `pie`; `data-size`: `small` | `medium` | `large`
+- `data-type`: `donut` | `pie`; `data-size`: `small` | `medium` | `large`
 - `data-loading`, `data-error`, `data-empty`, `data-refetching`, `data-table-view` mirror the state
 - `data-entered` on each slice flips after two animation frames to run the sweep
 - `data-active` on the active slice, `data-dimmed` on the others

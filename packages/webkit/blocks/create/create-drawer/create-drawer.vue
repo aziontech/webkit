@@ -184,7 +184,7 @@
   <Button
     type="button"
     label="Add Domain"
-    kind="outlined"
+    variant="outline"
     size="medium"
     icon="ai ai-plus"
     @click="open = true"
@@ -270,10 +270,10 @@
             >
               <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                 <fieldset class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0">
-                  <Field.Legend kind="label">Domain source</Field.Legend>
+                  <Field.Legend type="label">Domain source</Field.Legend>
                   <RadioGroup
                     v-model="form.kind"
-                    kind="card"
+                    variant="card"
                     name="domain-kind"
                     aria-label="Domain source"
                     :disabled="submitting"
@@ -334,7 +334,7 @@
                     </Select>
                     <HelperText
                       id="domain-certificate-helper"
-                      kind="helper"
+                      type="helper"
                       >{{ certificateHint }}</HelperText
                     >
                   </Field>
@@ -365,7 +365,7 @@
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Add Domain"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

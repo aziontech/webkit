@@ -12,7 +12,7 @@ export default FilterMenu
 export { FilterMenuChips }
 export type {
   FilterMenuField,
-  FilterMenuFieldKind,
+  FilterMenuFieldType,
   FilterMenuModel,
   FilterMenuOption,
   FilterMenuRange,

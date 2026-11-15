@@ -9,7 +9,7 @@
   import Hint from '../../inputs/hint/hint.vue'
 
   /** Where the control sits: `field` in a right cell capped at the 3xs container, `compact` hard right at its natural width, `stacked` under the copy at the full measure. */
-  export type SettingRowKind = 'field' | 'compact' | 'stacked'
+  export type SettingRowVariant = 'field' | 'compact' | 'stacked'
   /** Indent depth of a child setting under the row that enables it. */
   export type SettingRowDepth = 0 | 1 | 2
 
@@ -24,7 +24,7 @@
     /** One sentence under the title that says what the setting does. */
     description?: string
     /** Where the control sits relative to the copy. */
-    kind?: SettingRowKind
+    variant?: SettingRowVariant
     /** Indent depth under a rule, for a setting that only applies when its parent is on. */
     depth?: SettingRowDepth
     /** Below the md container of the row, move a field control under the copy at full width. */
@@ -35,7 +35,7 @@
 
   withDefaults(defineProps<Props>(), {
     description: '',
-    kind: 'field',
+    variant: 'field',
     depth: 0,
     stackable: false,
     hint: ''
@@ -61,7 +61,7 @@
   <Item
     v-bind="$attrs"
     :data-testid="testId"
-    :data-row-kind="kind"
+    :data-row-variant="variant"
     :data-depth="depth"
     :data-stackable="stackable || null"
     role="listitem"
@@ -69,8 +69,8 @@
     class="@container/setting-row items-start"
   >
     <div
-      :data-kind="kind"
-      class="contents data-[kind=stacked]:flex data-[kind=stacked]:w-full data-[kind=stacked]:flex-col data-[kind=stacked]:items-stretch data-[kind=stacked]:gap-(--spacing-sm)"
+      :data-variant="variant"
+      class="contents data-[variant=stacked]:flex data-[variant=stacked]:w-full data-[variant=stacked]:flex-col data-[variant=stacked]:items-stretch data-[variant=stacked]:gap-(--spacing-sm)"
     >
       <ItemContent>
         <div
@@ -94,17 +94,17 @@
         </div>
       </ItemContent>
       <div
-        :data-kind="kind"
+        :data-variant="variant"
         :data-stackable="stackable || null"
-        class="contents data-[kind=field]:flex data-[kind=field]:min-w-0 data-[kind=field]:max-w-(--container-3xs) data-[kind=field]:flex-1 data-[kind=field]:justify-end @max-md/setting-row:data-[kind=field]:data-[stackable]:max-w-none @max-md/setting-row:data-[kind=field]:data-[stackable]:basis-full @max-md/setting-row:data-[kind=field]:data-[stackable]:justify-start"
+        class="contents data-[variant=field]:flex data-[variant=field]:min-w-0 data-[variant=field]:max-w-(--container-3xs) data-[variant=field]:flex-1 data-[variant=field]:justify-end @max-md/setting-row:data-[variant=field]:data-[stackable]:max-w-none @max-md/setting-row:data-[variant=field]:data-[stackable]:basis-full @max-md/setting-row:data-[variant=field]:data-[stackable]:justify-start"
       >
         <ItemActions
           :data-testid="`${testId}__control`"
-          :data-kind="kind"
-          class="data-[kind=field]:w-full data-[kind=stacked]:w-full"
+          :data-variant="variant"
+          class="data-[variant=field]:w-full data-[variant=stacked]:w-full"
         >
           <div
-            v-if="kind !== 'compact'"
+            v-if="variant !== 'compact'"
             class="flex w-full min-w-0 flex-col gap-(--spacing-xs)"
           >
             <slot />

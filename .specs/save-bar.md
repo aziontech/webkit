@@ -3,11 +3,11 @@ name: save-bar
 category: layout
 structure: monolithic
 status: implemented
-checksum: 9e7ad7da35930490bf8c42aba8ee5aa2e5ccd5621ff7aeacdb8ce955b4e8dd74
-spec_version: 3
+checksum: 761e938369919352f1603b93a8555e6edf6ba35ae11017a81c17ad57032348e1
+spec_version: 4
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SaveBar — Component Spec
@@ -40,7 +40,7 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 - Render the floating bar with `v-if="dirty || saving"` inside a `Transition`, so it slides in when the first change is made.
 - Say what changed and when it takes effect in the status sentence; keep it to one line.
 - Disable Discard and set `loading` on Save while saving.
-- Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `kind="centered"`.
+- Do not build a centred action pill by hand (a sticky footer with a bordered card and a shadow): that is `variant="centered"`.
 - `floating` and `docked` are for the dirty state of a settings page; `centered` and `plain` are for a create page or a form saved as one unit and stay on screen.
 
 ## Usage
@@ -58,12 +58,12 @@ The bar at the bottom of a settings or create page that holds the status of unsa
       <Button
         type="button"
         label="Discard"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
       <Button
         label="Save"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </template>
@@ -75,9 +75,9 @@ The bar at the bottom of a settings or create page that holds the status of unsa
 
 | Prop   | Type                                | Default      | Required | JSDoc                                                |
 | ------ | ----------------------------------- | ------------ | -------- | ---------------------------------------------------- |
-| `kind` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. See the kind table below. |
+| `variant` | `'floating' \| 'docked' \| 'plain' \| 'fade' \| 'centered'` | `'floating'` | false    | How the bar sits at the bottom of its scroll region. See the variant table below. |
 
-Each `kind` is one placement plus one surface, named for what a reader sees:
+Each `variant` is one placement plus one surface, named for what a reader sees:
 
 - `floating`: overlays the bottom of the scroll region; the content does not move; canvas band with a top border; use for the dirty state of a settings page.
 - `docked`: its own row at the bottom of the region; the content ends above it; canvas band with a top border; use for the dirty state when nothing may be covered.
@@ -100,8 +100,8 @@ Each `kind` is one placement plus one surface, named for what a reader sees:
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop on the root
-- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `kind`. The other kinds publish nothing.
+- `data-variant` mirrors the `variant` prop on the root
+- Floating inset: while a `floating` bar is mounted it publishes its measured height on the document root as `--save-bar-inset` (for a scroll region of its own, such as a code editor, to pad its bottom) and `--toast-offset-bottom` (so the `toaster` stacks above the bar), and updates both when the bar resizes. When the bar would cover the end of the content, the root grows to the bar's height so the last field can scroll clear of it; when there is nothing left to cover, the root stays at zero height. Both properties are removed when the bar unmounts or changes to another `variant`. The other variants publish nothing.
 - Responsive: the root is the `@container/save-bar`. `floating` and `docked` put the message and the actions on one row from `@xl` of the bar; below it the actions stack full width under the message, Save on top. `plain` stacks the same way below `@md`. `fade` keeps `leading` (Back) and the actions on one row at every width, the actions at the inline end. `centered` keeps the card centred and one row at every width: the optional `leading` or `default` content first, then the actions; the card never grows wider than the bar and lets clicks through around it. The bar keeps `env(safe-area-inset-bottom)` clear on phones.
 
 ## Motion & Animations
@@ -161,10 +161,10 @@ No built-in strings: the status sentence and the action labels come from the con
 ## Examples
 
 - Floating — the dirty-state bar over a scroll region.
-- Docked — the bar on its own row; justified because `kind` changes the layout.
-- Plain — the form footer; justified because `kind` changes the surface and width.
-- Fade — the wizard step footer with Back in `leading`; justified because `kind` changes the surface and keeps one row.
-- Centered — the create page footer, Cancel and Create in a raised card centred under the form; justified because `kind` changes the surface, the width and the placement.
+- Docked — the bar on its own row; justified because `variant` changes the layout.
+- Plain — the form footer; justified because `variant` changes the surface and width.
+- Fade — the wizard step footer with Back in `leading`; justified because `variant` changes the surface and keeps one row.
+- Centered — the create page footer, Cancel and Create in a raised card centred under the form; justified because `variant` changes the surface, the width and the placement.
 
 ## Constraints — DO NOT
 
@@ -180,7 +180,7 @@ No built-in strings: the status sentence and the action labels come from the con
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

@@ -158,7 +158,7 @@
           <IconButton
             icon="ai ai-chevron-left"
             aria-label="Back to Services"
-            kind="outlined"
+            variant="outline"
             size="small"
             href="/services"
           />
@@ -170,7 +170,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -189,7 +189,7 @@
               <Avatar
                 :label="account.name"
                 size="medium"
-                kind="square"
+                variant="square"
               />
             </button>
           </DropdownMenu.Trigger>
@@ -278,7 +278,7 @@
                           <HelperText
                             v-if="errors.name"
                             id="ev-name-error"
-                            kind="required"
+                            type="required"
                             :label="errors.name"
                           />
                         </div>
@@ -298,7 +298,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.protocolUsage"
-                          kind="card"
+                          variant="card"
                           name="protocolUsage"
                           aria-label="Protocol Usage"
                           :disabled="submitting"
@@ -349,7 +349,7 @@
                           <HelperText
                             v-if="errors.httpPorts"
                             id="ev-httpPorts-error"
-                            kind="required"
+                            type="required"
                             :label="errors.httpPorts"
                           />
                         </div>
@@ -368,7 +368,7 @@
                     <SettingRow
                       title="Compression"
                       description="Compress responses with gzip or Brotli before they are sent."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.compression"
@@ -379,7 +379,7 @@
                     <SettingRow
                       title="Rate limiting"
                       description="Limit how many requests a single client can send per minute."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.rateLimiting"
@@ -390,7 +390,7 @@
                     <SettingRow
                       title="Image optimization"
                       description="Resize, crop, and convert images on the fly through URL parameters."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.imageOptimization"
@@ -401,7 +401,7 @@
                     <SettingRow
                       title="Secondary cache"
                       description="Add a second caching layer to reduce requests to the origin."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.secondaryCache"
@@ -451,7 +451,7 @@
                             <template #actions>
                               <Button
                                 label="Reload origins"
-                                kind="secondary"
+                                variant="secondary"
                                 size="medium"
                                 :loading="reloadingOrigins"
                                 @click="reloadOrigins"
@@ -475,7 +475,7 @@
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <Skeleton
                             v-if="reloadingOrigins"
-                            kind="rectangle"
+                            variant="rectangle"
                             width="100%"
                             height="var(--size-10)"
                             aria-label="Loading origins"
@@ -510,7 +510,7 @@
                             <HelperText
                               v-if="errors.originId"
                               id="ev-origin-error"
-                              :kind="form.originId ? 'invalid' : 'required'"
+                              :type="form.originId ? 'invalid' : 'required'"
                               :label="errors.originId"
                             />
                           </template>
@@ -538,7 +538,7 @@
                           <HelperText
                             v-if="errors.hostHeader"
                             id="ev-hostHeader-error"
-                            kind="required"
+                            type="required"
                             :label="errors.hostHeader"
                           />
                         </div>
@@ -597,7 +597,7 @@
                     <SettingRow
                       title="Active"
                       description="Rules that were successfully executed will be listed in the request logs and in the trace of each event."
-                      kind="compact"
+                      variant="compact"
                     >
                       <Switch
                         v-model="form.debugRules"
@@ -612,18 +612,18 @@
           </fieldset>
         </div>
 
-        <SaveBar kind="plain">
+        <SaveBar variant="plain">
           <template #actions>
             <Button
               type="button"
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="submitting"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               :disabled="reloadingOrigins"

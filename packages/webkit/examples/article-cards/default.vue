@@ -5,7 +5,7 @@
 
 <template>
   <ArticleCards
-    kind="start"
+    variant="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[

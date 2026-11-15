@@ -92,12 +92,12 @@
       >
         <CardGrid
           flush
-          kind="frame"
+          variant="frame"
           layout="fixed"
           :columns="3"
         >
           <CardGridCell
-            kind="canvas"
+            variant="canvas"
             class="lg:row-span-2"
           >
             <div class="flex h-full flex-col items-start gap-(--spacing-md)">
@@ -125,7 +125,7 @@
                 v-if="primaryAction"
                 :label="primaryAction.label"
                 :href="primaryAction.href"
-                kind="secondary"
+                variant="secondary"
                 size="large"
                 :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
@@ -137,7 +137,7 @@
           <CardGridCell
             v-for="item in items"
             :key="item.title"
-            kind="canvas"
+            variant="canvas"
           >
             <Topic
               :heading-level="3"

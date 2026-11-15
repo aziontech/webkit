@@ -28,7 +28,7 @@
 <template>
   <Button
     v-bind="$attrs"
-    kind="transparent"
+    variant="ghost"
     size="small"
     :label="label"
     :data-testid="testId"

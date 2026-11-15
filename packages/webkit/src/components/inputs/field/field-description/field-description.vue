@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useId } from 'vue'
 
-  import HelperText, { type HelperTextKind } from '../../helper-text/helper-text.vue'
+  import HelperText, { type HelperTextType } from '../../helper-text/helper-text.vue'
   import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -22,7 +22,7 @@
   )
   const id = computed(() => (attrs['id'] as string | undefined) ?? generatedId)
 
-  const kind = computed<HelperTextKind>(() => {
+  const type = computed<HelperTextType>(() => {
     if (!field) return 'helper'
     if (field.disabled.value) return 'disabled'
     if (field.invalid.value && !field.hasError.value) return 'invalid'
@@ -38,7 +38,7 @@
     v-bind="$attrs"
     :id="id"
     data-slot="field-description"
-    :kind="kind"
+    :type="type"
     :data-testid="testId"
   >
     <slot />

@@ -5,7 +5,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -20,9 +20,9 @@
 
   interface FormErrors {
     name: string
-    nameKind: HelperTextKind
+    nameKind: HelperTextType
     domain: string
-    domainKind: HelperTextKind
+    domainKind: HelperTextType
   }
 
   interface ZoneRecord {
@@ -232,7 +232,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Edge DNS"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -242,7 +242,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -259,7 +259,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -315,7 +315,7 @@
                         <HelperText
                           v-if="errors.name"
                           id="create-zone-name-message"
-                          :kind="errors.nameKind"
+                          :type="errors.nameKind"
                           :label="errors.name"
                         />
                       </SettingRow>
@@ -341,7 +341,7 @@
                         <HelperText
                           v-if="errors.domain"
                           id="create-zone-domain-message"
-                          :kind="errors.domainKind"
+                          :type="errors.domainKind"
                           :label="errors.domain"
                         />
                       </SettingRow>
@@ -380,7 +380,7 @@
                         <Item.Actions>
                           <IconButton
                             icon="ai ai-x"
-                            kind="transparent"
+                            variant="ghost"
                             size="medium"
                             :aria-label="`Remove ${record.type} record ${record.name}`"
                             @click="removeRecord(index)"
@@ -406,7 +406,7 @@
                       <Button
                         type="button"
                         label="Discard import"
-                        kind="transparent"
+                        variant="ghost"
                         size="medium"
                         @click="discardImport"
                       />
@@ -427,7 +427,7 @@
                       <SettingRow
                         title="DNSSEC"
                         description="Signs this zone's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.dnssec"
@@ -437,7 +437,7 @@
                       <SettingRow
                         title="Active"
                         description="When active, the zone answers authoritative DNS queries for the domain."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -450,13 +450,13 @@
               </SettingsSection>
             </fieldset>
           </div>
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template #leading>
               <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                 <Button
                   type="button"
                   label="Import"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-upload"
                   @click="openImport"
@@ -479,12 +479,12 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
               />
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
                 :loading="submitting"

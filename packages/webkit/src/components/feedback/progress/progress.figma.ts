@@ -20,7 +20,7 @@ export default {
     shape === 'flat'
       ? ''
       : figma.code`
-  kind="${shape}"`
+  variant="${shape}"`
   }
 />`,
   imports: ["import Progress from '@aziontech/webkit/progress'"],

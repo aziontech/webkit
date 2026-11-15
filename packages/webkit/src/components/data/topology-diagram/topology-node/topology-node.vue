@@ -154,7 +154,7 @@
               <Tooltip :content="bindLabel">
                 <IconButton
                   :icon="bound ? 'ai ai-pencil' : 'ai ai-plus'"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   :ariaLabel="bindLabel"
                 />
@@ -190,7 +190,7 @@
           >
             <IconButton
               icon="ai ai-x"
-              kind="outlined"
+              variant="outline"
               size="small"
               :ariaLabel="removeLabel"
               @click="(event: globalThis.MouseEvent) => emit('remove', event)"
@@ -241,7 +241,7 @@
               >
               <CopyButton
                 v-if="field.copyable"
-                kind="outlined"
+                variant="outline"
                 :value="field.value"
                 :ariaLabel="t('topologyDiagram.copy', { field: `${resourceType} ${field.label}` })"
                 size="small"

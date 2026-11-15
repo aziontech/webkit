@@ -8,13 +8,13 @@
       "file": "default.vue"
     },
     {
-      "name": "Kinds",
-      "summary": "Both `kind` values, one band under the other, with the copy and the scene held identical so the only thing that moves is the side the media sits on: `media-end` first, then `media-start`. Down a real product page these alternate band after band, each carrying its own claim — the mirroring is what keeps consecutive bands from reading as one long column. The flip is an `md`-and-up affair: narrow the canvas and both collapse to the same single column with the copy first, so reading order follows the argument rather than the layout.",
-      "file": "kinds.vue"
+      "name": "Variants",
+      "summary": "Both `variant` values, one band under the other, with the copy and the scene held identical so the only thing that moves is the side the media sits on: `media-end` first, then `media-start`. Down a real product page these alternate band after band, each carrying its own claim — the mirroring is what keeps consecutive bands from reading as one long column. The flip is an `md`-and-up affair: narrow the canvas and both collapse to the same single column with the copy first, so reading order follows the argument rather than the layout.",
+      "file": "variants.vue"
     },
     {
       "name": "Orientations",
-      "summary": "Both axes: the horizontal band across the full canvas, then the vertical one held in a narrow column. `horizontal` is the band proper — one column below `lg`, two cells above it. `vertical` keeps the stacked form at every width, which is what a page aside or a grid cell wants, and `kind` changes meaning with it: `media-start` puts the media above the copy rather than to its left. The copy cell stays first in the DOM either way, so tab order and screen-reader order follow the argument rather than the picture.",
+      "summary": "Both axes: the horizontal band across the full canvas, then the vertical one held in a narrow column. `horizontal` is the band proper — one column below `lg`, two cells above it. `vertical` keeps the stacked form at every width, which is what a page aside or a grid cell wants, and `variant` changes meaning with it: `media-start` puts the media above the copy rather than to its left. The copy cell stays first in the DOM either way, so tab order and screen-reader order follow the argument rather than the picture.",
       "file": "orientations.vue"
     },
     {

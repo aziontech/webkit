@@ -266,7 +266,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
                   disabled
@@ -279,7 +279,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Requests over time"
                   />
@@ -343,7 +343,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
                   disabled
@@ -356,7 +356,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Status codes"
                   />
@@ -405,7 +405,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
                   disabled
@@ -418,7 +418,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Requests by country"
                   />
@@ -470,7 +470,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"
                   disabled
@@ -483,7 +483,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top hosts"
                   />

@@ -155,7 +155,7 @@
         </span>
         <Tooltip :content="action.tip ?? ''">
           <Button
-            kind="transparent"
+            variant="ghost"
             size="small"
             :label="action.label"
             :icon="action.icon ?? ''"

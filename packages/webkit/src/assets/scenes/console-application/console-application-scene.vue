@@ -199,7 +199,7 @@
           <Button
             v-if="step.action"
             :label="step.action"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-plus"
             class="shrink-0"
@@ -223,7 +223,7 @@
             </Input>
             <Button
               label="Filter"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-filter"
               class="shrink-0"
@@ -271,7 +271,7 @@
                   v-for="row in band.rows"
                   :key="row.label"
                   :title="row.label"
-                  kind="compact"
+                  variant="compact"
                 >
                   <span
                     v-if="rowValue(row)"
@@ -297,7 +297,7 @@
 
         <SaveBar
           v-if="second && saveBar"
-          kind="centered"
+          variant="centered"
           :data-animated="animated || null"
           :data-testid="`${testId}__save-bar`"
           class="mt-auto data-animated:animate-content-enter motion-reduce:animate-none"
@@ -315,12 +315,12 @@
           <template #actions>
             <Button
               label="Discard"
-              kind="outlined"
+              variant="outline"
               size="medium"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
             />
           </template>
@@ -353,7 +353,7 @@
             <IconButton
               icon="ai ai-x"
               aria-label="Close"
-              kind="transparent"
+              variant="ghost"
               size="small"
               class="shrink-0"
             />
@@ -377,7 +377,7 @@
                     <RadioGroup
                       v-if="field.kind === 'choice'"
                       :model-value="field.value"
-                      kind="card"
+                      variant="card"
                       orientation="horizontal"
                       :options="field.options.map((option) => ({ value: option, label: option }))"
                       :aria-label="field.label"
@@ -441,7 +441,7 @@
           <PanelFooter>
             <Button
               :label="drawer.action"
-              kind="primary"
+              variant="primary"
               size="medium"
             />
           </PanelFooter>

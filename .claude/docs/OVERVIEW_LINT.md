@@ -128,15 +128,15 @@ Every ESLint invocation — script, lint-staged, CI — runs with **`--max-warni
 
 **Config:** [`.prettierrc.json`](../../.prettierrc.json). Formatting is Prettier's job alone — ESLint has no stylistic rules to fight it, so no `eslint-config-prettier` shim is wired into the flat config.
 
-| Option                    | Value    | Meaning                                                                                                               |
-| ------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------- |
-| `semi`                    | `false`  | no semicolons                                                                                                         |
-| `singleQuote`             | `true`   | `'single'` quotes                                                                                                     |
-| `tabWidth`                | `2`      | 2-space indent                                                                                                        |
-| `printWidth`              | `100`    | wrap at 100 columns                                                                                                   |
-| `trailingComma`           | `"none"` | no trailing commas                                                                                                    |
-| `singleAttributePerLine`  | `true`   | one attribute per line in templates — long `data-[kind=…]` class/attribute stacks stay readable and diff line-by-line |
-| `vueIndentScriptAndStyle` | `true`   | `<script>`/`<style>` content indented inside SFC blocks                                                               |
+| Option                    | Value    | Meaning                                                                                                                  |
+| ------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `semi`                    | `false`  | no semicolons                                                                                                            |
+| `singleQuote`             | `true`   | `'single'` quotes                                                                                                        |
+| `tabWidth`                | `2`      | 2-space indent                                                                                                           |
+| `printWidth`              | `100`    | wrap at 100 columns                                                                                                      |
+| `trailingComma`           | `"none"` | no trailing commas                                                                                                       |
+| `singleAttributePerLine`  | `true`   | one attribute per line in templates — long `data-[variant=…]` class/attribute stacks stay readable and diff line-by-line |
+| `vueIndentScriptAndStyle` | `true`   | `<script>`/`<style>` content indented inside SFC blocks                                                                  |
 
 `packages/webkit/.prettierignore` skips generated output: `dist`, `*.min.css`, `*.d.ts`, `coverage`, `node_modules`.
 

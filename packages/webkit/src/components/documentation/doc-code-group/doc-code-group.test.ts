@@ -46,7 +46,7 @@ describe('DocCodeGroup', () => {
     expect(code.textContent).toContain('curl -I')
     expect(code.textContent).not.toContain('HTTP/2 200')
     expect(output.textContent).toContain('HTTP/2 200')
-    expect(output.getAttribute('data-kind')).toBe('output')
+    expect(output.getAttribute('data-type')).toBe('output')
     expect(output.hasAttribute('data-copyable')).toBe(false)
     expect(
       getByTestId('documentation-doc-code-group__output__label-text').textContent?.trim()
@@ -67,12 +67,12 @@ describe('DocCodeGroup', () => {
     expect(queryByTestId('documentation-doc-code-group__output')).toBeNull()
   })
 
-  it('renders a standalone printout with kind output', () => {
+  it('renders a standalone printout with type output', () => {
     const { getByTestId } = render(DocCodeGroup, {
-      props: { kind: 'output', samples: [{ code: 'Deploy finished' }] }
+      props: { type: 'output', samples: [{ code: 'Deploy finished' }] }
     })
     const block = getByTestId('documentation-doc-code-group__code')
-    expect(block.getAttribute('data-kind')).toBe('output')
+    expect(block.getAttribute('data-type')).toBe('output')
     expect(block.hasAttribute('data-copyable')).toBe(false)
   })
 

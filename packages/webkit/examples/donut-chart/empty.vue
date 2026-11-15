@@ -28,7 +28,7 @@
       <template #empty-actions>
         <Button
           label="Clear filters"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
       </template>

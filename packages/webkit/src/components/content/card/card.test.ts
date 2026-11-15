@@ -175,9 +175,9 @@ describe('Card', () => {
     })
   })
 
-  describe('integration kind', () => {
+  describe('integration variant', () => {
     const integration = {
-      kind: 'integration' as const,
+      variant: 'integration' as const,
       title: 'Request Signer',
       vendor: 'Northwind Labs',
       logo: 'ai ai-key',
@@ -313,7 +313,7 @@ describe('Card', () => {
       expect(view.emitted('select')).toHaveLength(1)
     })
 
-    it('ignores featured outside the integration kind', () => {
+    it('ignores featured outside the integration variant', () => {
       const view = render(Card, { props: { title: 'Plan', featured: true } })
 
       expect(view.getByTestId('content-card')).not.toHaveAttribute('data-featured')

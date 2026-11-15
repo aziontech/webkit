@@ -125,7 +125,7 @@
         #header
       >
         <SectionTitle
-          kind="split"
+          variant="split"
           :eyebrow="eyebrow"
           :title="title"
           :description="description"
@@ -138,7 +138,7 @@
               :label="primaryAction.label"
               :href="primaryAction.href"
               :target="primaryAction.target"
-              kind="secondary"
+              variant="secondary"
               :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"

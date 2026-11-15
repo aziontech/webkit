@@ -15,6 +15,6 @@
         </div>
       </template>
     </Card>
-    <FileDropzone kind="overlay" />
+    <FileDropzone variant="overlay" />
   </div>
 </template>

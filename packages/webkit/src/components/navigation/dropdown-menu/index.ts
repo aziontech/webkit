@@ -34,7 +34,7 @@ export {
   DropdownMenuTrigger
 }
 export type {
-  DropdownMenuOptionKind,
+  DropdownMenuOptionType,
   DropdownMenuOptionValue,
   DropdownMenuPlacement,
   DropdownMenuPlacementInput

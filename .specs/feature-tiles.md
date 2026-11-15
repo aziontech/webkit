@@ -3,16 +3,16 @@ name: feature-tiles
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 3efb495c93279f485a7af572638f8c5fd075bda8f31f67578a50090c38f52020
+checksum: 42c5857061859ee60ff6ec3bf106d74b0cad7d59d184102190810a4c0c6dba37
 ---
 # FeatureTiles — Component Spec
 
 ## Purpose
 
-The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 ## When to use
 
@@ -31,7 +31,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 ## Best practices
 
-- Match the tile count to the kind: four tiles for `artwork`, three for `illustrated`.
+- Match the tile count to the variant: four tiles for `artwork`, three for `illustrated`.
 - Give a tile either `image` (a URL) or `illustration` (a registry name), not both; `scale` only matters with `illustration`.
 - Leave `title` empty to drop the header when the band sits under a hero that already states it; set `anchor` when a link above scrolls to the band.
 
@@ -44,7 +44,7 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 
 <template>
   <FeatureTiles
-    kind="artwork"
+    variant="artwork"
     eyebrow="Why Azion"
     title="From commit to live traffic, on one platform"
     description="Build, ship, and run an application on the same platform that serves it."
@@ -60,7 +60,7 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `FeatureTilesKind` | `'artwork'` | false | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule. |
+| `variant` | `FeatureTilesVariant` | `'artwork'` | false | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
 | `eyebrow` | `string` | `''` | false | Overline above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
@@ -78,7 +78,7 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop and drives the column count and the frame marks
+- `data-variant` mirrors the `variant` prop and drives the column count and the frame marks
 - Empty: when `tiles` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
 - A tile picture carries its `alt`; without one it is decorative (`alt=""`, `aria-hidden`)
@@ -112,7 +112,7 @@ _none_
 ## Examples
 
 - Default
-- Types — composite story rendering both `kind` values stacked.
+- Types — composite story rendering both `variant` values stacked.
 
 ## Constraints — DO NOT
 

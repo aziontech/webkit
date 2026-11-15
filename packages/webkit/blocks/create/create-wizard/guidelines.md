@@ -46,7 +46,7 @@ Each step's fields are `SettingRow`s in an `Item.List` inside a flush `Card`, th
 
 ### G. Choice cards — `RadioGroup` (optional)
 
-A choice that changes what follows, such as the list type, is a `SettingRow kind="stacked"` holding a `RadioGroup` with `kind="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
+A choice that changes what follows, such as the list type, is a `SettingRow variant="stacked"` holding a `RadioGroup` with `variant="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
 
 ### H. Long entry — `Textarea`, `HelperText` (optional)
 
@@ -60,8 +60,8 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
 
-- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup kind="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
-- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup kind="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
+- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/deployment-logs` (InCreateFlow) and ends on `create/deploy-success`.
 
 ## Do

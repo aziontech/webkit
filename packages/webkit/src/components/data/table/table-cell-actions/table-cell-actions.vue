@@ -61,7 +61,7 @@
     <DropdownMenuTrigger>
       <IconButton
         icon="ai ai-ellipsis"
-        kind="outlined"
+        variant="outline"
         size="small"
         :ariaLabel="label"
         :disabled="disabled"

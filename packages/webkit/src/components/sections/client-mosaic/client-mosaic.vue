@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Logo, { type LogoKind } from '../../content/logo/logo.vue'
+  import Logo, { type LogoVariant } from '../../content/logo/logo.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
@@ -127,7 +127,7 @@
     cell.logoTreatment ??
     (cell.fill === 'white' || cell.fill === 'primary' ? 'knockout' : 'monochrome')
 
-  const inkOf = (cell: ClientMosaicCell): LogoKind => {
+  const inkOf = (cell: ClientMosaicCell): LogoVariant => {
     const treatment = treatmentOf(cell)
     return treatment === 'as-is' ? 'color' : treatment
   }
@@ -161,7 +161,7 @@
             :key="`${cell.href}-${index}`"
             :span="cell.span ?? '1'"
             :rows="cell.rows ?? '1'"
-            kind="none"
+            variant="none"
             :padded="false"
             :data-cell="cell.text ? 'story' : 'logo'"
             class="min-h-[clamp(180px,18vw,240px)]"
@@ -188,7 +188,7 @@
               <Logo
                 :name="cell.logoAlt"
                 :src="cell.logo"
-                :kind="inkOf(cell)"
+                :variant="inkOf(cell)"
                 :data-treatment="treatmentOf(cell)"
                 :data-stacked="cell.stacked || undefined"
                 class="z-10 h-6 max-w-32 self-start data-[stacked]:h-9"
@@ -216,7 +216,7 @@
               <Logo
                 :name="cell.logoAlt"
                 :src="cell.logo"
-                :kind="inkOf(cell)"
+                :variant="inkOf(cell)"
                 :data-treatment="treatmentOf(cell)"
                 :data-stacked="cell.stacked || undefined"
                 class="z-10 h-8 max-w-36 data-[stacked]:h-12"

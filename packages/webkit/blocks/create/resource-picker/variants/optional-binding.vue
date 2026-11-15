@@ -168,7 +168,7 @@
           <SettingRow
             title="Protect with a firewall"
             description="Filters requests before they reach your code. Off by default. Turn it on to bind an existing firewall, or create one with the project."
-            kind="compact"
+            variant="compact"
           >
             <Switch
               v-model="enabled"
@@ -245,7 +245,7 @@
 
                   <HelperText
                     v-if="firewallPicker.message"
-                    kind="required"
+                    type="required"
                     >{{ firewallPicker.message }}</HelperText
                   >
                 </div>
@@ -292,7 +292,7 @@
                       >
                         <Item.Media>
                           <Skeleton
-                            kind="rectangle"
+                            variant="rectangle"
                             width="2rem"
                             height="2rem"
                           />
@@ -320,7 +320,7 @@
                     <Button
                       type="button"
                       :label="'Load ' + firewallPicker.nextBatch + ' more'"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       class="w-full"
                       :loading="firewallPicker.loading"
@@ -359,7 +359,7 @@
                     :key="module.key"
                     :title="module.title"
                     :description="module.description"
-                    kind="compact"
+                    variant="compact"
                   >
                     <Switch
                       v-if="module.locked"

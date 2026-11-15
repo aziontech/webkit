@@ -3,11 +3,11 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: b3d6ff838ddffffbf310cd45ed45b53ee8c1b405e2abe32311a50eb851cabca9
+checksum: 18f76aadc4e71bd5b3609a80f842f907580c01b2a9448760f53b07c36b94345f
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -31,7 +31,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 - A select with a visible label and helper/error text in a form → put it inside a `field`; the trigger picks up the field's id, description and state.
 - The field is always multi-pick → use `multi-select`.
-- Two to seven options that fit on screen → use `radio-group` (`kind="card"` for cards).
+- Two to seven options that fit on screen → use `radio-group` (`variant="card"` for cards).
 - The list triggers actions or navigation instead of holding a value → use `dropdown-menu`.
 
 ## Related
@@ -47,8 +47,8 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
 - Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Option` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
-- A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `kind="transparent"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
-- Keep `kind="transparent"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outlined` inside a `Field`.
+- A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `variant="ghost"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
+- Keep `variant="ghost"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outline` inside a `Field`.
 
 ## Usage
 
@@ -93,22 +93,22 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 
 ## Props
 
-| Prop           | Type                             | Default      | Required | JSDoc                                                                                                                                                                                                                                                                                                          |
-| -------------- | -------------------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defaultOpen`  | `boolean`                        | `false`      | false    | Initial open state when uncontrolled.                                                                                                                                                                                                                                                                          |
-| `placeholder`  | `string`                         | `''`         | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                                                                                                                          |
-| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                                                                                                                     |
-| `kind`         | `'outlined' \| 'transparent'`    | `'outlined'` | false    | Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb.                                                                                                  |
-| `disabled`     | `boolean`                        | `false`      | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                                                                                                            |
-| `readonly`     | `boolean`                        | `false`      | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                                                                                                                      |
-| `required`     | `boolean`                        | `false`      | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component.                                                                                             |
-| `invalid`      | `boolean`                        | `false`      | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                                                                                                               |
-| `displayValue` | `(value: TValue) => string`      | `undefined`  | false    | Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels.                                                                                                                              |
-| `name`         | `string`                         | `''`         | false    | Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does. |
+| Prop           | Type                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                          |
+| -------------- | -------------------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defaultOpen`  | `boolean`                        | `false`     | false    | Initial open state when uncontrolled.                                                                                                                                                                                                                                                                          |
+| `placeholder`  | `string`                         | `''`        | false    | Trigger placeholder shown when no option is selected.                                                                                                                                                                                                                                                          |
+| `size`         | `'small' \| 'medium' \| 'large'` | `'medium'`  | false    | Size token; affects trigger height (small=28px, medium=32px, large=40px) matching `Input`.                                                                                                                                                                                                                     |
+| `variant`      | `'outline' \| 'ghost'`           | `'outline'` | false    | Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb.                                                                                                         |
+| `disabled`     | `boolean`                        | `false`     | false    | Disables the trigger and prevents opening; applies disabled tokens.                                                                                                                                                                                                                                            |
+| `readonly`     | `boolean`                        | `false`     | false    | Marks the field read-only; the current selection is visible but the dropdown cannot open.                                                                                                                                                                                                                      |
+| `required`     | `boolean`                        | `false`     | false    | Marks the field as required; applies the required (warning) border and sets `aria-required` on the trigger, matching `Input`. The label's Required tag is owned by the wrapping form-field, not by this component.                                                                                             |
+| `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                                                                                                               |
+| `displayValue` | `(value: TValue) => string`      | `undefined` | false    | Custom formatter used by the trigger to render the selection; receives the current `modelValue`, typed as the bound model. Unset, the trigger shows the selected options' labels.                                                                                                                              |
+| `name`         | `string`                         | `''`        | false    | Form field name. Set, the root renders one hidden input per selected value (`String(value)`, objects as JSON) so a native `form` and `FormData` submit the selection; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the value out, as a native control does. |
 
 **Generic.** Props stay an inline literal in `defineProps` because the root is generic (a named `interface Props` fails declaration emit, TS4025). The root is generic over `TValue extends SelectValue` (`string | number | undefined`, the default), inferred from the bound `modelValue`: with a `string` model, `displayValue` takes `(value: string) => string` and `update:modelValue` sends a `string`, so a handler needs no narrowing.
 
-**Types.** `@aziontech/webkit/select` (and `-root`) export `SelectValue`, `SelectKind`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Option` rows, so a list with disabled entries needs no local type.
+**Types.** `@aziontech/webkit/select` (and `-root`) export `SelectValue`, `SelectVariant`, `SelectSize` and `SelectOptionItem<TValue = string>` (`{ value: TValue; label: string; icon?: string; disabled?: boolean }`), the shape of an options list rendered as `Select.Option` rows, so a list with disabled entries needs no local type.
 
 ## v-model
 
@@ -132,8 +132,8 @@ _none_
 - Visual states: `default`, `hover`, `focus-visible`, `filled`, `disabled`, `invalid`, `required`, `opened`
 - `data-state` on the root and trigger: `open` | `closed`
 - `data-size` on the trigger mirrors the `size` prop
-- `data-kind` on the root, the trigger and the panel mirrors `kind` (`outlined` | `transparent`)
-- `kind="transparent"`: the trigger and root size to the value (`w-auto`, capped at the container), no border, no fill, `--spacing-xs` inline padding, `.text-label-md` like a breadcrumb crumb, `--bg-mask` on hover and while open; the panel stops matching the trigger's width and takes at least `--container-3xs`
+- `data-variant` on the root, the trigger and the panel mirrors `variant` (`outline` | `ghost`)
+- `variant="ghost"`: the trigger and root size to the value (`w-auto`, capped at the container), no border, no fill, `--spacing-xs` inline padding, `.text-label-md` like a breadcrumb crumb, `--bg-mask` on hover and while open; the panel stops matching the trigger's width and takes at least `--container-3xs`
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<SelectOption>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
@@ -180,7 +180,7 @@ _none_
 
 ## Decisions and open questions
 
-- **`kind` on Select (2026-11-12).** The console's workload page ends its breadcrumb on the environment (`Production ⌄`) drawn as text, and the design sample got it by overriding the trigger with `!` classes (`border-0! bg-transparent! h-6! …`). The look is now `kind="transparent"`, named from the shared vocabulary (`transparent` = no surface until hover, as `Button` and `ButtonGroup`); the bordered field is `outlined`, the default, so no existing select changes. Decided: the transparent trigger keeps the `size` heights (28 px at `small`, not the sample's 24 px) so its target stays the same as every other small control; it zeroes the focus ring offset like the sample, since it sits inside a line of text; and its panel takes at least `--container-3xs` instead of the trigger's width, which would be a few characters wide. The `./select` budget moves from 19.75 KB to 20 KB (measured 19.91 KB, up from 19.73 KB).
+- **`variant` on Select (2026-11-12).** The console's workload page ends its breadcrumb on the environment (`Production ⌄`) drawn as text, and the design sample got it by overriding the trigger with `!` classes (`border-0! bg-transparent! h-6! …`). The look is now `variant="ghost"`, named from the shared vocabulary (`ghost` = no surface until hover, as `Button` and `ButtonGroup`); the bordered field is `outline`, the default, so no existing select changes. Decided: the transparent trigger keeps the `size` heights (28 px at `small`, not the sample's 24 px) so its target stays the same as every other small control; it zeroes the focus ring offset like the sample, since it sits inside a line of text; and its panel takes at least `--container-3xs` instead of the trigger's width, which would be a few characters wide. The `./select` budget moves from 19.75 KB to 20 KB (measured 19.91 KB, up from 19.73 KB).
 
 ## Theme gaps
 
@@ -206,7 +206,7 @@ _none_
 
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
-- Transparent — justification: the `kind="transparent"` trigger only reads right in its place, the environment switcher at the end of a breadcrumb (`Workloads › workload_01 › Production`).
+- Transparent — justification: the `variant="ghost"` trigger only reads right in its place, the environment switcher at the end of a breadcrumb (`Workloads › workload_01 › Production`).
 - Single — justification: documents the trailing check and the scalar `modelValue` shape.
 - WithGroups — justification: documents the `<SelectGroup label="…">` heading anatomy from Figma `3899:29361` (Group region), which is not reachable from Default.
 - WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<SelectContent>` (Top/Bottom regions in Figma `3899:29361`), which are slot-only and invisible from Default.
@@ -231,7 +231,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

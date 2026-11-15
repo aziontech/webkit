@@ -30,7 +30,7 @@
 
 <template>
   <MediaSplitStack
-    kind="alternating"
+    variant="alternating"
     :bands="bands"
   />
 </template>

@@ -10,7 +10,7 @@
   >
     <template #default>
       <KeyValuePairs
-        kind="split"
+        variant="split"
         aria-label="Subscription plan"
       >
         <KeyValuePairs.Item label="Plan Price">$0.00 / month</KeyValuePairs.Item>

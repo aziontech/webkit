@@ -60,7 +60,7 @@ follows the nearest container.
 - Build the repeated bands from their components, which already carry the right container and
   rhythm: `PageHeader` for the page heading, `SectionHeader` or `SettingsSection` for a band title,
   `SettingRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
-  sticky action bar (`kind="plain"` is the form-column footer).
+  sticky action bar (`variant="plain"` is the form-column footer).
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
 - Start a screen from its block (`npx @aziontech/webkit search <words>` → `npx @aziontech/webkit add

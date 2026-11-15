@@ -126,7 +126,7 @@
       <template #actions="{ item }">
         <IconButton
           icon="ai ai-ellipsis"
-          kind="transparent"
+          variant="ghost"
           size="small"
           :aria-label="'More actions for ' + item.label"
         />

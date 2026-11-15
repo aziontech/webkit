@@ -123,7 +123,7 @@
         <Button
           label="Add Record"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           class="w-full"
         />
@@ -203,7 +203,7 @@
                   </Select>
                   <HelperText
                     id="record-type-helper"
-                    kind="helper"
+                    type="helper"
                   >
                     <Link
                       label="Read more about record types"
@@ -229,7 +229,7 @@
                   />
                   <HelperText
                     id="record-ttl-helper"
-                    kind="helper"
+                    type="helper"
                     >Time-to-live a response can be cached for on a resolver server.</HelperText
                   >
                 </Field>
@@ -297,7 +297,7 @@
                   </Select>
                   <HelperText
                     id="record-policy-helper"
-                    kind="helper"
+                    type="helper"
                     >Simple is standard resolution. Weighted distributes answers across records by
                     weight.</HelperText
                   >
@@ -319,7 +319,7 @@
                   />
                   <HelperText
                     id="record-weight-helper"
-                    kind="helper"
+                    type="helper"
                     >Relative weight for this record within the weighted set, from 0 to
                     255.</HelperText
                   >
@@ -333,7 +333,7 @@
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Add Record"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
               type="submit"

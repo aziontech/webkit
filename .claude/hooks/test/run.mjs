@@ -161,7 +161,7 @@ group('lib: body parsing', () => {
     const rows = parseTable(getSection(body, 'Props'))
     assertTrue(rows.length >= 3, `expected >=3 rows, got ${rows.length}`)
     const propNames = rows.map((r) => r.prop.replace(/`/g, ''))
-    assertTrue(propNames.includes('kind'), 'kind missing')
+    assertTrue(propNames.includes('variant'), 'variant missing')
     assertTrue(propNames.includes('size'), 'size missing')
     assertTrue(propNames.includes('disabled'), 'disabled missing')
   })

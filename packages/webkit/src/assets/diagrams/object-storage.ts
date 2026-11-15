@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'User',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: origin is a bucket',
       icon: 'ai ai-rules-engine',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'storage',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Object Storage',
       title: 'assets bucket',
       icon: 'ai ai-edge-storage',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Cache',
       title: 'Object cached at the edge',
       icon: 'ai ai-tiered-cache',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 's3',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'S3 API',
       title: 'Any S3-compatible client',
       icon: 'ai ai-code'

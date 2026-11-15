@@ -58,7 +58,7 @@
   <IconButton
     v-bind="{ ...$attrs, ariaLabel }"
     :icon="icon"
-    kind="transparent"
+    variant="ghost"
     size="small"
     :data-testid="testId"
     :data-sort="sortDirection"

@@ -14,7 +14,7 @@ it. Two kinds of block exist, and they never mix:
   "Output" block under the command:
   `{ language: 'bash', code: 'curl -I https://<your-azion-domain>', output: 'HTTP/2 200' }`.
 - For a long printout that stands alone (a deploy log), use
-  `<DocCodeGroup kind="output" :samples="[{ code: log }]" />`, or say the outcome in prose
+  `<DocCodeGroup type="output" :samples="[{ code: log }]" />`, or say the outcome in prose
   ("A `200` status means the application is live").
 - Set `language` on every sample (`bash`, `javascript`, `json`, …). The label header shows its
   readable name — Shell, JavaScript, JSON — so leave `label` empty unless the samples differ by

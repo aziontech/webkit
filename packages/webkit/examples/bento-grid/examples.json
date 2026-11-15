@@ -14,7 +14,7 @@
     },
     {
       "name": "Mosaic",
-      "summary": "The four-column mosaic, where the cells claim both axes: one cell takes two columns and two rows, another takes two rows in one column, and the rest take a single track each. The spans add up to the rectangle, which is what keeps the block from ending on bare canvas. `kind` picks each cell's fill — `none` on the link cell, whose content paints the tile and pads itself, so the whole cell is the target.",
+      "summary": "The four-column mosaic, where the cells claim both axes: one cell takes two columns and two rows, another takes two rows in one column, and the rest take a single track each. The spans add up to the rectangle, which is what keeps the block from ending on bare canvas. `variant` picks each cell's fill — `none` on the link cell, whose content paints the tile and pads itself, so the whole cell is the target.",
       "file": "mosaic.vue"
     }
   ]

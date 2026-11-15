@@ -253,7 +253,7 @@
                         <Logo
                           :name="agent.name"
                           :src="agent.src"
-                          :kind="agent.mono ? 'current' : 'color'"
+                          :variant="agent.mono ? 'current' : 'color'"
                           decorative
                           size="small"
                         />
@@ -279,7 +279,7 @@
               >
                 <IconButton
                   icon="ai ai-x"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Dismiss agent setup"
                   @click="agentOnboardingVisible = false"

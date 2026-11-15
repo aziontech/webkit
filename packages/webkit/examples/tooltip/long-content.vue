@@ -11,7 +11,7 @@
     <IconButton
       icon="ai ai-circle-info"
       aria-label="More information"
-      kind="transparent"
+      variant="ghost"
       size="small"
     />
   </Tooltip>

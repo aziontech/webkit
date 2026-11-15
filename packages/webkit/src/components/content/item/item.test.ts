@@ -31,24 +31,24 @@ describe('Item', () => {
     })
 
     describe('root rendering (grounded in item.vue template)', () => {
-      it('renders a <div data-slot="item"> carrying the default testid and data-kind/data-size', () => {
+      it('renders a <div data-slot="item"> carrying the default testid and data-variant/data-size', () => {
         const { getByTestId } = render(Item, {
           slots: { default: '<span data-testid="child">x</span>' }
         })
         const root = getByTestId('content-item')
         expect(root.tagName).toBe('DIV')
         expect(root.getAttribute('data-slot')).toBe('item')
-        expect(root.getAttribute('data-kind')).toBe('default')
+        expect(root.getAttribute('data-variant')).toBe('default')
         expect(root.getAttribute('data-size')).toBe('medium')
       })
 
-      it('reflects kind and size props on the root data-* attributes', () => {
+      it('reflects variant and size props on the root data-* attributes', () => {
         const { getByTestId } = render(Item, {
-          props: { kind: 'outlined', size: 'small' },
+          props: { variant: 'outline', size: 'small' },
           slots: { default: '<span>y</span>' }
         })
         const root = getByTestId('content-item')
-        expect(root.getAttribute('data-kind')).toBe('outlined')
+        expect(root.getAttribute('data-variant')).toBe('outline')
         expect(root.getAttribute('data-size')).toBe('small')
       })
 
@@ -165,33 +165,33 @@ describe('Item', () => {
         expect(el.textContent).toBe('A description')
       })
 
-      it('ItemMedia defaults data-kind to "default"', () => {
+      it('ItemMedia defaults data-type to "default"', () => {
         const { getByTestId } = render(Item.Media, {
           slots: { default: '<span>m</span>' }
         })
-        expect(getByTestId('content-item__media').getAttribute('data-kind')).toBe('default')
+        expect(getByTestId('content-item__media').getAttribute('data-type')).toBe('default')
       })
 
-      it.each([['icon'], ['image']])('ItemMedia reflects kind="%s" on data-kind', (kind) => {
+      it.each([['icon'], ['image']])('ItemMedia reflects type="%s" on data-type', (variant) => {
         const { getByTestId } = render(Item.Media, {
-          props: { kind },
+          props: { type: variant },
           slots: { default: '<span>m</span>' }
         })
-        expect(getByTestId('content-item__media').getAttribute('data-kind')).toBe(kind)
+        expect(getByTestId('content-item__media').getAttribute('data-type')).toBe(variant)
       })
     })
 
     describe('href and clickable — the row renders its own interactive root', () => {
-      it('renders an anchor root carrying href, data-slot, data-kind and data-size', () => {
+      it('renders an anchor root carrying href, data-slot, data-variant and data-size', () => {
         const { getByTestId } = render(Item, {
-          props: { href: 'https://example.com/docs', kind: 'outlined', size: 'small' },
+          props: { href: 'https://example.com/docs', variant: 'outline', size: 'small' },
           slots: { default: 'Docs' }
         })
         const root = getByTestId('content-item')
         expect(root.tagName).toBe('A')
         expect(root.getAttribute('href')).toBe('https://example.com/docs')
         expect(root.getAttribute('data-slot')).toBe('item')
-        expect(root.getAttribute('data-kind')).toBe('outlined')
+        expect(root.getAttribute('data-variant')).toBe('outline')
         expect(root.getAttribute('data-size')).toBe('small')
         expect(root.hasAttribute('type')).toBe(false)
       })
@@ -211,14 +211,14 @@ describe('Item', () => {
         expect(clicks).toBe(1)
       })
 
-      it('forwards aria-pressed to the button root of a clickable row of any kind', () => {
+      it('forwards aria-pressed to the button root of a clickable row of any variant', () => {
         const { getByRole } = render(Item, {
           props: { clickable: true, size: 'small' },
           attrs: { 'aria-pressed': 'true' },
           slots: { default: 'Chosen' }
         })
         const root = getByRole('button', { name: 'Chosen', pressed: true })
-        expect(root.getAttribute('data-kind')).toBe('default')
+        expect(root.getAttribute('data-variant')).toBe('default')
         expect(root.hasAttribute('data-selected')).toBe(false)
       })
 
@@ -256,13 +256,13 @@ describe('Item', () => {
       })
 
       it.each([
-        ['Outline', Outline, 'outlined', 'medium'],
+        ['Outline', Outline, 'outline', 'medium'],
         ['Muted', Muted, 'muted', 'medium'],
-        ['Small', Small, 'outlined', 'small']
-      ])('%s story sets the root kind/size from its args', (_name, Story, kind, size) => {
+        ['Small', Small, 'outline', 'small']
+      ])('%s story sets the root variant/size from its args', (_name, Story, variant, size) => {
         const { getByTestId } = render(Story)
         const root = getByTestId('content-item')
-        expect(root.getAttribute('data-kind')).toBe(kind)
+        expect(root.getAttribute('data-variant')).toBe(variant)
         expect(root.getAttribute('data-size')).toBe(size)
       })
 
@@ -284,7 +284,7 @@ describe('Item', () => {
             IActions: Item.Actions
           },
           template: `
-          <Item kind="outlined">
+          <Item variant="outline">
             <IContent>
               <ITitle>Accessible Item</ITitle>
               <IDescription>A row with a title, description and an action.</IDescription>
@@ -303,12 +303,12 @@ describe('Item', () => {
       })
     })
 
-    describe('kind="option" — chooser rows', () => {
+    describe('variant="option" — chooser rows', () => {
       it('marks each row as an option row on its button and follows the pressed choice', async () => {
         const { getByRole, getAllByRole, container } = render(Option)
         const rows = getAllByRole('button')
         expect(rows).toHaveLength(4)
-        for (const row of rows) expect(row.getAttribute('data-kind')).toBe('option')
+        for (const row of rows) expect(row.getAttribute('data-variant')).toBe('option')
         expect(getByRole('button', { name: 'workload_02' }).getAttribute('aria-pressed')).toBe(
           'true'
         )

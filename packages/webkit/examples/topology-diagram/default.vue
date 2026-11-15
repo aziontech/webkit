@@ -183,7 +183,7 @@
           >
             <IconButton
               icon="ai ai-plus"
-              kind="outlined"
+              variant="outline"
               size="small"
               aria-label="Add domain"
               @click="note = 'Add a domain.'"

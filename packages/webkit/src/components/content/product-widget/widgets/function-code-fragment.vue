@@ -61,7 +61,7 @@ addEventListener("fetch", (event) =>
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     :chrome="false"
     :active="active"

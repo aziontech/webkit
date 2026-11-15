@@ -10,15 +10,15 @@
   defineOptions({ name: 'NavigationMenuPopup', inheritAttrs: false })
 
   /** Surface treatment: the raised surface, or the theme's inverted one. */
-  export type NavigationMenuPopupKind = 'default' | 'contrast'
+  export type NavigationMenuPopupVariant = 'default' | 'contrast'
 
   interface Props {
     /** Surface treatment. */
-    kind?: NavigationMenuPopupKind
+    variant?: NavigationMenuPopupVariant
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'default'
+    variant: 'default'
   })
 
   defineSlots<{ default(): unknown }>()
@@ -39,17 +39,17 @@
     'relative overflow-hidden rounded-(--shape-card) border border-solid border-(--border-default) ' +
     'bg-(--bg-surface-raised) shadow-(--shadow-lg) ' +
     'max-h-[var(--navigation-menu-available-height,100vh)] max-w-[var(--navigation-menu-available-width,100vw)] ' +
-    'data-[kind=contrast]:[--bg-surface-raised:var(--bg-contrast)] ' +
-    'data-[kind=contrast]:[--border-default:color-mix(in_srgb,var(--text-contrast)_20%,var(--bg-contrast))] ' +
-    'data-[kind=contrast]:[--text-default:var(--text-contrast)] ' +
-    'data-[kind=contrast]:[--text-muted:color-mix(in_srgb,var(--text-contrast)_60%,var(--bg-contrast))] ' +
-    'data-[kind=contrast]:[--bg-hover:color-mix(in_srgb,var(--text-contrast)_8%,transparent)] ' +
-    'data-[kind=contrast]:[--bg-canvas:var(--bg-contrast)]'
+    'data-[variant=contrast]:[--bg-surface-raised:var(--bg-contrast)] ' +
+    'data-[variant=contrast]:[--border-default:color-mix(in_srgb,var(--text-contrast)_20%,var(--bg-contrast))] ' +
+    'data-[variant=contrast]:[--text-default:var(--text-contrast)] ' +
+    'data-[variant=contrast]:[--text-muted:color-mix(in_srgb,var(--text-contrast)_60%,var(--bg-contrast))] ' +
+    'data-[variant=contrast]:[--bg-hover:color-mix(in_srgb,var(--text-contrast)_8%,transparent)] ' +
+    'data-[variant=contrast]:[--bg-canvas:var(--bg-contrast)]'
 
   const popupHidden = computed(() => !root.menuPopupMounted.value)
 
   const popupDataAttrs = computed(() => ({
-    'data-kind': props.kind,
+    'data-variant': props.variant,
     'data-state': root.menuOpen.value ? 'open' : 'closed',
     'data-starting-style': root.popupTransitionStatus.value === 'starting' ? '' : undefined,
     'data-ending-style': root.popupTransitionStatus.value === 'ending' ? '' : undefined

@@ -64,7 +64,7 @@ in it: `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInp
 - **Checkbox, switch:** `<Field orientation="horizontal">` with the control first and a
   `<Field.Content>` holding `Field.Label` + `Field.Description`.
 - **One of a few (radios):** always `<RadioGroup v-model>` with a `RadioGroup.Item` per option
-  (`description` for the line under it); `kind="card"` for bordered option cards. Never compose a
+  (`description` for the line under it); `variant="card"` for bordered option cards. Never compose a
   radio by hand inside `Field.Label`.
 - **Checkbox and switch cards** (a bordered option with a title and description): `<Field.Label>` wrapping a
   horizontal `<Field>` with the control and `<Field.Content>` (`Field.Title` + `Field.Description`).
@@ -193,7 +193,7 @@ contexts** in Azion products:
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
   The read-only cards beside them are components too, never a hand-written `dl` or `ul`: plan
-  facts (Plan Price, Billing Period, Next Invoice) are `KeyValuePairs kind="split"`
+  facts (Plan Price, Billing Period, Next Invoice) are `KeyValuePairs variant="split"`
   (`@aziontech/webkit/key-value-pairs`, label at the start, value at the end of each row), and
   the perks of an upgrade card are `FeatureList` (`@aziontech/webkit/feature-list`, a check per
   included feature, `:columns="2"` in a wide card).
@@ -314,7 +314,7 @@ link on the left and Save on the right. Canonical pattern:
         />
         <Button
           label="Save"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="submitting"
         />
@@ -398,7 +398,7 @@ Canonical pattern:
             <Button
               class="w-full"
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               @click="open = false"
             />
           </div>
@@ -406,7 +406,7 @@ Canonical pattern:
             <Button
               class="w-full"
               label="Delete"
-              kind="danger"
+              variant="danger"
               :disabled="!canDelete"
               @click="remove"
             />
@@ -591,7 +591,7 @@ Sections stack at the section gap; the first one takes no top margin.
 its accessible name. `<Field.Label>` is reserved for **Fields separated** (Approach B) and composed `Select`
 fields, where there is a real `<label for>` wired to a control `id`.
 
-**`kind` places the control by what it needs.** `field` (the default) for `Input` and `Select`: a right
+**`variant` places the control by what it needs.** `field` (the default) for `Input` and `Select`: a right
 cell capped at `--container-3xs`, so every field on the card ends at the same edge. `compact` for a
 `Switch` or a `Button`, hard right at its natural width. `stacked` for a `Textarea`, a radio group or an
 editor, under the copy at the full measure. A setting that only applies while the row above it is on
@@ -646,14 +646,14 @@ Canonical pattern:
             <HelperText
               v-if="errors.name"
               id="name-error"
-              :kind="form.name.trim() ? 'invalid' : 'required'"
+              :type="form.name.trim() ? 'invalid' : 'required'"
               :label="errors.name"
             />
           </SettingRow>
           <SettingRow
             title="Active"
             description="When off, the application stops serving traffic."
-            kind="compact"
+            variant="compact"
           >
             <Switch
               v-model="form.active"
@@ -680,15 +680,15 @@ Rules:
   `aria-describedby`. This is still the field saying what it needs, on the field — **not** a summary
   block or a `Alert` callout. `description` stays as the always-on guidance on the left.
 - **Required is NOT an error — pick the state by what failed.** An empty required field is a _prompt_:
-  `<HelperText kind="required">` (amber) + the control's `:required` (amber). A field whose value is
-  present but malformed is an _error_: `<HelperText kind="invalid">` (red) + the control's `:invalid`
+  `<HelperText type="required">` (amber) + the control's `:required` (amber). A field whose value is
+  present but malformed is an _error_: `<HelperText type="invalid">` (red) + the control's `:invalid`
   (red). Never set both `:required` and `:invalid` at once — that yields an amber border with a red
   helper. When one field can fail both ways, emptiness is the discriminator
-  (`:kind="value.trim() ? 'invalid' : 'required'"`). Note `Select`/`MultiSelect` have no amber border,
+  (`:type="value.trim() ? 'invalid' : 'required'"`). Note `Select`/`MultiSelect` have no amber border,
   so for an empty-required Select the amber `HelperText` (and `:required` for `aria-required`) carries
   the cue — never colour it red.
 - **Richer controls that don't fit a one-line row** (a radio group, a block of `Field` choice cards,
-  a list editor) use `kind="stacked"`, not a squeezed right column.
+  a list editor) use `variant="stacked"`, not a squeezed right column.
 
 ### Section title — the SettingsSection heading
 
@@ -868,9 +868,9 @@ field's own state plus an on-field `HelperText`** — there is **no separate err
 **Required is not an error.** Two failure kinds, two states:
 
 - **Required-but-empty** → the amber `required` state (`:required` on the control, `HelperText
-kind="required"`). It is a _prompt to fill_, not a rejection — never the red danger state.
+type="required"`). It is a _prompt to fill_, not a rejection — never the red danger state.
 - **Filled-but-malformed** → the red `invalid` state (`:invalid` on the control, `HelperText
-kind="invalid"`). The value is present and wrong.
+type="invalid"`). The value is present and wrong.
 
 On a failed submit, **move focus to the first field in error** so keyboard and screen-reader users
 land on it. Never pre-disable the submit button to stop an incomplete form: let it submit and show
@@ -933,7 +933,7 @@ Rules:
   text is the non-colour cue.
 - **The message lives on the field, as a `HelperText`.** In **Fields separated** it is the Field's
   `Field.Description` (its tone flips to `required` when the Field is `:required`, `invalid` when it is
-  `:invalid`) or a `Field.Error`; in an **ItemGroup** it is a `<HelperText>` rendered under the control, its `kind`
+  `:invalid`) or a `Field.Error`; in an **ItemGroup** it is a `<HelperText>` rendered under the control, its `type`
   matching the failure (`required` amber / `invalid` red — see Approach A). Either way it is
   `aria-describedby`-linked to the control and appears only after a failed submit.
 - **No custom error-summary block** (`role="alert"` list of links) and **no `Alert` callout** for
@@ -955,10 +955,10 @@ locks the whole scope** — this is `/webkit-ui-states` **Pattern 1**; this skil
 re-derive it**. Save shows `:loading`, and **every field the action reads takes `:disabled` off the same
 flag**. On a long form, the actions live in a **sticky bar** — `SaveBar`
 (`@aziontech/webkit/save-bar`) — so Save/Cancel are always reachable. A create page uses
-`kind="centered"` (Cancel and Create in a raised card centred at the bottom of the form, always
+`variant="centered"` (Cancel and Create in a raised card centred at the bottom of the form, always
 shown, at every width — never a hand-built sticky pill); an in-page form saved as one unit uses
-`kind="plain"` (always shown, on the form column); a full-page wizard step uses
-`kind="fade"` (no border, Back in `#leading`, the step's submit in `#actions`); a settings page
+`variant="plain"` (always shown, on the form column); a full-page wizard step uses
+`variant="fade"` (no border, Back in `#leading`, the step's submit in `#actions`); a settings page
 mounts the default `floating` bar only while the form is dirty or saving, with the status sentence
 in its default slot.
 
@@ -970,10 +970,10 @@ active mid-submit. Keep the `<fieldset :disabled="submitting">` as the native sa
 (Card with independent saves) bind each card's controls to _that card's_ flag.
 
 ```vue
-<SaveBar kind="plain">
+<SaveBar variant="plain">
   <template #actions>
-    <Button type="button" label="Cancel" kind="outlined" size="medium" :disabled="submitting" @click="cancel" />
-    <Button type="submit" label="Save" kind="primary" size="medium" :loading="submitting" />
+    <Button type="button" label="Cancel" variant="outline" size="medium" :disabled="submitting" @click="cancel" />
+    <Button type="submit" label="Save" variant="primary" size="medium" :loading="submitting" />
   </template>
 </SaveBar>
 ```
@@ -1002,7 +1002,7 @@ form does four things, and never toasts:
    that nothing else was lost, and what to do, as separate sentences: `Origin "web-origin-prod" no
 longer exists. Another user deleted it while you were filling in this form, so the service wasn't
 created. Nothing else was lost: reload the origin list and select another one.`
-2. **The recovery action on that `Alert`** (`#actions` slot, `kind="secondary"`): `Reload origins`,
+2. **The recovery action on that `Alert`** (`#actions` slot, `variant="secondary"`): `Reload origins`,
    with `loading` while it runs; meanwhile the field gives way to a `Skeleton` and Save is disabled.
 3. **The field turns `invalid`** with its own one-line reason under it (`This origin no longer
 exists.`), wired by `aria-describedby`. After the reload clears the stale value it turns `required`
@@ -1079,7 +1079,7 @@ creation date, an e-mail that only support can change — is **read-only**, not 
 
 ## Disabled state — the disabled helper is optional context, not submit feedback
 
-A `HelperText` with `kind="disabled"` (it prepends a lock glyph, muted text) is an **optional** element
+A `HelperText` with `type="disabled"` (it prepends a lock glyph, muted text) is an **optional** element
 whose only job is to explain **why a field is disabled** and how to lift the lock. It is **not**
 validation feedback and it is **not** required by the submit lock. Two cases:
 
@@ -1105,10 +1105,10 @@ Rules:
 - **The submit lock needs no disabled-reason helper** — it's transient and the Save `:loading` covers it.
 - **A disabled helper is optional and explains the dependency**, never validation — it answers only
   "why is this locked and how do I unlock it".
-- **Don't fabricate a disabled explanation for a transient lock.** Reserve `kind="disabled"` for a
+- **Don't fabricate a disabled explanation for a transient lock.** Reserve `type="disabled"` for a
   persistent, non-obvious dependency.
 - **A disabled field is never also `required`/`invalid`.** `disabled` wins the control's state (and the
-  `HelperText` `kind`), so a locked field shows neither the amber required nor the red invalid cue.
+  `HelperText` `type`), so a locked field shows neither the amber required nor the red invalid cue.
 
 ## Choosing an approach
 
@@ -1160,7 +1160,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 
 - [ ] Every labelled control sits in a `Field` (`Field.Label` + control + `Field.Description` /
       `Field.Error`, state on the `Field`); checkboxes/switches use `orientation="horizontal"`,
-      their cards are `Field.Label` wrapping a horizontal `Field`, radios are one `RadioGroup` (`kind="card"` for cards); a bare control is used only when its
+      their cards are `Field.Label` wrapping a horizontal `Field`, radios are one `RadioGroup` (`variant="card"` for cards); a bare control is used only when its
       label lives elsewhere, and then the `aria-label` + `aria-describedby` are wired by hand.
 - [ ] The form type fits the flow (Drawer / nested Drawer / Dialog / ItemGroup settings / Card with
       independent saves), and the **save model follows partitioning**: one save for a logical unit (Drawer,
@@ -1191,7 +1191,7 @@ End with: `form is accessible` or `N gaps — fix before polish`.
 - [ ] Validation runs on submit only; feedback is the field's state **and** an on-field `HelperText`
       message (`Field.Description` / `Field.Error` in Fields separated; a `<HelperText>` under the control in an
       ItemGroup), bound to the error and cleared on edit. Required-but-empty uses the amber `required`
-      state/`kind` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`kind`;
+      state/`type` (required is NOT an error); filled-but-malformed uses the red `invalid` state/`type`;
       never both on one field. No error-summary block, no `Alert` callout for field validation.
 - [ ] Native hints on the `<input>`: `type`, `autocomplete` + `name`, `spellcheck="false"` on
       e-mails, slugs and codes; paste is never blocked; a failed submit focuses the first field in

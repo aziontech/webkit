@@ -80,7 +80,7 @@
   }
 
   /** Row layout: byline pins the writers to the foot of the copy, center centres the copy. */
-  export type ArticleIndexRowKind = 'byline' | 'center'
+  export type ArticleIndexRowVariant = 'byline' | 'center'
 
   interface Props {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -118,7 +118,7 @@
     /** Label of the empty-state button that clears every filter; no button renders without it. */
     emptyActionLabel?: string
     /** Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. */
-    rowKind?: ArticleIndexRowKind
+    rowVariant?: ArticleIndexRowVariant
     /** Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty. */
     categoryParam?: string
     /** Accessible name of the list. */
@@ -143,7 +143,7 @@
     emptyTitle: '',
     emptyDescription: '',
     emptyActionLabel: '',
-    rowKind: undefined,
+    rowVariant: undefined,
     categoryParam: '',
     ariaLabel: ''
   })
@@ -172,8 +172,8 @@
 
   const faceted = computed(() => props.filters === 'facets')
 
-  const layout = computed<ArticleIndexRowKind>(
-    () => props.rowKind ?? (faceted.value ? 'center' : 'byline')
+  const layout = computed<ArticleIndexRowVariant>(
+    () => props.rowVariant ?? (faceted.value ? 'center' : 'byline')
   )
 
   const showCategories = computed(() => !faceted.value && props.categories.length > 0)
@@ -397,7 +397,7 @@
         >
           <ul
             :aria-label="ariaLabel || undefined"
-            :data-kind="layout"
+            :data-variant="layout"
             :data-filters="filters"
             class="group/rows m-0 flex list-none flex-col p-0"
           >
@@ -433,7 +433,7 @@
                 </div>
                 <div class="flex min-w-0 gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg)">
                   <div
-                    class="flex min-w-0 flex-1 flex-col justify-between gap-(--spacing-sm) group-data-[kind=center]/rows:justify-center"
+                    class="flex min-w-0 flex-1 flex-col justify-between gap-(--spacing-sm) group-data-[variant=center]/rows:justify-center"
                   >
                     <div class="flex flex-col gap-(--spacing-sm)">
                       <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
@@ -470,7 +470,7 @@
                         <Avatar
                           v-for="author in item.authors ?? []"
                           :key="author.name"
-                          kind="circle"
+                          variant="circle"
                           size="small"
                           :src="author.avatar || undefined"
                           :label="author.avatar ? undefined : author.name"
@@ -504,7 +504,7 @@
           <div class="flex justify-center p-(--spacing-xl)">
             <Button
               :label="moreLabel"
-              kind="outlined"
+              variant="outline"
               size="large"
               @click="pages += 1"
             />
@@ -531,7 +531,7 @@
           >
             <Button
               :label="emptyActionLabel"
-              kind="secondary"
+              variant="secondary"
               size="large"
               @click="clearFilters"
             />

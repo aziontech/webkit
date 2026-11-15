@@ -50,7 +50,7 @@
             <SettingRow
               title="Active"
               description="When disabled, the resource stops serving traffic."
-              kind="compact"
+              variant="compact"
             >
               <Switch
                 v-model="active"
@@ -74,7 +74,7 @@
               :key="feature.key"
               :title="feature.title"
               :description="feature.description"
-              kind="compact"
+              variant="compact"
             >
               <Switch
                 v-model="features[feature.key]"

@@ -17,7 +17,7 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 ### A. Trigger and actions — `Button` (required)
 
-`Change plan` (outlined) opens the drawer. In each pricing card one large action: the current plan is disabled, the upgrade is `primary`, the rest `outlined`. In the upgrade drawer: Change, Cancel and Update on the payment method, and the footer's Cancel and Upgrade (`type="submit"`, `:loading` while submitting).
+`Change plan` (outlined) opens the drawer. In each pricing card one large action: the current plan is disabled, the upgrade is `primary`, the rest `outline`. In the upgrade drawer: Change, Cancel and Update on the payment method, and the footer's Cancel and Upgrade (`type="submit"`, `:loading` while submitting).
 
 ### B. Drawer — `Drawer` (required)
 
@@ -49,7 +49,7 @@ Says why the user is here before the cards: `Compare what each tier includes bef
 
 ### I. Plan — `CardPricing` (required)
 
-One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
+One per tier, `variant="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
 
 ### J. Divider — `Separator` (required)
 

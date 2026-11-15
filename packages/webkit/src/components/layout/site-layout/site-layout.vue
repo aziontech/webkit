@@ -12,8 +12,8 @@
   import CommandList from '../../overlay/command/command-list/command-list.vue'
   import SiteFooter, {
     type SiteFooterColumn,
-    type SiteFooterKind,
-    type SiteFooterSocial
+    type SiteFooterSocial,
+    type SiteFooterVariant
   } from '../../sections/site-footer/site-footer.vue'
   import SiteNav, { type SiteNavLink, type SiteNavMenu } from '../../sections/site-nav/site-nav.vue'
 
@@ -43,7 +43,7 @@
   /** The site footer, bound onto `SiteFooter`. */
   export type SiteLayoutFooter = {
     /** `site` closes a framed page and draws its frame; `content` runs full bleed. */
-    kind?: SiteFooterKind
+    variant?: SiteFooterVariant
     /** Accessible name of the footer landmark. */
     ariaLabel?: string
     /** Destination of the Azion mark. */
@@ -73,7 +73,7 @@
   interface Props {
     /** The bar, bound onto `SiteNav`. */
     navigation: SiteLayoutNavigation
-    /** The footer, bound onto `SiteFooter`; `kind` defaults to `site`. No footer when absent. */
+    /** The footer, bound onto `SiteFooter`; `variant` defaults to `site`. No footer when absent. */
     footer?: SiteLayoutFooter
     /** Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`). */
     searchPlaceholder?: string
@@ -207,7 +207,7 @@
     </main>
     <SiteFooter
       v-if="footer"
-      kind="site"
+      variant="site"
       v-bind="footer"
       :data-testid="`${testId}__footer`"
     />

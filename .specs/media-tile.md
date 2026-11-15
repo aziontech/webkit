@@ -3,8 +3,8 @@ name: media-tile
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: c6bc615dbea425836c4d6d35e2103c8bb298e3b92541029356c8059ef4b4bedf
+spec_version: 3
+checksum: 45f9292c6541e8e94717e90478018ecd10c849222a75734cfbf464d791776cb9
 created: 2026-09-25
 last_updated: 2026-11-15
 ---
@@ -62,7 +62,7 @@ import MediaTile from '@aziontech/webkit/media-tile'
 
 <template>
   <CardGrid
-    kind="gap"
+    variant="gap"
     :columns="4"
   >
     <MediaTile
@@ -90,7 +90,7 @@ import MediaTile from '@aziontech/webkit/media-tile'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `MediaTileKind` | `'frame'` | false | Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates. |
+| `variant` | `MediaTileVariant` | `'frame'` | false | Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates. |
 | `title` | `string` | `—` | true | The caption's run-in lead, naming what the panel above it shows. |
 | `description` | `string` | `''` | false | The sentence continuing the caption after the lead; overridden by the default slot. |
 | `src` | `string` | `''` | false | URL of the tile's media image; ignored when the `media` slot is filled. |
@@ -113,7 +113,7 @@ import MediaTile from '@aziontech/webkit/media-tile'
 ## States
 
 - Visual states: `default`
-- `data-kind` carries the register, and is what moves the inset from the frame to the tile
+- `data-variant` carries the register, and is what moves the inset from the frame to the tile
 - `data-media` mirrors whether the frame holds any media
 - `data-padded` mirrors the `padded` prop
 - `data-fluid` mirrors the `fluid` prop, and is what stretches the media to the frame's width

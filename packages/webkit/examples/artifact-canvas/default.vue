@@ -83,7 +83,7 @@
           v-model:version="version"
           title="top-orders.sql"
           :meta="`SQL · ${versions[version].split('\n').length} lines`"
-          kind="code"
+          type="code"
           :versions="versions.length"
           :copy-value="versions[version]"
           @close="hide"

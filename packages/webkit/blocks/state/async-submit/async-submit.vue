@@ -77,7 +77,7 @@
           <template #actions>
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               size="medium"
               icon="ai ai-play"
               :loading="running"

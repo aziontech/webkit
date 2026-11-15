@@ -34,7 +34,7 @@
       <Button
         type="submit"
         label="Save tags"
-        kind="primary"
+        variant="primary"
         size="medium"
       />
     </div>

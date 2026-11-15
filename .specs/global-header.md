@@ -3,11 +3,11 @@ name: global-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: 3a1566de8587593151802088c9d9987d24ffb6e62173896c197948969e2ceb85
+checksum: a2d66e6becc84b83ed4871be9162b2af79307b9aba19dbb0836da0721361dc5c
 created: 2026-05-23
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ last_updated: 2026-11-15
 
 Application chrome for the top menubar: a fixed-height horizontal bar with three composable regions (start, center, end) and a dedicated brand slot for Azion logo variants. Matches the Webkit GlobalHeader (Figma node 4310:19617) — a Shell Core part with symmetric horizontal padding, a hairline bottom border, the menu trigger and brand grouped at the start, a growing nav region in the center, and trailing actions (Create, Copilot, Feedback, help, avatar) at the end. Consumers reorder or omit regions; logo and actions are not baked in.
 
-The bar has two placements, chosen with `kind`, and the only difference is where the inset is measured from. `content` is the default and the one every app shell wants: the bar runs full bleed across whatever zone holds it — a content zone beside a rail, or the whole window when nothing sits beside it — insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content. It reads the token the page reads, so retuning the boundary moves both.
+The bar has two placements, chosen with `variant`, and the only difference is where the inset is measured from. `content` is the default and the one every app shell wants: the bar runs full bleed across whatever zone holds it — a content zone beside a rail, or the whole window when nothing sits beside it — insetting its regions by the page boundary (`--layout-boundary-inline`) so the first region opens on the same vertical as the page content. It reads the token the page reads, so retuning the boundary moves both.
 
 A third placement, `app`, was removed in favour of that default. It insetted by a flat `--spacing-md` (16 at every width) on the theory that window-wide chrome above a navigation rail has no page column to answer to. Every shell that was placed deliberately chose `content` instead — including the bars that do span the whole window with no zone beside them — because a flat 16 disagrees with the page's 16-then-24 boundary at exactly the widths where nothing sits between the bar and the page, putting the brand on a different vertical from the title under it. Nothing selected `app` on purpose; the only bars on it had inherited it as the default.
 
@@ -30,8 +30,8 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 - Use GlobalHeader for the console's top bar; inside ConsoleLayout it is already rendered.
 - The top bar of a console-style app: menu trigger and brand at the start, an optional nav or breadcrumb region, and trailing actions (create, help, account) at the end.
-- A bar above a content zone that sits beside a navigation rail — `kind="content"` insets its regions by the page boundary so they line up with the page below.
-- The bar of a framed marketing page — `kind="site"` keeps the surface full bleed but caps and centres the regions.
+- A bar above a content zone that sits beside a navigation rail — `variant="content"` insets its regions by the page boundary so they line up with the page below.
+- The bar of a framed marketing page — `variant="site"` keeps the surface full bleed but caps and centres the regions.
 
 ## When NOT to use
 
@@ -48,7 +48,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
 
 ## Best practices
 
-- Keep the default `kind="content"` for app shells; use `kind="site"` only on framed marketing pages.
+- Keep the default `variant="content"` for app shells; use `variant="site"` only on framed marketing pages.
 - Group the menu trigger and the brand in `GlobalHeader.Container` so they stay together and never shrink.
 - Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
@@ -72,7 +72,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
         <IconButton
           icon="ai ai-menu"
           aria-label="Open navigation"
-          kind="transparent"
+          variant="ghost"
         />
       </GlobalHeader.Start>
       <GlobalHeader.Brand>
@@ -81,7 +81,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
           aria-label="Azion home"
         >
           <Brand
-            kind="default"
+            variant="default"
             size="small"
           />
         </a>
@@ -91,7 +91,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
     <GlobalHeader.End>
       <Button
         label="Create"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         icon="ai ai-circle-plus"
       />
@@ -118,7 +118,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 | Prop        | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | ----------- | --------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ariaLabel` | `string`              | `''`        | false    | Accessible name for the header landmark. Empty uses the locale catalog (`Global header`).                                                                                                                                                                                                                                                                                                                                                       |
-| `kind`      | `'content' \| 'site'` | `'content'` | false    | Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. |
+| `variant`   | `'content' \| 'site'` | `'content'` | false    | Where the bar sits: `content` is the default — full bleed across whatever zone holds it, insetting its regions by the page boundary so the first region opens on the same vertical as the page content under or beside it; `site` keeps that full-bleed surface on a framed marketing page but caps the regions at the site header measure and centres them, so they land on the bar's own column, one rung wider than the page frame under it. |
 
 ## Events
 
@@ -135,7 +135,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
 ## States
 
 - Visual states: `default`
-- Placement: `data-kind="content" | "site"` on the root (from `kind`).
+- Placement: `data-variant="content" | "site"` on the root (from `variant`).
 - No interactive states on the shell; children own focus/hover/disabled.
 
 ## Motion & Animations
@@ -144,19 +144,19 @@ _none_
 
 ## Tokens
 
-| Region                             | Token (DESIGN.md)                                                                                                          |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| shell height                       | `h-(--layout-header-height)` (56px, the token `SiteNav`, `HeroBand` and the sticky bands offset by)                        |
-| shell padding-x (`kind="content"`) | `var(--layout-boundary-inline)`                                                                                            |
-| shell padding-x (`kind="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
-| shell region gap                   | `var(--spacing-md)`                                                                                                        |
-| start cluster (container) gap      | `var(--spacing-md)`                                                                                                        |
-| start region gap                   | `var(--spacing-xs)`                                                                                                        |
-| end region gap                     | `var(--spacing-sm)`                                                                                                        |
-| brand logo height                  | `18px`                                                                                                                     |
-| surface                            | `var(--bg-surface)`                                                                                                        |
-| border (bottom)                    | `var(--border-default)`                                                                                                    |
-| ring (focus on children)           | `var(--ring-color)`                                                                                                        |
+| Region                                | Token (DESIGN.md)                                                                                                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| shell height                          | `h-(--layout-header-height)` (56px, the token `SiteNav`, `HeroBand` and the sticky bands offset by)                        |
+| shell padding-x (`variant="content"`) | `var(--layout-boundary-inline)`                                                                                            |
+| shell padding-x (`variant="site"`)    | `max(var(--layout-boundary-inline), calc((100% - var(--layout-measure-site-header)) / 2 + var(--layout-boundary-inline)))` |
+| shell region gap                      | `var(--spacing-md)`                                                                                                        |
+| start cluster (container) gap         | `var(--spacing-md)`                                                                                                        |
+| start region gap                      | `var(--spacing-xs)`                                                                                                        |
+| end region gap                        | `var(--spacing-sm)`                                                                                                        |
+| brand logo height                     | `18px`                                                                                                                     |
+| surface                               | `var(--bg-surface)`                                                                                                        |
+| border (bottom)                       | `var(--border-default)`                                                                                                    |
+| ring (focus on children)              | `var(--ring-color)`                                                                                                        |
 
 ## Theme gaps
 
@@ -177,7 +177,7 @@ _none_
 
 - Default — the bar's anatomy: brand cluster, centre region, trailing actions.
 - ContentZone — the default placement shown against a mock page, for the one claim the anatomy cannot show: the first region and the page heading on one vertical.
-- SitePlacement — the `kind="site"` bar over a framed marketing column, its regions on the bar's own measure, one rung wider than the page frame.
+- SitePlacement — the `variant="site"` bar over a framed marketing column, its regions on the bar's own measure, one rung wider than the page frame.
 
 ## Constraints — DO NOT
 
@@ -193,7 +193,7 @@ _none_
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

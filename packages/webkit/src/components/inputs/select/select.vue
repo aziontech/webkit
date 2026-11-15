@@ -7,9 +7,9 @@
   import { FormValue } from '../parts/form-value'
   import {
     SelectInjectionKey,
-    type SelectKind,
     type SelectSize,
-    type SelectValue
+    type SelectValue,
+    type SelectVariant
   } from './injection-key'
 
   defineOptions({
@@ -25,8 +25,8 @@
       placeholder?: string
       /** Size token; affects trigger height. */
       size?: SelectSize
-      /** Trigger look: `outlined` is the bordered field; `transparent` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. */
-      kind?: SelectKind
+      /** Trigger look: `outline` is the bordered field; `ghost` has no border or fill until hover, sized to its value, for a switcher inside a line of text such as the environment at the end of a breadcrumb. */
+      variant?: SelectVariant
       /** Disables the trigger and prevents opening. */
       disabled?: boolean
       /** Marks the field read-only; selection visible, dropdown locked. */
@@ -44,7 +44,7 @@
       defaultOpen: false,
       placeholder: '',
       size: 'medium',
-      kind: 'outlined',
+      variant: 'outline',
       disabled: false,
       readonly: false,
       required: false,
@@ -137,7 +137,7 @@
     toggleValue,
     isSelected,
     size: computed(() => props.size),
-    kind: computed(() => props.kind),
+    variant: computed(() => props.variant),
     disabled: isDisabled,
     readonly: computed(() => props.readonly),
     invalid: isInvalid,
@@ -157,7 +157,7 @@
 </script>
 
 <script lang="ts">
-  export type { SelectKind, SelectOptionItem, SelectSize, SelectValue } from './injection-key'
+  export type { SelectOptionItem, SelectSize, SelectValue, SelectVariant } from './injection-key'
 </script>
 
 <template>
@@ -166,14 +166,14 @@
     :data-testid="testId"
     :data-state="openState ? 'open' : 'closed'"
     :data-size="size"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-disabled="isDisabled || null"
     :data-readonly="readonly || null"
     :data-invalid="isInvalid || null"
     :data-required="isRequired || null"
     :data-filled="filled || null"
     :class="attrs.class"
-    class="relative inline-block w-full data-[kind=transparent]:w-auto data-[kind=transparent]:max-w-full"
+    class="relative inline-block w-full data-[variant=ghost]:w-auto data-[variant=ghost]:max-w-full"
   >
     <slot />
     <FormValue

@@ -214,7 +214,7 @@
       sortable: true,
       minWidth: 160
     })),
-    { id: '__actions', kind: 'action', hideable: false }
+    { id: '__actions', type: 'action', hideable: false }
   ])
   watch(selectedTableId, () => {
     rowSelection.value = {}
@@ -535,7 +535,7 @@ LIMIT 3;`
                   <Tooltip content="Refresh tables">
                     <IconButton
                       icon="ai ai-refresh"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Refresh tables"
                     />
@@ -543,7 +543,7 @@ LIMIT 3;`
                   <Tooltip content="Create Table">
                     <IconButton
                       icon="ai ai-plus"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Create Table"
                     />
@@ -582,7 +582,7 @@ LIMIT 3;`
               <template #actions>
                 <Button
                   label="Clear search"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="tableSearch = ''"
                 />
@@ -599,7 +599,7 @@ LIMIT 3;`
               >
                 <Item
                   clickable
-                  kind="option"
+                  variant="option"
                   :aria-pressed="selectedTable?.id === table.id"
                   class="min-w-0 flex-1"
                   @click="selectTable(table.id)"
@@ -617,7 +617,7 @@ LIMIT 3;`
                     <Tooltip :content="`Actions for ${table.name}`">
                       <IconButton
                         icon="ai ai-ellipsis"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="`Actions for ${table.name}`"
                       />
@@ -660,7 +660,7 @@ LIMIT 3;`
                 <Button
                   label="Create Table"
                   icon="ai ai-plus"
-                  kind="secondary"
+                  variant="secondary"
                   size="medium"
                   class="w-full"
                 />
@@ -718,21 +718,21 @@ LIMIT 3;`
               <div class="ms-auto flex items-center gap-(--spacing-xs)">
                 <Button
                   label="Sort"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-sort"
                 />
                 <Tooltip content="Refresh">
                   <IconButton
                     icon="ai ai-refresh"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     aria-label="Refresh"
                   />
                 </Tooltip>
                 <Button
                   label="Insert"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   icon="ai ai-plus"
                 />
@@ -785,7 +785,7 @@ LIMIT 3;`
                   <Tooltip :content="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="ai ai-trash"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       :aria-label="`Delete row ${row['id'] ?? row.__k}`"
                       @click="deleteRow(row)"
@@ -805,13 +805,13 @@ LIMIT 3;`
                       <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                         <Button
                           label="Insert row"
-                          kind="secondary"
+                          variant="secondary"
                           size="medium"
                           icon="ai ai-plus"
                         />
                         <Button
                           label="Import data from CSV"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           icon="ai ai-upload"
                         />
@@ -829,7 +829,7 @@ LIMIT 3;`
                     <template #actions>
                       <Button
                         label="Clear filter"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         @click="rowFilter = ''"
                       />
@@ -848,7 +848,7 @@ LIMIT 3;`
               <p class="text-heading-2xs text-(--text-default)">Columns</p>
               <Button
                 label="Add column"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 icon="ai ai-plus"
               />
@@ -934,7 +934,7 @@ LIMIT 3;`
               >
                 <Item
                   clickable
-                  kind="option"
+                  variant="option"
                   class="min-w-0 flex-1"
                   :title="oneLine(item.sql)"
                   @click="loadFromHistory(item)"
@@ -958,7 +958,7 @@ LIMIT 3;`
                     <Tooltip :content="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
                         icon="ai ai-ellipsis"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="`Actions for ${oneLine(item.sql)}`"
                       />
@@ -999,7 +999,7 @@ LIMIT 3;`
         >
           <Button
             label="Run query"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-play"
             :loading="running"
@@ -1008,14 +1008,14 @@ LIMIT 3;`
           <div class="ms-auto flex items-center gap-(--spacing-xs)">
             <Button
               label="Prettify"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-align-left"
               :disabled="running"
             />
             <Button
               label="Templates"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-bolt"
               :disabled="running"
@@ -1067,7 +1067,7 @@ LIMIT 3;`
               <Tooltip content="Refresh results">
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Refresh results"
                   :loading="running"
@@ -1077,7 +1077,7 @@ LIMIT 3;`
               <Tooltip content="Download results">
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Download results"
                   :disabled="!resultRows.length"
@@ -1086,7 +1086,7 @@ LIMIT 3;`
               <Tooltip content="Toggle columns">
                 <IconButton
                   icon="ai ai-table"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   aria-label="Toggle columns"
                   :disabled="!resultRows.length"
@@ -1192,7 +1192,7 @@ LIMIT 3;`
               <Item
                 v-for="template in filteredTemplates"
                 :key="template.id"
-                kind="outlined"
+                variant="outline"
                 clickable
                 @click="chooseTemplate(template)"
               >
@@ -1220,7 +1220,7 @@ LIMIT 3;`
               <template #actions>
                 <Button
                   label="Clear search"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   @click="templateQuery = ''"
                 />

@@ -263,7 +263,7 @@
           </div>
           <Button
             label="Export"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-download"
             disabled
@@ -335,9 +335,9 @@
                 :loading="loading"
               >
                 <Chart.Grid />
-                <Chart.Axis kind="y" />
+                <Chart.Axis type="y" />
                 <Chart.Axis
-                  kind="x"
+                  type="x"
                   :ticks="4"
                 />
                 <Chart.Area v-if="trend.mark === 'area'" />
@@ -444,7 +444,7 @@
                 >
                   <Item.Media>
                     <Skeleton
-                      kind="circle"
+                      variant="circle"
                       width="2rem"
                       height="2rem"
                     />

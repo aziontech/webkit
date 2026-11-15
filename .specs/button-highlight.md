@@ -3,12 +3,12 @@ name: button-highlight
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 9a9737ff5b42a682e1b433c1f369a99a345cb222ffcd0562034aa4f772cbc942
+checksum: 8f4343d432bef74b71ea31c6440f638206bf029efef2eff66390ea8198b8363d
 created: 2026-06-01
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `kind` axis.
+Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `variant` axis.
 
 ## When to use
 
@@ -33,7 +33,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 
 ## Related
 
-- `button` — the default action control; adds `kind`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.
+- `button` — the default action control; adds `variant`, `iconPosition`, `animated`, `type` and a `leading` slot that this component does not have.
 - `icon-button` — icon-only action when there is no room for a label.
 
 ## Best practices

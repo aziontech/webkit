@@ -34,7 +34,7 @@
     { accessorKey: 'domain', header: 'Domains', grow: 2 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 104 },
     { accessorKey: 'lastModified', header: 'Last Modified', sortable: true, minWidth: 80 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const router = useRouter()
@@ -93,7 +93,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/resources"
             target="_blank"
@@ -101,7 +101,7 @@
           <Button
             label="Create Resource"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             @click="router.push('/resources/new')"
           />
@@ -124,7 +124,7 @@
               >
                 <IconButton
                   icon="ai ai-refresh"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :loading="loading"
                   aria-label="Refresh"
@@ -137,7 +137,7 @@
               >
                 <IconButton
                   icon="ai ai-download"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   :disabled="!matchingItems.length"
                   aria-label="Download CSV"
@@ -168,14 +168,14 @@
                       <Button
                         label="Create Resource"
                         icon="ai ai-plus"
-                        kind="secondary"
+                        variant="secondary"
                         size="small"
                         @click="router.push('/resources/new')"
                       />
                       <Button
                         label="Documentation"
                         icon="ai ai-book"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         href="https://example.com/docs/resources"
                         target="_blank"
@@ -295,7 +295,7 @@
                       <template #actions>
                         <Button
                           label="Clear filters"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="clearFilters"
                         />

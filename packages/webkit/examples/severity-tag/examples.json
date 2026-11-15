@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Levels",
+      "name": "Severities",
       "summary": "Every level side by side, from critical to info.",
-      "file": "levels.vue"
+      "file": "severities.vue"
     },
     {
       "name": "Sizes",

@@ -32,7 +32,7 @@
       copyable?: boolean
       /** Text the copy button copies; defaults to `label`. */
       copyValue?: string
-      /** More values of the same kind, shown as a `+N` chip after the name. */
+      /** More values of the same type, shown as a `+N` chip after the name. */
       more?: OverflowCountItem[]
       /** What the `more` values are (`{ one: 'domain', other: 'domains' }`), the same name as CellTags. */
       noun?: OverflowCountNoun
@@ -137,7 +137,7 @@
     />
     <CopyButton
       v-if="copyable && (copyValue || label)"
-      kind="outlined"
+      variant="outline"
       :value="copyValue || label"
       :aria-label="t('tableCellLink.copy', { label })"
       :data-testid="`${testId}__copy`"

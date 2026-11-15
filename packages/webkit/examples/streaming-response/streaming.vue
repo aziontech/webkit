@@ -46,7 +46,7 @@
     />
     <Button
       label="Replay"
-      kind="outlined"
+      variant="outline"
       size="small"
       icon="ai ai-refresh"
       :disabled="streaming"

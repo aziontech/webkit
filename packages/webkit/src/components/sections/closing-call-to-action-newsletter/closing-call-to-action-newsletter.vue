@@ -216,7 +216,7 @@
                   <Button
                     type="submit"
                     :label="form.submitLabel"
-                    kind="secondary"
+                    variant="secondary"
                     size="large"
                     :loading="loading"
                   />
@@ -236,7 +236,7 @@
           class="relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
         >
           <TextureMaterial
-            kind="pixelate"
+            variant="pixelate"
             size="small"
           />
         </div>
@@ -249,7 +249,7 @@
       data-hatch="true"
       class="h-[calc(var(--spacing-2xl)*2)]"
     >
-      <TextureMaterial kind="lines" />
+      <TextureMaterial variant="lines" />
     </FrameBox>
   </section>
 </template>

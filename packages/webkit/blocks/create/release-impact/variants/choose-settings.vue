@@ -191,14 +191,14 @@
               </span>
               <Button
                 label="Select all"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :disabled="allSelected"
                 @click="selectAll"
               />
               <Button
                 label="Clear"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 :disabled="!selected.length"
                 @click="selected = []"
@@ -216,7 +216,7 @@
             <template #actions>
               <Button
                 label="Clear search"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 @click="search = ''"
               />
@@ -338,7 +338,7 @@
                   <Button
                     :label="group.action ?? ''"
                     :href="group.href ?? ''"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     icon="ai ai-external-link"
                   />
@@ -349,7 +349,7 @@
         </section>
       </div>
 
-      <SaveBar kind="docked">
+      <SaveBar variant="docked">
         <template #leading>
           <p
             id="release-impact-settings-hint"
@@ -365,13 +365,13 @@
         <template #actions>
           <Button
             label="Cancel"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="/services/web-app"
           />
           <Button
             label="Continue"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-arrow-right"
             icon-position="trailing"

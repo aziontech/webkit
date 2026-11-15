@@ -198,7 +198,7 @@
           >
             <IconButton
               icon="ai ai-x"
-              kind="transparent"
+              variant="ghost"
               size="small"
               :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
               :aria-describedby="item.error || item.warning ? messageId(index) : undefined"
@@ -212,7 +212,7 @@
           :value="item.progress ?? 0"
           :indeterminate="typeof item.progress !== 'number'"
           size="small"
-          kind="rounded"
+          variant="rounded"
           :aria-label="t('fileTokenGroup.uploading', { name: relativePathOf(item.file) })"
         />
         <p
@@ -236,7 +236,7 @@
       class="flex"
     >
       <Button
-        kind="transparent"
+        variant="ghost"
         size="small"
         :label="
           expanded ? t('fileTokenGroup.showFewer') : t('fileTokenGroup.showMore', { count: hidden })

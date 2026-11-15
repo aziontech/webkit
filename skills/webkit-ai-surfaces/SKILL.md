@@ -54,7 +54,7 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 | Thumbs up / down on a response                                          | `ChatMessage.Feedback`                                                          |
 | The composer                                                            | `PromptInput`                                                                   |
 | Waiting for the first token                                             | `ChatMessage status="pending"` (renders `AiLoading`)                            |
-| A table or code block about to appear while text streams                | `AiLoading kind="bar"`                                                          |
+| A table or code block about to appear while text streams                | `AiLoading variant="bar"`                                                       |
 | The model's Markdown, streamed or finished                              | `StreamingResponse`                                                             |
 | The model reasoning before it answers                                   | `Reasoning`                                                                     |
 | Where a statement comes from                                            | `[n]` in the Markdown → `Citation`; the list → `Sources` with the same `anchor` |
@@ -88,7 +88,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
   `v-html` model output, not even "sanitized".
 - **Nothing with side effects without `ToolApproval`.** Read-only calls are recorded with
   `ToolCall` and continue. Writes, deploys, purges and deletes wait for Approve. Irreversible actions
-  use `kind="danger"` and `confirmation-phrase`. The card is not a dialog: no focus trap, no initial
+  use `variant="danger"` and `confirmation-phrase`. The card is not a dialog: no focus trap, no initial
   focus, Approve never pre-selected.
 - **Undecided requests expire** (`status="expired"`) and the assistant says nothing ran.
 - **No secrets** in reasoning, tool inputs or outputs, or commands shown for approval.

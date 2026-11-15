@@ -13,7 +13,7 @@
         :key="name"
         :label="name"
         pattern="marble"
-        kind="square"
+        variant="square"
         size="large"
       />
     </div>
@@ -24,7 +24,7 @@
         :label="name"
         :colors="blue"
         pattern="marble"
-        kind="square"
+        variant="square"
         size="large"
       />
     </div>

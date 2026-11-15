@@ -83,7 +83,7 @@
                   <Button
                     label="Deploy"
                     icon="ai ai-cloud-upload"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                   />
                 </template>
@@ -105,7 +105,7 @@
                         <Item.List>
                           <SettingRow
                             title="Connected repository"
-                            kind="compact"
+                            variant="compact"
                           >
                             <template #description>
                               <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
@@ -136,7 +136,7 @@
                             <Button
                               type="button"
                               label="Disconnect"
-                              kind="danger"
+                              variant="danger"
                               size="small"
                             />
                           </SettingRow>
@@ -291,7 +291,7 @@
                                 />
                               </div>
                               <CopyButton
-                                kind="transparent"
+                                variant="ghost"
                                 value="analytics-app build token"
                                 aria-label="Copy API token"
                                 size="small"
@@ -321,14 +321,14 @@
                   <Button
                     type="button"
                     label="Discard"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :disabled="saving"
                     @click="discard"
                   />
                   <Button
                     label="Save"
-                    kind="primary"
+                    variant="primary"
                     size="medium"
                     :loading="saving"
                     @click="save"
@@ -355,7 +355,7 @@
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`/resources/analytics-app/${activeTab}`"
               />

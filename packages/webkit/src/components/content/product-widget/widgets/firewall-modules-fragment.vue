@@ -133,7 +133,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     shell="legacy"
     :fade="frame.scrolled ? 'y' : 'bottom'"
     class="[--mockup-fade-edge:16%] [--mockup-fade-start:74%]"

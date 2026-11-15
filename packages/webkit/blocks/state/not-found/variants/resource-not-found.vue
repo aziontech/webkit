@@ -18,7 +18,7 @@
         <template #actions>
           <Button
             label="Back to services"
-            kind="primary"
+            variant="primary"
             size="medium"
             href="/services"
           />

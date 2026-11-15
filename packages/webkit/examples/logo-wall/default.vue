@@ -40,7 +40,7 @@
     >
       <template #aside>
         <Quote
-          kind="signed"
+          variant="signed"
           :logo="herosparkLogo"
           logo-alt="HeroSpark"
           text="Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development."

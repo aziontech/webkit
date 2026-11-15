@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Requests',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'workload',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Workload',
       title: 'shop.example.com',
       icon: 'ai ai-workloads',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'metrics',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Real-Time Metrics',
       title: 'Traffic, errors and latency',
       icon: 'ai ai-real-time-metrics',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'dashboards',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Dashboards',
       title: 'Per product, per workload',
       icon: 'ai ai-chart-line',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'graphql',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'GraphQL API',
       title: 'Metrics in your tools',
       icon: 'ai ai-graphql'

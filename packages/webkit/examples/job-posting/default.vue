@@ -26,7 +26,7 @@
       title: 'About Acme',
       blocks: [
         {
-          kind: 'text',
+          type: 'text',
           text: 'Acme builds the platform teams use to ship and run their applications worldwide. We are a small team with a big footprint, and we care about tools that get out of the way.'
         }
       ]
@@ -35,11 +35,11 @@
       title: 'About the role',
       blocks: [
         {
-          kind: 'text',
+          type: 'text',
           text: 'As a Senior Platform Engineer you will turn quality into a built-in capability of our engineering platform: automation, internal tools and standards that remove manual steps from the delivery cycle.'
         },
         {
-          kind: 'text',
+          type: 'text',
           text: 'You will work with the development, platform and infrastructure teams on self-service tools, standard pipelines and automated release checks.'
         }
       ]
@@ -48,7 +48,7 @@
       title: 'What you will do',
       blocks: [
         {
-          kind: 'list',
+          type: 'list',
           items: [
             'Build and evolve standard CI/CD pipelines for tests, checks and releases.',
             'Write internal frameworks and tools for test automation.',
@@ -62,7 +62,7 @@
       title: 'What you bring',
       blocks: [
         {
-          kind: 'list',
+          type: 'list',
           items: [
             'Experience with test automation and quality engineering.',
             'Solid experience with CI/CD and pipeline automation.',
@@ -82,33 +82,33 @@
     fields: [
       {
         name: 'name',
-        kind: 'text',
+        type: 'text',
         label: 'Name',
         required: true,
         autocomplete: 'name'
       },
       {
         name: 'email',
-        kind: 'email',
+        type: 'email',
         label: 'Email address',
         required: true,
         helper: 'We answer every application at this address.'
       },
       {
         name: 'phone',
-        kind: 'phone',
+        type: 'phone',
         label: 'Contact number',
         required: true
       },
       {
         name: 'linkedin',
-        kind: 'url',
+        type: 'url',
         label: 'LinkedIn profile URL',
         helper: 'Optional.'
       },
       {
         name: 'resume',
-        kind: 'file',
+        type: 'file',
         label: 'Resume',
         required: true,
         accept: 'application/pdf,.docx,.doc',

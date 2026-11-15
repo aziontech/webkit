@@ -13,9 +13,9 @@
       "file": "spec.vue"
     },
     {
-      "name": "NodeKinds",
-      "summary": "One node of each kind: `app`, the quiet window of the consumer application; `pill`, the client; `card`, a platform piece with its eyebrow, icon and status; `item`, a model or provider with a mono line under its title; and `tile`, an icon-only cell whose name shows on hover.",
-      "file": "node-kinds.vue"
+      "name": "NodeTypes",
+      "summary": "One node of each type: `app`, the quiet window of the consumer application; `pill`, the client; `card`, a platform piece with its eyebrow, icon and status; `item`, a model or provider with a mono line under its title; and `tile`, an icon-only cell whose name shows on hover.",
+      "file": "node-types.vue"
     },
     {
       "name": "Groups",

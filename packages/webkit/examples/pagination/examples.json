@@ -9,7 +9,7 @@
     },
     {
       "name": "Buttons",
-      "summary": "`Pagination.Button` kinds (previous / next / number / more) and states: default, active (current page), and disabled. The buttons are butted into one segmented strip — the frame, border and end radii come from the `Pagination` root, so a consumer composes the buttons and nothing else.",
+      "summary": "`Pagination.Button` types (previous / next / number / more) and states: default, active (current page), and disabled. The buttons are butted into one segmented strip — the frame, border and end radii come from the `Pagination` root, so a consumer composes the buttons and nothing else.",
       "file": "buttons.vue"
     },
     {

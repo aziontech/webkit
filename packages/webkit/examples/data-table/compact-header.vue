@@ -50,7 +50,7 @@
     { accessorKey: 'status', header: 'Status' },
     { accessorKey: 'editor', header: 'Last Editor', sortable: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
-    { id: 'actions', header: '', kind: 'action', sortable: false }
+    { id: 'actions', header: '', type: 'action', sortable: false }
   ]
 
   const sorting = ref([])
@@ -100,7 +100,7 @@
           <IconButton
             icon="ai ai-ellipsis-vertical"
             aria-label="Row actions"
-            kind="transparent"
+            variant="ghost"
             size="small"
           />
         </DropdownMenuTrigger>

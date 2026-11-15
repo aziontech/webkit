@@ -70,7 +70,7 @@
       <IconButton
         icon="ai ai-chevron-left"
         :ariaLabel="t('responseBranches.previous')"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :disabled="disabled || index === 0"
         :data-testid="`${testId}__previous`"
@@ -86,7 +86,7 @@
       <IconButton
         icon="ai ai-chevron-right"
         :ariaLabel="t('responseBranches.next')"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :disabled="disabled || index === last"
         :data-testid="`${testId}__next`"

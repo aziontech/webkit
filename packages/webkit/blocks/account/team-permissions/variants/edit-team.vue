@@ -257,7 +257,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Teams and permissions"
-          kind="outlined"
+          variant="outline"
           size="small"
           href="/account/teams"
         />
@@ -268,7 +268,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -364,7 +364,7 @@
                           <Button
                             type="button"
                             label="Add"
-                            kind="outlined"
+                            variant="outline"
                             size="medium"
                             icon="ai ai-plus"
                             @click="addMember"
@@ -390,7 +390,7 @@
                           <Avatar
                             :label="initials(userByEmail(email)?.name ?? email)"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                           <span class="flex min-w-0 flex-1 flex-col">
                             <span
@@ -405,7 +405,7 @@
                           <IconButton
                             :id="`team-member-remove-${email}`"
                             icon="ai ai-x"
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             :aria-label="`Remove ${userByEmail(email)?.name ?? email}`"
                             @click="removeMember(email)"
@@ -450,14 +450,14 @@
                         <Button
                           type="button"
                           label="Select all"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           @click="selectAll"
                         />
                         <Button
                           type="button"
                           label="Clear"
-                          kind="transparent"
+                          variant="ghost"
                           size="medium"
                           @click="clearAll"
                         />
@@ -481,7 +481,7 @@
                           <Button
                             type="button"
                             label="Clear filter"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearQuery"
                           />
@@ -588,7 +588,7 @@
                       <Button
                         type="button"
                         label="Delete team"
-                        kind="danger"
+                        variant="danger"
                         size="medium"
                         icon="ai ai-trash"
                         @click="deleteOpen = true"
@@ -601,7 +601,7 @@
           </div>
         </div>
 
-        <SaveBar kind="centered">
+        <SaveBar variant="centered">
           <template v-if="dirty">You have unsaved changes.</template>
           <template #actions>
             <Button
@@ -609,7 +609,7 @@
               v-if="dirty"
               type="button"
               label="Discard"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="submitting"
               @click="discard"
@@ -619,13 +619,13 @@
               v-else
               type="button"
               label="Back to teams"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="/account/teams"
             />
             <Button
               label="Save changes"
-              kind="primary"
+              variant="primary"
               size="medium"
               type="submit"
               :disabled="!dirty"

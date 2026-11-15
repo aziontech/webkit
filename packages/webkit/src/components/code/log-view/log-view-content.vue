@@ -93,7 +93,7 @@
     >
       <CopyButton
         :value="ctx.copyText.value"
-        kind="outlined"
+        variant="outline"
         size="small"
         :ariaLabel="t('logView.copy')"
         :copiedLabel="t('logView.copied')"
@@ -384,7 +384,7 @@
             >
               <Button
                 :label="t('logView.clearSearch')"
-                kind="transparent"
+                variant="ghost"
                 size="medium"
                 :disabled="ctx.disabled.value"
                 @click="ctx.setSearch('')"

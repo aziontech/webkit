@@ -26,7 +26,7 @@ The creation header from `top-bar/creation-bar`: a small outlined back `IconButt
 
 ### B. Page heading — `PageHeader` (required)
 
-`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `kind="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
+`PageHeader` at `size="large"`. The description says what the page offers in one sentence and ends with inline file and folder `Button`s at `variant="link"` that open the system picker (a hidden file input, and one with `webkitdirectory` for a folder). Picking hands the files to the Upload a project flow (`create/deploy-template` Upload); the block announces it with an info toast. Dropping a folder is the job of `state/project-intake`; this page does not claim it. They are link-coloured and underline only on hover, like the rest of the console's text actions.
 
 ### C. Git connect — `EmptyState`, `Button`, `Alert`, `Link` (required until connected)
 
@@ -42,7 +42,7 @@ A flush `Card` with an `Item` list, one small row per repository: glyph, name, i
 
 ### F. Template gallery — `Input`, `ScrollArea`, `Card`, `EmptyState` (required)
 
-Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `Card kind="integration"` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
+Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `Card variant="integration"` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
 
 ## Do
 
@@ -60,7 +60,7 @@ Beside the Start from template heading, a medium search `Input` that filters the
 - Don't add a Continue or Next button; each Import and each template card starts its flow.
 - Don't let the template gallery push the page into a long scroll on large screens; it scrolls inside its own area.
 - Don't show templates as a dense table; the glyph and sentence are what the user scans.
-- Don't hand-write the file and folder links or underline them at rest; use `Button kind="link"`.
+- Don't hand-write the file and folder links or underline them at rest; use `Button variant="link"`.
 
 ## Copy
 

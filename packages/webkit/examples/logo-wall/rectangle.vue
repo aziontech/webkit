@@ -17,7 +17,7 @@
 <template>
   <FrameBox>
     <LogoWall
-      kind="rectangle"
+      variant="rectangle"
       aria-label="Clients running on Azion"
       :items="[
         { src: magaluLogo, alt: 'Magalu', href: 'https://www.azion.com/en/success-case/magalu/' },
@@ -47,7 +47,7 @@
     >
       <template #aside>
         <Quote
-          kind="signed"
+          variant="signed"
           :logo="herosparkLogo"
           logo-alt="HeroSpark"
           text="Azion transformed our operations, reducing costs and improving performance while freeing 200+ monthly hours for strategic development."

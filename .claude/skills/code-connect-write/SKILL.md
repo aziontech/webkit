@@ -11,7 +11,7 @@ enforced_by: [no-invention, prop-vocabulary, naming]
 
 ## Purpose
 
-Map Figma variants (kind / size / state) → Vue props, Figma slots → Vue children, and emit the snippet Dev Mode shows in the Figma file. The file lives next to the `.vue` at `packages/webkit/src/components/<category>/<name>/<name>.figma.ts`.
+Map Figma variants (variant / size / state) → Vue props, Figma slots → Vue children, and emit the snippet Dev Mode shows in the Figma file. The file lives next to the `.vue` at `packages/webkit/src/components/<category>/<name>/<name>.figma.ts`.
 
 ## When to invoke
 
@@ -39,7 +39,7 @@ Map Figma variants (kind / size / state) → Vue props, Figma slots → Vue chil
    const instance = figma.selectedInstance
 
    const label = instance.getString('label')
-   const kind = instance.getEnum('kind', {
+   const variant = instance.getEnum('kind', {
      primary: 'primary',
      secondary: 'secondary'
    })
@@ -50,8 +50,8 @@ Map Figma variants (kind / size / state) → Vue props, Figma slots → Vue chil
 
    export default {
      example: figma.code`<<PascalName>
-     label="${label}"${kind === 'primary' ? '' : figma.code`
-     kind="${kind}"`}${disabled ? figma.code`
+     label="${label}"${variant === 'primary' ? '' : figma.code`
+     variant="${variant}"`}${disabled ? figma.code`
      disabled` : ''}
    />`,
      imports: ["import <PascalName> from '@aziontech/webkit/<name>'"],

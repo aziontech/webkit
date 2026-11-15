@@ -15,7 +15,7 @@
   <div style="width: 320px">
     <MultiSelect
       v-model="value"
-      kind="chips"
+      variant="chips"
       searchable
       allow-custom
       placeholder="Add labels"

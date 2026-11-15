@@ -50,7 +50,7 @@
     <PopoverTrigger>
       <Button
         size="small"
-        kind="secondary"
+        variant="secondary"
         icon="ai ai-filter"
         label="Filter"
       />
@@ -64,7 +64,7 @@
       </PopoverHeader>
 
       <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-(--spacing-md)">
-        <FieldLegend kind="label">New Filter</FieldLegend>
+        <FieldLegend type="label">New Filter</FieldLegend>
         <div class="flex items-start gap-(--spacing-sm)">
           <div class="min-w-0 flex-1">
             <SelectRoot
@@ -114,13 +114,13 @@
       <PopoverFooter>
         <Button
           size="small"
-          kind="outlined"
+          variant="outline"
           label="Cancel"
           @click="cancel"
         />
         <Button
           size="small"
-          kind="primary"
+          variant="primary"
           label="Apply"
           @click="apply"
         />

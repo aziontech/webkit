@@ -7,7 +7,7 @@
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextKind } from '@aziontech/webkit/helper-text'
+  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -39,7 +39,7 @@
   }
 
   interface FieldError {
-    kind: HelperTextKind
+    type: HelperTextType
     message: string
   }
 
@@ -228,10 +228,10 @@
   const validate = (fields: FieldName[]) => {
     for (const field of fields) delete errors[field]
     if (fields.includes('name') && !form.name.trim()) {
-      errors.name = { kind: 'required', message: 'This field is required.' }
+      errors.name = { type: 'required', message: 'This field is required.' }
     }
     if (fields.includes('items') && !form.items.trim()) {
-      errors.items = { kind: 'required', message: 'This field is required.' }
+      errors.items = { type: 'required', message: 'This field is required.' }
     }
     return fields.every((field) => !errors[field])
   }
@@ -323,7 +323,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Access Lists"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -333,7 +333,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -350,7 +350,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -438,7 +438,7 @@
                 </div>
                 <HelperText
                   v-if="whereMissing"
-                  kind="required"
+                  type="required"
                   label="Select a policy, or continue without one."
                 />
               </div>
@@ -447,13 +447,13 @@
                 <Button
                   type="button"
                   label="Create a policy"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                 />
                 <Button
                   type="button"
                   label="Continue without a policy"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="skip"
                 />
@@ -524,7 +524,7 @@
                           aria-label="Name"
                           placeholder="office-ranges"
                           autocomplete="off"
-                          :required="errors.name?.kind === 'required'"
+                          :required="errors.name?.type === 'required'"
                           :aria-describedby="
                             errors.name ? 'create-access-list-name-message' : undefined
                           "
@@ -533,7 +533,7 @@
                         <HelperText
                           v-if="errors.name"
                           id="create-access-list-name-message"
-                          :kind="errors.name.kind"
+                          :type="errors.name.type"
                           :label="errors.name.message"
                         />
                       </SettingRow>
@@ -556,11 +556,11 @@
                     <Item.List>
                       <SettingRow
                         title="Type"
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <RadioGroup
                           v-model="form.type"
-                          kind="card"
+                          variant="card"
                           class="w-full"
                           name="access-lists-type"
                           aria-label="Type"
@@ -577,7 +577,7 @@
                       <SettingRow
                         :title="listField.label"
                         :description="listField.helper"
-                        kind="stacked"
+                        variant="stacked"
                       >
                         <Textarea
                           v-model="form.items"
@@ -585,7 +585,7 @@
                           :rows="5"
                           :aria-label="listField.label"
                           :placeholder="listField.placeholder"
-                          :required="errors.items?.kind === 'required'"
+                          :required="errors.items?.type === 'required'"
                           :aria-describedby="
                             errors.items ? 'create-access-list-items-message' : undefined
                           "
@@ -594,7 +594,7 @@
                         <HelperText
                           v-if="errors.items"
                           id="create-access-list-items-message"
-                          :kind="errors.items.kind"
+                          :type="errors.items.type"
                           :label="errors.items.message"
                         />
                       </SettingRow>
@@ -618,7 +618,7 @@
                     <Button
                       type="button"
                       label="Edit"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Edit where it runs"
                       @click="editStep('where-it-runs')"
@@ -658,7 +658,7 @@
                     <Button
                       type="button"
                       label="Edit"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       aria-label="Edit list settings"
                       @click="editStep('settings')"
@@ -680,7 +680,7 @@
                           <Button
                             type="button"
                             label="Edit"
-                            kind="transparent"
+                            variant="ghost"
                             size="small"
                             aria-label="Edit name"
                             @click="editStep('general')"

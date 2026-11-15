@@ -5,13 +5,13 @@
 <template>
   <div class="flex flex-col gap-(--spacing-lg)">
     <DocPrompt
-      kind="block"
+      variant="block"
       title="AI Assistant"
     >
       Deploy this repository to Azion and show me the edge URL when it is live.
     </DocPrompt>
     <DocPrompt
-      kind="line"
+      variant="line"
       title="AI Assistant"
     >
       Deploy this repository to Azion and show me the edge URL when it is live. Then open the

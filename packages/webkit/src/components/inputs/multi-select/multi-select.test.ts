@@ -802,7 +802,7 @@ describe('MultiSelect', () => {
 
   const FieldHarness = defineComponent({
     props: {
-      kind: { type: String, default: 'chips' },
+      variant: { type: String, default: 'chips' },
       searchable: { type: Boolean, default: false },
       allowCustom: { type: Boolean, default: false },
       filter: { type: Boolean, default: true },
@@ -837,7 +837,7 @@ describe('MultiSelect', () => {
           'onUpdate:open': (o: boolean) => {
             this.open = o
           },
-          kind: this.kind,
+          variant: this.variant,
           searchable: this.searchable,
           allowCustom: this.allowCustom,
           filter: this.filter,
@@ -869,7 +869,7 @@ describe('MultiSelect', () => {
   const visibleOptions = () =>
     Array.from(
       document.body.querySelectorAll<HTMLElement>('[role="listbox"] [role="option"]')
-    ).filter((el) => el.style.display !== 'none' && el.dataset['kind'] !== 'create')
+    ).filter((el) => el.style.display !== 'none' && el.dataset['variant'] !== 'create')
 
   describe('chips, typed filter and list states (spec v4)', () => {
     it('renders one removable chip per selected value with its label', async () => {
@@ -879,7 +879,7 @@ describe('MultiSelect', () => {
       const chips = container.querySelectorAll('[data-testid="multi-select-trigger__chip"]')
       expect(Array.from(chips).map((c) => c.textContent?.trim())).toEqual(['Alpha', 'Beta'])
       const trigger = container.querySelector('[data-testid="multi-select-trigger"]')
-      expect(trigger?.getAttribute('data-kind')).toBe('chips')
+      expect(trigger?.getAttribute('data-variant')).toBe('chips')
       expect(container.querySelector('[role="combobox"]')?.tagName).toBe('BUTTON')
       cleanupTeleported()
     })
@@ -1013,7 +1013,7 @@ describe('MultiSelect', () => {
     })
 
     it('loading and error replace the options with their rows', async () => {
-      const { rerender } = render(FieldHarness, { props: { loading: true, kind: 'summary' } })
+      const { rerender } = render(FieldHarness, { props: { loading: true, variant: 'summary' } })
       await fireEvent.click(document.querySelector('[role="combobox"]')!)
       await nextTick()
       expect(listbox()?.getAttribute('aria-busy')).toBe('true')

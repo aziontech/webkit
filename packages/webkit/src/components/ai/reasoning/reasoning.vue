@@ -114,7 +114,7 @@
       <Button
         v-if="skippable && streaming"
         :label="t('reasoning.skip')"
-        kind="transparent"
+        variant="ghost"
         size="small"
         :data-testid="`${testId}__skip`"
         @click="(event: MouseEvent) => emit('skip', event)"

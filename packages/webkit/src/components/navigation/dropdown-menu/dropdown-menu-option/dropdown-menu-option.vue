@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useSlots, watch } from 'vue'
 
-  import type { DropdownMenuOptionKind } from '../injection-key'
+  import type { DropdownMenuOptionType } from '../injection-key'
   import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
 
   defineOptions({
@@ -33,7 +33,7 @@
     /** Destination URL; the option renders as a link that still emits select. */
     href?: string
     /** Item role: a plain action that closes the menu, or a checkbox or radio item that keeps it open. */
-    kind?: DropdownMenuOptionKind
+    type?: DropdownMenuOptionType
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -42,7 +42,7 @@
     disabled: false,
     selected: false,
     href: '',
-    kind: 'default'
+    type: 'default'
   })
 
   const attrs = useAttrs()
@@ -59,12 +59,12 @@
   const hasLeading = () => Boolean(slots['leading'])
   const hasTrailing = () => Boolean(slots['trailing'])
 
-  const checkable = computed(() => props.kind !== 'default')
+  const checkable = computed(() => props.type !== 'default')
 
   const role = computed(() =>
-    props.kind === 'checkbox'
+    props.type === 'checkbox'
       ? 'menuitemcheckbox'
-      : props.kind === 'radio' || props.selected
+      : props.type === 'radio' || props.selected
         ? 'menuitemradio'
         : 'menuitem'
   )
@@ -138,11 +138,11 @@
       :aria-checked="ariaChecked"
       :aria-disabled="disabled || undefined"
       :data-testid="testId"
-      :data-kind="kind"
+      :data-type="type"
       :data-selected="selected || null"
       :data-disabled="disabled || null"
       :data-ungrouped="inGroup ? null : ''"
-      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[kind=default]:data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-2xs)"
+      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[type=default]:data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-2xs)"
       @click="onClick"
       @keydown="onKeydown"
       @pointerenter="onPointerenter"
@@ -155,11 +155,11 @@
         class="flex size-4 shrink-0 items-center justify-center"
       >
         <i
-          v-if="kind === 'checkbox' && selected"
+          v-if="type === 'checkbox' && selected"
           class="ai ai-check text-[length:inherit] leading-none"
         />
         <span
-          v-else-if="kind === 'radio' && selected"
+          v-else-if="type === 'radio' && selected"
           class="size-1.5 rounded-full bg-current"
         />
       </span>

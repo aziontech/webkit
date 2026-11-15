@@ -14,8 +14,8 @@ export { CardGridCell }
 export type {
   CardGridColumns,
   CardGridDividerColor,
-  CardGridKind,
   CardGridLayout,
-  CardGridMobileColumns
+  CardGridMobileColumns,
+  CardGridVariant
 } from './card-grid.vue'
-export type { CardGridCellKind } from './card-grid-cell/card-grid-cell.vue'
+export type { CardGridCellVariant } from './card-grid-cell/card-grid-cell.vue'

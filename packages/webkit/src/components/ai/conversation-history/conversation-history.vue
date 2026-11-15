@@ -120,7 +120,7 @@
         class="px-(--spacing-xs)"
       >
         <Skeleton
-          kind="rectangle"
+          variant="rectangle"
           :width="`${90 - n * 8}%`"
           height="var(--size-5)"
         />
@@ -187,7 +187,7 @@
                   v-if="removable"
                   icon="ai ai-trash"
                   :ariaLabel="t('conversationHistory.remove', { title: item.title })"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   :data-testid="`${testId}__remove`"
                   @click="(event: MouseEvent) => emit('remove', event, item.id)"

@@ -1094,7 +1094,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/rules"
             target="_blank"
@@ -1102,7 +1102,7 @@
           <Button
             label="Add Rule"
             icon="ai ai-plus"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="loading"
             @click="addRule()"
@@ -1224,7 +1224,7 @@
                           <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="ai ai-chevron-up"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               data-control="up"
                               :aria-label="
@@ -1239,7 +1239,7 @@
                           <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="ai ai-chevron-down"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               data-control="down"
                               :aria-label="
@@ -1256,7 +1256,7 @@
                       <template #cell-name="{ row }">
                         <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <Button
-                            kind="link"
+                            variant="link"
                             :label="row.name"
                             data-rule-name
                             :aria-label="`Edit ${row.name}`"
@@ -1309,7 +1309,7 @@
                           <template #actions>
                             <Button
                               label="Clear search"
-                              kind="outlined"
+                              variant="outline"
                               size="small"
                               @click="search = ''"
                             />
@@ -1327,7 +1327,7 @@
                         <Button
                           label="Add Rule"
                           icon="ai ai-plus"
-                          kind="outlined"
+                          variant="outline"
                           size="medium"
                           @click="addRule(group.value)"
                         />
@@ -1357,7 +1357,7 @@
           <Button
             type="button"
             label="Discard"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :disabled="saving"
             @click="discard"
@@ -1365,7 +1365,7 @@
           <Button
             type="button"
             label="Review changes"
-            kind="primary"
+            variant="primary"
             size="medium"
             :disabled="saving"
             @click="openReview"
@@ -1428,7 +1428,7 @@
                 class="w-full"
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 :disabled="saving"
                 @click="reviewOpen = false"
               />
@@ -1438,7 +1438,7 @@
                 class="w-full"
                 type="button"
                 :label="saveFailed ? 'Save again' : 'Save'"
-                kind="primary"
+                variant="primary"
                 :loading="saving"
                 @click="save"
               />
@@ -1521,7 +1521,7 @@
                       <div class="flex flex-col gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.phase"
-                          kind="card"
+                          variant="card"
                           name="rule-phase"
                           aria-label="Phase"
                           :disabled="submitting || editing"
@@ -1536,7 +1536,7 @@
                         </RadioGroup>
                         <HelperText
                           v-if="editing"
-                          kind="disabled"
+                          type="disabled"
                           label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
                         />
                       </div>
@@ -1804,7 +1804,7 @@
                               <Tooltip content="Move behavior up">
                                 <IconButton
                                   icon="ai ai-chevron-up"
-                                  kind="outlined"
+                                  variant="outline"
                                   size="large"
                                   aria-label="Move behavior up"
                                   :disabled="submitting || bIdx === 0"
@@ -1814,7 +1814,7 @@
                               <Tooltip content="Move behavior down">
                                 <IconButton
                                   icon="ai ai-chevron-down"
-                                  kind="outlined"
+                                  variant="outline"
                                   size="large"
                                   aria-label="Move behavior down"
                                   :disabled="submitting || bIdx === form.behaviors.length - 1"
@@ -1824,7 +1824,7 @@
                               <Tooltip content="Remove behavior">
                                 <IconButton
                                   icon="ai ai-trash"
-                                  kind="outlined"
+                                  variant="outline"
                                   size="large"
                                   aria-label="Remove behavior"
                                   :disabled="submitting || form.behaviors.length <= 1"
@@ -1839,7 +1839,7 @@
                           <Button
                             type="button"
                             label="Add behavior"
-                            kind="outlined"
+                            variant="outline"
                             size="medium"
                             icon="ai ai-circle-plus"
                             :disabled="submitting || !canAddBehavior"
@@ -1872,7 +1872,7 @@
                       <SettingRow
                         title="Active"
                         description="Turn the rule on right after it is created."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -1892,7 +1892,7 @@
               <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="submitting"
                 type="submit"

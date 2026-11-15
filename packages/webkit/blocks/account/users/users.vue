@@ -155,7 +155,7 @@
     { accessorKey: 'teams', header: 'Teams', grow: 2, minWidth: 220 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { accessorKey: 'lastActive', header: 'Last active', minWidth: 160 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const optionsOf = (key: 'role' | 'status') =>
@@ -350,7 +350,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/users"
             target="_blank"
@@ -358,7 +358,7 @@
           <Button
             label="Invite User"
             icon="ai ai-user-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             @click="openInvite"
           />
@@ -384,7 +384,7 @@
             >
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
@@ -397,7 +397,7 @@
             >
               <IconButton
                 icon="ai ai-download"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="!matchingItems.length"
                 aria-label="Download CSV"
@@ -419,7 +419,7 @@
           <template #actions>
             <Button
               label="Retry"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="retryLoad"
             />
@@ -444,7 +444,7 @@
                   <Avatar
                     :label="displayName(row)"
                     size="small"
-                    kind="square"
+                    variant="square"
                   />
                   <div class="flex min-w-0 flex-col">
                     <span class="truncate text-body-sm text-(--text-default)">{{
@@ -564,7 +564,7 @@
                   <template #actions>
                     <Button
                       label="Clear filters"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       @click="clearFilters"
                     />
@@ -586,7 +586,7 @@
             <Button
               label="Invite User"
               icon="ai ai-user-plus"
-              kind="secondary"
+              variant="secondary"
               size="small"
               @click="openInvite"
             />
@@ -677,14 +677,14 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 :disabled="sending"
                 @click="inviteOpen = false"
               />
               <Button
                 type="submit"
                 label="Send invitation"
-                kind="primary"
+                variant="primary"
                 icon="ai ai-send"
                 :loading="sending"
               />
@@ -704,7 +704,7 @@
             <Avatar
               :label="pending ? displayName(pending) : ''"
               size="medium"
-              kind="square"
+              variant="square"
             />
             <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
           </div>
@@ -746,14 +746,14 @@
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Close"
-              kind="outlined"
+              variant="outline"
               size="medium"
               @click="profileOpen = false"
             />
             <Button
               v-if="pending && !pending.owner"
               label="Edit role"
-              kind="primary"
+              variant="primary"
               size="medium"
               @click="openRole(pending)"
             />
@@ -809,14 +809,14 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 @click="roleOpen = false"
               />
               <Button
                 type="submit"
                 label="Save role"
-                kind="primary"
+                variant="primary"
                 size="medium"
               />
             </div>

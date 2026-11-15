@@ -137,7 +137,7 @@ import Input from '@aziontech/webkit/input'
     <Field.Label>Email</Field.Label>
     <Input name="email" type="email" autocomplete="email" />
   </Field>
-  <Button kind="primary" @click="submit">Create account</Button>
+  <Button variant="primary" @click="submit">Create account</Button>
 </template>
 ```
 

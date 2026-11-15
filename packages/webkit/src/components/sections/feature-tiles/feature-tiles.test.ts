@@ -89,16 +89,16 @@ describe('FeatureTiles', () => {
   it.each([
     ['artwork', artworkTiles],
     ['illustrated', illustratedTiles]
-  ] as const)('mirrors kind=%s on data-kind', (kind, tiles) => {
-    const { getByTestId } = band({ kind, tiles })
+  ] as const)('mirrors variant=%s on data-variant', (variant, tiles) => {
+    const { getByTestId } = band({ variant, tiles })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
   })
 
-  it('defaults to the artwork kind', () => {
+  it('defaults to the artwork variant', () => {
     const { getByTestId } = band()
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('artwork')
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('artwork')
   })
 
   it('sets the anchor as the band id', () => {
@@ -176,7 +176,7 @@ describe('FeatureTiles', () => {
   })
 
   it('renders an illustrated tile without an image', () => {
-    const { container, getAllByTestId } = band({ kind: 'illustrated', tiles: illustratedTiles })
+    const { container, getAllByTestId } = band({ variant: 'illustrated', tiles: illustratedTiles })
 
     const tiles = getAllByTestId(TILE_TESTID)
     expect(tiles).toHaveLength(illustratedTiles.length)
@@ -202,14 +202,14 @@ describe('FeatureTiles', () => {
     expect(queryAllByTestId(TILE_TESTID)).toHaveLength(0)
   })
 
-  it('has no a11y violations with the artwork kind', async () => {
+  it('has no a11y violations with the artwork variant', async () => {
     const { container } = band()
 
     await expectNoA11yViolations(container)
   })
 
-  it('has no a11y violations with the illustrated kind', async () => {
-    const { container } = band({ kind: 'illustrated', tiles: illustratedTiles })
+  it('has no a11y violations with the illustrated variant', async () => {
+    const { container } = band({ variant: 'illustrated', tiles: illustratedTiles })
 
     await expectNoA11yViolations(container)
   })

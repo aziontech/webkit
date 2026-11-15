@@ -6,12 +6,12 @@
 
 <template>
   <Carousel
-    kind="cards"
+    variant="cards"
     aria-label="Ways to use Image Processor"
   >
     <template #header>
       <SectionTitle
-        kind="start"
+        variant="start"
         size="small"
         :framed="false"
         title="See how to use"

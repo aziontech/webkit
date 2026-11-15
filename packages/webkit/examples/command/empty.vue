@@ -12,7 +12,7 @@
 <template>
   <Button
     label="Open empty palette"
-    kind="primary"
+    variant="primary"
     @click="open = true"
   />
 

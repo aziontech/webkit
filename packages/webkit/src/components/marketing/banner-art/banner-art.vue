@@ -8,17 +8,17 @@
   defineOptions({ name: 'BannerArt', inheritAttrs: false })
 
   /** The backdrop drawn behind a band: `globe` hangs a globe half past the page's inline-end rule over the dot lattice, `map` insets the world map beside the copy, `network` lays the map full bleed with its PoPs lit, traffic crossing between them and a scrim over the copy column. */
-  export type BannerArtKind = 'globe' | 'map' | 'network'
+  export type BannerArtVariant = 'globe' | 'map' | 'network'
 
   interface Props {
     /** Which backdrop to draw. */
-    kind?: BannerArtKind
+    variant?: BannerArtVariant
     /** Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. */
     animated?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'map',
+    variant: 'map',
     animated: true
   })
 
@@ -28,14 +28,14 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'marketing-banner-art'
   )
 
-  const backdrop = computed<BannerArtKind>(() => props.kind)
+  const backdrop = computed<BannerArtVariant>(() => props.variant)
 </script>
 
 <template>
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="backdrop"
+    :data-variant="backdrop"
     aria-hidden="true"
     class="pointer-events-none absolute inset-0 z-0 overflow-hidden [container-type:size]"
   >

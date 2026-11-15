@@ -44,7 +44,7 @@ const NavigationMenu = Object.assign(NavigationMenuRoot, {
 
 export default NavigationMenu
 export type { NavigationMenuItemLayout } from './navigation-menu-item.vue'
-export type { NavigationMenuPopupKind } from './navigation-menu-popup.vue'
+export type { NavigationMenuPopupVariant } from './navigation-menu-popup.vue'
 export type {
   NavigationMenuAlign,
   NavigationMenuCollisionPadding,

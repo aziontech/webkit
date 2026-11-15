@@ -85,7 +85,7 @@
         <template #actions>
           <IconButton
             icon="ai ai-refresh"
-            kind="outlined"
+            variant="outline"
             size="medium"
             aria-label="Refresh"
           />

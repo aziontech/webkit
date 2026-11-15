@@ -6,52 +6,52 @@
   <div class="flex flex-col gap-4">
     <div class="flex flex-wrap items-center gap-4">
       <Button
-        kind="primary"
+        variant="primary"
         label="Button"
         icon="ai ai-arrow-right"
       />
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Button"
         icon="ai ai-arrow-right"
       />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Button"
         icon="ai ai-arrow-right"
       />
       <Button
-        kind="transparent"
+        variant="ghost"
         label="Button"
         icon="ai ai-arrow-right"
       />
       <Button
-        kind="danger"
+        variant="danger"
         label="Button"
         icon="ai ai-trash"
       />
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <Button
-        kind="primary"
+        variant="primary"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
       />
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
       />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
       />
       <Button
-        kind="transparent"
+        variant="ghost"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
@@ -59,28 +59,28 @@
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <Button
-        kind="primary"
+        variant="primary"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
       <Button
-        kind="secondary"
+        variant="secondary"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
       <Button
-        kind="outlined"
+        variant="outline"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
       <Button
-        kind="transparent"
+        variant="ghost"
         label="Read the guide"
         icon="ai ai-chevron-right"
         icon-position="trailing"
@@ -89,7 +89,7 @@
     </div>
     <div class="flex flex-wrap items-center gap-4">
       <Button
-        kind="outlined"
+        variant="outline"
         size="medium"
         label="Deploy now"
         icon="ai ai-chevron-right"

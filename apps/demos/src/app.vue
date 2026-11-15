@@ -77,7 +77,7 @@
           >
             <IconButton
               icon="ai ai-circle-plus"
-              kind="primary"
+              variant="primary"
               size="medium"
               ariaLabel="Create"
               @click="router.push('/resources/new')"
@@ -89,7 +89,7 @@
           >
             <IconButton
               icon="ai ai-ask-azion"
-              kind="outlined"
+              variant="outline"
               size="medium"
               ariaLabel="Agent"
               @click="router.push('/assistant')"
@@ -99,7 +99,7 @@
         <template v-else>
           <Button
             label="Create"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-circle-plus"
             @click="router.push('/resources/new')"
@@ -229,7 +229,7 @@
           <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
             <Button
               label="Upgrade to Pro"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               class="w-full"
             />

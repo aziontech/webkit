@@ -4,7 +4,7 @@ The last ask at the end of a landing page, after a hatched gap. A closing frame 
 
 Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `kind` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is the `primary` form with `audiences`: a switch between ways in (a person or an agent), each with its own copyable line and actions, and a typed line under them; it loads `ToggleGroup`, `InputGroup` and `CopyButton` only when `audiences` is set. The templates close is `TemplateGallery` from `@aziontech/webkit/template-gallery` with `closing` set, which draws the closing frame under its scrolling grid of deployable templates.
+The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `variant` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is the `primary` form with `audiences`: a switch between ways in (a person or an agent), each with its own copyable line and actions, and a typed line under them; it loads `ToggleGroup`, `InputGroup` and `CopyButton` only when `audiences` is set. The templates close is `TemplateGallery` from `@aziontech/webkit/template-gallery` with `closing` set, which draws the closing frame under its scrolling grid of deployable templates.
 
 ## Examples
 
@@ -18,7 +18,7 @@ Example: [`site-split.vue`](./site-split.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `split`; `anchor` is the band's id for in-page links, `contact` by convention.
+- `variant` is `split`; `anchor` is the band's id for in-page links, `contact` by convention.
 - `eyebrow` is a short overline, such as Build.
 - `title` is the first line of the headline, and `titleMuted` the second line, in muted ink.
 - `description` is the sentence in the side cell.
@@ -46,7 +46,7 @@ Example: [`site-panel.vue`](./site-panel.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `panel`.
+- `variant` is `panel`.
 - `title` is the headline of the panel, and `description` the sentence under it. `eyebrow` is drawn above the headline; `titleMuted` is not drawn.
 - `primaryAction` is the panel button, with a `label`, an `href` and `trailing` for the chevron. A `secondaryAction` sits beside it as an outlined button.
 
@@ -72,7 +72,7 @@ Example: [`site-primary.vue`](./site-primary.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention.
+- `variant` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention.
 - `title` is the headline and `description` the sentence under it. `eyebrow` and `titleMuted` are not drawn, so the headline stands alone over the texture.
 - `primaryAction` is the white button and `secondaryAction` the outlined one beside it. Each takes a `label`, an `href` and `trailing` for the chevron.
 - `command` is an optional shell line set before the actions, with the `$` prompt and a copy button; `split` and `panel` take it too. See [`command.vue`](./command.vue).
@@ -91,8 +91,8 @@ Example: [`site-audiences.vue`](./site-audiences.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention; `title` is the headline.
-- `audiences` are the ways in, each a `value` and a `label` for the switch; the first one opens. `copy` is an optional line to copy: `text` is what the field shows and the button copies, `label` names the copy button, `shell` draws the `$` prompt before a command. `actions` are the buttons beside it, each a `label`, an `href`, a `kind` (`secondary` for the white pill, `outlined` by default) and `trailing` for the chevron. With `audiences` set, `command`, `primaryAction` and `secondaryAction` are not drawn.
+- `variant` is `primary`; `anchor` is the band's id for in-page links, `contact` by convention; `title` is the headline.
+- `audiences` are the ways in, each a `value` and a `label` for the switch; the first one opens. `copy` is an optional line to copy: `text` is what the field shows and the button copies, `label` names the copy button, `shell` draws the `$` prompt before a command. `actions` are the buttons beside it, each a `label`, an `href`, a `variant` (`secondary` for the white pill, `outline` by default) and `trailing` for the chevron. With `audiences` set, `command`, `primaryAction` and `secondaryAction` are not drawn.
 - `typedLead` and `typedWords` make the first line under the row. The lead stays put, and the words are typed, held, erased and typed again, in order, behind a blinking cursor. Screen readers get the whole sentence at once, and reduced motion shows every word at once with no cursor. `description` is the line under it.
 - `audiencesAriaLabel` names the switch and `lineAriaLabel` the copyable field for assistive tech.
 

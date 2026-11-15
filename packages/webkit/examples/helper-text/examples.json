@@ -9,7 +9,7 @@
     },
     {
       "name": "Types",
-      "summary": "All kind variants side by side.",
+      "summary": "All types side by side.",
       "file": "types.vue"
     }
   ]

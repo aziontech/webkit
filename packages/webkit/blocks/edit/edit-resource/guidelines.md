@@ -41,7 +41,7 @@ Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scr
 
 ### F. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
 
-When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`kind="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`kind="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
+When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
 ### G. Template editor — `SettingRow`, `HelperText` (optional)
 
@@ -149,7 +149,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 ## Related
 
-- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `kind="transparent"` and `size="small"` in its slot).
+- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `variant="ghost"` and `size="small"` in its slot).
 - `create/create-page` — the create page that shares this field list.
 - `detail/attached-resources` — the Domains section body in DeployableSettings.
 - `edit/delete-dialog` — the dialog behind the Danger zone action.

@@ -8,13 +8,13 @@
       <Kbd :keys="['meta', 'shift', 'p']" />
       <Kbd
         :keys="['meta', 'shift', 'p']"
-        kind="separate"
+        variant="separate"
       />
     </div>
     <div class="flex flex-wrap items-center gap-(--spacing-xs)">
       <Kbd
         :keys="['arrow-up', 'arrow-down']"
-        kind="separate"
+        variant="separate"
         size="small"
       />
       <span>to navigate</span>
@@ -32,7 +32,7 @@
     <div class="flex flex-wrap items-center gap-(--spacing-xs)">
       <Kbd
         :keys="['arrow-left', 'arrow-right']"
-        kind="separate"
+        variant="separate"
       />
       <span>to switch tabs</span>
     </div>

@@ -17,7 +17,7 @@
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useSidebarMenuSubContext } from '../composables/use-sidebar-menu-sub-context'
-  import type { SidebarMenuSubKind } from '../injection-key'
+  import type { SidebarMenuSubType } from '../injection-key'
 
   defineOptions({
     name: 'SidebarMenuSubTrigger',
@@ -28,7 +28,7 @@
     /** Visible row text. */
     label?: string
     /** Whether the children expand in place or replace the menu. */
-    kind?: SidebarMenuSubKind
+    type?: SidebarMenuSubType
     /** Leading glyph class. Only a drill row takes one; an inline row heads the rows beneath it and leaves the column to them. */
     icon?: string
     /** Destination of the row itself. Set it and the row splits into a link plus an arrow that reveals the children; leave it empty and the whole row reveals them. */
@@ -39,7 +39,7 @@
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
-    kind: 'inline',
+    type: 'inline',
     icon: '',
     href: '',
     disabled: false
@@ -65,7 +65,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-sub-trigger'
   )
 
-  const isInline = computed(() => props.kind === 'inline')
+  const isInline = computed(() => props.type === 'inline')
 
   const hasReference = computed(() => props.href.length > 0)
 
@@ -169,11 +169,11 @@
     const target = hasReference.value
       ? ((arrowEl.value?.$el as globalThis.HTMLElement | null) ?? null)
       : labelEl.value
-    sub.registerTrigger(props.kind, props.label, target)
+    sub.registerTrigger(props.type, props.label, target)
   }
 
   onMounted(register)
-  watch([() => props.kind, () => props.label, hasReference], register)
+  watch([() => props.type, () => props.label, hasReference], register)
 
   const activate = (event: globalThis.MouseEvent) => {
     if (props.disabled) return
@@ -217,7 +217,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-state="sub.open.value ? 'open' : 'closed'"
     :data-disabled="disabled ? '' : undefined"
     :class="rowClass"
@@ -266,7 +266,7 @@
       v-if="!rail"
       ref="arrowEl"
       :icon="arrowIcon"
-      kind="transparent"
+      variant="ghost"
       size="small"
       :ariaLabel="arrowAriaLabel"
       :aria-expanded="hasReference && isInline ? sub.open.value : undefined"

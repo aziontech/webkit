@@ -267,7 +267,7 @@
         <Button
           label="Create Network List"
           icon="ai ai-plus"
-          kind="primary"
+          variant="primary"
           size="large"
           class="w-full"
         />
@@ -334,7 +334,7 @@
                     ref="pasteToggleEl"
                     label="Paste list"
                     icon="ai ai-clipboard"
-                    kind="outlined"
+                    variant="outline"
                     size="medium"
                     :aria-expanded="pasteOpen"
                     :aria-controls="pasteOpen ? `${pasteId}-panel` : undefined"
@@ -372,7 +372,7 @@
                       <HelperText
                         v-if="pasteReport.invalid.length"
                         key="invalid"
-                        kind="invalid"
+                        type="invalid"
                         :label="`${lineList(pasteReport.invalid)} not ${copy.rule}; ${pasteReport.invalid.length === 1 ? 'it is' : 'they are'} added with an error to fix.`"
                       />
                       <HelperText
@@ -383,14 +383,14 @@
                       <HelperText
                         v-if="pasteOverflow"
                         key="overflow"
-                        kind="invalid"
+                        type="invalid"
                         :label="`A list holds at most ${LIMIT} entries; the last ${pasteOverflow} will be skipped.`"
                       />
                     </div>
                     <div class="flex flex-wrap items-center gap-(--spacing-xs)">
                       <Button
                         :label="`Add ${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'}`"
-                        kind="primary"
+                        variant="primary"
                         size="medium"
                         :disabled="!pasteReport.lines.length"
                         data-testid="network-list-paste-apply"
@@ -398,7 +398,7 @@
                       />
                       <Button
                         label="Cancel"
-                        kind="transparent"
+                        variant="ghost"
                         size="medium"
                         @click="cancelPaste"
                       />
@@ -474,7 +474,7 @@
             <Button
               type="submit"
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="submitting"
             /></div

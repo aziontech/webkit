@@ -5,7 +5,7 @@
 <template>
   <Avatar
     label="AB"
-    kind="circle"
+    variant="circle"
     size="medium"
   />
 </template>

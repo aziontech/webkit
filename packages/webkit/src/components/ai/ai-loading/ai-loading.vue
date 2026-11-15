@@ -5,7 +5,7 @@
   import * as en from '../../../i18n/messages/en'
   import Progress from '../../feedback/progress/progress.vue'
 
-  export type AiLoadingKind = 'inline' | 'bar'
+  export type AiLoadingVariant = 'inline' | 'bar'
 
   defineOptions({
     name: 'AiLoading',
@@ -16,14 +16,14 @@
     /** Visible loading text, `[Generating|Loading] <what>` with no end punctuation. Empty uses the locale catalog (`Generating a response`). */
     label?: string
     /** `inline` pulses three dots beside the text (text responses); `bar` draws an indeterminate bar under it, where a table, list or code block is about to appear. */
-    kind?: AiLoadingKind
+    variant?: AiLoadingVariant
     /** Milliseconds to wait before showing anything, so a fast response never flickers a loading state. */
     delay?: number
   }
 
   const props = withDefaults(defineProps<Props>(), {
     label: '',
-    kind: 'inline',
+    variant: 'inline',
     delay: 1000
   })
 
@@ -62,13 +62,13 @@
     v-bind="$attrs"
     role="status"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-state="visible ? 'open' : 'closed'"
-    class="flex w-full min-w-0 flex-col gap-(--spacing-xs) data-[kind=inline]:flex-row data-[kind=inline]:items-center"
+    class="flex w-full min-w-0 flex-col gap-(--spacing-xs) data-[variant=inline]:flex-row data-[variant=inline]:items-center"
   >
     <template v-if="visible">
       <span
-        v-if="kind === 'inline'"
+        v-if="variant === 'inline'"
         aria-hidden="true"
         :data-testid="`${testId}__dots`"
         class="inline-flex shrink-0 items-center gap-(--spacing-2xs)"
@@ -85,9 +85,9 @@
       </span>
       <span class="text-body-sm text-(--text-muted)">{{ text }}</span>
       <Progress
-        v-if="kind === 'bar'"
+        v-if="variant === 'bar'"
         indeterminate
-        kind="rounded"
+        variant="rounded"
         size="small"
         aria-hidden="true"
         :data-testid="`${testId}__bar`"

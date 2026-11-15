@@ -23,7 +23,7 @@
           <IconButton
             icon="ai ai-chevron-left"
             aria-label="Back to Home"
-            kind="outlined"
+            variant="outline"
             size="small"
             href="/home"
           />
@@ -35,7 +35,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -54,7 +54,7 @@
               <Avatar
                 :label="account.name"
                 size="medium"
-                kind="square"
+                variant="square"
               />
             </button>
           </DropdownMenu.Trigger>

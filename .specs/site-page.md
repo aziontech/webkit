@@ -3,9 +3,9 @@ name: site-page
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: fb84f1477ef209f6e04b84a9bbff1fbdeb5fbb33b99e9192353d6292d689b069
+checksum: cc9cd9639ada341156f695dc564da19e0982a7fdbcc759e1e7b7e090319aaa28
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -14,13 +14,13 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action`, `closing-call-to-action-newsletter`, or a `template-gallery` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action` of `kind: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
+The page renderer of the marketing site: it takes a page as data — the page JSON `{ hero, sections }` whose entries are `{ _id, props, scenes?, gap?, submission? }` — and renders each entry with the page section published at `@aziontech/webkit/<_id>`, binding `props` onto it. Openings (`hero`) run full bleed; the column (`sections`) sits in one `SectionContainer max-width="site"` with a hatched `SectionGap` before each band and one more after the last, the hatched break a page closes on before the footer, as the design sample's `SitePage` lays a page out. A page that ends on a closing band (`closing-call-to-action`, `closing-call-to-action-newsletter`, or a `template-gallery` with `closing: true`) closes on that band's own closing frame instead, so no trailing gap is drawn; two closing bands in a row share one frame (the upper one is bound with `hatch: false`); and a `closing-call-to-action` of `variant: 'frame'` takes no gap before it. A scene named in `scenes` is resolved by name through the scene registry and drawn in the section's slot of that name (`hero-band` `top` / `bottom`, `console-panel` `scene`). Every section and scene is loaded on demand, so a page pulls in only the sections it lists. An `_id` or scene name the renderer does not know is skipped with a development warning naming it, never silently.
 
 It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
 
 **Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-nav` and `site-footer` (the frame, which `shell/site` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry.
 
-**Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-band`; `'closing-call-to-action-agents'` → `closing-call-to-action` `kind: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery` `closing: true`; `'customer-spotlight'` → `client-mosaic-columns` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll`; `'compare-support-tiers'` → `compare-plans` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid`; `'code-split'` → `media-split-band`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. This is the only alias the package keeps: no retired export or prop is re-exported.
+**Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-band`; `'closing-call-to-action-agents'` → `closing-call-to-action` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery` `closing: true`; `'customer-spotlight'` → `client-mosaic-columns` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll`; `'compare-support-tiers'` → `compare-plans` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid`; `'code-split'` → `media-split-band`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. This is the only alias the package keeps: no retired export or prop is re-exported.
 
 **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-band` drew from a private map) and with `Diagram`, `ProductWidget` and `Illustration`, the components a scene slot already takes. `media-split-band` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there.
 
@@ -51,7 +51,7 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
 - Put openings (`hero-band`, `hero-form`, `article-body`, `pricing-plans`) in `hero` and every band after them in `sections`.
 - Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.
 - Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.
-- End a page on a closing band, or on `{ _id: 'closing-call-to-action', props: { kind: 'frame' } }` when its last band already carries its actions; never set `hatch` yourself on stacked closings, the renderer does.
+- End a page on a closing band, or on `{ _id: 'closing-call-to-action', props: { variant: 'frame' } }` when its last band already carries its actions; never set `hatch` yourself on stacked closings, the renderer does.
 - Keep transport details of a form (`endpoint`, `hiddenFields`) in `submission`, next to `props`; the renderer passes the entry back on `submit` and the site sends.
 - Watch the development console after changing a page: an unknown `_id` or scene is named there.
 - Keep one opening per page: every opening renders the page `h1`, so two openings put two `h1` on the page.
@@ -67,7 +67,7 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
     hero: [
       {
         _id: 'hero-band',
-        props: { kind: 'centered-band', title: 'Deliver content fast, worldwide' }
+        props: { variant: 'centered-band', title: 'Deliver content fast, worldwide' }
       }
     ],
     sections: [
@@ -116,7 +116,7 @@ Exported types, beside the component:
 - No state of its own; each section owns its states (`loading`, `submitted`, `error` on a form band come from its `props`).
 - An unknown `_id` or scene name renders nothing in its place and warns once per name in development.
 - A retired `_id` renders with its successor through `sitePageSectionAliases`, with the props transform applied.
-- Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action` with `kind: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
+- Closing bands: a closing band followed directly by another is bound with `hatch: false` (an explicit `hatch` in its `props` is overridden), so stacked closings share the lower band's closing frame; a `closing-call-to-action` with `variant: 'frame'` takes no gap before it; when the last column entry is a closing band that draws its frame, the trailing gap is omitted.
 - A section or scene still loading renders nothing in its place until its chunk arrives.
 - A section or scene whose chunk fails to load (network failure, deploy skew) or takes longer than 10 s renders nothing in its place, the rest of the page keeps rendering, and a development warning names the `_id` or scene; it does not retry (`defineAsyncComponent` with `timeout` and `onError`).
 

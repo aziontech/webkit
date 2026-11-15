@@ -31,40 +31,40 @@
     "fields": [
       {
         "name": "firstname",
-        "kind": "text",
+        "type": "text",
         "label": "Name",
         "half": true,
         "required": true
       },
       {
         "name": "lastname",
-        "kind": "text",
+        "type": "text",
         "label": "Last name",
         "half": true,
         "required": true
       },
       {
         "name": "email",
-        "kind": "email",
+        "type": "email",
         "label": "Business email",
         "required": true
       },
       {
         "name": "company",
-        "kind": "text",
+        "type": "text",
         "label": "Company",
         "half": true,
         "required": true
       },
       {
         "name": "domain",
-        "kind": "text",
+        "type": "text",
         "label": "Website",
         "half": true
       },
       {
         "name": "mobilephone",
-        "kind": "phone",
+        "type": "phone",
         "label": "Phone",
         "country": "US",
         "required": true

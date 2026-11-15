@@ -5,14 +5,14 @@
     nodes: [
       {
         key: 'user',
-        kind: 'pill',
+        type: 'pill',
         title: 'User',
         icon: 'ai ai-user',
         active: true
       },
       {
         key: 'routing',
-        kind: 'card',
+        type: 'card',
         eyebrow: 'Routing',
         title: 'Nearest data center',
         icon: 'ai ai-directions',
@@ -20,7 +20,7 @@
       },
       {
         key: 'workload',
-        kind: 'card',
+        type: 'card',
         eyebrow: 'Workload',
         title: 'shop.example.com',
         icon: 'ai ai-workloads',
@@ -33,7 +33,7 @@
       },
       {
         key: 'cache',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'Cache',
         title: 'Served from cache',
         icon: 'ai ai-tiered-cache',
@@ -41,7 +41,7 @@
       },
       {
         key: 'origin',
-        kind: 'item',
+        type: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
         icon: 'ai ai-database'

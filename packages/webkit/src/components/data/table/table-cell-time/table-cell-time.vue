@@ -85,7 +85,7 @@
         :alt="displayName"
         :label="displayName"
         size="small"
-        kind="square"
+        variant="square"
         :data-testid="`${testId}__avatar`"
       />
     </Tooltip>

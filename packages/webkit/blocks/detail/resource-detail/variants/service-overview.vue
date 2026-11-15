@@ -390,7 +390,7 @@
       <Select
         :model-value="environment"
         :display-value="(value) => String(value ?? '')"
-        kind="transparent"
+        variant="ghost"
         size="small"
         @update:model-value="
           (value) => {
@@ -478,7 +478,7 @@
             />
             <Button
               label="Deploy"
-              kind="outlined"
+              variant="outline"
               size="medium"
               icon="ai ai-cloud-upload"
               :loading="deploying"
@@ -585,7 +585,7 @@
                       label="Visit"
                       href="https://service-01.example.com"
                       target="_blank"
-                      kind="secondary"
+                      variant="secondary"
                       size="medium"
                       icon="ai ai-external-link"
                     />
@@ -650,7 +650,7 @@
                         <Tooltip content="Service actions">
                           <IconButton
                             icon="ai ai-ellipsis"
-                            kind="outlined"
+                            variant="outline"
                             size="medium"
                             aria-label="Service actions"
                           />
@@ -708,7 +708,7 @@
                       <Tooltip content="Add a custom domain">
                         <IconButton
                           icon="ai ai-circle-plus"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           aria-label="Add a custom domain"
                         />
@@ -736,7 +736,7 @@
                         1020655
                       </span>
                       <CopyButton
-                        kind="outlined"
+                        variant="outline"
                         value="1020655"
                         aria-label="Copy service ID"
                         class="shrink-0"
@@ -755,7 +755,7 @@
                         alt="Ethan Brooks"
                         label="Ethan Brooks"
                         size="small"
-                        kind="square"
+                        variant="square"
                         class="shrink-0"
                       />
                     </div>
@@ -909,7 +909,7 @@
                 <IconButton
                   icon="ai ai-window-maximize"
                   aria-label="Expand the production checklist"
-                  kind="outlined"
+                  variant="outline"
                   size="small"
                   class="shrink-0"
                   @click="detailOpen = true"
@@ -1027,7 +1027,7 @@
                         <Button
                           v-else
                           :label="step.actionLabel || step.title"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="step.id in targets ? showTopology(step.id) : (detailOpen = false)"
                         />
@@ -1040,7 +1040,7 @@
                   <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
                     <Button
                       label="Done"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       @click="detailOpen = false"
                     />
@@ -1075,7 +1075,7 @@
                     >
                       <IconButton
                         icon="ai ai-plus"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         aria-label="Add domain"
                         href="/domains/create"
@@ -1112,7 +1112,7 @@
             <template #actions>
               <Button
                 :label="`Open ${tabLabel}`"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 :href="`/services/service-01/${activeTab}`"
               />
@@ -1175,12 +1175,12 @@
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               @click="deployOpen = false"
             />
             <Button
               label="Deploy"
-              kind="primary"
+              variant="primary"
               icon="ai ai-cloud-upload"
               @click="runDeploy"
             />

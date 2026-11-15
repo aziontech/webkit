@@ -95,14 +95,14 @@ describe('Progress', () => {
     expect(fill.getAttribute('data-indeterminate')).toBe('true')
   })
 
-  it.each(['rounded', 'flat'] as const)('reflects kind=%s on data-kind', (kind) => {
-    const { getByRole } = render(Progress, { props: { kind } })
-    expect(getByRole('progressbar').getAttribute('data-kind')).toBe(kind)
+  it.each(['rounded', 'flat'] as const)('reflects variant=%s on data-variant', (variant) => {
+    const { getByRole } = render(Progress, { props: { variant: variant } })
+    expect(getByRole('progressbar').getAttribute('data-variant')).toBe(variant)
   })
 
-  it('defaults to the flat kind and drops the retired data-shape', () => {
+  it('defaults to the flat variant and drops the retired data-shape', () => {
     const { getByRole } = render(Progress)
-    expect(getByRole('progressbar').getAttribute('data-kind')).toBe('flat')
+    expect(getByRole('progressbar').getAttribute('data-variant')).toBe('flat')
     expect(getByRole('progressbar').hasAttribute('data-shape')).toBe(false)
   })
 

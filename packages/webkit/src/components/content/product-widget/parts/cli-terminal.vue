@@ -182,7 +182,7 @@
       class="contents"
     >
       <TextureMaterial
-        kind="pixelate"
+        variant="pixelate"
         size="small"
         fade="top"
       />

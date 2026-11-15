@@ -3,11 +3,11 @@ name: brand
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: 928f06c4fdd57d0a5530d70425324921fd5f0cf3a1405e1e53405fd9dc7b673d
+checksum: d71a3115b3c511a25971e0dce56730d080b9dcf7bc1b8205c2d84ae09bf9d711
 created: 2026-07-13
 last_updated: 2026-11-15
 ---
@@ -16,14 +16,14 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
+The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop selects the lockup: `default` (the AZION wordmark) for standard surfaces, `reduced` (the "A" glyph) for compact headers and tight spaces, and `extended` (the AZION wordmark with the "move to the edge technologies®" tagline) for marketing-oriented layouts. It consolidates the loose `@aziontech/webkit/svg/azion/*` assets — which remain individually importable — behind one component.
 
 ## When to use
 
 - Use Brand only for the Azion logo.
 - The Azion logo in a header, navigation bar, footer, sign-in screen or product mockup.
-- `kind="reduced"` where space is tight (collapsed sidebar, mobile header).
-- `kind="extended"` in marketing layouts that carry the tagline.
+- `variant="reduced"` where space is tight (collapsed sidebar, mobile header).
+- `variant="extended"` in marketing layouts that carry the tagline.
 
 ## When NOT to use
 
@@ -39,7 +39,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop sel
 
 ## Best practices
 
-- Choose the lockup with `kind` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
+- Choose the lockup with `variant` and the height with `size` (16 / 24 / 32 px); do not pass width or height classes, the width follows the lockup's aspect ratio.
 - Do not recolor or rebuild the SVG; use the component so every surface shows the same mark.
 - For a home link, wrap Brand in an anchor; its `role="img"` and accessible name "Azion" give the link its name.
 
@@ -51,7 +51,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop sel
 </script>
 
 <template>
-  <Brand kind="default" />
+  <Brand variant="default" />
 </template>
 ```
 
@@ -59,8 +59,8 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop sel
 
 | Prop         | Type                                   | Default     | Required | JSDoc                                                                                                                                                                    |
 | ------------ | -------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `kind`       | `'default' \| 'reduced' \| 'extended'` | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
-| `size`       | `'small' \| 'medium' \| 'large'`       | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `kind` keeps its own aspect ratio.                                         |
+| `variant`    | `'default' \| 'reduced' \| 'extended'` | `'default'` | false    | Brand lockup to render: `default` (AZION wordmark), `reduced` (the "A" glyph for tight spaces), `extended` (wordmark with the "move to the edge technologies®" tagline). |
+| `size`       | `'small' \| 'medium' \| 'large'`       | `'medium'`  | false    | Size token; sets the lockup height (16 / 24 / 32 px) while width scales automatically so each `variant` keeps its own aspect ratio.                                      |
 | `decorative` | `boolean`                              | `false`     | false    | Hides the mark from assistive tech when visible text beside it already says Azion.                                                                                       |
 
 ## Events
@@ -74,7 +74,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `kind` prop sel
 ## States
 
 - Visual states: `default`
-- `data-kind` mirrors the `kind` prop
+- `data-variant` mirrors the `variant` prop
 - `data-size` mirrors the `size` prop
 
 ## Motion & Animations
@@ -103,7 +103,7 @@ _none_
 ## Examples
 
 - Default
-- Types — composite story rendering every `kind` value (`default`, `reduced`, `extended`) side-by-side.
+- Types — composite story rendering every `variant` value (`default`, `reduced`, `extended`) side-by-side.
 - Sizes — composite story rendering every `size` value (`small`, `medium`, `large`) side-by-side.
 
 ## Constraints — DO NOT

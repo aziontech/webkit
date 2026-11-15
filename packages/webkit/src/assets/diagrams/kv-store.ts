@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Request',
       icon: 'ai ai-user',
       active: true
     },
     {
       key: 'function',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Functions',
       title: 'session-check',
       icon: 'ai ai-edge-functions',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'kv',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'KV Store',
       title: 'sessions namespace',
       icon: 'ai ai-edge-kv',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'get',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'get',
       title: 'Value from the edge',
       icon: 'ai ai-bolt',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'put',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'put',
       title: 'Replicated everywhere',
       icon: 'ai ai-globe'

@@ -21,13 +21,13 @@
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
             <Button
               label="Go to home"
-              kind="primary"
+              variant="primary"
               size="medium"
               href="/"
             />
             <Button
               label="Switch account"
-              kind="outlined"
+              variant="outline"
               icon="ai ai-sync"
               size="medium"
             />

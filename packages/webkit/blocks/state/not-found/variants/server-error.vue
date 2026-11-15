@@ -28,7 +28,7 @@
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
             <Button
               label="Retry"
-              kind="primary"
+              variant="primary"
               size="medium"
               icon="ai ai-refresh"
               :loading="retrying"
@@ -36,7 +36,7 @@
             />
             <Button
               label="System status"
-              kind="outlined"
+              variant="outline"
               icon="ai ai-external-link"
               size="medium"
               href="https://status.example.com"

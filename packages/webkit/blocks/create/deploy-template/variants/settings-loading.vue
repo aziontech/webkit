@@ -40,7 +40,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
-          kind="outlined"
+          variant="outline"
           size="small"
         />
         <GlobalHeader.Brand>
@@ -50,7 +50,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -67,7 +67,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -185,7 +185,7 @@
                         <Tooltip content="Repository visibility">
                           <Switch
                             v-model="isPublic"
-                            kind="privacy"
+                            variant="privacy"
                             aria-label="Public repository"
                           />
                         </Tooltip>
@@ -229,7 +229,7 @@
               <Button
                 class="w-full"
                 label="Deploy"
-                kind="primary"
+                variant="primary"
                 size="large"
                 disabled
               />
@@ -238,7 +238,7 @@
 
           <Button
             label="Browse templates"
-            kind="outlined"
+            variant="outline"
             size="medium"
           />
         </div>

@@ -372,7 +372,7 @@
               :icon="rail ? 'ai ai-chevrons-right' : 'ai ai-chevrons-left'"
               :ariaLabel="rail ? labels.expand : labels.collapse"
               :aria-keyshortcuts="keyShortcuts"
-              kind="outlined"
+              variant="outline"
               size="small"
               :data-testid="`${testId}__${rail ? 'expand-button' : 'collapse'}`"
               @click="collapsed = !rail"
@@ -447,7 +447,7 @@
           <IconButton
             icon="ai ai-chevrons-right"
             :ariaLabel="labels.expand"
-            kind="outlined"
+            variant="outline"
             size="medium"
             :data-testid="`${testId}__expand-button`"
             @click="collapsed = false"

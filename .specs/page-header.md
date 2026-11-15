@@ -3,8 +3,8 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 749c0501db00e5e60287746b417b1f334e7be8ed394ed524c683e23778d66b4b
-spec_version: 5
+checksum: 8e9e55adcb82b862bbdb8f9f38a1fd9f7c4c30fc637e6011e125436ae7db0d15
+spec_version: 6
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -71,7 +71,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       <Button
         label="Documentation"
         icon="ai ai-book"
-        kind="outlined"
+        variant="outline"
         size="medium"
         href="https://example.com/docs/resources"
         target="_blank"
@@ -79,7 +79,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       <Button
         label="Create Resource"
         icon="ai ai-plus"
-        kind="outlined"
+        variant="outline"
         size="medium"
       />
     </template>

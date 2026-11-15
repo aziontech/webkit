@@ -3,9 +3,9 @@ name: banner-art
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: c2d5bbf6dacc13d5a76e0fd35976a36891e039cf416f8b23dc96b1eb553b18fb
+checksum: f1ff884c33fddd1eb6323f784bb21024a8246f4fb5c763444c3e030d4dd0f57c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -49,11 +49,11 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 <template>
   <Hero
-    kind="band"
+    variant="band"
     max-width="site"
   >
     <template #background>
-      <BannerArt kind="network" />
+      <BannerArt variant="network" />
     </template>
     <HeroTitle title="Close to every user" />
   </Hero>
@@ -62,10 +62,10 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## Props
 
-| Prop       | Type            | Default | Required | JSDoc                                                                                 |
-| ---------- | --------------- | ------- | -------- | ------------------------------------------------------------------------------------- |
-| `kind`     | `BannerArtKind` | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                  |
-| `animated` | `boolean`       | `true`  | false    | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
+| Prop       | Type               | Default | Required | JSDoc                                                                                 |
+| ---------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------- |
+| `variant`  | `BannerArtVariant` | `'map'` | false    | Which backdrop to draw: `globe`, `map` or `network`.                                  |
+| `animated` | `boolean`          | `true`  | false    | Spins the globe or pulses the PoPs; a still frame when false or under reduced motion. |
 
 ## Events
 
@@ -77,7 +77,7 @@ The decorative backdrop a site, hub or docs band stands on, for a `Hero` `backgr
 
 ## States
 
-- `data-kind` mirrors the backdrop drawn.
+- `data-variant` mirrors the backdrop drawn.
 
 ## Motion & Animations
 

@@ -13,18 +13,18 @@
   })
 
   /** Layout of the row: one ruled strip, or standalone cards with a gutter. */
-  export type CarouselKind = CarouselLayout
+  export type CarouselVariant = CarouselLayout
 
   interface Props {
     /** Accessible name for the scrollable track, announced before its contents. */
     ariaLabel?: string
     /** Layout of the row: `strip` sets the cards edge to edge as one ruled strip, `cards` separates them with a gutter and rounds each card. */
-    kind?: CarouselKind
+    variant?: CarouselVariant
   }
 
   const props = withDefaults(defineProps<Props>(), {
     ariaLabel: '',
-    kind: 'strip'
+    variant: 'strip'
   })
 
   const slots = defineSlots<{
@@ -139,7 +139,7 @@
   onMounted(measure)
 
   provide(CarouselInjectionKey, {
-    kind: computed(() => props.kind),
+    variant: computed(() => props.variant),
     trackEl: shallowReadonly(trackEl) as Readonly<Ref<globalThis.HTMLUListElement | null>>,
     canScrollPrev,
     canScrollNext,
@@ -156,7 +156,7 @@
     :data-scrollable="canScroll || null"
     :data-can-scroll-prev="canScrollPrev || null"
     :data-can-scroll-next="canScrollNext || null"
-    :data-kind="kind"
+    :data-variant="variant"
     :aria-roledescription="t('carousel.roleDescription')"
     :aria-label="ariaLabel || undefined"
   >
@@ -185,8 +185,8 @@
       :data-can-scroll-prev="canScrollPrev || null"
       :data-can-scroll-next="canScrollNext || null"
       :data-dragging="dragging || null"
-      :data-kind="kind"
-      class="data-[kind=cards]:gap-(--spacing-md) [--carousel-fade-end:0%] [--carousel-fade-start:0%] data-[can-scroll-next]:[--carousel-fade-end:12%] data-[can-scroll-prev]:[--carousel-fade-start:12%] data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] rtl:data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_left,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
+      :data-variant="variant"
+      class="data-[variant=cards]:gap-(--spacing-md) [--carousel-fade-end:0%] [--carousel-fade-start:0%] data-[can-scroll-next]:[--carousel-fade-end:12%] data-[can-scroll-prev]:[--carousel-fade-start:12%] data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_right,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] rtl:data-[scrollable]:not-focus-visible:mask-[linear-gradient(to_left,transparent,black_var(--carousel-fade-start),black_calc(100%-var(--carousel-fade-end)),transparent)] flex snap-x snap-mandatory overflow-x-auto scroll-smooth scrollbar-none [&::-webkit-scrollbar]:hidden data-[dragging]:cursor-grabbing data-[dragging]:snap-none data-[dragging]:scroll-auto data-[dragging]:select-none data-[scrollable]:not-data-[dragging]:cursor-grab focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:scroll-auto"
     >
       <slot />
     </ul>

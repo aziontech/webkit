@@ -141,7 +141,7 @@
       return {
         id: menu.value,
         label: menu.label,
-        kind: 'drill',
+        type: 'drill',
         groups: groups.map((group) => ({
           label: groups.length > 1 ? group.label : undefined,
           items: group.items.map((item) => ({
@@ -206,7 +206,7 @@
   >
     <GlobalHeader
       ref="barEl"
-      kind="site"
+      variant="site"
       aria-label="Azion"
       class="sticky top-0 z-40"
     >
@@ -214,7 +214,7 @@
         <IconButton
           ref="opener"
           icon="ai ai-menu"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :ariaLabel="t('siteNav.open')"
           class="shrink-0 xl:hidden"
@@ -227,7 +227,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -318,7 +318,7 @@
               :side-offset="12"
               :collision-padding="{ x: columnInset, y: 8 }"
             >
-              <NavigationMenuPopup kind="contrast">
+              <NavigationMenuPopup variant="contrast">
                 <NavigationMenuArrow />
                 <NavigationMenuViewport />
               </NavigationMenuPopup>
@@ -334,7 +334,7 @@
         >
           <Button
             :label="contact.label"
-            kind="transparent"
+            variant="ghost"
             size="medium"
             :href="contact.href"
           />
@@ -347,7 +347,7 @@
         >
           <Button
             :label="secondaryAction.label"
-            kind="secondary"
+            variant="secondary"
             size="medium"
             :href="secondaryAction.href"
           />
@@ -356,7 +356,7 @@
           key="button-2"
           v-if="primaryAction"
           :label="primaryAction.label"
-          kind="primary"
+          variant="primary"
           size="medium"
           class="shrink-0"
           :href="primaryAction.href"
@@ -399,7 +399,7 @@
           <Button
             v-if="secondaryAction"
             :label="secondaryAction.label"
-            kind="outlined"
+            variant="outline"
             size="medium"
             class="w-full"
             :href="secondaryAction.href"
@@ -408,7 +408,7 @@
             key="button-2"
             v-if="primaryAction"
             :label="primaryAction.label"
-            kind="primary"
+            variant="primary"
             size="medium"
             class="w-full"
             :href="primaryAction.href"

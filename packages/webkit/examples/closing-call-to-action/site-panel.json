@@ -1,7 +1,7 @@
 {
   "_id": "closing-call-to-action",
   "props": {
-    "kind": "panel",
+    "variant": "panel",
     "title": "Ready to join us?",
     "description": "See our open positions and find the right fit.",
     "primaryAction": {

@@ -35,7 +35,7 @@ New swaps the list for the fields that create the resource, usually one Name `Fi
 
 ### D. Search and required message — `Input`, `HelperText` (optional)
 
-A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `HelperText kind="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
+A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `HelperText type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 

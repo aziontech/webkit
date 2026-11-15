@@ -6,34 +6,34 @@
   <div class="flex flex-col gap-(--spacing-md)">
     <Pagination aria-label="Pagination kinds">
       <Pagination.Button
-        kind="previous"
+        type="previous"
         aria-label="Previous page"
       />
-      <Pagination.Button kind="number">1</Pagination.Button>
+      <Pagination.Button type="number">1</Pagination.Button>
       <Pagination.Button
-        kind="number"
+        type="number"
         active
         >2</Pagination.Button
       >
-      <Pagination.Button kind="more" />
+      <Pagination.Button type="more" />
       <Pagination.Button
-        kind="next"
+        type="next"
         aria-label="Next page"
       />
     </Pagination>
     <Pagination aria-label="Pagination disabled states">
       <Pagination.Button
-        kind="previous"
+        type="previous"
         aria-label="Previous page"
         disabled
       />
       <Pagination.Button
-        kind="number"
+        type="number"
         disabled
         >1</Pagination.Button
       >
       <Pagination.Button
-        kind="next"
+        type="next"
         aria-label="Next page"
         disabled
       />

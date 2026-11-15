@@ -13,7 +13,7 @@
       :value="value"
     />
     <Button
-      kind="secondary"
+      variant="secondary"
       size="medium"
       label="Refresh"
       @click="value += 4210"

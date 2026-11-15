@@ -1,6 +1,6 @@
 # HeroBand
 
-The opening band of a page: an eyebrow, the page headline, a lead and up to two calls to action, laid out by `kind`, with an optional scene above or under the copy.
+The opening band of a page: an eyebrow, the page headline, a lead and up to two calls to action, laid out by `variant`, with an optional scene above or under the copy.
 
 The band is the `HeroBand` component from `@aziontech/webkit/hero-band`; it composes `Hero`, `Button`, the `Flow` nodes for a topology, and `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid` and `Topic` for the argument grid.
 
@@ -16,7 +16,7 @@ Example: [`site-title-band.vue`](./site-title-band.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `kind` picks the layout (`center`, `title-band`, `center-band`, `compact-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`) and `size` the headline step.
+- `variant` picks the layout (`center`, `title-band`, `center-band`, `compact-band`, `pixel-floor`, `copy-beside-art`, `copy-on-top-art`) and `size` the headline step.
 - `eyebrow`, `title` and `description` fill the copy.
 - `primaryAction` and `secondaryAction` are the two buttons, each a `label`, an `href` and `trailing` for the chevron.
 
@@ -51,7 +51,7 @@ Example: [`site-centered-carousel.vue`](./site-centered-carousel.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band` and `kind` is `center`.
+- `_id` is `hero-band` and `variant` is `center`.
 - `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
@@ -72,7 +72,7 @@ Example: [`site-title-band-small.vue`](./site-title-band-small.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band`, `kind` is `title-band` and `size` is `medium`, the default.
+- `_id` is `hero-band`, `variant` is `title-band` and `size` is `medium`, the default.
 - The other props work as in the title band.
 
 Example:
@@ -89,7 +89,7 @@ Example: [`site-title-band-carousel.vue`](./site-title-band-carousel.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band`, `kind` is `title-band` and `size` is `large`.
+- `_id` is `hero-band`, `variant` is `title-band` and `size` is `large`.
 - `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
@@ -109,7 +109,7 @@ Example: [`site-pixel-floor.vue`](./site-pixel-floor.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band` and `kind` is `pixel-floor`.
+- `_id` is `hero-band` and `variant` is `pixel-floor`.
 - `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
@@ -129,7 +129,7 @@ Example: [`site-copy-beside-art.vue`](./site-copy-beside-art.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band` and `kind` is `copy-beside-art`.
+- `_id` is `hero-band` and `variant` is `copy-beside-art`.
 - `eyebrow` is a short overline above the headline.
 - `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `description` is the sentence under the headline.
@@ -151,7 +151,7 @@ Example: [`site-topology.vue`](./site-topology.vue)
 
 Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
 
-- `_id` is `hero-band` and `kind` is `copy-on-top-art`.
+- `_id` is `hero-band` and `variant` is `copy-on-top-art`.
 - `eyebrow`, `title`, `description` and the two actions work as in the title band.
 - `levels[]` are the columns of the flow, left to right, each `nodes[]` of `{ eyebrow, icon, title, label, severity, lit? }`. A node with no title is skipped. The flow is drawn only when the entry has no `scenes`.
 
@@ -169,7 +169,7 @@ Example: [`site-arguments.vue`](./site-arguments.vue)
 
 Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `_id` is `hero-band`, `size` is `large`, and `kind` stays the default `title-band`.
+- `_id` is `hero-band`, `size` is `large`, and `variant` stays the default `title-band`.
 - `eyebrow`, `title`, `description` and the two actions work as in the title band. Set `titleLength` to `long` for a headline that would run to three lines.
 - `items` are the arguments in reading order. Three fill a row, so use three or six. Each takes an `icon` class, a short `title` and a one-sentence `description`.
 

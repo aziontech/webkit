@@ -91,7 +91,7 @@
                     <HelperText
                       v-if="generalSubmitted && nameEmpty"
                       id="group-full-name-error"
-                      kind="required"
+                      type="required"
                       label="This field is required."
                     />
                   </div>
@@ -133,7 +133,7 @@
           <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Save"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               :loading="savingGeneral"
               @click="saveGeneral"
@@ -159,7 +159,7 @@
               <SettingRow
                 title="Product updates"
                 description="Occasional emails about new features and changes."
-                kind="compact"
+                variant="compact"
               >
                 <Switch
                   v-model="notifications.productUpdates"
@@ -171,7 +171,7 @@
               <SettingRow
                 title="Security alerts"
                 description="Emails when a sign-in or key change is detected."
-                kind="compact"
+                variant="compact"
               >
                 <Switch
                   v-model="notifications.securityAlerts"
@@ -186,7 +186,7 @@
           <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
             <Button
               label="Save"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               :loading="savingNotifications"
               @click="saveNotifications"

@@ -219,7 +219,7 @@ jobs:
                     <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                       <Button
                         label="Visit"
-                        kind="secondary"
+                        variant="secondary"
                         size="medium"
                         icon="ai ai-external-link"
                       />
@@ -232,7 +232,7 @@ jobs:
                           <Tooltip content="Resource actions">
                             <IconButton
                               icon="ai ai-ellipsis"
-                              kind="outlined"
+                              variant="outline"
                               size="medium"
                               aria-label="Resource actions"
                             />
@@ -380,7 +380,7 @@ jobs:
                           alt="John Smith"
                           label="John Smith"
                           size="small"
-                          kind="square"
+                          variant="square"
                           class="shrink-0"
                         />
                       </div>
@@ -390,7 +390,7 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Source</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-sm)">
                         <Button
-                          kind="link"
+                          variant="link"
                           label="Connect Git repository"
                         />
                       </div>
@@ -427,7 +427,7 @@ jobs:
                       <Button
                         class="w-full"
                         label="Documentation"
-                        kind="outlined"
+                        variant="outline"
                         size="medium"
                         icon="ai ai-book"
                         href="https://example.com/docs/cli"

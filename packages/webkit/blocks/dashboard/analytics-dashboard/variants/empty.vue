@@ -444,7 +444,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Requests over time"
                   @click="openExpanded('requests')"
@@ -457,7 +457,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Requests over time"
                   />
@@ -487,8 +487,8 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar v-if="requestsForm === 'bar'" />
               <Chart.Area v-else />
               <Chart.Crosshair />
@@ -533,7 +533,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Status codes"
                   @click="openExpanded('status-codes')"
@@ -546,7 +546,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Status codes"
                   />
@@ -576,8 +576,8 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="statusForm === 'bar'"
                 stacked
@@ -610,7 +610,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Requests by country"
                   @click="openExpanded('countries')"
@@ -623,7 +623,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Requests by country"
                   />
@@ -654,8 +654,8 @@
               :loading="loading"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>
@@ -685,7 +685,7 @@
               <Tooltip content="Expand">
                 <IconButton
                   icon="ai ai-window-maximize"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   aria-label="Expand Top hosts"
                   @click="openExpanded('hosts')"
@@ -698,7 +698,7 @@
                 <DropdownMenu.Trigger>
                   <IconButton
                     icon="ai ai-ellipsis"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     aria-label="More options for Top hosts"
                   />
@@ -811,8 +811,8 @@
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar v-if="requestsForm === 'bar'" />
               <Chart.Area v-else />
               <Chart.Crosshair />
@@ -831,8 +831,8 @@
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar
                 v-if="statusForm === 'bar'"
                 stacked
@@ -855,8 +855,8 @@
               :aria-label="expandedReport.label"
             >
               <Chart.Grid />
-              <Chart.Axis kind="y" />
-              <Chart.Axis kind="x" />
+              <Chart.Axis type="y" />
+              <Chart.Axis type="x" />
               <Chart.Bar show-labels />
               <Chart.Tooltip />
             </Chart>

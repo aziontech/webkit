@@ -3,9 +3,9 @@ name: context-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: eaceee457245228ba2e4292665b0d1137829cf1f5047bb43dc46046aa3c1615e
+checksum: 253e2906ce024724fd58107f4cc8c8c6ee11e2e9c23c50caf02ad97f1409a2a2
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio kinds, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.
+Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio variants, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.
 
 ## When to use
 
@@ -113,7 +113,7 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the area's content.
-- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-option`, including `kind="checkbox"` / `kind="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
+- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-option`, including `type="checkbox"` / `type="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
 
 ## Props
 

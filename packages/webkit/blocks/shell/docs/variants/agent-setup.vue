@@ -169,7 +169,7 @@
         {
           id: 'agent-setup-group',
           label: 'Agent setup',
-          kind: 'inline',
+          type: 'inline',
           defaultOpen: true,
           children: [
             { id: 'agent-setup', label: 'Overview', href: '/docs/agent-setup' },
@@ -406,7 +406,7 @@
                     <Logo
                       :name="agent.name"
                       :src="agent.logo"
-                      :kind="agent.mono ? 'current' : 'color'"
+                      :variant="agent.mono ? 'current' : 'color'"
                       decorative
                     />
                   </span>
@@ -445,7 +445,7 @@
                   v-if="row.logo"
                   :name="row.agent"
                   :src="row.logo"
-                  :kind="row.mono ? 'current' : 'color'"
+                  :variant="row.mono ? 'current' : 'color'"
                   decorative
                   size="small"
                 />
@@ -483,7 +483,7 @@
             </template>
           </DataTable>
         </div>
-        <DocCallout kind="note">
+        <DocCallout variant="note">
           Every agent listed connects to the Azion MCP server. The workflow columns say where the
           tool runs, not what it can do.
         </DocCallout>
@@ -546,7 +546,7 @@
     <template #actions>
       <IconButton
         icon="ai ai-github"
-        kind="outlined"
+        variant="outline"
         size="medium"
         aria-label="Azion on GitHub"
         href="https://github.com/aziontech"
@@ -555,7 +555,7 @@
       />
       <Button
         label="Console"
-        kind="secondary"
+        variant="secondary"
         size="medium"
         class="shrink-0"
         href="https://console.azion.com"
@@ -582,7 +582,7 @@
     <template #footer>
       <div class="w-full border-t border-(--border-default)">
         <Footer
-          kind="content"
+          variant="content"
           aria-label="Footer"
         >
           <Footer.Column

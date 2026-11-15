@@ -78,7 +78,7 @@
           title="Delete the domain `old.example.com`?"
           description="The domain stops answering at once and its certificate is revoked. This cannot be undone."
           approve-label="Delete"
-          kind="danger"
+          variant="danger"
           confirmation-phrase="old.example.com"
           :status="decision"
           @approve="approve"

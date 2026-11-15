@@ -5,7 +5,7 @@ import Default from '../../../../examples/icon-button/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import IconButton from './icon-button.vue'
 
-const KINDS = ['primary', 'secondary', 'outlined', 'transparent', 'danger'] as const
+const VARIANTS = ['primary', 'secondary', 'outline', 'ghost', 'danger'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 describe('IconButton', () => {
@@ -155,11 +155,11 @@ describe('IconButton', () => {
     })
   })
 
-  it.each(KINDS)('renders kind=%s', (kind) => {
+  it.each(VARIANTS)('renders variant=%s', (variant) => {
     const { getByTestId } = render(IconButton, {
-      props: { icon: 'ai ai-plus', ariaLabel: 'Add', kind }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', variant: variant }
     })
-    expect(getByTestId('actions-icon-button').getAttribute('data-kind')).toBe(kind)
+    expect(getByTestId('actions-icon-button').getAttribute('data-variant')).toBe(variant)
   })
 
   it.each(SIZES)('renders size=%s', (size) => {

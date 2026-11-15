@@ -60,7 +60,7 @@
       />
       <IconButton
         icon="ai ai-external-link"
-        kind="outlined"
+        variant="outline"
         size="small"
         :aria-label="t.openInNewTab"
         :href="src"

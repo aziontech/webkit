@@ -59,7 +59,7 @@ Not every component has every state — a button has `disabled` + `loading`; a d
          data-[loading]:pointer-events-none
          data-[disabled]:cursor-not-allowed"
 >
-  <Skeleton v-if="loading" kind="rectangle" width="100%" height="48px" />
+  <Skeleton v-if="loading" variant="rectangle" width="100%" height="48px" />
   <EmptyState v-else-if="items.length === 0" title="No results" />
   <slot v-else />
 </div>

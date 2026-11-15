@@ -4,7 +4,7 @@
 
 <template>
   <CardGridRoot
-    kind="divider"
+    variant="divider"
     divider-color="muted"
     :columns="3"
   >

@@ -24,7 +24,7 @@
     },
     {
       "name": "Fieldset",
-      "summary": "`Field.Set` + `Field.Legend` group related fields; a nested set with `kind=\"label\"` groups a radio choice. `Field.Group` stacks the fields and `Field.Separator` divides them.",
+      "summary": "`Field.Set` + `Field.Legend` group related fields; a nested set with `type=\"label\"` groups a radio choice. `Field.Group` stacks the fields and `Field.Separator` divides them.",
       "file": "fieldset.vue"
     },
     {

@@ -16,7 +16,7 @@
   import {
     type AppliedFilter,
     type FilterField,
-    type TableFilterKind,
+    type TableFilterType,
     TableInjectionKey
   } from '../injection-key'
 
@@ -32,12 +32,12 @@
       /** Trigger text of the menu, accessible name of the property filter. Empty uses the locale catalog. */
       title?: string
       /** `menu` hosts FilterMenu (facets picked from known values); `property` hosts PropertyFilter (typed conditions with operators). */
-      kind?: TableFilterKind
+      type?: TableFilterType
     }>(),
     {
       fields: () => [],
       title: '',
-      kind: 'menu'
+      type: 'menu'
     }
   )
 
@@ -91,7 +91,7 @@
   watch(
     () => ctx?.editingFilter.value ?? null,
     (filter) => {
-      if (!filter || props.kind !== 'menu') return
+      if (!filter || props.type !== 'menu') return
       menuEl.value?.open(filter.field)
       if (ctx) ctx.editingFilter.value = null
     }
@@ -100,7 +100,7 @@
 
 <template>
   <FilterMenu
-    v-if="kind === 'menu'"
+    v-if="type === 'menu'"
     ref="menuEl"
     v-bind="$attrs"
     :data-testid="testId"

@@ -90,7 +90,7 @@ describe('DocMarkdown', () => {
         '<Update label="March 2, 2026" tags={["CLI", "API"]}>Faster deploys.</Update>'
       ].join('\n')
     )
-    expect(getByTestId('documentation-doc-callout').getAttribute('data-kind')).toBe('warning')
+    expect(getByTestId('documentation-doc-callout').getAttribute('data-variant')).toBe('warning')
     expect(getAllByTestId('documentation-doc-step')).toHaveLength(2)
     expect(getByText('Domains')).toBeTruthy()
     expect(await findByText('Store relational data.')).toBeTruthy()

@@ -10,7 +10,7 @@
   >
     <Button
       label="Hover me"
-      kind="outlined"
+      variant="outline"
       size="medium"
     />
   </Tooltip>

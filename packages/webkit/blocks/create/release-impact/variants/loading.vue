@@ -356,13 +356,13 @@
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 icon="ai ai-refresh"
                 @click="startRun"
@@ -380,13 +380,13 @@
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
               <Button
                 label="Edit"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 @click="edit"
               />
               <Button
                 label="Redeploy"
-                kind="outlined"
+                variant="outline"
                 size="small"
                 icon="ai ai-refresh"
                 @click="startRun"
@@ -552,7 +552,7 @@
                     v-if="!card.versions.length"
                     class="self-start"
                     label="Build a version"
-                    kind="transparent"
+                    variant="ghost"
                     size="small"
                     icon="ai ai-external-link"
                     href="/services/edge-policy/versions"
@@ -749,7 +749,7 @@
                     </span>
                     <Button
                       label="Retry"
-                      kind="outlined"
+                      variant="outline"
                       size="small"
                       icon="ai ai-refresh"
                       @click="loadImpact"
@@ -949,7 +949,7 @@
         </div>
       </div>
 
-      <SaveBar kind="docked">
+      <SaveBar variant="docked">
         <template #leading>
           <p class="text-body-sm text-(--text-muted)">
             Deploying puts every included resource into traffic at the version shown.
@@ -970,7 +970,7 @@
             <Button
               class="w-full"
               label="Cancel"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="/services/web-app"
               :disabled="deploying"
@@ -981,7 +981,7 @@
             title="Deploy this release?"
             :description="confirmBody"
             confirm-label="Deploy release"
-            kind="primary"
+            variant="primary"
             size="small"
             :disabled="!canDeploy"
             @confirm="confirmDeploy"
@@ -991,7 +991,7 @@
                 <Button
                   class="w-full"
                   :label="deploying ? 'Deploying…' : 'Deploy release'"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   icon="ai ai-cloud-upload"
                   :disabled="!canDeploy"

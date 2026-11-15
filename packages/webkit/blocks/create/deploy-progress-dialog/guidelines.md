@@ -35,7 +35,7 @@ Small, named "Filter deploys by status": All, Deploying n (running and queued), 
 
 ### E. Rows — `Item`, `OutcomeMark`, `Spinner`, `Tag`, `EmptyState` (required)
 
-An `Item.List` with one small `Item kind="outlined"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
+An `Item.List` with one small `Item variant="outline"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 

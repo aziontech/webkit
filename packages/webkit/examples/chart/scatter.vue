@@ -28,8 +28,8 @@
     aria-label="Response time by object size"
   >
     <Chart.Grid />
-    <Chart.Axis kind="y" />
-    <Chart.Axis kind="x" />
+    <Chart.Axis type="y" />
+    <Chart.Axis type="x" />
     <Chart.Scatter />
     <Chart.Tooltip />
     <Chart.Legend />

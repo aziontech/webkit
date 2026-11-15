@@ -141,17 +141,20 @@ describe('MediaSplit', () => {
     expect(columnsOf(container)).toHaveLength(2)
   })
 
-  it.each(['media-end', 'media-start'] as const)('mirrors the %s kind onto data-kind', (kind) => {
-    const { getByTestId } = render(MediaSplit, { props: { title: TITLE, kind } })
+  it.each(['media-end', 'media-start'] as const)(
+    'mirrors the %s variant onto data-variant',
+    (variant) => {
+      const { getByTestId } = render(MediaSplit, { props: { title: TITLE, variant: variant } })
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
-  })
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+    }
+  )
 
   it.each(['media-end', 'media-start'] as const)(
-    'keeps the copy before the media in DOM order for the %s kind',
-    (kind) => {
+    'keeps the copy before the media in DOM order for the %s variant',
+    (variant) => {
       const { container, getByRole } = render(MediaSplit, {
-        props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, kind }
+        props: { title: TITLE, description: DESCRIPTION, src: SRC, alt: ALT, variant: variant }
       })
       const heading = getByRole('heading', { level: 2 })
       const image = getByRole('img', { name: ALT })
@@ -188,7 +191,7 @@ describe('MediaSplit', () => {
         src: SRC,
         alt: ALT,
         orientation: 'vertical',
-        kind: 'media-start'
+        variant: 'media-start'
       }
     })
     const heading = getByRole('heading', { level: 2 })
@@ -241,7 +244,7 @@ describe('MediaSplit', () => {
     const [, media] = columnsOf(container)
 
     expect(media.contains(ground)).toBe(true)
-    expect(ground.getAttribute('data-kind')).toBe('grid')
+    expect(ground.getAttribute('data-variant')).toBe('grid')
     expect(ground.getAttribute('data-size')).toBe('medium')
     expect(ground.getAttribute('data-fade')).toBe('vignette')
     expect(ground.getAttribute('aria-hidden')).toBe('true')
@@ -260,7 +263,7 @@ describe('MediaSplit', () => {
     })
     const ground = getByTestId(GROUND)
 
-    expect(ground.getAttribute('data-kind')).toBe('pixelate')
+    expect(ground.getAttribute('data-variant')).toBe('pixelate')
     expect(ground.getAttribute('data-size')).toBe('small')
     expect(ground.getAttribute('data-fade')).toBe('edges')
   })
@@ -270,7 +273,7 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, texture: 'none' }
     })
 
-    expect(getByTestId(GROUND).getAttribute('data-kind')).toBe('none')
+    expect(getByTestId(GROUND).getAttribute('data-variant')).toBe('none')
   })
 
   it('runs the media flush to the cell unless the band asks for the inset', () => {
@@ -337,7 +340,7 @@ describe('MediaSplit', () => {
 
   it('keeps the copy cell before the media cell in DOM order when the cells are framed', () => {
     const { getByTestId } = render(MediaSplit, {
-      props: { title: TITLE, src: SRC, alt: ALT, framed: true, kind: 'media-start' }
+      props: { title: TITLE, src: SRC, alt: ALT, framed: true, variant: 'media-start' }
     })
     const [copy, media] = CELLS.map((cell) => getByTestId(cell))
 
@@ -407,7 +410,7 @@ describe('MediaSplit', () => {
 
   it('has no a11y violations when the image is decorative', async () => {
     const { container } = render(MediaSplit, {
-      props: { title: TITLE, description: DESCRIPTION, src: SRC, kind: 'media-start' }
+      props: { title: TITLE, description: DESCRIPTION, src: SRC, variant: 'media-start' }
     })
 
     await expectNoA11yViolations(container)
@@ -422,7 +425,7 @@ describe('MediaSplit', () => {
         src: SRC,
         alt: ALT,
         orientation: 'vertical',
-        kind: 'media-start',
+        variant: 'media-start',
         divided: false
       }
     })

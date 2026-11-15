@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Types",
-      "summary": "All kind variants side by side. `link` is an inline text action with no box, for a cell or a summary line that opens a drawer or a flow; `size` does not apply to it.",
-      "file": "types.vue"
+      "name": "Variants",
+      "summary": "All variants side by side. `link` is an inline text action with no box, for a cell or a summary line that opens a drawer or a flow; `size` does not apply to it.",
+      "file": "variants.vue"
     },
     {
       "name": "Sizes",

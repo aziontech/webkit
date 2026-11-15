@@ -5,19 +5,19 @@
 <template>
   <div class="flex flex-col gap-2">
     <HelperText
-      kind="helper"
+      type="helper"
       label="Helper Text"
     />
     <HelperText
-      kind="invalid"
+      type="invalid"
       label="Text Error"
     />
     <HelperText
-      kind="required"
+      type="required"
       label="Text Error"
     />
     <HelperText
-      kind="disabled"
+      type="disabled"
       label="Helper Text"
     />
   </div>

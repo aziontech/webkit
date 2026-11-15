@@ -8,7 +8,7 @@
   import Button from '../button/button.vue'
   import IconButton from '../icon-button/icon-button.vue'
 
-  export type SplitButtonKind = 'primary' | 'secondary' | 'outlined'
+  export type SplitButtonVariant = 'primary' | 'secondary' | 'outline'
   export type SplitButtonSize = 'small' | 'medium' | 'large'
 
   export interface SplitButtonItem {
@@ -35,7 +35,7 @@
     /** Actions rendered as rows in the attached overlay menu. */
     items?: SplitButtonItem[]
     /** Visual variant applied to both joined segments. */
-    kind?: SplitButtonKind
+    variant?: SplitButtonVariant
     /** Size token; affects height, padding, and typography. */
     size?: SplitButtonSize
     /** Disables both segments and prevents the menu from opening. */
@@ -50,7 +50,7 @@
     label: '',
     icon: '',
     items: () => [],
-    kind: 'primary',
+    variant: 'primary',
     size: 'large',
     disabled: false,
     loading: false,
@@ -119,7 +119,7 @@
   <div
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-variant="variant"
     :data-size="size"
     :data-disabled="disabled || null"
     :data-loading="loading || null"
@@ -135,7 +135,7 @@
         <Button
           :label="displayLabel"
           :icon="displayIcon"
-          :kind="kind"
+          :variant="variant"
           :size="size"
           :disabled="disabled"
           :loading="loading"
@@ -148,7 +148,7 @@
           <IconButton
             icon="ai ai-chevron-down"
             :ariaLabel="toggleAriaLabel"
-            :kind="kind"
+            :variant="variant"
             :size="size"
             :disabled="disabled || loading"
             :data-testid="`${testId}__toggle-button`"

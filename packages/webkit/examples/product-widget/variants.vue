@@ -7,25 +7,25 @@
     <div class="h-80 w-full">
       <ProductWidget
         name="workload-topology"
-        kind="window"
+        variant="window"
       />
     </div>
     <div class="h-80 w-full">
       <ProductWidget
         name="workload-topology"
-        kind="bare"
+        variant="bare"
       />
     </div>
     <div class="h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)">
       <ProductWidget
         name="edge-dns-record"
-        kind="window"
+        variant="window"
       />
     </div>
     <div class="h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)">
       <ProductWidget
         name="edge-dns-record"
-        kind="bare"
+        variant="bare"
       />
     </div>
   </div>

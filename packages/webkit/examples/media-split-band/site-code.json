@@ -26,7 +26,7 @@
       "label": "Explore Azion Lib",
       "href": "https://www.azion.com/en/documentation/products/azion-lib/overview/",
       "trailing": true,
-      "kind": "secondary"
+      "variant": "secondary"
     },
     "secondaryAction": {
       "label": "See GitHub",

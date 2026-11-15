@@ -283,7 +283,7 @@
       ]"
     >
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="environment"
         :display-value="(value) => String(value ?? '')"
@@ -351,7 +351,7 @@
         </Select.Content>
       </Select>
       <Select
-        kind="transparent"
+        variant="ghost"
         size="small"
         :model-value="versionId"
         @update:model-value="pickVersion"
@@ -433,7 +433,7 @@
       <Tooltip content="Back to web-app versions">
         <IconButton
           icon="ai ai-arrow-left"
-          kind="transparent"
+          variant="ghost"
           size="medium"
           href="/resources/1784552864?tab=versions"
           aria-label="Back to web-app versions"
@@ -615,7 +615,7 @@
                   <DropdownMenu.Trigger>
                     <IconButton
                       icon="ai ai-ellipsis"
-                      kind="transparent"
+                      variant="ghost"
                       size="small"
                       aria-label="Version actions"
                     />
@@ -701,7 +701,7 @@
                                   <SettingRow
                                     title="Active"
                                     description="When disabled, the resource stops serving traffic."
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <Switch
                                       v-model="settings.active"
@@ -726,7 +726,7 @@
                                     :key="mod.key"
                                     :title="mod.title"
                                     :description="mod.description"
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <Switch
                                       v-model="settings.modules[mod.key]"
@@ -748,7 +748,7 @@
                                 <Item.List>
                                   <SettingRow
                                     title="WebSocket Proxy"
-                                    kind="compact"
+                                    variant="compact"
                                   >
                                     <template #description>
                                       Enhance real-time data exchange between your resource and
@@ -800,7 +800,7 @@
                     <template #actions>
                       <Button
                         :label="`Open ${tabLabel}`"
-                        kind="outlined"
+                        variant="outline"
                         size="small"
                         :href="`/resources/web-app/${activeTab}`"
                       />
@@ -854,7 +854,7 @@
                     <SplitButton
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
                       :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
-                      kind="primary"
+                      variant="primary"
                       size="medium"
                       :items="saveOptions"
                       @item-click="(_event, item) => (saveAction = item.value)"
@@ -895,7 +895,7 @@
               </h2>
               <IconButton
                 icon="ai ai-x"
-                kind="transparent"
+                variant="ghost"
                 size="small"
                 aria-label="Close version history"
                 @click="historyExpanded = false"
@@ -933,7 +933,7 @@
                       >
                         <IconButton
                           icon="ai ai-pencil"
-                          kind="transparent"
+                          variant="ghost"
                           size="small"
                           aria-label="Edit version info"
                           @click="
@@ -964,13 +964,13 @@
                       <div class="flex justify-end gap-(--spacing-xs)">
                         <Button
                           label="Cancel"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="editing = false"
                         />
                         <Button
                           label="Save"
-                          kind="primary"
+                          variant="primary"
                           size="small"
                           @click="
                             () => {
@@ -996,7 +996,7 @@
                             :alt="version.author"
                             :label="version.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate"
@@ -1074,7 +1074,7 @@
                             :alt="entry.author"
                             :label="entry.author"
                             size="small"
-                            kind="square"
+                            variant="square"
                           />
                         </span>
                         <span class="truncate">{{ entry.author }} · {{ entry.createdAgo }}</span>
@@ -1090,7 +1090,7 @@
               >
                 <Button
                   label="Show older"
-                  kind="transparent"
+                  variant="ghost"
                   size="small"
                   @click="shown += 5"
                 />

@@ -3,9 +3,9 @@ name: schema-form
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 293d9633deab5cacf85c3b6886a43b5aba189fa320458e06b48ebba195a2160c
+checksum: f9e0d3f991bc3a8db5c3156a60be52864934562da77ce05aefac0bd219aae127
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -281,7 +281,7 @@ The form has no motion of its own; the composed controls bring theirs (the `Sele
 - DynamicFields — `when` on a field and inside repeat items, an `options` loader, and `widget: 'repeat'` for an array of objects.
 - RequestSchema — an OpenAPI request body: `oneOf` with a `discriminator`, `writeOnly`, `format`, a string map and a collapsed section.
 
-Justification: SchemaForm has no `kind` or `size` axis. WithValidation shows the submit timing and the server `errors` path, which the Default form cannot show at rest; CustomField shows the slot and `ui`, the two escape hatches. DynamicFields shows the `ui` behaviours that change the form as the value changes, and RequestSchema the keywords a generated console form reads, neither of which the other examples can show.
+Justification: SchemaForm has no `variant` or `size` axis. WithValidation shows the submit timing and the server `errors` path, which the Default form cannot show at rest; CustomField shows the slot and `ui`, the two escape hatches. DynamicFields shows the `ui` behaviours that change the form as the value changes, and RequestSchema the keywords a generated console form reads, neither of which the other examples can show.
 
 ## Decisions and open questions
 

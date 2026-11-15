@@ -46,7 +46,7 @@ The overall score's `Hint` states the bands:
 
 ### E. Overall figure — `StatTile` (required)
 
-The overall score as a `StatTile` with `kind="sans"`, labelled `Overall score`, the unit `/ 100` and
+The overall score as a `StatTile` with `variant="sans"`, labelled `Overall score`, the unit `/ 100` and
 no delta, with the top cause of poor samples under it. The tile owns its loading Skeleton and prints
 a dash when the period has no score; never hand-build the figure.
 
@@ -93,7 +93,7 @@ and its band.
 Variant RealUser only: the timings measured in the reader's browsers that such a score is built
 from. Title `Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`,
 `Last 7 days`, `Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals
-`StatTile`s (`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`StatTile`s (`variant="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
 `Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
 aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
 each with the latest value, its unit, a sparkline of the period and the period name in the aside.

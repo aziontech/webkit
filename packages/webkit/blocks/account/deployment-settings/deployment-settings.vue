@@ -368,7 +368,7 @@
     },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
     { accessorKey: 'updatedAt', header: 'Last modified', sortable: true, minWidth: 170 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const properties: FilteringProperty[] = [
@@ -558,7 +558,7 @@
           <Button
             label="Documentation"
             icon="ai ai-book"
-            kind="outlined"
+            variant="outline"
             size="medium"
             href="https://example.com/docs/deployment-settings"
             target="_blank"
@@ -566,7 +566,7 @@
           <Button
             label="Create Deployment Setting"
             icon="ai ai-plus"
-            kind="primary"
+            variant="primary"
             size="large"
             @click="openCreate"
           />
@@ -651,7 +651,7 @@
                   <SettingRow
                     title="Apply to existing Deployment Settings"
                     description="Give every setting this account already holds the binding policy above when you save. Default is never changed."
-                    kind="compact"
+                    variant="compact"
                   >
                     <Switch
                       v-model="form.applyToExisting"
@@ -738,7 +738,7 @@
                             <template #actions>
                               <Button
                                 label="Clear search"
-                                kind="outlined"
+                                variant="outline"
                                 size="small"
                                 @click="clearServiceSearch"
                               />
@@ -847,7 +847,7 @@
                   >
                     <IconButton
                       icon="ai ai-refresh"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       :loading="refreshing"
                       aria-label="Refresh"
@@ -860,7 +860,7 @@
                   >
                     <IconButton
                       icon="ai ai-download"
-                      kind="outlined"
+                      variant="outline"
                       size="medium"
                       :disabled="!matchingItems.length"
                       aria-label="Download CSV"
@@ -985,7 +985,7 @@
                         <template #actions>
                           <Button
                             label="Clear filters"
-                            kind="outlined"
+                            variant="outline"
                             size="small"
                             @click="clearFilters"
                           />
@@ -1012,14 +1012,14 @@
             <Button
               type="button"
               label="Discard"
-              kind="outlined"
+              variant="outline"
               size="medium"
               :disabled="saving"
               @click="discard"
             />
             <Button
               label="Save"
-              kind="primary"
+              variant="primary"
               size="medium"
               :loading="saving"
               @click="save"
@@ -1118,7 +1118,7 @@
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
-                    <Field.Legend kind="label">Binding policy</Field.Legend>
+                    <Field.Legend type="label">Binding policy</Field.Legend>
                     <RadioGroup
                       v-model="draft.bindingPolicy"
                       name="deployment-settings-binding"
@@ -1136,7 +1136,7 @@
                   <fieldset
                     class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
                   >
-                    <Field.Legend kind="label">Deployment policy</Field.Legend>
+                    <Field.Legend type="label">Deployment policy</Field.Legend>
                     <RadioGroup
                       v-model="draft.deploymentPolicy"
                       name="deployment-settings-policy"
@@ -1165,7 +1165,7 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 :disabled="submitting"
                 @click="drawerOpen = false"
@@ -1173,7 +1173,7 @@
               <Button
                 type="submit"
                 :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 :loading="submitting"
               />

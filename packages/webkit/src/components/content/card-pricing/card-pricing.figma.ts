@@ -13,9 +13,9 @@ const slotPosition = instance.getEnum('slotPosition', {
   bottom: 'bottom',
   middle: 'middle'
 })
-const kind = instance.getEnum('kind', {
+const variant = instance.getEnum('kind', {
   contained: 'contained',
-  transparent: 'transparent'
+  transparent: 'ghost'
 })
 const body = instance.getSlot('slot')
 const actions = instance.getSlot('slotAction')
@@ -55,10 +55,10 @@ export default {
       : figma.code`
   actions-position="${slotPosition}"`
   }${
-    kind === 'contained'
+    variant === 'contained'
       ? ''
       : figma.code`
-  kind="${kind}"`
+  variant="${variant}"`
   }
   value="${value}"${
     prefix === '$'

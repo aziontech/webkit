@@ -3,9 +3,9 @@ name: doc-hero
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: f06cd50212d179aa7afb736666dc34ba4ca800dc5f0a677bb95b54606b7c46fa
+checksum: 5ec2b6d28bd8bebd443ee84bc0169a378db3f8635b354167ee22f01832151df0
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ The masthead of a documentation home: a display-size `h1`, a deck capped at a re
 ## Best practices
 
 - Keep the title short (`Welcome to Azion Docs`) and the deck to one or two sentences.
-- Put `Button kind="primary" size="large"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.
+- Put `Button variant="primary" size="large"` first and `CopyPromptButton` second in `#actions`; say what the prompt does in `#note`.
 - Do not wrap it in `DocProse`; it is page chrome (`data-doc-chrome`).
 
 ## Usage

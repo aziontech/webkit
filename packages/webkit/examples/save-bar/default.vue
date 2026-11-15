@@ -24,13 +24,13 @@
         <Button
           type="button"
           label="Discard"
-          kind="outlined"
+          variant="outline"
           size="medium"
           :disabled="saving"
         />
         <Button
           label="Save"
-          kind="primary"
+          variant="primary"
           size="medium"
           :loading="saving"
           @click="save"

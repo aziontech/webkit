@@ -10,7 +10,7 @@
   } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
-  export type TableHeadCellKind = 'default' | 'checkbox' | 'action' | 'slot'
+  export type TableHeadCellType = 'default' | 'checkbox' | 'action' | 'slot'
   export type TableHeadCellAlign = 'start' | 'center' | 'end'
   export type TableHeadCellGrow = 1 | 2 | 3
   export type TableHeadCellFrozen = 'start' | 'end'
@@ -23,7 +23,7 @@
 
   interface Props {
     /** checkbox = select-all column; action = 40px header matching an action body cell; slot = free-form. */
-    kind?: TableHeadCellKind
+    type?: TableHeadCellType
     /** Renders the sort button and the sort affordance. */
     sortable?: boolean
     /** Current sort direction; controlled. */
@@ -46,7 +46,7 @@
   export type TableHeadCellProps = Props
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'default',
+    type: 'default',
     sortable: false,
     sortDirection: 'none',
     align: 'start',
@@ -82,7 +82,7 @@
   const sortById = useId()
 
   const growAttr = computed<number | null>(() =>
-    props.kind === 'checkbox' || props.kind === 'action'
+    props.type === 'checkbox' || props.type === 'action'
       ? null
       : (props.grow ?? (props.principal ? 2 : 1))
   )
@@ -106,7 +106,7 @@
     v-bind="$attrs"
     role="columnheader"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-sortable="sortable || null"
     :data-sort="sortable ? sortDirection : null"
     :data-align="align"
@@ -117,9 +117,9 @@
     @click="toggleSort"
     @keydown.enter.prevent="toggleSort"
     @keydown.space.prevent="toggleSort"
-    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[kind=checkbox]:w-10 data-[kind=checkbox]:flex-none data-[kind=checkbox]:justify-center data-[kind=checkbox]:px-0 data-[kind=action]:ms-auto data-[kind=action]:w-10 data-[kind=action]:flex-none data-[kind=action]:justify-center data-[kind=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-end-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-l rtl:group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-r data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-start-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-r rtl:group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-l data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
+    class="group/head relative flex h-11 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-sm) data-[sortable]:cursor-pointer data-[sortable]:select-none data-[compact]:h-9 data-[compact]:px-(--spacing-xs) text-label-sm text-(--text-muted) data-[align=start]:text-start data-[align=center]:text-center data-[align=end]:text-end data-[align=start]:justify-start data-[align=center]:justify-center data-[align=end]:justify-end data-[grow=1]:flex-[1_0_5rem] data-[grow=2]:flex-[2_0_5rem] data-[grow=3]:flex-[3_0_5rem] data-[type=checkbox]:w-10 data-[type=checkbox]:flex-none data-[type=checkbox]:justify-center data-[type=checkbox]:px-0 data-[type=action]:ms-auto data-[type=action]:w-10 data-[type=action]:flex-none data-[type=action]:justify-center data-[type=action]:px-0 data-[frozen=start]:sticky data-[frozen=start]:start-0 data-[frozen=end]:sticky data-[frozen=end]:end-0 data-[frozen]:z-10 data-[frozen]:bg-[var(--table-row-bg,var(--bg-surface))] data-[frozen=start]:after:pointer-events-none data-[frozen=start]:after:absolute data-[frozen=start]:after:inset-y-0 data-[frozen=start]:after:-end-6 data-[frozen=start]:after:w-6 data-[frozen=start]:after:content-[''] group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-l rtl:group-data-[overflow-start]/table:data-[frozen=start]:after:bg-gradient-to-r data-[frozen=start]:after:from-transparent data-[frozen=start]:after:to-[var(--table-row-bg,var(--bg-surface))] data-[frozen=end]:before:pointer-events-none data-[frozen=end]:before:absolute data-[frozen=end]:before:inset-y-0 data-[frozen=end]:before:-start-6 data-[frozen=end]:before:w-6 data-[frozen=end]:before:content-[''] group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-r rtl:group-data-[overflow-end]/table:data-[frozen=end]:before:bg-gradient-to-l data-[frozen=end]:before:from-transparent data-[frozen=end]:before:to-[var(--table-row-bg,var(--bg-surface))]"
   >
-    <slot v-if="kind === 'checkbox' || kind === 'action'" />
+    <slot v-if="type === 'checkbox' || type === 'action'" />
     <template v-else>
       <span
         :id="labelId"

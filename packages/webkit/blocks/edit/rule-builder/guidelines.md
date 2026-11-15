@@ -27,7 +27,7 @@ A `SettingsSection` with a hint, holding two `Field`s with large `Input`s: Name,
 
 ### C. Phase — `SettingsSection`, `Card`, `RadioGroup`, `HelperText` (optional)
 
-Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `kind="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
+Request and Response as choice cards: a flush `Card` holding a `RadioGroup` with `variant="card"`, each option with a title and a one-line description. When editing, the phase is locked and a `HelperText` explains why.
 
 ### D. Criteria — `SettingsSection`, `AttributeEditor` (grouped), `Combobox`, `Select`, `Input` (required)
 

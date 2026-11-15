@@ -51,7 +51,7 @@
     { accessorKey: 'domains', header: 'Domain', grow: 2 },
     { accessorKey: 'tags', header: 'Tags', grow: 2 },
     { accessorKey: 'updatedAt', header: 'Last modified', minWidth: 160 },
-    { id: 'actions', kind: 'action', hideable: false }
+    { id: 'actions', type: 'action', hideable: false }
   ]
 
   const onAction = (_event, _value, _row) => {}

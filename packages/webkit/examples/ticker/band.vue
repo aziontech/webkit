@@ -6,13 +6,13 @@
 <template>
   <div class="relative overflow-hidden bg-(--bg-canvas) pt-(--spacing-2xl)">
     <TextureMaterial
-      kind="dots"
+      variant="dots"
       size="small"
       fade="bottom"
     />
     <div class="relative flex min-h-80 flex-col justify-end">
       <Ticker
-        kind="band"
+        variant="band"
         label="Trusted by mission-critical workloads"
         :marks="['itau', 'netshoes', 'nzn']"
       />

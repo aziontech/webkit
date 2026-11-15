@@ -5,7 +5,7 @@ import figma from 'figma'
 
 const instance = figma.selectedInstance
 
-const kind = instance.getEnum('kind', {
+const type = instance.getEnum('kind', {
   option: 'option',
   group: 'group'
 })
@@ -16,7 +16,7 @@ const selected = instance.getEnum('selected', {
 const showIcon = instance.getBoolean('showIcon')
 const showTag = instance.getBoolean('showTag')
 
-const labelLayer = instance.findText(kind === 'group' ? 'Label Group' : 'Option 1')
+const labelLayer = instance.findText(type === 'group' ? 'Label Group' : 'Option 1')
 const label = labelLayer.type === 'TEXT' ? labelLayer.textContent : ''
 
 const tag = showTag ? instance.findInstance('Tag') : null
@@ -24,7 +24,7 @@ const tagValue = tag && tag.type === 'INSTANCE' ? tag.getString('label') : ''
 
 export default {
   example:
-    kind === 'group'
+    type === 'group'
       ? figma.code`<SidebarMenu.Group label="${label}" />`
       : figma.code`<SidebarMenu.Item${label === 'Option 1' ? '' : figma.code` label="${label}"`}${showIcon ? '' : ' icon=""'}${selected ? ' active' : ''}${tagValue ? figma.code` tag-value="${tagValue}"` : ''} />`,
   imports: ["import SidebarMenu from '@aziontech/webkit/sidebar-menu'"],

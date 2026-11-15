@@ -19,7 +19,7 @@ Add this entry to the `hero` array of the page JSON. `_id` picks the block and `
 - `title` is the page h1, and `titleHighlight` paints its opening words in the brand accent. The block renders nothing without a title.
 - `eyebrow` is the overline above the headline, and `description` the sentence under it.
 - `items` are the highlights under the description, each an `icon`, a `title` and a `description`. The list shows only when it has items.
-- `fields` are the form fields in order. Each takes a `name`, the key its value is sent under, a `kind` (`text`, `email`, `select`, `phone` or `textarea`) and a `label`, plus an optional `placeholder`, `required`, and `half` to share the row with the next half field. A `select` lists its choices in `options`; a `phone` starts on the `country` code, `US` by default, and its value is sent with the dial code.
+- `fields` are the form fields in order. Each takes a `name`, the key its value is sent under, a `variant` (`text`, `email`, `select`, `phone` or `textarea`) and a `label`, plus an optional `placeholder`, `required`, and `half` to share the row with the next half field. A `select` lists its choices in `options`; a `phone` starts on the `country` code, `US` by default, and its value is sent with the dial code.
 - `formAriaLabel` names the field group for assistive tech, and `submitLabel` is the send button.
 - `messages` holds the texts the block shows: `missing` under an empty required field, `invalidEmail` under a malformed email, `success` in place of the form once it is sent, and `error` under the form when it is not.
 - `tickerLabel` is the overline above the client strip, and `tickerMarks` lists the client marks in order. The strip shows only when it has marks.

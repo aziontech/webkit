@@ -225,7 +225,7 @@
             v-if="autoplaying"
             :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
             :aria-label="pauseLabel"
-            kind="outlined"
+            variant="outline"
             size="small"
             class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
             @click="paused = !paused"
@@ -310,7 +310,7 @@
                     <Button
                       v-if="actionLabel"
                       :label="actionLabel"
-                      kind="secondary"
+                      variant="secondary"
                       size="large"
                       :href="current.href"
                       icon="ai ai-chevron-right"
@@ -334,7 +334,7 @@
 
           <div ref="wallEl">
             <CardGrid
-              kind="frame"
+              variant="frame"
               flush
               :columns="wallColumns"
               :mobile-columns="1"
@@ -344,7 +344,7 @@
               <CardGridCell
                 v-for="(item, index) in items"
                 :key="item.key"
-                kind="canvas"
+                variant="canvas"
                 :padded="false"
                 role="presentation"
               >

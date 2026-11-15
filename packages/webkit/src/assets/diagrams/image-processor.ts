@@ -6,14 +6,14 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'user',
-      kind: 'pill',
+      type: 'pill',
       title: 'Browser',
       icon: 'ai ai-globe',
       active: true
     },
     {
       key: 'application',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Application',
       title: 'Rule: optimize images',
       icon: 'ai ai-rules-engine',
@@ -21,7 +21,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'processor',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Image Processor',
       title: 'fit-in/400x400, WebP',
       icon: 'ai ai-image-processor',
@@ -34,7 +34,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'cache',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Cache',
       title: 'Same variant, no work',
       icon: 'ai ai-tiered-cache',
@@ -42,7 +42,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'origin',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Origin',
       title: 'One source image',
       icon: 'ai ai-image'

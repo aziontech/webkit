@@ -77,7 +77,7 @@
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Resources"
-          kind="outlined"
+          variant="outline"
           size="small"
           @click="router.push('/resources')"
         />
@@ -88,7 +88,7 @@
             class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
-              kind="default"
+              variant="default"
               size="small"
             />
           </a>
@@ -105,7 +105,7 @@
           <Avatar
             label="name@example.com"
             size="medium"
-            kind="square"
+            variant="square"
           />
         </button>
       </GlobalHeader.End>
@@ -158,7 +158,7 @@
                         <HelperText
                           v-if="errors.name"
                           id="create-domain-name-message"
-                          :kind="errors.nameKind"
+                          :type="errors.nameKind"
                           :label="errors.name"
                         />
                       </SettingRow>
@@ -183,7 +183,7 @@
                         <HelperText
                           v-if="errors.domain"
                           id="create-domain-domain-message"
-                          :kind="errors.domainKind"
+                          :type="errors.domainKind"
                           :label="errors.domain"
                         />
                       </SettingRow>
@@ -204,7 +204,7 @@
                       <SettingRow
                         title="DNSSEC"
                         description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.dnssec"
@@ -214,7 +214,7 @@
                       <SettingRow
                         title="Active"
                         description="When active, the resource answers requests for its hostname."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -227,13 +227,13 @@
               </SettingsSection>
             </fieldset>
           </div>
-          <SaveBar kind="centered">
+          <SaveBar variant="centered">
             <template #leading>
               <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                 <Button
                   type="button"
                   label="Import"
-                  kind="outlined"
+                  variant="outline"
                   size="medium"
                   icon="ai ai-upload"
                   @click="openImport"
@@ -255,13 +255,13 @@
               <Button
                 type="button"
                 label="Cancel"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 @click="router.push('/resources')"
               />
               <Button
                 label="Save"
-                kind="primary"
+                variant="primary"
                 size="medium"
                 type="submit"
               />

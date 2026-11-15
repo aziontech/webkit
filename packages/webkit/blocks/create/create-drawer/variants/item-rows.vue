@@ -96,7 +96,7 @@
         <Button
           label="Add Origin"
           icon="ai ai-plus"
-          kind="outlined"
+          variant="outline"
           size="medium"
           @click="openCreate"
         />
@@ -171,7 +171,7 @@
                             <HelperText
                               v-if="errors.name"
                               id="origin-name-error"
-                              :kind="form.name.trim() ? 'invalid' : 'required'"
+                              :type="form.name.trim() ? 'invalid' : 'required'"
                               :label="errors.name"
                             />
                           </div>
@@ -238,7 +238,7 @@
                             <HelperText
                               v-if="errors.protocol"
                               id="origin-protocol-error"
-                              kind="required"
+                              type="required"
                               :label="errors.protocol"
                             />
                           </div>
@@ -285,7 +285,7 @@
                       <SettingRow
                         title="Active"
                         description="Send traffic to the origin as soon as it is added."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.active"
@@ -296,7 +296,7 @@
                       <SettingRow
                         title="Request logging"
                         description="Record the requests storefront sends to this origin."
-                        kind="compact"
+                        variant="compact"
                       >
                         <Switch
                           v-model="form.logging"
@@ -319,7 +319,7 @@
                 <Button
                   class="w-full"
                   label="Add Origin"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   :loading="submitting"
                   type="submit"

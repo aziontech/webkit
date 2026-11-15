@@ -199,7 +199,7 @@
           </div>
           <Button
             label="Export"
-            kind="outlined"
+            variant="outline"
             size="medium"
             icon="ai ai-download"
             disabled

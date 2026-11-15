@@ -6,12 +6,12 @@ const spec: DiagramSpec = {
   nodes: [
     {
       key: 'app',
-      kind: 'app',
+      type: 'app',
       title: 'App'
     },
     {
       key: 'firewall',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Firewall',
       title: 'WAF, rate limits, DDoS',
       icon: 'ai ai-edge-firewall',
@@ -19,7 +19,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'gateway',
-      kind: 'card',
+      type: 'card',
       eyebrow: 'Functions',
       title: 'AI Gateway',
       icon: 'ai ai-edge-functions',
@@ -32,7 +32,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'inference',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'AI Inference',
       title: 'Models on Azion',
       icon: 'ai ai-edge-ai',
@@ -40,7 +40,7 @@ const spec: DiagramSpec = {
     },
     {
       key: 'providers',
-      kind: 'item',
+      type: 'item',
       eyebrow: 'Connectors',
       title: 'Third-party providers',
       icon: 'ai ai-edge-connectors'

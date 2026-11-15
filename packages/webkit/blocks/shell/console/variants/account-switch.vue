@@ -147,7 +147,7 @@
           id: 'settings',
           label: 'Settings',
           icon: 'ai ai-settings',
-          kind: 'drill',
+          type: 'drill',
           groups: [
             {
               label: 'Settings',
@@ -390,7 +390,7 @@
             <Avatar
               :label="currentAccount.name"
               size="small"
-              kind="square"
+              variant="square"
             />
             <span class="min-w-0 flex-1 truncate text-start text-label-sm text-(--text-default)">{{
               currentAccount.name
@@ -420,7 +420,7 @@
             <Avatar
               :label="currentAccount.name"
               size="small"
-              kind="square"
+              variant="square"
             />
             <i
               class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted)"
@@ -438,7 +438,7 @@
           >
             <IconButton
               icon="ai ai-circle-plus"
-              kind="primary"
+              variant="primary"
               size="medium"
               aria-label="Create"
             />
@@ -449,7 +449,7 @@
           >
             <IconButton
               icon="ai ai-ask-azion"
-              kind="outlined"
+              variant="outline"
               size="medium"
               aria-label="Agent"
             />
@@ -458,7 +458,7 @@
         <template v-else>
           <Button
             label="Create"
-            kind="primary"
+            variant="primary"
             size="medium"
             icon="ai ai-circle-plus"
           />
@@ -586,7 +586,7 @@
           <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
             <Button
               label="Upgrade to Pro"
-              kind="secondary"
+              variant="secondary"
               size="medium"
               class="w-full"
             />
@@ -610,7 +610,7 @@
               <Button
                 label="Documentation"
                 icon="ai ai-book"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 href="https://www.azion.com/en/documentation/"
                 target="_blank"
@@ -618,7 +618,7 @@
               <Button
                 label="Create Application"
                 icon="ai ai-plus"
-                kind="outlined"
+                variant="outline"
                 size="medium"
               />
             </template>
@@ -683,7 +683,7 @@
                       <IconButton
                         v-if="row.hasChildren"
                         :icon="row.expanded ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
-                        kind="transparent"
+                        variant="ghost"
                         size="small"
                         :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
                         :aria-expanded="row.expanded"
@@ -702,7 +702,7 @@
                       />
                       <Button
                         :label="row.name"
-                        kind="link"
+                        variant="link"
                         size="small"
                         class="min-w-0"
                         :aria-current="row.id === currentAccountId ? 'true' : undefined"
@@ -746,7 +746,7 @@
                       <template #actions>
                         <Button
                           label="Clear search"
-                          kind="outlined"
+                          variant="outline"
                           size="small"
                           @click="accountQuery = ''"
                         />
@@ -764,7 +764,7 @@
               <Avatar
                 :label="currentAccount.name"
                 size="medium"
-                kind="square"
+                variant="square"
               />
               <div class="flex min-w-0 flex-col">
                 <span class="truncate text-label-sm text-(--text-default)">{{
@@ -778,7 +778,7 @@
             </div>
             <Button
               label="Account settings"
-              kind="outlined"
+              variant="outline"
               size="medium"
               href="/settings"
             />

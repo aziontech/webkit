@@ -243,7 +243,7 @@
       v-if="progress"
       :value="percent"
       size="small"
-      kind="flat"
+      variant="flat"
       :aria-label="t('logView.stepsProgress')"
       :data-testid="`${testId}__progress`"
       class="w-full"

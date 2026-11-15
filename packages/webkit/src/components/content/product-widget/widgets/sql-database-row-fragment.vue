@@ -107,7 +107,7 @@
 
 <template>
   <ShellMockup
-    kind="bare"
+    variant="bare"
     fade="bottom"
     class="[--mockup-fade-start:80%]"
     :chrome="false"
@@ -160,7 +160,7 @@
             <span class="ms-auto flex items-center gap-(--spacing-xs)">
               <IconButton
                 icon="ai ai-refresh"
-                kind="outlined"
+                variant="outline"
                 size="medium"
                 ariaLabel="Refresh"
               />
@@ -170,7 +170,7 @@
               >
                 <Button
                   label="Insert"
-                  kind="primary"
+                  variant="primary"
                   size="medium"
                   icon="ai ai-plus"
                 />

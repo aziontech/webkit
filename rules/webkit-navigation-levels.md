@@ -91,7 +91,7 @@ const navigation = [
         id: 'private-access',
         label: 'Private access',
         icon: 'ai ai-lock',
-        kind: 'drill',
+        type: 'drill',
         groups: [
           {
             label: 'Rules',

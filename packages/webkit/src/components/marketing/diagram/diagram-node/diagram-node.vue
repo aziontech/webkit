@@ -26,7 +26,7 @@
 
 <template>
   <div
-    v-if="node.kind === 'pill'"
+    v-if="node.type === 'pill'"
     class="flex items-center @5xl:h-(--size-20)"
   >
     <span
@@ -46,7 +46,7 @@
   </div>
 
   <Tooltip
-    v-else-if="node.kind === 'tile'"
+    v-else-if="node.type === 'tile'"
     :content="node.title"
   >
     <FrameBox
@@ -69,7 +69,7 @@
   </Tooltip>
 
   <div
-    v-else-if="node.kind === 'app'"
+    v-else-if="node.type === 'app'"
     v-bind="$attrs"
     :data-testid="testId"
     :data-diagram-node="node.key"
@@ -93,7 +93,7 @@
   </div>
 
   <div
-    v-else-if="node.kind === 'item'"
+    v-else-if="node.type === 'item'"
     v-bind="$attrs"
     :data-testid="testId"
     :data-diagram-node="node.key"

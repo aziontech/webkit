@@ -10,7 +10,7 @@
 
 <template>
   <SplitButton
-    kind="primary"
+    variant="primary"
     size="large"
     label="Save"
     icon="ai ai-check"

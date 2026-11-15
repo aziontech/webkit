@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  export type HelperTextKind = 'helper' | 'invalid' | 'required' | 'disabled'
+  export type HelperTextType = 'helper' | 'invalid' | 'required' | 'disabled'
 
   defineOptions({
     name: 'HelperText',
@@ -12,13 +12,13 @@
     /** Fallback text when the default slot is empty. */
     label?: string
     /** Visual variant; `disabled` also prepends a ai ai-lock icon. */
-    kind?: HelperTextKind
+    type?: HelperTextType
   }
   export type HelperTextProps = Props
 
   withDefaults(defineProps<Props>(), {
     label: '',
-    kind: 'helper'
+    type: 'helper'
   })
 
   defineSlots<{
@@ -34,12 +34,12 @@
   <p
     v-bind="$attrs"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :class="attrs.class"
-    class="inline-flex items-center text-label-sm data-[kind=helper]:text-(--text-muted) data-[kind=disabled]:text-(--text-muted) data-[kind=invalid]:text-(--danger-foreground) data-[kind=required]:text-(--warning-foreground) data-[kind=disabled]:gap-(--spacing-2xs)"
+    class="inline-flex items-center text-label-sm data-[type=helper]:text-(--text-muted) data-[type=disabled]:text-(--text-muted) data-[type=invalid]:text-(--danger-foreground) data-[type=required]:text-(--warning-foreground) data-[type=disabled]:gap-(--spacing-2xs)"
   >
     <i
-      v-if="kind === 'disabled'"
+      v-if="type === 'disabled'"
       class="ai ai-lock flex shrink-0 items-center"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"

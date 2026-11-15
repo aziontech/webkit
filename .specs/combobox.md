@@ -3,9 +3,9 @@ name: combobox
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: d10ba9a727cc150607b7af687222ac5b6adc961c0dc80078f63f17774b15e8bb
+checksum: fba98a7153cfb4bd8174098d9c278b8179d2c6a3f333540c6d8e98bae26d55ac
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -213,7 +213,7 @@ _none_ — one `.vue` file. The list is rendered by the component itself (telepo
 - Server — `filter: false`, `search` and `loading` driving a fake request.
 - States — `disabled`, `invalid` and `loading` side by side (the state examples for those props).
 
-Justification: Combobox has no `kind`; `size` is shown in Default's controls. Grouped and Server show the two data shapes a consumer must wire differently.
+Justification: Combobox has no `variant`; `size` is shown in Default's controls. Grouped and Server show the two data shapes a consumer must wire differently.
 
 ## Decisions and open questions
 

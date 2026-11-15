@@ -6,7 +6,7 @@
 <template>
   <Card
     class="w-full max-w-[400px]"
-    kind="integration"
+    variant="integration"
     title="Waiting Room"
     vendor="Tidewater"
     logo="ai ai-hourglass"
@@ -18,7 +18,7 @@
     <template #actions>
       <Button
         label="Configure"
-        kind="outlined"
+        variant="outline"
         size="small"
         icon="ai ai-settings"
       />

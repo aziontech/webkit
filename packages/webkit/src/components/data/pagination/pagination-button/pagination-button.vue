@@ -3,7 +3,7 @@
 
   import { PaginationInjectionKey } from '../injection-key'
 
-  export type PaginationButtonKind = 'previous' | 'next' | 'number' | 'more'
+  export type PaginationButtonType = 'previous' | 'next' | 'number' | 'more'
 
   defineOptions({
     name: 'PaginationButton',
@@ -12,7 +12,7 @@
 
   interface Props {
     /** Button role within the pagination. */
-    kind?: PaginationButtonKind
+    type?: PaginationButtonType
     /** Marks the current page (filled surface + aria-current). */
     active?: boolean
     /** Disables interaction and applies disabled tokens. */
@@ -20,7 +20,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'number',
+    type: 'number',
     active: false,
     disabled: false
   })
@@ -42,7 +42,7 @@
       (ctx ? `${ctx.testId}__button` : 'data-pagination__button')
   )
 
-  const inert = computed<boolean>(() => props.kind === 'more')
+  const inert = computed<boolean>(() => props.type === 'more')
 
   const onClick = (event: MouseEvent) => {
     if (props.disabled || inert.value) return
@@ -56,30 +56,30 @@
     v-bind="$attrs"
     :type="inert ? undefined : 'button'"
     :data-testid="testId"
-    :data-kind="kind"
+    :data-type="type"
     :data-active="(!inert && active) || null"
     :data-disabled="(!inert && disabled) || null"
     :disabled="inert ? undefined : disabled"
     :aria-hidden="inert ? 'true' : undefined"
     :aria-current="!inert && active ? 'page' : undefined"
     :aria-disabled="(!inert && disabled) || undefined"
-    class="relative isolate inline-flex h-7 min-w-7 items-center justify-center whitespace-nowrap text-(--text-default) text-button-lg tabular-nums first:rounded-s-(--shape-control) last:rounded-e-(--shape-control) transition-colors duration-150 ease-out motion-reduce:transition-none data-[kind=number]:bg-(--bg-surface) data-[kind=more]:bg-(--bg-surface) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out motion-reduce:before:transition-none before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:transition-opacity after:duration-150 after:ease-out motion-reduce:after:transition-none after:content-[''] hover:before:opacity-100 active:before:opacity-0 active:after:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[active]:bg-(--bg-selected) data-[active]:border-(length:--border-width-default) data-[active]:border-solid data-[active]:border-(--border-default) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:before:hidden data-[disabled]:after:hidden data-[kind=more]:before:hidden data-[kind=more]:after:hidden"
+    class="relative isolate inline-flex h-7 min-w-7 items-center justify-center whitespace-nowrap text-(--text-default) text-button-lg tabular-nums first:rounded-s-(--shape-control) last:rounded-e-(--shape-control) transition-colors duration-150 ease-out motion-reduce:transition-none data-[type=number]:bg-(--bg-surface) data-[type=more]:bg-(--bg-surface) before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:transition-opacity before:duration-150 before:ease-out motion-reduce:before:transition-none before:content-[''] after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:transition-opacity after:duration-150 after:ease-out motion-reduce:after:transition-none after:content-[''] hover:before:opacity-100 active:before:opacity-0 active:after:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[active]:bg-(--bg-selected) data-[active]:border-(length:--border-width-default) data-[active]:border-solid data-[active]:border-(--border-default) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:before:hidden data-[disabled]:after:hidden data-[type=more]:before:hidden data-[type=more]:after:hidden"
     @click="onClick"
   >
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <i
-        v-if="kind === 'previous'"
+        v-if="type === 'previous'"
         class="ai ai-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
         aria-hidden="true"
       />
       <i
-        v-if="kind === 'more'"
+        v-if="type === 'more'"
         class="ai ai-ellipsis text-[length:inherit] leading-none"
         aria-hidden="true"
       />
-      <slot v-if="kind === 'number'" />
+      <slot v-if="type === 'number'" />
       <i
-        v-if="kind === 'next'"
+        v-if="type === 'next'"
         class="ai ai-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
         aria-hidden="true"
       />

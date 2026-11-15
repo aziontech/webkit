@@ -947,7 +947,7 @@ describe('DropdownMenu', () => {
   })
 
   describe('checkable options', () => {
-    it('maps kind to menuitemcheckbox / menuitemradio with aria-checked', async () => {
+    it('maps type to menuitemcheckbox / menuitemradio with aria-checked', async () => {
       render(CheckableOptions)
       await waitFor(() => expect(getPanel()).not.toBeNull())
       const boxes = Array.from(document.body.querySelectorAll('[role="menuitemcheckbox"]'))
