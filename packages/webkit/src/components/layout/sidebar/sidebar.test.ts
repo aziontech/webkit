@@ -17,17 +17,17 @@ import SidebarGroup from './sidebar-group.vue'
 import SidebarHeader from './sidebar-header.vue'
 
 describe('Sidebar', () => {
-  describe('v-model:open (the positive name; collapsed is deprecated)', () => {
+  describe('v-model:open', () => {
     it('open=false renders the rail collapsed', () => {
       const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
       expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
     })
 
-    it('the trigger emits update:open false and the deprecated update:collapsed true', async () => {
+    it('the trigger emits update:open false and no update:collapsed', async () => {
       const { getByTestId, emitted } = render(Sidebar, { props: { collapsible: true } })
       await fireEvent.click(getByTestId('layout-sidebar__collapse'))
       expect(emitted()['update:open']?.at(-1)).toEqual([false])
-      expect(emitted()['update:collapsed']?.at(-1)).toEqual([true])
+      expect(emitted()['update:collapsed']).toBeUndefined()
     })
 
     it('the expand button emits update:open true', async () => {
@@ -38,12 +38,11 @@ describe('Sidebar', () => {
       expect(emitted()['update:open']?.at(-1)).toEqual([true])
     })
 
-    it('a parent that binds only the deprecated collapsed still drives the rail', async () => {
-      const { getByTestId, rerender } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true }
+    it('ignores a removed collapsed attribute; only open collapses the rail', () => {
+      const { getByTestId } = render(Sidebar, {
+        props: { collapsible: true },
+        attrs: { collapsed: true }
       })
-      expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
-      await rerender({ collapsible: true, collapsed: false })
       expect(getByTestId('layout-sidebar').hasAttribute('data-collapsed')).toBe(false)
     })
 
@@ -293,7 +292,7 @@ describe('Sidebar', () => {
 
     it('settles only after mount, so a state restored in the mount tick lands in place', async () => {
       const { getByTestId } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -319,7 +318,7 @@ describe('Sidebar', () => {
 
       await fireEvent.click(getByTestId('layout-sidebar__collapse'))
 
-      expect(emitted()['update:collapsed']?.[0]).toEqual([true])
+      expect(emitted()['update:open']?.[0]).toEqual([false])
 
       const root = getByTestId('layout-sidebar')
       expect(root.getAttribute('data-collapsed')).toBe('')
@@ -330,7 +329,7 @@ describe('Sidebar', () => {
 
     it('renders a hidden checkbox whose checked state mirrors collapsed, CSS-only motion driver', () => {
       const { getByTestId } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -351,13 +350,13 @@ describe('Sidebar', () => {
       await fireEvent.click(input)
 
       expect(input.checked).toBe(true)
-      expect(emitted()['update:collapsed']?.at(-1)).toEqual([true])
+      expect(emitted()['update:open']?.at(-1)).toEqual([false])
       expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
     })
 
     it('the way back is a sibling of the rail, because a collapsed rail would clip it', async () => {
       const { getByTestId } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -368,7 +367,7 @@ describe('Sidebar', () => {
 
     it('previewing: resting in the edge zone brings the collapsed rail back to --size-10', async () => {
       const { getByTestId } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -386,7 +385,7 @@ describe('Sidebar', () => {
 
     it('previewing: focus reaching the edge zone opens the same sliver as the pointer', async () => {
       const { getByTestId } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -402,7 +401,7 @@ describe('Sidebar', () => {
 
     it('previewing: the sliver stays out of the tab order — it is a preview, not a restore', async () => {
       const { getByTestId } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -417,7 +416,7 @@ describe('Sidebar', () => {
 
     it('previewing: a click on the collapsed splitter brings the rail back', async () => {
       const { getByTestId, emitted } = render(Sidebar, {
-        props: { collapsible: true, resizable: true, collapsed: true },
+        props: { collapsible: true, resizable: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -425,12 +424,12 @@ describe('Sidebar', () => {
       await fireEvent.pointerEnter(zone)
       await fireEvent.click(zone.querySelector('[role="separator"]') as HTMLElement)
 
-      expect(emitted()['update:collapsed']?.at(-1)).toEqual([false])
+      expect(emitted()['update:open']?.at(-1)).toEqual([true])
     })
 
     it('previewing: a drag that MOVED is not also answered as a click', async () => {
       const { getByTestId, emitted } = render(Sidebar, {
-        props: { collapsible: true, resizable: true, collapsed: true },
+        props: { collapsible: true, resizable: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
@@ -442,7 +441,7 @@ describe('Sidebar', () => {
       window.dispatchEvent(new PointerEvent('pointerup'))
       await fireEvent.click(splitter)
 
-      expect(emitted()['update:collapsed']).toBeUndefined()
+      expect(emitted()['update:open']).toBeUndefined()
     })
 
     it('previewing: an expanded rail has nothing to preview, so the zone is not even rendered', () => {
@@ -455,12 +454,12 @@ describe('Sidebar', () => {
 
     it('the expand button brings a collapsed rail back', async () => {
       const { getByTestId, emitted } = render(Sidebar, {
-        props: { collapsible: true, collapsed: true },
+        props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
 
       await fireEvent.click(await waitFor(() => getByTestId('layout-sidebar__expand-button')))
-      expect(emitted()['update:collapsed']?.at(-1)).toEqual([false])
+      expect(emitted()['update:open']?.at(-1)).toEqual([true])
     })
 
     it('renders a named, focusable separator as the drag handle', () => {
@@ -535,7 +534,7 @@ describe('Sidebar', () => {
       })
 
       await fireEvent.dblClick(getByTestId('layout-sidebar__handle'))
-      expect(emitted()['update:collapsed']?.at(-1)).toEqual([true])
+      expect(emitted()['update:open']?.at(-1)).toEqual([false])
     })
 
     it('a rail with the gesture on has no axe violations, open or collapsed', async () => {
@@ -550,7 +549,7 @@ describe('Sidebar', () => {
         props: {
           resizable: true,
           collapsible: true,
-          collapsed: true,
+          open: false,
           ariaLabel: 'Console'
         },
         slots: { default: '<a href="/">Home</a>' }
@@ -596,11 +595,11 @@ describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () =>
   const railMenu = {
     components: { Sidebar, SidebarMenu, SidebarMenuGroup, SidebarMenuItem },
     setup() {
-      const collapsed = ref(true)
-      return { collapsed }
+      const open = ref(false)
+      return { open }
     },
     template: `
-      <Sidebar v-model:collapsed="collapsed" collapsible="icon" shortcut>
+      <Sidebar v-model:open="open" collapsible="icon" shortcut>
         <SidebarMenu role="presentation">
           <SidebarMenuGroup label="Build">
             <SidebarMenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
@@ -610,7 +609,7 @@ describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () =>
         <template #footer="{ rail }"><span data-testid="footer-scope">{{ rail ? 'rail' : 'full' }}</span></template>
       </Sidebar>
       <input data-testid="field" />
-      <span data-testid="state">{{ collapsed }}</span>
+      <span data-testid="state">{{ !open }}</span>
     `
   }
 
@@ -664,14 +663,14 @@ describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () =>
 
   it('ignores the shortcut unless the shortcut prop is set', async () => {
     const onUpdate = vi.fn()
-    render(Sidebar, { props: { collapsible: true, 'onUpdate:collapsed': onUpdate } })
+    render(Sidebar, { props: { collapsible: true, 'onUpdate:open': onUpdate } })
     await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
     await nextTick()
     expect(onUpdate).not.toHaveBeenCalled()
   })
 
   it('keeps collapsible=true as the offcanvas collapse', () => {
-    const { getByTestId } = render(Sidebar, { props: { collapsible: true, collapsed: true } })
+    const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
     const root = getByTestId('layout-sidebar')
     expect(root.hasAttribute('inert')).toBe(true)
     expect(root.hasAttribute('data-rail')).toBe(false)

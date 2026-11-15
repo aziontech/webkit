@@ -224,7 +224,7 @@
             class="flex min-w-0 flex-1 items-center"
           >
             <Skeleton
-              kind="shape"
+              kind="rectangle"
               width="60%"
               height="1rem"
               aria-hidden="true"

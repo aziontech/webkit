@@ -601,13 +601,13 @@ test('container-needs-width', () => {
 
 test('header-search-trigger', () => {
   const header = (right, extra = '') =>
-    `<template><div class="@container"><GlobalHeader><GlobalHeader.Nav />` +
-    `<GlobalHeader.Right>${right}</GlobalHeader.Right></GlobalHeader></div>${extra}</template>`
+    `<template><div class="@container"><GlobalHeader><NavigationMenu />` +
+    `<GlobalHeader.End>${right}</GlobalHeader.End></GlobalHeader></div>${extra}</template>`
   vue.run('header-search-trigger', headerSearchTrigger, {
     valid: [
       { code: header('<SearchTrigger collapsible />'), filename: 'a.vue' },
       {
-        code: '<template><GlobalHeader><GlobalHeader.Right><Avatar /></GlobalHeader.Right></GlobalHeader></template>',
+        code: '<template><GlobalHeader><GlobalHeader.End><Avatar /></GlobalHeader.End></GlobalHeader></template>',
         filename: 'focused.vue'
       },
       {
@@ -624,7 +624,7 @@ test('header-search-trigger', () => {
     invalid: [
       { code: header('<Avatar />'), filename: 'c.vue', errors: [{ messageId: 'missing' }] },
       {
-        code: '<template><Sidebar /><GlobalHeader><GlobalHeader.Right /></GlobalHeader></template>',
+        code: '<template><Sidebar /><GlobalHeader><GlobalHeader.End /></GlobalHeader></template>',
         filename: 'd.vue',
         errors: [{ messageId: 'missing' }]
       },

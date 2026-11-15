@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 2efe54574c5a21866c71838efaf1890b7ec929c073d231c91c26965bef97ba36
+checksum: a59673d3a036d2e239e28e3ba6283847fa5b013eec572601443336eda66f42b9
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -34,6 +34,7 @@ always has, with the host owning the width — every existing consumer is unaffe
 
 ## When to use
 
+- Use Sidebar only when not using ConsoleLayout, which already renders the rail; put a SidebarMenu inside it.
 - The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `SidebarMenu`.
 - The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
 - Wide work surfaces where the navigation should shrink to its icons rather than disappear (`collapsible="icon"`), so a destination stays one click away.
@@ -376,11 +377,10 @@ boolean; `true` is `'offcanvas'`, so every existing consumer is unchanged.
 
 ## v-model
 
-| Model               | Type             | Default | Emits              | Notes                                                                                                                                                                                                                                                                                                                                                                          |
-| ------------------- | ---------------- | ------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model:open`      | `boolean`        | `true`  | `update:open`      | Whether the rail is in the layout. `false` collapses it: out of the layout (`collapsible` `true` / `'offcanvas'`) or down to its icon rail (`'icon'`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.      |
-| `v-model:width`     | `number \| null` | `null`  | `update:width`     | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
-| `v-model:collapsed` | `boolean`        | `false` | `update:collapsed` | **@deprecated since 6.0 — use `v-model:open` (inverted). Removed in 7.0.** Still works: it is the inverse of `open`, both are emitted on every change, and when a host binds only `collapsed` it drives the rail.                                                                                                                                                              |
+| Model           | Type             | Default | Emits          | Notes                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------- | ---------------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:open`  | `boolean`        | `true`  | `update:open`  | Whether the rail is in the layout. `false` collapses it: out of the layout (`collapsible` `true` / `'offcanvas'`) or down to its icon rail (`'icon'`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.      |
+| `v-model:width` | `number \| null` | `null`  | `update:width` | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
 
 Every model is inert unless `resizable` or `collapsible` is set. With neither, no inline width is
 applied and the host's own `class="w-[280px]"` governs exactly as before. The models are declared

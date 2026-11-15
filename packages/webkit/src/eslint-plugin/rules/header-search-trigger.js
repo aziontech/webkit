@@ -2,14 +2,7 @@ import { templateBodyVisitorFactory } from '../util.js'
 
 const HEADER = new Set(['GlobalHeader', 'global-header'])
 const TRIGGER = new Set(['SearchTrigger', 'search-trigger'])
-const NAVIGATION = new Set([
-  'GlobalHeader.Nav',
-  'global-header.nav',
-  'NavigationMenu',
-  'navigation-menu',
-  'Sidebar',
-  'sidebar'
-])
+const NAVIGATION = new Set(['NavigationMenu', 'navigation-menu', 'Sidebar', 'sidebar'])
 const ICON_BUTTONS = new Set(['IconButton', 'icon-button', 'Button', 'button'])
 const SHORTCUT = /\b(?:meta|control)\+k\b/i
 
@@ -50,7 +43,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Every app header offers search through SearchTrigger: flag a GlobalHeader that carries navigation (GlobalHeader.Nav, NavigationMenu or a Sidebar in the same template) without a SearchTrigger, a hand-rolled ⌘K field (aria-keyshortcuts Meta+K / Control+K on anything but SearchTrigger), and a bare magnifier button inside a GlobalHeader.'
+        'Every app header offers search through SearchTrigger: flag a GlobalHeader that carries navigation (NavigationMenu or a Sidebar in the same template) without a SearchTrigger, a hand-rolled ⌘K field (aria-keyshortcuts Meta+K / Control+K on anything but SearchTrigger), and a bare magnifier button inside a GlobalHeader.'
     },
     schema: [],
     messages: {

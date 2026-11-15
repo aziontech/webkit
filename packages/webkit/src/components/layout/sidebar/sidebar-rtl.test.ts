@@ -12,7 +12,7 @@ describe('Sidebar in a right-to-left subtree (styled)', () => {
     document.body.appendChild(host)
     const { getByTestId } = render(Sidebar, {
       container: host,
-      props: { collapsible: true, collapsed: true },
+      props: { collapsible: true, open: false },
       slots: { default: '<a href="/">Home</a>' }
     })
     const inner = getByTestId('layout-sidebar__panel')
