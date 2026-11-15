@@ -34,7 +34,9 @@
     "bind domain and deployment",
     "create resource in steps",
     "assistente de criação",
-    "criar serviço"
+    "criar serviço",
+    "asistente de creación",
+    "crear en pasos"
   ],
   "skills": ["webkit-create-surface", "webkit-form", "webkit-errors"],
   "steps": ["where-it-runs", "module", "general", "settings", "review"],

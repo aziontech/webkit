@@ -104,18 +104,14 @@
       "lang": "en",
       "query": "create wizard",
       "top1": "platform/create/multipage-create",
-      "top3": [
-        "platform/create/multipage-create",
-        "platform/create/provision-wizard",
-        "platform/create/source-wizard"
-      ]
+      "top3": ["platform/create/multipage-create", "platform/create/deploy-template"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "import from github",
       "top1": "platform/create/create-hub",
-      "top3": ["platform/create/create-hub", "platform/create/source-wizard"]
+      "top3": ["platform/create/create-hub", "platform/create/deploy-template"]
     },
     {
       "tool": "patterns",
@@ -136,7 +132,7 @@
       "lang": "en",
       "query": "build logs",
       "top1": "platform/detail/deployment-logs",
-      "top3": ["platform/detail/deployment-logs", "platform/create/deployment-flow"]
+      "top3": ["platform/detail/deployment-logs"]
     },
     {
       "tool": "patterns",
@@ -205,8 +201,8 @@
       "tool": "patterns",
       "lang": "en",
       "query": "metrics dashboard",
-      "top1": "platform/dashboard/data-dashboard",
-      "top3": ["platform/dashboard/data-dashboard", "platform/dashboard/analytics-dashboard"]
+      "top1": "platform/dashboard/analytics-dashboard",
+      "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
       "tool": "patterns",
@@ -242,13 +238,6 @@
       "query": "uptime monitoring",
       "top1": "platform/dashboard/service-monitoring-dashboard",
       "top3": ["platform/dashboard/service-monitoring-dashboard"]
-    },
-    {
-      "tool": "patterns",
-      "lang": "en",
-      "query": "conversion funnel",
-      "top1": "platform/dashboard/funnel-cohort-dashboard",
-      "top3": ["platform/dashboard/funnel-cohort-dashboard"]
     },
     {
       "tool": "patterns",
@@ -317,15 +306,15 @@
       "tool": "patterns",
       "lang": "en",
       "query": "edge function editor",
-      "top1": "platform/edit/code-editor",
-      "top3": ["platform/edit/code-editor"]
+      "top1": "platform/edit/function-editor",
+      "top3": ["platform/edit/function-editor"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "environment variables",
-      "top1": "platform/edit/attribute-editor",
-      "top3": ["platform/edit/attribute-editor"]
+      "top1": "platform/edit/variables",
+      "top3": ["platform/edit/variables"]
     },
     {
       "tool": "patterns",
@@ -442,11 +431,7 @@
       "lang": "pt-BR",
       "query": "painel",
       "top1": "platform/dashboard/analytics-dashboard",
-      "top3": [
-        "platform/dashboard/analytics-dashboard",
-        "platform/dashboard/data-dashboard",
-        "platform/dashboard/home-dashboard"
-      ]
+      "top3": ["platform/dashboard/analytics-dashboard", "platform/dashboard/home-dashboard"]
     },
     {
       "tool": "patterns",
@@ -522,15 +507,15 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "variáveis de ambiente",
-      "top1": "platform/edit/attribute-editor",
-      "top3": ["platform/edit/attribute-editor"]
+      "top1": "platform/edit/variables",
+      "top3": ["platform/edit/variables"]
     },
     {
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "editor de código",
-      "top1": "platform/edit/code-editor",
-      "top3": ["platform/edit/code-editor"]
+      "top1": "platform/edit/function-editor",
+      "top3": ["platform/edit/function-editor"]
     },
     {
       "tool": "patterns",
@@ -557,8 +542,8 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "métricas",
-      "top1": "platform/dashboard/data-dashboard",
-      "top3": ["platform/dashboard/data-dashboard", "platform/dashboard/analytics-dashboard"]
+      "top1": "platform/dashboard/analytics-dashboard",
+      "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
       "tool": "patterns",
@@ -586,21 +571,21 @@
       "lang": "pt-BR",
       "query": "novo projeto",
       "top1": "platform/create/create-hub",
-      "top3": ["platform/create/create-hub", "platform/create/source-wizard"]
+      "top3": ["platform/create/create-hub", "platform/create/deploy-template"]
     },
     {
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "assistente de criação",
-      "top1": "platform/create/provision-wizard",
-      "top3": ["platform/create/provision-wizard", "platform/create/multipage-create"]
+      "top1": "platform/create/multipage-create",
+      "top3": ["platform/create/multipage-create"]
     },
     {
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "logs de build",
       "top1": "platform/detail/deployment-logs",
-      "top3": ["platform/detail/deployment-logs", "platform/create/deployment-flow"]
+      "top3": ["platform/detail/deployment-logs"]
     },
     {
       "tool": "patterns",
@@ -711,8 +696,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "panel de métricas",
-      "top1": "platform/dashboard/data-dashboard",
-      "top3": ["platform/dashboard/data-dashboard", "platform/dashboard/analytics-dashboard"]
+      "top1": "platform/dashboard/analytics-dashboard",
+      "top3": ["platform/dashboard/analytics-dashboard"]
     },
     {
       "tool": "patterns",
@@ -746,8 +731,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "variables de entorno",
-      "top1": "platform/edit/attribute-editor",
-      "top3": ["platform/edit/attribute-editor"]
+      "top1": "platform/edit/variables",
+      "top3": ["platform/edit/variables"]
     },
     {
       "tool": "patterns",
@@ -823,8 +808,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "asistente de creación",
-      "top1": "platform/create/provision-wizard",
-      "top3": ["platform/create/provision-wizard", "platform/create/multipage-create"]
+      "top1": "platform/create/multipage-create",
+      "top3": ["platform/create/multipage-create"]
     },
     {
       "tool": "patterns",
@@ -844,8 +829,8 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "nova variável",
-      "top1": "platform/edit/attribute-editor",
-      "top3": ["platform/edit/attribute-editor"]
+      "top1": "platform/edit/variables",
+      "top3": ["platform/edit/variables"]
     },
     {
       "tool": "patterns",
@@ -866,7 +851,7 @@
       "lang": "es",
       "query": "crear proyecto",
       "top1": "platform/create/create-hub",
-      "top3": ["platform/create/create-hub", "platform/create/source-wizard"]
+      "top3": ["platform/create/create-hub", "platform/create/deploy-template"]
     },
     {
       "tool": "patterns",

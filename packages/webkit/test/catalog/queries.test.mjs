@@ -384,7 +384,7 @@ test('getPattern resolves a v6 block id through catalog.patternAliases with a no
   )
   assert.equal(
     getPattern(catalog, 'platform/forms/sectioned-form', { variant: 'Submitted' }).variant,
-    'ImportFromGitSubmitted'
+    'ImportFromGit'
   )
   assert.equal(getPattern(catalog, 'platform/forms/save-all-groups').variant, 'SaveAll')
   assert.equal(getPattern(catalog, 'details-page-with-tabs').id, 'platform/detail/details-page')
