@@ -3,9 +3,9 @@ name: error-boundary
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 7dcb4ebf7c7b3517a63524674213aa20a3f56c49274e1e19e78723818062b65b
+checksum: b3fdf7fb9eb63d69634c47fa410a7e0b1a2237ca8ac5d49a41f087ea9eeb5710
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -82,16 +82,16 @@ example).
 
 ## Events
 
-| Event   | Payload                   | Notes                                                                                                                    |
-| ------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `error` | `ErrorBoundaryErrorEvent` | Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here.      |
-| `retry` | `(event?: Event)`         | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it; no argument for a `resetKey` change. |
+| Event   | Payload                   | Notes                                                                                                                                                                                                                                                                                                                                                         |
+| ------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `error` | `ErrorBoundaryErrorEvent` | Fires once per failure with `{ error, info }`: what was thrown and Vue's description of where. Report it from here.                                                                                                                                                                                                                                           |
+| `retry` | `(event: Event)`          | Fires when the region is mounted again (Retry, the slot's `retry`, or a `resetKey` change). Reset the broken state here. Carries the click event when the built-in Retry button (or a slot `retry(event)` call) triggered it, an `Event` of type `retry` when the slot calls `retry()` with no event, and an `Event` of type `reset` for a `resetKey` change. |
 
 ## Slots
 
-| Slot       | Scope                                   | Notes                                                                                     |
-| ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `default`  | —                                       | The region the boundary guards. Mounted again, from scratch, on every retry.              |
+| Slot       | Scope                                                | Notes                                                                                                                                              |
+| ---------- | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`  | —                                                    | The region the boundary guards. Mounted again, from scratch, on every retry.                                                                       |
 | `fallback` | `{ error: unknown, retry: (event?: Event) => void }` | Replaces the built-in `Alert` while the region is failed. Call `retry` to mount it again; pass the click event to forward it on the `retry` event. |
 
 ## States

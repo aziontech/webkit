@@ -4,7 +4,7 @@ export type AccordionType = 'single' | 'multiple'
 
 export type AccordionSize = 'medium' | 'large'
 
-export type AccordionArrowPosition = 'left' | 'right'
+export type AccordionIconPosition = 'leading' | 'trailing'
 
 export type AccordionValue = string | string[] | null
 
@@ -31,7 +31,7 @@ export interface AccordionContext {
   /** Size token, mirrored onto every item. */
   size: ComputedRef<AccordionSize>
   /** Side the chevron sits on, mirrored onto every item. */
-  arrowPosition: ComputedRef<AccordionArrowPosition>
+  iconPosition: ComputedRef<AccordionIconPosition>
   /** Registers an item so roving focus can find its trigger. */
   register: (registration: AccordionItemRegistration) => void
   /** Removes a previously registered item. */

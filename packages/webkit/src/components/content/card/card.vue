@@ -27,7 +27,7 @@
     title?: string
     /** Pads the content region. Set false for flush, edge-to-edge content such as an ItemList with full-width dividers. */
     padded?: boolean
-    /** `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `action` slot. */
+    /** `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot. */
     kind?: CardKind
     /** Integration kind: icon class for the logo mark. The `logo` slot takes an image instead. */
     logo?: string
@@ -64,20 +64,18 @@
   }>()
 
   defineSlots<{
-    /** Replaces the default header layout (title + header-action). */
+    /** Replaces the default header layout (title + header-actions). */
     header(): unknown
     /** Actions aligned to the end of the default header; visible on header hover. */
-    'header-action'(): unknown
-    /** Main card body; with `kind="integration"` it renders under the description. Children passed without a slot name render here too. */
+    'header-actions'(): unknown
+    /** Main card body; with `kind="integration"` it renders under the description. */
     default(): unknown
-    /** Main card body, the named form of the default slot; with `kind="integration"` it renders under the description. */
-    content(): unknown
     /** Footer actions or metadata; omitted when empty. */
     footer(): unknown
     /** Integration kind: replaces the logo mark, for an `img` with an empty `alt`. */
     logo(): unknown
     /** Integration kind: one action at the end of the tile, above the stretched title target. */
-    action(): unknown
+    actions(): unknown
   }>()
 
   const attrs = useAttrs()
@@ -89,14 +87,14 @@
   const isIntegration = computed(() => props.kind === 'integration')
   const isFeatured = computed(() => isIntegration.value && props.featured)
   const hasHeaderSlot = () => Boolean(slots['header'])
-  const hasHeaderActionSlot = () => Boolean(slots['header-action'])
+  const hasHeaderActionsSlot = () => Boolean(slots['header-actions'])
   const hasFooterSlot = () => Boolean(slots['footer'])
-  const hasContentSlot = () => Boolean(slots['content'] || slots['default'])
-  const hasActionSlot = () => Boolean(slots['action'])
+  const hasContentSlot = () => Boolean(slots['default'])
+  const hasActionsSlot = () => Boolean(slots['actions'])
 
   const showHeaderRegion = () =>
     hasHeaderSlot() ||
-    hasHeaderActionSlot() ||
+    hasHeaderActionsSlot() ||
     (!isIntegration.value && Boolean(props.title?.trim()))
 
   const showDefaultHeader = () => showHeaderRegion() && !hasHeaderSlot()
@@ -135,11 +133,11 @@
           {{ title }}
         </h2>
         <div
-          v-if="hasHeaderActionSlot()"
+          v-if="hasHeaderActionsSlot()"
           class="ms-auto opacity-0 transition-opacity motion-reduce:transition-none group-hover:opacity-100 group-focus-within:opacity-100 [@media(hover:none)]:opacity-100"
-          :data-testid="`${testId}__header-action`"
+          :data-testid="`${testId}__header-actions`"
         >
-          <slot name="header-action" />
+          <slot name="header-actions" />
         </div>
       </template>
     </header>
@@ -227,13 +225,9 @@
             </p>
           </div>
         </div>
-        <slot
-          v-if="hasContentSlot()"
-          name="content"
-          ><slot
-        /></slot>
+        <slot v-if="hasContentSlot()" />
         <div
-          v-if="installed || (badges.length && !isFeatured) || hasActionSlot()"
+          v-if="installed || (badges.length && !isFeatured) || hasActionsSlot()"
           class="mt-auto flex min-w-0 flex-wrap items-center gap-(--spacing-xs) group-data-[featured]/card:justify-center"
         >
           <Tag
@@ -254,19 +248,15 @@
             />
           </template>
           <div
-            v-if="hasActionSlot()"
+            v-if="hasActionsSlot()"
             class="relative z-[1] ms-auto group-data-[featured]/card:ms-0"
-            :data-testid="`${testId}__action`"
+            :data-testid="`${testId}__actions`"
           >
-            <slot name="action" />
+            <slot name="actions" />
           </div>
         </div>
       </div>
-      <slot
-        v-else-if="hasContentSlot()"
-        name="content"
-        ><slot
-      /></slot>
+      <slot v-else-if="hasContentSlot()" />
     </div>
 
     <footer

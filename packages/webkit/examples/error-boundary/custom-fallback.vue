@@ -27,7 +27,7 @@
 <template>
   <div class="flex w-full max-w-[512px] flex-col gap-(--spacing-sm)">
     <Card title="Requests by region">
-      <template #content>
+      <template #default>
         <ErrorBoundary @retry="broken = false">
           <BarList
             :items="items"

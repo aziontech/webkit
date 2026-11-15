@@ -8,7 +8,7 @@
     title="Card Title"
     class="w-full max-w-[512px]"
   >
-    <template #content>
+    <template #default>
       <p class="text-body-sm text-(--text-muted)">
         The footer bar renders only when the footer slot is filled.
       </p>

@@ -15,7 +15,7 @@
     installed
     href="#waiting-room"
   >
-    <template #action>
+    <template #actions>
       <Button
         label="Configure"
         kind="outlined"

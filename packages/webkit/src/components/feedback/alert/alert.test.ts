@@ -100,10 +100,10 @@ describe('Alert', () => {
       expect(getByTestId('feedback-alert').hasAttribute('data-trailing')).toBe(true)
     })
 
-    it('is set when the action slot is filled', () => {
+    it('is set when the actions slot is filled', () => {
       const { getByTestId } = render(Alert, {
         props: { label: 'x' },
-        slots: { action: '<button type="button">Go</button>' }
+        slots: { actions: '<button type="button">Go</button>' }
       })
 
       expect(getByTestId('feedback-alert').hasAttribute('data-trailing')).toBe(true)
@@ -212,10 +212,10 @@ describe('Alert', () => {
       expect(queryByTestId('feedback-alert__action')).toBeNull()
     })
 
-    it('replaces the built-in button with the action slot', () => {
+    it('replaces the built-in button with the actions slot', () => {
       const { getByText, queryByTestId } = render(Alert, {
         props: { label: 'Custom action', actionLabel: 'Ignored' },
-        slots: { action: '<button type="button">Do it</button>' }
+        slots: { actions: '<button type="button">Do it</button>' }
       })
 
       expect(getByText('Do it')).toBeTruthy()
@@ -292,7 +292,9 @@ describe('Alert', () => {
       await waitFor(() => {
         expect(emitted('close')).toHaveLength(1)
       })
-      expect(emitted('close')[0]).toEqual([])
+      const [event] = emitted('close')[0] as Event[]
+      expect(event).toBeInstanceOf(Event)
+      expect(event?.type).toBe('timeout')
     })
 
     it('sets no inline transition on the root', () => {
@@ -395,7 +397,7 @@ describe('Alert', () => {
     it('renders no action wrapper without an action', () => {
       const view = render(Alert, { props: { label: 'Saved.' } })
 
-      expect(view.container.querySelector('[data-slot="alert-action"]')).toBeNull()
+      expect(view.container.querySelector('[data-slot="alert-actions"]')).toBeNull()
     })
   })
 
@@ -405,7 +407,7 @@ describe('Alert', () => {
       const { queryByTestId } = render({
         components: { Alert },
         setup: () => ({ shown }),
-        template: `<Alert><template #default>Saved.</template><template v-if="shown" #action><span data-testid="probe">Slotted</span></template></Alert>`
+        template: `<Alert><template #default>Saved.</template><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></Alert>`
       })
       expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
 

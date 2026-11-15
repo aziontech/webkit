@@ -14,15 +14,15 @@ const size = hasTab
       large: 'large'
     })
   : 'medium'
-const arrowPosition = hasTab
+const iconPosition = hasTab
   ? firstTab.getEnum('arrowPosition', {
-      right: 'right',
-      left: 'left'
+      right: 'trailing',
+      left: 'leading'
     })
-  : 'right'
+  : 'trailing'
 
 export default {
-  example: figma.code`<Accordion${size === 'medium' ? '' : figma.code` size="${size}"`}${arrowPosition === 'right' ? '' : figma.code` arrow-position="${arrowPosition}"`}>
+  example: figma.code`<Accordion${size === 'medium' ? '' : figma.code` size="${size}"`}${iconPosition === 'trailing' ? '' : figma.code` icon-position="${iconPosition}"`}>
   ${items}
 </Accordion>`,
   imports: ["import Accordion from '@aziontech/webkit/accordion'"],

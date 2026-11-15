@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, provide, useAttrs, useId } from 'vue'
 
   import {
-    type AccordionArrowPosition,
+    type AccordionIconPosition,
     AccordionInjectionKey,
     type AccordionItemRegistration,
     type AccordionSize,
@@ -27,7 +27,7 @@
     /** Size token; affects header height, padding, and typography. Provided to every item via context. */
     size?: AccordionSize
     /** Side of the header the chevron sits on. Provided to every item via context. */
-    arrowPosition?: AccordionArrowPosition
+    iconPosition?: AccordionIconPosition
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -35,7 +35,7 @@
     defaultValue: null,
     collapsible: true,
     size: 'medium',
-    arrowPosition: 'right'
+    iconPosition: 'trailing'
   })
 
   const model = defineModel<AccordionValue | undefined>({ default: undefined })
@@ -129,7 +129,7 @@
     type: computed(() => props.type),
     collapsible: computed(() => props.collapsible),
     size: computed(() => props.size),
-    arrowPosition: computed(() => props.arrowPosition),
+    iconPosition: computed(() => props.iconPosition),
     register,
     unregister,
     focusSibling,
@@ -150,7 +150,7 @@
     data-orientation="vertical"
     :data-type="type"
     :data-size="size"
-    :data-arrow="arrowPosition"
+    :data-icon-position="iconPosition"
     class="flex w-full flex-col"
   >
     <slot />

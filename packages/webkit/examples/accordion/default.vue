@@ -8,7 +8,7 @@
     collapsible
     default-value="overview"
     size="medium"
-    arrow-position="right"
+    icon-position="trailing"
     class="w-full max-w-[40rem]"
   >
     <Accordion.Item value="overview">

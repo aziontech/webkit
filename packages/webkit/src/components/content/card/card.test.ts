@@ -38,21 +38,17 @@ describe('Card', () => {
     expect(getByTestId(`${TESTID}__content`)).toBeTruthy()
   })
 
-  it('renders default slot children as the body, and content wins when both are passed', () => {
+  it('renders default slot children as the body and ignores the removed content slot', () => {
     const plain = render(Card, { slots: { default: '<p>Default body</p>' } })
     expect(plain.getByTestId(`${TESTID}__content`).textContent).toContain('Default body')
     plain.unmount()
-    const both = render(Card, {
-      slots: { default: '<p>Default body</p>', content: '<p>Named body</p>' }
-    })
-    const region = both.getByTestId(`${TESTID}__content`)
-    expect(region.textContent).toContain('Named body')
-    expect(region.textContent).not.toContain('Default body')
+    const legacy = render(Card, { slots: { content: '<p>Named body</p>' } })
+    expect(legacy.getByTestId(`${TESTID}__content`).textContent).not.toContain('Named body')
   })
 
-  it('renders content slot markup inside the content region', () => {
+  it('renders default slot markup inside the content region', () => {
     const { getByTestId, getByText } = render(Card, {
-      slots: { content: '<p>Body copy</p>' }
+      slots: { default: '<p>Body copy</p>' }
     })
     const content = getByTestId(`${TESTID}__content`)
     expect(content.textContent).toContain('Body copy')
@@ -81,25 +77,25 @@ describe('Card', () => {
 
     it('does not render the title node when title is empty', () => {
       const { queryByTestId } = render(Card, {
-        slots: { 'header-action': '<button>Act</button>' }
+        slots: { 'header-actions': '<button>Act</button>' }
       })
-      // header region shows (header-action present) but no title element.
+      // header region shows (header-actions present) but no title element.
       expect(queryByTestId(`${TESTID}__header`)).toBeTruthy()
       expect(queryByTestId(`${TESTID}__title`)).toBeNull()
     })
 
-    it('renders the header-action region in the default header when its slot is provided', () => {
+    it('renders the header-actions region in the default header when its slot is provided', () => {
       const { getByTestId, getByText } = render(Card, {
         props: { title: 'Overview' },
-        slots: { 'header-action': '<button>Edit</button>' }
+        slots: { 'header-actions': '<button>Edit</button>' }
       })
-      const action = getByTestId(`${TESTID}__header-action`)
+      const action = getByTestId(`${TESTID}__header-actions`)
       expect(action.contains(getByText('Edit'))).toBe(true)
     })
 
-    it('omits the header-action region when its slot is absent', () => {
+    it('omits the header-actions region when its slot is absent', () => {
       const { queryByTestId } = render(Card, { props: { title: 'Overview' } })
-      expect(queryByTestId(`${TESTID}__header-action`)).toBeNull()
+      expect(queryByTestId(`${TESTID}__header-actions`)).toBeNull()
     })
 
     it('uses the header slot verbatim and suppresses the default title layout', () => {
@@ -134,7 +130,7 @@ describe('Card', () => {
   describe('accessibility', () => {
     it('has no violations for the content-only card', async () => {
       const { container } = render(Card, {
-        slots: { content: '<p>Body copy for the card region.</p>' }
+        slots: { default: '<p>Body copy for the card region.</p>' }
       })
       await expectNoA11yViolations(container)
     })
@@ -143,8 +139,8 @@ describe('Card', () => {
       const { container } = render(Card, {
         props: { title: 'Account settings' },
         slots: {
-          'header-action': '<button type="button">Edit</button>',
-          content: '<p>Body copy for the card region.</p>',
+          'header-actions': '<button type="button">Edit</button>',
+          default: '<p>Body copy for the card region.</p>',
           footer: '<button type="button">Save</button>'
         }
       })
@@ -162,7 +158,7 @@ describe('Card', () => {
 
   describe('on devices', () => {
     it('makes its content region a named container', () => {
-      const view = render(Card, { props: { title: 'Usage' }, slots: { content: 'Body' } })
+      const view = render(Card, { props: { title: 'Usage' }, slots: { default: 'Body' } })
 
       expect(view.getByTestId('content-card__content').className).toContain('@container/card')
     })
@@ -170,10 +166,10 @@ describe('Card', () => {
     it('keeps the header action visible where there is no hover', () => {
       const view = render(Card, {
         props: { title: 'Usage' },
-        slots: { 'header-action': '<button type="button">Edit</button>' }
+        slots: { 'header-actions': '<button type="button">Edit</button>' }
       })
 
-      expect(view.getByTestId('content-card__header-action').className).toContain(
+      expect(view.getByTestId('content-card__header-actions').className).toContain(
         '[@media(hover:none)]:opacity-100'
       )
     })
@@ -226,13 +222,13 @@ describe('Card', () => {
     it('keeps the action its own target above the stretched title', async () => {
       const view = render(Card, {
         props: integration,
-        slots: { action: '<button type="button">Install</button>' }
+        slots: { actions: '<button type="button">Install</button>' }
       })
 
       await fireEvent.click(view.getByRole('button', { name: 'Install' }))
 
       expect(view.emitted('select')).toBeUndefined()
-      expect(view.getByTestId('content-card__action').className).toContain('relative')
+      expect(view.getByTestId('content-card__actions').className).toContain('relative')
     })
 
     it('shows the installed state', () => {
@@ -272,12 +268,12 @@ describe('Card', () => {
         defineComponent({
           setup: () => () =>
             h('div', { dir: 'rtl' }, [
-              h(Card, integration, { action: () => h('button', { type: 'button' }, 'Install') })
+              h(Card, integration, { actions: () => h('button', { type: 'button' }, 'Install') })
             ])
         })
       )
 
-      expect(view.getByTestId('content-card__action').className).toContain('ms-auto')
+      expect(view.getByTestId('content-card__actions').className).toContain('ms-auto')
       await expectNoA11yViolations(view.container)
     })
 
@@ -308,7 +304,7 @@ describe('Card', () => {
     it('keeps the installed tag and the action in the featured layout', () => {
       const view = render(Card, {
         props: { ...integration, featured: true, installed: true },
-        slots: { action: '<button type="button">Configure</button>' }
+        slots: { actions: '<button type="button">Configure</button>' }
       })
 
       expect(view.getByTestId('content-card__installed')).toHaveTextContent('Installed')

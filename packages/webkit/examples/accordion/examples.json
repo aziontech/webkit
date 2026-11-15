@@ -13,9 +13,9 @@
       "file": "sizes.vue"
     },
     {
-      "name": "ArrowPosition",
-      "summary": "`right` and `left` chevron placement side by side.",
-      "file": "arrow-position.vue"
+      "name": "IconPosition",
+      "summary": "`trailing` and `leading` chevron placement side by side.",
+      "file": "icon-position.vue"
     },
     {
       "name": "Disabled",

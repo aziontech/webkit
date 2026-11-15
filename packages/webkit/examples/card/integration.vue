@@ -17,7 +17,7 @@
       :badges="[{ label: 'Firewall' }]"
       @select="opened = 'Request Signer'"
     >
-      <template #action>
+      <template #actions>
         <Button
           label="Install"
           kind="outlined"
