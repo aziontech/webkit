@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview --port 4174 --strictPort",
     "lint": "eslint . --max-warnings 0",
-    "format:check": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
+    "check:format": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
   },
   "dependencies": {
     "@aziontech/icons": "workspace:*",

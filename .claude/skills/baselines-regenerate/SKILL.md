@@ -12,7 +12,7 @@ enforced_by: [git-workflow, release-types, review]
 ## Purpose
 
 Refresh the baselines that the `governance.yml` `visual` job compares every PR against. The
-suite lives in `apps/visual` (Playwright, `pnpm visual:test`): it serves the built docs site
+suite lives in `apps/visual` (Playwright, `pnpm test:visual`): it serves the built docs site
 (`apps/docs/dist`) and demos (`apps/demos/dist`) and screenshots, with the real theme CSS, the
 first example of every component (`/example?path=<dir>/<file>`), the primary state of every block
 (`/frame/<state>/<id>`), every state of the AI blocks, every demo route, and the geometry checks
@@ -39,7 +39,7 @@ committed by hand. This skill is that end-to-end flow.
 
 1. **Resolve + preflight.** Confirm the branch exists on origin; the workflow runs its **HEAD**,
    so push the `main` merge first.
-2. **Trigger** (`pnpm visual:update:baseline` does the same for the current branch):
+2. **Trigger** (`pnpm regenerate:baselines` does the same for the current branch):
    ```sh
    gh workflow run visual-baselines.yml --ref <branch> -f update_baselines=true [-f grep=<pattern>]
    gh run list --workflow=visual-baselines.yml --branch <branch> --limit 1 --json databaseId,status,url,headSha
@@ -68,7 +68,7 @@ committed by hand. This skill is that end-to-end flow.
 
 Locally, the same container gives the same pixels:
 `docker run --rm --ipc=host -v "$PWD":/w -w /w/apps/visual mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --update-snapshots=all`
-after `pnpm docs:build && pnpm demos:build`. Use it to look at a change before dispatching; the
+after `pnpm build:docs && pnpm build:demos`. Use it to look at a change before dispatching; the
 committed baselines still come from the workflow or from that exact image.
 
 ## Report

@@ -27,12 +27,12 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 
 | Command (repo root)                                | What it checks                                                |
 | -------------------------------------------------- | ------------------------------------------------------------- |
-| `pnpm webkit:lint` / `webkit:lint:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                 |
-| `pnpm webkit:lint:style` / `webkit:lint:style:fix` | Stylelint (§7) / with auto-fix                                |
-| `pnpm webkit:format:check` / `webkit:format`       | Prettier (§8) check / write                                   |
-| `pnpm webkit:type-check`                           | `vue-tsc --noEmit` (§9)                                       |
-| `pnpm webkit:type-coverage`                        | type-coverage ≥ 95% (§9)                                      |
-| `pnpm governance`                                  | lint + type-check + format:check + audit — local mirror of CI |
+| `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                 |
+| `pnpm lint-style:webkit` / `lint-style:webkit:fix` | Stylelint (§7) / with auto-fix                                |
+| `pnpm check-format:webkit` / `format:webkit`       | Prettier (§8) check / write                                   |
+| `pnpm typecheck:webkit`                           | `vue-tsc --noEmit` (§9)                                       |
+| `pnpm type-coverage:webkit`                        | type-coverage ≥ 95% (§9)                                      |
+| `pnpm gates`                                  | lint + typecheck + format check + audit — local mirror of CI |
 
 On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../rules/git-workflow.md).
 
@@ -857,7 +857,7 @@ function labelOf(option: Option) {
 
 ### `simple-import-sort/imports`
 
-Deterministic, auto-fixable order: packages first (alphabetical — `@`-scoped before plain names), then relative imports, groups separated by a blank line. Kills "import shuffle" diff noise. `pnpm webkit:lint:fix` sorts for you.
+Deterministic, auto-fixable order: packages first (alphabetical — `@`-scoped before plain names), then relative imports, groups separated by a blank line. Kills "import shuffle" diff noise. `pnpm lint:webkit:fix` sorts for you.
 
 **❌ Wrong**
 
@@ -1169,7 +1169,7 @@ The same selector twice in one sheet is a merge waiting to happen.
 
 ### `order/properties-alphabetical-order`
 
-Properties always alphabetical — declaration diffs stay minimal. Auto-fixable (`pnpm webkit:lint:style:fix`).
+Properties always alphabetical — declaration diffs stay minimal. Auto-fixable (`pnpm lint-style:webkit:fix`).
 
 **❌ Wrong**
 
@@ -1261,7 +1261,7 @@ Tailwind's at-rules are valid input here; do not "fix" them away.
 
 ## 8. Prettier — formatting
 
-Formatting is Prettier's job alone — never hand-fight it; run `pnpm webkit:format`. The options and what they produce:
+Formatting is Prettier's job alone — never hand-fight it; run `pnpm format:webkit`. The options and what they produce:
 
 | Option                    | Value                   |
 | ------------------------- | ----------------------- |
@@ -1465,7 +1465,7 @@ const config = JSON.parse(raw) as ThemeConfig
 config.theme.colors.primary // fully typed
 ```
 
-Run `pnpm webkit:type-coverage` — `--detail` lists every offending expression.
+Run `pnpm type-coverage:webkit` — `--detail` lists every offending expression.
 
 ---
 

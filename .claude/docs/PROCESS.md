@@ -184,7 +184,7 @@ CI by the [invariant test](#the-invariant).
 ### Stage 5 — Pull request + CI
 
 Branches and PRs go through `/branch-create` and `/pr-open` (base `main`, Conventional
-Commits, no attribution footers). CI is the **Governance Pipeline** — the same engines the
+Commits, no attribution footers). CI is the **Governance** workflow — the same engines the
 hooks ran, re-run over the whole repo, so an editor push that never ran a hook cannot merge
 an off-pattern change either.
 
@@ -192,21 +192,21 @@ an off-pattern change either.
 <summary><b>▸ Details — the governance jobs and the ratchet</b></summary>
 
 [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) — jobs
-gated by a `changes` path filter and summarized by a required `governance-check` gate:
+gated by a `changes` path filter and summarized by a required `gates` gate:
 
 | Job                | Runs                                                                                                             | Fails the PR when                                                                                       |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `security`         | `pnpm audit` + TruffleHog + depcheck                                                                             | high-severity advisory, a leaked secret, or a ghost dependency                                          |
-| `lint-canary`      | `node lint-canaries/index.js`                                                                                    | a deliberately broken fixture stops failing its rule (a lint was weakened)                              |
+| `lint-canaries`      | `node lint-canaries/index.js`                                                                                    | a deliberately broken fixture stops failing its rule (a lint was weakened)                              |
 | `lint`             | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit`                              | any warning or format drift                                                                             |
 | `types`            | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                                               | type error or coverage below 95%                                                                        |
-| `build`            | `pack:check` + `size` (after `lint` + `types`)                                                                   | a test file leaks into the tarball or an entry exceeds its [bundle budget](../rules/bundle-budget.md)   |
-| `site`             | `docs:build` + `demos:build`, artifact for the visual shards (after `lint` + `types`)                            | a page, example, block or demo fails to build or prerender                                              |
-| `toolkit`          | `catalog:check` + `test:toolkit` + `authoring` + `test:gate` + `doc-standards`                                   | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test |
-| `smoke`            | `smoke:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button`             | the published packages don't install, wire, render styled, or build for a real consumer                 |
+| `build`            | `check:pack` + `check:size` (after `lint` + `types`)                                                                   | a test file leaks into the tarball or an entry exceeds its [bundle budget](../rules/bundle-budget.md)   |
+| `site`             | `build:docs` + `build:demos`, artifact for the visual shards (after `lint` + `types`)                            | a page, example, block or demo fails to build or prerender                                              |
+| `toolkit`          | `check:catalog` + `test:toolkit` + `check:authoring` + `check:tests` + `check:authoring-docs`                                   | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test |
+| `smoke`            | `test:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button`             | the published packages don't install, wire, render styled, or build for a real consumer                 |
 | `tests`            | Vitest browser mode (Playwright Chromium), 4 shards (after `lint` + `types`)                                     | any functional or axe assertion fails                                                                   |
 | `visual`           | Playwright styled screenshots in the Playwright image, 4 shards (after every job above except `toolkit`/`smoke`) | an example, block or demo route drifts from its committed baseline                                      |
-| `governance-check` | summary gate over every job                                                                                      | any upstream job failed (skips count as pass)                                                           |
+| `gates` | summary gate over every job                                                                                      | any upstream job failed (skips count as pass)                                                           |
 
 **The ratchet** ([`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs the
 construction, token, and spec-compliance engines over every source file and
@@ -214,7 +214,7 @@ compares against [`authoring-baseline.json`](../../packages/webkit/scripts/autho
 
 - Existing debt is **frozen** (multiset semantics — a second occurrence of a baselined
   violation still blocks); new code must comply.
-- Fixing debt shrinks the baseline — prune deliberately with `pnpm authoring:update`.
+- Fixing debt shrinks the baseline — prune deliberately with `pnpm update:authoring`.
 - The remaining entries are legacy construction/token/spec debt.
 
 <a id="the-invariant"></a>**The invariant** —
@@ -307,7 +307,7 @@ Holding a package's line at a fixed track permanently is a different mechanism
 the commits of the range **before** the Release PR is computed; the Release PR itself
 carries the resolved version in its diff, so a footer added there arrives too late.
 
-At publish time the publish workflow (`package-webkit.yml`) generates `.d.ts` files (`vue-tsc`); the
+At publish time the publish workflow (`publish-webkit.yml`) generates `.d.ts` files (`vue-tsc`); the
 repo itself ships source (`exports` points at `./src/...`) — `.d.ts` is never committed.
 The published package embeds [`catalog.json`](../../packages/webkit/catalog.json) — the version-locked
 manifest Part 2 runs on.

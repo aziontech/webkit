@@ -116,7 +116,7 @@ Add a row to the component's `## Theme gaps` table in `.specs/<component>.md`:
 
 Build the theme first (`pnpm --filter @aziontech/theme build:tokens`) — the catalog reads the
 token source, but nothing renders until `dist/v4/globals.css` carries the utility and its
-`@keyframes`. Then run `pnpm --filter @aziontech/webkit catalog:build` (or
+`@keyframes`. Then run `pnpm --filter @aziontech/webkit build:catalog` (or
 `node packages/webkit/scripts/build-catalog.mjs`).
 Confirm `<name>` now appears in `catalog.json → tokens.animations`. This is what makes
 `validate-spec-compliance` accept `animate-<name>` in the component.

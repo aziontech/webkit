@@ -69,7 +69,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 3. `approve` → spawn `spec-validator` (`spec-validate` skill): schema, body, Constraints block,
    template-2 sections; it writes the checksum and flips `status: draft → approved`.
 4. Exit condition: `status: approved`, checksum matches, and
-   `pnpm --filter @aziontech/webkit run spec-template:check` passes.
+   `pnpm --filter @aziontech/webkit run check:spec-template` passes.
 
 ## Step 5 — Build
 
@@ -82,7 +82,7 @@ same on the issue (`gh issue comment`), and do nothing else.
    `examples[]` with `name`, `summary`, `file`) and one copyable `.vue` per example, covering the
    states of the spec.
 4. Budget: an entry in `packages/webkit/.size-limit.json` with the spec's `## Performance` budget.
-5. Regenerate: `pnpm --filter @aziontech/webkit catalog:build`. The docs page
+5. Regenerate: `pnpm --filter @aziontech/webkit build:catalog`. The docs page
    (`/components/<name>`, `/example?path=<name>/<file>`) and the visual test of the first example follow
    from the files; its baseline comes from the `Visual baselines` workflow (`/baselines-regenerate`).
 6. Exit condition: `/component-create` finished with `status: implemented` and the echo verdict
@@ -99,10 +99,10 @@ pnpm --filter @aziontech/webkit run gates          # catalog, naming, marketing,
                                                     # toolkit tests → table
 pnpm --filter @aziontech/webkit lint
 pnpm --filter @aziontech/webkit lint:style
-pnpm --filter @aziontech/webkit type-check
-pnpm --filter @aziontech/webkit type-coverage
-pnpm --filter @aziontech/webkit format:check
-pnpm --filter @aziontech/webkit run size
+pnpm --filter @aziontech/webkit typecheck
+pnpm --filter @aziontech/webkit check:type-coverage
+pnpm --filter @aziontech/webkit check:format
+pnpm --filter @aziontech/webkit run check:size
 cd packages/webkit && pnpm exec vitest run <name>.test copyable-sfcs   # filters by file path
 ```
 
@@ -122,9 +122,9 @@ so a skipped one fails the PR anyway.
 
 1. Write an intent-only prompt from the issue's intent and "where it is used": the product task,
    never the component name or a synonym of it.
-2. Run `pnpm --filter @aziontech/webkit run usage-check -- <name> "<prompt>" --report usage-report.md`
+2. Run `pnpm --filter @aziontech/webkit run check:usage -- <name> "<prompt>" --report usage-report.md`
    when the `claude` CLI and an API key are available; otherwise the PR in step 9 opens as draft
-   and you dispatch `gh workflow run usage-check.yml -f target=<name> -f prompt="<prompt>"` on the
+   and you dispatch `gh workflow run check:usage.yml -f target=<name> -f prompt="<prompt>"` on the
    branch.
 3. Exit condition: the report says `Usage check passed.` (the fresh session imported
    `@aziontech/webkit/<name>` through the MCP and `webkit doctor` passed). A failure means the

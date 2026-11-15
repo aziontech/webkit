@@ -327,7 +327,7 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
 1. **Plain multiline `class` on the root** (no JS quotes) + optional `:class="attrs.class"` for consumer overrides.
 2. **Single-quoted `ROOT_CLASS` in `<script setup>`** + `:class="cn(ROOT_CLASS, attrs.class)"` — one flat literal string, not a `kindClasses` / `sizeClasses` map.
 
-`pnpm webkit:lint` and `vue-tsc` may still pass; only the SFC template compiler (`pnpm docs:dev`, `pnpm docs:build`) catches this.
+`pnpm lint:webkit` and `vue-tsc` may still pass; only the SFC template compiler (`pnpm dev:docs`, `pnpm build:docs`) catches this.
 
 ## Vue SFC pitfall — no HTML-like tags in `<script>` comments
 
@@ -351,7 +351,7 @@ A tool that runs `@vitejs/plugin-vue` twice (as some consumer setups do) may cal
 | 2    | Confirm raw SFC parses: `node -e "require('vue/compiler-sfc').parse(fs.readFileSync('…vue','utf8'),{filename:'…'})"` → `errors: []` |
 | 3    | Grep script for `` `<…>` ``, `<template`, `</…>` in comments and JSDoc                                                              |
 | 4    | Remove backtick multiline literals from `<template> :class="cn(\`…\`)"`(move class string to script`ROOT_CLASS`)                    |
-| 5    | Restart `pnpm docs:dev` after fixing (clear stale HMR descriptor if needed)                                                         |
+| 5    | Restart `pnpm dev:docs` after fixing (clear stale HMR descriptor if needed)                                                         |
 
 ## When you legitimately need conditional styling
 

@@ -11,7 +11,7 @@ enforced_by: [release-types, git-workflow]
 
 ## Purpose
 
-`pnpm audit --audit-level=high` is a required gate in CI — the **Security Scans** job in [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) (and the local `pnpm run security:audit`). When it exits non-zero, at least one **high** or **critical** advisory matched a package in the workspace dependency graph.
+`pnpm audit --audit-level=high` is a required gate in CI — the **Security Scans** job in [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) (and the local `pnpm run audit`). When it exits non-zero, at least one **high** or **critical** advisory matched a package in the workspace dependency graph.
 
 This skill takes the failing audit, finds the **minimal** version bump that clears every high+ advisory, applies it to the **owning** workspace project, and verifies the gate passes again — while honoring a strict **semver** policy so a fix never silently performs a risky major upgrade.
 
@@ -19,7 +19,7 @@ Scope discipline: `--audit-level=high` ignores `low` / `moderate`. Those stay re
 
 ## When to invoke
 
-- CI's "Audit dependencies" step fails, or `pnpm run security:audit` exits non-zero locally.
+- CI's "Audit dependencies" step fails, or `pnpm run audit` exits non-zero locally.
 - A dependency review surfaces a new high/critical advisory you want remediated.
 
 ## Inputs
@@ -74,7 +74,7 @@ If the *only* version that clears a high advisory is a major (or a `0.x` minor) 
    pnpm install --frozen-lockfile                       # CI's first step — must pass
    cd packages/webkit && pnpm audit --audit-level=high  # CI runs the audit HERE; exit must be 0
    ```
-   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run webkit:lint`, `pnpm run webkit:type-check`, `pnpm docs:build`).
+   For a **minor**+ bump of a runtime/build dependency, also run the affected `governance` checks (`pnpm run lint:webkit`, `pnpm run typecheck:webkit`, `pnpm build:docs`).
    If a high advisory remains, return to step 3 with a higher target — and **re-apply the semver policy**, because a higher target may cross into major (→ ASK).
 
 8. **Repeat** until `pnpm audit --audit-level=high` exits **0**.

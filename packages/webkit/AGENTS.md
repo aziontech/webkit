@@ -35,9 +35,9 @@ Component creation under `components/**` is **always** driven by the pipeline at
 ## 4) Validation gate (must pass before reporting done)
 
 ```bash
-pnpm webkit:lint
-pnpm webkit:type-check
-pnpm webkit:type-coverage
+pnpm lint:webkit
+pnpm typecheck:webkit
+pnpm type-coverage:webkit
 pnpm --filter @aziontech/webkit test:ssr
 ```
 

@@ -7,9 +7,9 @@ changed to wire it to the router and to a shared store. `webkit.blocks.json` rec
 file came from, so `npx @aziontech/webkit diff <file>` shows what the demo changed.
 
 ```bash
-pnpm demos:dev       # dev server
-pnpm demos:build     # static build in apps/demos/dist
-pnpm demos:preview   # preview the build on http://localhost:4174
+pnpm dev:demos       # dev server
+pnpm build:demos     # static build in apps/demos/dist
+pnpm preview:demos   # preview the build on http://localhost:4174
 ```
 
 ## Flows

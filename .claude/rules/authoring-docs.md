@@ -53,7 +53,7 @@ enforced_by: [webkit-motion, webkit-accessibility]
 enforced_by: [review]
 ```
 
-**Presence** (`enforced-by-missing`) is checked write-time (`validate-authoring-docs`) and in the CI ratchet (`doc-standards`). **Resolution** — every entry is a real rule id of the skill's own population, or the literal `ui-verify` / `review` — is checked by the standards invariant test ([`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs)), the same test that pairs every rule to a real gate. A skill that names a non-existent rule, or the wrong population's rule, fails the build.
+**Presence** (`enforced-by-missing`) is checked write-time (`validate-authoring-docs`) and in the CI ratchet (`check:authoring-docs`). **Resolution** — every entry is a real rule id of the skill's own population, or the literal `ui-verify` / `review` — is checked by the standards invariant test ([`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs)), the same test that pairs every rule to a real gate. A skill that names a non-existent rule, or the wrong population's rule, fails the build.
 
 ## The file-as-example ban (skills only)
 
@@ -76,7 +76,7 @@ The current tree carries 7 pre-existing file-as-example references (component-sc
 
 ## Enforcement
 
-- **[`validate-authoring-docs.mjs`](../hooks/validate-authoring-docs.mjs)** (PostToolUse on `Write|Edit|MultiEdit`) re-reads a written/edited skill or agent doc and blocks (exit 2) on any **new** violation; pre-existing debt is grandfathered via [`doc-standards-baseline.json`](../../packages/webkit/scripts/doc-standards-baseline.json). Fail-open on error.
+- **[`validate-authoring-docs.mjs`](../hooks/validate-authoring-docs.mjs)** (PostToolUse on `Write|Edit|MultiEdit`) re-reads a written/edited skill or agent doc and blocks (exit 2) on any **new** violation; pre-existing debt is grandfathered via [`authoring-docs-baseline.json`](../../packages/webkit/scripts/authoring-docs-baseline.json). Fail-open on error.
 - **[`check-authoring-docs.mjs`](../../packages/webkit/scripts/check-authoring-docs.mjs)** is the CI ratchet (the `toolkit` job of [`governance.yml`](../../.github/workflows/governance.yml)) over all four populations; it fails on any introduced key even from an editor that never ran the hook.
 - Both share the single engine **[`_lib/authoring-docs-checks.mjs`](../hooks/_lib/authoring-docs-checks.mjs)** — one definition, two surfaces, so a push cannot bypass the hook.
 - The standard is registered in [`standards.mjs`](../hooks/_lib/standards.mjs) (`authoring-docs`), paired to these gates, and the pairing is checked by [`invariant.test.mjs`](../../packages/webkit/test/standards/invariant.test.mjs).

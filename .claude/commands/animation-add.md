@@ -12,7 +12,7 @@ Run the **animation-add** skill (`.claude/skills/animation-add/SKILL.md`). It:
    sibling `keyframes.js`, using the `duration` / `curve` tokens from `animate.js` — published as `@aziontech/theme/animations` — (never a raw ms / cubic-bezier literal).
 2. Records a **Theme gaps** row in the component's `.specs/<component>.md` (when a
    component is given) so the addition is tracked.
-3. Regenerates the catalog (`pnpm --filter @aziontech/webkit catalog:build`) so
+3. Regenerates the catalog (`pnpm --filter @aziontech/webkit build:catalog`) so
    `tokens.animations` includes `<name>` and the compliance cross-check passes.
 4. Reminds you to pair the class with `motion-reduce:*` in the component.
 

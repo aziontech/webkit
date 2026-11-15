@@ -11,9 +11,9 @@
     "preview": "node scripts/serve.mjs",
     "smoke": "node scripts/smoke.mjs",
     "lint": "eslint . --max-warnings 0",
-    "type-check": "vue-tsc --noEmit",
+    "typecheck": "vue-tsc --noEmit",
     "format": "prettier --write \"**/*.{js,mjs,ts,vue,css,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
+    "check:format": "prettier --check \"**/*.{js,mjs,ts,vue,css,json,md}\""
   },
   "dependencies": {
     "@aziontech/icons": "workspace:*",

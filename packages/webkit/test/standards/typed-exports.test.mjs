@@ -99,7 +99,7 @@ test('every CSS entry of @aziontech/icons declares types, in the repo and in dis
       assert.equal(entry.types, './dist/index.d.ts', key)
     }
   }
-  const build = readFileSync(resolve(ROOT, 'packages/icons/scripts/build.mjs'), 'utf8')
+  const build = readFileSync(resolve(ROOT, 'packages/icons/scripts/build-icons.mjs'), 'utf8')
   assert.match(build, /'index\.d\.ts'/)
   assert.match(build, /'\.': \{ types: '\.\/index\.d\.ts', default: '\.\/index\.css' \}/)
 })
@@ -141,7 +141,7 @@ test('packerToOutlive defers only a pnpm postpack', () => {
     packerToOutlive({ ...pnpm, npm_config_user_agent: 'npm/11.19.1 node/v24' }, 50, read),
     null
   )
-  assert.equal(packerToOutlive({ ...pnpm, npm_lifecycle_event: 'smoke:consume' }, 50, read), null)
+  assert.equal(packerToOutlive({ ...pnpm, npm_lifecycle_event: 'test:consume' }, 50, read), null)
 })
 
 test('the consumer check imports every typed export and spots WebKit sources', () => {
@@ -164,6 +164,6 @@ test('the consumer check imports every typed export and spots WebKit sources', (
 
 test('governance runs the exports check and the consumer types check', () => {
   const workflow = readFileSync(resolve(ROOT, '.github/workflows/governance.yml'), 'utf8')
-  assert.match(workflow, /webkit run exports:check\n/)
-  assert.match(workflow, /webkit run consumer:types\n/)
+  assert.match(workflow, /webkit run check:exports\n/)
+  assert.match(workflow, /webkit run check:consumer-types\n/)
 })

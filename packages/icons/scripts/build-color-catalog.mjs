@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-import { iconKeywordString } from './icon-keywords.mjs'
+import { iconKeywordString } from './lib/icon-keywords.mjs'
 
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'

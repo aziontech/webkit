@@ -15,7 +15,7 @@ The wrong/correct code pairs these fixtures are drawn from are documented in [`.
 
 ## Where it runs
 
-**CI only** — the `lint-canary` job in [`.github/workflows/governance.yml`](../.github/workflows/governance.yml), side by side with the Security Scans (audit) job. It feeds the Governance Gate, so a weakened lint blocks the pipeline. It is deliberately **not** part of `pnpm governance`, husky, or lint-staged.
+**CI only** — the `lint-canaries` job in [`.github/workflows/governance.yml`](../.github/workflows/governance.yml), side by side with the Security scans (audit) job. It feeds the Governance Gate, so a weakened lint blocks the pipeline. It is deliberately **not** part of `pnpm gates`, husky, or lint-staged.
 
 The job triggers when anything that can change lint behavior moves: the four config files, `packages/webkit/eslint.config.js`, this directory, root `package.json`, `pnpm-lock.yaml`, or the workflow itself.
 

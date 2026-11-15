@@ -62,7 +62,7 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
    Deprecate, Remove. Every component starts from a spec in `.specs/`, through `/component-new`.
 3. Every block in `packages/webkit/blocks/` is a pattern and every folder in
    `packages/webkit/examples/` documents a component. Changed one? Run
-   `pnpm --filter @aziontech/webkit catalog:build`; the docs page and the styled visual test follow
+   `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled visual test follow
    from the files.
 4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
@@ -144,10 +144,10 @@ Once the project is wired, import components by path:
 
 ### Live previews
 
-- **Docs site** — `apps/docs` (`pnpm docs:dev`) — every component's API and examples beside their source, every block in every state, the foundations. It replaces the Storybook that <https://webkit.azion.app/> served; publishing it there is pending (ROADMAP M2.10).
+- **Docs site** — `apps/docs` (`pnpm dev:docs`) — every component's API and examples beside their source, every block in every state, the foundations. It replaces the Storybook that <https://webkit.azion.app/> served; publishing it there is pending (ROADMAP M2.10).
 - **Icon catalog** — <https://icons-gallery.azion.app/> — Searchable browser for the icon sets of `@aziontech/icons`.
 
-Run them locally with `pnpm docs:dev`, `pnpm demos:dev` and `pnpm icons:gallery:serve`.
+Run them locally with `pnpm dev:docs`, `pnpm dev:demos` and `pnpm dev:icons-gallery`.
 
 ## Changing WebKit (contribute)
 
@@ -204,19 +204,19 @@ If you are new (human or AI), open these in order — together they describe the
 
 | Package                                                                      | Description                                                    | CI                                                                                                                                                                                                                            | Version                                                                                                                       |
 | ---------------------------------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)           | The Azion icon font used across products.                      | [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)           |
-| [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)           | Theme configuration, semantic tokens, and styling foundations. | [![Package Theme](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-theme.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)           |
-| [@aziontech/webkit](https://www.npmjs.com/package/@aziontech/webkit)         | Reusable UI components and design system utilities.            | [![Package Webkit](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-webkit.yml?query=branch%3Amain)             | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit.svg)](https://www.npmjs.com/package/@aziontech/webkit)         |
-| [@aziontech/webkit-mcp](https://www.npmjs.com/package/@aziontech/webkit-mcp) | MCP server that gives AI tools the WebKit catalog.             | [![Package Webkit MCP](https://github.com/aziontech/webkit/actions/workflows/package-webkit-mcp.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-webkit-mcp.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit-mcp.svg)](https://www.npmjs.com/package/@aziontech/webkit-mcp) |
+| [@aziontech/icons](https://www.npmjs.com/package/@aziontech/icons)           | The Azion icon font used across products.                      | [![Publish Icons](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/icons.svg)](https://www.npmjs.com/package/@aziontech/icons)           |
+| [@aziontech/theme](https://www.npmjs.com/package/@aziontech/theme)           | Theme configuration, semantic tokens, and styling foundations. | [![Publish Theme](https://github.com/aziontech/webkit/actions/workflows/publish-theme.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-theme.yml?query=branch%3Amain)                | [![npm version](https://img.shields.io/npm/v/@aziontech/theme.svg)](https://www.npmjs.com/package/@aziontech/theme)           |
+| [@aziontech/webkit](https://www.npmjs.com/package/@aziontech/webkit)         | Reusable UI components and design system utilities.            | [![Publish Webkit](https://github.com/aziontech/webkit/actions/workflows/publish-webkit.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-webkit.yml?query=branch%3Amain)             | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit.svg)](https://www.npmjs.com/package/@aziontech/webkit)         |
+| [@aziontech/webkit-mcp](https://www.npmjs.com/package/@aziontech/webkit-mcp) | MCP server that gives AI tools the WebKit catalog.             | [![Publish Webkit MCP](https://github.com/aziontech/webkit/actions/workflows/publish-webkit-mcp.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-webkit-mcp.yml?query=branch%3Amain) | [![npm version](https://img.shields.io/npm/v/@aziontech/webkit-mcp.svg)](https://www.npmjs.com/package/@aziontech/webkit-mcp) |
 
 ### Apps
 
-| App                                   | Description                                                                             | CI                                                                                                                                                                                                                         |
-| ------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [docs](./apps/docs)                   | Docs site for `@aziontech/webkit`: components, blocks and foundations from the files.   | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                      |
-| [demos](./apps/demos)                 | Routed console flows on mock data, assembled from blocks with `webkit add`.             | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                      |
-| [visual](./apps/visual)               | Styled visual regression (Playwright) over examples, blocks and demos.                  | [![Visual baselines](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml/badge.svg)](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml)                                    |
-| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![App Icons Gallery](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/app-icons-gallery.yml?query=branch%3Amain) |
+| App                                   | Description                                                                             | CI                                                                                                                                                                                                                                  |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [docs](./apps/docs)                   | Docs site for `@aziontech/webkit`: components, blocks and foundations from the files.   | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                               |
+| [demos](./apps/demos)                 | Routed console flows on mock data, assembled from blocks with `webkit add`.             | [![Governance](https://github.com/aziontech/webkit/actions/workflows/governance.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/governance.yml?query=branch%3Amain)                               |
+| [visual](./apps/visual)               | Styled visual regression (Playwright) over examples, blocks and demos.                  | [![Visual baselines](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml/badge.svg)](https://github.com/aziontech/webkit/actions/workflows/visual-baselines.yml)                                             |
+| [icons-gallery](./apps/icons-gallery) | Interactive gallery for Azion and Prime icons. Live: <https://icons-gallery.azion.app/> | [![Deploy icons gallery](https://github.com/aziontech/webkit/actions/workflows/deploy-icons-gallery.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/deploy-icons-gallery.yml?query=branch%3Amain) |
 
 ### Getting started (contributors)
 
@@ -246,12 +246,12 @@ renders its examples (`packages/webkit/examples/<name>/`) live beside the exact 
 block page shows each state in a resizable frame, and the foundations pages read the theme.
 
 ```bash
-pnpm docs:dev      # http://localhost:5173
-pnpm demos:dev     # the routed demos (apps/demos)
+pnpm dev:docs      # http://localhost:5173
+pnpm dev:demos     # the routed demos (apps/demos)
 ```
 
-A static build (`pnpm docs:build`, every route prerendered) lands in `apps/docs/dist`; preview it
-with `pnpm docs:preview`. How pages are generated and how to deploy is in the
+A static build (`pnpm build:docs`, every route prerendered) lands in `apps/docs/dist`; preview it
+with `pnpm preview:docs`. How pages are generated and how to deploy is in the
 [docs site README](./apps/docs/README.md); the demos are described in
 [`apps/demos/README.md`](./apps/demos/README.md).
 
@@ -261,14 +261,14 @@ Components ship a co-located `*.test.ts` run by **Vitest in browser mode** (real
 
 ```bash
 pnpm --filter @aziontech/webkit exec playwright install chromium
-pnpm webkit:test
+pnpm test:browser-webkit
 ```
 
 Pixels are covered by a separate layer, with the real theme CSS: `apps/visual` (Playwright) serves the built docs site and demos and compares screenshots of the examples, blocks and demo routes, in light and dark at 390 and 1280 px, against the committed baselines.
 
 ```bash
-pnpm docs:build && pnpm demos:build
-pnpm visual:test
+pnpm build:docs && pnpm build:demos
+pnpm test:visual
 ```
 
 Baselines come only from the `mcr.microsoft.com/playwright:v1.62.0-noble` image (the CI job runs in it), so never commit screenshots taken outside it. The full testing contract — coverage, the matrix, regenerating baselines — is in [CONTRIBUTING.md](./CONTRIBUTING.md#testing).
@@ -277,38 +277,38 @@ Baselines come only from the `mcr.microsoft.com/playwright:v1.62.0-noble` image 
 
 ```bash
 # Docs site and demos
-pnpm docs:dev               # Docs dev server
-pnpm docs:build             # Static build, every route prerendered
-pnpm docs:preview           # Preview the static build
-pnpm demos:dev              # Demos dev server
-pnpm demos:build            # Demos static build
+pnpm dev:docs               # Docs dev server
+pnpm build:docs             # Static build, every route prerendered
+pnpm preview:docs           # Preview the static build
+pnpm dev:demos              # Demos dev server
+pnpm build:demos            # Demos static build
 
 # Icons
-pnpm icons:build            # Generate icon artifacts
-pnpm icons:validate         # Validate icon source
-pnpm icons:gallery:serve    # Icons Gallery dev server
+pnpm build:icons            # Generate icon artifacts
+pnpm check:icons         # Validate icon source
+pnpm dev:icons-gallery    # Icons Gallery dev server
 
 # Tests
-pnpm webkit:test            # Unit suite (headless Chromium)
-pnpm webkit:test:watch      # Unit suite in watch mode
-pnpm webkit:test:ui         # Vitest UI (headed browser)
-pnpm webkit:test:coverage   # v8 coverage report
-pnpm visual:test            # Styled visual regression against the baselines
+pnpm test:browser-webkit            # Unit suite (headless Chromium)
+pnpm test:webkit:watch      # Unit suite in watch mode
+pnpm test:webkit:ui         # Vitest UI (headed browser)
+pnpm test:webkit:coverage   # v8 coverage report
+pnpm test:visual            # Styled visual regression against the baselines
 
 # Webkit quality gates
-pnpm webkit:lint            # ESLint (max-warnings 0)
-pnpm webkit:lint:style      # Stylelint
-pnpm webkit:type-check      # vue-tsc --noEmit
-pnpm webkit:type-coverage   # type-coverage >= 95%
-pnpm webkit:format:check    # Prettier check
+pnpm lint:webkit            # ESLint (max-warnings 0)
+pnpm lint-style:webkit      # Stylelint
+pnpm typecheck:webkit      # vue-tsc --noEmit
+pnpm type-coverage:webkit   # type-coverage >= 95%
+pnpm check-format:webkit    # Prettier check
 
 # Aggregate
-pnpm governance             # Lint + type-check + format + audit
+pnpm gates             # Lint + type-check + format + audit
 ```
 
 #### Troubleshooting
 
-- **Stale or half-installed dependencies** — `pnpm install:reset` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
+- **Stale or half-installed dependencies** — `pnpm reset` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
 - **pnpm aborts a script with a deps-verify error** (common when `node_modules` is symlinked, e.g. in a git worktree) — prefix the command with `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false`.
 
 ### Development flow
@@ -317,7 +317,7 @@ New components follow a **spec-driven pipeline**: spec → scaffold → verify. 
 
 1. Draft the spec with `/spec-create <name>`, then flip `status: draft` → `approved`.
 2. Scaffold with `/component-create <name>`.
-3. Verify with `/component-verify <name>` and `pnpm governance`.
+3. Verify with `/component-verify <name>` and `pnpm gates`.
 4. Commit using Conventional Commits with a package scope (e.g. `feat(webkit): …`).
 5. Open a pull request.
 

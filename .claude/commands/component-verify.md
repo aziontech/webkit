@@ -14,7 +14,7 @@ You are running `/component-verify <name>`. **You do not write anything.** You r
 3. Recompute `sha256(body)` and compare to frontmatter `checksum`. Mismatch → surface and exit.
 4. Resolve the existing component dir at `packages/webkit/src/components/<category>/<name>/`. Missing → exit.
 5. Spawn `echo-reporter` against the disk files. Surface its verdict (parity / mismatch / degraded).
-6. Spawn `component-validate` (`pnpm webkit:lint`, type-check, type-coverage, dts build, server render of every example).
+6. Spawn `component-validate` (`pnpm lint:webkit`, type-check, type-coverage, dts build, server render of every example).
 7. Print a one-table summary: spec status, hook verdict, echo verdict, validation pass/fail.
 
 ## Rules

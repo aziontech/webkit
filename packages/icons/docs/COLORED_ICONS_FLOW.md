@@ -36,7 +36,7 @@ So the package splits by _colorability_:
 
 ## The build flow
 
-`npm run build` → `node scripts/build.mjs`, a 7-step orchestrator:
+`npm run build` → `node scripts/build-icons.mjs`, a 7-step orchestrator:
 
 ```mermaid
 flowchart TD
@@ -46,8 +46,8 @@ flowchart TD
         COR["ai-cor/ — 35 colored<br/>hex fills + gradients"]
     end
 
-    BUILD["scripts/build.mjs<br/>(orchestrator, 7 steps)"]
-    VAL["validate-svg.mjs<br/>(step 1 — gate)"]
+    BUILD["scripts/build-icons.mjs<br/>(orchestrator, 7 steps)"]
+    VAL["check-svg.mjs<br/>(step 1 — gate)"]
 
     subgraph MONO["MONOCHROME → FONT"]
         FANT["build-woff2.mjs → fantasticon<br/>(fantasticon.config.mjs)<br/>step 3"]
@@ -89,9 +89,9 @@ flowchart TD
 > readers (`read #1`, `read #2`), each serializing the same SVGs into a different `dist` file —
 > this is the "duplication" the questions ask about.
 
-### Step-by-step (`build.mjs`)
+### Step-by-step (`build-icons.mjs`)
 
-1. **Validate** — `validate-svg.mjs` gates the build; failure aborts.
+1. **Validate** — `check-svg.mjs` gates the build; failure aborts.
 2. **Clean** — wipe & recreate `dist/`.
 3. **Fonts** — `build-woff2.mjs` runs **fantasticon** for `ai` and `pi` (per `fantasticon.config.mjs`): emits `azionicons.woff2` + `azionicons.css`, `primeicons.woff2` + `primeicons.css` from the `templates/css.hbs` Handlebars template. **Colored icons are not touched here.**
 4. **Barrel** — write `index.css` = `@import` of `azionicons.css` + **`azionicons-color.css`** (`primeicons.css` is a separate, opt-in entry).

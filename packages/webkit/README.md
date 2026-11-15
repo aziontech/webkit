@@ -5,7 +5,7 @@ tooling that keeps every project using them on-pattern: an ESLint plugin (every 
 `error`), a Stylelint config, an MCP server that guides AI coding tools, and a CLI that
 wires it all in one command.
 
-- **Docs site:** every component with its examples live beside their source, every block in every state, and the foundations (`apps/docs`, `pnpm docs:dev`). Full flows built from blocks run in `apps/demos` (`pnpm demos:dev`).
+- **Docs site:** every component with its examples live beside their source, every block in every state, and the foundations (`apps/docs`, `pnpm dev:docs`). Full flows built from blocks run in `apps/demos` (`pnpm dev:demos`).
 - **Styleguide:** [`docs/STYLEGUIDE.md`](./docs/STYLEGUIDE.md) — every code standard in full, with the gate that blocks each one.
 - **Guidelines:** [`docs/GUIDELINES.md`](./docs/GUIDELINES.md) — the one-page digest (build & use on-pattern).
 
@@ -45,7 +45,7 @@ Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/s
 1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-create`.
 3. Every block in `blocks/` is a pattern and every folder in `examples/` documents a component.
-   Changed one? Run `pnpm --filter @aziontech/webkit catalog:build`; the docs page and the styled
+   Changed one? Run `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled
    visual test follow from the files.
 4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md).
 
@@ -67,7 +67,7 @@ No MCP? The package ships the same content as plain files for any agent or reade
 `node_modules/@aziontech/webkit/llms/llms.txt` (in the [llms.txt](https://llmstxt.org) format)
 links one Markdown page per block, component and foundation, a JSON API per component
 (`llms/components/<name>.json`), and `llms-full.txt` holds every page in one file. They are
-generated from `catalog.json` (`pnpm --filter @aziontech/webkit llms:build`).
+generated from `catalog.json` (`pnpm --filter @aziontech/webkit build:llms`).
 
 ### 1 · Install
 
@@ -152,8 +152,8 @@ state in a resizable frame. The demos assemble blocks into routed flows on mock 
 
 ```bash
 # in this repo
-pnpm docs:dev     # components, blocks, foundations
-pnpm demos:dev    # list → create → detail → edit → delete, settings, onboarding, deploy, AI assistant
+pnpm dev:docs     # components, blocks, foundations
+pnpm dev:demos    # list → create → detail → edit → delete, settings, onboarding, deploy, AI assistant
 ```
 
 Local setup for contributors is in the [repository README](../../README.md#run-the-docs-site).
@@ -191,9 +191,9 @@ This package lives in the [`aziontech/webkit`](https://github.com/aziontech/webk
 [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md) and [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md) (its
 "What to update when WebKit changes" section) before changing a component, a story or a skill.
 
-A new or moved export is written as a plain path and then typed by `pnpm --filter @aziontech/webkit exports:build`
-(`exports:check` fails until it is). `pnpm pack` builds `types/` (`types:build`) and removes it afterwards;
-`consumer:types` packs the three packages, installs them into a fresh Vite `vue-ts` app and runs its
+A new or moved export is written as a plain path and then typed by `pnpm --filter @aziontech/webkit build:exports`
+(`check:exports` fails until it is). `pnpm pack` builds `types/` (`build:types`) and removes it afterwards;
+`check:consumer-types` packs the three packages, installs them into a fresh Vite `vue-ts` app and runs its
 `npm run build` (needs the network; CI job `consumer-types`).
 
 ## Packages

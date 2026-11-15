@@ -166,7 +166,7 @@ Context: the styling rule forbids `<style>` blocks and component-local CSS insid
 
 Two complementary gates:
 
-1. **`vue-tsc --noEmit`** (`pnpm webkit:type-check`) — full TypeScript program check across `.ts` **and** `.vue` files. Backed by a strict base config (`tsconfig.base.json`):
+1. **`vue-tsc --noEmit`** (`pnpm typecheck:webkit`) — full TypeScript program check across `.ts` **and** `.vue` files. Backed by a strict base config (`tsconfig.base.json`):
 
    | Flag                                       | Effect                                                 |
    | ------------------------------------------ | ------------------------------------------------------ |
@@ -177,7 +177,7 @@ Two complementary gates:
 
    `packages/webkit/tsconfig.json` adds `noPropertyAccessFromIndexSignature` and declaration emit (`declaration` + `emitDeclarationOnly`) — the same compiler that gates PRs also generates the published `.d.ts` at release time. Tests, `.figma.ts`, and `src/test/` are excluded from emit.
 
-2. **`type-coverage -p . --at-least 95`** (`pnpm webkit:type-coverage`) — measures how many expressions have a real (non-`any`) type and **fails below 95%**. This closes the gap `no-explicit-any` can't see: _implicit_ `any` leaking through inference.
+2. **`type-coverage -p . --at-least 95`** (`pnpm type-coverage:webkit`) — measures how many expressions have a real (non-`any`) type and **fails below 95%**. This closes the gap `no-explicit-any` can't see: _implicit_ `any` leaking through inference.
 
 ---
 
@@ -250,26 +250,26 @@ flowchart TB
     CH --> TY["types<br/>• vue-tsc --noEmit<br/>• type-coverage ≥ 95%"]
     CH --> SEC["security<br/>• pnpm audit --audit-level=high<br/>• TruffleHog (verified secrets)<br/>• depcheck (advisory)"]
 
-    LINT --> B["build<br/>• npm pack --dry-run<br/>• pack:check — no test files in tarball"]
+    LINT --> B["build<br/>• npm pack --dry-run<br/>• check:pack — no test files in tarball"]
     TY --> B
-    LINT --> SB["site<br/>docs:build + demos:build"]
+    LINT --> SB["site<br/>build:docs + build:demos"]
     TY --> SB
 
-    SEC --> GATE["governance-check<br/>every job success or cleanly skipped"]
+    SEC --> GATE["gates<br/>every job success or cleanly skipped"]
     B --> GATE
     SB --> GATE
 ```
 
 What each job contributes:
 
-| Job                  | Checks                                                                                  | Why it's here                                                                                  |
-| -------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **lint**             | ESLint (0 warnings) · Stylelint · `prettier --check`                                    | re-runs Layer 1/2 from a clean checkout — local bypasses can't merge                           |
-| **types**            | `vue-tsc` · type-coverage ≥95%                                                          | the type gates of §5, enforced on every PR                                                     |
-| **security**         | `pnpm audit` (high+) · TruffleHog verified-secret scan · `depcheck` (continue-on-error) | vulnerable deps and committed secrets block; unused deps are advisory                          |
-| **build**            | `pack:check`                                                                            | publish safety — the npm tarball is valid and ships zero test files                            |
-| **site**             | `docs:build` + `demos:build`                                                            | the docs site prerendering every route is a smoke test over every example, block and component |
-| **governance-check** | aggregates all of the above                                                             | the **single required status** for branch protection                                           |
+| Job          | Checks                                                                                  | Why it's here                                                                                  |
+| ------------ | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **lint**     | ESLint (0 warnings) · Stylelint · `prettier --check`                                    | re-runs Layer 1/2 from a clean checkout — local bypasses can't merge                           |
+| **types**    | `vue-tsc` · type-coverage ≥95%                                                          | the type gates of §5, enforced on every PR                                                     |
+| **security** | `pnpm audit` (high+) · TruffleHog verified-secret scan · `depcheck` (continue-on-error) | vulnerable deps and committed secrets block; unused deps are advisory                          |
+| **build**    | `check:pack`                                                                            | publish safety — the npm tarball is valid and ships zero test files                            |
+| **site**     | `build:docs` + `build:demos`                                                            | the docs site prerendering every route is a smoke test over every example, block and component |
+| **gates**    | aggregates all of the above                                                             | the **single required status** for branch protection                                           |
 
 The functional and visual test workflows (the `tests` and `visual` jobs of `governance.yml`, and `visual-baselines.yml`) run alongside the static gates — see [`OVERVIEW_TESTS.md`](./OVERVIEW_TESTS.md).
 
@@ -323,12 +323,12 @@ Honest footnotes worth a slide (all low-risk, none affect CI):
 
 ## 12. Command cheat sheet
 
-| Command (repo root)                                | What it does                                                             |
-| -------------------------------------------------- | ------------------------------------------------------------------------ |
-| `pnpm webkit:lint` / `webkit:lint:fix`             | ESLint over webkit source (zero warnings) / with auto-fix                |
-| `pnpm webkit:lint:style` / `webkit:lint:style:fix` | Stylelint / with auto-fix                                                |
-| `pnpm webkit:format` / `webkit:format:check`       | Prettier write / check                                                   |
-| `pnpm webkit:type-check`                           | `vue-tsc --noEmit`                                                       |
-| `pnpm webkit:type-coverage`                        | type-coverage, fails < 95%                                               |
-| `pnpm security:audit`                              | `pnpm audit --audit-level=high`                                          |
-| `pnpm governance`                                  | lint + type-check + format:check + audit — the local mirror of CI's gate |
+| Command (repo root)                                | What it does                                                            |
+| -------------------------------------------------- | ----------------------------------------------------------------------- |
+| `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint over webkit source (zero warnings) / with auto-fix               |
+| `pnpm lint-style:webkit` / `lint-style:webkit:fix` | Stylelint / with auto-fix                                               |
+| `pnpm format:webkit` / `check-format:webkit`       | Prettier write / check                                                  |
+| `pnpm typecheck:webkit`                            | `vue-tsc --noEmit`                                                      |
+| `pnpm type-coverage:webkit`                        | type-coverage, fails < 95%                                              |
+| `pnpm audit`                                       | `pnpm audit --audit-level=high`                                         |
+| `pnpm gates`                                       | lint + typecheck + format check + audit — the local mirror of CI's gate |

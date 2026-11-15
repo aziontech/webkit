@@ -32,8 +32,8 @@ Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring t
 - `packages/webkit/vitest.config.ts` — `@vitejs/plugin-vue`, `browser: { provider: playwright(), instances: [{ browser: 'chromium' }], headless: true }`, `define: { 'process.env.NODE_ENV': ... }` (so `@testing-library/vue`'s `fireEvent` runs in the browser), `retry: process.env.CI ? 2 : 0`. Story imports of `@aziontech/webkit/*` resolve through the workspace package itself (no alias needed).
 - `packages/webkit/src/test/setup.ts` — `cleanup()` + an anchor-navigation guard (a real click on an `<a href>` would navigate and tear down the test iframe). It loads **no** CSS, on purpose — see the CSS boundary above.
 - `packages/webkit/src/test/axe.ts` — `expectNoA11yViolations(container)`; semantics only, no contrast (unstyled DOM).
-- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when `packages/webkit` changes; the `toolkit` job runs `test:gate` (existence).
-- Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter @aziontech/webkit pack:check`, which fails when the dry-run pack lists a test file). Test files never ship to npm.
+- `.github/workflows/governance.yml` — the `tests` job runs Vitest browser mode sharded (×4) + retry, only when `packages/webkit` changes; the `toolkit` job runs `check:tests` (existence).
+- Publish-safety: `packages/webkit/package.json#files` negates `*.test.ts` and `src/test/**` (verified with `pnpm --filter @aziontech/webkit check:pack`, which fails when the dry-run pack lists a test file). Test files never ship to npm.
 
 ## Conventions
 
@@ -85,10 +85,10 @@ A tiny `it.each` smoke over enum variants ("mounts without throwing") is a **flo
 Existence is blocking — no advisory path:
 
 - **Write-time — existence, on create AND update.** `.claude/hooks/enforce-test-exists.mjs` (PostToolUse on `Write`/`Edit`/`MultiEdit`) blocks (exit 2) when a ROOT component `.vue` is written or edited and its co-located `<name>.test.ts` is missing. Composition sub-components are exempt (tested through their root); `wip/` and the legacy whitelist (`.claude/hooks/_lib/legacy-components.json`) are exempt.
-- **CI — existence (mandatory).** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run test:gate`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
-- **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm webkit:test` on every PR/push touching webkit; a failing assertion fails the PR.
+- **CI — existence (mandatory).** `packages/webkit/scripts/check-tests.mjs` (`pnpm --filter @aziontech/webkit run check:tests`, run in the `toolkit` job of `governance.yml`) fails the PR when **any** ROOT component has no co-located `<name>.test.ts`. **Never grandfathered** — a component without a test always fails the build. This is what makes "no untested component" true at merge, not just at save. There is deliberately **no** diff-freshness gate (changed `.vue` ⇒ changed test): it cannot tell a behavior change from a style-only one, so it taxed CSS/token PRs with no-op test edits; keeping the test honest on behavior changes is the reviewer's job (below).
+- **CI — the suite runs.** The sharded Vitest browser job (`vitest`, Playwright Chromium) runs `pnpm test:browser-webkit` on every PR/push touching webkit; a failing assertion fails the PR.
 - **Write-time — test integrity.** `validate-references.mjs` blocks a test whose imports don't resolve (including a mistaken alias).
-- **Publish safety.** `pnpm --filter @aziontech/webkit pack:check` must pass (the dry-run pack lists **no** `*.test.ts`) — the `files` negation keeps tests out of the published package.
+- **Publish safety.** `pnpm --filter @aziontech/webkit check:pack` must pass (the dry-run pack lists **no** `*.test.ts`) — the `files` negation keeps tests out of the published package.
 - **Review.** Reviewers confirm the behavioral surface is actually covered (the machine proves the test exists and moves with the component; the human confirms it asserts the right things).
 
 The registry pairs this rule with those gates in `.claude/hooks/_lib/standards.mjs` (`enforce[]`), and `packages/webkit/test/standards/invariant.test.mjs` fails the build if the rule and its gates ever drift apart.

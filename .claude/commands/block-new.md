@@ -33,8 +33,8 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
     └── <state>.vue     one copyable SFC per state (empty, loading, error, ...)
 ```
 
-The catalog (`catalog:build`), the MCP (`get_pattern` returns `guidelines.md` with the SFC),
-`patterns:check` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
+The catalog (`build:catalog`), the MCP (`get_pattern` returns `guidelines.md` with the SFC),
+`check:blocks` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
 docs site (`apps/docs`, one page per block and one frame per state), the styled visual suite
 (`apps/visual`, the primary state; every state for `platform/ai`) and the browser test
 that mounts every SFC (`src/test/copyable-sfcs.test.ts`) all read these files.
@@ -79,7 +79,7 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    component appears in one building block, one States line per variant). Each SFC
    imports only `@aziontech/webkit/*` subpaths and `@aziontech/icons`, follows
    `.claude/skills/ui-craft` "Start here", and stands alone (copy one file and it runs).
-2. `pnpm --filter @aziontech/webkit catalog:build` and
+2. `pnpm --filter @aziontech/webkit build:catalog` and
    commit `catalog.json` and `catalog/`. The docs page and the visual test follow from the files;
    baselines for a new block come from the `Visual baselines` workflow (`/baselines-regenerate`).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
@@ -99,7 +99,7 @@ blocker.
 
 ## Step 8 — Usage check
 
-`pnpm --filter @aziontech/webkit run usage-check -- <category-path>/<name> "<prompt>" --report usage-report.md`
+`pnpm --filter @aziontech/webkit run check:usage -- <category-path>/<name> "<prompt>" --report usage-report.md`
 (for example `platform/settings/api-tokens`), or the `usage-check.yml` workflow. The prompt asks for
 the screen by its job, never by the block id. Pass: the generated `src/**/*.vue` imports at least
 80 % of the components the block's primary SFC imports (the session copied it through

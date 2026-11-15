@@ -149,7 +149,7 @@ pnpm install
 pnpm serve
 
 # Or from workspace root
-pnpm --filter icons-gallery serve
+pnpm --filter @aziontech/icons-gallery serve
 ```
 
 The app will be available at `http://localhost:3333` with HMR enabled (configured in `vite.config.js`).

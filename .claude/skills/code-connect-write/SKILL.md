@@ -66,7 +66,7 @@ Map Figma variants (kind / size / state) → Vue props, Figma slots → Vue chil
    - Emit a prop only when it differs from its `withDefaults` default; never emit a name the `.vue` does not declare.
    - Vue syntax: PascalCase tag, kebab-case attributes, `:` for non-string values, `v-model` for a primary `defineModel`. Composition components import the compound and use dot-notation.
    - Children: SLOT → `instance.getSlot()`, INSTANCE_SWAP → `instance.getInstanceSwap()`, nested webkit instances → `instance.findInstance()`; check `type === 'INSTANCE'` and interpolate `executeTemplate().example` inside `figma.code`.
-5. **Verify.** `pnpm --filter @aziontech/webkit run figma:parse` lists the file with no `❌`.
+5. **Verify.** `pnpm --filter @aziontech/webkit run parse:figma` lists the file with no `❌`.
 6. **Stop.** Do not call `add_code_connect_map`, do not call `send_code_connect_mappings`, do not publish anything. Publishing requires `FIGMA_ACCESS_TOKEN` and is the user's call.
 
 ## Outputs
@@ -89,5 +89,5 @@ Map Figma variants (kind / size / state) → Vue props, Figma slots → Vue chil
 - [ ] Either `.figma.ts` file is written, **or** `SKIPPED: <reason>` is emitted.
 - [ ] The file is a parserless template: leading `// url=` (the spec's component node), `// source=`, `// component=`; `import figma from 'figma'` only.
 - [ ] Every Figma property has an `instance.*` mapping or is documented as not mapped.
-- [ ] `figma:parse` reports the file with no `❌`.
+- [ ] `parse:figma` reports the file with no `❌`.
 - [ ] No publish call.

@@ -39,11 +39,15 @@ export const GATES = [
     steps: [['node', 'scripts/check-api-diff.mjs']]
   },
   {
-    id: 'marketing',
+    id: 'marketing-inventory',
     label: 'Marketing and docs inventory',
     steps: [['node', 'scripts/check-marketing-inventory.mjs']]
   },
-  { id: 'patterns', label: 'Patterns (G1)', steps: [['node', 'scripts/check-patterns.mjs']] },
+  {
+    id: 'blocks',
+    label: 'Blocks have intents, real skills and a lint-clean SFC',
+    steps: [['node', 'scripts/check-blocks.mjs']]
+  },
   {
     id: 'examples-lint',
     label: 'Examples pass the consumer lint',
@@ -51,12 +55,12 @@ export const GATES = [
   },
   {
     id: 'cited-names',
-    label: 'Cited names (G2)',
+    label: 'Cited names',
     steps: [['node', 'scripts/check-cited-names.mjs']]
   },
   {
     id: 'spec-status',
-    label: 'No draft spec (G3)',
+    label: 'No draft spec',
     steps: [['node', 'scripts/check-spec-status.mjs']]
   },
   {
@@ -71,12 +75,12 @@ export const GATES = [
   },
   { id: 'authoring', label: 'Authoring ratchet', steps: [['node', 'scripts/check-authoring.mjs']] },
   {
-    id: 'doc-standards',
-    label: 'Skill and agent doc standards',
+    id: 'authoring-docs',
+    label: 'Authoring docs ratchet',
     steps: [['node', 'scripts/check-authoring-docs.mjs']]
   },
   {
-    id: 'test-gate',
+    id: 'tests',
     label: 'Every component has a test',
     steps: [['node', 'scripts/check-tests.mjs']]
   },
@@ -94,12 +98,12 @@ export const GATES = [
     ]
   },
   {
-    id: 'hook-tests',
+    id: 'hooks',
     label: 'Hook tests',
     steps: [['node', '../../.claude/hooks/__tests__/run.mjs']]
   },
   {
-    id: 'toolkit-tests',
+    id: 'toolkit',
     label: 'Toolkit tests',
     steps: [['node', '--test', 'test/**/*.test.mjs']]
   }
@@ -166,7 +170,9 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   try {
     opts = parseGateArgs(process.argv.slice(2))
   } catch (e) {
-    process.stderr.write(`gates: ${e.message}\nusage: run-gates.mjs [--only id,id] [--bail] [--json]\n`)
+    process.stderr.write(
+      `gates: ${e.message}\nusage: run-gates.mjs [--only id,id] [--bail] [--json]\n`
+    )
     process.exit(2)
   }
   const results = runGates(opts)

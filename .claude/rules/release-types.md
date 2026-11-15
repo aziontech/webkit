@@ -29,7 +29,7 @@ The list of accepted types and the type→release-effect must be **identical** a
 - **Squash-merge means the PR title is the commit.** Merges to `main` are squash merges (#795), so release-please parses the **PR title** as the conventional commit. The title must be commitlint-valid and carry the intended type; a breaking change belongs in the title as `!` — a `BREAKING CHANGE:` footer buried in the squashed body's bullet list is easy to lose.
 - **Path filtering per package.** A commit counts toward a package's release only if it touches files under that package's path ([`release-please-config.json`](../../release-please-config.json)`#packages`). A `fix(webkit)` that only edits theme files bumps nothing for webkit.
 - **`Release-As:` footer** overrides the computed version when an explicit version is required.
-- **The Release PR is the release.** Merging a `feat`/`fix` updates the pending Release PR; merging the Release PR bumps versions, tags, and triggers the `package-*.yml` publish workflows via `release: published`.
+- **The Release PR is the release.** Merging a `feat`/`fix` updates the pending Release PR; merging the Release PR bumps versions, tags, and triggers the `publish-*.yml` publish workflows via `release: published`.
 
 ## When adding, removing, or re-mapping a type
 

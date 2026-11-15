@@ -49,14 +49,14 @@
 
 <!-- Paste the table printed by `pnpm --filter @aziontech/webkit run gates`. -->
 
-| Command                                                          | Result |
-| ---------------------------------------------------------------- | ------ |
-| `pnpm --filter @aziontech/webkit run gates`                      |        |
-| `pnpm --filter @aziontech/webkit lint` and `lint:style`          |        |
-| `pnpm --filter @aziontech/webkit type-check` and `type-coverage` |        |
-| `pnpm --filter @aziontech/webkit format:check`                   |        |
-| `pnpm --filter @aziontech/webkit run size`                       |        |
-| `vitest run <name>.test copyable-sfcs`                           |        |
+| Command                                                         | Result |
+| --------------------------------------------------------------- | ------ |
+| `pnpm --filter @aziontech/webkit run gates`                     |        |
+| `pnpm --filter @aziontech/webkit lint` and `lint:style`         |        |
+| `pnpm --filter @aziontech/webkit typecheck` and `type-coverage` |        |
+| `pnpm --filter @aziontech/webkit check:format`                  |        |
+| `pnpm --filter @aziontech/webkit run check:size`                |        |
+| `vitest run <name>.test copyable-sfcs`                          |        |
 
 ## `ui-craft` review
 

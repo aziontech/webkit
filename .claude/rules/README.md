@@ -43,6 +43,6 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [testing](./testing.md) | general | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
 | [comments](./comments.md) | general | No prose comments; API JSDoc + directives only | authoring · ratchet · lint · review |
 | [example-data](./example-data.md) | general | `example.com` domains, Acme, fictional US data, no national formats | check-authoring · review |
-| [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · doc-standards (CI) |
+| [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · check:authoring-docs (CI) |
 
 **Split:** 17 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 10 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`.claude/docs/PROCESS.md`](../docs/PROCESS.md).

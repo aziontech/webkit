@@ -15,7 +15,7 @@ const DIST_DIR = './dist'
 
 console.log('\n🔍 Step 1/9 — Validating SVG files...\n')
 try {
-  execSync('node scripts/validate-svg.mjs', { stdio: 'inherit' })
+  execSync('node scripts/check-svg.mjs', { stdio: 'inherit' })
 } catch {
   console.error('\n🔴 SVG validation failed. Fix the errors above before building.\n')
   process.exit(1)
