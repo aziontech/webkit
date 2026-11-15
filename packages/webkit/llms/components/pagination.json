@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/pagination",
  "treeShakeableImport": "@aziontech/webkit/pagination-root",
  "category": "data",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

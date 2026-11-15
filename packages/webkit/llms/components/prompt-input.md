@@ -3,7 +3,7 @@
 > The composer of a generative AI chat (Cloudscape prompt input, AI Elements PromptInput): a text area that grows with the prompt up to `maxRows`, a Submit control that becomes Stop while a response is being generated, a toolbar row for secondary controls (attach, mode), an attachments row above the text, an optional character limit with a counter, and constraint text under it (a disclaimer or the shortcuts it accepts). Enter submits; Shift+Enter adds a line; an IME composition never submits. It is controlled: the owner holds the text, receives `submit` with the trimmed prompt, and clears it. While `state` is `submitted` or `streaming` the reader can keep typing the next prompt, but cannot submit it until the response ends or they press Stop.
 
 - Import: `import PromptInput from '@aziontech/webkit/prompt-input'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [prompt-input.json](https://github.com/aziontech/webkit/blob/main/.specs/prompt-input.json)
 
 ## When to use

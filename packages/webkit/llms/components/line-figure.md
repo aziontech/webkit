@@ -3,7 +3,7 @@
 > An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it follows the theme. Each figure loads on demand. The pointer, or focus with arrow keys, moves the figure through its answer; `play` walks it through on its own until a person arrives; under reduced motion it holds a still frame. From the design sample's `shared/ui/line-figure` (engine MIT, kept with its `LICENSE`). The figures are marketing assets, listed in the marketing inventory.
 
 - Import: `import LineFigure from '@aziontech/webkit/line-figure'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [line-figure.json](https://github.com/aziontech/webkit/blob/main/.specs/line-figure.json)
 
 ## When to use

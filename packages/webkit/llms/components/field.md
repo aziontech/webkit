@@ -4,7 +4,7 @@
 
 - Import: `import FieldRoot from '@aziontech/webkit/field-root'`
 - Compound import (dot notation, not tree-shakeable): `import Field from '@aziontech/webkit/field'`
-- Category: inputs · Surface: product · Structure: composition
+- Category: inputs · Surface: app · Structure: composition
 - API as JSON: [field.json](https://github.com/aziontech/webkit/blob/main/.specs/field.json)
 
 ## When to use

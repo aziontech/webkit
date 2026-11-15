@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/card-grid",
  "treeShakeableImport": "@aziontech/webkit/card-grid-root",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

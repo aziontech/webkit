@@ -3,7 +3,7 @@
 > The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `kind` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 - Import: `import FeatureTiles from '@aziontech/webkit/feature-tiles'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [feature-tiles.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-tiles.json)
 
 ## When to use

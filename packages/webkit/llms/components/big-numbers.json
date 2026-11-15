@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/big-numbers",
  "treeShakeableImport": "@aziontech/webkit/big-numbers",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
@@ -64,7 +64,7 @@
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import BigNumbers from '@aziontech/webkit/big-numbers'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xxl)\">\n    <BigNumbers\n      size=\"small\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <BigNumbers\n      size=\"medium\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <BigNumbers\n      size=\"large\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import BigNumbers from '@aziontech/webkit/big-numbers'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <BigNumbers\n      size=\"small\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <BigNumbers\n      size=\"medium\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n    <BigNumbers\n      size=\"large\"\n      :items=\"[\n        { value: '120', suffix: '+', label: 'Points of presence' },\n        { value: '99.99', suffix: '%', label: 'Availability' },\n        { prefix: '<', value: '15', suffix: 'ms', label: 'Median latency' },\n        { value: '4.5', suffix: 'Tbps', label: 'Network capacity' }\n      ]\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/big-numbers.md"

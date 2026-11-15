@@ -4,7 +4,7 @@
 
 - Import: `import BoardRoot from '@aziontech/webkit/board-root'`
 - Compound import (dot notation, not tree-shakeable): `import Board from '@aziontech/webkit/board'`
-- Category: layout · Surface: product · Structure: composition
+- Category: layout · Surface: app · Structure: composition
 - API as JSON: [board.json](https://github.com/aziontech/webkit/blob/main/.specs/board.json)
 
 ## When to use
@@ -22,7 +22,7 @@
 
 ## Don’t
 
-- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).
+- A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `dashboard/analytics-dashboard` block).
 - Two or three panes whose boundary the reader drags → use `resizable`.
 - Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.
 - A grid of resources the reader selects, not arranges → use `card-list`.
@@ -289,7 +289,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
         :label="editing ? 'Done' : 'Edit layout'"
         :kind="editing ? 'primary' : 'outlined'"
         size="medium"
-        :icon="editing ? 'ai ai-check' : 'ai ai-th-large'"
+        :icon="editing ? 'ai ai-check' : 'ai ai-layout-grid'"
         :aria-pressed="editing"
         @click="editing = !editing"
       />
@@ -316,7 +316,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
                 :label="item.span + '/12'"
                 severity="neutral"
                 size="small"
-                icon="ai ai-arrows-h"
+                icon="ai ai-move-horizontal"
               />
             </ChartCard.Action>
           </ChartCard.Header>

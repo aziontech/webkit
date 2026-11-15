@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/conversation-history",
  "treeShakeableImport": "@aziontech/webkit/conversation-history",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

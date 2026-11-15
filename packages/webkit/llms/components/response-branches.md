@@ -3,7 +3,7 @@
 > Pages through alternative versions of one assistant response: after Regenerate, or when the model returned several candidates, the message shows one version at a time with a `‹ 2 of 3 ›` pager under it. The owner keeps every version and renders the active one in the default slot; the component owns only the position and the pager. It is the AI Elements `Branch` pattern, rebuilt on WebKit's `IconButton` and tokens.
 
 - Import: `import ResponseBranches from '@aziontech/webkit/response-branches'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [response-branches.json](https://github.com/aziontech/webkit/blob/main/.specs/response-branches.json)
 
 ## When to use

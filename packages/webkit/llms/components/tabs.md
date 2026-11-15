@@ -4,7 +4,7 @@
 
 - Import: `import TabsRoot from '@aziontech/webkit/tabs-root'`
 - Compound import (dot notation, not tree-shakeable): `import Tabs from '@aziontech/webkit/tabs'`
-- Category: navigation · Surface: product · Structure: composition
+- Category: navigation · Surface: app · Structure: composition
 - API as JSON: [tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/tabs.json)
 
 ## When to use
@@ -56,7 +56,7 @@
 
 ## Sub-components
 
-- `tabs-item.vue` — Public sub-component `tabs-item`, attached as `Tabs.Item` and as its alias `Tabs.Trigger` (the same component). `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-contrast)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
+- `tabs-item.vue` — Public sub-component `tabs-item`, attached as `Tabs.Item` and as its alias `Tabs.Trigger` (the same component). `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-foreground)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
 - `tabs-list.vue` — Public sub-component `tabs-list`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
 - `tabs-content.vue` — Public sub-component `tabs-content`, attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab (the same element as `Tabs.Panel`, attributes forwarded to it).
 - `tabs-panel.vue` — Public sub-component `tabs-panel`, attached as `Tabs.Panel`; the `role="tabpanel"` for its `value`. Equivalent to `Tabs.Content` with a `value`.
@@ -83,7 +83,7 @@
 - Keyboard map (inside `Tabs.List`): `Tab` moves into the list onto the selected tab and out of it to the panel (roving `tabindex`: only the selected tab is `0`); `ArrowRight`/`ArrowLeft` select and focus the next/previous enabled tab in DOM order (a tab inserted later with `v-if`, or moved by a keyed list, takes its rendered place) and wrap, swapped under `dir="rtl"` (`useDirection`); `Home`/`End` select the first/last enabled tab; `Enter`/`Space` activate the focused tab; with `activationMode="manual"` the arrow keys and `Home`/`End` move focus only, from the focused tab, and the selection changes on `Enter`/`Space` or a click; `Delete` on a `closable` tab emits `close` (the tab carries `aria-keyshortcuts="Delete"`). Focus after a close is the consumer's call (the neighbouring tab, as `split-view#Sessions` does).
 - Close control: the `closable` glyph is a pointer target only (`aria-hidden="true"`, no role, no `tabindex`, a `title` with "Close tab"); keyboard and screen-reader users close with `Delete`, the WAI-ARIA tabs pattern. A focusable close button cannot sit next to the tab: anything focusable inside `role="tablist"` that is not a `tab` fails axe `aria-required-children` (unallowed child), and inside the tab it is `nested-interactive`.
 - ARIA: inside `Tabs.List` each item is `role="tab"` with `aria-selected` and `aria-controls` (when its panel is mounted); a `Tabs.Item` rendered on its own, outside any `Tabs`, is a toggle `<button>` with `aria-pressed` and no `tab` role, because a `tab` outside a `tablist` fails `aria-required-parent`. `Tabs.Panel` is `role="tabpanel"` labelled by its tab.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-contrast)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-foreground)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
 

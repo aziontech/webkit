@@ -27,12 +27,12 @@ always has a reduced-motion escape. This is the invariant behind the `/webkit-mo
 
 A conditionally rendered region never animates by itself — wrap the `v-if` in a Vue `Transition`
 and hand the enter/leave phases to the catalogued utilities. For lateral panels the pair is
-`animate-slide-in-left` / `animate-slide-out-left` (right-anchored drawers use the `-right` pair):
+`animate-slide-in-start` / `animate-slide-out-start` (end-anchored drawers use the `-end` pair; both flip in right-to-left pages):
 
 ```vue
 <Transition
-  enter-active-class="animate-slide-in-left motion-reduce:animate-none"
-  leave-active-class="animate-slide-out-left motion-reduce:animate-none"
+  enter-active-class="animate-slide-in-start motion-reduce:animate-none"
+  leave-active-class="animate-slide-out-start motion-reduce:animate-none"
 >
   <aside v-if="sidebarOpen">...</aside>
 </Transition>
@@ -100,10 +100,10 @@ stay a review concern:
 | `animate-pulse` | `pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite` | Skeleton/placeholder opacity pulse while content loads. |
 | `animate-shimmer` | `shimmer 1.6s linear infinite` | Skeleton shimmer sweep while content loads. |
 | `animate-slide-down` | `slideDown 220ms ease-in-out` | Vertical disclosure expanding (accordion panel, expandable row). |
-| `animate-slide-in-left` | `slideInLeft 240ms cubic-bezier(0.39, 0.57, 0.56, 1)` | Left-anchored panel entering (sidebar, navigation drawer). Wrap the v-if region in a Vue Transition with enter-active-class. |
-| `animate-slide-in-right` | `slideInRight 240ms cubic-bezier(0.39, 0.57, 0.56, 1)` | Right-anchored panel entering (settings/detail drawer). |
-| `animate-slide-out-left` | `slideOutLeft 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | Left-anchored panel leaving (pair of slide-in-left; use as leave-active-class). |
-| `animate-slide-out-right` | `slideOutRight 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | Right-anchored panel leaving (pair of slide-in-right). |
+| `animate-slide-in-end` | `slideInEnd 240ms cubic-bezier(0.39, 0.57, 0.56, 1)` | End-anchored panel entering (settings/detail drawer); flips with the reading direction. |
+| `animate-slide-in-start` | `slideInStart 240ms cubic-bezier(0.39, 0.57, 0.56, 1)` | Start-anchored panel entering (sidebar, navigation drawer); flips with the reading direction. Wrap the v-if region in a Vue Transition with enter-active-class. |
+| `animate-slide-out-end` | `slideOutEnd 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | End-anchored panel leaving (pair of slide-in-end). |
+| `animate-slide-out-start` | `slideOutStart 150ms cubic-bezier(0.55, 0.09, 0.68, 0.53)` | Start-anchored panel leaving (pair of slide-in-start; use as leave-active-class). |
 | `animate-spin` | `spin 1s linear infinite` | Indeterminate circular spinners (loading icons). |
 | `animate-texture-wave-a` | `textureWaveA 13s linear infinite` | One of the two crossing bands of a pixelate texture, travelling left. Set --texture-wave-shift on the element to one period of its banding measured along X, and overhang the element by that much on the side it travels toward, or the field uncovers mid-cycle. |
 | `animate-texture-wave-b` | `textureWaveB 19s linear infinite` | The counter-travelling band of that pair (pair of texture-wave-a; same --texture-wave-shift contract, opposite direction). |
@@ -114,4 +114,4 @@ stay a review concern:
 | --- | --- | --- |
 | transition | 8 | `--transition-duration-fast-01` · `--transition-duration-fast-02` · `--transition-duration-moderate-01` · `--transition-duration-moderate-02` · `--transition-duration-slow-01` · `--transition-duration-slow-02` · `--transition-duration-slow-03` · `--transition-duration-slow-04` |
 | ease | 7 | `--ease-expressive-entrance` · `--ease-expressive-exit` · `--ease-in` · `--ease-in-out` · `--ease-out` · `--ease-productive-entrance` · `--ease-productive-exit` |
-| animate | 24 | `--animate-blink` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-left` · `--animate-slide-in-right` · `--animate-slide-out-left` · `--animate-slide-out-right` · `--animate-spin` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |
+| animate | 24 | `--animate-blink` · `--animate-bounce` · `--animate-brand-marquee` · `--animate-content-enter` · `--animate-fade-in` · `--animate-fade-out` · `--animate-flow-dash` · `--animate-highlight-fade` · `--animate-page-enter` · `--animate-ping` · `--animate-popup-scale-in` · `--animate-popup-scale-out` · `--animate-progress-indeterminate` · `--animate-progress-indeterminate-short` · `--animate-pulse` · `--animate-shimmer` · `--animate-slide-down` · `--animate-slide-in-end` · `--animate-slide-in-start` · `--animate-slide-out-end` · `--animate-slide-out-start` · `--animate-spin` · `--animate-texture-wave-a` · `--animate-texture-wave-b` |

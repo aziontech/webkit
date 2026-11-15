@@ -3,7 +3,7 @@
 > Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. The platform is read once mounted: the server and the first client render print the non-Mac names, then a Mac swaps in its glyphs, so hydration never mismatches. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`). A sequence can also be passed as a `keys` list (`['meta', 'shift', 'p']`, `['arrow-up', 'arrow-down']`), drawn either as one keycap (`kind="combined"`, the default) or as one keycap per key (`kind="separate"`, each a nested `<kbd>` as HTML specifies for key combinations). Arrow keys and the Return glyph (`↵`) are named keys like `escape`.
 
 - Import: `import Kbd from '@aziontech/webkit/kbd'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [kbd.json](https://github.com/aziontech/webkit/blob/main/.specs/kbd.json)
 
 ## When to use
@@ -55,7 +55,7 @@
 Kbd is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
 - `data-size` mirrors the `size` prop (`small` | `medium`).
-- `data-kind` mirrors the `kind` prop (`combined` | `separate`). With `separate` the root drops its keycap chrome (border, surface, shadow, padding) and each key renders as a nested `<kbd>` keycap with the same size tokens, separated by `--spacing-xxs`.
+- `data-kind` mirrors the `kind` prop (`combined` | `separate`). With `separate` the root drops its keycap chrome (border, surface, shadow, padding) and each key renders as a nested `<kbd>` keycap with the same size tokens, separated by `--spacing-2xs`.
 
 ## Accessibility
 

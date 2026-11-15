@@ -3,7 +3,7 @@
 > Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogView. An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
 
 - Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
-- Category: code · Surface: product · Structure: monolithic
+- Category: code · Surface: app · Structure: monolithic
 - API as JSON: [code-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/code-editor.json)
 
 ## When to use
@@ -19,7 +19,7 @@
 - Wrap it in a `Field` with a visible label, or give it an `ariaLabel`; the label names the textarea and the Monaco editor.
 - Pass `loader` from the app so Monaco is code-split and never part of the WebKit bundle. The loader sets `MonacoEnvironment.getWorker` before it returns `import('monaco-editor')`; without workers Monaco has no language services. With `monaco-editor` 0.56 and later under Vite the worker imports are `monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|css|html|typescript>/<name>.worker?worker` (`ts.worker` serves `javascript` too); the old `monaco-editor/esm/vs/...?worker` paths fail the build. Copy `loadMonaco` from the Usage block or the `Monaco` example.
 - Set `padLineNumbers` on a full-page code editor (`fill`, a function's Code or Arguments document), as the console does (01, 02…); leave it off on a small editor inside a form.
-- Function calls are coloured for you (JavaScript and TypeScript, with `--code-sintax-function`); do not register your own Monarch grammar for that.
+- Function calls are coloured for you (JavaScript and TypeScript, with `--code-syntax-function`); do not register your own Monarch grammar for that.
 - Send server diagnostics as `markers` with 1-based lines; keep each message one sentence.
 - Pass a JSON Schema as `schema` for a JSON document with a known shape, and listen to `validate` to show the first problem in a `Field.Error`; keep `markers` for what only the server knows.
 - Set `:bordered="false"` when the editor fills a pane that already frames it (a resizable pane, a full-page function editor, a drawer body); keep the default frame inside a form.

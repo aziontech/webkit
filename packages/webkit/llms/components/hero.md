@@ -4,7 +4,7 @@
 
 - Import: `import HeroRoot from '@aziontech/webkit/hero-root'`
 - Compound import (dot notation, not tree-shakeable): `import Hero from '@aziontech/webkit/hero'`
-- Category: marketing · Surface: marketing · Structure: composition
+- Category: marketing · Surface: site · Structure: composition
 - API as JSON: [hero.json](https://github.com/aziontech/webkit/blob/main/.specs/hero.json)
 
 ## When to use

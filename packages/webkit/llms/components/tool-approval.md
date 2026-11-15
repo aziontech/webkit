@@ -3,7 +3,7 @@
 > A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`kind="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [tool-approval.json](https://github.com/aziontech/webkit/blob/main/.specs/tool-approval.json)
 
 ## When to use

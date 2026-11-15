@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/outcome-mark",
  "treeShakeableImport": "@aziontech/webkit/outcome-mark",
  "category": "feedback",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

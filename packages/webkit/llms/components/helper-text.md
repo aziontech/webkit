@@ -3,7 +3,7 @@
 > Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`). Each variant changes only color (and, for `disabled`, prepends a lock icon) so the visual weight stays consistent with the field above it.
 
 - Import: `import HelperText from '@aziontech/webkit/helper-text'`
-- Category: inputs · Surface: product · Structure: monolithic
+- Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [helper-text.json](https://github.com/aziontech/webkit/blob/main/.specs/helper-text.json)
 
 ## When to use

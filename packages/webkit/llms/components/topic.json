@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/topic",
  "treeShakeableImport": "@aziontech/webkit/topic",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -3,7 +3,7 @@
 > The list of past conversations with an assistant, in a side panel or drawer: titles grouped by when they were last active (Today, Yesterday, Previous 7 days, Previous 30 days, Older), the open one marked current, and an optional Delete per row. Choosing a row sets `v-model` to its id; the owner loads that conversation into `Conversation`.
 
 - Import: `import ConversationHistory from '@aziontech/webkit/conversation-history'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [conversation-history.json](https://github.com/aziontech/webkit/blob/main/.specs/conversation-history.json)
 
 ## When to use

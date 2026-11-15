@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/dialog",
  "treeShakeableImport": "@aziontech/webkit/dialog-root",
  "category": "overlay",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

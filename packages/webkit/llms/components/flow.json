@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/flow",
  "treeShakeableImport": "@aziontech/webkit/flow-root",
  "category": "data",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

@@ -4,7 +4,7 @@
 
 - Import: `import AccordionRoot from '@aziontech/webkit/accordion-root'`
 - Compound import (dot notation, not tree-shakeable): `import Accordion from '@aziontech/webkit/accordion'`
-- Category: content · Surface: product · Structure: composition
+- Category: content · Surface: app · Structure: composition
 - API as JSON: [accordion.json](https://github.com/aziontech/webkit/blob/main/.specs/accordion.json)
 
 ## When to use

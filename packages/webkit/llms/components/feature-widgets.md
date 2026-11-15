@@ -3,7 +3,7 @@
 > The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration`, `button-highlight` and the webkit scene assets.
 
 - Import: `import FeatureWidgets from '@aziontech/webkit/feature-widgets'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [feature-widgets.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-widgets.json)
 
 ## When to use

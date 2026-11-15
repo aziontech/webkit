@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/overline",
  "treeShakeableImport": "@aziontech/webkit/overline",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -3,7 +3,7 @@
 > The frequently-asked-questions band of a marketing page: a two-column panel with the section's heading on the left and the answers as a disclosure list on the right. It is the page-level band, not the disclosure primitive — it composes `accordion`, which remains the right choice anywhere a bare expandable list is wanted. The band is drawn in the hairline register: the two columns and every row are separated by a one-pixel gap over a rule fill, so the seams are the grid's own gaps rather than borders on the cells. The rule under a row is held at the item's edge and drawn only while that item is open, which keeps exactly one rule per row in either state; the last row draws none, because it sits on the band's own floor. A single `--accordion-inset` hook, re-declared per breakpoint, puts the heading, every question and every answer on one content column.
 
 - Import: `import Faq from '@aziontech/webkit/faq'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [faq.json](https://github.com/aziontech/webkit/blob/main/.specs/faq.json)
 
 ## When to use

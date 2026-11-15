@@ -3,7 +3,7 @@
 > One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [tool-call.json](https://github.com/aziontech/webkit/blob/main/.specs/tool-call.json)
 
 ## When to use

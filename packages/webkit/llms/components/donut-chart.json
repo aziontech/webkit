@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/donut-chart",
  "treeShakeableImport": "@aziontech/webkit/donut-chart",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

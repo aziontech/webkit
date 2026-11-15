@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/card-pricing",
  "treeShakeableImport": "@aziontech/webkit/card-pricing",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

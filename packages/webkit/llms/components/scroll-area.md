@@ -3,7 +3,7 @@
 > Structural layout primitive for scrolling regions: native overflow with themed thin scrollbars and keyboard scrolling. With `fade`, the edges that still have content to scroll to fade out, each sized by the distance left on that side (capped at 64px or a sixth of the viewport), so a list reads as continuing past its frame. A sticky header inside the viewport keeps its full opacity; the top fade starts below it.
 
 - Import: `import ScrollArea from '@aziontech/webkit/scroll-area'`
-- Category: layout · Surface: product · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [scroll-area.json](https://github.com/aziontech/webkit/blob/main/.specs/scroll-area.json)
 
 ## When to use
@@ -70,7 +70,7 @@
 
 <template>
   <div
-    class="h-[200px] max-w-(--container-md) rounded-(--shape-elements) border border-(--border-default)"
+    class="h-[200px] max-w-(--container-md) rounded-(--shape-control) border border-(--border-default)"
   >
     <ScrollArea
       orientation="vertical"
@@ -98,7 +98,7 @@
 
 <template>
   <div class="flex flex-wrap items-start gap-(--spacing-6)">
-    <div class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+    <div class="h-[160px] w-[240px] rounded-(--shape-control) border border-(--border-default)">
       <ScrollArea
         orientation="vertical"
         aria-label="Vertical scroll"
@@ -109,7 +109,7 @@
         </div>
       </ScrollArea>
     </div>
-    <div class="w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+    <div class="w-[240px] rounded-(--shape-control) border border-(--border-default)">
       <ScrollArea
         orientation="horizontal"
         aria-label="Horizontal scroll"
@@ -121,7 +121,7 @@
         </div>
       </ScrollArea>
     </div>
-    <div class="h-[160px] w-[240px] rounded-(--shape-elements) border border-(--border-default)">
+    <div class="h-[160px] w-[240px] rounded-(--shape-control) border border-(--border-default)">
       <ScrollArea
         orientation="both"
         aria-label="Two-axis scroll"
@@ -146,71 +146,71 @@
 <template>
   <div class="flex flex-wrap items-start gap-(--spacing-6)">
     <div
-      class="w-[280px] overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
+      class="w-[280px] overflow-hidden rounded-(--shape-control) border border-(--border-default)"
     >
       <ScrollArea
         fade
         aria-label="Deployments"
         class="max-h-[240px]"
       >
-        <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-(--spacing-xs)">
+        <ul class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-(--spacing-xs)">
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             edge-app-production
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             edge-app-staging
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             marketing-site
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             docs-portal
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             image-optimizer
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             api-gateway
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             auth-service
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             checkout-function
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             search-indexer
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             media-transcoder
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             waf-rules-engine
           </li>
           <li
-            class="rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             analytics-collector
           </li>
@@ -218,7 +218,7 @@
       </ScrollArea>
     </div>
     <div
-      class="w-[280px] overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
+      class="w-[280px] overflow-hidden rounded-(--shape-control) border border-(--border-default)"
     >
       <ScrollArea
         fade
@@ -227,27 +227,27 @@
       >
         <div class="flex w-max gap-(--spacing-xs) p-(--spacing-xs)">
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >São Paulo</span
           >
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >Miami</span
           >
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >Frankfurt</span
           >
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >Tokyo</span
           >
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >Sydney</span
           >
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-default)"
             >Mumbai</span
           >
         </div>

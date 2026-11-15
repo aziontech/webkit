@@ -3,7 +3,7 @@
 > Key and value tags of one resource, after Cloudscape's tag editor, built on `AttributeEditor`. It adds what tags need on top of the rows: key and value suggestions while typing, a tag limit (50 by default) that ignores tags marked for removal, the built-in key checks (required when the row has a value, unique, length, allowed characters, no key starting with a `reservedPrefix` the product reserves), and a removal that only marks a saved tag, with Undo, until the form is saved.
 
 - Import: `import TagEditor from '@aziontech/webkit/tag-editor'`
-- Category: inputs · Surface: product · Structure: monolithic
+- Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [tag-editor.json](https://github.com/aziontech/webkit/blob/main/.specs/tag-editor.json)
 
 ## When to use
@@ -32,7 +32,7 @@
 - [attribute-editor](attribute-editor.md) — the rows, Add, Remove, limit text, focus and announcements underneath.
 - [input](input.md) — key and value controls; suggestions come from a native `datalist`.
 - [tag](tag.md) — how the saved tags read outside the editor.
-- platform/states/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
+- state/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
 
 ## Props
 

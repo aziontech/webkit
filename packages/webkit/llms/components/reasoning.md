@@ -3,7 +3,7 @@
 > Shows the model's thinking before its response (Cloudscape Thinking pattern, AI Elements Reasoning): a disclosure whose label reads `Thinking` (pulsing) while the model reasons and `Thought for 14 seconds` once it is done, with the trace inside. Collapsed by default in a chat, where the response is the main content. The duration comes from the server (`duration`) or is measured from `streaming` turning on to turning off, rounded to whole seconds. An optional `Skip thinking` lets the reader ask for the response now.
 
 - Import: `import Reasoning from '@aziontech/webkit/reasoning'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [reasoning.json](https://github.com/aziontech/webkit/blob/main/.specs/reasoning.json)
 
 ## When to use

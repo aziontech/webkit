@@ -3,7 +3,7 @@
 > Values by place on the dotted world map of `NetworkMap`: countries shaded on a five-step sequential scale (a choropleth on the dot grid) and locations drawn as bubbles whose area follows the value. One tab stop walks every place from the highest value down, with a tooltip, a polite announcement and a table twin, so nothing on the map needs a pointer. The country shapes are a lazy chunk; the map itself adds no dependency.
 
 - Import: `import MapChart from '@aziontech/webkit/map-chart'`
-- Category: chart · Surface: product · Structure: monolithic
+- Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [map-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/map-chart.json)
 
 ## When to use

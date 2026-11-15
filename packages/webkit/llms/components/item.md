@@ -4,7 +4,7 @@
 
 - Import: `import ItemRoot from '@aziontech/webkit/item-root'`
 - Compound import (dot notation, not tree-shakeable): `import Item from '@aziontech/webkit/item'`
-- Category: content · Surface: product · Structure: composition
+- Category: content · Surface: app · Structure: composition
 - API as JSON: [item.json](https://github.com/aziontech/webkit/blob/main/.specs/item.json)
 
 ## When to use

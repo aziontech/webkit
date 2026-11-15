@@ -3,7 +3,7 @@
 > The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.
 
 - Import: `import PricingPlans from '@aziontech/webkit/pricing-plans'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [pricing-plans.json](https://github.com/aziontech/webkit/blob/main/.specs/pricing-plans.json)
 
 ## When to use

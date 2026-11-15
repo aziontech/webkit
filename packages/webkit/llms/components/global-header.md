@@ -4,7 +4,7 @@
 
 - Import: `import GlobalHeaderRoot from '@aziontech/webkit/global-header-root'`
 - Compound import (dot notation, not tree-shakeable): `import GlobalHeader from '@aziontech/webkit/global-header'`
-- Category: layout · Surface: product · Structure: composition
+- Category: layout · Surface: app · Structure: composition
 - API as JSON: [global-header.json](https://github.com/aziontech/webkit/blob/main/.specs/global-header.json)
 
 ## When to use
@@ -21,7 +21,7 @@
 - Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label="Azion home"`).
 - Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.
 - Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.
-- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`).
+- Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`).
 
 ## Don’t
 
@@ -131,7 +131,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
           label="Create"
           kind="secondary"
           size="medium"
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
         />
       </GlobalHeader.End>
     </GlobalHeader>

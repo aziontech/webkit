@@ -3,7 +3,7 @@
 > A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `sidebar-menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.
 
 - Import: `import Tree from '@aziontech/webkit/tree'`
-- Category: data · Surface: product · Structure: monolithic
+- Category: data · Surface: app · Structure: monolithic
 - API as JSON: [tree.json](https://github.com/aziontech/webkit/blob/main/.specs/tree.json)
 
 ## When to use
@@ -482,7 +482,7 @@
       </template>
       <template #actions="{ item }">
         <IconButton
-          icon="ai ai-ellipsis-h"
+          icon="ai ai-ellipsis"
           kind="transparent"
           size="small"
           :aria-label="'More actions for ' + item.label"

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/data-grid",
  "treeShakeableImport": "@aziontech/webkit/data-grid",
  "category": "data",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

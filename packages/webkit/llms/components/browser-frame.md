@@ -3,7 +3,7 @@
 > A browser window that renders live webkit components inside a viewport of its own, so a page or story can show a real screen at a real device size — desktop, tablet or mobile — and resize it by hand. The default slot is teleported into an internal `iframe`, which gives the content a true width × height viewport: CSS breakpoints fire against the frame's simulated width, viewport units resolve against its simulated height, and content taller than the viewport scrolls inside it like a page. When the simulated width is wider than the space available, the frame scales the whole viewport down to fit instead of clamping it. The chrome's window dots, address and size readout are decoration; its one control is a copy button inside the address bar, and the frame's other controls are the resize handles on its right edge, bottom edge and bottom-right corner.
 
 - Import: `import BrowserFrame from '@aziontech/webkit/browser-frame'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [browser-frame.json](https://github.com/aziontech/webkit/blob/main/.specs/browser-frame.json)
 
 ## When to use

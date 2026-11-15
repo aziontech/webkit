@@ -4,7 +4,7 @@
 
 - Import: `import SidebarRoot from '@aziontech/webkit/sidebar-root'`
 - Compound import (dot notation, not tree-shakeable): `import Sidebar from '@aziontech/webkit/sidebar'`
-- Category: layout · Surface: product · Structure: composition
+- Category: layout · Surface: app · Structure: composition
 - API as JSON: [sidebar.json](https://github.com/aziontech/webkit/blob/main/.specs/sidebar.json)
 
 ## When to use
@@ -130,7 +130,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
   region needs one only when nothing inside it is focusable, and this one holds a `SidebarMenu` of rows —
   so `Tab` reaches the first row directly instead of the box around it.
-  The region also keeps `var(--spacing-xxs)` of padding — and the same as `scroll-padding` — inside
+  The region also keeps `var(--spacing-2xs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
   row and a viewport flush against it would cut the ring off.
   The **drag handle is a focusable `role="separator"`**, so the gesture has a keyboard equivalent:
@@ -178,7 +178,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   it under `dir="rtl"`.
 - The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
   right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
-- The collapse / expand glyphs (`ai-angle-double-left` / `-right`) keep their meaning through the
+- The collapse / expand glyphs (`ai-chevrons-left` / `-right`) keep their meaning through the
   direction-aware placement of the trigger.
 
 ## Internationalization
@@ -271,7 +271,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="cmd:settings">
                   <template #prefix
                     ><i
-                      class="ai ai-cog"
+                      class="ai ai-settings"
                       aria-hidden="true"
                   /></template>
                   Account Settings
@@ -344,7 +344,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              icon="ai ai-cog"
+              icon="ai ai-settings"
               kind="drill"
             />
             <SidebarMenuSubContent>
@@ -384,7 +384,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             >
               <DropdownMenuTrigger>
                 <IconButton
-                  icon="ai ai-ellipsis-v"
+                  icon="ai ai-ellipsis-vertical"
                   aria-label="Account menu"
                   kind="outlined"
                   size="small"
@@ -415,7 +415,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 >
                   <template #trailing
                     ><i
-                      class="ai ai-sign-out"
+                      class="ai ai-log-out"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuOption>
@@ -502,7 +502,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
                 label="Settings"
-                icon="ai ai-cog"
+                icon="ai ai-settings"
                 kind="drill"
               />
               <SidebarMenuSubContent>

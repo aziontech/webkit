@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/streaming-response",
  "treeShakeableImport": "@aziontech/webkit/streaming-response",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

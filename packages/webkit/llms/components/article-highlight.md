@@ -3,7 +3,7 @@
 > The band that opens a blog under its hero. One article is shown large — its cover beside its overline, headline, deck, read time and a button into it — over a wall of the highlight articles that acts as its selector. The wall is a tablist and the large article its panel; selecting a title on the wall swaps the panel with a short slide in the direction of travel, and every article is drawn invisibly under the panel so the band keeps the height of its tallest article and never jumps. With four or more articles the wall runs four across. It is a page section — the site places it from a `{ _id: 'article-highlight', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid` and `button`; the selection is local state. With `autoplay` the band advances on its own every `autoplayInterval`, drawing a primary progress line at the panel's foot, and pauses while the pointer is over it or keyboard focus is inside it; it never autoplays under reduced motion or with one article. With `fill`, from `lg` the band fills the first viewport under the sticky site header.
 
 - Import: `import ArticleHighlight from '@aziontech/webkit/article-highlight'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [article-highlight.json](https://github.com/aziontech/webkit/blob/main/.specs/article-highlight.json)
 
 ## When to use

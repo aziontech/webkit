@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/kbd",
  "treeShakeableImport": "@aziontech/webkit/kbd",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

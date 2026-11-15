@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/stat-tile-group",
  "treeShakeableImport": "@aziontech/webkit/stat-tile-group",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

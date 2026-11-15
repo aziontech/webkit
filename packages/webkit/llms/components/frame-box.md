@@ -3,7 +3,7 @@
 > The registration frame: a hairline box with a small square set inside each corner and an optional linear hatch texture behind its content. Every side and every corner is addressable on its own, so frames stack and abut without doubling a rule or a mark. It is the container every framed page section is built from — a section title, the gap between two sections, a cell of a divider grid — so a page's rules and corner marks come from one component instead of from per-screen borders.
 
 - Import: `import FrameBox from '@aziontech/webkit/frame-box'`
-- Category: layout · Surface: marketing · Structure: monolithic
+- Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [frame-box.json](https://github.com/aziontech/webkit/blob/main/.specs/frame-box.json)
 
 ## When to use

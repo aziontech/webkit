@@ -3,7 +3,7 @@
 > Use Badge only for a number attached to something else (unread count, 12, 99+). For the state of a resource use StatusIndicator, for a category or outcome word use Tag, for a removable or selectable token use Chip, and for the "+N" of a truncated list use OverflowCount. Badge is a compact, non-interactive count with severity-based color coding, commonly overlaid on icons, avatars or buttons, or set beside a heading. It differs from its sibling `tag`: `tag` carries words (optional leading icon, optional pill shape, masked surfaces), whereas `badge` carries a number on a fully filled surface with no icon affordance.
 
 - Import: `import Badge from '@aziontech/webkit/badge'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [badge.json](https://github.com/aziontech/webkit/blob/main/.specs/badge.json)
 
 ## When to use

@@ -3,7 +3,7 @@
 > The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `product-widget` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material`, `product-widget` and `code-block`.
 
 - Import: `import CliTerminal from '@aziontech/webkit/cli-terminal'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [cli-terminal.json](https://github.com/aziontech/webkit/blob/main/.specs/cli-terminal.json)
 
 ## When to use

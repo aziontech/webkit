@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/status-code",
  "treeShakeableImport": "@aziontech/webkit/status-code",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

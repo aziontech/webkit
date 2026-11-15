@@ -4,7 +4,7 @@
 
 - Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
-- Category: overlay · Surface: product · Structure: composition
+- Category: overlay · Surface: app · Structure: composition
 - API as JSON: [drawer.json](https://github.com/aziontech/webkit/blob/main/.specs/drawer.json)
 
 ## When to use
@@ -279,7 +279,7 @@
           <section
             v-for="section in scrollSections"
             :key="section.title"
-            class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
+            class="flex flex-col gap-(--spacing-2) rounded-(--shape-control) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
           >
             <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
             <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>

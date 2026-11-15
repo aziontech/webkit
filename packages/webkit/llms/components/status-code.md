@@ -3,7 +3,7 @@
 > Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag. StatusCode shows the HTTP status of a request, optionally preceded by its method, as one compact monospace pill whose colour comes from the status class: informational, success and redirect responses (1xx, 2xx, 3xx) stay neutral, client errors (4xx) take the warning colour and server errors (5xx) the danger colour, so failures stand out in a long request log without every successful row competing for attention. Anything that is not a status from 100 to 599 renders muted, as written. It composes `Tag` for the surface, so its sizes, shape and colours are the tag's; the component owns only the mapping from status to colour and the method plus code layout that every logs table would otherwise repeat.
 
 - Import: `import StatusCode from '@aziontech/webkit/status-code'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [status-code.json](https://github.com/aziontech/webkit/blob/main/.specs/status-code.json)
 
 ## When to use
@@ -51,7 +51,7 @@
 - Visible focus: not applicable — StatusCode is non-interactive.
 - Keyboard map: none.
 - ARIA: plain text inside a `span`; the status number carries the meaning, so the colour is never the only cue (WCAG 1.4.1). Screen readers read `POST 503`.
-- Contrast ≥4.5:1: the `Tag` severity pairs (`--warning` / `--warning-contrast`, `--danger` / `--danger-contrast`, `--text-default` on `--bg-canvas`) and `--text-muted` on `--bg-canvas` are theme-guaranteed in light and dark.
+- Contrast ≥4.5:1: the `Tag` severity pairs (`--warning` / `--warning-foreground`, `--danger` / `--danger-foreground`, `--text-default` on `--bg-canvas`) and `--text-muted` on `--bg-canvas` are theme-guaranteed in light and dark.
 - `motion-reduce:*`: not applicable — no motion.
 - Touch target: not applicable — non-interactive.
 

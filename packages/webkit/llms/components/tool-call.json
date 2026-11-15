@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/tool-call",
  "treeShakeableImport": "@aziontech/webkit/tool-call",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

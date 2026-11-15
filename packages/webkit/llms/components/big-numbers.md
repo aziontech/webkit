@@ -3,7 +3,7 @@
 > A band of headline figures — throughput, uptime, points of presence — set in the display face at big-number scale, each in its own cell of a hairline `card-grid` with a short caption underneath. It is the proof band of a marketing page: the one place a page states its numbers, between a `section-title` and the section body.
 
 - Import: `import BigNumbers from '@aziontech/webkit/big-numbers'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [big-numbers.json](https://github.com/aziontech/webkit/blob/main/.specs/big-numbers.json)
 
 ## When to use
@@ -90,7 +90,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <BigNumbers
       size="small"
       :items="[

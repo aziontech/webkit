@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/process-scroll",
  "treeShakeableImport": "@aziontech/webkit/process-scroll",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

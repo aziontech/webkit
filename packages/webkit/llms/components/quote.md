@@ -3,7 +3,7 @@
 > A single customer testimonial: the quotation, who said it, and optionally the mark of the company they said it for. It is the smallest unit of social proof on a marketing page, and it is deliberately one quote — a wall of them is a layout built from several of these, not a prop on one. Three registers, one component. `inline` is the quiet unit that sits inside a cell of a larger band — the mark on a fixed band above the words, the quotation at the smallest heading size, and no quotation glyph, so a row of them reads as a row of claims. `signed` is the card-sized register a client sentence or an analyst report takes: the mark above, the quotation glyph, the quotation in body type, and the attribution stacked as the speaker (or the report) in the accent over their role (or its date). `highlight` is the featured register — the quotation set largest beside the company mark, which is given its own column at the quotation's first line; the speaker's likeness is drawn beside the attribution only when a `photo` is given. Every register attributes the same way: the name in the accent and the role in the muted ink, both in overline type, one over the other. The register changes the weight and the arrangement, never the anatomy: every register is one `figure` holding one `blockquote` and one `figcaption`, so the quotation and its attribution stay paired at the depth HTML requires.
 
 - Import: `import Quote from '@aziontech/webkit/quote'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [quote.json](https://github.com/aziontech/webkit/blob/main/.specs/quote.json)
 
 ## When to use
@@ -111,7 +111,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <Quote
       kind="inline"
       text="Magalu guarantees high availability for hundreds of global-scale applications, even during campaigns like Liquidação Fantástica and Black das Blacks."

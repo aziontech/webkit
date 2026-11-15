@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/hero-band",
  "treeShakeableImport": "@aziontech/webkit/hero-band",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/chip",
  "treeShakeableImport": "@aziontech/webkit/chip",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

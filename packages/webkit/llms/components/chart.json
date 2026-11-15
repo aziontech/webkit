@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/chart",
  "treeShakeableImport": "@aziontech/webkit/chart-root",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

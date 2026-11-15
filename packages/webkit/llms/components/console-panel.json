@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/console-panel",
  "treeShakeableImport": "@aziontech/webkit/console-panel",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

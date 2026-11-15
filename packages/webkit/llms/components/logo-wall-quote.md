@@ -3,7 +3,7 @@
 > The customers band: a section title over a framed logo wall of linked client marks with one signed quote in its aside, closed by a call to action. It is a page section — the site places it from a `{ _id: 'logo-wall-quote', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `logo-wall`, `quote` and `button`.
 
 - Import: `import LogoWallQuote from '@aziontech/webkit/logo-wall-quote'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [logo-wall-quote.json](https://github.com/aziontech/webkit/blob/main/.specs/logo-wall-quote.json)
 
 ## When to use

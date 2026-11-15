@@ -3,7 +3,7 @@
 > The titled card-carousel band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row. It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`kind="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `overline`, and owns only the card's inner layout.
 
 - Import: `import CardCarousel from '@aziontech/webkit/card-carousel'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [card-carousel.json](https://github.com/aziontech/webkit/blob/main/.specs/card-carousel.json)
 
 ## When to use

@@ -3,7 +3,7 @@
 > The framed content column: a centered, width-capped block carrying only its two vertical rules, which every section below a hero stacks inside. It is the middle layer of the page language — the hero above it owns the page's top rule, the footer below it owns the bottom, and this column owns the sides — so a page's frame is drawn once, by three components, instead of by every band that happens to need an edge.
 
 - Import: `import SectionContainer from '@aziontech/webkit/section-container'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [section-container.json](https://github.com/aziontech/webkit/blob/main/.specs/section-container.json)
 
 ## When to use

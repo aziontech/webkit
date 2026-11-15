@@ -3,7 +3,7 @@
 > A testimonial band a reader browses by client: the selected client's quotation featured at the top in the client's own colours, and a wall of client cards below it that is the selector itself — clicking a card brings that client's quotation in. It is the band a page reaches for when several customers have one strong sentence each and only one of them should be read at a time. The band owns the selection and nothing else. The featured quotation is `quote` in its `highlight` register, and every card is the same framed cell `logo-wall` draws, so a quotation and a client card look the same here as everywhere else on the page. The quotation travels sideways in the direction of the choice — a card later in the wall brings its quotation in from the right, an earlier one from the left — so the reader feels the wall as a sequence. Left alone it moves through the clients on its own, the way `media-tabs` does: a hairline along the panel's bottom edge fills toward the next client, and the band holds still while the reader points at it or works it from the keyboard.
 
 - Import: `import QuoteTabs from '@aziontech/webkit/quote-tabs'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [quote-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/quote-tabs.json)
 
 ## When to use

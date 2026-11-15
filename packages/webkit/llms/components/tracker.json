@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/tracker",
  "treeShakeableImport": "@aziontech/webkit/tracker",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

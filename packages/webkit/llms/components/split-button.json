@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/split-button",
  "treeShakeableImport": "@aziontech/webkit/split-button",
  "category": "actions",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

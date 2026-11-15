@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/media-tile",
  "treeShakeableImport": "@aziontech/webkit/media-tile",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

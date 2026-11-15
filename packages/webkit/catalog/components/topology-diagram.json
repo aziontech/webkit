@@ -13,7 +13,7 @@
   "flow` — the connector engine and anchors this component reuses.",
   "tree` — hierarchical data without connectors.",
   "dropdown-menu` — the bind control's menu.",
-  "platform/detail/details-page` — the page whose topology tab holds it."
+  "detail/resource-detail` — the page whose topology tab holds it."
  ],
  "bestPractices": [
   "Keep a column per depth and put the nodes that serve in parallel in the same column.",

@@ -4,7 +4,7 @@
 
 - Import: `import PopoverRoot from '@aziontech/webkit/popover-root'`
 - Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/webkit/popover'`
-- Category: overlay · Surface: product · Structure: composition
+- Category: overlay · Surface: app · Structure: composition
 - API as JSON: [popover.json](https://github.com/aziontech/webkit/blob/main/.specs/popover.json)
 
 ## When to use
@@ -92,7 +92,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`ai ai-times`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
+- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`ai ai-x`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
   - Props: _none_.
   - Events: _none_ (root handles `update:open`).
   - Slots: _none_.
@@ -188,7 +188,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 <template>
   <div
-    class="grid grid-cols-2 gap-(--spacing-xxl) place-items-center min-h-[24rem] p-(--spacing-xxl)"
+    class="grid grid-cols-2 gap-(--spacing-2xl) place-items-center min-h-[24rem] p-(--spacing-2xl)"
   >
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>

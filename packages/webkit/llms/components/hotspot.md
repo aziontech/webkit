@@ -3,7 +3,7 @@
 > Marks a real control as a step of a tutorial. It wraps the control and, while a tutorial that names its `hotspotId` runs, draws a small marker beside it. The current step's marker pulses and opens the step in a popover: the step's title, `Step n of N` with the task's name, the instructions, and Previous / Next (Finish on the last step). Outside a running tutorial, or outside a `TutorialPanel.Provider`, it renders only the wrapped control, so hotspots can stay on a page for good.
 
 - Import: `import Hotspot from '@aziontech/webkit/hotspot'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [hotspot.json](https://github.com/aziontech/webkit/blob/main/.specs/hotspot.json)
 
 ## When to use

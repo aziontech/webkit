@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/quote-tabs",
  "treeShakeableImport": "@aziontech/webkit/quote-tabs",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

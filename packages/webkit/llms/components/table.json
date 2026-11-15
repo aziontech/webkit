@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/table",
  "treeShakeableImport": "@aziontech/webkit/table-root",
  "category": "data",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

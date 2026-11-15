@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/feedback-reason-dialog",
  "treeShakeableImport": "@aziontech/webkit/feedback-reason-dialog",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

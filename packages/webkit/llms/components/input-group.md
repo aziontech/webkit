@@ -4,7 +4,7 @@
 
 - Import: `import InputGroupRoot from '@aziontech/webkit/input-group-root'`
 - Compound import (dot notation, not tree-shakeable): `import InputGroup from '@aziontech/webkit/input-group'`
-- Category: inputs · Surface: product · Structure: composition
+- Category: inputs · Surface: app · Structure: composition
 - API as JSON: [input-group.json](https://github.com/aziontech/webkit/blob/main/.specs/input-group.json)
 
 ## When to use
@@ -91,8 +91,8 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 - Focus-within: 2-ring at `var(--ring-color)` with `var(--bg-canvas)` offset (suppressed when `data-disabled`)
 - Disabled: `bg-(--bg-disabled)`, `text-(--text-disabled)`, `cursor-not-allowed`, hover ignored, focus-within ring suppressed
 - Child seams (applied by the root via Tailwind child selectors):
-  - `[&>*:first-child]:rounded-l-(--shape-elements)` and `[&>*:not(:first-child)]:rounded-l-none`
-  - `[&>*:last-child]:rounded-r-(--shape-elements)` and `[&>*:not(:last-child)]:rounded-r-none`
+  - `[&>*:first-child]:rounded-l-(--shape-control)` and `[&>*:not(:first-child)]:rounded-l-none`
+  - `[&>*:last-child]:rounded-r-(--shape-control)` and `[&>*:not(:last-child)]:rounded-r-none`
   - `[&>*:not(:last-child)]:border-r-(color:--border-default) [&>*:not(:last-child)]:border-r` — a single vertical seam between adjacent children, drawn on the left child so child components keep their own left border intact
   - Child components' own outer borders remain — the root's outer border sits on top, so double lines are avoided by the child selector removing the _inner-facing_ border only
 

@@ -4,7 +4,7 @@
 
 - Import: `import MultiSelectRoot from '@aziontech/webkit/multi-select-root'`
 - Compound import (dot notation, not tree-shakeable): `import MultiSelect from '@aziontech/webkit/multi-select'`
-- Category: inputs · Surface: product · Structure: composition
+- Category: inputs · Surface: app · Structure: composition
 - API as JSON: [multi-select.json](https://github.com/aziontech/webkit/blob/main/.specs/multi-select.json)
 
 ## When to use

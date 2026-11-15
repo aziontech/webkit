@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/button-highlight",
  "treeShakeableImport": "@aziontech/webkit/button-highlight",
  "category": "actions",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

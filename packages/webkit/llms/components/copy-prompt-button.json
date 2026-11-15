@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/copy-prompt-button",
  "treeShakeableImport": "@aziontech/webkit/copy-prompt-button",
  "category": "actions",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/webkit-provider",
  "treeShakeableImport": "@aziontech/webkit/webkit-provider",
  "category": "utils",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

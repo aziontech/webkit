@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/section-header",
  "treeShakeableImport": "@aziontech/webkit/section-header",
  "category": "layout",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

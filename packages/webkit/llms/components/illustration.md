@@ -3,7 +3,7 @@
 > Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package. `name` selects a scene from a closed registry; there is no way to assemble artwork out of markup, so a page can only render illustrations design has actually signed off, and a scene can never drift between the screens that use it. The library is drawn once, in dark mode. The scene is drawn into the page as inline SVG and every colour it carries is repainted from the `illustration` theme foundation of `@aziontech/theme` — `--illustration-*` roles that alias the global tokens — so the one export follows light and dark like the rest of the page.
 
 - Import: `import Illustration from '@aziontech/webkit/illustration'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [illustration.json](https://github.com/aziontech/webkit/blob/main/.specs/illustration.json)
 
 ## When to use

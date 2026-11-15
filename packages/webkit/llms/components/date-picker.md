@@ -4,7 +4,7 @@
 
 - Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
 - Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
-- Category: inputs · Surface: product · Structure: composition
+- Category: inputs · Surface: app · Structure: composition
 - API as JSON: [date-picker.json](https://github.com/aziontech/webkit/blob/main/.specs/date-picker.json)
 
 ## When to use

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/map-chart",
  "treeShakeableImport": "@aziontech/webkit/map-chart",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

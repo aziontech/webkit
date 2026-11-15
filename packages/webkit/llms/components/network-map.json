@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/network-map",
  "treeShakeableImport": "@aziontech/webkit/network-map",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

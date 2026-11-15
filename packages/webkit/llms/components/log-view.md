@@ -4,7 +4,7 @@
 
 - Import: `import LogViewRoot from '@aziontech/webkit/log-view-root'`
 - Compound import (dot notation, not tree-shakeable): `import LogView from '@aziontech/webkit/log-view'`
-- Category: code · Surface: product · Structure: composition
+- Category: code · Surface: app · Structure: composition
 - API as JSON: [log-view.json](https://github.com/aziontech/webkit/blob/main/.specs/log-view.json)
 
 ## When to use

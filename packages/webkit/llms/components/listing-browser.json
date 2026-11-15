@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/listing-browser",
  "treeShakeableImport": "@aziontech/webkit/listing-browser",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

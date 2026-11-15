@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/line-figure",
  "treeShakeableImport": "@aziontech/webkit/line-figure",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

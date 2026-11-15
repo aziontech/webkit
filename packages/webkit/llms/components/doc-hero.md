@@ -1,6 +1,6 @@
 # Doc Hero
 
-> The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-xxl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
+> The masthead of a documentation home: a display-size `h1`, a deck capped at a readable measure, an action row (the primary `Get started`, then `CopyPromptButton`) and one muted note under it that says what the prompt does. It carries the air the home needs — `--spacing-2xl` above and below, `--spacing-xl` between the deck and the actions — so the front door reads as a front door and not as one more article. An article page uses `DocPageHeader` instead.
 
 - Import: `import DocHero from '@aziontech/webkit/doc-hero'`
 - Category: documentation · Surface: docs · Structure: monolithic
@@ -9,7 +9,7 @@
 ## When to use
 
 - Use DocHero only on the documentation home; marketing page openings use HeroBand.
-- The top of a documentation home or a docs section landing (`shells/documentation`, variant `Landing`).
+- The top of a documentation home or a docs section landing (`shell/docs`, variant `Landing`).
 
 ## Do
 
@@ -70,7 +70,7 @@
 
 ## Responsive
 
-- The title steps 30 → 36 → 48 px with `.text-heading-2xl`; the top space is `--spacing-xl` on a phone and `--spacing-xxl` from `sm`.
+- The title steps 30 → 36 → 48 px with `.text-heading-2xl`; the top space is `--spacing-xl` on a phone and `--spacing-2xl` from `sm`.
 - The action row wraps; at 390 px `CopyPromptButton` drops under `Get started`.
 - Reflow: no horizontal scroll at 320 px.
 

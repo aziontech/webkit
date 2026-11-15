@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/panel",
  "treeShakeableImport": "@aziontech/webkit/panel-root",
  "category": "overlay",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

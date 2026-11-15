@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/spark-chart",
  "treeShakeableImport": "@aziontech/webkit/spark-chart",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

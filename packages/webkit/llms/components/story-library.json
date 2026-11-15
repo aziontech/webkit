@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/story-library",
  "treeShakeableImport": "@aziontech/webkit/story-library",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

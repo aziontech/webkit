@@ -3,7 +3,7 @@
 > Use Tracker for the history of a state across periods (an uptime strip); the current state of one resource is a StatusIndicator. A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.
 
 - Import: `import Tracker from '@aziontech/webkit/tracker'`
-- Category: chart · Surface: product · Structure: monolithic
+- Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [tracker.json](https://github.com/aziontech/webkit/blob/main/.specs/tracker.json)
 
 ## When to use

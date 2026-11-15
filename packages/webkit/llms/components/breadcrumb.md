@@ -4,7 +4,7 @@
 
 - Import: `import BreadcrumbRoot from '@aziontech/webkit/breadcrumb-root'`
 - Compound import (dot notation, not tree-shakeable): `import Breadcrumb from '@aziontech/webkit/breadcrumb'`
-- Category: navigation · Surface: product · Structure: composition
+- Category: navigation · Surface: app · Structure: composition
 - API as JSON: [breadcrumb.json](https://github.com/aziontech/webkit/blob/main/.specs/breadcrumb.json)
 
 ## When to use

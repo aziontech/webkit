@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.3): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -13,8 +13,8 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Typography](foundations/typography.md): The generated typography classes: font, size, line height and tracking in one class.
 - [Spacing and layout](foundations/spacing.md): Page levels, the five measures, the two rhythm steps and the spacing scale.
 - [Motion](foundations/motion.md): The catalogued animate-* utilities, their timing, when to use each, and reduced motion.
-- [Languages (i18n)](foundations/i18n.md): Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.
-- [Right-to-left](foundations/rtl.md): Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.
+- [Languages (internationalization)](foundations/internationalization.md): Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.
+- [Right-to-left](foundations/right-to-left.md): Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.
 - [Devices](foundations/devices.md): Viewport breakpoints for the shell, container queries for the content, touch targets and reflow at 320 px.
 - [Accessibility](foundations/accessibility.md): WCAG 2.1 AA rules every component and screen follows: names, focus, keyboard, contrast, motion.
 - [Using WebKit in an app](foundations/usage.md): Start from a block, find a component, import it tree-shakeably, app-level setup and the quality checklist.
@@ -24,86 +24,113 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Brand marks](foundations/brand-marks.md): Client, analyst and framework marks drawn as theme-aware SVG.
 - [Icons](foundations/icons.md): Every icon class of `@aziontech/icons` with search keywords.
 
-## Blocks: Platform
+## Blocks: Account
 
-- [ActivityHistory (platform/account/activity-history)](blocks/platform/account/activity-history.md): The account's audit log.
-- [Billing (platform/account/billing)](blocks/platform/account/billing.md): What the account pays, what it paid and which card it is charged to.
-- [Build and deployment (platform/account/build-deployment)](blocks/platform/account/build-deployment.md): How every deploy in the account routes.
-- [ChangePlanDrawer (platform/account/change-plan-drawer)](blocks/platform/account/change-plan-drawer.md): The drawer the Billing page opens from its Subscription Plan card.
-- [ManageResources (platform/account/manage-resources)](blocks/platform/account/manage-resources.md): Where an account admin arranges the account's hierarchy.
-- [MfaManagement (platform/account/mfa-management)](blocks/platform/account/mfa-management.md): Multi-factor authentication for a whole account.
-- [OnboardingForm (platform/account/onboarding-form)](blocks/platform/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
-- [PaymentMethodCard (platform/account/payment-method-card)](blocks/platform/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
-- [TeamPermissions (platform/account/team-permissions)](blocks/platform/account/team-permissions.md): Who can do what in the account.
-- [Tokens (platform/account/tokens)](blocks/platform/account/tokens.md): The Personal tokens page of the account settings.
-- [Users (platform/account/users)](blocks/platform/account/users.md): Who can sign in to the account, with which role and through which teams.
-- [AiActionApproval (platform/ai/ai-action-approval)](blocks/platform/ai/ai-action-approval.md): The moment an assistant needs permission.
-- [AiChat (platform/ai/ai-chat)](blocks/platform/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
-- [AiChatDrawer (platform/ai/ai-chat-drawer)](blocks/platform/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
-- [Auth (platform/auth)](blocks/platform/auth.md): The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included.
-- [CreateHub (platform/create/create-hub)](blocks/platform/create/create-hub.md): The Creation Center, where a new project starts.
-- [CreateInDrawer (platform/create/create-in-drawer)](blocks/platform/create/create-in-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
-- [DeployDrawer (platform/create/deploy-drawer)](blocks/platform/create/deploy-drawer.md): The drawer a platform deploys from, opened by Deploy on a service or a project.
-- [DeployProgressDialog (platform/create/deploy-progress-dialog)](blocks/platform/create/deploy-progress-dialog.md): The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it.
-- [DeploySuccess (platform/create/deploy-success)](blocks/platform/create/deploy-success.md): The screen a create flow ends on.
-- [DeployTemplate (platform/create/deploy-template)](blocks/platform/create/deploy-template.md): A focused page, outside the console shell, where the user turns a template into a running project.
-- [MultipageCreate (platform/create/multipage-create)](blocks/platform/create/multipage-create.md): The page a first-level resource is created on one step at a time.
-- [ReleaseImpact (platform/create/release-impact)](blocks/platform/create/release-impact.md): The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference.
-- [ResourcePicker (platform/create/resource-picker)](blocks/platform/create/resource-picker.md): The band a create flow uses when the resource being created needs another resource that may already exist.
-- [SinglePageCreate (platform/create/single-page-create)](blocks/platform/create/single-page-create.md): The page a first-level resource is created on when everything it needs fits on one screen.
-- [AlertsDashboard (platform/dashboard/alerts-dashboard)](blocks/platform/dashboard/alerts-dashboard.md): The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved.
-- [AnalyticsDashboard (platform/dashboard/analytics-dashboard)](blocks/platform/dashboard/analytics-dashboard.md): The page a developer or operator opens to see how much traffic their services handled and how well they handled it: requests, data transferred, success rate and server errors for the period, then the charts and the ta…
-- [CompositionDashboard (platform/dashboard/composition-dashboard)](blocks/platform/dashboard/composition-dashboard.md): The page that answers "what is this total made of, and how did the mix move?".
-- [ConfigurableDashboard (platform/dashboard/configurable-dashboard)](blocks/platform/dashboard/configurable-dashboard.md): A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout.
-- [DashboardSwitcher (platform/dashboard/dashboard-switcher)](blocks/platform/dashboard/dashboard-switcher.md): The dashboards hub.
-- [ExecutiveSummaryDashboard (platform/dashboard/executive-summary-dashboard)](blocks/platform/dashboard/executive-summary-dashboard.md): The one page a lead reads to see how the quarter went: the headline results against last quarter, the twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when they reviewe…
-- [HealthScoreDashboard (platform/dashboard/health-score-dashboard)](blocks/platform/dashboard/health-score-dashboard.md): The page that answers "how well does this work for the people who use it, and where is it worst?".
-- [HomeDashboard (platform/dashboard/home-dashboard)](blocks/platform/dashboard/home-dashboard.md): The Console's Home page: the first screen a signed-in user lands on.
-- [ScanResultsDashboard (platform/dashboard/scan-results-dashboard)](blocks/platform/dashboard/scan-results-dashboard.md): The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict.
-- [SecurityDashboard (platform/dashboard/security-dashboard)](blocks/platform/dashboard/security-dashboard.md): The page a reader opens to see what their security rules are doing: how many requests were blocked and inspected, how blocking moved over time, which attack categories and countries it came from, which source addresse…
-- [ServiceMonitoringDashboard (platform/dashboard/service-monitoring-dashboard)](blocks/platform/dashboard/service-monitoring-dashboard.md): The page an on-call engineer keeps open: is every service up, how fast is it answering, how many requests fail, and which alerts are open right now.
-- [DeleteWithConfirmation (platform/delete/delete-with-confirmation)](blocks/platform/delete/delete-with-confirmation.md): The last stop before a resource is gone for good.
-- [AttachedResources (platform/detail/attached-resources)](blocks/platform/detail/attached-resources.md): A short list of the things one resource is attached to, shown in place inside its Settings tab.
-- [DeploymentLogs (platform/detail/deployment-logs)](blocks/platform/detail/deployment-logs.md): The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why.
-- [DetailsPage (platform/detail/details-page)](blocks/platform/detail/details-page.md): The second-level page of one resource.
-- [GetStarted (platform/detail/get-started)](blocks/platform/detail/get-started.md): The first thing a user reads about a resource they created from the CLI and have not deployed yet.
-- [Invocations (platform/detail/invocations)](blocks/platform/detail/invocations.md): The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print.
-- [ProductionChecklist (platform/detail/production-checklist)](blocks/platform/detail/production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
-- [RecordTable (platform/detail/record-table)](blocks/platform/detail/record-table.md): The detail page of a resource that owns a long list of records, here a DNS zone.
-- [SectionedResource (platform/detail/sectioned-resource)](blocks/platform/detail/sectioned-resource.md): The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application.
-- [VersionDetail (platform/detail/version-detail)](blocks/platform/detail/version-detail.md): One version of a resource, opened from its Versions tab.
-- [EditResource (platform/edit/edit-resource)](blocks/platform/edit/edit-resource.md): The settings page of one existing resource.
-- [FunctionEditor (platform/edit/function-editor)](blocks/platform/edit/function-editor.md): The editing page of a service whose behavior lives in source code.
-- [RuleBuilder (platform/edit/rule-builder)](blocks/platform/edit/rule-builder.md): A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match.
-- [SchemaEditor (platform/edit/schema-editor)](blocks/platform/edit/schema-editor.md): The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it.
-- [Variables (platform/edit/variables)](blocks/platform/edit/variables.md): A list of key and value pairs and the drawer that edits them, here environment variables.
-- [SettingsForm (platform/settings/settings-form)](blocks/platform/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
-- [AsyncSubmit (platform/states/async-submit)](blocks/platform/states/async-submit.md): The async-action pattern, and the standard for every build and deploy screen.
-- [FirstUse (platform/states/first-use)](blocks/platform/states/first-use.md): What a first-level list shows before the account owns any resource of that kind.
-- [FormValidation (platform/states/form-validation)](blocks/platform/states/form-validation.md): Every state a submit can land in, on one create form.
-- [NotFound (platform/states/not-found)](blocks/platform/states/not-found.md): The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500).
-- [PageWires (platform/states/page-wires)](blocks/platform/states/page-wires.md): The skeleton wires an app paints while a page is still arriving.
-- [ProjectIntake (platform/states/project-intake)](blocks/platform/states/project-intake.md): The surfaces a project passes through when the user drops it on the page.
-- [CardView (platform/view/card-view)](blocks/platform/view/card-view.md): The first-level index of one resource type, in cards.
-- [FileBrowser (platform/view/file-browser)](blocks/platform/view/file-browser.md): The contents of one storage resource.
-- [Marketplace (platform/view/marketplace)](blocks/platform/view/marketplace.md): The page where people find something made by Azion or a partner and add it to what they run.
-- [QueryEditor (platform/view/query-editor)](blocks/platform/view/query-editor.md): The workspace of one SQL database.
-- [RulesList (platform/view/rules-list)](blocks/platform/view/rules-list.md): An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only).
-- [SplitView (platform/view/split-view)](blocks/platform/view/split-view.md): The events explorer.
-- [TableView (platform/view/table-view)](blocks/platform/view/table-view.md): The first-level index of one resource type, in rows.
-- [TemplateBrowser (platform/view/template-browser)](blocks/platform/view/template-browser.md): The catalog of templates a person starts a project from.
-- [WafTuning (platform/view/waf-tuning)](blocks/platform/view/waf-tuning.md): The Tuning tab of a WAF rule set.
+- [AccountHierarchy (account/account-hierarchy)](blocks/account/account-hierarchy.md): Where an account admin arranges the account's hierarchy.
+- [ActivityHistory (account/activity-history)](blocks/account/activity-history.md): The account's audit log.
+- [Billing (account/billing)](blocks/account/billing.md): What the account pays, what it paid and which card it is charged to.
+- [ChangePlanDrawer (account/change-plan-drawer)](blocks/account/change-plan-drawer.md): The drawer the Billing page opens from its Subscription Plan card.
+- [DeploymentSettings (account/deployment-settings)](blocks/account/deployment-settings.md): How every deploy in the account routes.
+- [MfaSettings (account/mfa-settings)](blocks/account/mfa-settings.md): Multi-factor authentication for a whole account.
+- [OnboardingForm (account/onboarding-form)](blocks/account/onboarding-form.md): The `/signup/onboarding` screen, frame included.
+- [PaymentMethodCard (account/payment-method-card)](blocks/account/payment-method-card.md): The Payment method card of the Upgrade to Pro drawer.
+- [PersonalTokens (account/personal-tokens)](blocks/account/personal-tokens.md): The Personal tokens page of the account settings.
+- [TeamPermissions (account/team-permissions)](blocks/account/team-permissions.md): Who can do what in the account.
+- [Users (account/users)](blocks/account/users.md): Who can sign in to the account, with which role and through which teams.
 
-## Blocks: Shells
+## Blocks: Ai
 
-- [Console (shells/console)](blocks/shells/console.md): The application shell every signed-in page renders inside.
-- [Documentation (shells/documentation)](blocks/shells/documentation.md): The documentation shell.
-- [Website (shells/website)](blocks/shells/website.md): The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer clos…
+- [AiActionApproval (ai/ai-action-approval)](blocks/ai/ai-action-approval.md): The moment an assistant needs permission.
+- [AiChat (ai/ai-chat)](blocks/ai/ai-chat.md): A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question.
+- [AiChatDrawer (ai/ai-chat-drawer)](blocks/ai/ai-chat-drawer.md): The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page.
 
-## Blocks: Top Bars
+## Blocks: Auth
 
-- [AuthBar (top-bars/auth-bar)](blocks/top-bars/auth-bar.md): The top bar of every signed-out and first-run screen: sign in, sign up, password recovery and the onboarding steps.
-- [CreationBar (top-bars/creation-bar)](blocks/top-bars/creation-bar.md): The top bar of the focused creation shell: create, edit and deploy flows that run without the navigation rail.
+- [SignIn (auth/sign-in)](blocks/auth/sign-in.md): The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included.
+
+## Blocks: Create
+
+- [CreateDrawer (create/create-drawer)](blocks/create/create-drawer.md): The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule.
+- [CreateHub (create/create-hub)](blocks/create/create-hub.md): The Creation Center, where a new project starts.
+- [CreatePage (create/create-page)](blocks/create/create-page.md): The page a first-level resource is created on when everything it needs fits on one screen.
+- [CreateWizard (create/create-wizard)](blocks/create/create-wizard.md): The page a first-level resource is created on one step at a time.
+- [DeployDrawer (create/deploy-drawer)](blocks/create/deploy-drawer.md): The drawer a platform deploys from, opened by Deploy on a service or a project.
+- [DeployProgressDialog (create/deploy-progress-dialog)](blocks/create/deploy-progress-dialog.md): The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it.
+- [DeploySuccess (create/deploy-success)](blocks/create/deploy-success.md): The screen a create flow ends on.
+- [DeployTemplate (create/deploy-template)](blocks/create/deploy-template.md): A focused page, outside the console shell, where the user turns a template into a running project.
+- [ReleaseImpact (create/release-impact)](blocks/create/release-impact.md): The Review and deploy page of a release that carries several resources at once: a service, the policy in front of it, its storage, its error page and every dependency they reference.
+- [ResourcePicker (create/resource-picker)](blocks/create/resource-picker.md): The band a create flow uses when the resource being created needs another resource that may already exist.
+
+## Blocks: Dashboard
+
+- [AlertsDashboard (dashboard/alerts-dashboard)](blocks/dashboard/alerts-dashboard.md): The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved.
+- [AnalyticsDashboard (dashboard/analytics-dashboard)](blocks/dashboard/analytics-dashboard.md): The page a developer or operator opens to see how much traffic their services handled and how well they handled it: requests, data transferred, success rate and server errors for the period, then the charts and the ta…
+- [BreakdownDashboard (dashboard/breakdown-dashboard)](blocks/dashboard/breakdown-dashboard.md): The page that answers "what is this total made of, and how did the mix move?".
+- [ConfigurableDashboard (dashboard/configurable-dashboard)](blocks/dashboard/configurable-dashboard.md): A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout.
+- [DashboardSwitcher (dashboard/dashboard-switcher)](blocks/dashboard/dashboard-switcher.md): The dashboards hub.
+- [ExecutiveSummaryDashboard (dashboard/executive-summary-dashboard)](blocks/dashboard/executive-summary-dashboard.md): The one page a lead reads to see how the quarter went: the headline results against last quarter, the twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when they reviewe…
+- [HealthScoreDashboard (dashboard/health-score-dashboard)](blocks/dashboard/health-score-dashboard.md): The page that answers "how well does this work for the people who use it, and where is it worst?".
+- [HomeDashboard (dashboard/home-dashboard)](blocks/dashboard/home-dashboard.md): The Console's Home page: the first screen a signed-in user lands on.
+- [ScanResultsDashboard (dashboard/scan-results-dashboard)](blocks/dashboard/scan-results-dashboard.md): The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict.
+- [SecurityDashboard (dashboard/security-dashboard)](blocks/dashboard/security-dashboard.md): The page a reader opens to see what their security rules are doing: how many requests were blocked and inspected, how blocking moved over time, which attack categories and countries it came from, which source addresse…
+- [ServiceMonitoringDashboard (dashboard/service-monitoring-dashboard)](blocks/dashboard/service-monitoring-dashboard.md): The page an on-call engineer keeps open: is every service up, how fast is it answering, how many requests fail, and which alerts are open right now.
+
+## Blocks: Detail
+
+- [AttachedResources (detail/attached-resources)](blocks/detail/attached-resources.md): A short list of the things one resource is attached to, shown in place inside its Settings tab.
+- [DeploymentLogs (detail/deployment-logs)](blocks/detail/deployment-logs.md): The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why.
+- [DnsZoneDetail (detail/dns-zone-detail)](blocks/detail/dns-zone-detail.md): The detail page of a resource that owns a long list of records, here a DNS zone.
+- [GetStarted (detail/get-started)](blocks/detail/get-started.md): The first thing a user reads about a resource they created from the CLI and have not deployed yet.
+- [Invocations (detail/invocations)](blocks/detail/invocations.md): The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print.
+- [ProductionChecklist (detail/production-checklist)](blocks/detail/production-checklist.md): A service that is live on its generated hostname is not yet ready for real traffic.
+- [ResourceDetail (detail/resource-detail)](blocks/detail/resource-detail.md): The second-level page of one resource.
+- [SectionedResource (detail/sectioned-resource)](blocks/detail/sectioned-resource.md): The page of one resource whose tab holds more sibling pages than a tab row can carry: the rules of a policy, the records of a zone, the settings of one application.
+- [VersionDetail (detail/version-detail)](blocks/detail/version-detail.md): One version of a resource, opened from its Versions tab.
+
+## Blocks: Edit
+
+- [DeleteDialog (edit/delete-dialog)](blocks/edit/delete-dialog.md): The last stop before a resource is gone for good.
+- [EditResource (edit/edit-resource)](blocks/edit/edit-resource.md): The settings page of one existing resource.
+- [FunctionEditor (edit/function-editor)](blocks/edit/function-editor.md): The editing page of a service whose behavior lives in source code.
+- [RuleBuilder (edit/rule-builder)](blocks/edit/rule-builder.md): A drawer where the user writes one rule of a rules engine: when it runs (the phase), the conditions that decide whether it applies, and the ordered behaviors it performs when they match.
+- [SchemaEditor (edit/schema-editor)](blocks/edit/schema-editor.md): The table schema of a SQL database: the definition of one table and the drawers and dialogs that change it.
+- [Variables (edit/variables)](blocks/edit/variables.md): A list of key and value pairs and the drawer that edits them, here environment variables.
+
+## Blocks: Settings
+
+- [SettingsForm (settings/settings-form)](blocks/settings/settings-form.md): The place the user goes to change how an account or a project behaves.
+
+## Blocks: Shell
+
+- [Console (shell/console)](blocks/shell/console.md): The application shell every signed-in page renders inside.
+- [Docs (shell/docs)](blocks/shell/docs.md): The documentation shell.
+- [Site (shell/site)](blocks/shell/site.md): The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer clos…
+
+## Blocks: State
+
+- [AsyncSubmit (state/async-submit)](blocks/state/async-submit.md): The async-action pattern, and the standard for every build and deploy screen.
+- [FirstUse (state/first-use)](blocks/state/first-use.md): What a first-level list shows before the account owns any resource of that kind.
+- [FormValidation (state/form-validation)](blocks/state/form-validation.md): Every state a submit can land in, on one create form.
+- [NotFound (state/not-found)](blocks/state/not-found.md): The page an app renders when it cannot show the address the user asked for: the address leads nowhere (404), the user may not see it (403), or the server failed to build it (500).
+- [PageSkeleton (state/page-skeleton)](blocks/state/page-skeleton.md): The skeleton wires an app paints while a page is still arriving.
+- [ProjectIntake (state/project-intake)](blocks/state/project-intake.md): The surfaces a project passes through when the user drops it on the page.
+
+## Blocks: Top Bar
+
+- [AuthBar (top-bar/auth-bar)](blocks/top-bar/auth-bar.md): The top bar of every signed-out and first-run screen: sign in, sign up, password recovery and the onboarding steps.
+- [CreationBar (top-bar/creation-bar)](blocks/top-bar/creation-bar.md): The top bar of the focused creation shell: create, edit and deploy flows that run without the navigation rail.
+
+## Blocks: View
+
+- [CardView (view/card-view)](blocks/view/card-view.md): The first-level index of one resource type, in cards.
+- [FileBrowser (view/file-browser)](blocks/view/file-browser.md): The contents of one storage resource.
+- [Marketplace (view/marketplace)](blocks/view/marketplace.md): The page where people find something made by Azion or a partner and add it to what they run.
+- [QueryEditor (view/query-editor)](blocks/view/query-editor.md): The workspace of one SQL database.
+- [RuleList (view/rule-list)](blocks/view/rule-list.md): An ordered list of rules grouped by phase: the Rules tab of an application (Request and Response phases) or a firewall (Request only).
+- [SplitView (view/split-view)](blocks/view/split-view.md): The events explorer.
+- [TableView (view/table-view)](blocks/view/table-view.md): The first-level index of one resource type, in rows.
+- [TemplateBrowser (view/template-browser)](blocks/view/template-browser.md): The catalog of templates a person starts a project from.
+- [WafTuning (view/waf-tuning)](blocks/view/waf-tuning.md): The Tuning tab of a WAF rule set.
 
 ## Components: Actions
 
@@ -254,7 +281,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [FileDropzone](components/file-dropzone.md): A FileDropzone is the target a user drags files from the operating system onto.
 - [FileTokenGroup](components/file-token-group.md): Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress.
 - [HelperText](components/helper-text.md): Auxiliary text rendered below a form input to communicate guidance (`helper`), validation errors (`invalid`), required-field reminders (`required`), or a locked/disabled state (`disabled`).
-- [Hint](components/hint.md): Small info affordance — a muted `ai ai-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
+- [Hint](components/hint.md): Small info affordance — a muted `ai ai-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`.
 - [Input](components/input.md): Single-line text input for forms and inline editing.
 - [InputGroup](components/input-group.md): Composition container that joins an input primitive with any number of adjacent controls (buttons, selects, static addons) into a single visual field — the webkit analogue of PrimeVue's `InputGroup`.
 - [MultiSelect](components/multi-select.md): Select control specialised for choosing many options from a list.

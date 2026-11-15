@@ -3,7 +3,7 @@
 > ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment. It renders as a `radiogroup` whose segments are `radio` buttons, is driven by an `options` array plus `v-model`, and works uncontrolled through `defaultValue`. It differs from `tabs`, which switches between content panels it owns: a segmented button only holds the chosen value and leaves rendering what that value means to the consumer.
 
 - Import: `import ToggleGroup from '@aziontech/webkit/toggle-group'`
-- Category: actions · Surface: product · Structure: monolithic
+- Category: actions · Surface: app · Structure: monolithic
 - API as JSON: [toggle-group.json](https://github.com/aziontech/webkit/blob/main/.specs/toggle-group.json)
 
 ## When to use

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/client-mosaic-columns",
  "treeShakeableImport": "@aziontech/webkit/client-mosaic-columns",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -3,7 +3,7 @@
 > The "what teams use it for" band of a product page: a three-column frame whose first cell carries the band's overline, headline, lead and one call to action, followed by one cell per use case. It is a page section — the site places it from a `{ _id: 'use-cases', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `card-grid`, `frame-box`, `overline`, `topic` and `button` rather than owning any anatomy of its own.
 
 - Import: `import UseCases from '@aziontech/webkit/use-cases'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [use-cases.json](https://github.com/aziontech/webkit/blob/main/.specs/use-cases.json)
 
 ## When to use

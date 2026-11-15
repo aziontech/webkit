@@ -4,7 +4,7 @@
 
 - Import: `import KeyValuePairsRoot from '@aziontech/webkit/key-value-pairs-root'`
 - Compound import (dot notation, not tree-shakeable): `import KeyValuePairs from '@aziontech/webkit/key-value-pairs'`
-- Category: content · Surface: product · Structure: composition
+- Category: content · Surface: app · Structure: composition
 - API as JSON: [key-value-pairs.json](https://github.com/aziontech/webkit/blob/main/.specs/key-value-pairs.json)
 
 ## When to use

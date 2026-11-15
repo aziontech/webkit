@@ -4,7 +4,7 @@
 
 - Import: `import FooterRoot from '@aziontech/webkit/footer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Footer from '@aziontech/webkit/footer'`
-- Category: layout · Surface: product · Structure: composition
+- Category: layout · Surface: app · Structure: composition
 - API as JSON: [footer.json](https://github.com/aziontech/webkit/blob/main/.specs/footer.json)
 
 ## When to use
@@ -160,7 +160,7 @@
       <IconButton
         kind="transparent"
         size="small"
-        icon="ai ai-x"
+        icon="ai ai-x-brand"
         aria-label="Azion on X"
         href="https://x.com/aziontech"
         target="_blank"
@@ -299,7 +299,7 @@
       <IconButton
         kind="transparent"
         size="small"
-        icon="ai ai-x"
+        icon="ai ai-x-brand"
         aria-label="Azion on X"
         href="https://x.com/aziontech"
         target="_blank"

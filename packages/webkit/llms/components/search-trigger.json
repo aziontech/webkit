@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/search-trigger",
  "treeShakeableImport": "@aziontech/webkit/search-trigger",
  "category": "actions",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
@@ -30,7 +30,7 @@
  "bestPractices": [
   "Wire `@open` to the same state the shortcut opens (`<Command v-model:open=\"open\">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.",
   "Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=\"\"`) when no shortcut exists.",
-  "Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.",
+  "Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/require-header-search` lint rule flags both.",
   "With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.",
   "With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.",
   "Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.",
@@ -83,7 +83,7 @@
   },
   {
    "name": "Collapsible",
-   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      class=\"@container w-64 rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger collapsible />\n    </div>\n    <div\n      class=\"@container w-full max-w-3xl rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger\n        collapsible\n        label=\"Search docs\"\n      />\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      class=\"@container w-64 rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger collapsible />\n    </div>\n    <div\n      class=\"@container w-full max-w-3xl rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger\n        collapsible\n        label=\"Search docs\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Disabled",

@@ -3,7 +3,7 @@
 > A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit). The unsaved-changes guard uses the same shell; the `actions` slot replaces the two buttons when the guard can also save. Built from `Dialog`, `Panel` parts and `Button`.
 
 - Import: `import ConfirmDialog from '@aziontech/webkit/confirm-dialog'`
-- Category: overlay · Surface: product · Structure: monolithic
+- Category: overlay · Surface: app · Structure: monolithic
 - API as JSON: [confirm-dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/confirm-dialog.json)
 
 ## When to use

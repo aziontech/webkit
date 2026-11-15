@@ -1,9 +1,9 @@
 # Otp Input
 
-> The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete="one-time-code"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces six hand-wired text inputs with focus moves between them; the `platform/account/mfa-management` block uses it to set up and confirm an authenticator.
+> The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete="one-time-code"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces six hand-wired text inputs with focus moves between them; the `account/mfa-settings` block uses it to set up and confirm an authenticator.
 
 - Import: `import OtpInput from '@aziontech/webkit/otp-input'`
-- Category: inputs · Surface: product · Structure: monolithic
+- Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [otp-input.json](https://github.com/aziontech/webkit/blob/main/.specs/otp-input.json)
 
 ## When to use

@@ -3,7 +3,7 @@
 > A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
 
 - Import: `import ConsolePanel from '@aziontech/webkit/console-panel'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [console-panel.json](https://github.com/aziontech/webkit/blob/main/.specs/console-panel.json)
 
 ## When to use

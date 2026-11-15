@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/page-tabs",
  "treeShakeableImport": "@aziontech/webkit/page-tabs",
  "category": "navigation",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

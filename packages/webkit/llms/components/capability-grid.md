@@ -3,7 +3,7 @@
 > A framed grid of claims or links under an optional section title: each cell is a `Topic` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`. Use CapabilityGrid for any grid of claims or links on a marketing page; icons and per-item links are optional.
 
 - Import: `import CapabilityGrid from '@aziontech/webkit/capability-grid'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [capability-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/capability-grid.json)
 
 ## When to use

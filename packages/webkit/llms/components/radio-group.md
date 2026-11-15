@@ -4,7 +4,7 @@
 
 - Import: `import RadioGroupRoot from '@aziontech/webkit/radio-group-root'`
 - Compound import (dot notation, not tree-shakeable): `import RadioGroup from '@aziontech/webkit/radio-group'`
-- Category: inputs · Surface: product · Structure: composition
+- Category: inputs · Surface: app · Structure: composition
 - API as JSON: [radio-group.json](https://github.com/aziontech/webkit/blob/main/.specs/radio-group.json)
 
 ## When to use
@@ -93,7 +93,7 @@ packages/webkit/src/components/inputs/radio-group/
 - Visual states: `default`, `hover`, `focus-visible`, `checked`, `disabled`, `invalid`
 - Root: `role="radiogroup"`; `data-orientation` (`vertical` | `horizontal`); `data-kind` (`default` | `card`); `data-disabled`, `data-required` and `data-invalid` mirror the group state (the `Field` state included).
 - Item: `data-kind` mirrors the group's; `data-checked` while selected, `data-disabled` while the item or the group is disabled, `data-invalid` while the group is invalid. A card shows `var(--border-selected)` and `var(--primary-selected)` while checked, `var(--bg-hover)` on hover and the focus ring on the card itself.
-- The circle: `var(--border-input)` ring on `var(--bg-surface)`, `var(--primary)` when checked with a `var(--primary-contrast)` dot, `var(--danger-border)` when invalid, disabled tokens at 50 % opacity.
+- The circle: `var(--border-input)` ring on `var(--bg-surface)`, `var(--primary)` when checked with a `var(--primary-foreground)` dot, `var(--danger-border)` when invalid, disabled tokens at 50 % opacity.
 - Not states of this component: `loading`, `empty`, `error` (the `Field.Error` carries the message) and `readonly` (a fixed choice is plain text, not a disabled group).
 
 ## Accessibility

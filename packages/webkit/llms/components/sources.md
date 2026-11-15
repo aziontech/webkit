@@ -3,7 +3,7 @@
 > The list of sources a generative AI response drew on (Cloudscape's sources expandable section, AI Elements Sources): a disclosure titled `3 sources` that opens an ordered list — number, linked title, one-line description. Item `n` carries the id `<anchor>-source-<n>`, the target of the `[n]` citations `StreamingResponse` renders; following a citation opens the list and brings the item into view.
 
 - Import: `import Sources from '@aziontech/webkit/sources'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [sources.json](https://github.com/aziontech/webkit/blob/main/.specs/sources.json)
 
 ## When to use

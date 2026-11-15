@@ -3,7 +3,7 @@
 > A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws them as one path. It is for setup flows that hand a URI to a phone, first the `otpauth://` URI of an authenticator app in `auth#MfaSetup`, where it replaces the image the API returned and the framed placeholder of the demo. The code is always dark on a light plate (the plate pins the light theme), because several authenticator scanners do not read an inverted code.
 
 - Import: `import QrCode from '@aziontech/webkit/qr-code'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [qr-code.json](https://github.com/aziontech/webkit/blob/main/.specs/qr-code.json)
 
 ## When to use
@@ -92,7 +92,7 @@
       :value="uri"
       :aria-label="`QR code to add ${account} to an authenticator app`"
     />
-    <div class="flex flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
       <div class="flex items-center gap-(--spacing-xs)">
         <code

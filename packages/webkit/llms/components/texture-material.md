@@ -3,7 +3,7 @@
 > The one decorative surface every band in the system is painted on: a full-bleed, non-interactive layer that tiles a texture behind whatever sits above it. It is a material, not a container — it takes no content and claims no space, so a band composes it into its own backdrop slot and keeps ownership of its layout.
 
 - Import: `import TextureMaterial from '@aziontech/webkit/texture-material'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [texture-material.json](https://github.com/aziontech/webkit/blob/main/.specs/texture-material.json)
 
 ## When to use

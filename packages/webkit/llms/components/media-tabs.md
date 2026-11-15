@@ -3,7 +3,7 @@
 > A band split in two: a stack of claims on one side, one piece of media on the other, and only the selected claim's media on screen. The selection moves on hover, on click, and on a timer, so the band reads on its own and still answers a reader who takes it over. Its height is its own — each row carries a height the component sets from `size`, and the media column is exactly as tall as the stack — so the band never inherits a height from the section it lands in. `position` decides where the tabs sit: `left` or `right` stack them beside the media, `top` or `bottom` lay them in one row, each with its own title, description and progress, with the one piece of media running the full width on the other side.
 
 - Import: `import MediaTabs from '@aziontech/webkit/media-tabs'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [media-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/media-tabs.json)
 
 ## When to use
@@ -181,7 +181,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaTabs
       position="left"
       :autoplay="false"
@@ -251,7 +251,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaTabs
       size="small"
       :autoplay="false"

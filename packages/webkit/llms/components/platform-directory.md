@@ -3,7 +3,7 @@
 > A directory of Azion's products under a section title: one column per product group (Build, Store, Secure, Observe), each row an icon, a product name and one line about it, linking to that product. It is a page section — the site places it from a `{ _id: 'platform-directory', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `frame-box` and `column-navigation` rather than owning any anatomy of its own.
 
 - Import: `import PlatformDirectory from '@aziontech/webkit/platform-directory'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [platform-directory.json](https://github.com/aziontech/webkit/blob/main/.specs/platform-directory.json)
 
 ## When to use

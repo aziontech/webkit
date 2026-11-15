@@ -3,7 +3,7 @@
 > PaginationButton is one segment of the pagination's numbers strip: a 28px-tall native `button` that renders a page number or a Previous / Next chevron, or — for `kind="more"` — an inert, decorative overflow ellipsis (`span`, `aria-hidden`), selected by `kind`. It is the part `pagination` renders in data-driven mode and the one consumers compose by hand in composition mode, where it is reached as `Pagination.Button` (or imported standalone from `@aziontech/webkit/pagination-button`). It owns the segment's surface, current-page (`selected`) and `disabled` treatment, but not the strip's frame, border or the page state, which belong to the `pagination` root and the consumer.
 
 - Import: `import PaginationButton from '@aziontech/webkit/pagination-button'`
-- Category: data · Surface: product · Structure: monolithic
+- Category: data · Surface: app · Structure: monolithic
 - API as JSON: [pagination-button.json](https://github.com/aziontech/webkit/blob/main/.specs/pagination-button.json)
 
 ## When to use
@@ -59,7 +59,7 @@
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`.
 - Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `kind` is `more` (inert: not focusable, no hover / active layer, no `selected` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
-- `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis-h`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.

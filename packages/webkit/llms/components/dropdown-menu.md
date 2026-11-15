@@ -4,7 +4,7 @@
 
 - Import: `import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import DropdownMenu from '@aziontech/webkit/dropdown-menu'`
-- Category: navigation · Surface: product · Structure: composition
+- Category: navigation · Surface: app · Structure: composition
 - API as JSON: [dropdown-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/dropdown-menu.json)
 
 ## When to use

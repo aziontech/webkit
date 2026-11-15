@@ -3,7 +3,7 @@
 > A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
 
 - Import: `import SettingsSection from '@aziontech/webkit/settings-section'`
-- Category: layout · Surface: product · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [settings-section.json](https://github.com/aziontech/webkit/blob/main/.specs/settings-section.json)
 
 ## When to use
@@ -41,7 +41,7 @@
 | `hint` | `string` | `''` | false | One-sentence guidance shown in a Hint glyph beside the title. |
 | `anchor` | `string` | `''` | false | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false | Turns the title into a disclosure that folds the band body. |
-| `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `ai ai-cog`). |
+| `icon` | `string` | `''` | false | Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`). |
 | `open` | `boolean` | `false` | false | Two-way value (`v-model:open`). |
 
 ## Slots
@@ -289,7 +289,7 @@
     <SettingsSection
       v-model:open="open"
       title="Advanced"
-      icon="ai ai-cog"
+      icon="ai ai-settings"
       collapsible
     >
       <Card :padded="false">

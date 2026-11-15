@@ -1,9 +1,9 @@
 # Hint
 
-> Small info affordance — a muted `ai ai-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
+> Small info affordance — a muted `ai ai-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
 
 - Import: `import Hint from '@aziontech/webkit/hint'`
-- Category: inputs · Surface: product · Structure: monolithic
+- Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [hint.json](https://github.com/aziontech/webkit/blob/main/.specs/hint.json)
 
 ## When to use

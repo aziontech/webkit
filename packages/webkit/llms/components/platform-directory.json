@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/platform-directory",
  "treeShakeableImport": "@aziontech/webkit/platform-directory",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

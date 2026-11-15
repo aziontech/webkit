@@ -3,7 +3,7 @@
 > The card-brand plate shown beside a payment card: a small bordered plate with the network's mark (Visa, Mastercard, American Express, Diners Club, JCB, Discover, Elo, Hipercard, UnionPay) drawn in one colour in theme tokens, so it reads in light, dark and forced colors without a raster image or a brand hex. It replaces the design sample's `CardBrandMark` (a Visa plate on a hard-coded blue fill), the Console Kit's card flag block (six colored SVG logos) and the inline Visa SVG the account blocks repeated. A brand it does not draw (Maestro, Hiper, or any unknown value) shows a generic card glyph and keeps the brand's name for assistive technology.
 
 - Import: `import PaymentBrand from '@aziontech/webkit/payment-brand'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [payment-brand.json](https://github.com/aziontech/webkit/blob/main/.specs/payment-brand.json)
 
 ## When to use

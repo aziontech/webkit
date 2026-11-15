@@ -3,7 +3,7 @@
 > Every article or resource of a blog or a resource hub as one ruled list, with the controls to narrow it on one row. `filters` picks the filter bar: `category-search` draws a category picker and a search field (the blog), `facets` draws one dropdown per facet — content type, category, industry — that wraps when it runs out of room (a resource hub). Each entry is a row — its cover on the left, and on the right its overline, headline, a deck and, when it has them, its writers with the byline; the row is one link named by its headline, and from `lg` up a read cue rises into its end on hover or keyboard focus. The filters combine; a facet dropdown with more than seven options gains an option search; a load-more button reveals the next page, and when nothing matches an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'article-index', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `toggle-group`, `select`, `input`, `avatar`, `empty-state` and `button`; the selected category, the search term, the facet selections, each dropdown's option search and the page count are local state. A row without a cover draws its client's mark in one flat ink that follows the theme.
 
 - Import: `import ArticleIndex from '@aziontech/webkit/article-index'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [article-index.json](https://github.com/aziontech/webkit/blob/main/.specs/article-index.json)
 
 ## When to use

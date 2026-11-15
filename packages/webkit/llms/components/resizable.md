@@ -4,7 +4,7 @@
 
 - Import: `import ResizableRoot from '@aziontech/webkit/resizable-root'`
 - Compound import (dot notation, not tree-shakeable): `import Resizable from '@aziontech/webkit/resizable'`
-- Category: layout · Surface: product · Structure: composition
+- Category: layout · Surface: app · Structure: composition
 - API as JSON: [resizable.json](https://github.com/aziontech/webkit/blob/main/.specs/resizable.json)
 
 ## When to use
@@ -98,7 +98,7 @@ context, so a consumer never wires one part to the other.
 - ARIA: the handle is `role="separator"` with `aria-orientation` (the PERPENDICULAR of the group's axis — a separator between two side-by-side panes is itself vertical), `aria-valuenow` / `aria-valuemin` / `aria-valuemax` published from the pane it moves, `aria-label` from `ariaLabel`, and `aria-disabled` when disabled. Each pane is `role="group"` with its `ariaLabel`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state
 - `motion-reduce:transition-none` on the handle's colour transition
-- Touch target: the handle draws a `--spacing-xxs` rail and extends its hit area to 16px across the axis with a pseudo-element, so the edge is grabbable without drawing a thick bar.
+- Touch target: the handle draws a `--spacing-2xs` rail and extends its hit area to 16px across the axis with a pseudo-element, so the edge is grabbable without drawing a thick bar.
 
 ## Right-to-left
 

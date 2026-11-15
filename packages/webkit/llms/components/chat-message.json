@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/chat-message",
  "treeShakeableImport": "@aziontech/webkit/chat-message-root",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

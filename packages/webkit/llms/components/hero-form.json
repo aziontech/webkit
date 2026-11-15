@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/hero-form",
  "treeShakeableImport": "@aziontech/webkit/hero-form",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

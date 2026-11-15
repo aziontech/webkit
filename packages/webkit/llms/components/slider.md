@@ -3,7 +3,7 @@
 > Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Field.Label` and `Field.Description`, the same way `switch` and `number-input` are composed.
 
 - Import: `import Slider from '@aziontech/webkit/slider'`
-- Category: inputs · Surface: product · Structure: monolithic
+- Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [slider.json](https://github.com/aziontech/webkit/blob/main/.specs/slider.json)
 
 ## When to use

@@ -3,7 +3,7 @@
 > The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleKind: 'centered'`. From the design sample's site `ProcessScroll`.
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [process-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/process-scroll.json)
 
 ## When to use

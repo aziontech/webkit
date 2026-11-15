@@ -3,7 +3,7 @@
 > The templates band of a solution page: a framed media split whose copy side invites the reader to start from a template and whose media side is a scrolling two-column wall of deployable template cards, closed by a ticker of the frameworks and clouds it works with. Each card is a mark, a title, one line and a deploy action. It is a page section — the site places it from a `{ _id: 'template-gallery', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `media-split`, `scroll-area`, `card-grid`, `button`, `frame-box` and `ticker` rather than owning any anatomy of its own. With `closing` set it is the page's closing band: the hatched closing frame follows it, with no rules of its own, because the site footer under it opens with one (`hatch` turns that frame off when another closing band stacks directly below and draws the shared one).
 
 - Import: `import TemplateGallery from '@aziontech/webkit/template-gallery'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [template-gallery.json](https://github.com/aziontech/webkit/blob/main/.specs/template-gallery.json)
 
 ## When to use
@@ -114,20 +114,20 @@
       {
         title: 'Next.js Commerce',
         description: 'Ecommerce template built with Next.js and Shopify.',
-        icon: 'ai-cor ai-next',
+        icon: 'ai-color ai-nextjs',
         invertInDark: true,
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'Astro Odyssey',
         description: 'A modern business marketing website theme/starter built with Astro.',
-        icon: 'ai-cor ai-astro',
+        icon: 'ai-color ai-astro',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'SvelteKit Commerce',
         description: 'Ecommerce template built with SvelteKit and Shopify.',
-        icon: 'ai-cor ai-svelte',
+        icon: 'ai-color ai-svelte',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       }
     ]"
@@ -169,40 +169,40 @@
     {
       title: 'Next.js Commerce',
       description: 'Ecommerce template built with Next.js and Shopify.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Astro Odyssey',
       description: 'A business marketing website built with Astro.',
-      icon: 'ai-cor ai-astro',
+      icon: 'ai-color ai-astro',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js AI Chatbot',
       description: 'A server-rendered Next.js App Router AI chatbot.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'SvelteKit Commerce',
       description: 'Ecommerce template built with SvelteKit and Shopify.',
-      icon: 'ai-cor ai-svelte',
+      icon: 'ai-color ai-svelte',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js Multi-tenant Starter',
       description: 'A minimal multi-tenant Next.js starter.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Cosmic Agency Website',
       description: "A template built on Cosmic's React components.",
-      icon: 'ai-cor ai-react',
+      icon: 'ai-color ai-react',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {

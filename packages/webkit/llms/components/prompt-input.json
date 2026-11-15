@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/prompt-input",
  "treeShakeableImport": "@aziontech/webkit/prompt-input",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

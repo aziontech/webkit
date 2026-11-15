@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/pricing-plans",
  "treeShakeableImport": "@aziontech/webkit/pricing-plans",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

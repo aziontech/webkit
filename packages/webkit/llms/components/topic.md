@@ -3,7 +3,7 @@
 > One claim stated in three parts: a glyph, a short headline it shares a line with, and a sentence under them that explains it. It is the repeated unit of a marketing claim grid — the content of a cell, not the cell itself, so it carries no surface, no padding and no rules of its own and reads the same dropped into a `card-grid` cell, a `bento-grid` cell, or a column the page lays out by hand. Given an `href` the whole claim becomes the link, and its headline closes on a trailing arrow, so a band of claims needs no separate row of "learn more" controls.
 
 - Import: `import Topic from '@aziontech/webkit/topic'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [topic.json](https://github.com/aziontech/webkit/blob/main/.specs/topic.json)
 
 ## When to use

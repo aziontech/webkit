@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/stats-band",
  "treeShakeableImport": "@aziontech/webkit/stats-band",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

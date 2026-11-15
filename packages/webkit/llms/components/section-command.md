@@ -3,7 +3,7 @@
 > A one-line command or agent prompt with a copy button, set in a large `InputGroup` under hero or section copy ("npm create azion", "Ask your agent to …"). With `shell` a `$` prompt leads the line. From the design sample's site `SectionCommand`.
 
 - Import: `import SectionCommand from '@aziontech/webkit/section-command'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [section-command.json](https://github.com/aziontech/webkit/blob/main/.specs/section-command.json)
 
 ## When to use

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/spinner",
  "treeShakeableImport": "@aziontech/webkit/spinner",
  "category": "utils",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

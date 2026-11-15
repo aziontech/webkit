@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/banner-art",
  "treeShakeableImport": "@aziontech/webkit/banner-art",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

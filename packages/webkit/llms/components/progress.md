@@ -3,7 +3,7 @@
 > Use Progress when the work has a measurable amount (value/max), or for a long task with no layout to reserve (indeterminate). A region with a known shape loads with Skeleton, an inline busy mark is a Spinner, and a background file transfer is an UploadProgress. Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.
 
 - Import: `import Progress from '@aziontech/webkit/progress'`
-- Category: feedback · Surface: product · Structure: monolithic
+- Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [progress.json](https://github.com/aziontech/webkit/blob/main/.specs/progress.json)
 
 ## When to use

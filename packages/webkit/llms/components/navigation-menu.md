@@ -4,7 +4,7 @@
 
 - Import: `import NavigationMenuRoot from '@aziontech/webkit/navigation-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import NavigationMenu from '@aziontech/webkit/navigation-menu'`
-- Category: navigation · Surface: product · Structure: composition
+- Category: navigation · Surface: app · Structure: composition
 - API as JSON: [navigation-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/navigation-menu.json)
 
 ## When to use

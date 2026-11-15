@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/number-input",
  "treeShakeableImport": "@aziontech/webkit/number-input",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

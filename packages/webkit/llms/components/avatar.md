@@ -3,7 +3,7 @@
 > Identifies a person, an account or an organization with a small visual mark: their picture when there is one, otherwise their initials, a fallback icon or a generated pattern seeded by the name. It comes in a circle or a square at three sizes, so the same person reads the same way in a header, a list row or a comment thread.
 
 - Import: `import Avatar from '@aziontech/webkit/avatar'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [avatar.json](https://github.com/aziontech/webkit/blob/main/.specs/avatar.json)
 
 ## When to use

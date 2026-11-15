@@ -3,7 +3,7 @@
 > The framed header row that opens a page section: an optional overline, the section's `h2`, an optional description and an optional row of actions, held inside a registration frame whose bottom rule is what divides the header from the section body. `kind` picks the layout — `centered` for a symmetric opener, `left` for a reading-order one, and `horizontal` for a wide row that sets the headline against its description.
 
 - Import: `import SectionTitle from '@aziontech/webkit/section-title'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [section-title.json](https://github.com/aziontech/webkit/blob/main/.specs/section-title.json)
 
 ## When to use

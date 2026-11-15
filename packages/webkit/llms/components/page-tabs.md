@@ -3,7 +3,7 @@
 > The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-changes `Tag`, Deploy). It is `Tabs` plus the strip and the actions region, so every detail page stops re-creating the same bar.
 
 - Import: `import PageTabs from '@aziontech/webkit/page-tabs'`
-- Category: navigation · Surface: product · Structure: monolithic
+- Category: navigation · Surface: app · Structure: monolithic
 - API as JSON: [page-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/page-tabs.json)
 
 ## When to use

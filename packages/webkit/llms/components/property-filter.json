@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/property-filter",
  "treeShakeableImport": "@aziontech/webkit/property-filter",
  "category": "data",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

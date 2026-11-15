@@ -3,7 +3,7 @@
 > The proof-by-numbers band of a marketing page: a framed row of big figures, each with its caption and optional prefix or unit. It is a page section — the site places it from a `{ _id: 'stats-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `big-numbers`, which owns the figures' scale and layout.
 
 - Import: `import StatsBand from '@aziontech/webkit/stats-band'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [stats-band.json](https://github.com/aziontech/webkit/blob/main/.specs/stats-band.json)
 
 ## When to use

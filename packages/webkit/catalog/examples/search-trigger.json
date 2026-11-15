@@ -8,7 +8,7 @@
   {
    "name": "Collapsible",
    "summary": "The same trigger in a narrow and a wide container: folded to the magnifier, then the full field.",
-   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      class=\"@container w-64 rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger collapsible />\n    </div>\n    <div\n      class=\"@container w-full max-w-3xl rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger\n        collapsible\n        label=\"Search docs\"\n      />\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SearchTrigger from '@aziontech/webkit/search-trigger'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-md)\">\n    <div\n      class=\"@container w-64 rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger collapsible />\n    </div>\n    <div\n      class=\"@container w-full max-w-3xl rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)\"\n    >\n      <SearchTrigger\n        collapsible\n        label=\"Search docs\"\n      />\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "Disabled",

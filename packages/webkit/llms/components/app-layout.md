@@ -1,9 +1,9 @@
 # App Layout
 
-> The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.
+> The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.
 
 - Import: `import AppLayout from '@aziontech/webkit/app-layout'`
-- Category: layout · Surface: product · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [app-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/app-layout.json)
 
 ## When to use
@@ -30,7 +30,7 @@
 - A single resizable split inside a page, with no shell around it → use `resizable`.
 - A navigation rail on its own (resize, collapse, footer) → use `sidebar`; put it in the `navigation` slot.
 - A one-off overlay for a task (a create form, a detail preview) → use `drawer`.
-- Marketing and documentation pages → use the `shells/website` and `shells/documentation` blocks.
+- Marketing and documentation pages → use the `shell/site` and `shell/docs` blocks.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -208,7 +208,7 @@ Unbound, each one keeps its own local state.
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
-                  icon="ai ai-bars"
+                  icon="ai ai-menu"
                   aria-label="Open navigation"
                   kind="outlined"
                   size="medium"
@@ -223,7 +223,7 @@ Unbound, each one keeps its own local state.
                 @open="searchOpen = true"
               />
               <IconButton
-                icon="ai ai-question-circle"
+                icon="ai ai-circle-help"
                 aria-label="Help"
                 kind="outlined"
                 size="medium"
@@ -410,7 +410,7 @@ Unbound, each one keeps its own local state.
         />
         <ul
           aria-label="Services"
-          class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
+          class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
         >
           <li
             v-for="service in services"

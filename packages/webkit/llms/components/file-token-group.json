@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/file-token-group",
  "treeShakeableImport": "@aziontech/webkit/file-token-group",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

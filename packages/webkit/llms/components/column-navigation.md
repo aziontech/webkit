@@ -4,7 +4,7 @@
 
 - Import: `import ColumnNavigationRoot from '@aziontech/webkit/column-navigation-root'`
 - Compound import (dot notation, not tree-shakeable): `import ColumnNavigation from '@aziontech/webkit/column-navigation'`
-- Category: marketing · Surface: marketing · Structure: composition
+- Category: marketing · Surface: site · Structure: composition
 - API as JSON: [column-navigation.json](https://github.com/aziontech/webkit/blob/main/.specs/column-navigation.json)
 
 ## When to use

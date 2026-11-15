@@ -4,7 +4,7 @@
 
 - Import: `import ConsoleLayoutRoot from '@aziontech/webkit/console-layout-root'`
 - Compound import (dot notation, not tree-shakeable): `import ConsoleLayout from '@aziontech/webkit/console-layout'`
-- Category: layout · Surface: product · Structure: composition
+- Category: layout · Surface: app · Structure: composition
 - API as JSON: [console-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/console-layout.json)
 
 ## When to use
@@ -16,7 +16,7 @@
 ## Do
 
 - Compose the layout once, in the app's root, around `RouterView`; each route renders only its page body. Never copy the chrome into a page.
-- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/menu-node-href`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
+- Give every navigation row an `id` and an `href`: an in-app path (`/workloads`) is followed with the app's router when one is installed (a named route becomes a path through `router.resolve(...).href`), an external URL loads normally, and a row with no `href` is left to your `navigate` handler. Never `to`, `path` or `route` on a row (lint `webkit/prefer-href-in-menu-node`). Leave `activeId` empty so the active row follows the route; set it only for a page whose route matches no row.
 - Pass a static trail through `breadcrumbs` (derive it from the route meta); leave it empty on first-level pages.
 - A page that owns its trail (a loaded name, a control crumb) renders `ConsoleLayout.Breadcrumbs`: `items` are the crumbs, the default slot the trailing controls (a `Select` with `kind="transparent"`, `size="small"`, an `aria-label`, no `w-full`). It replaces the layout's trail while the page is mounted and renders nothing in place.
 - Put the app's own header actions (`Create`, `Agent`) in the `actions` slot and render them icon-only while `compact`.
@@ -29,7 +29,7 @@
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
-- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `SidebarMenu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
+- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `SidebarMenu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `detail/sectioned-resource` block. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Don’t
 
@@ -44,7 +44,7 @@
 - Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
 - Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
-- shells/console` — the block that shows this layout with sample console navigation.
+- shell/console` — the block that shows this layout with sample console navigation.
 
 ## Props
 
@@ -221,7 +221,7 @@ packages/webkit/src/components/layout/console-layout/
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'ai ai-cog',
+          icon: 'ai ai-settings',
           kind: 'drill',
           groups: [
             {
@@ -260,7 +260,7 @@ packages/webkit/src/components/layout/console-layout/
         placement="bottom"
       >
         <IconButton
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
           kind="primary"
           size="medium"
           aria-label="Create"
@@ -271,7 +271,7 @@ packages/webkit/src/components/layout/console-layout/
           label="Create"
           kind="primary"
           size="medium"
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
         />
         <ButtonHighlight
           label="Agent"
@@ -422,7 +422,7 @@ packages/webkit/src/components/layout/console-layout/
         <Command.Item value="action:sidebar">
           <template #prefix>
             <i
-              :class="navigationOpen ? 'ai ai-angle-double-left' : 'ai ai-angle-double-right'"
+              :class="navigationOpen ? 'ai ai-chevrons-left' : 'ai ai-chevrons-right'"
               aria-hidden="true"
             />
           </template>

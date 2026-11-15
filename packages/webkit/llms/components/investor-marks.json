@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/investor-marks",
  "treeShakeableImport": "@aziontech/webkit/investor-marks",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

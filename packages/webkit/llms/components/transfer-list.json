@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/transfer-list",
  "treeShakeableImport": "@aziontech/webkit/transfer-list-root",
  "category": "data",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

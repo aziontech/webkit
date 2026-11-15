@@ -3,7 +3,7 @@
 > One claim beside its picture, on its own frame: the copy cell with its overline, headline and sentence on one side, and the media on a raised, pixel-textured surface on the other. It is a page section — the site places it from a `{ _id: 'media-split-band', props }` entry and binds `props` straight onto it — and it composes `section-module`, a framed `media-split`, `button`, `code-block`, `illustration`, `product-widget`, `diagram` and the webkit scene assets. The media is a scene, a code sample (one file or a tab strip of files), a product console widget, a request-flow diagram, an image (cover or framed) or an illustration; with one action the whole band links to it (unless `linked` is off), with two the band stays unlinked. The media sits beside the copy, or under it when `orientation` is `vertical`.
 
 - Import: `import MediaSplitBand from '@aziontech/webkit/media-split-band'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [media-split-band.json](https://github.com/aziontech/webkit/blob/main/.specs/media-split-band.json)
 
 ## When to use

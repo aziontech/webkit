@@ -3,7 +3,7 @@
 > A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest.
 
 - Import: `import Trace from '@aziontech/webkit/trace'`
-- Category: code · Surface: product · Structure: monolithic
+- Category: code · Surface: app · Structure: monolithic
 - API as JSON: [trace.json](https://github.com/aziontech/webkit/blob/main/.specs/trace.json)
 
 ## When to use

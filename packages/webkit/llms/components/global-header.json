@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/global-header",
  "treeShakeableImport": "@aziontech/webkit/global-header-root",
  "category": "layout",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [],
@@ -33,7 +33,7 @@
   "Wrap the logo in `GlobalHeader.Brand` inside a link with its own accessible name (for example `aria-label=\"Azion home\"`).",
   "Set `aria-label` on the root (default `'Global header'`) when the page has more than one banner-style bar.",
   "Keep the regions free of layout overrides — the bar owns height, padding and the bottom hairline; put only controls in each region.",
-  "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/header-search-trigger`)."
+  "Every header that navigates (console, demo, docs, site) carries `SearchTrigger` first in `GlobalHeader.End`, wired to a `Command` palette; wrap the header in an `@container` so it unfolds into the `Search … ⌘K` field. Never hand-roll the field or use a bare magnifier `IconButton` (lint `webkit/require-header-search`)."
  ],
  "props": [
   {
@@ -78,7 +78,7 @@
   },
   {
    "name": "ContentZone",
-   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'\n  import Button from '@aziontech/webkit/button'\n  import GlobalHeader from '@aziontech/webkit/global-header'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col bg-(--bg-canvas)\">\n    <GlobalHeader aria-label=\"Console header\">\n      <GlobalHeader.Start>\n        <div class=\"flex w-full min-w-0 items-center gap-(--spacing-xs)\">\n          <Breadcrumb :items=\"[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]\" />\n        </div>\n      </GlobalHeader.Start>\n      <GlobalHeader.Center />\n      <GlobalHeader.End>\n        <Button\n          label=\"Create\"\n          kind=\"secondary\"\n          size=\"medium\"\n          icon=\"ai ai-plus-circle\"\n        />\n      </GlobalHeader.End>\n    </GlobalHeader>\n    <div class=\"layout-boundary\">\n      <h1 class=\"text-heading-xl text-(--text-default)\">Custom Pages</h1>\n      <p class=\"text-body-md text-(--text-muted)\">\n        Manage the pages served for an error or a maintenance window.\n      </p>\n    </div>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Breadcrumb from '@aziontech/webkit/breadcrumb-root'\n  import Button from '@aziontech/webkit/button'\n  import GlobalHeader from '@aziontech/webkit/global-header'\n</script>\n\n<template>\n  <div class=\"flex w-full flex-col bg-(--bg-canvas)\">\n    <GlobalHeader aria-label=\"Console header\">\n      <GlobalHeader.Start>\n        <div class=\"flex w-full min-w-0 items-center gap-(--spacing-xs)\">\n          <Breadcrumb :items=\"[{ label: 'Build', href: '/build' }, { label: 'Custom Pages' }]\" />\n        </div>\n      </GlobalHeader.Start>\n      <GlobalHeader.Center />\n      <GlobalHeader.End>\n        <Button\n          label=\"Create\"\n          kind=\"secondary\"\n          size=\"medium\"\n          icon=\"ai ai-circle-plus\"\n        />\n      </GlobalHeader.End>\n    </GlobalHeader>\n    <div class=\"layout-boundary\">\n      <h1 class=\"text-heading-xl text-(--text-default)\">Custom Pages</h1>\n      <p class=\"text-body-md text-(--text-muted)\">\n        Manage the pages served for an error or a maintenance window.\n      </p>\n    </div>\n  </div>\n</template>"
   },
   {
    "name": "SitePlacement",

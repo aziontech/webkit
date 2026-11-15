@@ -3,7 +3,7 @@
 > A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent. It is a material — it takes no content and claims no space — but unlike a static illustration it is tuned by the consumer (region, PoP density, landmass opacity, static or animated) to sit behind a band's copy.
 
 - Import: `import NetworkMap from '@aziontech/webkit/network-map'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [network-map.json](https://github.com/aziontech/webkit/blob/main/.specs/network-map.json)
 
 ## When to use

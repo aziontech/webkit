@@ -4,7 +4,7 @@
 
 - Import: `import ContextMenuRoot from '@aziontech/webkit/context-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import ContextMenu from '@aziontech/webkit/context-menu'`
-- Category: navigation · Surface: product · Structure: composition
+- Category: navigation · Surface: app · Structure: composition
 - API as JSON: [context-menu.json](https://github.com/aziontech/webkit/blob/main/.specs/context-menu.json)
 
 ## When to use

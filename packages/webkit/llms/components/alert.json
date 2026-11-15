@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/alert",
  "treeShakeableImport": "@aziontech/webkit/alert",
  "category": "feedback",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

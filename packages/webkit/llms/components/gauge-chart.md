@@ -3,7 +3,7 @@
 > Use GaugeChart for one value against a known range with thresholds; for threshold lines or bands inside a Chart use Chart.Reference, and for one headline metric with a delta use StatTile. Both thresholds share one model, `ChartThreshold`. One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.
 
 - Import: `import GaugeChart from '@aziontech/webkit/gauge-chart'`
-- Category: chart · Surface: product · Structure: monolithic
+- Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [gauge-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/gauge-chart.json)
 
 ## When to use

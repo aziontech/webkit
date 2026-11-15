@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/diagram",
  "treeShakeableImport": "@aziontech/webkit/diagram",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

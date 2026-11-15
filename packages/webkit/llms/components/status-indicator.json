@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/status-indicator",
  "treeShakeableImport": "@aziontech/webkit/status-indicator",
  "category": "feedback",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

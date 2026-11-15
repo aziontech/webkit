@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/section-gap",
  "treeShakeableImport": "@aziontech/webkit/section-gap",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
@@ -29,7 +29,7 @@
  ],
  "bestPractices": [
   "Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.",
-  "Do not override the height from the call site. The steps are multiples of `--spacing-xxl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.",
+  "Do not override the height from the call site. The steps are multiples of `--spacing-2xl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.",
   "Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.",
   "Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks=\"all\"`): the shared rule is given away, the registration mark is not.",
   "Reach for `hatch` here rather than on a section header: the gap is the one band with no copy of its own, so the texture gives the break identity without sitting behind a headline.",
@@ -42,7 +42,7 @@
    "type": "'small' | 'medium' | 'large'",
    "default": "'medium'",
    "required": "false",
-   "doc": "How much vertical air the gap holds, as a multiple of `--spacing-xxl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport."
+   "doc": "How much vertical air the gap holds, as a multiple of `--spacing-2xl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport."
   },
   {
    "name": "hatch",
@@ -67,7 +67,7 @@
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import SectionGap from '@aziontech/webkit/section-gap'\n</script>\n\n<template>\n  <div>\n    <FrameBox borders=\"y\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        size=\"small\" — one --spacing-xxl below\n      </div>\n    </FrameBox>\n    <SectionGap size=\"small\" />\n    <FrameBox\n      flush\n      marks=\"bottom\"\n      borders=\"y\"\n    >\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        size=\"medium\" — two below\n      </div>\n    </FrameBox>\n    <SectionGap size=\"medium\" />\n    <FrameBox\n      flush\n      marks=\"bottom\"\n      borders=\"y\"\n    >\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        size=\"large\" — three below\n      </div>\n    </FrameBox>\n    <SectionGap size=\"large\" />\n    <FrameBox\n      flush\n      marks=\"bottom\"\n      borders=\"y\"\n    >\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">End</div>\n    </FrameBox>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import SectionGap from '@aziontech/webkit/section-gap'\n</script>\n\n<template>\n  <div>\n    <FrameBox borders=\"y\">\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        size=\"small\" — one --spacing-2xl below\n      </div>\n    </FrameBox>\n    <SectionGap size=\"small\" />\n    <FrameBox\n      flush\n      marks=\"bottom\"\n      borders=\"y\"\n    >\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        size=\"medium\" — two below\n      </div>\n    </FrameBox>\n    <SectionGap size=\"medium\" />\n    <FrameBox\n      flush\n      marks=\"bottom\"\n      borders=\"y\"\n    >\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">\n        size=\"large\" — three below\n      </div>\n    </FrameBox>\n    <SectionGap size=\"large\" />\n    <FrameBox\n      flush\n      marks=\"bottom\"\n      borders=\"y\"\n    >\n      <div class=\"p-(--spacing-lg) text-center text-body-md text-(--text-muted)\">End</div>\n    </FrameBox>\n  </div>\n</template>"
   }
  ],
  "docs": "components/section-gap.md"

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/embed",
  "treeShakeableImport": "@aziontech/webkit/embed",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
@@ -67,7 +67,7 @@
   },
   {
    "name": "Ratios",
-   "sfc": "<script setup>\n  import Embed from '@aziontech/webkit/embed'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-xxl)\">\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 16:9 frame\"\n      ratio=\"video\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a square frame\"\n      ratio=\"square\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 21:9 frame\"\n      ratio=\"wide\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import Embed from '@aziontech/webkit/embed'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-2xl)\">\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 16:9 frame\"\n      ratio=\"video\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a square frame\"\n      ratio=\"square\"\n    />\n    <Embed\n      src=\"data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>\"\n      title=\"A placeholder document in a 21:9 frame\"\n      ratio=\"wide\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/embed.md"

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/client-quotes",
  "treeShakeableImport": "@aziontech/webkit/client-quotes",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

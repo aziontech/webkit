@@ -3,13 +3,13 @@
 > Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard. A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
 - Import: `import CardList from '@aziontech/webkit/card-list'`
-- Category: data · Surface: product · Structure: monolithic
+- Category: data · Surface: app · Structure: monolithic
 - API as JSON: [card-list.json](https://github.com/aziontech/webkit/blob/main/.specs/card-list.json)
 
 ## When to use
 
 - Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).
-- The card form of a list page (`platform/view/card-view`), filtered and paged by `useCollection`.
+- The card form of a list page (`view/card-view`), filtered and paged by `useCollection`.
 
 ## Do
 
@@ -127,7 +127,7 @@
   <CardList :items="applications">
     <template #header="{ item }">{{ item.name }}</template>
     <template #default="{ item }">
-      <dl class="grid grid-cols-[auto_1fr] gap-x-(--spacing-sm) gap-y-(--spacing-xxs)">
+      <dl class="grid grid-cols-[auto_1fr] gap-x-(--spacing-sm) gap-y-(--spacing-2xs)">
         <dt class="text-(--text-muted)">Status</dt>
         <dd>
           <Tag

@@ -3,7 +3,7 @@
 > The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).
 
 - Import: `import FeatureScroll from '@aziontech/webkit/feature-scroll'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [feature-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-scroll.json)
 
 ## When to use
@@ -244,7 +244,7 @@
       },
       code: {
         fileName: 'azion.config.js',
-        fileIcon: 'ai-cor ai-js',
+        fileIcon: 'ai-color ai-javascript',
         language: 'javascript',
         code: "import { defineConfig } from 'azion'\n\nexport default defineConfig({\n  build: {\n    entry: 'src/index.ts',\n    worker: true,\n    preset: 'next'\n  },\n  functions: [\n    { name: 'storefront', path: '.edge/worker.js' }\n  ]\n})",
         copyAriaLabel: 'Copy the azion.config.js sample'
@@ -278,7 +278,7 @@
       },
       code: {
         fileName: 'main.tf',
-        fileIcon: 'ai-cor ai-terraform',
+        fileIcon: 'ai-color ai-terraform',
         language: 'hcl',
         code: 'resource "azion_application" "storefront" {\n  name                    = "storefront"\n  edge_functions          = true\n  application_accelerator = true\n}\n\nresource "azion_workload" "storefront" {\n  name    = "storefront"\n  domains = ["storefront.example.com"]\n\n  application {\n    id = azion_application.storefront.id\n  }\n}',
         copyAriaLabel: 'Copy the main.tf sample'
@@ -296,7 +296,7 @@
       },
       code: {
         fileName: 'requests.graphql',
-        fileIcon: 'ai-cor ai-graphql',
+        fileIcon: 'ai-color ai-graphql',
         language: 'graphql',
         code: 'query RequestsByStatus($begin: DateTime!, $end: DateTime!) {\n  httpMetrics(\n    limit: 100\n    filter: { tsRange: { begin: $begin, end: $end } }\n    groupBy: [status]\n  ) {\n    status\n    requests: sum(field: requests)\n    p95: percentile(field: requestTime, percentile: 95)\n  }\n}',
         copyAriaLabel: 'Copy the requests.graphql sample'

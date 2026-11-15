@@ -3,7 +3,7 @@
 > A library of learning subjects in a divider grid: each subject is one framed card with its name, what it covers and a list of its article links, and an optional closing call to action spans the grid's last two cells so the grid ends without an empty cell. It is a page section — the site places it from a `{ _id: 'subject-library', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `frame-box`, `card-grid`, `call-to-action` and `button` rather than owning any anatomy of its own.
 
 - Import: `import SubjectLibrary from '@aziontech/webkit/subject-library'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [subject-library.json](https://github.com/aziontech/webkit/blob/main/.specs/subject-library.json)
 
 ## When to use

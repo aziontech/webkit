@@ -3,7 +3,7 @@
 > The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyNode`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 - Import: `import TopologyDiagram from '@aziontech/webkit/topology-diagram'`
-- Category: data · Surface: product · Structure: monolithic
+- Category: data · Surface: app · Structure: monolithic
 - API as JSON: [topology-diagram.json](https://github.com/aziontech/webkit/blob/main/.specs/topology-diagram.json)
 
 ## When to use
@@ -32,7 +32,7 @@
 - [flow](flow.md) — the connector engine and anchors this component reuses.
 - [tree](tree.md) — hierarchical data without connectors.
 - [dropdown-menu](dropdown-menu.md) — the bind control's menu.
-- platform/detail/details-page` — the page whose topology tab holds it.
+- detail/resource-detail` — the page whose topology tab holds it.
 
 ## Props
 

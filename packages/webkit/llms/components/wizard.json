@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/wizard",
  "treeShakeableImport": "@aziontech/webkit/wizard-root",
  "category": "navigation",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

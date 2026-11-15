@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/browser-frame",
  "treeShakeableImport": "@aziontech/webkit/browser-frame",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

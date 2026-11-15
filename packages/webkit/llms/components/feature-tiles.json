@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/feature-tiles",
  "treeShakeableImport": "@aziontech/webkit/feature-tiles",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

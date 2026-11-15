@@ -3,7 +3,7 @@
 > Use AiLoading only while a generative AI answer is being produced; never for loading product data, which uses Skeleton (known shape), Spinner (inline) or Progress (measurable). The loading state of a generative AI response (Cloudscape generative AI loading states and loading bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads` — paired with three pulsing dots (`inline`, for text) or an indeterminate bar (`bar`, where a table, list or code block is about to appear). It waits `delay` milliseconds before showing anything, so a response that arrives within a second never flickers a loading state.
 
 - Import: `import AiLoading from '@aziontech/webkit/ai-loading'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [ai-loading.json](https://github.com/aziontech/webkit/blob/main/.specs/ai-loading.json)
 
 ## When to use

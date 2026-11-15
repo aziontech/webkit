@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/log-view",
  "treeShakeableImport": "@aziontech/webkit/log-view-root",
  "category": "code",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

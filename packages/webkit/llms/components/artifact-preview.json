@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/artifact-preview",
  "treeShakeableImport": "@aziontech/webkit/artifact-preview",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

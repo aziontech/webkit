@@ -3,7 +3,7 @@
 > A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs. It is the one place external content enters a page, so the attributes that are easy to forget are not optional.
 
 - Import: `import Embed from '@aziontech/webkit/embed'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [embed.json](https://github.com/aziontech/webkit/blob/main/.specs/embed.json)
 
 ## When to use
@@ -83,7 +83,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <Embed
       src="data:text/html,<body style='margin:0;height:100vh;display:grid;place-items:center;font:1rem system-ui;color:gray'>Placeholder embed</body>"
       title="A placeholder document in a 16:9 frame"

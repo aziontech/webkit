@@ -3,7 +3,7 @@
 > One setting inside a flush `Card`: an `Item` whose content carries the title and description, with the control placed by what it needs. A typed or picked field sits in a right cell capped at the 3xs container so every field on the card ends at the same edge (`field`); a switch or a button sits hard right at its natural width (`compact`); a textarea, list, radio group or editor drops under the copy at the full measure (`stacked`). A child setting indents one or two levels under a rule (`level`). The copy top-aligns with the control, and the row keeps its two columns at every width (the description clamps to two lines); `stackable` opts a row into moving a `field` control under the copy in a narrow box.
 
 - Import: `import SettingRow from '@aziontech/webkit/setting-row'`
-- Category: layout · Surface: product · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [setting-row.json](https://github.com/aziontech/webkit/blob/main/.specs/setting-row.json)
 
 ## When to use

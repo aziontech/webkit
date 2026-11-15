@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/section-command",
  "treeShakeableImport": "@aziontech/webkit/section-command",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

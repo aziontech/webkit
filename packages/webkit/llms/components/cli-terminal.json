@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/cli-terminal",
  "treeShakeableImport": "@aziontech/webkit/cli-terminal",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

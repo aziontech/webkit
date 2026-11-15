@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/media-split-stack",
  "treeShakeableImport": "@aziontech/webkit/media-split-stack",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

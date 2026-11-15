@@ -3,7 +3,7 @@
 > Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `WebkitProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `Table.CellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.
 
 - Import: `import Timestamp from '@aziontech/webkit/timestamp'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [timestamp.json](https://github.com/aziontech/webkit/blob/main/.specs/timestamp.json)
 
 ## When to use

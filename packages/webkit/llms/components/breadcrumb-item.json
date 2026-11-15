@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/breadcrumb-item",
  "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
  "category": "navigation",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -3,7 +3,7 @@
 > An endlessly looping row of brand marks — the trust strip that names the companies running on the platform, and the stack strip that names the frameworks and clouds a workload already uses. The marks come from the package's own registry and are drawn in one ink, so a strip reads as a list rather than as a dozen competing palettes. The same strip can instead print short claims, each with an optional leading icon, for the benefits line that floors a closing band. Its loop (the travelling track, the duplicate copy hidden from assistive technology, hover/focus pause and the pause control) is an internal part shared with `recognition-marquee` and `photo-marquee`.
 
 - Import: `import Ticker from '@aziontech/webkit/ticker'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [ticker.json](https://github.com/aziontech/webkit/blob/main/.specs/ticker.json)
 
 ## When to use
@@ -58,7 +58,7 @@
 
 - Visual states: every mark rests at 70% opacity and lifts to full on `hover`; an item is real text and rests at full ink
 - `data-size` mirrors the `size` prop and is what drives the mark height, the cell width and the row gap
-- `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-xxl` (never under twice `--spacing-xl`, so a phone keeps room between claims), and the label steps down to `text-body-sm` under `size="small"`
+- `data-content` is `items` when `items` is set and `marks` otherwise; in `items` mode the cells size to their text, the row gap widens to `--spacing-2xl` (never under twice `--spacing-xl`, so a phone keeps room between claims), and the label steps down to `text-body-sm` under `size="small"`
 - `data-kind` mirrors the `kind` prop; `band` paints the page canvas and the strip's own vertical rhythm so nothing behind it shows through while the fill still matches the band it floors, `plain` leaves it transparent over whatever it sits on
 - `data-duplicate` marks every `aria-hidden` copy after the first — the copies the loop translates into place, and the ones hidden outright under reduced motion
 - Short rows: the row repeats until half the track is at least as wide as the strip, so a strip with few marks never shows an empty run; the pass lengthens with each repeat so the speed stays the same

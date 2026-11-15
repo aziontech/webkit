@@ -3,7 +3,7 @@
 > An inline numbered reference in generated text (`[1]`), Cloudscape's inline citation: a small superscript number that links to the source — to item `n` of the `Sources` list under the response, or straight to the URL — with a tooltip naming the source and an accessible name of `Source 1: <title>`. `StreamingResponse` renders it for every `[n]`; use it directly when you build responses yourself.
 
 - Import: `import Citation from '@aziontech/webkit/citation'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [citation.json](https://github.com/aziontech/webkit/blob/main/.specs/citation.json)
 
 ## When to use

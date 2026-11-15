@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/trace",
  "treeShakeableImport": "@aziontech/webkit/trace",
  "category": "code",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

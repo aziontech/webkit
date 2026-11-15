@@ -3,7 +3,7 @@
 > Three featured success stories side by side: each column is a client's mark on a face painted in the client's own brand colour, over a one-line story that links to the case. With `reveal="hover"` each column is one card instead: the client's reversed logo on its brand face, which opens while hovered or focused to reveal the story line and a "Read story" cue, the whole card linking to the case; below the large breakpoint those cards stack and stay open. It is a page section — the site places it from a `{ _id: 'client-mosaic-columns', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box` and `logo-wall`. The retired `'customer-spotlight'` `_id` resolves here with `reveal: 'hover'`.
 
 - Import: `import ClientMosaicColumns from '@aziontech/webkit/client-mosaic-columns'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [client-mosaic-columns.json](https://github.com/aziontech/webkit/blob/main/.specs/client-mosaic-columns.json)
 
 ## When to use

@@ -3,7 +3,7 @@
 > A two-column band pairing a block of copy with a piece of media — a screenshot, diagram or short video — each holding half the frame. It is the workhorse section of a product page: one claim, one picture of the claim, repeated down the page with the sides alternating. It is a **sub-section**, not a section header, and its typography says so: the headline is `heading-md` against `section-title`'s `heading-xl`, because these bands sit _inside_ a section that a `section-title` has already opened. A band that needs the larger weight is opening a section, and wants `section-title`. Typographic weight and heading level are separate choices. The band sets its headline at `heading-md`, or `heading-xl` when `size` is `large`; `headingLevel` decides whether that headline is an `h2` or an `h3`, so a band nested under a section that already has its own `h2` does not open a second one at the same level. The seam between the two cells is the grid's own one-pixel gap over a rule fill, so neither cell draws a border and the hairline lands in the same place whichever side the media is on — horizontal while the band is stacked, vertical once it splits. `divided` drops it for a band whose two halves should read as one plate. Whether the band ever splits is `orientation`'s call. `horizontal` is the band proper: stacked below `lg`, two cells from `lg` up. `vertical` holds the stacked form at every width, and `kind` then picks whether the media sits above the copy or below it rather than left or right — the shape a band takes in a column too narrow to carry two halves.
 
 - Import: `import MediaSplit from '@aziontech/webkit/media-split'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [media-split.json](https://github.com/aziontech/webkit/blob/main/.specs/media-split.json)
 
 ## When to use
@@ -95,7 +95,7 @@
 - The media half is grounded on a `texture-material` the band paints itself: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the cell's edges, so a transparent scene has something to sit on and the seam stays the only hard line. `texture="none"` leaves the cell bare; no media, no layer
 - `data-media-padded` mirrors the `mediaPadded` prop and is what insets the media from the cell's edges — off by default, because an exported asset already carries its own air and a padded cell pays for that margin twice. The ground fills the cell either way, so the texture reaches the seam even when the media does not
 - `data-media-fill` mirrors the `mediaFill` prop. `surface` paints the media cell `var(--bg-surface)`, so the asset sits on its own plate one step off the page; `canvas` paints it `var(--bg-canvas)` and, with `divided` off, the whole band sits on the page
-- `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-xxl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. The padding follows the type, so a call site never re-spaces a large band by hand
+- `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-2xl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. The padding follows the type, so a call site never re-spaces a large band by hand
 - `data-align` mirrors the `align` prop; `top` spreads the copy column so the headline sits at the cell's top and the actions on its floor, `center` gathers the stack and its actions on the cell's vertical middle. The text stays flush with the leading edge either way
 - `data-media-href` is present when `mediaHref` is set, and is what turns the band into a link: the media cell is a single `<a>` named by the band's `title`, and a chevron affordance sits at its closing lower corner — `opacity-0` at rest, revealed on `hover` anywhere on the band and on the cell's own `focus-visible`, so the keyboard reaches the same affordance the pointer does. The affordance is `aria-hidden` decoration, never a nested control: the cell is the link
 - A band carrying `mediaHref` is clickable as a whole: the pointer turns to `cursor-pointer`, and a click anywhere outside a control follows the URL — in a new tab with `Cmd`/`Ctrl` held, and not at all while the reader is selecting text or when a consumer's own `click` listener called `preventDefault()`. Links and buttons inside the band keep their own destinations. The keyboard path is the media cell's link, so the band adds no tab stop
@@ -149,7 +149,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaSplit
       kind="media-end"
       eyebrow="Deployment"
@@ -183,7 +183,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaSplit
       orientation="horizontal"
       eyebrow="Deployment"

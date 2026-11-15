@@ -3,7 +3,7 @@
 > Every success story of a company as one filterable library. A left-aligned title sits over a toolbar — a search field and one select per facet (industry, solution, product) on one row, each starting with an option that clears it — then a grid of story cards and a load-more button that reveals the next page. Below `lg` the toolbar folds to the search field (with its shorter placeholder) and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Each card is one link named by its company: the client mark in a single ink, the story's category as an overline, its description and a read cue whose arrow nudges on hover. The grid runs one column on phones, two from `sm` and three from `lg`. Search and facets combine; when nothing matches, an empty state offers to clear every filter. It is a page section — the site places it from a `{ _id: 'story-library', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `input`, `select`, `chip`, `button` and `empty-state`; the search, the facet selections, each select's own option search and the page count are local state, and facets can be seeded from the URL query.
 
 - Import: `import StoryLibrary from '@aziontech/webkit/story-library'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [story-library.json](https://github.com/aziontech/webkit/blob/main/.specs/story-library.json)
 
 ## When to use

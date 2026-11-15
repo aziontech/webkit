@@ -3,7 +3,7 @@
 > Use Alert for a persistent message on a console page or section (info, warning, error) — the answer for 'banner' or 'notice'. A short confirmation after an action that disappears on its own is a Toast. Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon, an optional bold `title` over the copy, and message copy that may carry inline links, plus an optional secondary action button.
 
 - Import: `import Alert from '@aziontech/webkit/alert'`
-- Category: feedback · Surface: product · Structure: monolithic
+- Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [alert.json](https://github.com/aziontech/webkit/blob/main/.specs/alert.json)
 
 ## When to use
@@ -70,7 +70,7 @@
 ## States
 
 - Visual states: default (per severity)
-- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-heading-xxs` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
+- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-heading-2xs` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
 - Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `action` slot, wrapped in `[data-slot=alert-action]`) moves to its own line under the message while the close button stays on the message line.
 
 ## Accessibility

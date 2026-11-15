@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/capability-grid",
  "treeShakeableImport": "@aziontech/webkit/capability-grid",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

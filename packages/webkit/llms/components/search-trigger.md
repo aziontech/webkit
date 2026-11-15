@@ -3,7 +3,7 @@
 > The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container (with its label as a tooltip), so one element serves the wide and the narrow bar.
 
 - Import: `import SearchTrigger from '@aziontech/webkit/search-trigger'`
-- Category: actions · Surface: product · Structure: monolithic
+- Category: actions · Surface: app · Structure: monolithic
 - API as JSON: [search-trigger.json](https://github.com/aziontech/webkit/blob/main/.specs/search-trigger.json)
 
 ## When to use
@@ -16,7 +16,7 @@
 
 - Wire `@open` to the same state the shortcut opens (`<Command v-model:open="open">`), so the button and ⌘K never disagree. Without a `Command` on the page, `@open` also fires on ⌘K / Ctrl K, so a custom search dialog gets the shortcut for free.
 - Keep `shortcut` equal to the key the `Command` root listens for (`K`), or clear it (`shortcut=""`) when no shortcut exists.
-- Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/header-search-trigger` lint rule flags both.
+- Do not hand-roll the field (`<button>` + magnifier + `Kbd`) or put a bare magnifier `IconButton` in a header: the `webkit/require-header-search` lint rule flags both.
 - With `collapsible`, put the bar inside an `@container` (the header blocks do); the trigger folds while that container is narrower than 47rem (752 px, the `--container-2xl` token) and without a container it stays folded. Do not add your own breakpoint around it: 47rem is the one threshold every header uses.
 - With `collapsible`, the button sits inside the `Tooltip` wrapper, so put layout classes (`ms-auto`, `order-*`) on a parent, not on the trigger.
 - Name the target in the label when the scope is narrow (`Search docs`); the label is also the accessible name.
@@ -139,12 +139,12 @@
 <template>
   <div class="flex flex-col gap-(--spacing-md)">
     <div
-      class="@container w-64 rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)"
+      class="@container w-64 rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)"
     >
       <SearchTrigger collapsible />
     </div>
     <div
-      class="@container w-full max-w-3xl rounded-(--shape-elements) border border-(--border-default) p-(--spacing-sm)"
+      class="@container w-full max-w-3xl rounded-(--shape-control) border border-(--border-default) p-(--spacing-sm)"
     >
       <SearchTrigger
         collapsible

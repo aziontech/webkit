@@ -3,7 +3,7 @@
 > Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ShellMockup` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
 
 - Import: `import ProductWidget from '@aziontech/webkit/product-widget'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [product-widget.json](https://github.com/aziontech/webkit/blob/main/.specs/product-widget.json)
 
 ## When to use

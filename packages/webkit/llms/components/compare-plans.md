@@ -3,7 +3,7 @@
 > The feature-by-feature matrix under the plan cards on Pricing: one column per plan with its name and action button pinned in the header while the page scrolls, one band per product with an overline, a title and a lead, and one row per feature saying what each plan includes — an included mark, a not-included mark, or the allowance as text. The recommended plan carries an accent bar, and below the large breakpoint the table folds to one plan picked from a searchable select. It is a page section — the site places it from a `{ _id: 'compare-plans', props }` entry and binds `props` straight onto it — and it composes `section-module`, `select`, `input`, `button`, `icon-button`, `popover`, `tooltip`, `overline`, `tag` and `link`.
 
 - Import: `import ComparePlans from '@aziontech/webkit/compare-plans'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [compare-plans.json](https://github.com/aziontech/webkit/blob/main/.specs/compare-plans.json)
 
 ## When to use
@@ -49,7 +49,7 @@
 - The highlighted plan carries the accent bar and the secondary button; the others carry an outlined button
 - Below the large breakpoint only the picked plan's column shows (`data-folded` on the others); the picker opens on the highlighted plan, or the first
 - Picker search: the picker's list carries a search field that narrows the plans by name; with no match it shows a `role="status"` line from the locale catalog (`No results found.`); the query clears each time the list opens or closes
-- Cells: an included cell is a `ai ai-check-circle` mark and a not-included cell an `ai ai-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
+- Cells: an included cell is a `ai ai-circle-check` mark and a not-included cell an `ai ai-circle-minus` mark, each with a tooltip of its label on hover and the same label as `sr-only` text
 - Hint: a row with `hint` ends its label with an info icon button that opens a popover titled with the label and described by the hint
 - Closing rule: when neither the last band nor the table carries a closing link, the last row draws a bottom rule (`data-closing`) so the table never ends open
 - Below the large breakpoint the plan button's label wraps (auto height, at least 40 px) instead of widening the table, so the folded matrix fits a 320 px screen whatever the font metrics.

@@ -4,7 +4,7 @@
 
 - Import: `import CommandRoot from '@aziontech/webkit/command-root'`
 - Compound import (dot notation, not tree-shakeable): `import Command from '@aziontech/webkit/command'`
-- Category: overlay · Surface: product · Structure: composition
+- Category: overlay · Surface: app · Structure: composition
 - API as JSON: [command.json](https://github.com/aziontech/webkit/blob/main/.specs/command.json)
 
 ## When to use
@@ -276,7 +276,7 @@ packages/webkit/src/components/overlay/command/
         <CommandItem value="settings">
           <template #prefix
             ><i
-              class="ai ai-cog"
+              class="ai ai-settings"
               aria-hidden="true"
           /></template>
           Go to Settings

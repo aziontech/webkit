@@ -4,7 +4,7 @@
 
 - Import: `import FlowRoot from '@aziontech/webkit/flow-root'`
 - Compound import (dot notation, not tree-shakeable): `import Flow from '@aziontech/webkit/flow'`
-- Category: data · Surface: product · Structure: composition
+- Category: data · Surface: app · Structure: composition
 - API as JSON: [flow.json](https://github.com/aziontech/webkit/blob/main/.specs/flow.json)
 
 ## When to use

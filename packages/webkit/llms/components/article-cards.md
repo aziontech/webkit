@@ -3,7 +3,7 @@
 > A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `left` at the start (an article's closing row), `centered` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
 - Import: `import ArticleCards from '@aziontech/webkit/article-cards'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [article-cards.json](https://github.com/aziontech/webkit/blob/main/.specs/article-cards.json)
 
 ## When to use

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/logo",
  "treeShakeableImport": "@aziontech/webkit/logo",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

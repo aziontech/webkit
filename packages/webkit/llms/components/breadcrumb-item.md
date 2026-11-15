@@ -3,7 +3,7 @@
 > Single segment in a breadcrumb trail. Ancestor segments use muted label text and optional leading icon; the current page uses default text. Hover and focus-visible states match the Webkit navigation pattern (ghost overlay + focus ring).
 
 - Import: `import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'`
-- Category: navigation · Surface: product · Structure: monolithic
+- Category: navigation · Surface: app · Structure: monolithic
 - API as JSON: [breadcrumb-item.json](https://github.com/aziontech/webkit/blob/main/.specs/breadcrumb-item.json)
 
 ## When to use

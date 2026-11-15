@@ -3,7 +3,7 @@
 > The compliance band: a framed media split whose copy states the certifications and whose media is a frame grid of badges, each a picture over a check-marked pill, closed by a "see more" cell. It is a page section — the site places it from a `{ _id: 'compliance-badges', props }` entry and binds `props` straight onto it — and it composes `section-module`, `media-split` and `card-grid`.
 
 - Import: `import ComplianceBadges from '@aziontech/webkit/compliance-badges'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [compliance-badges.json](https://github.com/aziontech/webkit/blob/main/.specs/compliance-badges.json)
 
 ## When to use

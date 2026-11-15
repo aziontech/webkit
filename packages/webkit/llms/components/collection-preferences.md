@@ -3,7 +3,7 @@
 > The preferences panel of a collection, after Cloudscape's collection preferences: a cog button opens a dialog (or a drawer) with the page size, the columns (shown, hidden and ordered; a locked column always shows), wrapped lines, striped rows and density. Changes are a draft until Confirm; Cancel, `Esc` and the close button discard them. It holds no saved state itself: `useCollection` saves the confirmed value in `localStorage` and `preferencesProps` binds the value, the columns and the page sizes in one `v-bind`. It is the one column chooser of a table. Placed in a DataTable's `toolbar` slot with no `columns`, it reads the table through context: the columns are the table's hideable leaf columns (a column with `hideable: false` is listed locked), the draft starts from the table's column visibility and order, and Confirm writes both back to the table (`update:columnVisibility`) besides emitting `confirm` and `update:preferences`. Bound to `useCollection`, `preferencesProps` supplies `columns` and the context is not read.
 
 - Import: `import CollectionPreferences from '@aziontech/webkit/collection-preferences'`
-- Category: data · Surface: product · Structure: monolithic
+- Category: data · Surface: app · Structure: monolithic
 - API as JSON: [collection-preferences.json](https://github.com/aziontech/webkit/blob/main/.specs/collection-preferences.json)
 
 ## When to use
@@ -174,7 +174,7 @@
     <template #trigger="{ open }">
       <Button
         label="Table settings"
-        icon="ai ai-cog"
+        icon="ai ai-settings"
         kind="outlined"
         size="medium"
         @click="open"

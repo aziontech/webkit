@@ -3,7 +3,7 @@
 > A part-to-whole chart drawn as a ring (donut) or a disc (pie): one slice per series, the total in the center, a legend beside it. It shares the cartesian chart's data model, palette, legend behavior and loading / empty / error surface, so a dashboard reads as one system. Each slice is the sum of its series values, so a time series passes straight in as its share of the range.
 
 - Import: `import DonutChart from '@aziontech/webkit/donut-chart'`
-- Category: chart · Surface: product · Structure: monolithic
+- Category: chart · Surface: app · Structure: monolithic
 - API as JSON: [donut-chart.json](https://github.com/aziontech/webkit/blob/main/.specs/donut-chart.json)
 
 ## When to use

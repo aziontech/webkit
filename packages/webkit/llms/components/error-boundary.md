@@ -3,7 +3,7 @@
 > Guards one region of a page. When a component inside the region throws while it renders, sets up or runs a lifecycle hook, the boundary catches the error, reports it through its `error` event, and puts a recoverable message in the region's place: a danger `Alert` that says the section failed and offers **Try again**, which mounts the region again. The rest of the page keeps working. A `fallback` slot replaces the built-in message when the region needs a different shape (a card-sized `EmptyState`, for example).
 
 - Import: `import ErrorBoundary from '@aziontech/webkit/error-boundary'`
-- Category: feedback · Surface: product · Structure: monolithic
+- Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [error-boundary.json](https://github.com/aziontech/webkit/blob/main/.specs/error-boundary.json)
 
 ## When to use
@@ -23,8 +23,8 @@
 
 ## Don’t
 
-- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
-- A whole page that cannot be shown (missing route, no access, server failure) → use the `platform/states/not-found` block.
+- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `state/form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
+- A whole page that cannot be shown (missing route, no access, server failure) → use the `state/not-found` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -219,7 +219,7 @@
             <EmptyState
               title="This chart failed to load"
               description="The rest of the dashboard still works."
-              icon="ai ai-exclamation-triangle"
+              icon="ai ai-triangle-alert"
               size="small"
             >
               <template #actions>

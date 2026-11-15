@@ -81,10 +81,10 @@
 <template>
   <DocFrame caption="Console, + Create">
     <div
-      class="w-full rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
+      class="w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
     >
       <p class="text-heading-xs text-(--text-default)">Create a workload</p>
-      <p class="pt-(--spacing-xxs) text-body-sm text-(--text-muted)">
+      <p class="pt-(--spacing-2xs) text-body-sm text-(--text-muted)">
         Pick a template, or start from an empty project.
       </p>
     </div>
@@ -138,7 +138,7 @@
       <video
         autoplay
         :src="placeholderClip"
-        class="block h-auto w-full rounded-(--shape-elements)"
+        class="block h-auto w-full rounded-(--shape-control)"
       ></video>
     </DocFrame>
   </div>

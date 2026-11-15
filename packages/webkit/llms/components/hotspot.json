@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/hotspot",
  "treeShakeableImport": "@aziontech/webkit/hotspot",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

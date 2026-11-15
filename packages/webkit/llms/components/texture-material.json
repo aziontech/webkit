@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/texture-material",
  "treeShakeableImport": "@aziontech/webkit/texture-material",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

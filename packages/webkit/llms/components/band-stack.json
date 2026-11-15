@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/band-stack",
  "treeShakeableImport": "@aziontech/webkit/band-stack",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

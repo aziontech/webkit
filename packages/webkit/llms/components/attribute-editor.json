@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/attribute-editor",
  "treeShakeableImport": "@aziontech/webkit/attribute-editor",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
@@ -22,7 +22,7 @@
   "A fixed set of named settings on one resource → use `field` controls in a form.",
   "Many records the user browses, filters and acts on → use `data-table` with row actions.",
   "Many cells of many records edited in place, spreadsheet-style → use `data-grid`.",
-  "An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block."
+  "An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `edit/rule-builder` block."
  ],
  "related": [
   "tag-editor` — key and value tags with limits and validation, on top of AttributeEditor.",
@@ -30,7 +30,7 @@
   "input` — the default control of a cell; any control can replace it through `cell-<key>`.",
   "button`, `icon-button` — Add and Remove.",
   "separator` — the \"or\" between groups in grouped mode.",
-  "platform/edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell."
+  "edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell."
  ],
  "bestPractices": [
   "Keep two to four columns; more columns belong in a drawer per row.",

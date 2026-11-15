@@ -3,7 +3,7 @@
 > The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.
 
 - Import: `import SectionHeader from '@aziontech/webkit/section-header'`
-- Category: layout · Surface: product · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [section-header.json](https://github.com/aziontech/webkit/blob/main/.specs/section-header.json)
 
 ## When to use

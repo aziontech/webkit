@@ -3,7 +3,7 @@
 > A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional large centered section title opens the run. It is a page section — the site places it from a `{ _id: 'media-split-stack', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `band-stack`, `media-split`, `illustration`, `product-widget`, `diagram` and `button`. A band's picture is one of four things: a `ProductWidget` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. `kind` picks the layout only: `media-end` sets every picture at the closing end, `alternating` starts it at the opening end and swaps sides band by band; the bands keep the same shape in both.
 
 - Import: `import MediaSplitStack from '@aziontech/webkit/media-split-stack'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [media-split-stack.json](https://github.com/aziontech/webkit/blob/main/.specs/media-split-stack.json)
 
 ## When to use

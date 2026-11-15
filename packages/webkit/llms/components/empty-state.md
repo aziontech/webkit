@@ -3,7 +3,7 @@
 > Centered placeholder shown when a resource list or section has no content yet. Stacks an optional standardized adornment, a title, an optional description, and a consumer-composed actions area (buttons + documentation link) to guide the user toward a first action. The adornment is a standardized, size-scaled featured-icon tile driven by the `icon` prop; the consumer may instead supply custom content via the `icon` slot, or omit both for no adornment. Unlike `Alert`, which is an inline severity banner, `EmptyState` is a full-region zero-data state and renders either inside a bordered surface card or on a plain transparent background.
 
 - Import: `import EmptyState from '@aziontech/webkit/empty-state'`
-- Category: feedback · Surface: product · Structure: monolithic
+- Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [empty-state.json](https://github.com/aziontech/webkit/blob/main/.specs/empty-state.json)
 
 ## When to use

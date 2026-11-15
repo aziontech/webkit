@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/progress",
  "treeShakeableImport": "@aziontech/webkit/progress",
  "category": "feedback",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

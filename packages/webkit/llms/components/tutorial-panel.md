@@ -4,7 +4,7 @@
 
 - Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
-- Category: content · Surface: product · Structure: composition
+- Category: content · Surface: app · Structure: composition
 - API as JSON: [tutorial-panel.json](https://github.com/aziontech/webkit/blob/main/.specs/tutorial-panel.json)
 
 ## When to use
@@ -125,7 +125,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ## Right-to-left
 
 - Layout: logical utilities only; every row is a flex row that follows `dir`.
-- Icons: `ai ai-check-circle` (not mirrored), `ai ai-sign-out` on Exit (not mirrored; it names the action, not a direction).
+- Icons: `ai ai-circle-check` (not mirrored), `ai ai-log-out` on Exit (not mirrored; it names the action, not a direction).
 - Keyboard: no arrow keys.
 - User data: none.
 
@@ -267,7 +267,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
         >
           <h2
             id="new-service-title"
-            class="text-heading-xxs text-(--text-default)"
+            class="text-heading-2xs text-(--text-default)"
           >
             New service
           </h2>

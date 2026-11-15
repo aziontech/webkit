@@ -3,7 +3,7 @@
 > The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `quote-tabs` and `button`.
 
 - Import: `import ClientQuotes from '@aziontech/webkit/client-quotes'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [client-quotes.json](https://github.com/aziontech/webkit/blob/main/.specs/client-quotes.json)
 
 ## When to use

@@ -4,7 +4,7 @@
 
 - Import: `import ChartCardRoot from '@aziontech/webkit/chart-card-root'`
 - Compound import (dot notation, not tree-shakeable): `import ChartCard from '@aziontech/webkit/chart-card'`
-- Category: chart · Surface: product · Structure: composition
+- Category: chart · Surface: app · Structure: composition
 - API as JSON: [chart-card.json](https://github.com/aziontech/webkit/blob/main/.specs/chart-card.json)
 
 ## When to use
@@ -194,7 +194,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 <template>
   <ChartCard>
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Threats vs requests</ChartCard.Title>
         <Hint text="Requests WAF analyzed, split into blocked, logged and allowed." />
       </span>
@@ -345,7 +345,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 <template>
   <ChartCard class="max-w-(--container-3xl)">
     <ChartCard.Header>
-      <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+      <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
         <ChartCard.Title>Cross-site scripting threats</ChartCard.Title>
         <Hint text="Requests carrying cross-site scripting attacks against your domains." />
       </span>
@@ -364,7 +364,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
             <IconButton
               kind="transparent"
               size="small"
-              icon="ai ai-ellipsis-h"
+              icon="ai ai-ellipsis"
               aria-label="More options"
             />
           </DropdownMenuTrigger>

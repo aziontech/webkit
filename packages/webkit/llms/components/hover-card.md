@@ -4,7 +4,7 @@
 
 - Import: `import HoverCardRoot from '@aziontech/webkit/hover-card-root'`
 - Compound import (dot notation, not tree-shakeable): `import HoverCard from '@aziontech/webkit/hover-card'`
-- Category: overlay · Surface: product · Structure: composition
+- Category: overlay · Surface: app · Structure: composition
 - API as JSON: [hover-card.json](https://github.com/aziontech/webkit/blob/main/.specs/hover-card.json)
 
 ## When to use

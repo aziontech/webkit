@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/select",
  "treeShakeableImport": "@aziontech/webkit/select-root",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

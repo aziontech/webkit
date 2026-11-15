@@ -3,7 +3,7 @@
 > The marketing site's chrome, composed once in the app: `SiteNav` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteNav` and `SiteFooter` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.
 
 - Import: `import SiteLayout from '@aziontech/webkit/site-layout'`
-- Category: layout · Surface: marketing · Structure: monolithic
+- Category: layout · Surface: site · Structure: monolithic
 - API as JSON: [site-layout.json](https://github.com/aziontech/webkit/blob/main/.specs/site-layout.json)
 
 ## When to use
@@ -32,7 +32,7 @@
 - SiteFooter` — the footer; `footer` is bound onto it (`kind="site"` closes a framed page).
 - SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - Command` — the search palette the bar's search button opens.
-- shells/website` — the block that shows this layout with the azion.com navigation and footer.
+- shell/site` — the block that shows this layout with the azion.com navigation and footer.
 
 ## Props
 

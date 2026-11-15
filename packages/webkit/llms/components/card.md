@@ -3,7 +3,7 @@
 > Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
 
 - Import: `import Card from '@aziontech/webkit/card'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [card.json](https://github.com/aziontech/webkit/blob/main/.specs/card.json)
 
 ## When to use
@@ -34,7 +34,7 @@
 - It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
-- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `platform/view/template-browser`).
+- It is a template tile in a gallery with no vendor, badge or install state → keep `kind="default"` with a `content` slot (see `view/template-browser`).
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

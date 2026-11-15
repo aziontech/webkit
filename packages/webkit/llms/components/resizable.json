@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/resizable",
  "treeShakeableImport": "@aziontech/webkit/resizable-root",
  "category": "layout",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

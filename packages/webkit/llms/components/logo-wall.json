@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/logo-wall",
  "treeShakeableImport": "@aziontech/webkit/logo-wall",
  "category": "marketing",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "A frame around composed markup, with a caption under it. The default slot is what an author reaches for when the thing being framed is not a file.",
-   "sfc": "<script setup>\n  import DocFrame from '@aziontech/webkit/doc-frame'\n</script>\n\n<template>\n  <DocFrame caption=\"Console, + Create\">\n    <div\n      class=\"w-full rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n    >\n      <p class=\"text-heading-xs text-(--text-default)\">Create a workload</p>\n      <p class=\"pt-(--spacing-xxs) text-body-sm text-(--text-muted)\">\n        Pick a template, or start from an empty project.\n      </p>\n    </div>\n  </DocFrame>\n</template>"
+   "sfc": "<script setup>\n  import DocFrame from '@aziontech/webkit/doc-frame'\n</script>\n\n<template>\n  <DocFrame caption=\"Console, + Create\">\n    <div\n      class=\"w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)\"\n    >\n      <p class=\"text-heading-xs text-(--text-default)\">Create a workload</p>\n      <p class=\"pt-(--spacing-2xs) text-body-sm text-(--text-muted)\">\n        Pick a template, or start from an empty project.\n      </p>\n    </div>\n  </DocFrame>\n</template>"
   },
   {
    "name": "Media",
@@ -13,7 +13,7 @@
   {
    "name": "Autoplay",
    "summary": "A clip that plays on its own is decoration, so it must not seize the reader's speakers or take over an iOS viewport, and — with nobody there to replay it — it loops. `autoplay` therefore implies muted, inline and looping, and drops the controls. The frame applies the rule on both authoring paths: to the `autoplay` prop, and to a clip written by hand in the slot. WebKit ships no recordings, so the clip here is the neutral `@aziontech/webkit/assets/placeholder-clip.webm`; pass your own.",
-   "sfc": "<script setup>\n  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'\n  import DocFrame from '@aziontech/webkit/doc-frame'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <DocFrame\n      :src=\"placeholderClip\"\n      alt=\"Landing on step 3 of Create application\"\n      autoplay\n      caption=\"Autoplay: muted, inline, looping, no controls\"\n    />\n    <DocFrame caption=\"The same rule reaches a clip written by hand\">\n      <video\n        autoplay\n        :src=\"placeholderClip\"\n        class=\"block h-auto w-full rounded-(--shape-elements)\"\n      ></video>\n    </DocFrame>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import placeholderClip from '@aziontech/webkit/assets/placeholder-clip.webm'\n  import DocFrame from '@aziontech/webkit/doc-frame'\n</script>\n\n<template>\n  <div class=\"flex flex-col gap-(--spacing-lg)\">\n    <DocFrame\n      :src=\"placeholderClip\"\n      alt=\"Landing on step 3 of Create application\"\n      autoplay\n      caption=\"Autoplay: muted, inline, looping, no controls\"\n    />\n    <DocFrame caption=\"The same rule reaches a clip written by hand\">\n      <video\n        autoplay\n        :src=\"placeholderClip\"\n        class=\"block h-auto w-full rounded-(--shape-control)\"\n      ></video>\n    </DocFrame>\n  </div>\n</template>"
   }
  ]
 }

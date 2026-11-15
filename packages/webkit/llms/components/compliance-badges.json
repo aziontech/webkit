@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/compliance-badges",
  "treeShakeableImport": "@aziontech/webkit/compliance-badges",
  "category": "sections",
- "surface": "marketing",
+ "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

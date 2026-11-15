@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/key-value-pairs",
  "treeShakeableImport": "@aziontech/webkit/key-value-pairs-root",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

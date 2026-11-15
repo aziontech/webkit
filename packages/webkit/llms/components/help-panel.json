@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/help-panel",
  "treeShakeableImport": "@aziontech/webkit/help-panel-root",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

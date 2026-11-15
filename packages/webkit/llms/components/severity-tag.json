@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/severity-tag",
  "treeShakeableImport": "@aziontech/webkit/severity-tag",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

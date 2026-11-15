@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/feature-list",
  "treeShakeableImport": "@aziontech/webkit/feature-list",
  "category": "content",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

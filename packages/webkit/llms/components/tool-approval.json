@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/tool-approval",
  "treeShakeableImport": "@aziontech/webkit/tool-approval",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

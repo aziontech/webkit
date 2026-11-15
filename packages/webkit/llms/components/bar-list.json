@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/bar-list",
  "treeShakeableImport": "@aziontech/webkit/bar-list",
  "category": "chart",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -3,7 +3,7 @@
 > A text field with a list of suggestions under it: typing filters the options, picking one fills the field, and a value that is not in the list is accepted as typed. It holds one string value, after the design sample's `ComboboxInput` and the ARIA 1.2 combobox pattern. It differs from `Select`, whose value must be one of its options and whose trigger is a button, and from `Command`, which runs commands from a palette instead of filling a form field. Naming: this is the ARIA 1.2 combobox (an editable field with suggestions, free text by default). In shadcn, `Combobox` is a searchable select whose value must come from the list; get that here with `allow-custom="false"` (or `Select` with a search field). `allowCustom` and `filter` default to `true` and are recorded as exceptions to the default-false rule: inverting them would break every consumer. `emptyTitle` is the empty-list text prop, the name `table` and `select` use; AttributeEditor's `empty` names the same idea.
 
 - Import: `import Combobox from '@aziontech/webkit/combobox'`
-- Category: inputs · Surface: product · Structure: monolithic
+- Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [combobox.json](https://github.com/aziontech/webkit/blob/main/.specs/combobox.json)
 
 ## When to use

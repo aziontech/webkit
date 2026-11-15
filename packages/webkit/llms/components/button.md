@@ -3,7 +3,7 @@
 > The labelled control that triggers an action. `kind` ranks the action in its view (one `primary`, the rest `secondary`, `outlined`, `transparent`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
 
 - Import: `import Button from '@aziontech/webkit/button'`
-- Category: actions · Surface: product · Structure: monolithic
+- Category: actions · Surface: app · Structure: monolithic
 - API as JSON: [button.json](https://github.com/aziontech/webkit/blob/main/.specs/button.json)
 
 ## When to use

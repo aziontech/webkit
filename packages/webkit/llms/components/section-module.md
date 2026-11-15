@@ -3,7 +3,7 @@
 > The brick of the page column: a section whose header row is divided from its body by a hairline and which is divided from the module above it by another. Stacked inside a `section-container`, a run of modules reads as one continuous frame, because each module draws only its own top rule and hands its sides to the column. It is where a band's header and a band's content are joined, so no page has to re-draw that join.
 
 - Import: `import SectionModule from '@aziontech/webkit/section-module'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [section-module.json](https://github.com/aziontech/webkit/blob/main/.specs/section-module.json)
 
 ## When to use

@@ -3,7 +3,7 @@
 > The bar at the bottom of a settings or create page that holds the status of unsaved work and its Discard (or Cancel) and Save actions. `floating` overlays the bottom of the scroll region without moving the content and is shown while the form is dirty; `docked` takes its own row at the bottom; `plain` closes a form column saved as one unit, always shown; `fade` closes a wizard step with no border or surface, the step content fading into the canvas above Back and Next; `centered` floats the actions as a raised card centred over the bottom of a create page, always shown.
 
 - Import: `import SaveBar from '@aziontech/webkit/save-bar'`
-- Category: layout · Surface: product · Structure: monolithic
+- Category: layout · Surface: app · Structure: monolithic
 - API as JSON: [save-bar.json](https://github.com/aziontech/webkit/blob/main/.specs/save-bar.json)
 
 ## When to use

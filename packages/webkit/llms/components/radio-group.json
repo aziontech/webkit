@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/radio-group",
  "treeShakeableImport": "@aziontech/webkit/radio-group-root",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

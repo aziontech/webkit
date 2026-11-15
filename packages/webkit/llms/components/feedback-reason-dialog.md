@@ -3,7 +3,7 @@
 > Asks why an assistant response was not helpful, right after the thumbs-down in `ChatMessage.Feedback`: a small dialog with one required reason (radio buttons) and optional details, then Send feedback. It turns a bare thumbs-down into a signal the team can act on, without a page or a form of the owner's own. The owner opens it, sends the payload it emits and closes it.
 
 - Import: `import FeedbackReasonDialog from '@aziontech/webkit/feedback-reason-dialog'`
-- Category: ai · Surface: product · Structure: monolithic
+- Category: ai · Surface: app · Structure: monolithic
 - API as JSON: [feedback-reason-dialog.json](https://github.com/aziontech/webkit/blob/main/.specs/feedback-reason-dialog.json)
 
 ## When to use

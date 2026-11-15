@@ -33,6 +33,7 @@ Used by: [ClientQuotes](../components/client-quotes.md), [Hero](../components/he
 | `axur` | Axur |
 | `azure` | Azure |
 | `caixa` | Caixa |
+| `cloudflare-workers` | Cloudflare Workers |
 | `coca-cola` | Coca-Cola |
 | `contabilizei` | Contabilizei |
 | `dafiti` | Dafiti |
@@ -83,4 +84,3 @@ Used by: [ClientQuotes](../components/client-quotes.md), [Hero](../components/he
 | `vite` | Vite |
 | `vitepress` | VitePress |
 | `vue` | Vue |
-| `workers-cloudflare` | Cloudflare Workers |

@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/input-group",
  "treeShakeableImport": "@aziontech/webkit/input-group-root",
  "category": "inputs",
- "surface": "product",
+ "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [

@@ -3,7 +3,7 @@
 > One cell of a media band: a scene above, and under it a run-in caption whose lead names what the scene shows and whose sentence continues on the same line, so a row of tiles reads as one paragraph of claims under one row of panels. It comes in two registers. `frame` draws the page's frame language around the media alone — never around the copy — which is what lets the captions sit on the page column with no rules between them. `plain` draws no rules at all: the tile is itself the cell, filled and inset, for a `card-grid` in its `divider` register where the grid's own hairlines separate the columns.
 
 - Import: `import MediaTile from '@aziontech/webkit/media-tile'`
-- Category: marketing · Surface: marketing · Structure: monolithic
+- Category: marketing · Surface: site · Structure: monolithic
 - API as JSON: [media-tile.json](https://github.com/aziontech/webkit/blob/main/.specs/media-tile.json)
 
 ## When to use

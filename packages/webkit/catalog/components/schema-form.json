@@ -7,7 +7,7 @@
   "A resource's create or edit drawer generated from its OpenAPI request schema, with choices read from other endpoints through a loader the app supplies."
  ],
  "avoidWhen": [
-  "A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`platform/edit/edit-resource`, `platform/create/single-page-create`).",
+  "A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`edit/edit-resource`, `create/create-page`).",
   "Rows of key/value pairs the user adds and removes → use `attribute-editor`.",
   "Editing the schema itself, or raw JSON → use `code-editor`.",
   "A single choice or value → use the control directly inside a `field`."

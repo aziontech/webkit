@@ -3,7 +3,7 @@
 > The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 - Import: `import FeatureTabs from '@aziontech/webkit/feature-tabs'`
-- Category: sections · Surface: marketing · Structure: monolithic
+- Category: sections · Surface: site · Structure: monolithic
 - API as JSON: [feature-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-tabs.json)
 
 ## When to use
@@ -128,7 +128,7 @@
     language: 'javascript',
     code,
     fileName,
-    fileIcon: 'ai-cor ai-js'
+    fileIcon: 'ai-color ai-javascript'
   })
 
   const tabs = [

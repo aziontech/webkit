@@ -3,7 +3,7 @@
 > Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `popover` instead.
 
 - Import: `import Tooltip from '@aziontech/webkit/tooltip'`
-- Category: overlay · Surface: product · Structure: monolithic
+- Category: overlay · Surface: app · Structure: monolithic
 - API as JSON: [tooltip.json](https://github.com/aziontech/webkit/blob/main/.specs/tooltip.json)
 
 ## When to use

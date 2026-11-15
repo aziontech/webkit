@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/suggestion-group",
  "treeShakeableImport": "@aziontech/webkit/suggestion-group",
  "category": "ai",
- "surface": "product",
+ "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

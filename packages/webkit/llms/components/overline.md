@@ -3,7 +3,7 @@
 > Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand primary color, optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `ticker`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `ticker`) through it.
 
 - Import: `import Overline from '@aziontech/webkit/overline'`
-- Category: content · Surface: product · Structure: monolithic
+- Category: content · Surface: app · Structure: monolithic
 - API as JSON: [overline.json](https://github.com/aziontech/webkit/blob/main/.specs/overline.json)
 
 ## When to use
