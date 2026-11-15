@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 69bc2a274377d2d58c7fd300e2698b10e46d4c41ecb6df29e32f7f725f16b1b5
+checksum: b876a9055911bf57da497716843a70c0758c408dcd1fa515210e4bb3e2f1f4ae
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -24,6 +24,7 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 
 ## When to use
 
+- Use Table for records that share columns when you compose the rows by hand; for any console list of resources people scan, sort and act on, pass `data` + `columns` to DataTable, which renders through these parts.
 - A small, static table, or one whose cells need a layout the column model cannot express: compose `Table.Header` / `Table.Row` / `Table.Cell` by hand. The root loads no engine.
 - The parts of a DataTable: the toolbar parts and cell presets go in its slots, imported from this compound (`Table.Search`, `Table.CellStatus`).
 - Use Table for read-and-act content; for repeated records pass `data` + `columns` to `data-table`, and when people edit cells in place use `data-grid`.

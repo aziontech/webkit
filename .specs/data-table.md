@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 1b276b4ccf00613f0eb26367ff10d5e4846ec17170dca2f426381af5e8354707
+checksum: 08b9af7dac28d159c36385a4c6faed889ad62fd4a8121e73365153dc48fddab9
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -31,6 +31,7 @@ The data-driven table: pass `data` + `columns` and it renders the header, rows, 
 
 ## When to use
 
+- Use DataTable for records that share columns — any console list of resources people scan, sort and act on.
 - Records with the same fields shown in rows and columns, where the reader compares, sorts, selects or acts on rows (resource lists, logs, usage breakdowns): use DataTable for read-and-act lists of repeated records.
 - A list needs a toolbar for search, structured filters, column visibility, CSV export or refresh — the `Table.*` toolbar parts drive the DataTable through context.
 - Server-backed data that pages, sorts or filters on the API: `manual-pagination`, `manual-sorting` and `manual-filtering` emit the state instead of slicing locally.
