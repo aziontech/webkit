@@ -15,7 +15,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - One region of a page failed to render while the rest works: wrap the region in `ErrorBoundary`; it shows a danger `Alert` with Try again in the region's place.
 - A list with no items yet: use `platform/states/first-use`. A list whose filter matched nothing: use the no-match state of `platform/view/table-view`.
-- A form the server rejected: use `platform/states/form-error`.
+- A form the server rejected: use `platform/states/form-validation` (SectionRejected).
 - A build or deploy that failed: use `platform/states/async-submit`; its toast and page `Alert` carry Edit and Redeploy.
 - The account itself could not load after sign-in: that is an auth screen; see `platform/auth`.
 
@@ -77,6 +77,6 @@ Two at most, side by side, wrapping on narrow screens. The way out is primary (`
 
 - `shells/console` — the shell that frames ResourceNotFound and a 403 inside the product.
 - `platform/states/first-use` — an empty list, which is not an error.
-- `platform/states/form-error` — a server rejection scoped to a form section.
+- `platform/states/form-validation` (SectionRejected) — a server rejection scoped to a form section.
 - `platform/states/async-submit` — the outcome of a build or deploy, with Edit and Redeploy.
 - `platform/auth` — the sign-in screens, including the account that could not load.

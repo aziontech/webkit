@@ -15,7 +15,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
-  import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
@@ -181,142 +180,6 @@
     )
   ])
 
-  interface Template {
-    id: string
-    title: string
-    framework: string
-    icon: string
-    description: string
-    markClass: string
-  }
-
-  const template = (
-    id: string,
-    title: string,
-    framework: string,
-    icon: string,
-    description: string,
-    markClass = ''
-  ): Template => ({ id, title, framework, icon, description, markClass })
-
-  const INVERT_IN_DARK = '[[data-theme=dark]_&]:invert'
-
-  const templates: Template[] = [
-    template(
-      'next-starter',
-      'Next.js Starter',
-      'Next.js',
-      'ai-cor ai-next',
-      'A Next.js app with server rendering and static pages, ready to deploy.',
-      INVERT_IN_DARK
-    ),
-    template(
-      'react-starter',
-      'React Starter',
-      'React',
-      'ai-cor ai-react',
-      'A single-page React app built with Vite, every route served from the edge.'
-    ),
-    template(
-      'vue-starter',
-      'Vue Starter',
-      'Vue',
-      'ai-cor ai-vue',
-      'A lightweight Vue app with routing, built with Vite.'
-    ),
-    template(
-      'nuxt-store',
-      'Nuxt Storefront',
-      'Nuxt',
-      'ai-cor ai-nuxt',
-      'A product catalog with a cart, rendered on the server and cached close to buyers.'
-    ),
-    template(
-      'astro-blog',
-      'Astro Blog',
-      'Astro',
-      'ai-cor ai-astro',
-      'A content-first blog with Markdown posts, an RSS feed and a sitemap.'
-    ),
-    template(
-      'angular-dashboard',
-      'Angular Dashboard',
-      'Angular',
-      'ai-cor ai-angular',
-      'A single-page admin dashboard with routing and lazy-loaded modules.'
-    ),
-    template(
-      'svelte-starter',
-      'Svelte Starter',
-      'SvelteKit',
-      'ai-cor ai-svelte',
-      'A SvelteKit app with server routes and prerendered pages.'
-    ),
-    template(
-      'solid-starter',
-      'Solid Starter',
-      'SolidStart',
-      'ai-cor ai-solidjs',
-      'A SolidStart app with fine-grained updates and streaming server rendering.'
-    ),
-    template(
-      'qwik-starter',
-      'Qwik Starter',
-      'Qwik',
-      'ai ai-qwik',
-      'A resumable Qwik app that loads only the code a visitor touches.'
-    ),
-    template(
-      'gatsby-site',
-      'Gatsby Site',
-      'Gatsby',
-      'ai ai-gatsby',
-      'A marketing site built at deploy time from Markdown and images.'
-    ),
-    template(
-      'docusaurus-docs',
-      'Docusaurus Docs',
-      'Docusaurus',
-      'ai ai-docusaurus',
-      'A documentation site with versioned sections, search and a blog.'
-    ),
-    template(
-      'vitepress-docs',
-      'VitePress Docs',
-      'VitePress',
-      'ai ai-vitepress',
-      'A fast documentation site written in Markdown, with a sidebar and search.'
-    ),
-    template(
-      'hugo-docs',
-      'Hugo Docs',
-      'Hugo',
-      'ai ai-hugo',
-      'A documentation site with search, versioned sections and dark mode.'
-    ),
-    template(
-      'static-site',
-      'Static Site',
-      'Static files',
-      'ai ai-edge-storage',
-      'Publish a folder of built files and serve it from the closest location.'
-    ),
-    template(
-      'reverse-proxy',
-      'Reverse Proxy',
-      'JavaScript',
-      'ai ai-edge-connectors',
-      'Front an origin you already run and pass every request on to it.'
-    ),
-    template(
-      'rest-api',
-      'REST API',
-      'Hono',
-      'ai ai-hono',
-      'A small Hono API with typed routes, running at the edge.'
-    )
-  ]
-
   const withStatus = (item: Integration) => ({
     ...item,
     status: item.installedOn.length ? 'installed' : 'available'
@@ -360,31 +223,6 @@
   })
 
   const featured = computed(() => catalog.value.filter((item) => item.featured))
-
-  const {
-    items: templateItems,
-    propertyFilterProps: templateFilterProps,
-    status: templateStatus,
-    clearFilters: clearTemplateFilters
-  } = useCollection({
-    items: templates,
-    filtering: { fields: ['title', 'framework', 'description'] },
-    propertyFiltering: {
-      properties: [
-        { key: 'title', label: 'Name' },
-        {
-          key: 'framework',
-          label: 'Framework',
-          options: [...new Set(templates.map((item) => item.framework))]
-            .sort()
-            .map((value) => ({ value }))
-        }
-      ]
-    },
-    url: { prefix: 'templates' }
-  })
-
-  const activeTab = ref('templates')
 
   const detailOpen = ref(false)
   const selectedId = ref('request-signer')
@@ -459,7 +297,7 @@
     <div class="layout-column flex min-h-full flex-col">
       <PageHeader
         title="Marketplace"
-        description="Find integrations and templates that run on your applications."
+        description="Find integrations that run on your applications."
       >
         <template #actions>
           <Button
@@ -474,175 +312,107 @@
       </PageHeader>
 
       <div class="layout-section-start">
-        <Tabs.Root v-model="activeTab">
-          <Tabs.List align="center">
-            <Tabs.Item
-              value="templates"
-              label="Templates"
-            />
-            <Tabs.Item
-              value="integrations"
-              label="Integrations"
-            />
-          </Tabs.List>
-          <div class="relative isolate w-full">
-            <Tabs.Panel value="templates">
-              <section
-                class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
-                aria-label="Templates"
+        <div class="flex min-w-0 flex-col gap-(--layout-section-gap) pt-(--layout-group-gap)">
+          <section
+            v-if="!filtersActive"
+            class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+            aria-labelledby="marketplace-featured"
+          >
+            <h2
+              id="marketplace-featured"
+              class="text-heading-xxs text-(--text-default)"
+            >
+              Featured
+            </h2>
+            <ul class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 md:grid-cols-3">
+              <li
+                v-for="item in featured"
+                :key="item.id"
+                class="flex min-w-0"
               >
-                <PropertyFilter
-                  v-bind="templateFilterProps"
-                  placeholder="Search templates"
-                  aria-label="Search templates"
+                <Card
+                  class="w-full"
+                  kind="integration"
+                  featured
+                  :title="item.name"
+                  :vendor="item.vendor"
+                  :logo="item.logo"
+                  :description="item.description"
+                  :badges="[{ label: CONTEXTS[item.context] }]"
+                  :installed="item.installedOn.length > 0"
+                  @select="openDetail(item.id)"
                 />
+              </li>
+            </ul>
+          </section>
 
-                <EmptyState
-                  v-if="templateStatus === 'no-match'"
-                  bordered
-                  size="medium"
-                  icon="pi pi-search"
-                  title="No matching templates"
-                  description="No template matches these filters. Try another name or framework."
+          <section
+            class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+            aria-labelledby="marketplace-all"
+          >
+            <h2
+              id="marketplace-all"
+              class="text-heading-xxs text-(--text-default)"
+            >
+              All integrations
+            </h2>
+            <PropertyFilter
+              v-bind="propertyFilterProps"
+              placeholder="Search integrations"
+              aria-label="Search integrations"
+            />
+
+            <EmptyState
+              v-if="status === 'no-match'"
+              size="medium"
+              icon="pi pi-filter-slash"
+              title="No matching integrations"
+              description="No integration matches this search. Remove a filter to widen the results."
+            >
+              <template #actions>
+                <Button
+                  label="Clear filters"
+                  kind="outlined"
+                  size="small"
+                  @click="clearFilters"
+                />
+              </template>
+            </EmptyState>
+
+            <ul
+              v-else
+              class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 xl:grid-cols-3"
+            >
+              <li
+                v-for="item in items"
+                :key="item.id"
+                class="flex min-w-0"
+              >
+                <Card
+                  class="w-full"
+                  kind="integration"
+                  :title="item.name"
+                  :vendor="item.vendor"
+                  :logo="item.logo"
+                  :description="item.description"
+                  :badges="[{ label: item.category, severity: 'neutral' }]"
+                  :installed="item.status === 'installed'"
+                  @select="openDetail(item.id)"
                 >
-                  <template #actions>
+                  <template #action>
                     <Button
-                      label="Clear filters"
+                      :label="item.status === 'installed' ? 'Configure' : 'Install'"
+                      :aria-label="`${item.status === 'installed' ? 'Configure' : 'Install'} ${item.name}`"
                       kind="outlined"
                       size="small"
-                      @click="clearTemplateFilters"
+                      @click="openDetail(item.id)"
                     />
                   </template>
-                </EmptyState>
-
-                <ul
-                  v-else
-                  class="m-0 grid list-none grid-cols-2 gap-(--spacing-md) p-0 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
-                >
-                  <li
-                    v-for="item in templateItems"
-                    :key="item.id"
-                    class="flex min-w-0"
-                  >
-                    <Card
-                      kind="integration"
-                      class="w-full"
-                      :title="item.title"
-                      :logo="[item.icon, item.markClass].filter(Boolean).join(' ')"
-                      :description="item.description"
-                      :badges="[{ label: item.framework, severity: 'neutral' }]"
-                      :href="`/marketplace/templates/${item.id}`"
-                    />
-                  </li>
-                </ul>
-              </section>
-            </Tabs.Panel>
-
-            <Tabs.Panel value="integrations">
-              <div class="flex min-w-0 flex-col gap-(--layout-section-gap) pt-(--layout-group-gap)">
-                <section
-                  v-if="!filtersActive"
-                  class="flex min-w-0 flex-col gap-(--layout-group-gap)"
-                  aria-labelledby="marketplace-featured"
-                >
-                  <h2
-                    id="marketplace-featured"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    Featured
-                  </h2>
-                  <ul class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 md:grid-cols-3">
-                    <li
-                      v-for="item in featured"
-                      :key="item.id"
-                      class="flex min-w-0"
-                    >
-                      <Card
-                        class="w-full"
-                        kind="integration"
-                        featured
-                        :title="item.name"
-                        :vendor="item.vendor"
-                        :logo="item.logo"
-                        :description="item.description"
-                        :badges="[{ label: CONTEXTS[item.context] }]"
-                        :installed="item.installedOn.length > 0"
-                        @select="openDetail(item.id)"
-                      />
-                    </li>
-                  </ul>
-                </section>
-
-                <section
-                  class="flex min-w-0 flex-col gap-(--layout-group-gap)"
-                  aria-labelledby="marketplace-all"
-                >
-                  <h2
-                    id="marketplace-all"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    All integrations
-                  </h2>
-                  <PropertyFilter
-                    v-bind="propertyFilterProps"
-                    placeholder="Search integrations"
-                    aria-label="Search integrations"
-                  />
-
-                  <EmptyState
-                    v-if="status === 'no-match'"
-                    size="medium"
-                    icon="pi pi-filter-slash"
-                    title="No matching integrations"
-                    description="No integration matches this search. Remove a filter to widen the results."
-                  >
-                    <template #actions>
-                      <Button
-                        label="Clear filters"
-                        kind="outlined"
-                        size="small"
-                        @click="clearFilters"
-                      />
-                    </template>
-                  </EmptyState>
-
-                  <ul
-                    v-else
-                    class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 sm:grid-cols-2 xl:grid-cols-3"
-                  >
-                    <li
-                      v-for="item in items"
-                      :key="item.id"
-                      class="flex min-w-0"
-                    >
-                      <Card
-                        class="w-full"
-                        kind="integration"
-                        :title="item.name"
-                        :vendor="item.vendor"
-                        :logo="item.logo"
-                        :description="item.description"
-                        :badges="[{ label: item.category, severity: 'neutral' }]"
-                        :installed="item.status === 'installed'"
-                        @select="openDetail(item.id)"
-                      >
-                        <template #action>
-                          <Button
-                            :label="item.status === 'installed' ? 'Configure' : 'Install'"
-                            :aria-label="`${item.status === 'installed' ? 'Configure' : 'Install'} ${item.name}`"
-                            kind="outlined"
-                            size="small"
-                            @click="openDetail(item.id)"
-                          />
-                        </template>
-                      </Card>
-                    </li>
-                  </ul>
-                </section>
-              </div>
-            </Tabs.Panel>
-          </div>
-        </Tabs.Root>
+                </Card>
+              </li>
+            </ul>
+          </section>
+        </div>
       </div>
     </div>
 

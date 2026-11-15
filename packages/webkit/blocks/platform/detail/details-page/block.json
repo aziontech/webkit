@@ -3,7 +3,7 @@
   "name": "DetailsPage",
   "title": "Templates/Platform/Detail/DetailsPage",
   "surface": "product",
-  "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page has no tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The FirstDeploy variant draws the summary cards before and during the first deploy, Invocation the summary card of one function invocation, DeploymentQueued a deployment that has not started, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
+  "summary": "The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -13,9 +13,7 @@
     "resource overview",
     "detail page",
     "summary page",
-    "deployment detail",
     "application overview",
-    "deployment failed",
     "página de visão geral",
     "detalhe do recurso",
     "página de resumo",
@@ -42,13 +40,11 @@
     "topologia",
     "first deploy",
     "not deployed",
-    "deployment queued",
-    "function invocation",
-    "invocation summary",
     "connected repository",
     "primeiro deploy",
-    "implantação na fila",
-    "invocação de função"
+    "resource overview tabs",
+    "service details",
+    "policy details"
   ],
   "skills": ["webkit-layout", "webkit-navigation", "webkit-ui-states"],
   "primary": {
@@ -99,16 +95,6 @@
       "file": "variants/service-overview.vue"
     },
     {
-      "name": "DeploymentDetail",
-      "summary": "A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps.",
-      "file": "variants/deployment-detail.vue"
-    },
-    {
-      "name": "DeploymentFailed",
-      "summary": "A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.",
-      "file": "variants/deployment-failed.vue"
-    },
-    {
       "name": "Application",
       "summary": "An application page body with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `DataTable` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy.",
       "file": "variants/application.vue"
@@ -121,20 +107,6 @@
         "layout": "padded",
         "background": "dark"
       }
-    },
-    {
-      "name": "Invocation",
-      "summary": "The summary card of one function invocation: the function link, the invocation ID with a `CopyButton` and its status, Replay, the Recent switcher whose `DropdownMenu` lists the recent invocations with their status and start, the Invocation actions menu (Open in Real-Time Events, Function settings), a facts band with Started, Completed, Duration and Location, and a state band with the request that triggered it, copyable, and its outcome, in danger color when it failed.",
-      "file": "variants/invocation.vue",
-      "preview": {
-        "layout": "padded",
-        "background": "dark"
-      }
-    },
-    {
-      "name": "DeploymentQueued",
-      "summary": "A deployment waiting for a runner: the info banner, Visit disabled until the deployment is live, the Deployment details card with Queued as its status and Not started as its duration, and the Deployment logs card with a Queued `StatusIndicator` in its header and a not-started `EmptyState` in place of the steps, with no Phased or Complete switch.",
-      "file": "variants/deployment-queued.vue"
     },
     {
       "name": "ResourceBuildConnected",

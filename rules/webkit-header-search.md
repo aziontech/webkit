@@ -60,9 +60,8 @@ groups go in their `search` slot; a page opens the console palette with
   (`<SiteNav @search="searchOpen = true" />`) and mount the `Command` beside it.
 - Without a `Command` on the page, `@open` still fires on `⌘K` / `Ctrl K`, so a custom search
   dialog gets the shortcut for free.
-- Start from a shell block (`shells/console`, `shells/documentation`, `shells/website`: the app
-  layouts) or a header block (`headers/docs-header`, `headers/site-header`,
-  `headers/resource-header`): each already carries the trigger and the palette.
+- Start from a shell block (`shells/console`, `shells/documentation`, `shells/website`): each
+  layout already renders its header with the trigger and the palette.
 
 ## Do not
 

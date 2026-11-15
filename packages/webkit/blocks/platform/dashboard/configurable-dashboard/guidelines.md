@@ -10,6 +10,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use configurable-dashboard only when each reader rearranges and resizes the cards.
 - The same dashboard serves readers with different priorities, and each comes back often.
 - The cards are independent: none depends on its position to make sense.
 - The product has somewhere to store per-user preferences.
@@ -122,6 +123,6 @@ crosshair on every card. A legend with totals appears only when a card has more 
 ## Related
 
 - `platform/dashboard/analytics-dashboard` — the static version of the same cards.
-- `platform/dashboard/data-dashboard` — a fixed dashboard when the order tells the story.
+- `platform/dashboard/analytics-dashboard` — a fixed dashboard when the order tells the story.
 - `Board` — the grid component: layout model, bounds, reorder, resize and announcements.
 - `ChartCard` — the card inside each item, with the drag handle and resize corner.

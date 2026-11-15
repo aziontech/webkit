@@ -2,14 +2,14 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import AttributeEditorList from '../../blocks/platform/edit/attribute-editor/attribute-editor.vue'
-import CodeEditorArguments from '../../blocks/platform/edit/code-editor/variants/arguments.vue'
-import CodeEditorSaving from '../../blocks/platform/edit/code-editor/variants/saving.vue'
 import EditResource from '../../blocks/platform/edit/edit-resource/edit-resource.vue'
 import DangerZone from '../../blocks/platform/edit/edit-resource/variants/danger-zone.vue'
 import StaleRecord from '../../blocks/platform/edit/edit-resource/variants/stale-record.vue'
+import FunctionEditorArguments from '../../blocks/platform/edit/function-editor/variants/arguments.vue'
+import FunctionEditorSaving from '../../blocks/platform/edit/function-editor/variants/saving.vue'
 import RuleBuilder from '../../blocks/platform/edit/rule-builder/rule-builder.vue'
 import RuleBuilderComposed from '../../blocks/platform/edit/rule-builder/variants/composed.vue'
+import VariablesList from '../../blocks/platform/edit/variables/variables.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -42,9 +42,9 @@ const openCreate = async () => {
   return { panel, key, value }
 }
 
-describe('attribute-editor#List', () => {
+describe('variables#List', () => {
   it('draws the key and value fields with InputGroupInput and uppercases the key', async () => {
-    render(AttributeEditorList)
+    render(VariablesList)
     const { key, value } = await openCreate()
     expect(key.dataset.testid).toBe('input-group-input')
     expect(value.dataset.testid).toBe('input-group-input')
@@ -53,7 +53,7 @@ describe('attribute-editor#List', () => {
   })
 
   it('raises a success toast after creating a variable', async () => {
-    render(AttributeEditorList)
+    render(VariablesList)
     const { panel, key, value } = await openCreate()
     await userEvent.type(key, 'NEW_KEY')
     await userEvent.type(value, 'on')
@@ -64,7 +64,7 @@ describe('attribute-editor#List', () => {
 
   it('keeps the drawer open with a danger alert when the save fails', async () => {
     Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
-    render(AttributeEditorList)
+    render(VariablesList)
     const { panel, key, value } = await openCreate()
     await userEvent.type(key, 'NEW_KEY')
     await userEvent.type(value, 'on')
@@ -101,9 +101,9 @@ describe('edit-resource locked modules', () => {
   })
 })
 
-describe('code-editor#Arguments', () => {
+describe('function-editor#Arguments', () => {
   it('reorders fields with native Move buttons and announces the move', async () => {
-    const view = render(CodeEditorArguments)
+    const view = render(FunctionEditorArguments)
     const up = view.getByRole('button', { name: 'Move quality up' })
     expect(up.tagName).toBe('BUTTON')
     expect(
@@ -120,7 +120,7 @@ describe('code-editor#Arguments', () => {
   })
 
   it('shows Save loading, then a success toast', async () => {
-    const view = render(CodeEditorArguments)
+    const view = render(FunctionEditorArguments)
     await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
     const save = await waitFor(() => buttonIn(document, 'Save'))
     await fireEvent.click(save)
@@ -130,7 +130,7 @@ describe('code-editor#Arguments', () => {
 
   it('keeps the bar with a danger alert when the save fails', async () => {
     Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
-    const view = render(CodeEditorArguments)
+    const view = render(FunctionEditorArguments)
     await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
     await fireEvent.click(await waitFor(() => buttonIn(document, 'Save')))
     await waitFor(
@@ -144,9 +144,9 @@ describe('code-editor#Arguments', () => {
   })
 })
 
-describe('code-editor#Saving', () => {
+describe('function-editor#Saving', () => {
   it('holds Save in its loading state with Discard disabled', async () => {
-    render(CodeEditorSaving)
+    render(FunctionEditorSaving)
     await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
     expect(buttonIn(document, 'Save').getAttribute('aria-busy')).toBe('true')
   })

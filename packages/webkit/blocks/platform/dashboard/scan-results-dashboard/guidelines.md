@@ -9,6 +9,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use scan-results-dashboard when items wait for a verdict from an asynchronous analysis.
 - Items get a verdict from an asynchronous analysis (Clean, Suspicious, Flagged, Pending).
 - Some items are held or released depending on that verdict, and the exceptions need follow-up.
 - The reader needs to look up a specific item by name or submitter.
@@ -17,7 +18,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A continuous score rather than a verdict per item: use `platform/dashboard/health-score-dashboard`.
 - Alerts triaged by severity: use `platform/dashboard/alerts-dashboard`.
-- Requests decided by rules in real time: use `platform/dashboard/activity-outcomes-dashboard`.
+- Requests decided by rules in real time: use `platform/dashboard/security-dashboard`.
 
 ## Building blocks
 
@@ -130,5 +131,5 @@ The verdict of each row, in the same hue as its donut slice.
 ## Related
 
 - `platform/dashboard/alerts-dashboard` — the early delivery alerts as a triage queue.
-- `platform/dashboard/activity-outcomes-dashboard` — decisions made in real time.
+- `platform/dashboard/security-dashboard` — decisions made in real time.
 - `platform/view/table-view` — the submissions table on its own page.

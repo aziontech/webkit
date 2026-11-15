@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `top-bars/creation-bar` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route.
 status: active
 last_updated: 2026-11-14
 scope: general
@@ -52,8 +52,8 @@ for a page that opens its search palette. It already composes `AppLayout`, `Side
 of your own. Start it from the `shells/console` block (`npx @aziontech/webkit add shells/console`, or
 `get_pattern`): the block is the `App.vue`, with the real console navigation.
 
-**The focused creation shell is a block, not a component:** `headers/creation-header`
-(`npx @aziontech/webkit view headers/creation-header`), built from `global-header`, `icon-button`,
+**The focused creation shell is a block, not a component:** `top-bars/creation-bar`
+(`npx @aziontech/webkit view top-bars/creation-bar`), built from `global-header`, `icon-button`,
 `brand`, `breadcrumb` and `avatar`. Every `platform/create/*` block already renders it above its own
 `<main>`.
 
@@ -67,7 +67,7 @@ A page picks **exactly one**. The choice is not stylistic — it follows from wh
 
 |                      | **Persistent console shell**                                                                       | **Focused creation shell**                                                                                 |
 | -------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `headers/creation-header` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail        |
+| What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `top-bars/creation-bar` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail        |
 | Use for              | Hubs, lists, dashboards, settings — anywhere the user _browses_ and moves laterally                | Create / import / deploy a template / wizard — a single task with a start and an end                       |
 | Rail                 | **Yes** — the layout's navigation rail, built from your `navigation` data                          | **No** — removed so the task is the only focus                                                             |
 | Header               | The layout's: `breadcrumbs`, `SearchTrigger` (⌘K palette), your `actions` slot, the account avatar | `GlobalHeader`: back button + Azion brand + breadcrumb + account avatar                                    |
@@ -273,18 +273,18 @@ do compose yourself follows rule `webkit-header-search` (lint `webkit/header-sea
   says _where you are_ once you are below a module; the `PageHeader` is the page's own title +
   description + actions.
 
-### Shell 2 — focused creation: the `headers/creation-header` bar
+### Shell 2 — focused creation: the `top-bars/creation-bar` bar
 
 For a **single task** — create a resource, import, deploy a template, a wizard step. Editing an existing resource and watching its deploy stay inside `ConsoleLayout` as page bodies. The rail is gone so nothing competes with
 the form. The only chrome is one `GlobalHeader`: a **back** button, the Azion brand, the flow
 breadcrumb and the account avatar.
 
-There is no layout component for it today. It is the `headers/creation-header` block, and every
-`platform/create/*` block (`single-page-create`, `multipage-create`, `source-wizard`,
-`provision-wizard`, `create-hub`) already renders that bar above its own `<main>`. Route these flows
+There is no layout component for it today. It is the `top-bars/creation-bar` block, and every
+`platform/create/*` block (`single-page-create`, `multipage-create`, `create-hub`,
+`deploy-template`) already renders that bar above its own `<main>`. Route these flows
 **outside** `ConsoleLayout` (`meta: { shell: 'focused' }` in the `App.vue` above), so the rail never
 renders: a focused flow is a whole screen, the one kind of page that owns its header and its `<main>`.
-Signed-out screens (`platform/auth`, headed by `headers/auth-header`) are routed outside the layout
+Signed-out screens (`platform/auth`, headed by `top-bars/auth-bar`) are routed outside the layout
 the same way.
 
 ```ts
@@ -300,7 +300,7 @@ const routes = [
 ```
 
 When several flows share the bar, lift it once into your own shell, copied from the block
-(`npx @aziontech/webkit add headers/creation-header`):
+(`npx @aziontech/webkit add top-bars/creation-bar`):
 
 ```vue
 <!-- components/CreationShell.vue — the creation-header block, lifted once for
@@ -878,7 +878,7 @@ End with: `navigation sound` or `N gaps — fix before polish`.
   lists every prop, slot and event. `useConsoleLayout` (`@aziontech/webkit/use-console-layout`) opens
   its palette from a page. Start from the `shells/console` block (states `ListPage`, `DetailPage`,
   `Notifications`, `AccountSwitch`).
-- **Focused creation shell** — the `headers/creation-header` block (one `GlobalHeader` with back,
+- **Focused creation shell** — the `top-bars/creation-bar` block (one `GlobalHeader` with back,
   brand, flow breadcrumb and avatar, no rail), carried by every `platform/create/*` block; lift it into
   your own `CreationShell` when several flows share it.
 - **The other app layouts** — `SiteLayout` (`@aziontech/webkit/site-layout`) for the marketing site and

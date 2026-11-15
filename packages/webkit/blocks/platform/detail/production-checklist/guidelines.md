@@ -4,13 +4,14 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 ## When to use
 
+- Use production-checklist inside a resource's Overview tab for the few setup gates left before production traffic; it is a card, not a page.
 - On the Overview tab of a service or resource that is deployed but still has setup gates before it should take production traffic.
 - When the gates are few (three to five), independent and each completed by one action elsewhere in the console.
 
 ## When not to use
 
 - Commands to build and deploy a resource for the first time: use `platform/detail/get-started`.
-- Ordered steps the user must complete before the resource exists: use `platform/create/provision-wizard` or `platform/create/multipage-create`.
+- Ordered steps the user must complete before the resource exists: use `platform/create/multipage-create`.
 - A list of resources already bound to this one: use `platform/detail/attached-resources`.
 - A module the account has never used: use `platform/states/first-use`.
 

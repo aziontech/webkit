@@ -1,18 +1,18 @@
 # Marketplace
 
-The page where people find something made by Azion or a partner and add it to what they run. Two kinds of item live here: integrations, installed into an existing application, and templates, which start a new project. People browse by need ("block bots", "split traffic"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.
+The page where people find something made by Azion or a partner and add it to what they run. It lists integrations, installed into an existing application; templates, which start a new project, live in `platform/view/template-browser`. People browse by need ("block bots", "split traffic"), compare by publisher and context, read what an integration does and what it may touch, then install it on one application and keep working while it installs. One `useCollection` call holds the search and the filters; one drawer holds the detail and the install; the install reports by toast wherever the person is.
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
+- Use marketplace for installable integrations into an existing resource; templates live in template-browser.
 - A catalog of installable add-ons (integrations, extensions, plugins) with a publisher, a category and an installed state per account.
 - Installing means choosing a target (an application) and waiting for an asynchronous run.
-- The same page also lists the templates, the other way to start from someone else's work, as a searchable grid on the first tab.
 
 ## When not to use
 
-- Only templates, grouped by category with a filter, a preview and a README: use `platform/view/template-browser`.
+- The catalog of templates a project starts from: use `platform/view/template-browser`.
 - Deploying a chosen template: use `platform/create/deploy-template`.
 - The resources the account already created: use `platform/view/card-view` or `platform/view/table-view`.
 - Changing the settings of an installed integration on one application: use `platform/edit/edit-resource` from Configure.
@@ -23,61 +23,49 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 `PageHeader` at its medium size: "Marketplace" and one sentence of purpose. The actions slot holds only the outlined medium Documentation `Button`, which opens the docs in a new tab.
 
-### B. Item kinds — `Tabs` (required)
-
-`Tabs.Root` with Templates first and Integrations second, starting on the tab the URL names (Templates by default here, as in the design sample). The tab row is centred over the catalog with `Tabs.List align="center"`, as in the design sample; the solution page keeps its tabs at the start, since they head a resource page. Each tab is a `Tabs.Panel`; the panels keep their own state when the person switches.
-
-### C. Featured — `Card` (required)
+### B. Featured — `Card` (required)
 
 While no filter is set (`filtersActive` is false), a "Featured" `h2` over three `Card kind="integration" featured` tiles in a row (one a row on a phone): the mark, the name, the publisher and the description centred on a raised surface with a primary glow at the top, and the context as a primary badge in the corner. They carry no action, so the row reads as a recommendation; the tile opens the drawer. Searching hides the row, so the results start at the top.
 
-### D. Search and filter — `PropertyFilter` (required)
+### C. Search and filter — `PropertyFilter` (required)
 
 Under the "All integrations" `h2`, one `PropertyFilter` bound with `v-bind="propertyFilterProps"`. Free text searches the name, the publisher and the description; Publisher and Category list the values in the catalog, Context is Application or Firewall, and Status is Installed or Available. Every token lives in the URL (`url: true`).
 
-### E. Integration tiles — `Card`, `Button` (required)
+### D. Integration tiles — `Card`, `Button` (required)
 
 A `ul` grid, one to three tiles a row by width, of `Card kind="integration"`: the logo, the name (the stretched target that emits `select`), "by" the publisher, two lines of description, the category as a secondary badge, the Installed tag from `installed`, and in the `action` slot an outlined small `Button`, Install for an available integration and Configure for an installed one, named with the integration (`Install Rate Guard`). Both the tile and its action open the drawer.
 
-### F. No matching integrations — `EmptyState`, `Button` (required)
+### E. No matching integrations — `EmptyState`, `Button` (required)
 
 When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
 
-### G. Templates — `PropertyFilter`, `Card`, `EmptyState`, `Button` (required)
-
-The first tab is the full template catalog. A second `useCollection` runs the templates: its `PropertyFilter` (placeholder and `aria-label` "Search templates") turns free text over the name, the framework and the description, and a Framework property, into tokens that live in the URL under the `templates` prefix, so they never collide with the integration filter. Under it a `ul` grid of `Card kind="integration"` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark as the `logo` (`ai-cor` colour marks; the black Next.js mark inverts in dark), the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`), two lines of description and the framework as a secondary badge. The tile markup is the `Card`'s, shared with `platform/view/template-browser`. When its `status` is `no-match`, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear filters `Button` bound to the templates' `clearFilters`.
-
-### H. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
 A medium right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelContent` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
 
-### I. Install outcome — `Alert` (required)
+### G. Install outcome — `Alert` (required)
 
 The inline half of the async-submit outcome, at the top of the drawer: a success `Alert` naming the application ("Rate Guard is installed on storefront. It runs from the next request."), or a danger `Alert` with the server's reason and a Reinstall action. Nothing shows while idle or running; the button and the toast carry the running state.
 
-### J. Integration facts — `KeyValuePairs` (required)
+### H. Integration facts — `KeyValuePairs` (required)
 
 A two-column `KeyValuePairs` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
 
-### K. Overview — `DocProse` (required)
+### I. Overview — `DocProse` (required)
 
 An "Overview" `h3` over the publisher's text in `DocProse`, ending on what installing adds to the application. Then a "Permissions" `h3` with the list of what the integration may read or add, each line led by a check glyph.
 
-### L. Install form — `Field`, `Select` (required)
+### J. Install form — `Field`, `Select` (required)
 
 An "Install" `h3` ("Install on another application" once installed somewhere) over a required `Field` labelled Application with a `Select` of the applications it is not installed on yet. Submitting without a choice marks the `Field` invalid and shows `Field.Error` ("Select the application to install Rate Guard on."); otherwise `Field.Description` says where it runs. While the run lasts the `Field` is disabled. When no application is left, the field gives way to one sentence and the footer drops Install.
 
-### M. Solution page — `Tabs`, `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+### K. Solution page — `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
-### N. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
+### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
-The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingRow` in an `Item.List`, the rest are `Field`s. Errors follow `platform/states/form-error`: nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
-
-### O. Template page — `Field`, `Button`, `KeyValuePairs` (optional)
-
-A template as a page, for the template's own URL (the variant adds `SettingsSection`, `Input` and `Link`): the description, a deploy form (application name, repository) beside the facts. Deploy is a build and deploy, so it follows `platform/states/async-submit`: loading on the button, a progress toast, and a success toast with Edit and Redeploy.
+The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingRow` in an `Item.List`, the rest are `Field`s. Errors follow `platform/states/form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
 ### Install toast — through `toast`
 
@@ -88,7 +76,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`; derive the Status property from where each integration is installed.
 - Use `Card kind="integration"` for every integration tile, with the installed state as the `installed` prop and one action in the `action` slot.
 - Hide the Featured row while any filter is set.
-- Open on Templates and narrow the templates with one `PropertyFilter` on their own `useCollection`, as every list does; the grouped catalog with a preview drawer is the template browser's job.
+- Keep templates out of this page: a template starts a project, so it lives in `platform/view/template-browser`.
 - Open the detail in a drawer so the catalog, the filter and the scroll stay put.
 - Show the permissions before the install form, and the target as a required field.
 - Treat install as an async run: `loading` on Install, a progress toast, then the outcome as a toast and an inline `Alert`, with actions that fit an integration (Configure, Open application; Edit, Reinstall).
@@ -101,14 +89,13 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - Don't use "Retry" or "Try again" for a failed install; the action is Reinstall.
 - Don't show Install for an application that already runs the integration; filter it out of the `Select`.
 - Don't badge every tile with more than one tag beside Installed; the publisher and the category are enough to compare.
-- Don't rebuild the template browser inside the Templates tab: no categories, no property filter, no preview drawer; the tile links to the template page.
+- Don't add a Templates tab or template tiles; link to `platform/view/template-browser` instead.
 - Don't use `featured` for every integration tile; it marks the short Featured row only.
 
 ## Copy
 
-- **Title:** "Marketplace". Description: "Find integrations and templates that run on your applications."
-- **Tabs:** "Templates", "Integrations". **Sections:** "Featured", "All integrations".
-- **Template search:** placeholder and `aria-label` "Search templates"; no match: "No matching templates", "No template matches these filters. Try another name or framework.", "Clear filters".
+- **Title:** "Marketplace". Description: "Find integrations that run on your applications."
+- **Sections:** "Featured", "All integrations".
 - **Filter:** placeholder and `aria-label` "Search integrations".
 - **Tile action:** "Install" or "Configure"; its `aria-label` adds the name.
 - **Drawer:** the name, "by <publisher>", "Overview", "Permissions", "Install" or "Install on another application", the field "Application" with "Select an application".
@@ -122,8 +109,6 @@ Raised through `toast` with one id for the install, so progress turns into the o
 ## Accessibility
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the only `h1`, each section heading an `h2`, each tile name an `h3`.
-- The tabs follow the tablist pattern: arrow keys move between Templates and Integrations, and each panel is labelled by its tab.
-- Each template tile's target is a real link named by the template; the mark is decorative.
 - Each tile's target is a real button named by the integration; the action button sits above it and is named with the integration, so "Install" is never ambiguous in a list.
 - The Installed state is text in a `Tag`, never colour alone.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
@@ -132,24 +117,20 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## States
 
-- Default: the Templates tab with the search and the full template grid; each tile links to its template page.
-- Integrations: the Integrations tab with Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
+- Default: Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
 - Detail: the drawer is open on Request Signer with its details, overview, permissions and the install form.
 - Installing: Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
 - Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
 - InstallFailed: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
 - NoMatch: the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
-- TemplatesNoMatch: the template search "kubernetes" matches nothing; the bordered empty state offers Clear filters.
-- Loading: on Templates, the search is disabled and ten `Skeleton` tiles (mark, name, two lines) hold the grid in a band that is `aria-busy`; the Integrations tab holds six skeleton integration tiles under a disabled filter.
-
+- Loading: the search is disabled and six `Skeleton` integration tiles hold the grid in a band that is `aria-busy`.
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
 - Configure: Waiting Room settings on storefront, with the SaveBar after a change.
-- TemplatePage: Nuxt Storefront as a page with its deploy form.
 
 ## Related
 
-- `platform/view/template-browser` — the template catalog grouped by category, with a filter and a README preview.
+- `platform/view/template-browser` — the one template catalog, grouped by category, with a filter and a README preview.
 - `platform/create/deploy-template` — where a template's Deploy leads.
 - `platform/states/async-submit` — the toast and inline outcome every install follows.
-- `platform/states/form-error` — the field, section and toast placement of a form error.
+- `platform/states/form-validation` (SectionRejected) — the field, section and toast placement of a form error.
 - `Card` (`kind="integration"`) and `useCollection` — see `skills/webkit-lists`.

@@ -9,15 +9,15 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use executive-summary-dashboard for a one-page roll-up of business KPIs for leadership.
 - A recurring review (quarterly, monthly) where readers need results, trends, goals and context together.
 - The audience reads the page, they do not investigate on it.
 - There are a handful of headline metrics (about six) with targets.
 
 ## When not to use
 
-- Investigating a metric by dimension: use `platform/dashboard/analytics-dashboard` or
-  `platform/dashboard/data-dashboard`.
-- Tracking one project's tasks and sprint: use `platform/dashboard/project-status-dashboard`.
+- Investigating a metric by dimension: use `platform/dashboard/analytics-dashboard`
+  (Usage for consumption).
 - A total broken into categories: use `platform/dashboard/composition-dashboard`.
 
 ## Building blocks
@@ -125,6 +125,5 @@ The author's initials beside each note.
 
 ## Related
 
-- `platform/dashboard/project-status-dashboard` — one project against its plan.
 - `platform/dashboard/composition-dashboard` — where a cost metric breaks down.
 - `platform/dashboard/analytics-dashboard` — the detail behind a traffic metric.

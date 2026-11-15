@@ -19,7 +19,7 @@ const PKG_DIR = fileURLToPath(new URL('../..', import.meta.url))
 const require = createRequire(import.meta.url)
 
 const TYPESCRIPT_FOLDERS = [
-  'blocks/headers',
+  'blocks/top-bars',
   'blocks/shells',
   'blocks/platform/account',
   'blocks/platform/ai',

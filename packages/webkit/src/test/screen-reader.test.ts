@@ -11,7 +11,7 @@ import type { Component } from 'vue'
 import { nextTick } from 'vue'
 
 import SinglePageCreate from '../../blocks/platform/create/single-page-create/single-page-create.vue'
-import FormErrorRejected from '../../blocks/platform/states/form-error/variants/rejected.vue'
+import FormValidationSectionRejected from '../../blocks/platform/states/form-validation/variants/section-rejected.vue'
 import CommandDefault from '../../examples/command/default.vue'
 import DialogDefault from '../../examples/dialog/default.vue'
 import DrawerDefault from '../../examples/drawer/default.vue'
@@ -189,8 +189,8 @@ describe('screen-reader smoke · overlays', () => {
 })
 
 describe('screen-reader smoke · form blocks', () => {
-  it('form-error (rejected)', async () => {
-    render(FormErrorRejected)
+  it('form-validation (section rejected)', async () => {
+    render(FormValidationSectionRejected)
     await settle()
     expect(await commands.ariaSnapshot('form')).toMatchInlineSnapshot(`
       "- form "Create Service":

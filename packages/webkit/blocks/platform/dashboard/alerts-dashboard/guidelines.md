@@ -10,6 +10,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use alerts-dashboard to triage open alerts by severity.
 - Alerts carry a severity level and the reader has to decide which to handle first.
 - The reader needs both the trend (are we raising more?) and the queue (what is open now?) on one page.
 - Alerts name entities (hosts, users, accounts) whose accumulated risk is worth ranking.
@@ -17,7 +18,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Every request and the rule that decided it, not only alerts: use
-  `platform/dashboard/activity-outcomes-dashboard`.
+  `platform/dashboard/security-dashboard` (ByActor).
 - Service health with latency and error thresholds and a short alert rail: use
   `platform/dashboard/service-monitoring-dashboard`.
 - Items waiting for a verdict from an analysis engine: use `platform/dashboard/scan-results-dashboard`.
@@ -130,7 +131,7 @@ so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The 
 
 ## Related
 
-- `platform/dashboard/activity-outcomes-dashboard` — every request and its outcome, not only alerts.
+- `platform/dashboard/security-dashboard` (ByActor) — every request and its outcome, not only alerts.
 - `platform/dashboard/security-dashboard` — blocked traffic and the rules that block it.
 - `platform/dashboard/service-monitoring-dashboard` — threshold alerts beside service health.
 - `SeverityTag` — the one severity scale the page shares.

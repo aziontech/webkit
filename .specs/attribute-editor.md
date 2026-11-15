@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 2621419f08ee86f2612113cdf04e9da7d53635e57f9746fc88e61cf3842d4df4
+checksum: b4037decfa5c031f811e9eaa5b26a5f04b40173eb4e698a8d4776843888d85ff
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -44,7 +44,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 ## Best practices
 
 - Keep two to four columns; more columns belong in a drawer per row.
-- Pass `errors` only after the first Save (rule of the form-error block), then keep them live while the user fixes the rows.
+- Pass `errors` only after the first Save (rule of the form-validation block), then keep them live while the user fixes the rows.
 - Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.
 - Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.
 - Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.

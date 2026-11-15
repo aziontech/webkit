@@ -14,7 +14,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A first-level list of resources the user creates and manages: use `platform/view/table-view`.
 - The log of one deployment or build run: use `platform/detail/deployment-logs`.
-- Metrics and charts without a row-level log: use `platform/dashboard/data-dashboard`.
+- Metrics and charts without a row-level log: use `platform/dashboard/analytics-dashboard`.
 - Files and folders of a storage resource: use `platform/view/file-browser`.
 - Querying a database with SQL: use `platform/view/query-editor`.
 
@@ -139,6 +139,6 @@ The document lists every field of the event. Search in this event narrows the li
 
 - `platform/view/table-view` — the same controls row over a resource list.
 - `platform/detail/deployment-logs` — logs of one deployment run.
-- `platform/dashboard/data-dashboard` — the metrics view for the same traffic.
+- `platform/dashboard/analytics-dashboard` — the metrics view for the same traffic.
 - `shells/console` — the layout this explorer renders in.
 - `DataTable` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.

@@ -85,7 +85,7 @@ const pattern = (guidelines) => ({
 
 test('pattern ids come from the story title, kebab-cased, without "Templates/"', () => {
   assert.equal(patternIdFromTitle('Templates/Platform/Auth/SignIn'), 'platform/auth/sign-in')
-  assert.equal(patternIdFromTitle('Templates/Headers/CreationHeader'), 'headers/creation-header')
+  assert.equal(patternIdFromTitle('Templates/TopBars/CreationBar'), 'top-bars/creation-bar')
   assert.equal(
     patternIdFromTitle('Templates/Platform/Creation/CreationHeader'),
     'platform/creation/creation-header'

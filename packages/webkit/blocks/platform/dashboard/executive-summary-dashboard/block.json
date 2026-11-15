@@ -17,7 +17,9 @@
     "leadership dashboard",
     "resumo executivo",
     "painel executivo",
-    "indicadores do trimestre"
+    "indicadores do trimestre",
+    "business kpi roll-up",
+    "leadership summary"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {

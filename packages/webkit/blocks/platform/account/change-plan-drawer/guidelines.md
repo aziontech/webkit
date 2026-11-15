@@ -4,6 +4,7 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 ## When to use
 
+- Use change-plan-drawer to change a signed-in account's plan.
 - Changing the subscription plan from Billing or from an upgrade prompt anywhere in the console.
 
 ## When not to use
@@ -137,4 +138,4 @@ A failure no section owns (the payment service did not answer) is `toast.error` 
 
 - `platform/account/payment-method-card` — the Payment method card on its own, with its editing state.
 - `platform/account/onboarding-form` — the plan choice during sign-up opens the same upgrade drawer.
-- `platform/account/profile` — the account settings layout Billing shares.
+- `platform/settings/settings-form` (Profile) — the account settings layout Billing shares.

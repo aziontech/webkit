@@ -668,7 +668,40 @@ the save strategies are `platform/settings/settings-form`, the two details pages
 `platform/detail/details-page`, the labelled delete dialog is a variant of
 `platform/delete/delete-with-confirmation`, the server rejection is a variant of
 `platform/states/form-validation` and the sectioned Import from Git form is a variant of
-`platform/create/single-page-create`. Every old id, and every renamed state, is in
+`platform/create/deploy-template`.
+
+One block per job (6.0):
+
+- Starting a project is one flow, `platform/create/create-hub` then
+  `platform/create/deploy-template`. `source-wizard` is removed: its Where it runs chooser and
+  its integration install step are the deploy-template variants `WhereItRuns` and
+  `InstallIntegration`; single-page-create drops `ImportFromGit` and `ImportFromGitSubmitted`
+  (deploy-template's `ImportFromGit`).
+- `platform/create/multipage-create` runs on `Wizard`; `provision-wizard` is its
+  `CreateAndDeploy` variant. `onboarding-form` keeps its frame and uses `Wizard` for its steps.
+- `platform/account/profile` is the settings-form variants `Profile`, `ProfileLoading` and
+  `ProfileFailed`.
+- `platform/states/form-error` is the form-validation variants `SectionRejected`,
+  `SectionReloading` and `SectionReloaded`.
+- `platform/create/deployment-flow` is the deployment-logs variants `InCreateFlow` and
+  `InCreateFlowFailed`; details-page's `DeploymentDetail`, `DeploymentFailed` and
+  `DeploymentQueued` moved to `platform/detail/deployment-logs`, and its `Invocation` variant is
+  `platform/detail/invocations`. Every phased deploy log composes `LogView.Steps`.
+- `platform/view/marketplace` lists integrations only (its `Integrations` state is now the
+  default); templates live in `platform/view/template-browser`, and its `TemplatesNoMatch` and
+  `TemplatePage` variants are template-browser's `NoMatch` and deploy-template's `Form`.
+- `data-dashboard` is analytics-dashboard's `Usage` (its RealUser page is health-score-dashboard's
+  `RealUser`); `activity-outcomes-dashboard` is security-dashboard's `ByActor`;
+  `project-status-dashboard` and `funnel-cohort-dashboard` are removed (off-domain for the console).
+- `headers/site-header`, `headers/docs-header` and `headers/resource-header` are removed: SiteLayout,
+  DocLayout and ConsoleLayout already draw those bars (`shells/*`). The other two are renamed:
+  `headers/auth-header` → `top-bars/auth-bar`, `headers/creation-header` → `top-bars/creation-bar`.
+- `platform/edit/attribute-editor` → `platform/edit/variables` and `platform/edit/code-editor` →
+  `platform/edit/function-editor` (the names belonged to the components they compose).
+- `resource-picker`, `payment-method-card`, `get-started`, `production-checklist` and
+  `attached-resources` carry `kind: "fragment"`: cards placed inside a page, not screens.
+
+Every old id, and every renamed state of a removed block, is in
 [`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_pattern` still
 answers an old id with the new block and a `note`. Code you already copied does not change.
 

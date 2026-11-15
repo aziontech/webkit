@@ -407,7 +407,7 @@ test('searchPatterns lands each task on its v6 category block', () => {
     ['details page', 'platform/detail/details-page'],
     ['resource settings', 'platform/edit/edit-resource'],
     ['save per card', 'platform/settings/settings-form'],
-    ['account settings', 'platform/account/profile']
+    ['account settings', 'platform/settings/settings-form']
   ]) {
     assert.equal(searchPatterns(catalog, q).matches[0].id, id, q)
   }

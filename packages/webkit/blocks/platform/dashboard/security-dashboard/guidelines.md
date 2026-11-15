@@ -9,16 +9,16 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use security-dashboard for WAF/firewall traffic: blocked vs allowed over time, attack categories, source IPs; ByActor lists each request of known actors with the rule that decided it.
 - Security rules (firewall, WAF, bot rules) inspect and block requests, and the reader owns those rules.
 - The reader needs the trend and the breakdown, plus a short list of things to fix.
 - Source addresses or networks are worth searching individually.
 
 ## When not to use
 
-- Every request with the rule that decided it, for a set of actors: use
-  `platform/dashboard/activity-outcomes-dashboard`.
 - Alerts with severity and an open queue: use `platform/dashboard/alerts-dashboard`.
 - Plain traffic volume and status codes: use `platform/dashboard/analytics-dashboard`.
+- Items waiting for a verdict from an asynchronous analysis: use `platform/dashboard/scan-results-dashboard`.
 
 ## Building blocks
 
@@ -105,6 +105,25 @@ Each chart keeps its box (`No matched requests in this period` / `Nothing was re
 says `No matching rows` / `Change the search.` When no rule set exists at all, the Empty variant
 replaces the whole grid with one bordered `EmptyState` and its `Add rule set` button.
 
+### Q. Request activity by actor — `PageHeader`, `Select`, `IconButton`, `Input`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `DataTable`, `Tag`, `EmptyState` (optional)
+
+Variant ByActor only; it adds `FilterMenu`, `Button`, `Table` and `SeverityTag` to the page: the same blocked and allowed data, pivoted per known actor, with the rule that
+decided each request. Title `Request activity`. The heading's actions hold the time range `Select`
+(named `Time range`) and a Refresh `IconButton` (`aria-label="Refresh"`, the block emits `refresh`).
+Under it, one `FilterMenu` with three multi-choice fields (Actor, Outcome, Category) in a container
+labelled `Filters`, its `FilterMenu.Chips` on the row below, and a destination `Input` named
+`Destination host`. The filters are global: every tile, chart, breakdown and the log read them; when
+they match nothing, the chart and the log show `No requests match these filters` with an outlined
+`Clear filters` `Button`, and the tiles show a dash.
+
+Seven outcome `StatTile`s in a grid labelled `Outcomes` (requests, allowed, blocked, held, approved,
+denied, over budget), each with its delta and a `Hint`; pass `inverse` on every outcome where a rise
+is bad. Outcomes over time are stacked bars, one series per exclusive outcome in its status color
+(allowed success, blocked danger, held warning) — here the color means a state. Three `BarList`s rank
+by actor, by category and by destination, largest first. The request log `DataTable` lists time,
+actor, outcome (a `Table.CellStatus` in the same hue as its series), category, a `SeverityTag`,
+destination, method and the rule that decided it; outcome and severity are two different facts.
+
 ## Do
 
 - End every Needs attention entry with exactly one action.
@@ -125,6 +144,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 - **Attention description:** one sentence of evidence with a figure. `SQL injection against the API rose 64% in the last hour.`
 - **Attention action:** verb first. `Review rules`, `Attach a rule set`.
 - **Kind tag:** two words at most. `Log only`, `Spike`, `No rules`.
+- **ByActor:** title `Request activity`, description `What each actor requested through the rules and what the rules decided.`; outcome tags are one past participle (`Allowed`, `Blocked`, `Held`); no match `No requests match these filters` / `Clear the filters or pick other values.`
 - **Setup empty state:** `No security rules protect your services` / `Security metrics and the Needs attention list appear once a rule set protects a service.`, action `Add rule set`.
 
 ## Accessibility
@@ -140,10 +160,12 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 - Default: rules in place, populated tiles, charts, attention list and table.
 - Loading: every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet; tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
+- ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
 - `platform/dashboard/alerts-dashboard` — the alert queue raised by these rules.
-- `platform/dashboard/activity-outcomes-dashboard` — the rule that decided each request.
+- `platform/dashboard/scan-results-dashboard` — verdicts from an asynchronous analysis.
+- `platform/view/table-view` — the request log on its own, as a filterable list page.
 - `platform/edit/rule-builder` — where a rule set is edited.

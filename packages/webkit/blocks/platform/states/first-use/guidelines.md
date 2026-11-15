@@ -6,6 +6,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use first-use on a list page before the account owns any resource of that kind.
 - The first visit to a list page (Resources, Services, Domains…) when the account has none of that resource.
 - When there is more than one way to create the first item and each deserves its own action.
 

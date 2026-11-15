@@ -30,7 +30,9 @@
     "confirm in dialog",
     "formulário em modal",
     "formulário no diálogo",
-    "modal com formulário"
+    "modal com formulário",
+    "type the name to delete",
+    "confirm deletion by name"
   ],
   "skills": ["webkit-ux-heuristics", "webkit-microcopy", "webkit-form", "webkit-errors"],
   "primary": {

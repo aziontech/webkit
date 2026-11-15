@@ -2,23 +2,22 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import Activity from '../../blocks/platform/dashboard/activity-outcomes-dashboard/activity-outcomes-dashboard.vue'
 import Analytics from '../../blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue'
+import AnalyticsUsage from '../../blocks/platform/dashboard/analytics-dashboard/variants/usage.vue'
 import Composition from '../../blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue'
 import CompositionEmpty from '../../blocks/platform/dashboard/composition-dashboard/variants/empty.vue'
 import Switcher from '../../blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue'
 import SwitcherEmpty from '../../blocks/platform/dashboard/dashboard-switcher/variants/empty.vue'
 import SwitcherFailed from '../../blocks/platform/dashboard/dashboard-switcher/variants/failed.vue'
 import SwitcherOwnPeriod from '../../blocks/platform/dashboard/dashboard-switcher/variants/own-period.vue'
-import Data from '../../blocks/platform/dashboard/data-dashboard/data-dashboard.vue'
 import Executive from '../../blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue'
-import Funnel from '../../blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue'
 import Health from '../../blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue'
 import HealthEmpty from '../../blocks/platform/dashboard/health-score-dashboard/variants/empty.vue'
+import HealthRealUser from '../../blocks/platform/dashboard/health-score-dashboard/variants/real-user.vue'
 import Home from '../../blocks/platform/dashboard/home-dashboard/home-dashboard.vue'
 import HomeFailed from '../../blocks/platform/dashboard/home-dashboard/variants/failed.vue'
-import ProjectStatus from '../../blocks/platform/dashboard/project-status-dashboard/project-status-dashboard.vue'
 import Security from '../../blocks/platform/dashboard/security-dashboard/security-dashboard.vue'
+import SecurityByActor from '../../blocks/platform/dashboard/security-dashboard/variants/by-actor.vue'
 import ServiceMonitoring from '../../blocks/platform/dashboard/service-monitoring-dashboard/service-monitoring-dashboard.vue'
 import { useToastRegion } from './toast-region'
 
@@ -33,6 +32,22 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
   Array.from(root.querySelectorAll('button')).find(
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement | undefined
+
+describe('platform/dashboard blocks', () => {
+  it('ships one block per data shape, with no merged or off-domain dashboard left', () => {
+    const ids = Object.keys(import.meta.glob('../../blocks/platform/dashboard/*/block.json')).map(
+      (path) => path.split('/').at(-2)
+    )
+    for (const removed of [
+      'data-dashboard',
+      'activity-outcomes-dashboard',
+      'project-status-dashboard',
+      'funnel-cohort-dashboard'
+    ])
+      expect(ids).not.toContain(removed)
+    expect(ids).toContain('analytics-dashboard')
+  })
+})
 
 describe('platform/dashboard/dashboard-switcher', () => {
   it('sets the shared period with FilterMenu and shows it as a removable chip', async () => {
@@ -123,11 +138,17 @@ describe('platform/dashboard/health-score-dashboard', () => {
     const tile = byTestId('chart-stat-tile', view.container)!
     expect(tile.textContent).toContain('No value')
   })
+
+  it('shows the real-user web vitals in the RealUser variant', () => {
+    const view = render(HealthRealUser)
+    expect(view.getByRole('heading', { level: 1, name: 'Real-user monitoring' })).toBeTruthy()
+    expect(view.container.textContent).toContain('Largest contentful paint')
+  })
 })
 
 describe.each([
   ['analytics-dashboard', Analytics],
-  ['data-dashboard', Data],
+  ['analytics-dashboard#Usage', AnalyticsUsage],
   ['security-dashboard', Security]
 ])('platform/dashboard/%s period', (_name, Block) => {
   it('drives the delta comparison from the Period Select in the header', async () => {
@@ -160,26 +181,14 @@ const pickMenuOption = async (trigger: HTMLElement, label: string) => {
 }
 
 describe('platform/dashboard exports', () => {
-  it.each([
-    ['composition-dashboard', Composition, 'More options for Current split'],
-    ['funnel-cohort-dashboard', Funnel, 'More options for Weekly cohorts'],
-    ['project-status-dashboard', ProjectStatus, 'More options for Owners']
-  ])('%s exports a card as CSV from its menu', async (_name, Block, trigger) => {
-    const view = render(Block)
-    await pickMenuOption(view.getByRole('button', { name: trigger }), 'Export CSV')
-    await waitFor(() => expect(document.body.textContent).toContain('CSV exported.'))
-  })
-
-  it('copies a link to a project status card', async () => {
-    const view = render(ProjectStatus)
-    await pickMenuOption(view.getByRole('button', { name: 'More options for Owners' }), 'Copy link')
-    await waitFor(() =>
-      expect(
-        document.body.textContent?.includes('Link copied.') ||
-          document.body.textContent?.includes('The link could not be copied.')
-      ).toBe(true)
-    )
-  })
+  it.each([['composition-dashboard', Composition, 'More options for Current split']])(
+    '%s exports a card as CSV from its menu',
+    async (_name, Block, trigger) => {
+      const view = render(Block)
+      await pickMenuOption(view.getByRole('button', { name: trigger }), 'Export CSV')
+      await waitFor(() => expect(document.body.textContent).toContain('CSV exported.'))
+    }
+  )
 
   it('exports from the page header buttons', async () => {
     const composition = render(Composition)
@@ -203,9 +212,9 @@ describe('platform/dashboard exports', () => {
   })
 })
 
-describe('platform/dashboard/activity-outcomes-dashboard', () => {
+describe('platform/dashboard/security-dashboard#ByActor', () => {
   it('narrows the log by destination and offers Clear filters when nothing matches', async () => {
-    const view = render(Activity)
+    const view = render(SecurityByActor)
     const table = () => byTestId('data-data-table', view.container)
     expect(table()?.textContent).toContain('storage.example.com')
     const input = view.getByRole('textbox', { name: 'Destination host' })
@@ -224,13 +233,13 @@ describe('platform/dashboard/activity-outcomes-dashboard', () => {
   })
 
   it('moves the time range to the header and the closed-set filters into FilterMenu', async () => {
-    const view = render(Activity)
+    const view = render(SecurityByActor)
     expect(byTestId('data-filter-menu', view.container)).not.toBeNull()
     expect(view.getByRole('combobox', { name: 'Time range' })).toBeTruthy()
   })
 
   it('emits refresh from the Refresh button', async () => {
-    const view = render(Activity)
+    const view = render(SecurityByActor)
     await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
     expect(view.emitted('refresh')?.length).toBe(1)
   })

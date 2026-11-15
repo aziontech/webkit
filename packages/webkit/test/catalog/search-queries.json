@@ -170,15 +170,15 @@
       "tool": "patterns",
       "lang": "en",
       "query": "account settings",
-      "top1": "platform/account/profile",
-      "top3": ["platform/account/profile"]
+      "top1": "platform/settings/settings-form",
+      "top3": ["platform/settings/settings-form"]
     },
     {
       "tool": "patterns",
       "lang": "en",
       "query": "my profile",
-      "top1": "platform/account/profile",
-      "top3": ["platform/account/profile"]
+      "top1": "platform/settings/settings-form",
+      "top3": ["platform/settings/settings-form"]
     },
     {
       "tool": "patterns",
@@ -394,8 +394,8 @@
       "tool": "patterns",
       "lang": "en",
       "query": "console header",
-      "top1": "headers/resource-header",
-      "top3": ["headers/resource-header"]
+      "top1": "shells/console",
+      "top3": ["shells/console"]
     },
     {
       "tool": "patterns",
@@ -501,8 +501,8 @@
       "tool": "patterns",
       "lang": "pt-BR",
       "query": "configurações da conta",
-      "top1": "platform/account/profile",
-      "top3": ["platform/account/profile"]
+      "top1": "platform/settings/settings-form",
+      "top3": ["platform/settings/settings-form"]
     },
     {
       "tool": "patterns",
@@ -739,8 +739,8 @@
       "tool": "patterns",
       "lang": "es",
       "query": "configuración de la cuenta",
-      "top1": "platform/account/profile",
-      "top3": ["platform/account/profile"]
+      "top1": "platform/settings/settings-form",
+      "top3": ["platform/settings/settings-form"]
     },
     {
       "tool": "patterns",

@@ -17,7 +17,8 @@
     "alert triage",
     "painel de alertas",
     "alertas abertos",
-    "alertas por severidade"
+    "alertas por severidade",
+    "triage open alerts"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {

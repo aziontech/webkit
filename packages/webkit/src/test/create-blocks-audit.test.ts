@@ -13,11 +13,10 @@ import DeploySuccess from '../../blocks/platform/create/deploy-success/deploy-su
 import DeploySuccessCli from '../../blocks/platform/create/deploy-success/variants/cli-created.vue'
 import DeployTemplate from '../../blocks/platform/create/deploy-template/deploy-template.vue'
 import DeployTemplateUpload from '../../blocks/platform/create/deploy-template/variants/upload.vue'
-import DeploymentFlowFailed from '../../blocks/platform/create/deployment-flow/variants/failed.vue'
-import DeploymentFlowRunning from '../../blocks/platform/create/deployment-flow/variants/running.vue'
+import MultipageCreate from '../../blocks/platform/create/multipage-create/multipage-create.vue'
+import MultipageCreateAndDeploy from '../../blocks/platform/create/multipage-create/variants/create-and-deploy.vue'
 import MultipageListSettings from '../../blocks/platform/create/multipage-create/variants/list-settings.vue'
 import MultipageReview from '../../blocks/platform/create/multipage-create/variants/review.vue'
-import ProvisionWizardBinding from '../../blocks/platform/create/provision-wizard/variants/domain-and-deployment.vue'
 import ReleaseImpact from '../../blocks/platform/create/release-impact/release-impact.vue'
 import ReleaseImpactSettings from '../../blocks/platform/create/release-impact/variants/choose-settings.vue'
 import ResourcePicker from '../../blocks/platform/create/resource-picker/resource-picker.vue'
@@ -100,15 +99,19 @@ describe('create-hub', () => {
   })
 
   it('announces loading with one status line and hides the skeletons', () => {
-    render(CreateHubLoading)
-    expect(screen.getByRole('status').textContent).toContain('Loading repositories')
+    const view = render(CreateHubLoading)
+    expect(within(view.container as HTMLElement).getByRole('status').textContent).toContain(
+      'Loading repositories'
+    )
   })
 
   it('replaces the list with a Retry alert when the repositories fail to load', async () => {
-    render(CreateHubLoadFailed)
+    const view = render(CreateHubLoadFailed)
     expect(screen.getByText(/didn't load/)).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
-    expect(screen.getByRole('status').textContent).toContain('Loading repositories')
+    expect(within(view.container as HTMLElement).getByRole('status').textContent).toContain(
+      'Loading repositories'
+    )
   })
 })
 
@@ -208,25 +211,6 @@ describe('deploy-success', () => {
   })
 })
 
-describe('deployment-flow', () => {
-  it('gives every step its status in words', () => {
-    render(DeploymentFlowRunning)
-    const triggers = screen.getAllByRole('button', { expanded: false })
-    expect(triggers.some((trigger) => /Done/.test(trigger.textContent ?? ''))).toBe(true)
-    expect(triggers.some((trigger) => /Waiting/.test(trigger.textContent ?? ''))).toBe(true)
-    expect(screen.getByRole('button', { expanded: true }).textContent).toContain('In progress')
-  })
-
-  it('ends a failure with Edit and Redeploy', async () => {
-    render(DeploymentFlowFailed)
-    expect(screen.getByRole('link', { name: 'Edit' })).toBeTruthy()
-    expect(screen.getByLabelText('Log view')).toBeTruthy()
-    await fireEvent.click(screen.getByRole('button', { name: 'Redeploy' }))
-    expect(screen.queryByLabelText('Log view')).toBeNull()
-    expect(document.body.textContent).toContain('Redeploying')
-  })
-})
-
 describe('resource-picker', () => {
   it('opens on New with no toggle when nothing exists to bind', async () => {
     const view = render(ResourcePickerEmpty)
@@ -244,9 +228,20 @@ describe('resource-picker', () => {
   })
 })
 
-describe('provision-wizard', () => {
-  it('shows the loading state on Create and deploy once the step is valid', async () => {
-    render(ProvisionWizardBinding)
+describe('multipage-create#CreateAndDeploy', () => {
+  it('gates Next on the project, then shows the loading state on Create and deploy', async () => {
+    render(MultipageCreateAndDeploy)
+    expect(screen.getByTestId('navigation-wizard')).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(
+      await screen.findByText('Select the project this service serves, or create a new one.')
+    ).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: /web-app/ }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Domain and deployment' })
+    ).toBeTruthy()
+    await fireEvent.update(screen.getByRole('textbox', { name: 'Domain prefix' }), 'my-first-app')
     const submit = screen.getByRole('button', { name: 'Create and deploy' })
     await fireEvent.click(submit)
     await waitFor(() => expect(submit.getAttribute('aria-busy')).toBe('true'), wait)
@@ -317,14 +312,26 @@ describe('multipage-create', () => {
 
   it('creates from Review with a loading submit and a toast, and edits Name on General', async () => {
     render(MultipageReview)
-    const create = screen.getByRole('button', { name: 'Create Access List' })
+    const create = await screen.findByRole('button', { name: 'Create Access List' })
     await fireEvent.click(create)
     await waitFor(() => expect(create.getAttribute('aria-busy')).toBe('true'), wait)
     await waitFor(() => expect(screen.getByText('office-ranges created.')).toBeTruthy(), wait)
     await fireEvent.click(screen.getByRole('button', { name: 'Edit name' }))
-    await waitFor(
-      () => expect(screen.getByRole('heading', { level: 1 }).textContent).toContain('General'),
-      wait
-    )
+    expect(await screen.findByRole('heading', { level: 2, name: 'General' }, wait)).toBeTruthy()
+  })
+
+  it('runs on the Wizard: Next needs an answer, and a host with the module off adds a step', async () => {
+    render(MultipageCreate)
+    expect(screen.getByTestId('navigation-wizard')).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'Create Access List' })).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(await screen.findByText('Select a policy, or continue without one.')).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: /acme-staging/ }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'IP filtering' })).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(await screen.findByRole('heading', { level: 2, name: 'General' })).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+    expect(await screen.findByText('This field is required.')).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 2, name: 'General' })).toBeTruthy()
   })
 })

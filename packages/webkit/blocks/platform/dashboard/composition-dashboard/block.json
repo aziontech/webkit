@@ -18,7 +18,9 @@
     "mix over time",
     "painel de composição",
     "gastos por categoria",
-    "custos por categoria"
+    "custos por categoria",
+    "total by category over time",
+    "spend by category"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {

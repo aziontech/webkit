@@ -2,6 +2,12 @@ import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/vu
 import { afterEach, describe, expect, it } from 'vitest'
 
 import DeploymentLogs from '../../blocks/platform/detail/deployment-logs/deployment-logs.vue'
+import DeploymentDetail from '../../blocks/platform/detail/deployment-logs/variants/deployment-detail.vue'
+import DeploymentFailed from '../../blocks/platform/detail/deployment-logs/variants/deployment-failed.vue'
+import DeploymentQueued from '../../blocks/platform/detail/deployment-logs/variants/deployment-queued.vue'
+import DeploymentLogsFailed from '../../blocks/platform/detail/deployment-logs/variants/failed.vue'
+import InCreateFlow from '../../blocks/platform/detail/deployment-logs/variants/in-create-flow.vue'
+import InCreateFlowFailed from '../../blocks/platform/detail/deployment-logs/variants/in-create-flow-failed.vue'
 import DetailsPage from '../../blocks/platform/detail/details-page/details-page.vue'
 import Service from '../../blocks/platform/detail/details-page/variants/service.vue'
 import Running from '../../blocks/platform/detail/invocations/variants/running.vue'
@@ -11,6 +17,8 @@ import SectionedResource from '../../blocks/platform/detail/sectioned-resource/s
 import FewSiblings from '../../blocks/platform/detail/sectioned-resource/variants/few-siblings.vue'
 import DeviceGroups from '../../blocks/platform/detail/version-detail/variants/device-groups.vue'
 import Revert from '../../blocks/platform/detail/version-detail/variants/revert.vue'
+import AsyncSubmitFailed from '../../blocks/platform/states/async-submit/variants/failed.vue'
+import AsyncSubmitRunning from '../../blocks/platform/states/async-submit/variants/running.vue'
 import { useToastRegion } from './toast-region'
 
 useToastRegion()
@@ -109,12 +117,64 @@ describe('platform/detail/deployment-logs', () => {
     const view = render(DeploymentLogs)
     const root = view.container as HTMLElement
     expect(view.getByRole('heading', { name: 'Deployment logs', level: 2 })).toBeTruthy()
-    const heading = view.getByRole('heading', { name: 'Deployment logs', level: 2 })
-    const progress = within(heading.parentElement as HTMLElement).getByRole('status')
-    expect(progress.textContent).toMatch(/3\/8 steps\s*Build/)
+    expect(within(root).getByRole('status').textContent).toMatch(/3\/8 steps\s*Build/)
     expect(view.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('38')
     const publish = within(root).getByText('Publish').closest('button') as HTMLElement
     expect(publish.textContent).not.toMatch(/\d+s/)
+  })
+
+  it('announces the run in one status region and gives every step its status in words', () => {
+    const view = render(DeploymentLogs)
+    expect(within(view.container as HTMLElement).getAllByRole('status')).toHaveLength(1)
+    const triggers = view.getAllByRole('button', { expanded: false })
+    expect(triggers.some((trigger) => /Done/.test(trigger.textContent ?? ''))).toBe(true)
+    expect(triggers.some((trigger) => /Not started/.test(trigger.textContent ?? ''))).toBe(true)
+    expect(view.getByRole('button', { expanded: true }).textContent).toContain('Running')
+  })
+
+  it.each([
+    ['Running', DeploymentLogs],
+    ['Failed', DeploymentLogsFailed],
+    ['InCreateFlowFailed', InCreateFlowFailed],
+    ['DeploymentDetail', DeploymentDetail],
+    ['DeploymentFailed', DeploymentFailed],
+    ['async-submit Running', AsyncSubmitRunning],
+    ['async-submit Failed', AsyncSubmitFailed]
+  ])('%s composes LogView.Steps for its phased steps', (_name, block) => {
+    const view = render(block)
+    expect(view.container.querySelector('[data-testid="code-log-view__steps"]')).toBeTruthy()
+  })
+
+  it('opens a failed run on the failed step and says why the next one never ran', async () => {
+    const view = render(DeploymentLogsFailed)
+    expect(view.getByRole('button', { expanded: true }).textContent).toContain('Routing Rules')
+    await fireEvent.click(within(view.container as HTMLElement).getByText('Publish'))
+    await waitFor(() =>
+      expect(view.container.textContent).toContain(
+        'Never ran. The deployment stopped at Routing Rules.'
+      )
+    )
+  })
+
+  it('InCreateFlow opens on the cloning splash with a Cloning status', () => {
+    const view = render(InCreateFlow)
+    expect(view.container.textContent).toContain('Cloning acme/web-app to acme')
+    expect(view.container.textContent).toContain('Cloning')
+  })
+
+  it('InCreateFlowFailed ends a failure with Edit and Redeploy', async () => {
+    const view = render(InCreateFlowFailed)
+    expect(view.getByRole('link', { name: 'Edit' })).toBeTruthy()
+    expect(view.getAllByLabelText('Log view')).toHaveLength(1)
+    await fireEvent.click(view.getByRole('button', { name: 'Redeploy' }))
+    expect(view.queryByLabelText('Log view')).toBeNull()
+    expect(view.container.textContent).toContain('Redeploying')
+  })
+
+  it('DeploymentQueued shows a not-started state with no view switch', () => {
+    const view = render(DeploymentQueued)
+    expect(view.container.textContent).toContain('Queued, not started')
+    expect(view.queryByLabelText('Log view')).toBeNull()
   })
 })
 

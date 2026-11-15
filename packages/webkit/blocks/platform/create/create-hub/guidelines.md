@@ -4,6 +4,7 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ## When to use
 
+- Use create-hub as the first screen of every new project, where the user picks Git, a template or an upload.
 - The entry point of every new project, before the user has decided where the code comes from.
 - The user may import an existing repository, start from a framework or starter template, or upload local files.
 - The choice leads to a focused flow outside the console shell, such as `platform/create/deploy-template`.
@@ -11,7 +12,8 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 ## When not to use
 
 - Creating a first-level resource that has no source code: use `platform/create/single-page-create`.
-- A guided multi-step creation once the source is known: use `platform/create/source-wizard`.
+- Configuring and deploying once the source is known: use `platform/create/deploy-template`.
+- A first-level resource created in ordered steps: use `platform/create/multipage-create`.
 - Adding something inside an existing resource: use `platform/create/create-in-drawer`.
 - The drop target and upload progress after a folder is dropped: those are `platform/states/project-intake`.
 - Teaching a module to a new account: use `platform/states/first-use`.
@@ -20,7 +22,7 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The creation header from `headers/creation-header`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
+The creation header from `top-bars/creation-bar`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -91,6 +93,5 @@ Beside the Start from template heading, a medium search `Input` that filters the
 
 - `platform/create/deploy-template` — where a template card or Import leads.
 - `platform/states/project-intake` — the drop target and upload overlay for a dropped folder.
-- `platform/create/source-wizard` — the guided flow once a source is chosen.
-- `headers/creation-header` — the header this page uses.
+- `top-bars/creation-bar` — the header this page uses.
 - `platform/dashboard/home-dashboard` — Home, where the back control returns.

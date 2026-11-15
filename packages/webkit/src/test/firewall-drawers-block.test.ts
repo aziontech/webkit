@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
 import Certificate from '../../blocks/platform/create/create-in-drawer/variants/certificate.vue'
-import NetworkList from '../../blocks/platform/edit/attribute-editor/variants/network-list.vue'
+import NetworkList from '../../blocks/platform/edit/variables/variants/network-list.vue'
 import RulesReview from '../../blocks/platform/view/rules-list/variants/review-changes.vue'
 import WafAllow from '../../blocks/platform/view/waf-tuning/variants/allow.vue'
 import { expectNoA11yViolations } from './axe'
@@ -27,7 +27,7 @@ const buttonIn = (root: HTMLElement, text: string) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 
-describe('attribute-editor#NetworkList', () => {
+describe('variables#NetworkList', () => {
   it('reports invalid and repeated lines, adds every new line as a row and shows each invalid row its error', async () => {
     render(NetworkList)
     const panel = await openDrawer(/Create Network List/)

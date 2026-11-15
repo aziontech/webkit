@@ -13,7 +13,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 ## When not to use
 
 - First-run steps after the account exists (profile, plan, organization): use `platform/account/onboarding-form`.
-- Changing the password or email of a signed-in user: use `platform/account/profile`.
+- Changing the password or email of a signed-in user: use `platform/settings/settings-form` (Profile).
 - Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (Session); this block is where it lands.
 - Any signed-in form: use `platform/states/form-validation` for the submit states and `platform/settings/settings-form` for settings.
 - Listing or revoking the apps a person already authorized: that is a settings table, not this card.
@@ -22,7 +22,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 
 ### A. Signed-out bar — `GlobalHeader` (required)
 
-The bar above the card, labelled `aria-label="Console"`. Brand on the start side, one Documentation button on the end side, the middle empty. It is the same bar on every step so the user knows they are still in the same flow. Shared anatomy with `headers/auth-header`.
+The bar above the card, labelled `aria-label="Console"`. Brand on the start side, one Documentation button on the end side, the middle empty. It is the same bar on every step so the user knows they are still in the same flow. Shared anatomy with `top-bars/auth-bar`.
 
 ### B. Product mark — `Brand` (required)
 
@@ -191,7 +191,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 ## Related
 
-- `headers/auth-header` — the signed-out bar this block renders at the top.
+- `top-bars/auth-bar` — the signed-out bar this block renders at the top.
 - `platform/account/onboarding-form` — where a new account goes after it verifies its email.
 - `platform/states/page-wires` — the session wire painted while an expired session signs out, before this screen.
 - `platform/states/form-validation` — the same field mechanics (required versus invalid, validate on submit) in a signed-in form, where unscoped failures do toast.

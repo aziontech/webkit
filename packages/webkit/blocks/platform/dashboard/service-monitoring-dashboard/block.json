@@ -18,7 +18,9 @@
     "observability",
     "monitoramento",
     "painel de monitoramento",
-    "latência"
+    "latência",
+    "latency percentiles",
+    "error rate per service"
   ],
   "skills": ["webkit-data-viz", "webkit-ui-states"],
   "primary": {

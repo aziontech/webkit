@@ -10,7 +10,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 ## When not to use
 
 - Team or service credentials with roles and scopes managed by an admin: start from `platform/account/team-permissions` and add a scope field to the create drawer.
-- Secrets the product stores and shows again (environment variables): use `platform/edit/attribute-editor` with masked values.
+- Secrets the product stores and shows again (environment variables): use `platform/edit/variables` with masked values.
 - A single key shown on a resource's details page: use `CopyButton` beside the value in `platform/detail/details-page`.
 
 ## Building blocks

@@ -206,7 +206,7 @@ typed confirmation); ItemGroup settings and Card with independent saves are
 `platform/settings/settings-form`, whose primary `SaveAll` is the default one-save model and whose
 `SavePerGroup` and `SavePerCard` variants are the split ones. A resource's own settings tab is
 `platform/edit/edit-resource`; every submit state is `platform/states/form-validation`; a server
-rejection that one section owns is `platform/states/form-error`; a save that starts a long run (build,
+rejection that one section owns is its SectionRejected variant; a save that starts a long run (build,
 deploy) is `platform/states/async-submit`.
 
 ### Example — Card with its own save
@@ -983,7 +983,7 @@ Rules:
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
 
-### Form errors — the server rejects one section (`platform/states/form-error`)
+### Form errors — the server rejects one section (`platform/states/form-validation`, SectionRejected)
 
 The design sample's `/forms/error-validation` screen is the standard. When the server rejects the save
 because of one section (a linked resource another user deleted, a value only that section owns), the

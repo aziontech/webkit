@@ -11,6 +11,8 @@
   "intents": [
     "settings page",
     "resource settings",
+    "settings of one resource",
+    "resource settings page",
     "settings tab",
     "application settings",
     "workload settings",

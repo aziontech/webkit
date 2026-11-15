@@ -20,7 +20,9 @@
     "aprovar ação da ia",
     "autorizar ação do agente",
     "confirmar comando",
-    "aprobar acción de la ia"
+    "aprobar acción de la ia",
+    "approve an agent action",
+    "tool approval in chat"
   ],
   "skills": ["webkit-genai", "webkit-ui-states", "webkit-errors"],
   "primary": {

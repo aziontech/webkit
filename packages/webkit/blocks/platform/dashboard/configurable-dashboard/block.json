@@ -19,7 +19,9 @@
     "dashboard builder",
     "painel configurável",
     "painel personalizado",
-    "reorganizar cards"
+    "reorganizar cards",
+    "rearrange cards",
+    "resize dashboard cards"
   ],
   "skills": ["webkit-data-viz", "webkit-layout", "webkit-ui-states"],
   "primary": {

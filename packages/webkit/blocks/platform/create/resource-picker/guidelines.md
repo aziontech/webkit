@@ -4,6 +4,7 @@ The band a create flow uses when the resource being created needs another resour
 
 ## When to use
 
+- Use resource-picker inside a create flow to bind one resource the user may reuse or create; it is a card, not a page.
 - A create flow binds a whole resource that the user may reuse or create: the project a service serves, the deployment a release is cut against, the firewall that protects a workload.
 - The candidates can run past seven, so the list needs search, paging and a no-match line.
 - Creating the bound resource takes one or a few fields that fit in the same card.
@@ -11,8 +12,8 @@ The band a create flow uses when the resource being created needs another resour
 
 ## When not to use
 
-- A single field that references an existing resource (a certificate, an environment, a function): use a select row inside the form, as `platform/create/provision-wizard` does for Environment.
-- Choosing where a resource runs as a step of its own, with module tags and an inline create row: use the chooser in `platform/create/multipage-create` or `platform/create/source-wizard`.
+- A single field that references an existing resource (a certificate, an environment, a function): use a select row inside the form, as `platform/create/multipage-create` (CreateAndDeploy) does for Environment.
+- Choosing where a resource runs as a step of its own, with module tags and an inline create row: use the chooser in `platform/create/multipage-create` or `platform/create/deploy-template` (WhereItRuns).
 - Browsing or managing the resources themselves: use `platform/view/table-view`.
 - Creating the bound resource needs its own full form: link to its create page (`platform/create/single-page-create`) instead of nesting it here.
 
@@ -97,8 +98,7 @@ A transparent small full-width `Button` under the list while more matches remain
 
 ## Related
 
-- `platform/create/source-wizard` — its last step binds an optional firewall with the OptionalBinding band.
-- `platform/create/provision-wizard` — binds its project with this band on the first step and reuses the list for the deployment.
+- `platform/create/multipage-create` — its CreateAndDeploy variant binds its project with this band on the first step and reuses the list for the deployment.
 - `platform/create/multipage-create` — the step wizard whose Where it runs chooser follows the same list rules.
 - `platform/states/form-validation` — how required and invalid messages appear on submit.
 - `Item` — the selectable row the list is built from; see `skills/webkit-form`.

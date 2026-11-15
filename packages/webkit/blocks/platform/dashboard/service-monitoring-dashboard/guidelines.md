@@ -10,6 +10,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use service-monitoring-dashboard for latency percentiles, error rates and live state per service.
 - The reader watches a known set of services for state changes and threshold breaches.
 - Latency percentiles and error rates matter more than volume.
 - Open alerts need to stay visible next to the evidence.

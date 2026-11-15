@@ -1,22 +1,33 @@
 # Form validation
 
-Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. A server rejection scoped to one section of a long form is its own block, `platform/states/form-error`.
+Every state a submit can land in, on one create form. The user's job is to create a resource and, when something stops the save, to know exactly which control to touch and that nothing they typed was lost. The primary is a short Create Variable page (heading, four fields straight on the canvas, Cancel and Create); the variants walk it through validation, the in-flight lock, an unscoped failure, a conflict, success and loading. The Section variants carry the same rules to a long sectioned create page, where the server rejects the save because of one section: another user deleted the origin the form links to, so the page takes the user to that section, says what happened and that nothing else was lost, offers the one action that recovers (Reload origins) and marks the field with its own reason. The Section variants are a focused create page with their own creation header and no rail.
 
-This block is a page body for a create page: render it under the focused creation header (`headers/creation-header`), not in `ConsoleLayout`.
+This block is a page body for a create page: render it under the focused creation header (`top-bars/creation-bar`), not in `ConsoleLayout`.
 
 ## When to use
 
+- Use form-validation as the reference for every submit outcome of a create or edit form: required, invalid, in flight, conflict, section rejected, unscoped failure, saved.
 - As the reference for the submit states of any create or edit form: what happens on Create with gaps, while the request is in flight, and on each kind of answer.
 - A short create form with a handful of fields and no sections (a variable, a key, a token).
+- A long, sectioned create or edit form whose save can be rejected because of one section (a linked resource deleted or changed by someone else): SectionRejected, SectionReloading, SectionReloaded.
 
 ## When not to use
 
 - A sectioned create page with many settings and a sticky save bar: build it from `platform/create/single-page-create` and apply these states to it.
 - A create that runs for tens of seconds and can be left (build, deploy, import): use `platform/states/async-submit`.
 - Settings of an existing object saved section by section: use `platform/settings/settings-form`.
-- A long sectioned form whose save is rejected because of one section (a linked resource deleted under the user): use `platform/states/form-error`.
 - Signed-out screens: use `platform/auth`, where nothing toasts.
 - A create launched from a list without leaving it: use `platform/create/create-in-drawer`.
+
+## Where the error renders
+
+| Error                                                                   | Where it renders                                                                                                                                                                     | Variant          |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| A value the user left empty or typed wrong (client-side)                | On the field: `required` or `invalid`, its message in the description, focus on the first field in error                                                                             | ValidationErrors |
+| A value the server refused that one field owns (a key already in use)   | On the field (`invalid` with its reason) and in a danger `Alert` above the fields of its section; never a toast                                                                      | Conflict         |
+| A rejection one section of a long form owns (a linked resource deleted) | A danger `Alert` under that section's heading with the recovery action, the field `invalid` with its own reason, the section scrolled into view and the field focused; never a toast | SectionRejected  |
+| A failure no field or section owns (network, timeout, 500)              | `toast.error` with Retry, every entry kept                                                                                                                                           | ServerError      |
+| A save that went through                                                | `toast.success` naming the new object, the form cleared                                                                                                                              | Saved            |
 
 ## Building blocks
 
@@ -50,7 +61,11 @@ Description. Optionality is said in the description (`Optional. Up to 200 charac
 
 ### H. Section notice — `Alert` (conflict and rejection only)
 
-A server rejection a field owns lands in two places, never in a toast: a danger `Alert` at the top of the section that owns the field (on this one-section form, above the fields; on a long form, under the section heading, as in `platform/states/form-error`), and the field's `invalid` state with its reason. The `Alert` says what happened, that nothing typed was lost and what to do; it closes once the user changes the value or recovers.
+A server rejection a field owns lands in two places, never in a toast: a danger `Alert` at the top of the section that owns the field (on this one-section form, above the fields; on a long form, under the section heading, as in SectionRejected), and the field's `invalid` state with its reason. The `Alert` says what happened, that nothing typed was lost and what to do; it closes once the user changes the value or recovers.
+
+### Section rejection (Section variants only)
+
+The Section variants add `GlobalHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcrumb`, `DropdownMenu`, `Avatar`, `SectionHeader`, `SettingRow`, `SaveBar`, `Card`, `Item`, `MultiSelect`, `RadioGroup`, `Switch`, `NumberInput` and `HelperText` to the parts above. The Section variants are a Create Service page under the creation header (`top-bars/creation-bar`): a back `IconButton` with a `Tooltip`, the `Brand`, a `Breadcrumb` (`Services › Create Service`) and the account `DropdownMenu`. Each section is a `SectionHeader` over a flush `Card` whose `Item.List` holds `SettingRow`s (`Input`, `MultiSelect`, `RadioGroup` with `kind="card"`, `Switch`, `NumberInput`), and a sticky `SaveBar` raised with `z-10` holds Cancel and Save. The Origin heading carries an id so the save can scroll it into view; the danger `Alert` opens under it with an expand transition (`motion-reduce:transition-none`) and the recovery action (`Reload origins`, `kind="secondary"`, `loading` while it runs) in its `action` slot. The Origin `Select` takes `invalid` when the server says the chosen origin no longer exists, and `required` once the list is reloaded without it, each with a one-line `HelperText`. While the list reloads a `Skeleton` named `Loading origins` stands in for the select and Save is disabled.
 
 ### Result notices — through `toast`
 
@@ -64,6 +79,7 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 - Keep every entry after a failed or rejected save, and say so in the copy.
 - Clear the form after a success, so the next entry starts clean, and name the new object in the toast.
 - On the one-section form, a key already in use raises the danger `Alert` above the fields as well as the `invalid` Key, and focus moves to Key.
+- On a long form, put a section-scoped rejection in one danger `Alert` under that section's heading with the recovery on it, scroll the section into view (instant under `prefers-reduced-motion`) and focus the field with `preventScroll` after the lock is released. After the recovery, close the `Alert`, clear the stale value and flag the field `required`.
 
 ## Don't
 
@@ -71,7 +87,8 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 - Don't toast a rejection a field owns (a key already in use, a deleted origin). The toast dismisses itself and points nowhere.
 - Don't use the amber `required` prompt for a value the server rejected; the value is present, so it is `invalid`.
 - Don't disable Create to signal missing values; let submit run and show the messages.
-- Don't auto-dismiss an `Alert` that names a required action; it stays until the user recovers (see the Reloaded state of `platform/states/form-error`).
+- Don't clear the form or send the user back to the start after a rejection, and don't open more than one `Alert` for one rejection.
+- Don't auto-dismiss an `Alert` that names a required action; it stays until the user recovers (see SectionReloaded).
 
 ## Copy
 
@@ -83,7 +100,8 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 - **Conflict message:** the fact, on the field: `A variable named API_TOKEN already exists.` The section `Alert` adds what happened and what to do: `A variable named API_TOKEN already exists in this account, so it wasn't created. Your entries are kept: change the key and press Create again.`
 - **Error toast:** what did not happen, then what was kept: title `The variable wasn't created.`, description `The request didn't reach the server. Your entries are kept.`, action `Retry`.
 - **Success toast:** past tense, names the object and where it applies: `API_TOKEN was created.` / `It is available in Production.`
-- **Actions:** `Cancel`, `Create`, `Retry`.
+- **Section Alert:** the fact, the cause, what was not lost, what to do: `Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.` Field reasons: `This origin no longer exists.`, then `Select an origin to continue.`
+- **Actions:** `Cancel`, `Create`, `Retry`; on the long form `Cancel`, `Save`, `Reload origins`.
 
 ## Accessibility
 
@@ -92,7 +110,8 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 - The loading region is `role="status"` with an accessible name (`Loading the form`).
 - Focus moves to the first field in error, only after the lock is released, since a disabled control cannot take focus.
 - Toasts are announced by the app's `Toaster` region; the error toast keeps its Retry reachable by keyboard.
-- A section `Alert` sits in reading order before the fields it governs.
+- A section `Alert` sits in reading order before the fields it governs; its action is a real button reachable by keyboard.
+- In SectionRejected focus moves to the refused field with `preventScroll`, so the scroll to the section heading is the only movement; the reloading `Skeleton` has an accessible name.
 
 ## States
 
@@ -103,11 +122,14 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 - Conflict: the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
 - Saved: the save went through; a success toast names the variable and where it is available, and the form is cleared.
 - Loading: the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
+- SectionRejected: on the long Create Service form, another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
+- SectionReloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
+- SectionReloaded: the list is back without the deleted origin; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
 
 ## Related
 
-- `platform/states/form-error` — a server rejection scoped to one section of a long form: the section `Alert` with its recovery action, and the field's own reason.
-- `platform/states/async-submit` — the long-running counterpart: the outcome reports back wherever the user is.
+- `platform/states/async-submit` — the long-running counterpart: use it when the action runs long enough that the user leaves (build, deploy, import) and the result must reach them later.
+- `skills/webkit-errors` — where every error renders, row by row.
 - `platform/create/single-page-create` — the sectioned create page these states apply to.
 - `platform/auth` — the signed-out version, where every outcome lands in one card `Alert` and nothing toasts.
 - `platform/settings/settings-form` — the same field states on an existing object.

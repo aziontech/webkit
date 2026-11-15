@@ -4,17 +4,18 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## When to use
 
+- Use single-page-create only to create a first-level resource on one page; its settings page is edit-resource (`platform/edit/edit-resource`).
 - The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/webkit-create-surface`).
 - Its fields fit in a few sections without depending on each other's answers step by step.
 - An action that takes a form and runs once, whose submit names what it does (Save, Purge, Deploy).
-- The settings page of the same resource: it reuses these sections in the same order.
 
 ## When not to use
 
 - The fields split into steps that unlock in order, or one answer adds a step: use `platform/create/multipage-create`.
-- The resource binds another one and then deploys: use `platform/create/provision-wizard` or `platform/create/source-wizard`.
+- The resource binds another one and then deploys: use `platform/create/multipage-create` (CreateAndDeploy).
+- Deploying a repository, a template or an uploaded folder: start at `platform/create/create-hub` and deploy with `platform/create/deploy-template` (ImportFromGit covers a Git import).
 - The thing is created inside another resource (a record in a zone, a rule in an application): use `platform/create/create-in-drawer`.
-- Editing an existing resource where the commit bar should mount only after a change: use `platform/settings/settings-form`.
+- The settings page of an existing resource, with the save bar that mounts only after a change: use `platform/edit/edit-resource`.
 - Never put a create form in a dialog.
 
 ## Building blocks
@@ -41,7 +42,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
+`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
 ## Do
 
@@ -90,8 +91,6 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
-- ImportFromGit: the same job as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`) with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
-- ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.
 
 ## Related
 

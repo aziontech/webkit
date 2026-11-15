@@ -3,7 +3,7 @@
   "name": "AnalyticsDashboard",
   "title": "Templates/Platform/Dashboard/AnalyticsDashboard",
   "surface": "product",
-  "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+  "summary": "The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -37,7 +37,20 @@
     "metrics landing",
     "sub-dashboards",
     "status class filter",
-    "visão geral de métricas"
+    "visão geral de métricas",
+    "data dashboard",
+    "metrics dashboard",
+    "kpi dashboard",
+    "stat tiles",
+    "data transferred",
+    "usage dashboard",
+    "usage per project",
+    "consumption",
+    "breakdown charts",
+    "métricas",
+    "painel de dados",
+    "painel de uso",
+    "traffic and usage dashboard"
   ],
   "skills": ["webkit-data-viz", "webkit-tables", "webkit-ui-states"],
   "primary": {
@@ -74,6 +87,11 @@
       "name": "MetricsOverview",
       "summary": "The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard).",
       "file": "variants/metrics-overview.vue"
+    },
+    {
+      "name": "Usage",
+      "summary": "Consumption instead of traffic quality: the Data usage page, whose Period Select drives six StatTiles (requests, data transferred, jobs run, images processed, requests inspected, logs exported) with a sparkline and the change against the previous period, then data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranking projects by data transferred, and a searchable, paginated DataTable of requests and data transferred per project.",
+      "file": "variants/usage.vue"
     }
   ]
 }

@@ -63,7 +63,7 @@ The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) ar
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
-create flow (`platform/create/*`, headed by the `headers/creation-header` bar) or a
+create flow (`platform/create/*`, headed by the `top-bars/creation-bar` bar) or a
 signed-out screen (`platform/auth`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`).
 
