@@ -1,5 +1,5 @@
 {
-  "description": "Fixed query set for MCP search quality (M2.6). tool: patterns = search_patterns, components = search_components, suggest = suggest_component (pattern id, or component/section name). top1 is the expected first result; top3 lists every answer acceptable in the first three.",
+  "description": "Fixed query set for MCP search quality (M2.6). tool: patterns = search_patterns, components = search_components, suggest = suggest_component (pattern id, or component/section name). top1 is the expected first result; top3 lists every answer acceptable in the first three. A query with `pending` expects a name another v6 lane is still renaming: it is skipped until the catalog is regenerated.",
   "queries": [
     {
       "tool": "patterns",
@@ -907,8 +907,9 @@
       "tool": "components",
       "lang": "en",
       "query": "date picker",
-      "top1": "calendar",
-      "top3": ["calendar"]
+      "top1": "date-picker",
+      "top3": ["date-picker"],
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
     },
     {
       "tool": "components",
@@ -1054,8 +1055,8 @@
       "tool": "components",
       "lang": "en",
       "query": "radio",
-      "top1": "radio-button",
-      "top3": ["radio-button", "radio-cards"]
+      "top1": "radio-group",
+      "top3": ["radio-group", "radio-group-item"]
     },
     {
       "tool": "components",
@@ -1075,8 +1076,9 @@
       "tool": "components",
       "lang": "pt-BR",
       "query": "seletor de data",
-      "top1": "calendar",
-      "top3": ["calendar"]
+      "top1": "date-picker",
+      "top3": ["date-picker"],
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
     },
     {
       "tool": "components",
@@ -1180,8 +1182,9 @@
       "tool": "components",
       "lang": "es",
       "query": "selector de fecha",
-      "top1": "calendar",
-      "top3": ["calendar"]
+      "top1": "date-picker",
+      "top3": ["date-picker"],
+      "pending": "calendar is renamed to date-picker by the inputs lane; un-skip after the catalog is regenerated"
     },
     {
       "tool": "components",

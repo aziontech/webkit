@@ -428,10 +428,26 @@ function conceptHits(catalog, query) {
   const q = normalize(query)
   const hits = new Map()
   if (!q) return hits
+  const words = contentWords(q)
+  const owners = new Map()
+  const covered = new Map()
   for (const { key, term } of longestMatches(q, NORMALIZED_TERMS)) {
     if (!catalog.getEntry(key)) continue
-    const boost = term === q ? 90 : 30
-    if ((hits.get(key) ?? 0) < boost) hits.set(key, boost)
+    const owner = owners.get(term)
+    if (owner && owner !== key) continue
+    owners.set(term, key)
+    if (term === q) {
+      hits.set(key, 90)
+      continue
+    }
+    const tokens = covered.get(key) ?? new Set()
+    for (const w of term.split(' ')) tokens.add(w)
+    covered.set(key, tokens)
+  }
+  for (const [key, tokens] of covered) {
+    if (hits.has(key)) continue
+    const share = words.length ? words.filter((w) => tokens.has(w)).length / words.length : 0
+    hits.set(key, Math.round(30 + 50 * Math.min(1, share)))
   }
   return hits
 }
