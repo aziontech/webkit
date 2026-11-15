@@ -36,7 +36,7 @@ const attrs = figma.code` value="${value || 'option'}" label="${label}"${showCom
 
 const option =
   showIcon || showRight
-    ? figma.code`<DropdownMenu.Option${attrs}>${
+    ? figma.code`<DropdownMenu.Item${attrs}>${
         showIcon
           ? figma.code`
   <template #leading><i class="pi pi-box" aria-hidden="true" /></template>`
@@ -47,8 +47,8 @@ const option =
   <template #trailing>${right}</template>`
           : ''
       }
-</DropdownMenu.Option>`
-    : figma.code`<DropdownMenu.Option${attrs} />`
+</DropdownMenu.Item>`
+    : figma.code`<DropdownMenu.Item${attrs} />`
 
 let example = option
 if (type === 'group') example = figma.code`<DropdownMenu.Group label="${groupLabel}" />`
