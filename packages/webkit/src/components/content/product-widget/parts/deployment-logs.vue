@@ -157,18 +157,18 @@
     return seconds > 0 ? formatDuration(seconds) : ''
   }
 
-  const toLine = ([time, message, type]: DeploymentLogTuple, i: number): LogViewLine => ({
-    id: String(i),
-    time,
-    type:
+  const toLine = ([time, message, type]: DeploymentLogTuple, i: number): LogViewLine => {
+    const kind =
       type ??
       (message.includes('vulnerabilit')
         ? 'warning'
         : /successfully|finalized/.test(message)
           ? 'success'
-          : 'text'),
-    message
-  })
+          : 'text')
+    return kind === 'warning'
+      ? { id: String(i), time, type: 'text', level: 'warn', message }
+      : { id: String(i), time, type: kind, message }
+  }
 
   const linesByStep = computed(() =>
     stepList.value.map((step, i) => step.logs.slice(0, revealed.value[i]).map(toLine))
