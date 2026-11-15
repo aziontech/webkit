@@ -943,6 +943,15 @@ export const es: Messages = {
     filtersApplied: '{label} ({count})',
     newTab: '(se abre en una pestaña nueva)'
   },
+  dataGrid: {
+    selectAll: 'Seleccionar todas las filas',
+    selectRow: 'Seleccionar fila',
+    resize: 'Cambiar el ancho de {column}',
+    emptyTitle: 'Todavía no hay filas',
+    emptyDescription: 'Agrega una fila para empezar a editar.',
+    true: 'Sí',
+    false: 'No'
+  },
   table: {
     selectAll: 'Seleccionar todas las filas',
     selectRow: 'Seleccionar fila',
@@ -950,50 +959,8 @@ export const es: Messages = {
     emptyDescription: 'Empieza creando tu primer recurso.',
     errorTitle: 'No se pudieron cargar los datos'
   },
-  tableAppliedFilters: {
-    contains: 'contiene',
-    notContains: 'no contiene',
-    startsWith: 'empieza con',
-    endsWith: 'termina con',
-    in: 'en',
-    notIn: 'no está en',
-    isEmpty: 'está vacío',
-    isNotEmpty: 'no está vacío',
-    within: 'en los últimos',
-    between: 'entre'
-  },
-  tableColumnSelector: {
-    title: 'Columnas',
-    empty: 'No hay columnas que se puedan ocultar.',
-    alwaysShown: 'Siempre visible',
-    showAll: 'Mostrar todas las columnas'
-  },
   tableExport: {
     label: 'Exportar CSV'
-  },
-  tableFilter: {
-    title: 'Filtros',
-    triggerCount: { one: '{title}, {count} aplicado', other: '{title}, {count} aplicados' },
-    field: 'Campo',
-    operator: 'Operador',
-    value: 'Valor',
-    apply: 'Aplicar filtro',
-    eq: 'es',
-    neq: 'no es',
-    contains: 'contiene',
-    notContains: 'no contiene',
-    startsWith: 'empieza con',
-    endsWith: 'termina con',
-    gt: 'mayor que',
-    gte: 'al menos',
-    lt: 'menor que',
-    lte: 'como máximo',
-    in: 'en',
-    notIn: 'no está en',
-    isEmpty: 'está vacío',
-    isNotEmpty: 'no está vacío',
-    within: 'en los últimos',
-    between: 'entre'
   },
   tableHeadCell: {
     resize: 'Redimensionar columna',

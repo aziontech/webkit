@@ -1,5 +1,5 @@
 [
-  "packages/webkit/examples/table/refresh.vue::clock:no-clock-in-setup",
+  "packages/webkit/examples/data-table/refresh.vue::clock:no-clock-in-setup",
   "packages/webkit/src/components/actions/toggle-group/toggle-group.vue::token:js-class-preset",
   "packages/webkit/src/components/actions/toggle-group/toggle-group.vue::token:js-class-preset",
   "packages/webkit/src/components/actions/toggle-group/toggle-group.vue::token:js-class-preset",

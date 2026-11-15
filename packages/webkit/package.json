@@ -672,6 +672,14 @@
       "types": "./types/components/data/table/table.vue.d.ts",
       "default": "./src/components/data/table/table.vue"
     },
+    "./data-table": {
+      "types": "./types/components/data/data-table/data-table.vue.d.ts",
+      "default": "./src/components/data/data-table/data-table.vue"
+    },
+    "./data-grid": {
+      "types": "./types/components/data/data-grid/data-grid.vue.d.ts",
+      "default": "./src/components/data/data-grid/data-grid.vue"
+    },
     "./table-header": {
       "types": "./types/components/data/table/table-header/table-header.vue.d.ts",
       "default": "./src/components/data/table/table-header/table-header.vue"
@@ -739,14 +747,6 @@
     "./table-filter": {
       "types": "./types/components/data/table/table-filter/table-filter.vue.d.ts",
       "default": "./src/components/data/table/table-filter/table-filter.vue"
-    },
-    "./table-applied-filters": {
-      "types": "./types/components/data/table/table-applied-filters/table-applied-filters.vue.d.ts",
-      "default": "./src/components/data/table/table-applied-filters/table-applied-filters.vue"
-    },
-    "./table-column-selector": {
-      "types": "./types/components/data/table/table-column-selector/table-column-selector.vue.d.ts",
-      "default": "./src/components/data/table/table-column-selector/table-column-selector.vue"
     },
     "./table-export": {
       "types": "./types/components/data/table/table-export/table-export.vue.d.ts",
@@ -2982,6 +2982,12 @@
       "table-root": [
         "./types/components/data/table/table.vue.d.ts"
       ],
+      "data-table": [
+        "./types/components/data/data-table/data-table.vue.d.ts"
+      ],
+      "data-grid": [
+        "./types/components/data/data-grid/data-grid.vue.d.ts"
+      ],
       "table-header": [
         "./types/components/data/table/table-header/table-header.vue.d.ts"
       ],
@@ -3032,12 +3038,6 @@
       ],
       "table-filter": [
         "./types/components/data/table/table-filter/table-filter.vue.d.ts"
-      ],
-      "table-applied-filters": [
-        "./types/components/data/table/table-applied-filters/table-applied-filters.vue.d.ts"
-      ],
-      "table-column-selector": [
-        "./types/components/data/table/table-column-selector/table-column-selector.vue.d.ts"
       ],
       "table-export": [
         "./types/components/data/table/table-export/table-export.vue.d.ts"

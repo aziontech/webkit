@@ -921,6 +921,16 @@ export const storyLibrary = {
   newTab: '(opens in a new tab)'
 } as const
 
+export const dataGrid = {
+  selectAll: 'Select all rows',
+  selectRow: 'Select row',
+  resize: 'Resize {column}',
+  emptyTitle: 'No rows yet',
+  emptyDescription: 'Add a row to start editing.',
+  true: 'Yes',
+  false: 'No'
+} as const
+
 export const table = {
   selectAll: 'Select all rows',
   selectRow: 'Select row',
@@ -929,56 +939,8 @@ export const table = {
   errorTitle: 'Could not load the data'
 } as const
 
-export const tableAppliedFilters = {
-  contains: 'contains',
-  notContains: 'not contains',
-  startsWith: 'starts with',
-  endsWith: 'ends with',
-  in: 'in',
-  notIn: 'not in',
-  isEmpty: 'is empty',
-  isNotEmpty: 'is not empty',
-  within: 'within the last',
-  between: 'between'
-} as const
-
-export const tableColumnSelector = {
-  title: 'Columns',
-  empty: 'No hideable columns.',
-  alwaysShown: 'Always shown',
-  showAll: 'Show all columns'
-} as const
-
 export const tableExport = {
   label: 'Export CSV'
-} as const
-
-export const tableFilter = {
-  title: 'Filters',
-  triggerCount: {
-    one: '{title}, {count} applied',
-    other: '{title}, {count} applied'
-  },
-  field: 'Field',
-  operator: 'Operator',
-  value: 'Value',
-  apply: 'Apply filter',
-  eq: 'is',
-  neq: 'is not',
-  contains: 'contains',
-  notContains: 'does not contain',
-  startsWith: 'starts with',
-  endsWith: 'ends with',
-  gt: 'greater than',
-  gte: 'at least',
-  lt: 'less than',
-  lte: 'at most',
-  in: 'in',
-  notIn: 'not in',
-  isEmpty: 'is empty',
-  isNotEmpty: 'is not empty',
-  within: 'within the last',
-  between: 'between'
 } as const
 
 export const tableHeadCell = {
@@ -1498,11 +1460,9 @@ export const en = {
   stepper,
   storyLibrary,
   suggestionGroup,
+  dataGrid,
   table,
-  tableAppliedFilters,
-  tableColumnSelector,
   tableExport,
-  tableFilter,
   tableHeadCell,
   tableRefreshButton,
   tableCellActions,

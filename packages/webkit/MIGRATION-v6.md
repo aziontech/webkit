@@ -108,19 +108,15 @@ component.
 These old names keep working through v6 and are marked `@deprecated` in the types; the codemod
 rewrites the prop renames, the rest are listed here so you can move at your own pace.
 
-| Component      | Deprecated                    | Use instead                                    |
-| -------------- | ----------------------------- | ---------------------------------------------- |
-| `code-block`   | `showLineNumbers`             | `lineNumbers`                                  |
-| `flow-anchor`  | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
-| `log-view`     | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
-| `log-view`     | line `type: 'warning'`        | line `level: 'warn'`                           |
-| `pick-list`    | `dataKey`                     | `trackBy` (the name `cards` uses)              |
-| `table`        | `headerKind`                  | `density` (now sets the header and the rows)   |
-| `table`        | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
-| `table-header` | `kind`                        | `density`                                      |
+| Component     | Deprecated                    | Use instead                       |
+| ------------- | ----------------------------- | --------------------------------- |
+| `code-block`  | `showLineNumbers`             | `lineNumbers`                     |
+| `flow-anchor` | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`     |
+| `log-view`    | `v-model:warnings-only`       | `v-model:level` with `'warn'`     |
+| `log-view`    | line `type: 'warning'`        | line `level: 'warn'`              |
+| `pick-list`   | `dataKey`                     | `trackBy` (the name `cards` uses) |
 
-`headerKind` and `density` are not one-to-one: `density="compact"` also compacts the rows, so the
-codemod leaves `headerKind` for you. `warningsOnly` and `type: 'warning'` are data or inverted
+`warningsOnly` and `type: 'warning'` are data or inverted
 booleans; move them by hand.
 
 These also keep working in 6.x and are marked `@deprecated` in the types:
@@ -273,6 +269,63 @@ The screens (blocks) that were only these fragments are gone from the catalog:
 `platform/page/page-header`, `platform/page/section-header`, `platform/page/page-tabs`,
 `platform/page/settings-section`, `platform/forms/setting-row` and `platform/overlays/confirm-dialog`.
 
+### Data-driven tables are `DataTable`
+
+`Table` is now the markup-only root of the table parts, so a hand-composed table no longer bundles
+the `@tanstack/vue-table` engine (`table-root` is about 2 KB, down from 56 KB). Everything that
+takes `data` + `columns` moved to `DataTable`:
+
+```diff
+- import Table from '@aziontech/webkit/table'
+- import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
++ import Table from '@aziontech/webkit/table' // still the parts: Table.Search, Table.CellStatus, …
++ import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
+
+- <Table :data="rows" :columns="columns" paginated>
++ <DataTable :data="rows" :columns="columns" paginated>
+    <template #toolbar><Table.Search /></template>
+- </Table>
++ </DataTable>
+```
+
+- Every prop, event, slot, `v-model` and the `TableExposed` ref API of the data-driven mode is on
+  `DataTable` unchanged; `useCollection().tableProps` binds to it the same way.
+- The types (`TableColumn`, `TableExposed`, `TableStateSnapshot`, the slot scopes) come from
+  `@aziontech/webkit/data-table` or `@aziontech/webkit/table`; `@aziontech/webkit/table-root` no
+  longer exports them.
+- `Table` keeps `maxHeight`, `bordered`, `density`, `wrapLines` and the `default`, `title`,
+  `toolbar` and `footer` slots. Its `toolbar` slot has no scope.
+- Test ids: DataTable's root is `data-data-table` (its parts `data-data-table__row`, …); a
+  hand-composed `Table` keeps `data-table`.
+- Removed with no alias: `headerKind` (use `density`, which also compacts the rows),
+  `rowsPerPageOptions` (use `pageSizeOptions`, now `[10, 25, 50, 100]` by default) and
+  `Table.Header`'s `kind` (use `density`). `useCollection().tableProps` now binds `pageSizeOptions`.
+- The codemod cannot tell a data-driven `<Table>` from a composed one; move the tags that pass
+  `:data`, `:columns` or `v-bind="tableProps"` by hand.
+
+### Two table filters and one column chooser
+
+A table filters with one of two components, picked by the shape of the data, and chooses its
+columns in one place:
+
+- `Table.Filter` is only the toolbar slot that hosts them, wired to the DataTable's `filters`:
+  `kind="menu"` (the default) renders `FilterMenu` (facets picked from known values) and
+  `kind="property"` renders `PropertyFilter` (typed conditions with operators, combined with AND).
+  The field / operator / value builder (`kind="builder"`, the old default) is removed with its
+  `count` prop, its `default` and `trigger` slots and its `clear` event. A `<Table.Filter>` with no
+  `kind` now opens the menu: write `kind="property"` to keep operator conditions (the codemod
+  rewrites `kind="builder"`). For a query language of your own, bind `PropertyFilter` in `query`
+  mode.
+- `Table.AppliedFilters` (`./table-applied-filters`) is removed. Put `<FilterMenu.Chips />` with no
+  `fields` in the DataTable `filters` slot: it reads the table's filter fields and filters, and its
+  chips reopen the menu or remove the filter (`filter-remove`). The property kind shows its own
+  tokens and needs no chips.
+- `Table.ColumnSelector` (`./table-column-selector`) is removed. Put `<CollectionPreferences
+:sections="['columns']" />` with no `columns` in the DataTable toolbar: it lists the table's
+  columns (a `hideable: false` one locked) with their order, and Confirm writes the visibility and
+  the order back to the table. Bound to `useCollection`, keep `v-bind="preferencesProps"`.
+- `PropertyFilter` gains `hide-operations`, which hides the Match all / Match any toggle.
+
 ### `v-model` everywhere
 
 `Accordion`, `Tabs`, `NavigationMenu`, `CodeBlock`, `ThemeSwitcher` and `PageTabs` bind `v-model`
@@ -301,10 +354,9 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `TopologyDiagram`       | `remove`            | `(key)`                          | `(event, key)`                                      |
 | `TopologyDiagram`       | `create`            | `(key)`                          | `(event, key)`                                      |
 | `TopologyDiagram`       | `bind`              | `(key, value)`                   | `(event, { key, value })`                           |
-| `Table`                 | `filter-apply`      | `(filters)`                      | `(event, filters)`                                  |
-| `Table`                 | `filter-remove`     | `(filter)`                       | `(event, filter)`                                   |
+| `DataTable`             | `filter-apply`      | `(filters)`                      | `(event, filters)`                                  |
+| `DataTable`             | `filter-remove`     | `(filter)`                       | `(event, filter)`                                   |
 | `Table.Filter`          | `apply`             | `(filters)`                      | `(event, filters)`                                  |
-| `Table.Filter`          | `clear`             | `()`                             | `(event)`                                           |
 | `CollectionPreferences` | `confirm`           | `(value)`                        | `(event, value)`                                    |
 | `CollectionPreferences` | `cancel`            | `()`                             | `(event)`                                           |
 | `PropertyFilter`        | `submit`            | `(payload)`                      | `(event, payload)`                                  |
@@ -339,9 +391,8 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 <ButtonGroup :items="actions" @click="(event, id) => run(id)" />
 ```
 
-Two slot functions changed with them. The `Table.Filter` default slot's `apply`, `clear` and
-`remove` take the event first (`apply(event)`, `clear(event)`, `remove(event, filter)`), and the
-`AttributeEditor` `row` and `row-actions` slots pass `remove(event)`. Bind them to a click
+A slot function changed with them: the `AttributeEditor` `row` and `row-actions` slots pass
+`remove(event)`. Bind them to a click
 (`@click="remove"`) or pass the event on (`@click="(event) => apply(event)"`).
 
 The `AttributeEditor` `row` slot also passes `move(event, offset)` for reorderable lists
@@ -838,7 +889,7 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 <script setup>
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import Table from '@aziontech/webkit/table'
+  import DataTable from '@aziontech/webkit/data-table'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const { tableProps, propertyFilterProps, preferencesProps } = useCollection({
@@ -854,7 +905,7 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 <template>
   <PropertyFilter v-bind="propertyFilterProps" />
   <CollectionPreferences v-bind="preferencesProps" />
-  <Table v-bind="tableProps" />
+  <DataTable v-bind="tableProps" />
 </template>
 ```
 
