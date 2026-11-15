@@ -185,7 +185,7 @@ describe('Button', () => {
       const node = getByRole('button', { name: 'Save' }) as HTMLButtonElement
       expect(node.getAttribute('aria-busy')).toBe('true')
       expect(node.disabled).toBe(false)
-      expect(getByTestId('actions-button-loading')).toBeTruthy()
+      expect(getByTestId('actions-button__loading')).toBeTruthy()
       await fireEvent.click(node)
       expect(emitted().click).toBeUndefined()
     })
@@ -330,7 +330,7 @@ describe('Button', () => {
           loading: true
         }
       })
-      expect(getByTestId('actions-button-loading')).toBeTruthy()
+      expect(getByTestId('actions-button__loading')).toBeTruthy()
       expect(getByRole('button').querySelector('i[data-icon-position]')).toBeNull()
     })
   })
@@ -370,7 +370,7 @@ describe('Button', () => {
 
     it('Loading story renders the spinner', () => {
       const { getByTestId } = render(Loading)
-      expect(getByTestId('actions-button-loading')).toBeTruthy()
+      expect(getByTestId('actions-button__loading')).toBeTruthy()
     })
   })
 })

@@ -435,7 +435,7 @@
                       key="tag-1"
                       v-if="card.readonly"
                       label="Read-only"
-                      severity="secondary"
+                      severity="neutral"
                       icon="pi pi-lock"
                       size="small"
                     />
@@ -908,7 +908,7 @@
                               </span>
                               <Tag
                                 :label="plural(environment.projects.length, 'project', 'projects')"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                             </span>

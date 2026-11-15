@@ -816,7 +816,7 @@
                             <template #cell-active="{ value }">
                               <Tag
                                 :label="value ? 'Active' : 'Inactive'"
-                                :severity="value ? 'success' : 'secondary'"
+                                :severity="value ? 'success' : 'neutral'"
                                 size="medium"
                               />
                             </template>

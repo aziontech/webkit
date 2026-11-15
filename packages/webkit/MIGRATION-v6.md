@@ -317,6 +317,13 @@ not rewrite handlers: a handler that ignores its arguments (`@retry="reload"`,
 | `AttributeEditor`       | `remove`            | `({ index, item, groupIndex? })` | `(event, { index, item, groupIndex? })`             |
 | `Combobox`              | `create`            | `(value)`                        | `(event, value)`                                    |
 | `Calendar`              | `apply`             | `(value)`                        | `(event, value)`                                    |
+| `CopyButton`            | `copy`              | `(value)`                        | `(event, value)`                                    |
+| `CopyPromptButton`      | `copy`              | `(value)`                        | `(event, value)`                                    |
+| `CodeBlock`             | `copy`              | `(code)`                         | `(event, code)`                                     |
+| `LogView`               | `copy`              | `(value)`                        | `(event, value)`                                    |
+| `ArtifactCanvas`        | `copy`              | `(value)`                        | `(event, value)`                                    |
+| `ArtifactPreview`       | `copy`              | `(value)`                        | `(event, value)`                                    |
+| `DocAgentCard`          | `copy`              | `(value)`                        | `(event, value)`                                    |
 
 ```vue
 <!-- v5 -->
@@ -406,6 +413,47 @@ Test ids follow the component name: `feedback-message` → `feedback-alert`, `la
 `data-testid`. `NavigationMenu` moves from `navigation-menu` (the id `Menu` also uses) to
 `navigation-navigation-menu`, and its parts from `navigation-menu__*` to
 `navigation-navigation-menu__*`.
+
+A child test id joins its root with two underscores, never a hyphen. These moved:
+
+| Component                     | v5                                    | v6                                      |
+| ----------------------------- | ------------------------------------- | --------------------------------------- |
+| `Button`                      | `actions-button-loading`              | `actions-button__loading`               |
+| `IconButton`                  | `actions-icon-button-loading`         | `actions-icon-button__loading`          |
+| `ButtonHighlight`             | `actions-button-highlight-loading`    | `actions-button-highlight__loading`     |
+| `RadioGroup.Item` (the radio) | `input-radio-group__item-control`     | `input-radio-group__item__control`      |
+| `Flow.Parallel` (branch list) | `data-flow__parallel-branches`        | `data-flow__parallel__branches`         |
+| `KeyValuePairs.Item`          | `content-key-value-pairs-item`        | `content-key-value-pairs__item`         |
+| `KeyValuePairs.Group`         | `content-key-value-pairs-group`       | `content-key-value-pairs__group`        |
+| `Tree` row / chevron          | `data-tree-item` / `data-tree-toggle` | `data-tree__item` / `data-tree__toggle` |
+| `Toaster` region              | `feedback-toast-<position>`           | `feedback-toast__<position>`            |
+| `Chart` legend entry          | `chart-chart__legend-item`            | `chart-chart__legend__item`             |
+| `Board.Item`                  | `layout-board-item`                   | `layout-board__item`                    |
+| `DocProse` copy tip           | `documentation-doc-prose-copy-tip`    | `documentation-doc-prose__copy-tip`     |
+
+The same applies under a root id you pass yourself (`my-tree-item` → `my-tree__item`).
+
+### Default sizes follow the house rule
+
+Actions default to `large` and everything else to `medium`. These defaults moved; pass the old
+`size` to keep the old look:
+
+| Component       | v5 default | v6 default |
+| --------------- | ---------- | ---------- |
+| `CopyButton`    | `small`    | `large`    |
+| `ButtonGroup`   | `medium`   | `large`    |
+| `Progress`      | `small`    | `medium`   |
+| `ConfirmDialog` | `small`    | `medium`   |
+| `Currency`      | `small`    | `medium`   |
+| `HeroTitle`     | `large`    | `medium`   |
+
+### Tag and StatusIndicator colours
+
+`Tag` `severity="secondary"` is removed: it drew the same bordered look as `neutral`, which takes
+its place. `Menu.Item` `tag-severity="secondary"` follows. `StatusIndicator` `severity="alt"` is
+removed: its dot was the brand orange, outside the shared severity scale; `neutral` (a muted dot)
+takes its place, or `info` if the orange marked something to notice. The codemod rewrites all three
+to `neutral`.
 
 ### Navigation: deprecated names, removed in 7.0
 

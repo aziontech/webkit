@@ -7,7 +7,7 @@
   const NOW = Date.UTC(2026, 10, 10, 12)
 
   const statusSeverity = (status) =>
-    ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'secondary'
+    ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'neutral'
 
   const rows = [
     {

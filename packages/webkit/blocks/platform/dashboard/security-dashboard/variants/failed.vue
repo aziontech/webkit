@@ -219,7 +219,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -289,7 +289,7 @@
             <ChartCard.Action>
               <Tag
                 :label="`${attention.length} open`"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
             </ChartCard.Action>
@@ -317,7 +317,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -384,7 +384,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -452,7 +452,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />

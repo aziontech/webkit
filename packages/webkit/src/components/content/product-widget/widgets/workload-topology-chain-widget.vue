@@ -338,7 +338,7 @@
                 <Tag
                   v-else
                   :label="node.label"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </span>

@@ -9,7 +9,6 @@ import Tag from './tag.vue'
 const SEVERITIES = [
   'neutral',
   'primary',
-  'secondary',
   'success',
   'info',
   'warning',
@@ -152,6 +151,14 @@ describe('Tag', () => {
   it('falls back to primary for a severity outside the union', () => {
     const { getByTestId } = render(Tag, {
       props: { label: 'Inactive', severity: 'bogus' as never }
+    })
+
+    expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')
+  })
+
+  it('no longer accepts secondary, which v6 folds into neutral', () => {
+    const { getByTestId } = render(Tag, {
+      props: { label: 'Viewer', severity: 'secondary' as never }
     })
 
     expect(getByTestId('content-tag').getAttribute('data-severity')).toBe('primary')

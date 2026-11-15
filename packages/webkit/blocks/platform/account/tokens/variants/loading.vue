@@ -70,7 +70,7 @@
   const tokens = ref<Token[]>([])
 
   const statusOf = (token: Token): TokenStatus => {
-    if (token.revoked) return { label: 'Revoked', severity: 'secondary' }
+    if (token.revoked) return { label: 'Revoked', severity: 'neutral' }
     const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
     if (left <= 7)
@@ -660,6 +660,7 @@
       :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
       confirm-label="Revoke token"
       :loading="working"
+      size="small"
       @confirm="revoke"
     />
 
@@ -668,6 +669,7 @@
       title="Delete token"
       :description="`“${pending?.name ?? ''}” no longer works; deleting removes it from this list.`"
       confirm-label="Delete token"
+      size="small"
       @confirm="remove"
     />
   </div>

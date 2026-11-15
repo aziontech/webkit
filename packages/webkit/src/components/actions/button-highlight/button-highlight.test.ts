@@ -108,7 +108,7 @@ describe('ButtonHighlight', () => {
       expect(node.getAttribute('aria-disabled')).toBe('true')
       expect(node.getAttribute('data-loading')).toBe('')
       expect(node.disabled).toBe(false)
-      expect(getByTestId('actions-button-highlight-loading')).toBeTruthy()
+      expect(getByTestId('actions-button-highlight__loading')).toBeTruthy()
       await fireEvent.click(node)
       expect(emitted().click).toBeUndefined()
     })
@@ -182,7 +182,7 @@ describe('ButtonHighlight', () => {
 
     it('Loading story renders the spinner', () => {
       const { getByTestId } = render(Loading)
-      expect(getByTestId('actions-button-highlight-loading')).toBeTruthy()
+      expect(getByTestId('actions-button-highlight__loading')).toBeTruthy()
     })
   })
 })

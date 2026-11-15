@@ -251,7 +251,7 @@
       description: 'Repository wired and the deploy published',
       status: 'skipped',
       duration: '',
-      tag: { label: 'Skipped', severity: 'secondary' },
+      tag: { label: 'Skipped', severity: 'neutral' },
       lines: []
     }
   ]

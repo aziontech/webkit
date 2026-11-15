@@ -83,7 +83,7 @@
   ]
   const versionSeverity: Record<string, TagSeverity> = {
     Active: 'success',
-    Ready: 'secondary',
+    Ready: 'neutral',
     Draft: 'warning'
   }
 
@@ -453,6 +453,7 @@
                           kind="transparent"
                           :value="`${APP.name} build token`"
                           aria-label="Copy API token"
+                          size="small"
                         />
                       </InputGroupRoot>
                     </SettingRow>
@@ -599,7 +600,7 @@
                     />
                     <Tag
                       label="Production"
-                      severity="secondary"
+                      severity="neutral"
                       size="small"
                       class="shrink-0"
                     />
@@ -828,7 +829,7 @@
                 <dd class="m-0">
                   <Tag
                     label="Production"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                   />
                 </dd>

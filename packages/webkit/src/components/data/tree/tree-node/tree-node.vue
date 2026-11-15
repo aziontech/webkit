@@ -79,7 +79,7 @@
 <template>
   <li
     role="treeitem"
-    :data-testid="`${ctx.testId.value}-item`"
+    :data-testid="`${ctx.testId.value}__item`"
     :data-item-id="item.id"
     :aria-level="level"
     :aria-setsize="setsize"
@@ -105,7 +105,7 @@
           tabindex="-1"
           aria-hidden="true"
           data-tree-toggle
-          :data-testid="`${ctx.testId.value}-toggle`"
+          :data-testid="`${ctx.testId.value}__toggle`"
           :data-state="state"
           class="flex h-full w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
           @mousedown.prevent

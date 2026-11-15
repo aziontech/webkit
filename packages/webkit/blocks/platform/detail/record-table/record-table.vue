@@ -302,6 +302,7 @@
                               kind="transparent"
                               :value="ns"
                               :aria-label="'Copy nameserver ' + (index + 1)"
+                              size="small"
                             />
                           </InputGroupRoot>
                         </div>
@@ -359,6 +360,7 @@
                               kind="transparent"
                               :value="key.value"
                               :aria-label="'Copy ' + key.label"
+                              size="small"
                             />
                           </InputGroupRoot>
                         </SettingRow>
@@ -519,7 +521,7 @@
                   <template #cell-type="{ value }">
                     <Tag
                       :label="value"
-                      severity="secondary"
+                      severity="neutral"
                       size="medium"
                     />
                   </template>

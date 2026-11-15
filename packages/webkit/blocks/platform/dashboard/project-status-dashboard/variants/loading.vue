@@ -606,7 +606,7 @@
             <ChartCard.Action>
               <Tag
                 label="Story points"
-                severity="secondary"
+                severity="neutral"
                 size="small"
                 icon="pi pi-chart-line"
               />
@@ -773,7 +773,7 @@
               <Tag
                 v-if="atRisk.length && !loading"
                 :label="atRisk.length + ' open'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
               <DropdownMenu

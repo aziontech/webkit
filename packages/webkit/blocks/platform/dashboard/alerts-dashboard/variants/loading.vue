@@ -499,7 +499,7 @@
   ]
 
   const statusSeverity: Record<AlertStatus, TagSeverity> = {
-    Open: 'secondary',
+    Open: 'neutral',
     Investigating: 'info'
   }
 
@@ -694,7 +694,7 @@
               <template #cell-type="{ row }">
                 <Tag
                   :label="row.type"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>

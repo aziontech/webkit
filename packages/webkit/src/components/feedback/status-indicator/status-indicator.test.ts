@@ -7,7 +7,7 @@ import Status from '../../../../examples/status-indicator/status.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import StatusIndicator from './status-indicator.vue'
 
-const STATUSES = ['success', 'info', 'neutral', 'warning', 'alt', 'danger'] as const
+const STATUSES = ['success', 'info', 'neutral', 'warning', 'danger'] as const
 
 describe('StatusIndicator', () => {
   it('renders with the default testid, default severity and default label', () => {
@@ -134,6 +134,15 @@ describe('StatusIndicator', () => {
 
     // The composite story renders one indicator per status option.
     expect(getAllByTestId('feedback-status-indicator').length).toBe(STATUSES.length)
+  })
+
+  it('shows only the shared severity scale in the Status example, without alt', () => {
+    const { getAllByTestId } = render(Status)
+
+    const severities = getAllByTestId('feedback-status-indicator').map((el) =>
+      el.getAttribute('data-severity')
+    )
+    expect(severities).toEqual([...STATUSES])
   })
 
   it('renders the Loading story fixture with a spinner and busy state', async () => {

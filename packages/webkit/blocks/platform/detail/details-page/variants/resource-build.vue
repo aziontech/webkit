@@ -252,6 +252,7 @@
                                 kind="transparent"
                                 value="analytics-app build token"
                                 aria-label="Copy API token"
+                                size="small"
                               />
                             </InputGroupRoot>
                           </div>

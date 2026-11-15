@@ -29,6 +29,7 @@
         value="azion create edge-function"
         aria-label="Copy the create function command"
         copied-label="Command copied"
+        size="small"
       />
     </InputGroupRoot>
   </div>

@@ -70,9 +70,10 @@ describe('CopyButton', () => {
         expect(emitted().copy).toBeTruthy()
       })
       expect(writeText).toHaveBeenCalledWith('secret-value')
-      const events = emitted().copy as string[][]
+      const events = emitted().copy as [Event, string][]
       expect(events).toHaveLength(1)
-      expect(events[0][0]).toBe('secret-value')
+      expect(events[0][0]).toBeInstanceOf(MouseEvent)
+      expect(events[0][1]).toBe('secret-value')
     })
 
     it('swaps the accessible name to the copied label after a successful copy', async () => {
@@ -233,6 +234,11 @@ describe('CopyButton', () => {
     it.each(kinds)('renders an accessible button for kind=%s', (kind) => {
       const { getByRole } = render(CopyButton, { props: { value: 'token', kind } })
       expect(getByRole('button', { name: 'Copy' }).getAttribute('data-kind')).toBe(kind)
+    })
+
+    it('defaults to the large action size', () => {
+      const { getByRole } = render(CopyButton, { props: { value: 'token' } })
+      expect(getByRole('button', { name: 'Copy' }).getAttribute('data-size')).toBe('large')
     })
 
     const sizes = ['small', 'medium', 'large'] as const

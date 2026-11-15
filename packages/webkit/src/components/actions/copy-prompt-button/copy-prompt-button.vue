@@ -46,7 +46,7 @@
   })
 
   const emit = defineEmits<{
-    copy: [value: string]
+    copy: [event: MouseEvent, value: string]
     close: [event: MouseEvent]
   }>()
 
@@ -91,7 +91,7 @@
   const fallbackOpen = ref(false)
   let resetTimer: ReturnType<typeof setTimeout> | null = null
 
-  async function onClick() {
+  async function onClick(event: MouseEvent) {
     if (props.disabled || !props.value || typeof globalThis.navigator === 'undefined') return
     try {
       await globalThis.navigator.clipboard.writeText(props.value)
@@ -101,7 +101,7 @@
       return
     }
     copied.value = true
-    emit('copy', props.value)
+    emit('copy', event, props.value)
     if (resetTimer) clearTimeout(resetTimer)
     resetTimer = setTimeout(() => {
       copied.value = false

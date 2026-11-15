@@ -42,7 +42,7 @@
     /** The reader asked to see the whole artifact. */
     open: [event: MouseEvent]
     /** The content was copied; the payload is the copied text. */
-    copy: [value: string]
+    copy: [event: MouseEvent, value: string]
   }>()
 
   const slots = defineSlots<{
@@ -102,10 +102,11 @@
         <slot name="actions" />
         <CopyButton
           v-if="copyValue"
+          size="small"
           :value="copyValue"
           :aria-label="t('artifactPreview.copy', { title })"
           :data-testid="`${testId}__copy`"
-          @copy="emit('copy', $event)"
+          @copy="(event, value) => emit('copy', event, value)"
         />
         <IconButton
           v-if="downloadHref"

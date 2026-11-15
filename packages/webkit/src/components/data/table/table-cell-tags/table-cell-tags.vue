@@ -158,7 +158,7 @@
       <Tag
         v-for="(item, index) in shown"
         :key="`${index}-${item}`"
-        severity="secondary"
+        severity="neutral"
         size="medium"
         rounded
         :data-testid="`${testId}__tag`"
@@ -193,7 +193,7 @@
         >
           <Tag
             :label="item"
-            severity="secondary"
+            severity="neutral"
             size="medium"
             rounded
           />
@@ -204,7 +204,7 @@
         >
           <Tag
             :label="`+${items.length}`"
-            severity="secondary"
+            severity="neutral"
             size="small"
           />
         </span>

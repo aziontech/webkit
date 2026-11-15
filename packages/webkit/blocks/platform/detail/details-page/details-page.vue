@@ -274,7 +274,7 @@ jobs:
                         </div>
                         <Tag
                           label="Production"
-                          severity="secondary"
+                          severity="neutral"
                           size="small"
                           class="shrink-0"
                         />

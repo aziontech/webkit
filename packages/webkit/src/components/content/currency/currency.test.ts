@@ -72,6 +72,11 @@ describe('Currency', () => {
     }
   )
 
+  it('defaults to the medium size', () => {
+    const { container } = render(Currency, { props: { value: '20', prefix: '$' } })
+    expect(container.querySelector('[data-size]')).toHaveAttribute('data-size', 'medium')
+  })
+
   it('has no a11y violations in the default render', async () => {
     const { container } = render(Currency, {
       props: { value: '20', prefix: '$', suffix: 'per month', size: 'small' }

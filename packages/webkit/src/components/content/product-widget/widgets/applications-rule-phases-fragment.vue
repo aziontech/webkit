@@ -200,7 +200,7 @@
                         <Table.Cell class="w-24 flex-none!">
                           <Tag
                             :label="rule.status"
-                            :severity="rule.status === 'Active' ? 'success' : 'secondary'"
+                            :severity="rule.status === 'Active' ? 'success' : 'neutral'"
                             size="medium"
                           />
                         </Table.Cell>

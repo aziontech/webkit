@@ -1938,7 +1938,7 @@
                                 <Item.Actions>
                                   <Tag
                                     label="Request phase"
-                                    severity="secondary"
+                                    severity="neutral"
                                     size="small"
                                   />
                                 </Item.Actions>
@@ -1955,7 +1955,7 @@
                               >
                                 <Tag
                                   :label="behavior"
-                                  severity="secondary"
+                                  severity="neutral"
                                   size="small"
                                 />
                               </li>

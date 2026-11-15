@@ -477,7 +477,7 @@
             >
               <Tag
                 :label="String(value)"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
             </template>

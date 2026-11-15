@@ -308,7 +308,7 @@
               <Tag
                 v-if="!loading && rows.length"
                 :label="rows.length + ' requests'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
             </ChartCard.Action>

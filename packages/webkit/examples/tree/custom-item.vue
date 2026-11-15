@@ -96,7 +96,7 @@
     },
     'robots.txt': {
       label: 'Draft',
-      severity: 'secondary'
+      severity: 'neutral'
     }
   }
 </script>

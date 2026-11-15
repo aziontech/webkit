@@ -123,7 +123,7 @@
           <span class="flex items-center gap-(--spacing-xs)">
             <Tag
               icon="ai ai-azion"
-              severity="secondary"
+              severity="neutral"
               size="small"
             />
             <span class="truncate text-label-md text-(--text-default)">

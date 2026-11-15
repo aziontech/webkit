@@ -39,6 +39,7 @@ describe('RadioGroup', () => {
     expect(group.getAttribute('data-testid')).toBe('input-radio-group')
     expect(group.getAttribute('data-orientation')).toBe('vertical')
     expect(view.getAllByTestId('input-radio-group__item')).toHaveLength(3)
+    expect(view.getAllByTestId('input-radio-group__item__control')).toHaveLength(3)
     expect(view.getByRole('radio', { name: 'Monthly' }).hasAttribute('aria-checked')).toBe(false)
   })
 

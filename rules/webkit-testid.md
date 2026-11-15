@@ -17,7 +17,8 @@ enforced by review — no lint rule checks it, so apply it deliberately.
 - In components you author, read `attrs['data-testid']` for the fallback so a
   consumer-supplied value is applied once, not twice with different values.
 - Give every interactive sub-element a test must reach (a sort button, a remove control)
-  its own testid derived from the root (`data-table-sort-button`).
+  its own testid: the root testid, two underscores, then the part (`data-table__sort-button`),
+  never a single hyphen.
 - Keep the `defineOptions` PascalCase name and the kebab testid derived from the same
   canonical component name.
 

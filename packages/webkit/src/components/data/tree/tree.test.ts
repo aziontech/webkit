@@ -65,12 +65,12 @@ describe('Tree', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
     expect(fallback.getByTestId('data-tree')).toBeTruthy()
-    expect(fallback.getAllByTestId('data-tree-item')).toHaveLength(ITEMS.length)
-    expect(fallback.getAllByTestId('data-tree-toggle')).toHaveLength(2)
+    expect(fallback.getAllByTestId('data-tree__item')).toHaveLength(ITEMS.length)
+    expect(fallback.getAllByTestId('data-tree__toggle')).toHaveLength(2)
     fallback.unmount()
     const custom = mount({}, { attrs: { 'data-testid': 'objects' } })
     expect(custom.getByTestId('objects')).toBeTruthy()
-    expect(custom.getAllByTestId('objects-item')).toHaveLength(ITEMS.length)
+    expect(custom.getAllByTestId('objects__item')).toHaveLength(ITEMS.length)
     expect(custom.queryByTestId('data-tree')).toBeNull()
   })
 

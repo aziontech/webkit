@@ -51,7 +51,7 @@ function makeHost(options: {
   disabled?: boolean
   searchPlaceholder?: string
   withFooter?: boolean
-  onCopy?: (value: string) => void
+  onCopy?: (event: Event, value: string) => void
 }) {
   const search = ref('')
   const warningsOnly = ref(false)
@@ -322,7 +322,11 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
   describe('copy: the header control emits the root copy event with the formatted text', () => {
     it('fires copy with the plain-text join of the filtered lines on click', async () => {
       const copied: string[] = []
-      const { Host } = makeHost({ onCopy: (v) => copied.push(v) })
+      const { Host } = makeHost({
+        onCopy: (event, v) => {
+          if (event instanceof MouseEvent) copied.push(v)
+        }
+      })
       const { getByTestId } = render(Host)
 
       stubClipboardResolved()
@@ -519,7 +523,9 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       const { view, onCopy } = renderLevels()
       await fireEvent.click(view.getByRole('button', { name: 'warn, 1 line' }))
       await fireEvent.click(within(view.getByTestId('code-log-view__copy')).getByRole('button'))
-      await vi.waitFor(() => expect(onCopy).toHaveBeenCalledWith('180 ms WARN Slow origin'))
+      await vi.waitFor(() =>
+        expect(onCopy).toHaveBeenCalledWith(expect.any(MouseEvent), '180 ms WARN Slow origin')
+      )
     })
 
     it('the Levels example has no a11y violations', async () => {

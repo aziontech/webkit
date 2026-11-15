@@ -172,7 +172,7 @@
               <template #cell-access="cell">
                 <Tag
                   :label="cellValue(cell)"
-                  :severity="cellValue(cell) === 'Public' ? 'success' : 'secondary'"
+                  :severity="cellValue(cell) === 'Public' ? 'success' : 'neutral'"
                   size="medium"
                 />
               </template>

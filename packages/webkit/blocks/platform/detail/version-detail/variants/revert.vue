@@ -703,7 +703,7 @@
                       <span class="hidden shrink-0 sm:inline-flex">
                         <Tag
                           label="Read-only"
-                          severity="secondary"
+                          severity="neutral"
                           icon="pi pi-lock"
                           size="small"
                         />

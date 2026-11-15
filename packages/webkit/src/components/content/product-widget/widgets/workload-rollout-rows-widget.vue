@@ -160,7 +160,7 @@
                 <span class="inline-flex">
                   <Tag
                     :label="row.environment"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                   />
                 </span>

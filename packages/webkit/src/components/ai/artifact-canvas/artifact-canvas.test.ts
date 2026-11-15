@@ -33,7 +33,9 @@ function harness(props: Record<string, unknown> = {}) {
           version: version.value,
           'onUpdate:version': (next: number) => (version.value = next),
           onClose: (event: Event) => closes.push(event),
-          onCopy: (value: string) => copies.push(value)
+          onCopy: (event: Event, value: string) => {
+            if (event instanceof MouseEvent) copies.push(value)
+          }
         },
         {
           default: ({ version: index }: { version: number }) =>

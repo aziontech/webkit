@@ -69,7 +69,7 @@
               <div class="shrink-0 cursor-pointer">
                 <Tag
                   label="+7"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </div>
@@ -268,6 +268,7 @@
               value="1020655"
               aria-label="Copy service ID"
               class="shrink-0"
+              size="small"
             />
           </div>
         </div>

@@ -769,7 +769,7 @@
                             >
                               <Tag
                                 :label="environment.name"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                               <Tag
@@ -802,7 +802,7 @@
                                 v-if="environment.auto"
                                 key="auto"
                                 label="Linked automatically"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                               <Tag
@@ -892,7 +892,7 @@
                         <Tag
                           v-if="row.system"
                           label="System"
-                          severity="secondary"
+                          severity="neutral"
                           size="small"
                           class="shrink-0"
                         />
@@ -941,7 +941,7 @@
                     <template #cell-status="{ value }">
                       <Table.CellStatus
                         :label="value"
-                        :severity="value === 'Active' ? 'success' : 'secondary'"
+                        :severity="value === 'Active' ? 'success' : 'neutral'"
                       />
                     </template>
                     <template #cell-updatedAt="{ row }">
@@ -1203,6 +1203,7 @@
       title="Delete Deployment Setting"
       :description="deleteDescription"
       confirm-label="Delete"
+      size="small"
       @confirm="remove"
     />
   </div>

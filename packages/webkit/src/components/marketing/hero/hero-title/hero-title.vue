@@ -47,7 +47,7 @@
     eyebrowPrefix: '',
     centered: false,
     mobileCentered: false,
-    size: 'large',
+    size: 'medium',
     maxWidth: '4xl',
     sticky: false
   })

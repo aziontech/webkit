@@ -48,7 +48,7 @@
       role="list"
       data-flow-branches
       :data-align="align"
-      :data-testid="`${testId}-branches`"
+      :data-testid="`${testId}__branches`"
       class="flex w-full flex-col gap-(--spacing-md) data-[align=start]:items-start data-[align=end]:items-end"
     >
       <slot />

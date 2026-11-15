@@ -47,7 +47,7 @@
       version: 'v40',
       application: 'storefront',
       status: 'Previous',
-      severity: 'secondary',
+      severity: 'neutral',
       time: '6 days ago',
       action: 'Rollback'
     }

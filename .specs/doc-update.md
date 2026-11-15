@@ -3,7 +3,7 @@ name: doc-update
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 checksum: 487934fd0d3fcead3b2060bb73d4e64a10cc4f9e989fa4f14f504449745339a1
 created: 2026-08-22
 last_updated: 2026-11-11
@@ -29,7 +29,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 ## Related
 
 - `DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.
-- `Tag` — renders the entry's tags row (`severity="secondary"`): small and rounded in the label column, medium with the default shape under a `title`.
+- `Tag` — renders the entry's tags row (`severity="neutral"`): small and rounded in the label column, medium with the default shape under a `title`.
 - `use-heading-nav` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNav`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over.
 
 ## Best practices
@@ -112,7 +112,7 @@ One entry in a changelog: what shipped, when, and under which version. The relea
 | ring (anchor focus)             | `var(--ring-color)`                                                                                                                |
 | shape (anchor focus outline)    | `var(--shape-flat)`                                                                                                                |
 | spacing                         | `var(--spacing-xl)` / `var(--spacing-lg)` / `var(--spacing-md)` / `var(--spacing-sm)` / `var(--spacing-xs)` / `var(--spacing-xxs)` |
-| tags row                        | `Tag`'s own `severity="secondary"` tokens                                                                                          |
+| tags row                        | `Tag`'s own `severity="neutral"` tokens                                                                                            |
 
 ## Theme gaps
 

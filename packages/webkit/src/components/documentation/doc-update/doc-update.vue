@@ -105,7 +105,7 @@
           v-for="tag in tags"
           :key="tag"
           :label="tag"
-          severity="secondary"
+          severity="neutral"
           size="small"
           rounded
         />
@@ -155,7 +155,7 @@
             v-for="tag in tags"
             :key="tag"
             :label="tag"
-            severity="secondary"
+            severity="neutral"
             size="medium"
           />
         </div>

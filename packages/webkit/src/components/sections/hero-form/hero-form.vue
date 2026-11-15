@@ -283,6 +283,7 @@
           max-width="lg"
           :sticky="items.length === 0"
           class="min-w-0 [&_h1]:max-w-(--container-md)"
+          size="large"
         >
           <template v-if="description || descriptionLink || descriptionAfter">
             {{ description }}

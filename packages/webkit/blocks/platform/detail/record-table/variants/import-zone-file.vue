@@ -385,7 +385,7 @@ legacy  IN HINFO "PC" "Linux"`
   ]
   const statusTag: Record<ZoneLine['status'], { label: string; severity: TagSeverity }> = {
     ready: { label: 'Ready', severity: 'success' },
-    skipped: { label: 'Skipped', severity: 'secondary' },
+    skipped: { label: 'Skipped', severity: 'neutral' },
     error: { label: 'Error', severity: 'danger' }
   }
 
@@ -576,6 +576,7 @@ legacy  IN HINFO "PC" "Linux"`
                               kind="transparent"
                               :value="ns"
                               :aria-label="'Copy nameserver ' + (index + 1)"
+                              size="small"
                             />
                           </InputGroupRoot>
                         </div>
@@ -633,6 +634,7 @@ legacy  IN HINFO "PC" "Linux"`
                               kind="transparent"
                               :value="key.value"
                               :aria-label="'Copy ' + key.label"
+                              size="small"
                             />
                           </InputGroupRoot>
                         </SettingRow>
@@ -800,7 +802,7 @@ legacy  IN HINFO "PC" "Linux"`
                   <template #cell-type="{ value }">
                     <Tag
                       :label="value"
-                      severity="secondary"
+                      severity="neutral"
                       size="medium"
                     />
                   </template>

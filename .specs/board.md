@@ -3,7 +3,7 @@ name: board
 category: layout
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 checksum: c2335ba72be2d84496ce08584dd4444cef6d7f4d399e3856abae46084a47ec73
 created: 2026-11-11
@@ -111,7 +111,7 @@ drags and resizes go to the board. `ChartCard` keeps working on its own outside 
 - `board-item/board-item.vue` — One cell of the grid, an `<li>` that spans the entry's columns (capped at the grid's current column count) and, when the entry has a `height`, that many pixels. It is the drop target while another item is dragged (`data-over` while hovered), registers its `label` for announcements, and returns focus to the handle that moved it.
   - Props: `itemId: string` (required — the `id` of its layout entry), `label?: string` (default `''` — the name the live region announces; empty uses `Item <position>` from the locale catalog).
   - Slot: `default` — the item's content, normally one `ChartCard`.
-  - `data-testid` fallback: `layout-board-item`.
+  - `data-testid` fallback: `layout-board__item`.
 
 Resulting layout:
 

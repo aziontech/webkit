@@ -470,7 +470,7 @@
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex lg:hidden xl:flex">
                   <Tag
                     label="Sum"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                     icon="pi pi-calculator"
                   />

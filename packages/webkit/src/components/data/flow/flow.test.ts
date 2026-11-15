@@ -228,7 +228,7 @@ describe('Flow (composition compound)', () => {
       expect(group.getAttribute('role')).toBe('listitem')
       expect(group.getAttribute('data-flow-kind')).toBe('parallel')
       expect(group.getAttribute('data-align')).toBe('start')
-      const branches = getByTestId('data-flow__parallel-branches')
+      const branches = getByTestId('data-flow__parallel__branches')
       expect(branches.parentElement).toBe(group)
       expect(branches.getAttribute('role')).toBe('list')
       expect(branches.querySelectorAll(':scope > [role="listitem"]').length).toBe(2)

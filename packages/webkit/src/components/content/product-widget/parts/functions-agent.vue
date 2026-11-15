@@ -31,7 +31,7 @@
 
   const STATES = {
     preview: { label: 'Dry run', severity: 'info' },
-    running: { label: 'Running', severity: 'secondary' },
+    running: { label: 'Running', severity: 'neutral' },
     done: { label: 'Done', severity: 'success' }
   } as const
 

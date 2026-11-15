@@ -642,6 +642,7 @@
       :description="`Delete ${saved.name}? Its ${saved.members.length} members lose the permissions it grants. Their user accounts stay.`"
       confirm-label="Delete team"
       :loading="deleting"
+      size="small"
       @confirm="deleteTeam"
     />
   </div>

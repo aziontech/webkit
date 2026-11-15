@@ -83,7 +83,7 @@ describe('Board', () => {
     const grid = view.getByTestId('layout-board__grid')
     expect(grid.tagName).toBe('UL')
     expect(grid.getAttribute('aria-label')).toBe('Dashboard')
-    expect(view.getAllByTestId('layout-board-item')).toHaveLength(3)
+    expect(view.getAllByTestId('layout-board__item')).toHaveLength(3)
     expect(view.getByTestId('layout-board').className).toContain('@container/board')
   })
 
@@ -99,7 +99,7 @@ describe('Board', () => {
 
   it('sizes each item from its layout entry', () => {
     const { view } = mount()
-    const [first, , third] = view.getAllByTestId('layout-board-item')
+    const [first, , third] = view.getAllByTestId('layout-board__item')
     expect(first?.style.getPropertyValue('--board-item-span')).toBe('8')
     expect(third?.style.getPropertyValue('--board-item-height')).toBe('400px')
     expect(first?.offsetWidth).toBeGreaterThan(700)
@@ -201,7 +201,7 @@ describe('Board', () => {
 
   it('reorders when a dragged card is dropped on another item', async () => {
     const { view, layout } = mount({ editing: true })
-    const [first, , third] = view.getAllByTestId('layout-board-item')
+    const [first, , third] = view.getAllByTestId('layout-board__item')
     await fireEvent.pointerDown(view.getByTestId('drag-requests'))
     const card = first?.querySelector('[data-testid="chart-chart-card"]') as HTMLElement
     await fireEvent.dragStart(card)
@@ -215,7 +215,7 @@ describe('Board', () => {
 
   it('ignores a drop when nothing is being dragged', async () => {
     const { view, layout } = mount({ editing: true })
-    const [, second] = view.getAllByTestId('layout-board-item')
+    const [, second] = view.getAllByTestId('layout-board__item')
     await fireEvent.drop(second as HTMLElement)
     expect(order(layout)).toEqual(['requests', 'regions', 'errors'])
   })

@@ -311,9 +311,10 @@ describe('CodeBlock', () => {
         expect(emitted().copy).toBeTruthy()
       })
       expect(writeText).toHaveBeenCalledWith(CODE_ONE)
-      const events = emitted().copy as string[][]
+      const events = emitted().copy as [Event, string][]
       expect(events).toHaveLength(1)
-      expect(events[0][0]).toBe(CODE_ONE)
+      expect(events[0][0]).toBeInstanceOf(MouseEvent)
+      expect(events[0][1]).toBe(CODE_ONE)
     })
 
     it('copies the code of the active tab after switching tabs', async () => {

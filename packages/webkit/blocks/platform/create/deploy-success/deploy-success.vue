@@ -90,7 +90,7 @@
               You deployed a new resource. Source:
               <Tag
                 label="acme"
-                severity="secondary"
+                severity="neutral"
                 icon="ai ai-github"
               />
             </p>

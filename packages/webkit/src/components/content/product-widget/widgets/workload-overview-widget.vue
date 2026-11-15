@@ -89,7 +89,7 @@
       icon: 'ai ai-domains',
       name: FACTS.domain,
       status: '1 domain',
-      severity: 'secondary',
+      severity: 'neutral',
       column: 1,
       row: 1
     },
@@ -110,7 +110,7 @@
       icon: 'ai ai-edge-firewall',
       name: '',
       status: 'Not bound',
-      severity: 'secondary',
+      severity: 'neutral',
       dashed: true,
       column: 5,
       row: 1
@@ -132,7 +132,7 @@
       icon: 'ai ai-custom-pages',
       name: '',
       status: 'Not bound',
-      severity: 'secondary',
+      severity: 'neutral',
       dashed: true,
       column: 7,
       row: 2
@@ -287,6 +287,7 @@
                         kind="outlined"
                         :value="FACTS.id"
                         aria-label="Copy workload ID"
+                        size="small"
                       />
                     </div>
                   </div>

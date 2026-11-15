@@ -128,10 +128,10 @@
         'Sign-in': 'info',
         Security: 'warning',
         Deploy: 'success',
-        Users: 'secondary',
+        Users: 'neutral',
         Billing: 'primary'
       }) as const
-    )[category] ?? 'secondary'
+    )[category] ?? 'neutral'
 
   const range = ref<DateRangeValue>({
     type: 'relative',
@@ -389,6 +389,7 @@
                     kind="outlined"
                     :value="value"
                     aria-label="Copy IP address"
+                    size="small"
                   />
                 </div>
               </template>

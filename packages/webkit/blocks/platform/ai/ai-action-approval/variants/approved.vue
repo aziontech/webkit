@@ -104,7 +104,10 @@
         <StreamingResponse :content="followUp" />
         <template #actions>
           <ChatMessage.Actions>
-            <CopyButton :value="followUp" />
+            <CopyButton
+              size="small"
+              :value="followUp"
+            />
           </ChatMessage.Actions>
         </template>
       </ChatMessage>

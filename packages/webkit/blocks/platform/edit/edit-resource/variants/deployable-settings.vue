@@ -312,7 +312,7 @@
               <template #tag>
                 <Tag
                   :label="option.policy"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>
@@ -447,7 +447,7 @@
                         <template #cell-environment="{ value }">
                           <Tag
                             v-if="value"
-                            severity="secondary"
+                            severity="neutral"
                             size="medium"
                             rounded
                             icon="ai ai-layers"
@@ -574,7 +574,7 @@
                                     v-if="
                                       environment.auto && !form.deploymentSettings[environment.name]
                                     "
-                                    severity="secondary"
+                                    severity="neutral"
                                     size="small"
                                     label="Linked automatically"
                                   />

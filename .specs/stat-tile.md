@@ -4,7 +4,7 @@ category: chart
 structure: monolithic
 status: implemented
 checksum: 56b022dfefaacfd32a4d0b9649ae10d32318557fb03c968480ce7f2ba9b58b7b
-spec_version: 2
+spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-14
 ---
@@ -96,7 +96,7 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 ## States
 
 - Visual states: `default`, `loading` (Skeleton), `empty value` (a dash when `value` is null, over a no-data band: a muted placeholder `spark-chart` under a `Separator` carrying a "No data" `Tag`)
-- The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `secondary` when flat
+- The delta `Tag` severity follows the trend: `success` when good, `danger` when bad, `neutral` when flat
 - `data-loading` mirrors `loading`; `data-kind` mirrors `kind` (`mono` | `sans`)
 - `data-grouped` is set when the tile sits in a `StatTileGroup` (injected, no prop): the tile drops its own border, radius and surface, draws its end and bottom edges as the cell dividers, and aligns the delta to the end of the figure row
 - `data-trend` on the delta: `good` | `bad` | `flat` — `flat` when the change rounds to zero
@@ -118,9 +118,9 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 | label        | `.text-label-sm`, `var(--text-muted)`                                                                                                   |
 | figure       | `mono`: `.text-big-number-sm`; `sans`: `.text-heading-lg`; `var(--text-default)`                                                        |
 | unit         | `mono`: `.text-body-xs`; `sans`: `.text-body-md`; `var(--text-muted)`                                                                   |
-| delta        | `tag` at `size="small"` (`success` / `danger` / `secondary`); period in `.text-label-sm`, `var(--text-muted)`                           |
+| delta        | `tag` at `size="small"` (`success` / `danger` / `neutral`); period in `.text-label-sm`, `var(--text-muted)`                             |
 | sparkline    | `spark-chart` at `size="medium"`, area kind, `var(--chart-series-1)`, edge to edge                                                      |
-| no-data band | `spark-chart` `color="other"` at reduced opacity, `divider`, `tag` `severity="secondary"` at `size="small"`                             |
+| no-data band | `spark-chart` `color="other"` at reduced opacity, `divider`, `tag` `severity="neutral"` at `size="small"`                               |
 | spacing      | `var(--spacing-xxs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                          |
 
 ## Theme gaps

@@ -72,7 +72,7 @@ describe('IconButton', () => {
       props: { icon: 'pi pi-plus', ariaLabel: 'Add', loading: true }
     })
 
-    expect(getByTestId('actions-icon-button-loading')).toBeInTheDocument()
+    expect(getByTestId('actions-icon-button__loading')).toBeInTheDocument()
     expect(container.querySelector('i.pi.pi-plus')).toBeNull()
   })
 

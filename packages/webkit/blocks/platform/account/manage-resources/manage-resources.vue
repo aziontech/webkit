@@ -54,7 +54,7 @@
   const types: Record<ResourceType, ResourceTypeMeta> = {
     organization: { label: 'Organization', icon: 'pi pi-building', severity: 'accent' },
     group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
+    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'neutral' }
   }
 
   const seedResources: Resource[] = [
@@ -212,7 +212,7 @@
     Pending: 'warning'
   }
   const statusSeverity = (status?: ResourceStatus): TagSeverity =>
-    status ? statusSeverities[status] : 'secondary'
+    status ? statusSeverities[status] : 'neutral'
   const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
   const initials = (name: string) =>
     name
@@ -798,7 +798,7 @@
                             >
                               <Tag
                                 :label="label"
-                                severity="secondary"
+                                severity="neutral"
                                 size="medium"
                               />
                             </li>
@@ -997,6 +997,7 @@
           : 'It stays in Resources pending deletion for 30 days, then is removed with its data.'
       "
       confirm-label="Delete"
+      size="small"
       @confirm="confirmDelete"
     />
   </div>

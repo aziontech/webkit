@@ -11,7 +11,7 @@
     />
     <Tag
       label="Label"
-      severity="secondary"
+      severity="neutral"
       icon="pi pi-box"
     />
     <Tag

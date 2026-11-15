@@ -3,7 +3,7 @@ name: doc-agent-card
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 checksum: 9f47452d35946a8a19d3501986354ba876448e41b17d81f5b4ab09c1bf48ceb2
 created: 2026-11-12
@@ -57,27 +57,27 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 ## Props
 
-| Prop          | Type                | Default     | Required | JSDoc                                                                                 |
-| ------------- | ------------------- | ----------- | -------- | ------------------------------------------------------------------------------------- |
-| `prompt`      | `string`            | —           | true     | The prompt `CopyPromptButton` copies.                                                 |
-| `title`       | `string`            | `''`        | false    | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`.    |
-| `description` | `string`            | `''`        | false    | One or two sentences on what the prompt gives the agent; empty uses the catalog's.    |
-| `agents`      | `CopyPromptAgent[]` | `undefined` | false    | The agents whose marks the copy button shows; unset keeps the button's default list.  |
-| `asideTitle`  | `string`            | `''`        | false    | Question over the guided action; empty uses the catalog's `Prefer the guided route?`. |
-| `actionLabel` | `string`            | `''`        | false    | Label of the guided action; empty uses the catalog's `Agent setup`.                   |
+| Prop          | Type                | Default     | Required | JSDoc                                                                                    |
+| ------------- | ------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------- |
+| `prompt`      | `string`            | —           | true     | The prompt `CopyPromptButton` copies.                                                    |
+| `title`       | `string`            | `''`        | false    | Card heading (an `h3`); empty uses the catalog's `Your AI agent, fluent in Azion`.       |
+| `description` | `string`            | `''`        | false    | One or two sentences on what the prompt gives the agent; empty uses the catalog's.       |
+| `agents`      | `CopyPromptAgent[]` | `undefined` | false    | The agents whose marks the copy button shows; unset keeps the button's default list.     |
+| `asideTitle`  | `string`            | `''`        | false    | Question over the guided action; empty uses the catalog's `Prefer the guided route?`.    |
+| `actionLabel` | `string`            | `''`        | false    | Label of the guided action; empty uses the catalog's `Agent setup`.                      |
 | `actionHref`  | `string`            | `''`        | false    | Destination of the guided action; empty renders it as a button that only emits `action`. |
 
 ## Events
 
-| Event    | Payload      | Notes                                                      |
-| -------- | ------------ | ---------------------------------------------------------- |
-| `copy`   | `string`     | Re-emitted from `CopyPromptButton` after a successful copy. |
-| `action` | `MouseEvent` | The guided action was activated.                           |
+| Event    | Payload                              | Notes                                                       |
+| -------- | ------------------------------------ | ----------------------------------------------------------- |
+| `copy`   | `(event: MouseEvent, value: string)` | Re-emitted from `CopyPromptButton` after a successful copy. |
+| `action` | `MouseEvent`                         | The guided action was activated.                            |
 
 ## Slots
 
-| Slot      | Props | Notes                                       |
-| --------- | ----- | ------------------------------------------- |
+| Slot      | Props | Notes                                        |
+| --------- | ----- | -------------------------------------------- |
 | `actions` | —     | Replaces the copy button in the left column. |
 
 ## States
@@ -88,21 +88,21 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-| ------- | ---------------------- | ------------------------------------------------- | ----------------------- |
-| _none_  | — (the button and copy button own theirs) | —                              | —                       |
+| Trigger | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+| ------- | ----------------------------------------- | ------------------------------------------------- | ----------------------- |
+| _none_  | — (the button and copy button own theirs) | —                                                 | —                       |
 
 ## Tokens
 
-| Region   | Token (DESIGN.md)                                                                   |
-| -------- | ----------------------------------------------------------------------------------- |
-| card     | `var(--bg-surface)` inside `FrameBox` (borders and corner marks)                    |
-| divider  | `var(--border-default)`                                                             |
-| title    | `.text-heading-lg`, `var(--text-default)`                                           |
-| text     | `.text-body-md`, `var(--text-muted)`                                                |
-| aside    | `.text-heading-md`, `var(--text-default)`                                           |
-| art      | `TextureMaterial kind="dither"` inked with `var(--primary)` at 70 %                 |
-| spacing  | `var(--spacing-xl)` padding, `var(--spacing-sm)` / `var(--spacing-md)` inner rhythm |
+| Region  | Token (DESIGN.md)                                                                   |
+| ------- | ----------------------------------------------------------------------------------- |
+| card    | `var(--bg-surface)` inside `FrameBox` (borders and corner marks)                    |
+| divider | `var(--border-default)`                                                             |
+| title   | `.text-heading-lg`, `var(--text-default)`                                           |
+| text    | `.text-body-md`, `var(--text-muted)`                                                |
+| aside   | `.text-heading-md`, `var(--text-default)`                                           |
+| art     | `TextureMaterial kind="dither"` inked with `var(--primary)` at 70 %                 |
+| spacing | `var(--spacing-xl)` padding, `var(--spacing-sm)` / `var(--spacing-md)` inner rhythm |
 
 ## Theme gaps
 
@@ -118,12 +118,12 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 ## Internationalization
 
-| Key                       | English source                   | Override prop |
-| ------------------------- | -------------------------------- | ------------- |
-| `docAgentCard.title`      | `Your AI agent, fluent in Azion` | `title`       |
-| `docAgentCard.description`| `One prompt teaches any coding agent the platform: …` | `description` |
-| `docAgentCard.asideTitle` | `Prefer the guided route?`       | `asideTitle`  |
-| `docAgentCard.action`     | `Agent setup`                    | `actionLabel` |
+| Key                        | English source                                        | Override prop |
+| -------------------------- | ----------------------------------------------------- | ------------- |
+| `docAgentCard.title`       | `Your AI agent, fluent in Azion`                      | `title`       |
+| `docAgentCard.description` | `One prompt teaches any coding agent the platform: …` | `description` |
+| `docAgentCard.asideTitle`  | `Prefer the guided route?`                            | `asideTitle`  |
+| `docAgentCard.action`      | `Agent setup`                                         | `actionLabel` |
 
 ## Right-to-left
 

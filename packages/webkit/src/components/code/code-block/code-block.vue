@@ -113,7 +113,7 @@
   })
 
   const emit = defineEmits<{
-    copy: [code: string]
+    copy: [event: MouseEvent, code: string]
   }>()
 
   const valueModel = defineModel<string | undefined>({ default: undefined })
@@ -526,8 +526,8 @@
     }
   }
 
-  const handleCopy = (code: string) => {
-    emit('copy', code)
+  const handleCopy = (event: MouseEvent, code: string) => {
+    emit('copy', event, code)
   }
 
   onMounted(() => {

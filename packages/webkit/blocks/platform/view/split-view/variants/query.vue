@@ -178,10 +178,10 @@
     Error: 'danger',
     Warning: 'warning',
     Info: 'info',
-    Debug: 'secondary'
+    Debug: 'neutral'
   }
 
-  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'secondary'
+  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'neutral'
 
   const levelOrder = Object.keys(eventLevels) as EventLevel[]
 
@@ -1800,7 +1800,7 @@
                         />
                         <Tag
                           :label="documentEvent.sourceLabel"
-                          severity="secondary"
+                          severity="neutral"
                           size="small"
                         />
                       </div>
@@ -1878,7 +1878,7 @@
                     />
                     <Tag
                       :label="documentEvent.sourceLabel"
-                      severity="secondary"
+                      severity="neutral"
                       size="small"
                     />
                   </div>

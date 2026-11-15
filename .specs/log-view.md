@@ -3,7 +3,7 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
@@ -122,9 +122,9 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 
 ## Events
 
-| Event  | Payload  | Notes                                                            |
-| ------ | -------- | ---------------------------------------------------------------- |
-| `copy` | `string` | Fires after a successful copy; payload is the copied plain text. |
+| Event  | Payload                              | Notes                                                            |
+| ------ | ------------------------------------ | ---------------------------------------------------------------- |
+| `copy` | `(event: MouseEvent, value: string)` | Fires after a successful copy; payload is the copied plain text. |
 
 ## Slots
 

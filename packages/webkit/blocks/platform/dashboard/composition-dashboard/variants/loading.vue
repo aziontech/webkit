@@ -642,7 +642,7 @@
               <template #cell-category="{ row }">
                 <Tag
                   :label="row.category"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>
@@ -667,7 +667,7 @@
               <template #cell-change="{ row }">
                 <Tag
                   :label="formatters.change(row.change)"
-                  :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'secondary'"
+                  :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
                       ? 'pi pi-arrow-up-right'

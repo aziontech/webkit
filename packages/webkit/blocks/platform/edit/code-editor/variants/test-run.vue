@@ -581,6 +581,7 @@ export async function handleRequest(request, args = {}) {
                               :value="runId"
                               aria-label="Copy the run ID"
                               kind="outlined"
+                              size="small"
                             />
                           </div>
 

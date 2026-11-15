@@ -58,7 +58,7 @@ describe('DocAgentCard', () => {
     vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
     const { getByRole, emitted } = render(DocAgentCard, { props: { prompt: PROMPT } })
     await fireEvent.click(getByRole('button', { name: 'Copy prompt' }))
-    await waitFor(() => expect(emitted('copy')).toEqual([[PROMPT]]))
+    await waitFor(() => expect(emitted('copy')).toEqual([[expect.any(MouseEvent), PROMPT]]))
     await user.click(getByRole('button', { name: 'Agent setup' }))
     expect(emitted('action')).toHaveLength(1)
   })

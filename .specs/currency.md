@@ -3,7 +3,7 @@ name: currency
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 checksum: 3fc77ec6c800b130b5c2dbadeb191ef49fe604505b7e4e64c38c6b173b6731c5
 created: 2026-05-22
 last_updated: 2026-11-09
@@ -37,29 +37,34 @@ The size ladder is the house one (`small` / `medium` / `large`) and each step is
 
 - Pass `value` already formatted as a string (`'1,250.00'`). The component does no number or locale formatting.
 - `prefix` defaults to `'$'`; set `prefix=""` to drop the symbol. The suffix renders only when `suffix` is set.
-- Pick `size` by reading distance, not by available space: `small` (the default) in tables and lists, `medium` on cards, `large` only for a headline price.
+- Pick `size` by reading distance, not by available space: `small` in tables and lists, `medium` (the default) on cards, `large` only for a headline price.
 - Don't restyle the parts with classes; each size takes its typography from the `text-amount-*` and `text-label-code-*` tokens.
 
 ## Usage
 
 ```vue
 <script setup>
-import Currency from '@aziontech/webkit/currency'
+  import Currency from '@aziontech/webkit/currency'
 </script>
 
 <template>
-  <Currency value="20" prefix="$" suffix="/ mon" size="medium" />
+  <Currency
+    value="20"
+    prefix="$"
+    suffix="/ mon"
+    size="medium"
+  />
 </template>
 ```
 
 ## Props
 
-| Prop     | Type                             | Default   | Required | JSDoc                                                                         |
-| -------- | -------------------------------- | --------- | -------- | ----------------------------------------------------------------------------- |
-| `value`  | `string`                         | `''`      | false    | value.                                                                        |
-| `prefix` | `string`                         | `'$'`     | false    | prefix.                                                                       |
-| `suffix` | `string`                         | `''`      | false    | suffix.                                                                       |
-| `size`   | `'small' \| 'medium' \| 'large'` | `'small'` | false    | Size token; affects typography and the gap between the figure and the suffix. |
+| Prop     | Type                             | Default    | Required | JSDoc                                                                         |
+| -------- | -------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------- |
+| `value`  | `string`                         | `''`       | false    | value.                                                                        |
+| `prefix` | `string`                         | `'$'`      | false    | prefix.                                                                       |
+| `suffix` | `string`                         | `''`       | false    | suffix.                                                                       |
+| `size`   | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; affects typography and the gap between the figure and the suffix. |
 
 ## Events
 

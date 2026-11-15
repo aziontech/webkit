@@ -46,7 +46,7 @@
     /** Close was pressed, or Escape inside the panel that no inner control handled. */
     close: [event: MouseEvent | KeyboardEvent]
     /** Copy put the text on the clipboard; the payload is the copied text. */
-    copy: [value: string]
+    copy: [event: MouseEvent, value: string]
   }>()
 
   const slots = defineSlots<{
@@ -147,10 +147,11 @@
         <slot name="actions" />
         <CopyButton
           v-if="copyValue"
+          size="small"
           :value="copyValue"
           :aria-label="t('artifactCanvas.copy', { title })"
           :data-testid="`${testId}__copy`"
-          @copy="emit('copy', $event)"
+          @copy="(event, value) => emit('copy', event, value)"
         />
         <IconButton
           v-if="downloadHref"

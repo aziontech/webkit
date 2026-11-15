@@ -126,6 +126,7 @@
         :highlight="highlight"
         :title="title"
         :description="description"
+        size="large"
       >
         <template
           v-if="primary || secondary"

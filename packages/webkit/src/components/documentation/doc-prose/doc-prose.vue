@@ -138,7 +138,7 @@
           :dir="portalLocale.dir"
           :lang="portalLocale.lang"
           role="tooltip"
-          data-testid="documentation-doc-prose-copy-tip"
+          :data-testid="`${testId}__copy-tip`"
           :style="{ left: `${tipLeft}px`, top: `${tipTop}px` }"
           class="pointer-events-none fixed z-(--z-input-overlay) -translate-x-1/2 -translate-y-[calc(100%+var(--spacing-xxs))] rounded-(--shape-elements) bg-(--bg-contrast) px-(--spacing-xs) py-(--spacing-xxs) text-body-xs whitespace-nowrap text-(--text-contrast)"
           >{{ tipLabel }}</span

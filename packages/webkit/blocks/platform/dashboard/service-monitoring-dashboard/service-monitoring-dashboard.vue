@@ -577,7 +577,7 @@
         <Tag
           v-if="!loading && alerts.length"
           :label="String(alerts.length)"
-          severity="secondary"
+          severity="neutral"
           size="small"
         />
       </div>

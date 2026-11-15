@@ -61,12 +61,12 @@
               <span class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                 <Tag
                   :label="ROWS[index].type"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
                 <Tag
                   :label="ROWS[index].expiration"
-                  :severity="ROWS[index].expiration === 'No expiration' ? 'secondary' : 'warning'"
+                  :severity="ROWS[index].expiration === 'No expiration' ? 'neutral' : 'warning'"
                   size="small"
                 />
               </span>

@@ -51,7 +51,7 @@
     confirmLabel: '',
     cancelLabel: '',
     kind: 'danger',
-    size: 'small',
+    size: 'medium',
     loading: false,
     disabled: false,
     defaultOpen: false

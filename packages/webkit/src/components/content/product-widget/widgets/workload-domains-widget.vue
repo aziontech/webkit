@@ -108,7 +108,7 @@
                 <span class="ms-auto hidden shrink-0 items-center gap-(--spacing-xs) md:flex">
                   <Tag
                     :label="row.environment"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                   />
                   <Tag
@@ -118,7 +118,7 @@
                   />
                   <Tag
                     label="TLS 1.3"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                   />
                 </span>

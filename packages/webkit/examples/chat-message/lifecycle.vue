@@ -46,7 +46,10 @@
       />
       <template #actions>
         <ChatMessage.Actions>
-          <CopyButton :value="full" />
+          <CopyButton
+            size="small"
+            :value="full"
+          />
         </ChatMessage.Actions>
       </template>
     </ChatMessage>

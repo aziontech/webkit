@@ -382,7 +382,7 @@ tag on the version that is live (`Current`). If two chips both survive that test
 are restating one fact.
 
 The one highlighted value of a set (the `Owner` role among Admin / Member) is
-`severity="highlight"`, the orange tint; an `Inactive` state is `secondary`, never `danger` — nothing
+`severity="highlight"`, the orange tint; an `Inactive` state is `neutral`, never `danger` — nothing
 failed.
 
 **A CATEGORY chip is one `rounded` tag in one severity.** A category says _which kind_, not _how it
@@ -398,7 +398,7 @@ colour _is_ the information.
 ```vue
 <template #cell-repository="{ value }">
   <Tag
-    severity="secondary"
+    severity="neutral"
     size="medium"
     icon="pi pi-github"
     rounded
@@ -480,7 +480,7 @@ and a `noun`; an item with `href` opens in a new tab, and the `item` slot takes 
 ### Tags — `Table.CellTags`
 
 A list of tags shows as many as fit the cell and moves the rest behind `+N`; it measures itself, so
-the same column reads well at every width. Tags are rounded and secondary (a category, not a status).
+the same column reads well at every width. Tags are rounded and neutral (a category, not a status).
 
 ```vue
 <template #cell-tags="{ value }">
