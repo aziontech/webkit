@@ -508,9 +508,9 @@ export function searchComponents(catalog, query, { surface } = {}) {
     .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => {
       const e = catalog.getDetails(sub)
-      const score =
-        scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
-      return { sub, score }
+      const base = scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
+      const productBonus = !wantedSurface && base > 0 && isProductEntry(e) ? PRODUCT_BONUS : 0
+      return { sub, score: base + productBonus }
     })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || a.sub.localeCompare(b.sub))
@@ -537,6 +537,12 @@ export function searchComponents(catalog, query, { surface } = {}) {
     count: ranked.length,
     matches: ranked
   }
+}
+
+const PRODUCT_BONUS = 15
+
+function isProductEntry(entry) {
+  return (entry?.surface ?? 'product') === 'product'
 }
 
 function componentSuggestion(catalog, need, opts) {
