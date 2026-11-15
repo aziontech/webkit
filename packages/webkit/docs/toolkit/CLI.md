@@ -55,7 +55,7 @@ npx @aziontech/webkit add platform/delete/delete-with-confirmation [--variant La
 npx @aziontech/webkit diff delete-with-confirmation       # your copy vs the canonical block
 ```
 
-- **`search <query>`** runs the MCP queries (`search_patterns`, `search_components`, plus the
+- **`search <query>`** runs the MCP queries (`search_blocks`, `search_components`, plus the
   component examples) in the terminal. **`view <id>`** prints a component's API (props, events,
   slots, parts, the first example or `--example <name>`) or a block's summary, variants, imports,
   guidelines and SFC (`--variant <name>`). Both take `--json`.

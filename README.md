@@ -42,7 +42,7 @@ Pick the path by what you are about to do.
    `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
    reviewed SFC into your views, checks its imports against the installed version, records it in
    `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
-   screen from scratch. (The MCP gives an agent the same blocks: `search_patterns`, `get_pattern`.) Patterns are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
+   screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
 3. A single piece: `suggest_component`, then `get_component`.
@@ -60,7 +60,7 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
 1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md).
 2. Follow the [component lifecycle](./CONTRIBUTING.md#component-lifecycle): Add, Change,
    Deprecate, Remove. Every component starts from a spec in `.specs/`, through `/component-new`.
-3. Every block in `packages/webkit/blocks/` is a pattern and every folder in
+3. Every block in `packages/webkit/blocks/` is a screen agents copy and every folder in
    `packages/webkit/examples/` documents a component. Changed one? Run
    `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled visual test follow
    from the files.
@@ -68,7 +68,7 @@ Rules for this path: [`skills/`](./skills/) and [`rules/`](./rules/). Do not use
 
 ## Building with WebKit (consume)
 
-The path for apps and screens that use the packages. AI agents start with the patterns in the `webkit` MCP (above); agents without the MCP read `node_modules/@aziontech/webkit/llms/llms.txt`, a page per block, component and foundation.
+The path for apps and screens that use the packages. AI agents start with the blocks in the `webkit` MCP (above); agents without the MCP read `node_modules/@aziontech/webkit/llms/llms.txt`, a page per block, component and foundation.
 
 ### Use in your app
 

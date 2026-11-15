@@ -1,6 +1,6 @@
 ---
 name: webkit-usage
-description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
+description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a block, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
 last_updated: 2026-11-15
@@ -67,20 +67,20 @@ create flow (`platform/create/*`, headed by the `top-bars/creation-bar` bar) or 
 signed-out screen (`platform/auth`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`).
 
-## A screen begins from a pattern
+## A screen begins from a block
 
 Before composing anything, check whether the screen already exists as a block:
 `npx @aziontech/webkit search <the screen in plain words>` ("login", "account settings", "delete
-confirmation"), or the `webkit` MCP `search_patterns`. Read the best one with
-`npx @aziontech/webkit view <block-id>` (or `get_pattern`), then start the screen with
+confirmation"), or the `webkit` MCP `search_blocks`. Read the best one with
+`npx @aziontech/webkit view <block-id>` (or `get_block`), then start the screen with
 `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state): it copies the SFC
 into the views directory, checks its imports, records it in `webkit.blocks.json` and prints the
 route entry. `npx @aziontech/webkit diff <block-id>` later shows what you changed against the
 canonical block. Before adapting it, read the guidelines (`view`, or the `guidelines` field
-`get_pattern` returns): when to use the screen and when another block fits better, what each building block (A,
+`get_block` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
 matches your case, switch to the block it names. Then change only the content of the copy,
-keeping to the guidelines. Only when no pattern fits, compose from components (below). A marketing band is a page section, not a pattern (rule
+keeping to the guidelines. Only when no block fits, compose from components (below). A marketing band is a page section, not a block (rule
 `webkit-sections`).
 
 ## Headers and the docs home — never hand-build these

@@ -28,7 +28,7 @@ shadcn's AI Elements.
 
 ## How to find the components
 
-Never guess an import path. Ask the **webkit MCP** — `get_pattern platform/ai/ai-chat` (or
+Never guess an import path. Ask the **webkit MCP** — `get_block platform/ai/ai-chat` (or
 `ai-chat-drawer`, `ai-action-approval`) returns the full screen to copy; `suggest_component` with the
 moment in plain words ("streamed answer", "ask before running a command") returns the component. Or
 read the `imports` keys in **`node_modules/@aziontech/webkit/catalog.json`**: a subpath that is not a

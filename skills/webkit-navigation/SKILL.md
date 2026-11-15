@@ -50,7 +50,7 @@ every webkit primitive the same way:
 for a page that opens its search palette. It already composes `AppLayout`, `Sidebar`, `SidebarMenu`,
 `GlobalHeader`, `Breadcrumb`, `SearchTrigger` and `Command`, so you never assemble those into a shell
 of your own. Start it from the `shells/console` block (`npx @aziontech/webkit add shells/console`, or
-`get_pattern`): the block is the `App.vue`, with the real console navigation.
+`get_block`): the block is the `App.vue`, with the real console navigation.
 
 **The focused creation shell is a block, not a component:** `top-bars/creation-bar`
 (`npx @aziontech/webkit view top-bars/creation-bar`), built from `global-header`, `icon-button`,

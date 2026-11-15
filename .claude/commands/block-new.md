@@ -14,7 +14,7 @@ the differences are written here.
 ## What a block is
 
 A screen built only from `@aziontech/webkit` components, which agents copy through the MCP
-(`search_patterns` → `get_pattern`). It lives in one folder:
+(`search_blocks` → `get_block`). It lives in one folder:
 
 | Category                                                                                           | Folder                                               |
 | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -33,7 +33,7 @@ A screen built only from `@aziontech/webkit` components, which agents copy throu
     └── <state>.vue     one copyable SFC per state (empty, loading, error, ...)
 ```
 
-The catalog (`build:catalog`), the MCP (`get_pattern` returns `guidelines.md` with the SFC),
+The catalog (`build:catalog`), the MCP (`get_block` returns `guidelines.md` with the SFC),
 `check:blocks` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
 docs site (`apps/docs`, one page per block and one frame per state), the styled visual suite
 (`apps/visual`, the primary state; every state for `platform/ai`) and the browser test
@@ -49,8 +49,8 @@ present. Create the branch with `/branch-create new block <name> #<n>`.
 
 1. Benchmarks: Cloudscape patterns and demos as Markdown (`https://cloudscape.design/patterns/<x>/index.html.md`,
    index `https://cloudscape.design/llms.txt`), shadcn blocks (`https://ui.shadcn.com/blocks`).
-2. Reuse: MCP `search_patterns` with the intent (en and pt-BR), `get_pattern` on the closest hits,
-   `catalog.json#patternAliases`. For each region of the screen, `suggest_component`.
+2. Reuse: MCP `search_blocks` with the intent (en and pt-BR), `get_block` on the closest hits,
+   `catalog.json#blockAliases`. For each region of the screen, `suggest_component`.
 3. Exit condition: no block does the job. If one nearly does, the run adds a **variant** to it
    instead (same steps, the existing folder). If a region needs a component that does not exist,
    stop and open a **New component** issue; the block waits for it (`/component-new` first).
@@ -83,7 +83,7 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    commit `catalog.json` and `catalog/`. The docs page and the visual test follow from the files;
    baselines for a new block come from the `Visual baselines` workflow (`/baselines-regenerate`).
 3. Exit condition: `node packages/webkit/scripts/check-naming.mjs` and
-   `node packages/webkit/scripts/check-patterns.mjs` pass (the latter fails when `guidelines.md`
+   `node packages/webkit/scripts/check-blocks.mjs` pass (the latter fails when `guidelines.md`
    is missing, a section is missing or empty, a building block names a component the primary SFC
    does not import or leaves one out, or a variant has no States line).
 
@@ -103,7 +103,7 @@ blocker.
 (for example `platform/settings/api-tokens`), or the `usage-check.yml` workflow. The prompt asks for
 the screen by its job, never by the block id. Pass: the generated `src/**/*.vue` imports at least
 80 % of the components the block's primary SFC imports (the session copied it through
-`get_pattern`) and `webkit doctor` passes.
+`get_block`) and `webkit doctor` passes.
 
 ## Step 9 — Pull request
 

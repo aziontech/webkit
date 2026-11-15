@@ -27,7 +27,7 @@ fails the build when the two mix.
    order and stops on the first failure:
    1. read the issue (`.github/ISSUE_TEMPLATE/new-component.yml` / `new-block.yml`);
    2. research the benchmarks (Cloudscape `index.html.md`, shadcn) and the catalog for reuse
-      (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`);
+      (`reuse-audit`, MCP `search_components` / `search_blocks`, `catalog.json#aliases`);
    3. write the spec as `draft` (`spec-create`, template 2) or the block brief;
    4. spec review by a second agent ([`spec-reviewer`](./.claude/agents/spec-reviewer.md)); on
       approval `spec-validate` flips it to `approved` with a checksum;

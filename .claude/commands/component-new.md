@@ -93,7 +93,7 @@ same on the issue (`gh issue comment`), and do nothing else.
 Run, from the repository root, and keep the output for the PR:
 
 ```bash
-pnpm --filter @aziontech/webkit run gates          # catalog, naming, marketing, patterns, cited names,
+pnpm --filter @aziontech/webkit run gates          # catalog, naming, marketing, blocks, cited names,
                                                     # spec status, spec template, authoring, doc standards,
                                                     # test gate, bundle budget, hook tests,
                                                     # toolkit tests → table
@@ -112,7 +112,7 @@ so a skipped one fails the PR anyway.
 ## Step 7 — `ui-craft` review (mandatory)
 
 1. Run `/ui-craft <file>` (`.claude/skills/ui-craft/SKILL.md`) on the component, each example, and
-   every block that imports it (`catalog.json#patterns[*].imports`). Output each child skill's
+   every block that imports it (`catalog.json#blocks[*].imports`). Output each child skill's
    findings under its own heading.
 2. Fix every finding you can (back to step 5, then step 6). What stays open is listed with its
    reason.

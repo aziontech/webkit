@@ -21,14 +21,14 @@ consuming projects (they start from `webkit-usage`). Every new or changed compon
 runs the full progression below before its PR opens; the findings go into the PR description. The
 child skills are the consumer skills at the repository root: read them from `skills/<name>/SKILL.md`.
 
-## Start here: a screen begins from a pattern
+## Start here: a screen begins from a block
 
-Before any phase below, find out whether the screen already exists as a webkit pattern. Ask the
-`webkit` MCP: `search_patterns` with the screen in plain words ("login", "account settings",
-"delete confirmation"), then `get_pattern` with the best id. Copy that SFC and change only the
-content; the routing below then reviews what you built. Only when no pattern fits, compose the screen
+Before any phase below, find out whether the screen already exists as a webkit block. Ask the
+`webkit` MCP: `search_blocks` with the screen in plain words ("login", "account settings",
+"delete confirmation"), then `get_block` with the best id. Copy that SFC and change only the
+content; the routing below then reviews what you built. Only when no block fits, compose the screen
 from components (`suggest_component`, `get_component`). A marketing band is a page section, not a
-pattern (rule `webkit-sections`).
+block (rule `webkit-sections`).
 
 ## How to use
 
@@ -114,7 +114,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 
 | Phase      | Goal                                                                                                                                      | Skill                       |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| Start      | The whole screen from its pattern: `search_patterns` → `get_pattern`, change only the content                                             | `webkit` MCP                |
+| Start      | The whole screen from its block: `search_blocks` → `get_block`, change only the content                                             | `webkit` MCP                |
 | Mechanics  | Import path, tokens, tree-shaking                                                                                                         | `/webkit-usage`             |
 | Structure  | Right component + Nielsen heuristics; the 3 states must exist                                                                             | `/webkit-ux-heuristics`     |
 | Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts                                                                | `/webkit-ui-states`         |

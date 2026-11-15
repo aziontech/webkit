@@ -35,22 +35,22 @@ rail), keep only what is inside its `<main>` and drop the rest. The one exceptio
 no rail — a create flow (`platform/create/*`, headed by `top-bars/creation-bar`) or
 a signed-out screen (`platform/auth`): route it outside the layout; it keeps its own bar and `<main>`.
 
-### Start every screen from a pattern
+### Start every screen from a block
 
 A whole screen — login, signup, settings, a list, a create flow, a detail page — is never built from
 scratch. Find its block with `npx @aziontech/webkit search <the screen in plain words>` (or the
-`webkit` MCP: `search_patterns`), read it with `npx @aziontech/webkit view <block-id>` (or
-`get_pattern`), then copy it with `npx @aziontech/webkit add <block-id>`: it writes the SFC into the
+`webkit` MCP: `search_blocks`), read it with `npx @aziontech/webkit view <block-id>` (or
+`get_block`), then copy it with `npx @aziontech/webkit add <block-id>`: it writes the SFC into the
 views directory, checks its imports, records it in `webkit.blocks.json` and prints the route to add.
 Change only the content (copy, data, handlers); keep the components, their order, the props and the
-classes. Pattern ids are grouped by task (`platform/create/…`, `platform/view/…`,
+classes. Block ids are grouped by task (`platform/create/…`, `platform/view/…`,
 `platform/detail/…`, `platform/edit/…`, `platform/delete/…`, `platform/settings/…`,
 `platform/states/…`, `platform/dashboard/…`, `platform/account/…`, `platform/auth`); each is one job
-whose states are its variants (`add --variant <state>`, or `variant` on `get_pattern`). Use `suggest_component` / `get_component` only for pieces the pattern does
+whose states are its variants (`add --variant <state>`, or `variant` on `get_block`). Use `suggest_component` / `get_component` only for pieces the block does
 not cover. A marketing band is a page section: `suggest_component` returns it (rule `webkit-sections`).
 Every export carries a `surface`: `product` (console and apps), `marketing` (the azion.com site) or
 `docs` (the documentation site). A console screen uses `product` only (`list_components`,
-`search_patterns` and `suggest_component` take `surface`). The search tools understand English,
+`search_blocks` and `suggest_component` take `surface`). The search tools understand English,
 Portuguese and Spanish ("cadastro", "crear cuenta"). Without the MCP, read
 `node_modules/@aziontech/webkit/llms/llms.txt`: one Markdown page per block, component and
 foundation, a JSON API per component, and `llms-full.txt` with everything in one file.
@@ -68,7 +68,7 @@ foundation, a JSON API per component, and `llms-full.txt` with everything in one
 - **A form creates what it is missing.** A field that needs a resource that does not exist yet (the
   certificate of a new workload) offers `Create <noun>`, which opens that resource's create form in a
   drawer over the form and selects it on save. Never send the reader away to create it.
-- **Patterns, then components.** Screens start from a pattern (above). Pieces reach for an
+- **Blocks, then components.** Screens start from a block (above). Pieces reach for an
   `@aziontech/webkit` component before writing custom UI — find one via the `webkit` MCP
   (`suggest_component`), `node_modules/@aziontech/webkit/llms/llms.txt` or
   `node_modules/@aziontech/webkit/catalog.json`.

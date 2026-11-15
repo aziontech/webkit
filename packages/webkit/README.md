@@ -29,7 +29,7 @@ Pick the path by what you are about to do.
    `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
    reviewed SFC into your views, checks its imports against the installed version, records it in
    `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
-   screen from scratch. (The MCP gives an agent the same blocks: `search_patterns`, `get_pattern`.) Patterns are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
+   screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
 4. A single piece: `suggest_component`, then `get_component`.
@@ -44,7 +44,7 @@ Rules for this path: [`skills/`](https://github.com/aziontech/webkit/tree/main/s
 
 1. Read [`.claude/AGENTS.md`](https://github.com/aziontech/webkit/blob/main/.claude/AGENTS.md).
 2. Every component starts from a spec in `.specs/`, through `/component-create`.
-3. Every block in `blocks/` is a pattern and every folder in `examples/` documents a component.
+3. Every block in `blocks/` is a screen agents copy and every folder in `examples/` documents a component.
    Changed one? Run `pnpm --filter @aziontech/webkit build:catalog`; the docs page and the styled
    visual test follow from the files.
 4. Before the PR: "What to update when WebKit changes", in [CONTRIBUTING.md](https://github.com/aziontech/webkit/blob/main/CONTRIBUTING.md).
@@ -58,7 +58,7 @@ Using Claude Code, Cursor, or another AI coding tool? Paste this into your agent
 > Install `@aziontech/webkit`, `@aziontech/theme`, and `@aziontech/icons` in this project,
 > then run `npx @aziontech/webkit init` to wire the lint, the MCP server, and the agent docs.
 
-The MCP server it wires gives your AI the screen patterns (`search_patterns`, `get_pattern`) and
+The MCP server it wires gives your AI the screen blocks (`search_blocks`, `get_block`) and
 the full component catalog (`list_components`, `get_component`, `list_tokens`, `list_assets`,
 `suggest_component`, `get_best_practices`, `validate_usage`) — so it starts each screen from the
 reviewed layout and writes the right import, prop, and token on the first try.

@@ -79,8 +79,8 @@ which WebKit components render each region, the variants, the sample content, an
 checklist. Run the same ten items, read as:
 
 - naming → the block id is `<category>/<name>` in kebab-case English, named by the job, and
-  `scripts/check-naming.mjs` accepts it; the id is not in `catalog.json#patternAliases`;
-- reuse → MCP `search_patterns` finds no block that does the job (a new variant of an existing
+  `scripts/check-naming.mjs` accepts it; the id is not in `catalog.json#blockAliases`;
+- reuse → MCP `search_blocks` finds no block that does the job (a new variant of an existing
   block beats a new block); every region uses an existing export, never hand-rolled markup;
 - prop vocabulary → the components are used with the vocabulary props, no deprecated export;
 - states → `variants` cover the states the issue lists (empty, loading, error, no permission,
@@ -94,7 +94,7 @@ checklist. Run the same ten items, read as:
 Read `guidelines.md` against the section plan in the same pass, and fail the item it belongs to:
 
 - reuse → `## When not to use` points to the block or component to use instead, by id, and
-  `## Related` names only ids that exist (`search_patterns`);
+  `## Related` names only ids that exist (`search_blocks`);
 - naming → every ``### X. <Element> — `Component` `` names a component the plan imports, the letters
   follow the plan's order, and every component of the plan appears in one building block;
 - states → `## States` has one line per variant of the draft `block.json`, saying when it shows;

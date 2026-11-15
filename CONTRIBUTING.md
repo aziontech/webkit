@@ -163,17 +163,17 @@ design opens the request and approves the merge, and nobody edits the code by ha
    `/block-new <issue>` (`.claude/commands/block-new.md`). Each step stops the run on
    failure:
 
-   | Step | What happens                                                                                                                              | Owner                             |
-   | ---- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-   | 1    | Read the issue                                                                                                                            | orchestrator                      |
-   | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
-   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                              | `spec-creator`                     |
-   | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                    | `spec-reviewer`, `spec-validator` |
-   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                            | `/component-create` sub-agents    |
-   | 6    | Machine gates (below)                                                                                                                     | orchestrator                      |
-   | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                             | orchestrator                      |
-   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `check-usage.mjs`                 |
-   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                      | `/pr-open`                        |
+   | Step | What happens                                                                                                                            | Owner                             |
+   | ---- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+   | 1    | Read the issue                                                                                                                          | orchestrator                      |
+   | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_blocks`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
+   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                            | `spec-creator`                    |
+   | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                  | `spec-reviewer`, `spec-validator` |
+   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                          | `/component-create` sub-agents    |
+   | 6    | Machine gates (below)                                                                                                                   | orchestrator                      |
+   | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                           | orchestrator                      |
+   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                              | `check-usage.mjs`                 |
+   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                    | `/pr-open`                        |
 
 3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
    comments, never to a human fix.
@@ -242,13 +242,13 @@ Components in [`.claude/hooks/_lib/legacy-components.json`](./.claude/hooks/_lib
 ## What to update when WebKit changes
 
 You only write the source. `build:catalog` and the package's `prepack` generate what AI agents read
-(`catalog.json`, its `patterns`, the packaged `skills/` and `rules/`), and CI fails the PR when the
+(`catalog.json`, its `blocks`, the packaged `skills/` and `rules/`), and CI fails the PR when the
 source and the generated files disagree. Nobody rewrites the AI files by hand.
 
 | When you…                                             | You write                                                                                    | Generated                                      | CI gate                                                             |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
 | Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks             |
-| Create or change a block in `packages/webkit/blocks/` | `block.json` (with `intents` and `skills`), the `.vue`, `variants/`, `guidelines.md`         | `catalog.json` `patterns`                      | `check:blocks` (G1)                                               |
+| Create or change a block in `packages/webkit/blocks/` | `block.json` (with `intents` and `skills`), the `.vue`, `variants/`, `guidelines.md`         | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                 |
 | Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                                  |
 | Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
 | Change a token                                        | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                                   |
@@ -256,8 +256,8 @@ source and the generated files disagree. Nobody rewrites the AI files by hand.
 | Release a version                                     | Nothing                                                                                      | The release, by release-please                 | —                                                                   |
 
 After any of these, run `pnpm --filter @aziontech/webkit build:catalog` and commit `catalog.json` and `catalog/`.
-A pattern's SFC must pass the consumer lint; legacy findings are frozen in
-`packages/webkit/scripts/patterns-lint-baseline.json` and can only go down
+A block's SFC must pass the consumer lint; legacy findings are frozen in
+`packages/webkit/scripts/blocks-baseline.json` and can only go down
 (`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some).
 
 ## Quality gates

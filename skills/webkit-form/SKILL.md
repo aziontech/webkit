@@ -208,7 +208,7 @@ save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **o
 into independently-committed cards — the **Card with independent saves** type — has **one save per
 card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
 
-Each form type has its pattern in the `webkit` MCP (`get_pattern`): the Drawer form and the Nested
+Each form type has its block in the `webkit` MCP (`get_block`): the Drawer form and the Nested
 drawer are `platform/create/create-in-drawer` (variant `NestedDrawer` for the stacked child); the
 Dialog form is `platform/delete/delete-with-confirmation` (variant `LabelledField` for the labelled
 typed confirmation); ItemGroup settings and Card with independent saves are
