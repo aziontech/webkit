@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
 import { brand } from '../src/tokens/primitives/colors/brand.js'
-import { compileThemeVars } from '../src/scripts/compile-theme.js'
+import { compileThemeVars } from '../src/tokens/theme-colors.js'
 
 const TOKENS = [
   'identifier',
@@ -12,7 +12,7 @@ const TOKENS = [
   'type',
   'comment',
   'punctuation'
-].map((name) => `--code-sintax-${name}`)
+].map((name) => `--code-syntax-${name}`)
 
 const luminance = (hex) => {
   const [r, g, b] = [1, 3, 5].map((i) => {
@@ -40,6 +40,6 @@ for (const variant of ['light', 'dark']) {
 }
 
 test('the shell command colour is the brand orange, not a brown', () => {
-  assert.equal(vars.light['--code-sintax-function'].toUpperCase(), brand.primary[700])
-  assert.equal(vars.dark['--code-sintax-function'].toUpperCase(), brand.primary[300])
+  assert.equal(vars.light['--code-syntax-function'].toUpperCase(), brand.primary[700])
+  assert.equal(vars.dark['--code-syntax-function'].toUpperCase(), brand.primary[300])
 })

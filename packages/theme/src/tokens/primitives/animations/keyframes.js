@@ -39,21 +39,21 @@ export const keyframes = {
     '0%': 'opacity: 1; transform: scale(1)',
     '100%': 'opacity: 0; transform: scale(0.9)'
   },
-  slideInLeft: {
-    '0%': 'transform: translateX(-100%)',
+  slideInStart: {
+    '0%': 'transform: translateX(calc(-100% * var(--direction-sign, 1)))',
     '100%': 'transform: translateX(0)'
   },
-  slideOutLeft: {
+  slideOutStart: {
     '0%': 'transform: translateX(0)',
-    '100%': 'transform: translateX(-100%)'
+    '100%': 'transform: translateX(calc(-100% * var(--direction-sign, 1)))'
   },
-  slideInRight: {
-    '0%': 'transform: translateX(100%)',
+  slideInEnd: {
+    '0%': 'transform: translateX(calc(100% * var(--direction-sign, 1)))',
     '100%': 'transform: translateX(0)'
   },
-  slideOutRight: {
+  slideOutEnd: {
     '0%': 'transform: translateX(0)',
-    '100%': 'transform: translateX(100%)'
+    '100%': 'transform: translateX(calc(100% * var(--direction-sign, 1)))'
   },
   progressIndeterminate: {
     '0%': 'inset-inline-start: -35%; inset-inline-end: 100%',

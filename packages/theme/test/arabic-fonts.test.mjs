@@ -4,8 +4,8 @@ import { readFile } from 'node:fs/promises';
 
 import { fontFamily } from '../src/tokens/primitives/typography/font-family.js';
 
-const fontsCss = await readFile(new URL('../dist/v4/fonts.css', import.meta.url), 'utf8');
-const globalsCss = await readFile(new URL('../dist/v4/globals.css', import.meta.url), 'utf8');
+const fontsCss = await readFile(new URL('../dist/fonts.css', import.meta.url), 'utf8');
+const globalsCss = await readFile(new URL('../dist/globals.css', import.meta.url), 'utf8');
 
 test('the sans stack falls back to an Arabic-capable face right after Rubik', () => {
   const stack = fontFamily.sans.split(',').map((name) => name.trim().replace(/^'|'$/g, ''));

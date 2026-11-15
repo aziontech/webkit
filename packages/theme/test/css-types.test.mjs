@@ -25,7 +25,7 @@ test('every CSS entry declares types, so a side-effect import type-checks (TS288
 });
 
 test('the declarations ship: they sit in a published folder and the token build writes them', () => {
-  const build = readFileSync(join(ROOT, 'src/scripts/build-tokens.mjs'), 'utf8');
+  const build = readFileSync(join(ROOT, 'scripts/build-tokens.mjs'), 'utf8');
   for (const [, target] of cssEntries) {
     const rel = target.types.replace(/^\.\//, '');
     assert.ok(
