@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/breadcrumb-item/breadcrumb-item.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue
 // component=BreadcrumbItem
 import figma from 'figma'
 

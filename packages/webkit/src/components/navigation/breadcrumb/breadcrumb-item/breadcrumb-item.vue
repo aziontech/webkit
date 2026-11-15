@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { cn } from '../../../utils/cn'
-  import { directionalIconClass } from '../../../utils/directional-icons'
+  import { cn } from '../../../../utils/cn'
+  import { directionalIconClass } from '../../../../utils/directional-icons'
 
   defineOptions({
     name: 'BreadcrumbItem',

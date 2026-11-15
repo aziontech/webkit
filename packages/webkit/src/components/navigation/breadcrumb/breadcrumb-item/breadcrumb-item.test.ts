@@ -1,11 +1,11 @@
 import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
-import Current from '../../../../examples/breadcrumb-item/current.vue'
-import Default from '../../../../examples/breadcrumb-item/default.vue'
-import Disabled from '../../../../examples/breadcrumb-item/disabled.vue'
-import WithIcon from '../../../../examples/breadcrumb-item/with-icon.vue'
-import { expectNoA11yViolations } from '../../../test/axe'
+import Current from '../../../../../examples/breadcrumb-item/current.vue'
+import Default from '../../../../../examples/breadcrumb-item/default.vue'
+import Disabled from '../../../../../examples/breadcrumb-item/disabled.vue'
+import WithIcon from '../../../../../examples/breadcrumb-item/with-icon.vue'
+import { expectNoA11yViolations } from '../../../../test/axe'
 import BreadcrumbItem from './breadcrumb-item.vue'
 
 const TESTID = 'navigation-breadcrumb-item'
