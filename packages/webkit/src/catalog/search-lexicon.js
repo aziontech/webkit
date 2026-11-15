@@ -248,6 +248,13 @@ export const COMPONENT_TERMS = {
   ],
   'password-input': ['password', 'password field', 'senha', 'contraseña', 'campo de senha'],
   'phone-input': ['phone', 'phone number', 'telefone', 'teléfono', 'telefono'],
+  'context-menu': [
+    'context menu',
+    'right click',
+    'right-click menu',
+    'right click menu',
+    'long press menu'
+  ],
   'dropdown-menu': [
     'menu suspenso',
     'menú desplegable',
@@ -313,7 +320,11 @@ export const COMPONENT_TERMS = {
     'fragmento de código',
     'show code',
     'json viewer',
-    'show json'
+    'show json',
+    'diff',
+    'show diff',
+    'diff view',
+    'compare code'
   ],
   kbd: ['keyboard shortcut', 'atalho de teclado', 'atajo de teclado'],
   'file-dropzone': ['dropzone', 'drop zone', 'file upload', 'enviar arquivo', 'subir archivo'],
@@ -390,7 +401,18 @@ export const COMPONENT_TERMS = {
   item: ['list', 'list of items', 'row list'],
   'key-value-pairs': ['description list', 'details', 'properties', 'metadata'],
   'collection-preferences': ['column selector', 'visible columns', 'table preferences'],
-  brand: ['azion logo']
+  brand: ['azion logo'],
+  'hover-card': ['hover card', 'preview on hover', 'link preview', 'user card'],
+  'status-code': ['http status', 'status code', 'http status code', 'http method', 'get post'],
+  timestamp: ['timestamp', 'relative time', 'time ago', 'date time display'],
+  'chart-reference': [
+    'threshold',
+    'threshold line',
+    'reference line',
+    'reference band',
+    'target line'
+  ],
+  'data-grid': ['data grid', 'editable grid', 'spreadsheet', 'edit cells', 'inline edit table']
 }
 
 export const STOPWORDS = new Set([
