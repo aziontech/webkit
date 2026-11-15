@@ -18,7 +18,7 @@
   interface Props {
     /** The row's name — what the reader is choosing. */
     title?: string
-    /** PrimeIcons class for the leading glyph. */
+    /** Azion icon class for the leading glyph. */
     icon?: string
     /** Destination; when set the whole row becomes the link. */
     href?: string
@@ -96,10 +96,10 @@
       <i
         :class="
           isExternal
-            ? 'pi-arrow-up-right group-hover/item:translate-x-0.5 rtl:group-hover/item:-translate-x-0.5 group-hover/item:-translate-y-0.5'
-            : 'pi-chevron-right group-hover/item:translate-x-0.5 rtl:group-hover/item:-translate-x-0.5'
+            ? 'ai-arrow-up-right group-hover/item:translate-x-0.5 rtl:group-hover/item:-translate-x-0.5 group-hover/item:-translate-y-0.5'
+            : 'ai-chevron-right group-hover/item:translate-x-0.5 rtl:group-hover/item:-translate-x-0.5'
         "
-        class="pi text-(--text-muted) transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
+        class="ai text-(--text-muted) transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
         aria-hidden="true"
       />
     </ItemActions>

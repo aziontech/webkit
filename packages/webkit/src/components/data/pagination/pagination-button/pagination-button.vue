@@ -69,18 +69,18 @@
     <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <i
         v-if="kind === 'previous'"
-        class="pi pi-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
+        class="ai ai-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
         aria-hidden="true"
       />
       <i
         v-if="kind === 'more'"
-        class="pi pi-ellipsis-h text-[length:inherit] leading-none"
+        class="ai ai-ellipsis-h text-[length:inherit] leading-none"
         aria-hidden="true"
       />
       <slot v-if="kind === 'number'" />
       <i
         v-if="kind === 'next'"
-        class="pi pi-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
+        class="ai ai-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
         aria-hidden="true"
       />
     </span>

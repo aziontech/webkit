@@ -25,7 +25,7 @@
     kind?: DocPromptKind
     /** What the block is, in a word or two. Renders as a titled row above the prompt. */
     title?: string
-    /** PrimeIcons class for the glyph beside the title. */
+    /** Azion icon class for the glyph beside the title. */
     icon?: string
     /** Fallback prompt text when the default slot is empty. */
     label?: string
@@ -34,7 +34,7 @@
   const props = withDefaults(defineProps<Props>(), {
     kind: 'block',
     title: '',
-    icon: 'pi pi-sparkles',
+    icon: 'ai ai-sparkles',
     label: ''
   })
 
@@ -239,7 +239,7 @@
         >
           <Button
             :label="expanded ? t('docPrompt.showLess') : t('docPrompt.showMore')"
-            :icon="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+            :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
             kind="outlined"
             size="small"
             @click="toggle"

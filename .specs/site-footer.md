@@ -3,11 +3,11 @@ name: site-footer
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 9e779ee6a548412fb9ee851aa613cdbabe8b06a0febb5c0ecdc25bfc29e88059
+checksum: c9ff5bf4ca6c580bb32b0f3d1eb91efb0fed387c548ff1bed7cc4a7abe5033de
 ---
 
 # SiteFooter — Component Spec
@@ -54,7 +54,7 @@ The footer under every marketing page: the link columns, then the social row bes
     home="/"
     :columns="[{ title: 'Products', links: [{ label: 'Functions', href: '/products/functions' }] }]"
     :socials="[
-      { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+      { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ]"
     status-label="All Systems Operational"
     :languages="['EN', 'PT-BR', 'ES']"
@@ -98,7 +98,7 @@ The footer under every marketing page: the link columns, then the social row bes
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Motion & Animations

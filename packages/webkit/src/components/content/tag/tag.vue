@@ -23,7 +23,7 @@
     size?: TagSize
     /** Pill shape when true. */
     rounded?: boolean
-    /** PrimeIcons class for the leading icon. */
+    /** Azion icon class for the leading icon. */
     icon?: string
   }
 

@@ -1,6 +1,6 @@
 # @aziontech/icons
 
-> Icon font library for Azion — **azionicons** (`ai`) + **primeicons** (`pi`) delivered as CSS + woff2.
+> Icon font library for Azion — **azionicons** (`ai`) delivered as CSS + woff2. The legacy **primeicons** (`pi`) font still ships as an opt-in entry.
 
 [![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml)
 [![npm version](https://badge.fury.io/js/%40aziontech%2Ficons.svg)](https://badge.fury.io/js/%40aziontech%2Ficons)
@@ -17,8 +17,10 @@
 
 | Font           | Prefix | Icons | Description                                  |
 | -------------- | ------ | ----- | -------------------------------------------- |
-| **azionicons** | `ai`   | 143   | Azion product, platform, and ecosystem icons |
-| **primeicons** | `pi`   | 317   | General-purpose UI icons (PrimeIcons set)    |
+| **azionicons** | `ai`   | 436   | Azion UI, product, platform, and ecosystem icons |
+| **primeicons** | `pi`   | 317   | Legacy: the same UI glyphs under PrimeIcons names, opt-in only |
+
+Every UI glyph of the `pi` set ships in `azionicons` under the same name with the `ai` prefix (`pi pi-check` → `ai ai-check`). The default entry (`import '@aziontech/icons'`) loads only the Azion set; import `@aziontech/icons/primeicons` yourself if you still render `pi` classes. `npx @aziontech/webkit migrate --to 6` rewrites `pi pi-*` classes in your source to their `ai` names.
 
 Icons are distributed as **woff2 icon fonts** with matching CSS class utilities, making them framework-agnostic — usable in plain HTML, Vue, React, or any web project.
 
@@ -39,18 +41,21 @@ npm install @aziontech/icons
 ### Import via CSS / bundler
 
 ```js
-// Import both icon sets (recommended)
+// Azion set + colored icons (recommended)
 import '@aziontech/icons'
 
 // Or import individually
 import '@aziontech/icons/azionicons'
+import '@aziontech/icons/azionicons-color'
+
+// Legacy PrimeIcons names, only if you still render pi classes
 import '@aziontech/icons/primeicons'
 ```
 
 ### Import via HTML `<link>`
 
 ```html
-<!-- All icons -->
+<!-- Azion set + colored icons -->
 <link
   rel="stylesheet"
   href="node_modules/@aziontech/icons/dist/index.css"
@@ -63,7 +68,7 @@ import '@aziontech/icons/primeicons'
 />
 <link
   rel="stylesheet"
-  href="node_modules/@aziontech/icons/dist/primeicons.css"
+  href="node_modules/@aziontech/icons/dist/azionicons-color.css"
 />
 ```
 
@@ -75,10 +80,10 @@ import '@aziontech/icons/primeicons'
 <i class="ai ai-edge-application"></i>
 <i class="ai ai-edge-functions"></i>
 
-<!-- PrimeIcons (prefix: pi) -->
-<i class="pi pi-home"></i>
-<i class="pi pi-cog"></i>
-<i class="pi pi-search"></i>
+<!-- UI glyphs (prefix: ai) -->
+<i class="ai ai-cog"></i>
+<i class="ai ai-search"></i>
+<i class="ai ai-chevron-right"></i>
 ```
 
 ### Package exports
@@ -86,10 +91,10 @@ import '@aziontech/icons/primeicons'
 The package exposes the following named exports (defined in the generated `dist/package.json`):
 
 ```js
-import '@aziontech/icons' // → dist/index.css (all sets + colored classes)
+import '@aziontech/icons' // → dist/index.css (azionicons + colored classes)
 import '@aziontech/icons/azionicons' // → dist/azionicons.css
 import '@aziontech/icons/azionicons-color' // → dist/azionicons-color.css (colored `.ai-cor.ai-<name>` classes)
-import '@aziontech/icons/primeicons' // → dist/primeicons.css
+import '@aziontech/icons/primeicons' // → dist/primeicons.css (legacy, opt-in)
 import catalog from '@aziontech/icons/catalog' // → dist/catalog.json (font icon list)
 import colorIcons from '@aziontech/icons/color-catalog' // → dist/color-catalog.json (colored SVGs)
 ```
@@ -132,20 +137,12 @@ Notable category groupings:
 - **Integrations** — `ai-terraform`, `ai-graphql`, `ai-redis`, `ai-turso`, `ai-lora`, `ai-instructor`
 - **Support & Services** — `ai-professional-services`, `ai-technical-support`, `ai-business-support`, `ai-security-team`, `ai-technical-account`, `ai-pratices-review`
 - **UI & Utility** — `ai-home`, `ai-filter-alt`, `ai-column`, `ai-layers`, `ai-json`, `ai-open`, `ai-sparkles`, `ai-scizors`, `ai-datasheet`, `ai-store`
-- **Social & Media** — `ai-medium`, `ai-rss`, `ai-twitch`, `ai-x`
+- **UI glyphs** — `ai-check`, `ai-times`, `ai-plus`, `ai-minus`, `ai-search`, `ai-chevron-down`, `ai-chevron-right`, `ai-arrow-up-right`, `ai-external-link`, `ai-info-circle`, `ai-exclamation-triangle`, `ai-check-circle`, `ai-trash`, `ai-pencil`, `ai-copy`, `ai-cog`, `ai-user`, `ai-lock`, … (every `pi` glyph name, with the `ai` prefix)
+- **Social & Media** — `ai-medium`, `ai-rss`, `ai-twitch`, `ai-x`, `ai-github`, `ai-discord`, `ai-youtube`, `ai-linkedin`, `ai-instagram`, `ai-reddit`, `ai-facebook`
 
-### PrimeIcons (`pi`)
+### PrimeIcons (`pi`, legacy)
 
-A comprehensive general-purpose UI icon set. All use the `.pi` base class:
-
-```html
-<i class="pi pi-home"></i>
-<i class="pi pi-cog"></i>
-<i class="pi pi-check"></i>
-<i class="pi pi-times"></i>
-<i class="pi pi-search"></i>
-<i class="pi pi-user"></i>
-```
+The `pi` font keeps the PrimeIcons class names for apps that have not migrated. It is not part of the default entry: import `@aziontech/icons/primeicons` to load it. Each glyph has an `ai` twin (`pi pi-check` → `ai ai-check`, `pi pi-minus-circle` → `ai ai-circle-minus`, `pi pi-twitter` → `ai ai-x`); the third-party marks `pi-amazon`, `pi-android`, `pi-apple`, `pi-bitcoin`, `pi-ethereum`, `pi-microsoft`, `pi-paypal`, `pi-pinterest`, `pi-prime`, `pi-telegram`, `pi-tiktok` and `pi-vimeo` have none.
 
 ---
 
@@ -241,7 +238,7 @@ Icons inherit color via `currentColor`, making them trivially themeable with CSS
 ></i>
 ```
 
-The generated CSS base class sets the following properties on each icon prefix (`.ai`, `.pi`):
+The generated CSS base class sets the following properties on each icon prefix (`.ai`, and `.pi` in the legacy entry):
 
 ```css
 .ai {
@@ -325,16 +322,16 @@ Here's how that your SVG needs to looks in code:
 │   ├── primeicons.css
 │   ├── primeicons.woff2
 │   ├── index.css
-│   ├── catalog.json          # font icon list (ai + pi)
+│   ├── catalog.json          # font icon list (ai + legacy pi)
 │   ├── color-catalog.json    # colored icons as inline SVG (ai-cor ai-<name>)
 │   ├── package.json          # generated for npm publish
 │   ├── LICENSE
 │   └── README.md
 ├── src/
 │   └── svg-raw/
-│       ├── ai/               # Azion SVG source files (143 icons, monochrome → font)
+│       ├── ai/               # Azion SVG source files (436 icons, monochrome → font)
 │       ├── ai-cor/           # Azion colored brand icons (inline SVG, NOT fonted)
-│       └── pi/               # PrimeIcons SVG source files (317 icons → font)
+│       └── pi/               # legacy PrimeIcons names (317 icons → opt-in font)
 ├── scripts/
 │   ├── build.mjs             # Build orchestrator: validate → fonts → catalogs → assemble
 │   ├── build-woff2.mjs       # Font generation via fantasticon
@@ -366,9 +363,9 @@ Here's how that your SVG needs to looks in code:
 3. Run `npm run build` to regenerate the font files
 4. Verify the icon appears correctly in the generated CSS
 
-### Adding a new PrimeIcon
+### The legacy `pi` folder
 
-Follow the same steps above but place the SVG in [`src/svg-raw/pi/`](src/svg-raw/pi/) using the `pi-` prefix.
+Do not add icons to [`src/svg-raw/pi/`](src/svg-raw/pi/): it only keeps the PrimeIcons names working for apps that have not migrated. New glyphs go in `src/svg-raw/ai/`.
 
 ### Adding a new colored Azion icon
 
@@ -432,7 +429,7 @@ The [`scripts/build.mjs`](scripts/build.mjs) orchestrator runs 7 steps:
 1. **Validate SVGs** — runs `scripts/validate-svg.mjs` (blocks on errors)
 2. **Clean `dist/`** — removes and recreates the output directory
 3. **Generate fonts** — runs `scripts/build-woff2.mjs` (fantasticon for both `ai` and `pi`; the colored `ai-cor` folder is not a font input)
-4. **Create `index.css`** — barrel file importing `azionicons.css`, `azionicons-color.css`, and `primeicons.css`
+4. **Create `index.css`** — barrel file importing `azionicons.css` and `azionicons-color.css` (`primeicons.css` stays a separate, opt-in entry)
 5. **Generate `dist/package.json`** — creates a clean package manifest with exports for npm
 6. **Copy LICENSE & README.md** — into `dist/` for npm
 7. **Generate catalogs & colored CSS** — `dist/catalog.json` (font icons, via `build-catalog.mjs`), `dist/color-catalog.json` (colored SVGs, via `build-color-catalog.mjs`), and `dist/azionicons-color.css` (colored `.ai-cor.ai-<name>` rules, via `build-color-css.mjs`)

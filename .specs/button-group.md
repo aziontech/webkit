@@ -3,9 +3,9 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 73fad2391af3b3cf2378ba8902c8fccfb3b5a247616ddbadfa24246d7163d493
+checksum: c86b6d647ee9469b9b84f5a1639099dd7d8d6beee29a2d45ef2a662ca74e51b8
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -60,20 +60,20 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 
   const wrap = ref(false)
   const items = computed(() => [
-    { id: 'copy', label: 'Copy code', icon: 'pi pi-copy' },
-    { id: 'format', label: 'Format document', icon: 'pi pi-align-left' },
+    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
+    { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },
     {
       id: 'wrap',
       type: 'toggle',
       label: 'Wrap lines',
-      icon: 'pi pi-arrows-h',
+      icon: 'ai ai-arrows-h',
       pressed: wrap.value
     },
     {
       id: 'download',
       type: 'menu',
       label: 'Download',
-      icon: 'pi pi-download',
+      icon: 'ai ai-download',
       options: [
         { id: 'download-js', label: 'Download as .js' },
         { id: 'download-zip', label: 'Download as .zip' }

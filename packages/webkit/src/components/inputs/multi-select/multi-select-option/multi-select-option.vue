@@ -12,7 +12,7 @@
   interface Props {
     /** Stable value that identifies this option in the selection. */
     value: unknown
-    /** PrimeIcons class for the leading decorative icon. */
+    /** Azion icon class for the leading decorative icon. */
     icon?: string
     /** Disables this single option; does not affect the parent multi-select. */
     disabled?: boolean

@@ -3,10 +3,10 @@ name: doc-item
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: b21d3c37304561ae1dd3e784d4a5559f24f707980af9237ae78f34e4898281d0
+spec_version: 2
+checksum: c6d6c04b059d2a29d5648ad2c32736b4c2fa6b30ee2fb8cb8cbac818287bc390
 created: 2026-08-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # DocItem — Component Spec
@@ -52,14 +52,14 @@ One row of the documentation's related-content list: a leading glyph in a framed
     <ItemList>
       <DocItem
         title="Edge Functions"
-        icon="pi pi-code"
+        icon="ai ai-code"
         href="/docs/edge-functions"
       >
         Build serverless applications on Azion's global network.
       </DocItem>
       <DocItem
         title="Edge SQL"
-        icon="pi pi-database"
+        icon="ai ai-database"
         href="/docs/edge-sql"
       >
         Store relational data across the network.
@@ -74,7 +74,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 | Prop     | Type                  | Default   | Required | JSDoc                                                 |
 | -------- | --------------------- | --------- | -------- | ----------------------------------------------------- |
 | `title`  | `string`              | `''`      | false    | The row's name — what the reader is choosing.         |
-| `icon`   | `string`              | `''`      | false    | PrimeIcons class for the leading glyph.               |
+| `icon`   | `string`              | `''`      | false    | Azion icon class for the leading glyph.               |
 | `href`   | `string`              | `''`      | false    | Destination; when set the whole row becomes the link. |
 | `target` | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                 |
 | `label`  | `string`              | `''`      | false    | Fallback copy when the default slot is empty.         |

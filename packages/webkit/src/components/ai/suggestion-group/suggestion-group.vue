@@ -11,7 +11,7 @@
     id: string
     /** The prompt as the reader would say it, under 72 characters. */
     label: string
-    /** Optional PrimeIcons or Azion icon class drawn before the label. */
+    /** Optional Azion icon class drawn before the label. */
     icon?: string
   }
 

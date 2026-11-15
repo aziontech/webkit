@@ -202,7 +202,7 @@
                 </p>
                 <Link
                   :label="linkLabel"
-                  icon="pi pi-angle-right"
+                  icon="ai ai-angle-right"
                   :href="cell.href"
                 />
               </div>

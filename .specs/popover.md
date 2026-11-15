@@ -3,11 +3,11 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 5cdd9b7518447e7117f2d865b2f49b53d0589b7c230a1009c02b9623108d7d27
+checksum: 150aded1d6c1f3438bd91a306d7d4537975fe985be4c763e580205d697963469
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -117,7 +117,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — plain-text description.
-- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`pi pi-times`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
+- `popover-close/popover-close.vue` — close control. Renders an `IconButton` (`ai ai-times`, `aria-label="Close"`) that calls the injected `setOpen(false)` on activation; focus returns to the trigger. Optional — omit when the popover is dismissed only by outside-click / `Esc` / a footer action.
   - Props: _none_.
   - Events: _none_ (root handles `update:open`).
   - Slots: _none_.

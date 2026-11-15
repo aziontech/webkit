@@ -153,7 +153,7 @@
                       class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
                     >
                       <i
-                        class="pi pi-bars"
+                        class="ai ai-bars"
                         aria-hidden="true"
                       />
                     </span>
@@ -195,7 +195,7 @@
                       />
                     </span>
                     <IconButton
-                      icon="pi pi-times"
+                      icon="ai ai-times"
                       kind="outlined"
                       size="large"
                       ariaLabel="Remove column"
@@ -220,7 +220,7 @@
                         class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
                       >
                         <i
-                          class="pi pi-bars"
+                          class="ai ai-bars"
                           aria-hidden="true"
                         />
                       </span>
@@ -267,7 +267,7 @@
                         />
                       </span>
                       <IconButton
-                        icon="pi pi-times"
+                        icon="ai ai-times"
                         kind="outlined"
                         size="large"
                         ariaLabel="Remove column"
@@ -285,7 +285,7 @@
                   label="Add column"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   class="w-full"
                 />
               </span>

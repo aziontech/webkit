@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'S3 API',
       title: 'Any S3-compatible client',
-      icon: 'pi pi-code'
+      icon: 'ai ai-code'
     }
   ],
   layout: {

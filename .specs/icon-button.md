@@ -3,11 +3,11 @@ name: icon-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: e74b7dbb7c6289ec1c3f3da2664bac22f01e68e4707d43f75f60ba312945472e
+checksum: 9b2a367ab97fbd2699e55c349e637797c2c07549c6601315f9f77334af090952
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Icon Button — Component Spec
@@ -53,17 +53,17 @@ A square control that triggers an action with a glyph and no visible text: close
 
 <template>
   <IconButton
-    icon="pi pi-plus"
+    icon="ai ai-plus"
     aria-label="Add domain"
   />
   <IconButton
-    icon="pi pi-refresh"
+    icon="ai ai-refresh"
     aria-label="Refresh"
     kind="transparent"
     size="medium"
   />
   <IconButton
-    icon="pi pi-trash"
+    icon="ai ai-trash"
     aria-label="Delete domain"
     kind="danger"
     size="small"
@@ -75,7 +75,7 @@ A square control that triggers an action with a glyph and no visible text: close
 
 | Prop             | Type                                                                  | Default     | Required | JSDoc                                                                                                                                                               |
 | ---------------- | --------------------------------------------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `icon`           | `string`                                                              | `—`         | true     | PrimeIcons class for the leading/trailing icon.                                                                                                                     |
+| `icon`           | `string`                                                              | `—`         | true     | Azion icon class for the leading/trailing icon.                                                                                                                     |
 | `ariaLabel`      | `string`                                                              | `''`        | false    | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
 | `kind`           | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false    | Visual variant.                                                                                                                                                     |
 | `size`           | `'small' \| 'medium' \| 'large'`                                      | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                |

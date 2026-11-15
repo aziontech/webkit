@@ -3,8 +3,8 @@ name: input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 5b207b07b6834af44afb55c924686c3ecb96f9e90916464e39fee4fbb745aaed
+spec_version: 6
+checksum: ff4c77ea900cdc4478f8645c6e63586205746a6b5d30fd19a592d10af3de71c7
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -61,7 +61,7 @@ Aligned with Figma frame `562:6774` (Webkit / Input).
     aria-label="Domain"
   >
     <template #prefix>
-      <i class="pi pi-globe" />
+      <i class="ai ai-globe" />
     </template>
   </Input>
 </template>

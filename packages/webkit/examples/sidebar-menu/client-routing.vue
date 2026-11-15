@@ -9,17 +9,17 @@
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'pi pi-th-large',
+          icon: 'ai ai-th-large',
           href: '/applications'
         },
-        { id: 'functions', label: 'Functions', icon: 'pi pi-code', href: '/functions' }
+        { id: 'functions', label: 'Functions', icon: 'ai ai-code', href: '/functions' }
       ]
     },
     {
       label: 'Secure',
       items: [
-        { id: 'firewall', label: 'Firewall', icon: 'pi pi-shield', href: '/firewall' },
-        { id: 'certificates', label: 'Certificates', icon: 'pi pi-lock', href: '/certificates' }
+        { id: 'firewall', label: 'Firewall', icon: 'ai ai-shield', href: '/firewall' },
+        { id: 'certificates', label: 'Certificates', icon: 'ai ai-lock', href: '/certificates' }
       ]
     }
   ]

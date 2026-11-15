@@ -26,7 +26,7 @@
         @click="advance"
       />
       <IconButton
-        icon="pi pi-refresh"
+        icon="ai ai-refresh"
         aria-label="Reset"
         size="small"
         kind="outlined"

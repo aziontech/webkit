@@ -17,8 +17,8 @@ import DocPageHeader from './doc-page-header.vue'
 const CRUMBS = [{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]
 
 const META_ACTIONS = [
-  { value: 'copy', label: 'Copy as Markdown', icon: 'pi pi-copy', tip: 'Copy the page.' },
-  { value: 'agent', label: 'Agent setup', icon: 'pi pi-microchip-ai', href: '/docs/agent-setup' },
+  { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy', tip: 'Copy the page.' },
+  { value: 'agent', label: 'Agent setup', icon: 'ai ai-microchip-ai', href: '/docs/agent-setup' },
   { value: 'source', label: 'Edit this page', href: 'https://example.test/edit', target: '_blank' }
 ]
 

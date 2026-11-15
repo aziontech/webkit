@@ -13,7 +13,7 @@
     title?: string
     /** Small muted line above the title — who makes the thing, when the title does not say. */
     eyebrow?: string
-    /** PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled. */
+    /** Azion icon class for the leading glyph. Ignored when the `icon` slot is filled. */
     icon?: string
     /** Destination; when set the whole card becomes the link. */
     href?: string
@@ -96,10 +96,10 @@
       <i
         :class="
           isExternal
-            ? 'pi-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
-            : 'pi-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
+            ? 'ai-arrow-up-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:-translate-y-0.5'
+            : 'ai-chevron-right group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5'
         "
-        class="pi text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
+        class="ai text-body-xs transition-[translate] duration-moderate-02 ease-expressive-entrance motion-reduce:transition-none"
         aria-hidden="true"
       />
     </span>

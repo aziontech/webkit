@@ -44,7 +44,7 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>
@@ -59,7 +59,7 @@
         <template #footer>
           <Button
             label="Create new item"
-            icon="pi pi-plus-circle"
+            icon="ai ai-plus-circle"
             kind="transparent"
             size="small"
             class="w-full"

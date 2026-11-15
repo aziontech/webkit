@@ -3,13 +3,13 @@ name: input-group
 category: inputs
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: a400918892324ce1567e4c2a0c80add2cabea248335f24c3ba02a3f4c5aae923
+checksum: 9cc7498eba58cf4cbbf367893574944370502f6f03cd6051ab8025289cd88cab
 created: 2026-07-01
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # InputGroup — Component Spec
@@ -168,7 +168,7 @@ Root props:
 
 | Slot      | Scope | Notes                                                                                                                                                                                                                                                                                                                                                                                                          |
 | --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
+| `default` | —     | On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), an Azion icon `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height). |
 
 ## States
 

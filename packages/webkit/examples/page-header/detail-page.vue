@@ -19,7 +19,7 @@
       <Breadcrumb :items="trail" />
     </template>
     <template #icon>
-      <i class="pi pi-box" />
+      <i class="ai ai-box" />
     </template>
     <template #meta>
       <Tag
@@ -36,7 +36,7 @@
     <template #actions>
       <Button
         label="Documentation"
-        icon="pi pi-book"
+        icon="ai ai-book"
         kind="outlined"
         size="medium"
         href="https://example.com/docs/resources"
@@ -44,7 +44,7 @@
       />
       <Button
         label="Deploy"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
         kind="outlined"
         size="medium"
       />

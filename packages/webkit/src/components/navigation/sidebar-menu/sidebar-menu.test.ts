@@ -43,7 +43,7 @@ const composed = (
       <SidebarMenu v-bind="props" aria-label="Console navigation">
         <SidebarMenuBack />
         <SidebarMenuGroup label="User agents">
-          <SidebarMenuItem label="End User" icon="pi pi-user" href="/end-user" />
+          <SidebarMenuItem label="End User" icon="ai ai-user" href="/end-user" />
           <SidebarMenuItem label="Web Browser" href="/web-browser" />
         </SidebarMenuGroup>
         <SidebarMenuGroup label="Azion platform">
@@ -75,7 +75,7 @@ const GROUPS: SidebarMenuGroupNode[] = [
   {
     label: 'User agents',
     items: [
-      { id: 'end-user', label: 'End User', icon: 'pi pi-user', href: '/end-user' },
+      { id: 'end-user', label: 'End User', icon: 'ai ai-user', href: '/end-user' },
       { id: 'web-browser', label: 'Web Browser', href: '/web-browser' }
     ]
   },
@@ -378,14 +378,14 @@ describe('SidebarMenu (composition, drill stack + data mode)', () => {
               {
                 id: 'settings',
                 label: 'Settings',
-                icon: 'pi pi-cog',
+                icon: 'ai ai-cog',
                 kind: 'drill',
                 children: [{ id: 'general', label: 'General', href: '/settings/general' }]
               },
               {
                 id: 'getting-started',
                 label: 'Getting started',
-                icon: 'pi pi-book',
+                icon: 'ai ai-book',
                 children: [{ id: 'install', label: 'Installation', href: '/docs/install' }]
               }
             ]
@@ -785,7 +785,7 @@ describe('SidebarMenu audit fixes', () => {
         components: { SidebarMenuItem },
         template: `
           <ul>
-            <SidebarMenuItem label="Home" href="https://example.com" icon="pi pi-home" selected />
+            <SidebarMenuItem label="Home" href="https://example.com" icon="ai ai-home" selected />
             <SidebarMenuItem label="Billing" disabled />
           </ul>`
       })

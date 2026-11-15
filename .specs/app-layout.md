@@ -3,9 +3,9 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 7771ae293cef288b0e7b1e411faed7b74a5f7a0a166a9362eb9c1c80a2d4a9a2
+checksum: 40d85205baf17e5bd854eeba0c3cab5d8daba58bdf9c6f9076729c9a2b265230
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -89,7 +89,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
         <GlobalHeader.Start>
           <IconButton
             v-if="compact"
-            icon="pi pi-bars"
+            icon="ai ai-bars"
             aria-label="Open navigation"
             kind="outlined"
             size="medium"
@@ -98,7 +98,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
         </GlobalHeader.Start>
         <GlobalHeader.End>
           <IconButton
-            icon="pi pi-question-circle"
+            icon="ai ai-question-circle"
             aria-label="Help"
             kind="outlined"
             size="medium"
@@ -224,7 +224,7 @@ The only events are the `update:*` of the models above.
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
-- Icons: the position toggle icons (`pi pi-window-maximize` family) are not mirrored; close is not mirrored.
+- Icons: the position toggle icons (`ai ai-window-maximize` family) are not mirrored; close is not mirrored.
 - Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
 - User data: none.
 

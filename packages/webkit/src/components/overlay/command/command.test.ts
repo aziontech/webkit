@@ -90,7 +90,7 @@ const mixedPrefixes = () =>
         <CommandList>
           <CommandGroup heading="Actions">
             <CommandItem value="deploy">
-              <template #prefix><i class="pi pi-cloud-upload" aria-hidden="true" /></template>
+              <template #prefix><i class="ai ai-cloud-upload" aria-hidden="true" /></template>
               Deploy Project
             </CommandItem>
             <CommandItem value="new-app">Create Application</CommandItem>
@@ -352,7 +352,7 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
 
       const iconed = items[0].querySelector('[data-testid="overlay-command__item__prefix"]')
       expect(iconed).not.toBeNull()
-      expect(items[0].querySelector('i.pi-cloud-upload')).not.toBeNull()
+      expect(items[0].querySelector('i.ai-cloud-upload')).not.toBeNull()
 
       // The icon-less row puts no empty box in the DOM, so it carries no indent.
       expect(items[1].querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()

@@ -9,7 +9,7 @@
     kind="integration"
     title="Waiting Room"
     vendor="Tidewater"
-    logo="pi pi-hourglass"
+    logo="ai ai-hourglass"
     description="Queue visitors during a traffic surge and let them in as capacity frees up."
     :badges="[{ label: 'Application' }]"
     installed
@@ -20,7 +20,7 @@
         label="Configure"
         kind="outlined"
         size="small"
-        icon="pi pi-cog"
+        icon="ai ai-cog"
       />
     </template>
   </Card>

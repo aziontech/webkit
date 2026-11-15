@@ -8,23 +8,23 @@
     {
       id: 'assets',
       label: 'assets',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       children: [
         {
           id: 'assets/images',
           label: 'images',
-          icon: 'pi pi-folder',
+          icon: 'ai ai-folder',
           children: [
             {
               id: 'assets/images/hero.webp',
               label: 'hero.webp',
-              icon: 'pi pi-file',
+              icon: 'ai ai-file',
               description: '248 KB'
             },
             {
               id: 'assets/images/logo.svg',
               label: 'logo.svg',
-              icon: 'pi pi-file',
+              icon: 'ai ai-file',
               description: '12 KB'
             }
           ]
@@ -32,12 +32,12 @@
         {
           id: 'assets/fonts',
           label: 'fonts',
-          icon: 'pi pi-folder',
+          icon: 'ai ai-folder',
           children: [
             {
               id: 'assets/fonts/rubik.woff2',
               label: 'rubik.woff2',
-              icon: 'pi pi-file',
+              icon: 'ai ai-file',
               description: '64 KB'
             }
           ]
@@ -45,7 +45,7 @@
         {
           id: 'assets/styles.css',
           label: 'styles.css',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           description: '18 KB'
         }
       ]
@@ -53,18 +53,18 @@
     {
       id: 'reports',
       label: 'reports',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       children: [
         {
           id: 'reports/2026-10.csv',
           label: '2026-10.csv',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           description: '1.2 MB'
         },
         {
           id: 'reports/2026-11.csv',
           label: '2026-11.csv',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           description: '840 KB'
         }
       ]
@@ -72,13 +72,13 @@
     {
       id: 'index.html',
       label: 'index.html',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       description: '4 KB'
     },
     {
       id: 'robots.txt',
       label: 'robots.txt',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       description: '1 KB'
     }
   ]
@@ -125,7 +125,7 @@
       </template>
       <template #actions="{ item }">
         <IconButton
-          icon="pi pi-ellipsis-h"
+          icon="ai ai-ellipsis-h"
           kind="transparent"
           size="small"
           :aria-label="'More actions for ' + item.label"

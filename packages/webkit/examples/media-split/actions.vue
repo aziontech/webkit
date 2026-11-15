@@ -19,7 +19,7 @@
           label="Read the guide"
           kind="secondary"
           size="small"
-          icon="pi pi-chevron-right"
+          icon="ai ai-chevron-right"
           icon-position="trailing"
           animated
           href="/site/docs"
@@ -46,7 +46,7 @@
           label="See GitHub"
           kind="outlined"
           size="small"
-          icon="pi pi-github"
+          icon="ai ai-github"
           href="https://github.com/aziontech"
           target="_blank"
         />

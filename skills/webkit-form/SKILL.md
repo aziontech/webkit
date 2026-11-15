@@ -513,7 +513,7 @@ Canonical pattern:
       <template #footer>
         <Select.Option
           :value="CREATE_ORIGIN"
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
           >Create Origin</Select.Option
         >
       </template>
@@ -687,7 +687,7 @@ When a settings surface is split into topic bands (the Account Settings pattern)
 `SettingsSection`**: an h2 titled in one or two words, its one-sentence guidance in `hint` (rendered as
 a `Hint` glyph beside the title), and `anchor` when people link to it (the h2 takes the id and a
 copy-link appears in the gutter on hover or focus). An Advanced band whose defaults suit most people is
-`collapsible` with `icon="pi pi-cog"`; it starts closed, and its body is `inert` while folded.
+`collapsible` with `icon="ai ai-cog"`; it starts closed, and its body is `inert` while folded.
 
 Rules:
 

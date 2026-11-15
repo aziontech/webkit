@@ -27,7 +27,7 @@ describe('EmptyState', () => {
   it('honours a consumer-supplied data-testid across the whole subtree', () => {
     const { getByTestId } = within(
       render(EmptyState, {
-        props: { title: 'Empty', icon: 'pi pi-inbox' },
+        props: { title: 'Empty', icon: 'ai ai-inbox' },
         attrs: { 'data-testid': 'custom-empty' }
       }).container
     )
@@ -58,19 +58,19 @@ describe('EmptyState', () => {
 
   it('renders the standardized featured-icon tile when the icon prop is set', () => {
     const { getByTestId } = within(
-      render(EmptyState, { props: { title: 'Empty', icon: 'pi pi-inbox' } }).container
+      render(EmptyState, { props: { title: 'Empty', icon: 'ai ai-inbox' } }).container
     )
 
     const icon = getByTestId('feedback-empty-state__icon')
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     // The tile carries the consumer-supplied icon glyph.
-    expect(icon.querySelector('i.pi.pi-inbox')).toBeTruthy()
+    expect(icon.querySelector('i.ai.ai-inbox')).toBeTruthy()
   })
 
   it('renders custom icon slot content, overriding the icon prop tile', () => {
     const { getByTestId } = within(
       render(EmptyState, {
-        props: { title: 'Empty', icon: 'pi pi-inbox' },
+        props: { title: 'Empty', icon: 'ai ai-inbox' },
         slots: { icon: '<span data-testid="my-icon">glyph</span>' }
       }).container
     )
@@ -79,7 +79,7 @@ describe('EmptyState', () => {
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     expect(getByTestId('my-icon').textContent).toBe('glyph')
     // Slot wins: the prop's default tile glyph is not rendered.
-    expect(icon.querySelector('i.pi.pi-inbox')).toBeNull()
+    expect(icon.querySelector('i.ai.ai-inbox')).toBeNull()
   })
 
   it('renders the actions region only when the actions slot is supplied', () => {
@@ -118,7 +118,7 @@ describe('EmptyState', () => {
     'mirrors size=%s onto data-size of the root and the icon tile',
     (size) => {
       const { getByTestId } = within(
-        render(EmptyState, { props: { title: 'Empty', size, icon: 'pi pi-inbox' } }).container
+        render(EmptyState, { props: { title: 'Empty', size, icon: 'ai ai-inbox' } }).container
       )
       expect(getByTestId('feedback-empty-state').getAttribute('data-size')).toBe(size)
       expect(getByTestId('feedback-empty-state__icon').getAttribute('data-size')).toBe(size)

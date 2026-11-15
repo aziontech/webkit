@@ -3,8 +3,8 @@ name: doc-prompt
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 131649afc41e5a6dccb8294fae769f108540a66b69a7489ab7ac3e19a06178be
+spec_version: 3
+checksum: 426160aa91b47d99c15b8e357f7e9aa4d88bfe089915628ca67d2c80a7846151
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -62,7 +62,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 | ------- | ------------------- | ------------------ | -------- | ------------------------------------------------------------------------------ |
 | `kind`  | `'block' \| 'line'` | `'block'`          | false    | Wrapping paragraph capped at four lines, or one line that scrolls sideways.    |
 | `title` | `string`            | `''`               | false    | What the block is, in a word or two. Renders as a titled row above the prompt. |
-| `icon`  | `string`            | `'pi pi-sparkles'` | false    | PrimeIcons class for the glyph beside the title.                               |
+| `icon`  | `string`            | `'ai ai-sparkles'` | false    | Azion icon class for the glyph beside the title.                               |
 | `label` | `string`            | `''`               | false    | Fallback prompt text when the default slot is empty.                           |
 
 ## Events

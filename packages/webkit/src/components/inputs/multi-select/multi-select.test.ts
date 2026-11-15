@@ -518,7 +518,7 @@ describe('MultiSelect (composition / overlay)', () => {
           h(MultiSelect, { open: open.value, modelValue: [] }, () => [
             h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
             h(MultiSelectContent, null, () => [
-              h(MultiSelectOption, { value: 'a', icon: 'pi pi-heart' }, () => 'With icon'),
+              h(MultiSelectOption, { value: 'a', icon: 'ai ai-heart' }, () => 'With icon'),
               h(MultiSelectOption, { value: 'b' }, () => 'Without icon')
             ])
           ])
@@ -540,7 +540,7 @@ describe('MultiSelect (composition / overlay)', () => {
 
     expect(boxes[0].hasAttribute('data-leading')).toBe(true)
     expect(boxes[1].hasAttribute('data-leading')).toBe(false)
-    expect(boxes[0].querySelector('i.pi-heart')).not.toBeNull()
+    expect(boxes[0].querySelector('i.ai-heart')).not.toBeNull()
     expect(boxes[1].querySelector('i')).toBeNull()
 
     const list = document.body.querySelector('[data-testid="multi-select-content__list"]')

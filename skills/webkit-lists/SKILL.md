@@ -89,7 +89,7 @@ the band is one `useCollection` call:
             label="Create application"
             kind="primary"
             size="large"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
           />
         </template>
       </PageHeader>

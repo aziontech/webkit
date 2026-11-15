@@ -125,7 +125,7 @@
           >
             <span class="flex min-w-0 items-center gap-(--spacing-xs)">
               <i
-                class="pi pi-table shrink-0 text-(--text-muted)"
+                class="ai ai-table shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-heading-xxs text-(--text-default)">users</span>
@@ -151,7 +151,7 @@
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -159,7 +159,7 @@
             </span>
             <span class="ms-auto flex items-center gap-(--spacing-xs)">
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 ariaLabel="Refresh"
@@ -172,7 +172,7 @@
                   label="Insert"
                   kind="primary"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                 />
               </span>
             </span>
@@ -204,7 +204,7 @@
                   <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                   <i
                     v-if="column.primaryKey"
-                    class="pi pi-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
+                    class="ai ai-key ms-auto shrink-0 ps-(--spacing-xs) text-(--primary)"
                     aria-label="Primary key"
                   />
                 </span>

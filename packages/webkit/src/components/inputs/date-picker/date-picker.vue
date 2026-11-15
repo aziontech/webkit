@@ -319,14 +319,14 @@
             @click="toggleOpen"
           >
             <i
-              class="pi pi-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
+              class="ai ai-calendar shrink-0 text-[length:inherit] leading-none text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="min-w-0 flex-1 truncate text-start">{{ triggerText }}</span>
             <i
               v-if="!split && !(clearable && hasCommitted)"
               :data-state="isOpen ? 'open' : 'closed'"
-              class="pi pi-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+              class="ai ai-chevron-down shrink-0 text-[length:inherit] leading-none text-(--text-muted) transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </button>
@@ -341,7 +341,7 @@
             @click="clearCommitted"
           >
             <i
-              class="pi pi-times text-[length:inherit] leading-none"
+              class="ai ai-times text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </button>
@@ -358,7 +358,7 @@
           >
             <i
               :data-state="isOpen ? 'open' : 'closed'"
-              class="pi pi-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
+              class="ai ai-chevron-down text-[length:inherit] leading-none transition-transform duration-150 ease-out data-[state=open]:rotate-180 motion-reduce:transition-none"
               aria-hidden="true"
             />
           </button>
@@ -418,7 +418,7 @@
                 kind="outlined"
                 :size="size"
                 :disabled="isDisabled"
-                icon="pi pi-arrow-down-left"
+                icon="ai ai-arrow-down-left"
                 class="w-full justify-center"
                 :data-testid="`${testId}__apply`"
                 @click="applySelection"

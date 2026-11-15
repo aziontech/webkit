@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: f621f4d212a88a905b4da074b16e6a83387c2fff063890cbe288c4e804c87a57
+checksum: 9e07182b7be3d59349e9238c2e97f5465632a9b44b8ef084665149d46382fe1b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -142,7 +142,7 @@ Two details are what make the pair correct, and neither costs more than one attr
         <SidebarMenu.Sub>
           <SidebarMenu.SubTrigger
             label="Settings"
-            icon="pi pi-cog"
+            icon="ai ai-cog"
             kind="drill"
           />
           <SidebarMenu.SubContent>
@@ -178,7 +178,7 @@ Two details are what make the pair correct, and neither costs more than one attr
         >
           <DropdownMenu.Trigger>
             <IconButton
-              icon="pi pi-ellipsis-v"
+              icon="ai ai-ellipsis-v"
               aria-label="Account menu"
               kind="outlined"
               size="small"
@@ -642,7 +642,7 @@ Every story composes `SidebarMenu`; none composes `SidebarGroup` (see Sub-compon
   it under `dir="rtl"`.
 - The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
   right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
-- The collapse / expand glyphs (`pi-angle-double-left` / `-right`) keep their meaning through the
+- The collapse / expand glyphs (`ai-angle-double-left` / `-right`) keep their meaning through the
   direction-aware placement of the trigger.
 
 ## Responsive

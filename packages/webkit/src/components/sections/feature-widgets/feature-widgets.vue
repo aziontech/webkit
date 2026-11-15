@@ -170,7 +170,7 @@
               :label="secondaryAction.label"
               :href="secondaryAction.href"
               kind="outlined"
-              :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
             />
           </template>
@@ -225,7 +225,7 @@
                     :href="item.action.href"
                     kind="outlined"
                     size="medium"
-                    icon="pi pi-chevron-right"
+                    icon="ai ai-chevron-right"
                     icon-position="trailing"
                     animated
                   />
@@ -233,7 +233,7 @@
                     v-if="item.copy"
                     :label="copied === index ? doneLabel : item.copy.label"
                     size="medium"
-                    :icon="copied === index ? 'pi pi-check' : 'pi pi-copy'"
+                    :icon="copied === index ? 'ai ai-check' : 'ai ai-copy'"
                     @click="copyPrompt(index, item.copy.text)"
                   />
                 </span>

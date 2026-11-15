@@ -78,7 +78,7 @@
                 <span class="flex items-center gap-(--spacing-xs)">
                   <span class="text-label-md text-(--text-default)">Top Bot Traffic</span>
                   <i
-                    class="pi pi-info-circle text-body-sm leading-none text-(--text-muted)"
+                    class="ai ai-info-circle text-body-sm leading-none text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </span>

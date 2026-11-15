@@ -174,7 +174,7 @@ describe('RadioGroup', () => {
 
 describe('RadioGroup kind="card" and options', () => {
   const options = [
-    { value: 'free', label: 'Free', description: 'For side projects.', icon: 'pi pi-user' },
+    { value: 'free', label: 'Free', description: 'For side projects.', icon: 'ai ai-user' },
     { value: 'pro', label: 'Pro', description: 'For production apps.' },
     { value: 'scale', label: 'Scale', disabled: true }
   ]

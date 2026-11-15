@@ -22,7 +22,7 @@
       </div>
       <Link
         label="Docs"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
         size="medium"
         href="#"
       />

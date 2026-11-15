@@ -27,7 +27,7 @@ const uses: SitePageSection = {
   _id: 'use-cases',
   props: {
     title: USES_TITLE,
-    items: [{ icon: 'pi pi-bolt', title: 'Fast pages', description: 'Served close to the reader.' }]
+    items: [{ icon: 'ai ai-bolt', title: 'Fast pages', description: 'Served close to the reader.' }]
   }
 }
 

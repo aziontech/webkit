@@ -91,7 +91,7 @@
       key: 'start',
       label: '',
       entries: [
-        { key: 'overview', icon: 'pi pi-home', label: 'Overview' },
+        { key: 'overview', icon: 'ai ai-home', label: 'Overview' },
         { key: 'workloads', icon: 'ai ai-workloads', label: 'Workloads' },
         { key: 'deployments', icon: 'ai ai-deploy-pillar', label: 'Deployments' }
       ]
@@ -300,7 +300,7 @@
         class="relative z-10 flex h-14 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xl)"
       >
         <IconButton
-          icon="pi pi-bars"
+          icon="ai ai-bars"
           kind="outlined"
           size="small"
           ariaLabel="Open navigation"
@@ -314,7 +314,7 @@
             label="Create"
             kind="primary"
             size="small"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
           />
           <ButtonHighlight
             label="Copilot"
@@ -325,16 +325,16 @@
             label="Feedback"
             kind="outlined"
             size="small"
-            icon="pi pi-flag"
+            icon="ai ai-flag"
           />
           <IconButton
-            icon="pi pi-question-circle"
+            icon="ai ai-question-circle"
             kind="outlined"
             size="small"
             ariaLabel="Help"
           />
           <IconButton
-            icon="pi pi-user"
+            icon="ai ai-user"
             kind="outlined"
             size="small"
             ariaLabel="Account"
@@ -399,7 +399,7 @@
               >
                 <i
                   v-if="index > 0"
-                  class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <li
@@ -415,7 +415,7 @@
                 class="flex h-8 w-56 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm)"
               >
                 <i
-                  class="pi pi-search text-(--text-muted)"
+                  class="ai ai-search text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-muted)"
@@ -431,7 +431,7 @@
                 label="Create"
                 kind="primary"
                 size="medium"
-                icon="pi pi-plus-circle"
+                icon="ai ai-plus-circle"
               />
               <ButtonHighlight
                 label="Agent"

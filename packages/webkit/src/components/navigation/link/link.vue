@@ -20,7 +20,7 @@
     size?: LinkSize
     /** Disables interaction and applies disabled token set. */
     disabled?: boolean
-    /** PrimeIcons class for the trailing icon; set shows it. Empty shows the external-link glyph only for `_blank` targets. */
+    /** Azion icon class for the trailing icon; set shows it. Empty shows the external-link glyph only for `_blank` targets. */
     icon?: string
     /** Destination URL for the anchor. Empty renders `#`. */
     href?: string
@@ -49,7 +49,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ link: en.link })
 
-  const EXTERNAL_ICON = 'pi pi-external-link'
+  const EXTERNAL_ICON = 'ai ai-external-link'
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-link')
 

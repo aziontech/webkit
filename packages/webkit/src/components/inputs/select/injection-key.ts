@@ -15,7 +15,7 @@ export interface SelectOptionItem<TValue = string> {
   value: TValue
   /** Text of the option and of the trigger once selected. */
   label: string
-  /** PrimeIcons class of the leading icon. */
+  /** Azion icon class of the leading icon. */
   icon?: string
   /** Disables this option only. */
   disabled?: boolean

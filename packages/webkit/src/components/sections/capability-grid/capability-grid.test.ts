@@ -96,7 +96,7 @@ describe('CapabilityGrid', () => {
 
   it('draws a cell without an icon when the item has none', () => {
     const { container } = render(CapabilityGrid, { props: { items } })
-    expect(container.querySelector('i, [class*="pi-"]')).toBeNull()
+    expect(container.querySelector('i, [class*="ai ai-"]')).toBeNull()
   })
 
   it('renders the links example as six linked use cases with no axe violations', async () => {

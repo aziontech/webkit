@@ -16,7 +16,7 @@
   })
 
   interface Props {
-    /** PrimeIcons class for the icon. */
+    /** Azion icon class for the icon. */
     icon: string
     /** Accessible name for the icon-only control; write it as the aria-label attribute. Leave it empty only when aria-labelledby names the button. */
     ariaLabel?: string

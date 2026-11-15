@@ -11,7 +11,7 @@
   interface Props {
     /** Stable value that identifies this option in the selection. */
     value: unknown
-    /** PrimeIcons class for the leading decorative icon. */
+    /** Azion icon class for the leading decorative icon. */
     icon?: string
     /** Disables this single option; does not affect the parent select. */
     disabled?: boolean
@@ -105,7 +105,7 @@
     />
     <i
       v-if="selected"
-      class="pi pi-check shrink-0 text-(--text-default)"
+      class="ai ai-check shrink-0 text-(--text-default)"
       aria-hidden="true"
       :data-testid="`${testId}__check`"
     />

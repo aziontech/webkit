@@ -385,7 +385,7 @@
             :target="primary.target"
             kind="secondary"
             size="large"
-            :icon="primary.trailing ? 'pi pi-chevron-right' : ''"
+            :icon="primary.trailing ? 'ai ai-chevron-right' : ''"
             :icon-position="primary.trailing ? 'trailing' : 'leading'"
             :animated="Boolean(primary.trailing)"
           />
@@ -397,7 +397,7 @@
             :target="secondary.target"
             kind="outlined"
             size="large"
-            :icon="secondary.trailing ? 'pi pi-chevron-right' : ''"
+            :icon="secondary.trailing ? 'ai ai-chevron-right' : ''"
             :icon-position="secondary.trailing ? 'trailing' : 'leading'"
             :animated="Boolean(secondary.trailing)"
           />

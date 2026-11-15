@@ -148,7 +148,7 @@
                   :href="lane.action.href"
                   kind="secondary"
                   size="large"
-                  :icon="lane.action.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="lane.action.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(lane.action.trailing)"
                 />
@@ -159,7 +159,7 @@
                   :href="lane.secondaryAction.href"
                   kind="outlined"
                   size="large"
-                  :icon="lane.secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="lane.secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(lane.secondaryAction.trailing)"
                 />

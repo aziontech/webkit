@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       active: true
     },
     {

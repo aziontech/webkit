@@ -6,33 +6,33 @@
     {
       id: 'assets',
       label: 'assets',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       children: [
-        { id: 'assets/hero.webp', label: 'hero.webp', icon: 'pi pi-image', description: '248 KB' },
-        { id: 'assets/logo.svg', label: 'logo.svg', icon: 'pi pi-image', description: '12 KB' },
-        { id: 'assets/styles.css', label: 'styles.css', icon: 'pi pi-file', description: '18 KB' }
+        { id: 'assets/hero.webp', label: 'hero.webp', icon: 'ai ai-image', description: '248 KB' },
+        { id: 'assets/logo.svg', label: 'logo.svg', icon: 'ai ai-image', description: '12 KB' },
+        { id: 'assets/styles.css', label: 'styles.css', icon: 'ai ai-file', description: '18 KB' }
       ]
     },
     {
       id: 'reports',
       label: 'reports',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       children: [
         {
           id: 'reports/2026-10.csv',
           label: '2026-10.csv',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           description: '1.2 MB'
         },
         {
           id: 'reports/2026-11.csv',
           label: '2026-11.csv',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           description: '840 KB'
         }
       ]
     },
-    { id: 'index.html', label: 'index.html', icon: 'pi pi-file', description: '4 KB' }
+    { id: 'index.html', label: 'index.html', icon: 'ai ai-file', description: '4 KB' }
   ]
 
   const expanded = ref(['assets', 'reports'])

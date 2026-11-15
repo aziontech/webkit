@@ -310,7 +310,7 @@
         kind="outlined"
         :size="size"
         :disabled="disabled"
-        icon="pi pi-filter"
+        icon="ai ai-filter"
       />
       <Transition
         enter-from-class="scale-75 opacity-0"
@@ -364,7 +364,7 @@
               >
                 <IconButton
                   :data-testid="`${testId}__back`"
-                  icon="pi pi-angle-left"
+                  icon="ai ai-angle-left"
                   kind="outlined"
                   size="small"
                   :aria-label="customField ? t('filterMenu.backToPeriods') : t('filterMenu.back')"
@@ -405,7 +405,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -434,7 +434,7 @@
                         {{ summaryOf(field) }}
                       </bdi>
                       <i
-                        class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                        class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                         aria-hidden="true"
                       />
                     </button>
@@ -468,7 +468,7 @@
                       />
                       <bdi class="grow truncate">{{ option.label }}</bdi>
                       <i
-                        class="pi pi-check shrink-0 text-(--text-default) data-[picked=false]:invisible"
+                        class="ai ai-check shrink-0 text-(--text-default) data-[picked=false]:invisible"
                         :data-picked="isPicked(option.value)"
                         aria-hidden="true"
                       />
@@ -500,7 +500,7 @@
                   >
                     <span class="grow truncate">{{ t('filterMenu.customRange') }}</span>
                     <i
-                      class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                      class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                       aria-hidden="true"
                     />
                   </button>
@@ -517,7 +517,7 @@
                     @click="clear(activeField)"
                   >
                     <i
-                      class="pi pi-filter-slash text-(--text-muted)"
+                      class="ai ai-filter-slash text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <bdi class="truncate">{{

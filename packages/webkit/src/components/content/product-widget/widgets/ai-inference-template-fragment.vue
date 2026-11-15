@@ -176,7 +176,7 @@
                 label="Filter"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-filter"
+                icon="ai ai-filter"
               />
               <Badge
                 label="1"

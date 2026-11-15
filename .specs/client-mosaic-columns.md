@@ -3,10 +3,10 @@ name: client-mosaic-columns
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 46d5ab6d960704dbc2a8e7ff65bea9be03e641c31a9af93f2189bef6f7c66718
+checksum: dfc1fd83aa37f651f3e390f1800dd5f9bd90329b316a060093a81772b22b674d
 ---
 
 # ClientMosaicColumns — Component Spec
@@ -127,7 +127,7 @@ Three featured success stories side by side: each column is a client's mark on a
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
-- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `pi-arrow-up-right` mirrors under right-to-left.
+- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `ai-arrow-up-right` mirrors under right-to-left.
 
 ## Internationalization
 

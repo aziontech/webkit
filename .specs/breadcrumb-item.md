@@ -3,11 +3,11 @@ name: breadcrumb-item
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 6462ce8c7a4472eb7bdb57768d98777adec391fc17af986139609c9b97e4722e
+checksum: 77ea8cb0f6240530204e97b702932637fcabdd98f0d8353207fdafa3b07aabec
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 - Set `current` on the last segment only; it renders a `span` with `aria-current="page"`, drops out of the tab order and ignores `href`.
 - Always pass a real `href` on ancestors — an empty `href` (the default) renders `#`, and the segment renders an `a`.
-- Use `show-icon` together with `icon` (a PrimeIcons class; empty shows `pi pi-box`); `icon` alone renders nothing.
+- Use `show-icon` together with `icon` (an Azion icon class; empty shows `ai ai-box`); `icon` alone renders nothing.
 - `disabled` suppresses the `click` emit and removes the segment from the tab order; prefer omitting an unreachable ancestor over disabling it.
 
 ## Usage
@@ -54,7 +54,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
     label="Applications"
     href="/applications"
     show-icon
-    icon="pi pi-box"
+    icon="ai ai-box"
   />
 </template>
 ```
@@ -66,8 +66,8 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 | `label`    | `string`  | `''`    | false    | Visible segment label.                                                                      |
 | `href`     | `string`  | `''`    | false    | Destination when the segment is a link (ignored when `current` is true); empty renders `#`. |
 | `current`  | `boolean` | `false` | false    | Marks the current page (last segment); renders as span with `aria-current="page"`.          |
-| `showIcon` | `boolean` | `false` | false    | When true, renders a leading PrimeIcons icon before the label.                              |
-| `icon`     | `string`  | `''`    | false    | PrimeIcons class for the leading icon when `showIcon` is true; empty shows `pi pi-box`.     |
+| `showIcon` | `boolean` | `false` | false    | When true, renders a leading icon before the label.                              |
+| `icon`     | `string`  | `''`    | false    | Azion icon class for the leading icon when `showIcon` is true; empty shows `ai ai-box`.     |
 | `disabled` | `boolean` | `false` | false    | Disables interaction and applies disabled tokens.                                           |
 
 ## Events

@@ -28,7 +28,7 @@
         <CommandItem value="deploy">
           <template #prefix
             ><i
-              class="pi pi-cloud-upload"
+              class="ai ai-cloud-upload"
               aria-hidden="true"
           /></template>
           Deploy Project
@@ -40,7 +40,7 @@
         <CommandItem value="settings">
           <template #prefix
             ><i
-              class="pi pi-cog"
+              class="ai ai-cog"
               aria-hidden="true"
           /></template>
           Go to Settings
@@ -51,7 +51,7 @@
         <CommandItem value="profile">
           <template #prefix
             ><i
-              class="pi pi-user"
+              class="ai ai-user"
               aria-hidden="true"
           /></template>
           View Profile

@@ -3,11 +3,11 @@ name: footer
 category: layout
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 585bf63f92f019409180e0315accdcebd413f03a61aad9f86992ca390579c6fd
+checksum: 4442a24df03c919509acd190174eca02b9ac8d942a8d72b9229b5762a11b0513
 created: 2026-08-10
 last_updated: 2026-11-15
 ---
@@ -99,7 +99,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
       <IconButton
         kind="transparent"
         size="small"
-        icon="pi pi-github"
+        icon="ai ai-github"
         ariaLabel="Azion on GitHub"
         href="https://github.com/aziontech"
       />

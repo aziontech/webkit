@@ -223,7 +223,7 @@
         >
           <IconButton
             v-if="autoplaying"
-            :icon="paused ? 'pi pi-play' : 'pi pi-pause'"
+            :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
             :aria-label="pauseLabel"
             kind="outlined"
             size="small"
@@ -313,7 +313,7 @@
                       kind="secondary"
                       size="large"
                       :href="current.href"
-                      icon="pi pi-chevron-right"
+                      icon="ai ai-chevron-right"
                       icon-position="trailing"
                       animated
                       class="relative mt-(--spacing-sm) self-start"

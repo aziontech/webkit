@@ -7,7 +7,7 @@ import SuggestionGroup from './suggestion-group.vue'
 
 const items = [
   { id: 'ttl', label: 'What TTL should my images use?' },
-  { id: 'purge', label: 'How do I purge one URL?', icon: 'pi pi-bolt' }
+  { id: 'purge', label: 'How do I purge one URL?', icon: 'ai ai-bolt' }
 ]
 
 describe('SuggestionGroup', () => {

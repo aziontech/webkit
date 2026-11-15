@@ -26,7 +26,7 @@
     disabled?: boolean
     /** Shows loading state and disables activation. */
     loading?: boolean
-    /** PrimeIcons class for the icon drawn beside the label. */
+    /** Azion icon class for the icon drawn beside the label. */
     icon?: string
     /** Which side of the label the icon sits on. A leading glyph names the action; a trailing one points at where it goes. */
     iconPosition?: ButtonIconPosition

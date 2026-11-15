@@ -22,7 +22,7 @@
     </div>
     <div class="flex flex-col items-center gap-2">
       <Avatar
-        icon="pi pi-user"
+        icon="ai ai-user"
         size="large"
       />
       <span class="text-body-xs text-(--text-muted)">Icon</span>

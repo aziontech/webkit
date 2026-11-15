@@ -3,8 +3,8 @@ name: doc-on-this-page
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: f81228f14668fb30effbacbd1d6d652edb0a05965780ca5f4f26f1d3609a5c51
+spec_version: 3
+checksum: 6d1729151b92c2c2178c81c07b3908c394748084d5a32efe5662afccfe4e87c8
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -56,7 +56,7 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
       {
         label: 'Repository',
         links: [
-          { label: 'View source', href: 'https://github.com/aziontech', icon: 'pi pi-github' }
+          { label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }
         ]
       }
     ]"

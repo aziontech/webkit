@@ -28,7 +28,7 @@
             :value="answer"
           />
           <IconButton
-            icon="pi pi-refresh"
+            icon="ai ai-refresh"
             aria-label="Regenerate response"
             kind="transparent"
             size="small"

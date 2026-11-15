@@ -200,11 +200,11 @@ function treeCase(expandAll = false): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
-    icon: 'pi pi-folder',
+    icon: 'ai ai-folder',
     children: Array.from({ length: 99 }, (_, c) => ({
       id: `f${f}/c${c}`,
       label: `file-${c}.txt`,
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       description: `${c} KB`
     }))
   }))
@@ -229,11 +229,11 @@ function treeMultiSelectCase(): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
     label: `folder-${f}`,
-    icon: 'pi pi-folder',
+    icon: 'ai ai-folder',
     children: Array.from({ length: 99 }, (_, c) => ({
       id: `f${f}/c${c}`,
       label: `file-${c}.txt`,
-      icon: 'pi pi-file'
+      icon: 'ai ai-file'
     }))
   }))
   const ids = items.flatMap((folder) => [folder.id, ...folder.children.map((child) => child.id)])

@@ -125,7 +125,7 @@
               label: linkLabel,
               href,
               size: 'small',
-              icon: 'pi pi-chevron-right',
+              icon: 'ai ai-chevron-right',
               class: 'self-start'
             })
           : null

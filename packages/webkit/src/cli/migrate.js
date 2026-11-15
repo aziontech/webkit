@@ -28,8 +28,34 @@ export function loadMigration(version) {
     types: base.types || {},
     legacy: base.legacy || null,
     exports: exportList(),
-    props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`))
+    props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`)),
+    icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`))
   }
+}
+
+const ICON_PAIR = /(?<![\w-])pi(\s+)(pi-[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w-])/g
+const ICON_TOKEN = /(?<![\w-])pi-[a-z0-9]+(?:-[a-z0-9]+)*(?![\w-])/g
+
+export function migrateIcons(source, icons = {}) {
+  const changes = []
+  const warnings = []
+  if (!source.includes('pi-')) return { source, changes, warnings }
+  const out = source.replace(ICON_PAIR, (all, space, name) => {
+    const rule = icons[name]
+    if (typeof rule !== 'string') return all
+    changes.push(`pi ${name} → ai ${rule}`)
+    return `ai${space}${rule}`
+  })
+  for (const [name] of out.matchAll(ICON_TOKEN)) {
+    const rule = icons[name]
+    if (!rule) continue
+    warnings.push(
+      typeof rule === 'string'
+        ? `PrimeIcons class ${name} outside a "pi ${name}" pair: rewrite it to ai ${rule} by hand`
+        : `PrimeIcons class ${name} has no Azion icon: ${rule.removed}`
+    )
+  }
+  return { source: out, changes: [...new Set(changes)], warnings: [...new Set(warnings)] }
 }
 
 const kebab = (s) =>
@@ -225,10 +251,12 @@ export function referencedSubpaths(source) {
   return new Set([...source.matchAll(SUBPATH_LITERAL)].map((m) => m[2]))
 }
 
-export function migrateSource(source, migration, { fromMajor = null } = {}) {
+export function migrateSource(input, migration, { fromMajor = null } = {}) {
   const { props, types } = migration
-  const changes = []
-  const warnings = []
+  const iconPass = migrateIcons(input, migration.icons)
+  const source = iconPass.source
+  const changes = [...iconPass.changes]
+  const warnings = [...iconPass.warnings]
   const subpaths = referencedSubpaths(source)
   if (!subpaths.size) return { source, changes, warnings }
 

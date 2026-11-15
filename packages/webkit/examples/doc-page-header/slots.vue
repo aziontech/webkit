@@ -13,13 +13,13 @@
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'pi pi-copy',
+        icon: 'ai ai-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'agent-setup',
         label: 'Agent setup',
-        icon: 'pi pi-microchip-ai',
+        icon: 'ai ai-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       }
@@ -34,7 +34,7 @@
           class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16"
         >
           <i
-            class="pi pi-microchip-ai text-heading-lg text-(--text-default)"
+            class="ai ai-microchip-ai text-heading-lg text-(--text-default)"
             aria-hidden="true"
           />
         </span>

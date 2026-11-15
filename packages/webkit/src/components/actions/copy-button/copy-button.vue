@@ -55,7 +55,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'actions-copy-button'
   )
 
-  const icon = computed(() => (copied.value ? 'pi pi-check' : 'pi pi-copy'))
+  const icon = computed(() => (copied.value ? 'ai ai-check' : 'ai ai-copy'))
 
   const label = computed(() =>
     copied.value

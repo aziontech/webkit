@@ -7,7 +7,7 @@
   const regions = ref<string[]>([])
   const options: SelectOptionItem<string>[] = [
     { value: 'production', label: 'Production' },
-    { value: 'preview', label: 'Preview', icon: 'pi pi-eye', disabled: true }
+    { value: 'preview', label: 'Preview', icon: 'ai ai-eye', disabled: true }
   ]
   const labelOf = (value: string): string =>
     options.find((option) => option.value === value)?.label ?? value

@@ -249,7 +249,7 @@
               :target="items[index].action.target"
               :kind="items[index].action.kind ?? 'secondary'"
               size="small"
-              :icon="items[index].action.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="items[index].action.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(items[index].action.trailing)"
             />

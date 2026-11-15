@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Request',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       active: true
     },
     {
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'get',
       title: 'Value from the edge',
-      icon: 'pi pi-bolt',
+      icon: 'ai ai-bolt',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'put',
       title: 'Replicated everywhere',
-      icon: 'pi pi-globe'
+      icon: 'ai ai-globe'
     }
   ],
   layout: {

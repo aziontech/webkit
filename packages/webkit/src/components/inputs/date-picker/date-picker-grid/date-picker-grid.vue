@@ -366,7 +366,7 @@
           @click="goToPreviousMonth"
         >
           <i
-            class="pi pi-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
+            class="ai ai-chevron-left text-[length:inherit] leading-none rtl:-scale-x-100"
             aria-hidden="true"
           />
         </button>
@@ -379,7 +379,7 @@
           @click="goToNextMonth"
         >
           <i
-            class="pi pi-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
+            class="ai ai-chevron-right text-[length:inherit] leading-none rtl:-scale-x-100"
             aria-hidden="true"
           />
         </button>

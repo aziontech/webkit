@@ -180,7 +180,7 @@
       <template v-else>{{ ctx.placeholder.value }}</template>
     </span>
     <i
-      class="pi pi-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
+      class="ai ai-chevron-down shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
       :data-state="ctx.open.value ? 'open' : 'closed'"
       aria-hidden="true"
       :data-testid="`${testId}__chevron`"
@@ -286,7 +286,7 @@
       <template v-if="!ctx.filled.value">{{ ctx.placeholder.value }}</template>
     </button>
     <i
-      class="pi pi-chevron-down ms-auto shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
+      class="ai ai-chevron-down ms-auto shrink-0 text-(--text-muted) group-data-[disabled]:text-(--text-disabled) transition-transform duration-150 ease-out motion-reduce:transition-none data-[state=open]:rotate-180"
       :data-state="ctx.open.value ? 'open' : 'closed'"
       aria-hidden="true"
       :data-testid="`${testId}__chevron`"

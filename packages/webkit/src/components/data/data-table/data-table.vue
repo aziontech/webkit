@@ -1945,7 +1945,7 @@
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <IconButton
-                      icon="pi pi-bars"
+                      icon="ai ai-bars"
                       kind="outlined"
                       size="small"
                       :ariaLabel="handleLabelOf(row.id, windowStart + index)"
@@ -2014,8 +2014,8 @@
                           class="text-body-xs"
                           :class="
                             row.getIsExpanded()
-                              ? 'pi pi-chevron-down'
-                              : 'pi pi-chevron-right rtl:-scale-x-100'
+                              ? 'ai ai-chevron-down'
+                              : 'ai ai-chevron-right rtl:-scale-x-100'
                           "
                         />
                       </span>
@@ -2101,7 +2101,7 @@
           >
             <EmptyState
               size="small"
-              icon="pi pi-exclamation-triangle"
+              icon="ai ai-exclamation-triangle"
               :title="t('table.errorTitle')"
               :description="error"
             />
@@ -2115,7 +2115,7 @@
           <slot name="empty">
             <EmptyState
               size="small"
-              icon="pi pi-table"
+              icon="ai ai-table"
               :title="t('table.emptyTitle')"
               :description="t('table.emptyDescription')"
             />

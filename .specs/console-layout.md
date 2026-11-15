@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: dcac9ca3f0a65cffe824cb1c805c6fa865501967f7e417d08a5dccd0b3b784b8
+checksum: d5ad44082f53df0e2757792127777eb26f4b2b100c895bf212ea85d67c247d28
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -103,7 +103,7 @@ The app's root renders only `<ConsoleLayout>`, so it imports the standalone root
   const navigation: ConsoleLayoutNavGroup[] = [
     {
       items: [
-        { id: 'home', label: 'Home', icon: 'pi pi-home', href: '/' },
+        { id: 'home', label: 'Home', icon: 'ai ai-home', href: '/' },
         { id: 'workloads', label: 'Workloads', icon: 'ai ai-workloads', href: '/workloads' }
       ]
     }

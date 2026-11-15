@@ -171,7 +171,7 @@
               class="invisible inline-flex items-center gap-(--spacing-xxs) [grid-area:1/1] group-data-[state=copied]/copy-prompt:visible"
             >
               <i
-                class="pi pi-check text-body-sm"
+                class="ai ai-check text-body-sm"
                 aria-hidden="true"
               />{{ doneLabel }}</span
             >
@@ -212,7 +212,7 @@
       placement="top"
     >
       <IconButton
-        icon="pi pi-times"
+        icon="ai ai-times"
         kind="transparent"
         size="small"
         :aria-label="t('copyPromptButton.dismiss')"

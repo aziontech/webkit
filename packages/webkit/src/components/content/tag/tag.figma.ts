@@ -46,7 +46,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="pi pi-box"`
+  icon="ai ai-box"`
       : ''
   }
 />`,

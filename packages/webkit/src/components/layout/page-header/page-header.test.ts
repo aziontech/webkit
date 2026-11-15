@@ -144,7 +144,7 @@ describe('PageHeader regions', () => {
         props: { title: 'acme-store' },
         slots: {
           breadcrumb: '<nav aria-label="Breadcrumb"><a href="/resources">Resources</a></nav>',
-          icon: '<i class="pi pi-box"></i>',
+          icon: '<i class="ai ai-box"></i>',
           meta: '<span>Active</span>',
           actions: '<button type="button">Deploy</button>',
           tabs: '<div role="tablist"><button role="tab" aria-selected="true">Overview</button></div>'
@@ -167,7 +167,7 @@ describe('PageHeader regions', () => {
     const { getByTestId } = within(
       render(PageHeader, {
         props: { title: 'acme-store' },
-        slots: { icon: '<i class="pi pi-box"></i>' }
+        slots: { icon: '<i class="ai ai-box"></i>' }
       }).container
     )
 

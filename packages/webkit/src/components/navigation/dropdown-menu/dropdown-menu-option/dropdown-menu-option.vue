@@ -156,7 +156,7 @@
       >
         <i
           v-if="kind === 'checkbox' && selected"
-          class="pi pi-check text-[length:inherit] leading-none"
+          class="ai ai-check text-[length:inherit] leading-none"
         />
         <span
           v-else-if="kind === 'radio' && selected"
@@ -195,7 +195,7 @@
       <i
         v-if="selected && !checkable"
         :data-testid="`${testId}__check`"
-        class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
+        class="ai ai-check shrink-0 text-body-xs text-(--text-default)"
         aria-hidden="true"
       />
     </component>

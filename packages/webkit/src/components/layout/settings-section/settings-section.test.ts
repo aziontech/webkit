@@ -80,7 +80,7 @@ describe('SettingsSection', () => {
 
   it('toggles a collapsible band and emits update:open', async () => {
     const { container, emitted } = render(SettingsSection, {
-      props: { title: 'Advanced', collapsible: true, icon: 'pi pi-cog' }
+      props: { title: 'Advanced', collapsible: true, icon: 'ai ai-cog' }
     })
     const scope = within(container)
     const trigger = scope.getByTestId('layout-settings-section__trigger')

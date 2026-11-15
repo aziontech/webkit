@@ -15,7 +15,7 @@
       <SidebarMenuGroup label="Account">
         <SidebarMenuItem
           label="Overview"
-          icon="pi pi-home"
+          icon="ai ai-home"
           href="/overview"
           selected
         />

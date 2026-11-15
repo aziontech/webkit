@@ -143,7 +143,7 @@
               label="Filter"
               kind="outlined"
               size="medium"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
             />
             <Badge
               :label="String(appliedCount)"
@@ -162,7 +162,7 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>
@@ -189,7 +189,7 @@
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -211,7 +211,7 @@
                   {{ summary(field.id) }}
                 </span>
                 <i
-                  class="pi pi-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
               </span>
@@ -227,7 +227,7 @@
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
             >
               <IconButton
-                icon="pi pi-angle-left"
+                icon="ai ai-angle-left"
                 kind="outlined"
                 size="small"
                 ariaLabel="Back to all filters"
@@ -244,7 +244,7 @@
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -261,7 +261,7 @@
                 <span class="grow truncate">{{ source.label }}</span>
                 <i
                   :data-picked="picked(source.id) || null"
-                  class="pi pi-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-picked:opacity-100 motion-reduce:transition-none"
+                  class="ai ai-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-picked:opacity-100 motion-reduce:transition-none"
                   aria-hidden="true"
                 />
               </span>
@@ -274,7 +274,7 @@
                 class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
               >
                 <i
-                  class="pi pi-filter-slash text-(--text-muted)"
+                  class="ai ai-filter-slash text-(--text-muted)"
                   aria-hidden="true"
                 />
                 Clear Source

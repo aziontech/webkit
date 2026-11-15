@@ -68,7 +68,7 @@
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
                 label="Settings"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 kind="drill"
               />
               <SidebarMenuSubContent>

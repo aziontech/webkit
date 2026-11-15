@@ -28,7 +28,7 @@
         label="Docs"
         kind="outlined"
         size="large"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
       />
@@ -41,15 +41,15 @@
           { icon: 'ai ai-edge-functions', label: 'No regions to pick, no servers to manage' },
           { icon: 'ai ai-origin-shield', label: 'Stop attacks before they reach your origin' },
           { icon: 'ai ai-edge-firewall', label: 'DDoS mitigation with no surprise charges' },
-          { icon: 'pi pi-dollar', label: 'Usage-based pricing with no hidden fees' },
-          { icon: 'pi pi-gift', label: 'Start with $300 in free credits' },
+          { icon: 'ai ai-dollar', label: 'Usage-based pricing with no hidden fees' },
+          { icon: 'ai ai-gift', label: 'Start with $300 in free credits' },
           { icon: 'ai ai-azion-cli', label: 'Deploy from the CLI, the Console or an agent' },
           {
             icon: 'ai ai-real-time-metrics',
             label: 'Real-time events and metrics for every request'
           },
           { icon: 'ai ai-real-time-purge', label: 'Purge the cache everywhere in real time' },
-          { icon: 'pi pi-code', label: 'Works with Vue, React, Next.js, Astro and more' }
+          { icon: 'ai ai-code', label: 'Works with Vue, React, Next.js, Astro and more' }
         ]"
       />
     </template>

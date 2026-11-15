@@ -11,7 +11,7 @@
     <template #actions>
       <Button
         label="Documentation"
-        icon="pi pi-book"
+        icon="ai ai-book"
         kind="outlined"
         size="medium"
         href="https://example.com/docs/resources"
@@ -19,7 +19,7 @@
       />
       <Button
         label="Create Resource"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         kind="outlined"
         size="medium"
       />

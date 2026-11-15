@@ -254,7 +254,7 @@ describe('PasswordInput', () => {
 
   it('renders the prefix slot and marks its wrapper aria-hidden', () => {
     const { getByTestId } = render(PasswordInput, {
-      slots: { prefix: '<i data-testid="left-icon" class="pi pi-lock" />' }
+      slots: { prefix: '<i data-testid="left-icon" class="ai ai-lock" />' }
     })
 
     const icon = getByTestId('left-icon')
@@ -266,7 +266,7 @@ describe('PasswordInput', () => {
   it('renders the suffix slot only when toggleable is false', () => {
     const withToggle = render(PasswordInput, {
       props: { toggleable: true },
-      slots: { suffix: '<i data-testid="right-icon" class="pi pi-key" />' }
+      slots: { suffix: '<i data-testid="right-icon" class="ai ai-key" />' }
     })
     // hasIconRight is `!toggleable && hasSlot` → not rendered while toggleable.
     expect(withToggle.queryByTestId('right-icon')).toBeNull()
@@ -274,7 +274,7 @@ describe('PasswordInput', () => {
 
     const noToggle = render(PasswordInput, {
       props: { toggleable: false },
-      slots: { suffix: '<i data-testid="right-icon" class="pi pi-key" />' }
+      slots: { suffix: '<i data-testid="right-icon" class="ai ai-key" />' }
     })
     expect(noToggle.queryByTestId('right-icon')).toBeTruthy()
     expect(
@@ -309,7 +309,7 @@ describe('PasswordInput', () => {
     const { container } = render(PasswordInput, {
       props: { toggleable: false, placeholder: 'Password' },
       attrs: { 'aria-label': 'Password' },
-      slots: { suffix: '<i class="pi pi-key" aria-hidden="true" />' }
+      slots: { suffix: '<i class="ai ai-key" aria-hidden="true" />' }
     })
 
     await expectNoA11yViolations(container)

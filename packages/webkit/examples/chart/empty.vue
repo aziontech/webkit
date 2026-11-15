@@ -74,7 +74,7 @@
           label="Add firewall"
           kind="secondary"
           size="small"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
         />
       </template>
     </Chart>

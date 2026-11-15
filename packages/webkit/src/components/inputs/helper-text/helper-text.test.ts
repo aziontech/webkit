@@ -43,10 +43,10 @@ describe('HelperText', () => {
     }
   })
 
-  it('renders the pi pi-lock icon only for the disabled kind', () => {
+  it('renders the ai ai-lock icon only for the disabled kind', () => {
     const disabled = render(HelperText, { props: { kind: 'disabled', label: 'Locked' } })
     const icon = disabled.getByTestId('input-helper-text__icon')
-    expect(icon).toHaveClass('pi', 'pi-lock')
+    expect(icon).toHaveClass('ai', 'ai-lock')
     // The icon is decorative and must be hidden from assistive tech.
     expect(icon).toHaveAttribute('aria-hidden', 'true')
     disabled.unmount()
@@ -66,7 +66,7 @@ describe('HelperText', () => {
 
     expect(getByTestId('field-hint').tagName).toBe('P')
     expect(getByTestId('field-hint__text')).toHaveTextContent('Locked')
-    expect(getByTestId('field-hint__icon')).toHaveClass('pi-lock')
+    expect(getByTestId('field-hint__icon')).toHaveClass('ai-lock')
   })
 
   it('has no accessibility violations in the default helper variant', async () => {

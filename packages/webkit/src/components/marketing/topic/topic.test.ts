@@ -96,7 +96,7 @@ describe('Topic', () => {
 
   it('closes a linked headline on a decorative arrow', () => {
     const { container } = render(Topic, { props: { title: TITLE, href: '/products/cache' } })
-    const arrow = container.querySelector('.pi-arrow-up-right')
+    const arrow = container.querySelector('.ai-arrow-up-right')
 
     expect(arrow).not.toBeNull()
     expect(arrow).toHaveAttribute('aria-hidden', 'true')
@@ -107,7 +107,7 @@ describe('Topic', () => {
 
     expect(getByTestId(TESTID).tagName).toBe('DIV')
     expect(getByTestId(TESTID)).not.toHaveAttribute('data-linked')
-    expect(container.querySelector('.pi-arrow-up-right')).toBeNull()
+    expect(container.querySelector('.ai-arrow-up-right')).toBeNull()
     expect(queryByRole('link')).toBeNull()
   })
 

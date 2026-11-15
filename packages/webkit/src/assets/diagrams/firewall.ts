@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Request',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       active: true
     },
     {
@@ -41,7 +41,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Rate limit',
       title: 'Requests per second',
-      icon: 'pi pi-clock',
+      icon: 'ai ai-clock',
       active: true
     },
     {

@@ -6,17 +6,17 @@
   <div class="flex flex-wrap items-center gap-4">
     <IconButton
       size="small"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       size="medium"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       size="large"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
   </div>

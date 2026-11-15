@@ -26,7 +26,7 @@
     </div>
     <div class="relative bg-(--bg-canvas) p-(--spacing-xl)">
       <Topic
-        icon="pi pi-code"
+        icon="ai ai-code"
         title="Compatible with your framework"
         description="Deploy any modern framework or build tool, from Next.js to Astro."
         href="/products/build"

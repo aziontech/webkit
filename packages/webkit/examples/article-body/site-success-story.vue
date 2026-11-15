@@ -42,12 +42,12 @@
       {
         label: 'Join us on Discord',
         href: 'https://discord.com/invite/Yp9N7RMVZy',
-        icon: 'pi pi-discord'
+        icon: 'ai ai-discord'
       },
       {
         label: 'Read our blog posts',
         href: '/blog',
-        icon: 'pi pi-comment'
+        icon: 'ai ai-comment'
       },
       {
         label: 'Follow us on X',
@@ -63,37 +63,37 @@
       {
         value: 'link',
         label: 'Get page link',
-        icon: 'pi pi-link'
+        icon: 'ai ai-link'
       },
       {
         value: 'markdown',
         label: 'View page as markdown',
-        icon: 'pi pi-eye'
+        icon: 'ai ai-eye'
       },
       {
         value: 'google',
         label: 'Open in Google AI',
-        icon: 'pi pi-external-link'
+        icon: 'ai ai-external-link'
       },
       {
         value: 'perplexity',
         label: 'Open in Perplexity',
-        icon: 'pi pi-external-link'
+        icon: 'ai ai-external-link'
       },
       {
         value: 'claude',
         label: 'Open in Claude',
-        icon: 'pi pi-external-link'
+        icon: 'ai ai-external-link'
       },
       {
         value: 'chatgpt',
         label: 'Open in ChatGPT',
-        icon: 'pi pi-external-link'
+        icon: 'ai ai-external-link'
       },
       {
         value: 'grok',
         label: 'Open in Grok',
-        icon: 'pi pi-external-link'
+        icon: 'ai ai-external-link'
       }
     ]
   }

@@ -10,36 +10,41 @@ import {
 
 describe('directional icons', () => {
   it('mirrors arrows and chevrons, never external links, media or logos', () => {
-    expect(isDirectionalIcon('pi pi-chevron-right')).toBe(true)
-    expect(isDirectionalIcon('pi pi-arrow-left')).toBe(true)
-    expect(isDirectionalIcon('pi pi-sign-out')).toBe(true)
+    expect(isDirectionalIcon('ai ai-chevron-right')).toBe(true)
+    expect(isDirectionalIcon('ai ai-arrow-left')).toBe(true)
+    expect(isDirectionalIcon('ai ai-sign-out')).toBe(true)
     for (const icon of [
-      'pi pi-external-link',
-      'pi pi-arrow-up-right',
-      'pi pi-play',
-      'pi pi-github',
-      'pi pi-chevron-down',
+      'ai ai-external-link',
+      'ai ai-arrow-up-right',
+      'ai ai-play',
+      'ai ai-github',
+      'ai ai-chevron-down',
       '',
       undefined
     ]) {
       expect(isDirectionalIcon(icon)).toBe(false)
     }
-    expect(directionalIconClass('pi pi-angle-left')).toBe(MIRROR_CLASS)
-    expect(directionalIconClass('pi pi-box')).toBe('')
+    expect(directionalIconClass('ai ai-angle-left')).toBe(MIRROR_CLASS)
+    expect(directionalIconClass('ai ai-box')).toBe('')
   })
 
   it('keeps the stylesheet rule in sync with the list', () => {
-    const selectors = [...styles.matchAll(/\.((?:pi|ai)-[a-z0-9-]+)/g)].map((m) => m[1])
+    const selectors = [...styles.matchAll(/\.(ai-[a-z0-9-]+)/g)].map((m) => m[1])
     expect(new Set(selectors)).toEqual(new Set(DIRECTIONAL_ICONS))
   })
 
   it('matches exactly the listed icons', () => {
     for (const icon of DIRECTIONAL_ICONS) {
-      expect(isDirectionalIcon(`pi ${icon}`)).toBe(true)
+      expect(isDirectionalIcon(`ai ${icon}`)).toBe(true)
       expect(isDirectionalIcon(`${icon}-x`)).toBe(false)
       expect(isDirectionalIcon(`x${icon}`)).toBe(false)
     }
-    for (const icon of ['pi-arrow-up-left', 'pi-caret-circle-left', 'pi-chevron-double-left']) {
+    for (const icon of [
+      'ai-arrow-up-left',
+      'ai-arrow-circle-up',
+      'pi-chevron-left',
+      'ai-chevron-double-left'
+    ]) {
       expect(isDirectionalIcon(icon)).toBe(false)
     }
   })

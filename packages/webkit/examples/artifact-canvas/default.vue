@@ -61,7 +61,7 @@
           <ArtifactPreview
             title="top-orders.sql"
             meta="SQL"
-            icon="pi pi-code"
+            icon="ai ai-code"
             openable
             @open="show"
           />

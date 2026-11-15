@@ -29,7 +29,7 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 <template>
   <Tooltip text="Delete" placement="top">
-    <IconButton icon="pi pi-trash" aria-label="Delete" />
+    <IconButton icon="ai ai-trash" aria-label="Delete" />
   </Tooltip>
 </template>
 ```

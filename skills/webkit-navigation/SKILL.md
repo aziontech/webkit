@@ -117,7 +117,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
         placement="bottom"
       >
         <IconButton
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
           kind="primary"
           size="medium"
           aria-label="Create"
@@ -128,7 +128,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
         label="Create"
         kind="primary"
         size="medium"
-        icon="pi pi-plus-circle"
+        icon="ai ai-plus-circle"
       />
     </template>
 
@@ -176,7 +176,7 @@ export const navigation: ConsoleLayoutNavGroup[] = [
       {
         id: 'settings',
         label: 'Settings',
-        icon: 'pi pi-cog',
+        icon: 'ai ai-cog',
         kind: 'drill',
         groups: [
           {
@@ -334,7 +334,7 @@ When several flows share the bar, lift it once into your own shell, copied from 
       <GlobalHeader.Start>
         <IconButton
           v-if="!terminal"
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           :aria-label="backLabel"
           kind="outlined"
           size="small"
@@ -481,7 +481,7 @@ narrow the list and the table they narrow.
             label="Documentation"
             kind="outlined"
             size="medium"
-            icon="pi pi-book"
+            icon="ai ai-book"
             href="https://www.azion.com/en/documentation/"
             target="_blank"
           />
@@ -489,7 +489,7 @@ narrow the list and the table they narrow.
             label="Create Application"
             kind="primary"
             size="large"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
           />
         </template>
       </PageHeader>

@@ -45,7 +45,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'parse',
     parentId: 'root',
     name: 'parse-request',
-    icon: 'pi pi-code',
+    icon: 'ai ai-code',
     start: 4,
     duration: 12
   },
@@ -53,7 +53,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'origin',
     parentId: 'root',
     name: 'fetch-origin',
-    icon: 'pi pi-send',
+    icon: 'ai ai-send',
     start: 16,
     duration: 186
   },
@@ -61,7 +61,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'dns',
     parentId: 'origin',
     name: 'dns-lookup',
-    icon: 'pi pi-send',
+    icon: 'ai ai-send',
     start: 16,
     duration: 14
   },
@@ -69,7 +69,7 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'tls',
     parentId: 'origin',
     name: 'tls-handshake',
-    icon: 'pi pi-lock',
+    icon: 'ai ai-lock',
     start: 30,
     duration: 31
   },
@@ -77,16 +77,16 @@ export const CONSOLE_TRACE_SPANS: TraceSpan[] = [
     id: 'response',
     parentId: 'origin',
     name: 'origin-response',
-    icon: 'pi pi-send',
+    icon: 'ai ai-send',
     start: 61,
     duration: 141
   },
-  { id: 'decode', parentId: 'root', name: 'decode', icon: 'pi pi-code', start: 202, duration: 54 },
+  { id: 'decode', parentId: 'root', name: 'decode', icon: 'ai ai-code', start: 202, duration: 54 },
   {
     id: 'transform',
     parentId: 'root',
     name: 'transform',
-    icon: 'pi pi-code',
+    icon: 'ai ai-code',
     start: 256,
     duration: 92
   },

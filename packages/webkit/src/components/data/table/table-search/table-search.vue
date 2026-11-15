@@ -58,7 +58,7 @@
   >
     <template #prefix>
       <i
-        class="pi pi-search text-button-md"
+        class="ai ai-search text-button-md"
         aria-hidden="true"
       />
     </template>

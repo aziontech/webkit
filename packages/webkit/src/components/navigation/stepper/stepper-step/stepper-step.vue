@@ -110,11 +110,11 @@
           />
           <span
             v-else-if="dataState === 'complete'"
-            class="pi pi-check text-label-sm"
+            class="ai ai-check text-label-sm"
           />
           <span
             v-else-if="dataState === 'error'"
-            class="pi pi-exclamation-triangle text-label-sm"
+            class="ai ai-exclamation-triangle text-label-sm"
           />
           <span v-else-if="dataState !== 'current'">{{ index }}</span>
         </span>

@@ -7,6 +7,6 @@
     label="Page Name"
     href="#"
     show-icon
-    icon="pi pi-box"
+    icon="ai ai-box"
   />
 </template>

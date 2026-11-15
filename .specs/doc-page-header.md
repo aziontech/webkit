@@ -3,8 +3,8 @@ name: doc-page-header
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 96f12a45102844f286818ab6b5b1b69f1e88f561f5540496d3445f8dfd03b350
+spec_version: 4
+checksum: 2bdd7965cc4a9f3c765b27667062a25294c749306101c61bd972ff4fbeacc2ee
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -57,13 +57,13 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
       {
         value: 'copy',
         label: 'Copy as Markdown',
-        icon: 'pi pi-copy',
+        icon: 'ai ai-copy',
         tip: 'Copy this page as Markdown, ready to paste into an assistant.'
       },
       {
         value: 'agent',
         label: 'Agent setup',
-        icon: 'pi pi-microchip-ai',
+        icon: 'ai ai-microchip-ai',
         href: '/docs/agent-setup',
         tip: 'Set up your coding agent to build on Azion.'
       }

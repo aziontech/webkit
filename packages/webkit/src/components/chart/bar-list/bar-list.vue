@@ -182,7 +182,7 @@
           <EmptyState
             :title="t('barList.errorTitle')"
             :description="error"
-            icon="pi pi-exclamation-triangle"
+            icon="ai ai-exclamation-triangle"
             size="small"
             bordered
             :data-testid="`${testId}__error`"
@@ -198,7 +198,7 @@
         <EmptyState
           :title="emptyTitle || t('barList.emptyTitle')"
           :description="emptyDescription"
-          icon="pi pi-chart-bar"
+          icon="ai ai-chart-bar"
           size="small"
           bordered
           :data-testid="`${testId}__empty`"

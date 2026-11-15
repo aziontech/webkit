@@ -24,7 +24,7 @@ export default {
   label="${label}"${
     showIcon
       ? figma.code`
-  icon="pi pi-plus"`
+  icon="ai ai-plus"`
       : ''
   }${
     kind === 'primary'

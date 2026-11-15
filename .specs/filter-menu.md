@@ -3,9 +3,9 @@ name: filter-menu
 category: data
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 6e03552b6b51f9f79a31533e35a5f111ea954e99f53cc08847a5acaf7aff2db4
+checksum: b6ec40450336637e0aabd2de2fcf995c0346639b507924414917602558d3212d
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -281,7 +281,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 ## Right-to-left
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `-end-2` for the badge, `text-start`).
-- Icons: the Back chevron (`pi pi-angle-left`) and the row chevrons (`pi pi-angle-right`) mirror under rtl (`rtl:-scale-x-100`; IconButton mirrors its own directional icons); the funnel, search, check and filter-slash glyphs do not.
+- Icons: the Back chevron (`ai ai-angle-left`) and the row chevrons (`ai ai-angle-right`) mirror under rtl (`rtl:-scale-x-100`; IconButton mirrors its own directional icons); the funnel, search, check and filter-slash glyphs do not.
 - Keyboard: `ArrowUp` / `ArrowDown` are vertical and unchanged. The level slide enters from the inline end going forward and from the inline start going back, so it mirrors with the direction from `WebkitProvider`.
 - User data: field labels, value labels and summaries render in `<bdi>` so an author name or a domain keeps its own direction.
 

@@ -167,7 +167,7 @@ describe('ComparePlans', () => {
 
     const rows = getAllByRole('row').filter((row) => within(row).queryByRole('rowheader'))
     const included = within(rows[1]).getAllByRole('cell')[0]!
-    expect(included.querySelector('.pi-check-circle')).not.toBeNull()
+    expect(included.querySelector('.ai-check-circle')).not.toBeNull()
     expect(within(included).getByTestId('overlay-tooltip')).toBeInTheDocument()
     const excluded = within(rows[3]).getAllByRole('cell')[0]!
     expect(excluded.querySelector('.ai-circle-minus')).not.toBeNull()

@@ -660,7 +660,7 @@
         <EmptyState
           :title="emptyTitle || t('chart.emptyTitle')"
           :description="emptyDescription"
-          :icon="vertical ? 'pi pi-chart-line' : 'pi pi-chart-bar'"
+          :icon="vertical ? 'ai ai-chart-line' : 'ai ai-chart-bar'"
           size="small"
           bordered
           :data-testid="`${testId}__empty`"

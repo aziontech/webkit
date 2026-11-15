@@ -225,7 +225,7 @@
         <EmptyState
           :title="emptyTitle || t('gaugeChart.emptyTitle')"
           :description="emptyDescription"
-          icon="pi pi-gauge"
+          icon="ai ai-gauge"
           size="small"
           bordered
           :data-testid="`${testId}__empty`"

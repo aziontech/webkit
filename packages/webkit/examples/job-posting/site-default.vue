@@ -10,19 +10,19 @@
     facets: [
       {
         label: 'Engineering',
-        icon: 'pi pi-sitemap'
+        icon: 'ai ai-sitemap'
       },
       {
         label: 'San Francisco, California',
-        icon: 'pi pi-map-marker'
+        icon: 'ai ai-map-marker'
       },
       {
         label: 'Hybrid',
-        icon: 'pi pi-building'
+        icon: 'ai ai-building'
       },
       {
         label: 'Full-time',
-        icon: 'pi pi-clock'
+        icon: 'ai ai-clock'
       }
     ],
     sections: [

@@ -3,10 +3,10 @@ name: contact-hub
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 5fda21edcfc097aa05c9ad6e0ff7e017cb68ff7134073c705ded8bf722f63630
+last_updated: 2026-11-15
+checksum: 39d759cdfc87e2a9e0e5a71ab76ce781e4ee73994a15801eee7fe7c9166c0227
 ---
 
 # ContactHub — Component Spec
@@ -50,7 +50,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
     anchor="contact"
     :lanes="[
       {
-        icon: 'pi pi-briefcase',
+        icon: 'ai ai-briefcase',
         title: 'Sales',
         description: 'Discuss your requirements or get custom pricing.',
         action: { label: 'Talk to sales', href: '/contact/sales' },
@@ -59,7 +59,7 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
     ]"
     :channels="[
       {
-        icon: 'pi pi-book',
+        icon: 'ai ai-book',
         title: 'Read the docs',
         description: 'Guides and API reference for every Azion product.',
         href: 'https://www.azion.com/en/documentation/',

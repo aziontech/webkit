@@ -18,7 +18,7 @@
     id: string
     /** Accessible name, tooltip and overflow label. */
     label: string
-    /** PrimeIcons class. */
+    /** Azion icon class. */
     icon: string
     disabled?: boolean
     /** Shows a spinner and blocks activation while the action runs. */
@@ -285,7 +285,7 @@
       <Tooltip :text="overflowName">
         <DropdownMenuTrigger>
           <IconButton
-            icon="pi pi-ellipsis-h"
+            icon="ai ai-ellipsis-h"
             :ariaLabel="overflowName"
             :kind="kind"
             :size="size"
@@ -331,7 +331,7 @@
               #trailing
             >
               <i
-                class="pi pi-check text-(--text-default)"
+                class="ai ai-check text-(--text-default)"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ t('buttonGroup.pressed') }}</span>

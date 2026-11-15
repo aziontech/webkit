@@ -3,8 +3,8 @@ name: quote-tabs
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 5b66eb5464a6731790cb2129fafa339d64fec5a69d21e59f00e547945298c0fd
+spec_version: 5
+checksum: 70079fd1e862e53d54e1cd818cac7b9ab3f0be8d16562e304b54991752d75b29
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
@@ -92,7 +92,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
       <Button
         kind="secondary"
         label="See success stories"
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         icon-position="trailing"
         animated
         href="/success-stories"

@@ -3,8 +3,8 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 7ec248bc55e743fb43d19ec926cb3bfb482fc048ac4aae47b4295210f0bfa091
-spec_version: 3
+checksum: 122ecc8be1a6b6873c3af18499774269bbb5858233f34993d4c810458a5f267e
+spec_version: 4
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -70,7 +70,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
     <template #actions>
       <Button
         label="Documentation"
-        icon="pi pi-book"
+        icon="ai ai-book"
         kind="outlined"
         size="medium"
         href="https://example.com/docs/resources"
@@ -78,7 +78,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       />
       <Button
         label="Create Resource"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         kind="outlined"
         size="medium"
       />
@@ -94,7 +94,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       <Breadcrumb :items="[{ label: 'Resources', href: '/resources' }, { label: 'acme-store' }]" />
     </template>
     <template #icon>
-      <i class="pi pi-box" />
+      <i class="ai ai-box" />
     </template>
     <template #meta>
       <Tag

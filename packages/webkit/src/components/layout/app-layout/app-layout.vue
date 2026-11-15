@@ -387,7 +387,7 @@
               </h2>
               <IconButton
                 v-if="!compact"
-                icon="pi pi-window-maximize"
+                icon="ai ai-window-maximize"
                 :ariaLabel="t('appLayout.showAtSide')"
                 kind="transparent"
                 size="small"
@@ -395,7 +395,7 @@
                 @click="togglePosition"
               />
               <IconButton
-                icon="pi pi-times"
+                icon="ai ai-times"
                 :ariaLabel="t('appLayout.closeSplitPanel')"
                 kind="transparent"
                 size="small"
@@ -448,7 +448,7 @@
               {{ splitPanelTitle || t('appLayout.splitPanel') }}
             </h2>
             <IconButton
-              icon="pi pi-window-minimize"
+              icon="ai ai-window-minimize"
               :ariaLabel="t('appLayout.showAtBottom')"
               kind="transparent"
               size="small"
@@ -456,7 +456,7 @@
               @click="togglePosition"
             />
             <IconButton
-              icon="pi pi-times"
+              icon="ai ai-times"
               :ariaLabel="t('appLayout.closeSplitPanel')"
               kind="transparent"
               size="small"
@@ -491,7 +491,7 @@
               {{ toolsLabel || t('appLayout.tools') }}
             </h2>
             <IconButton
-              icon="pi pi-times"
+              icon="ai ai-times"
               :ariaLabel="t('appLayout.closeTools')"
               kind="transparent"
               size="small"

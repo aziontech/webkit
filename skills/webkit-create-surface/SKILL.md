@@ -107,7 +107,7 @@ Each piece of the anatomy is a component — compose them, never re-type their m
 | Piece                        | Component                                                                                                                                   |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                            |
-| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="pi pi-cog"`                                        |
+| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="ai ai-cog"`                                        |
 | Row (field, switch, stacked) | `SettingRow` (`@aziontech/webkit/setting-row`) with `kind` `field`, `compact` or `stacked`                                                  |
 | Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `kind="centered"` on a create page (Cancel and Create in a raised card centred at the bottom), `kind="plain"` on an in-page form saved as one unit, `kind="fade"` on a wizard step, the floating default on settings |
 | Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                        |
@@ -197,7 +197,7 @@ reuses one or makes one, and the form says which in one place.
 - **Existing is the default when at least one exists.** When none exist, there is no choice to
   offer: the segment is not rendered and the band opens on the New fields.
 - **Existing** shows an inline picker: one selectable `Item` row per resource (icon, name,
-  description), the chosen row marked with `data-selected`, a trailing `pi-check`, and
+  description), the chosen row marked with `data-selected`, a trailing `ai-check`, and
   `aria-pressed`. **New** shows the resource's own create fields in the same band.
 - Switching modes keeps both answers: going to New and back finds the same resource still chosen.
 

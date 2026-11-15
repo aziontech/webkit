@@ -13,12 +13,12 @@
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="pi pi-th-large"
+          icon="ai ai-th-large"
           href="/applications"
         />
         <SidebarMenuItem
           label="Real-Time Purge"
-          icon="pi pi-refresh"
+          icon="ai ai-refresh"
           disabled
         />
         <SidebarMenuSub>

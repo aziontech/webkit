@@ -190,7 +190,7 @@
       @click.stop="onCloseClick"
     >
       <i
-        class="pi pi-times"
+        class="ai ai-times"
         aria-hidden="true"
       />
     </span>

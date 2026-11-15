@@ -15,19 +15,19 @@
           value: 'explain',
           label: 'explain',
           description: 'Explain a configuration',
-          icon: 'pi pi-info-circle'
+          icon: 'ai ai-info-circle'
         },
         {
           value: 'troubleshoot',
           label: 'troubleshoot',
           description: 'Find why a request failed',
-          icon: 'pi pi-wrench'
+          icon: 'ai ai-wrench'
         },
         {
           value: 'summarize',
           label: 'summarize',
           description: 'Summarize recent events',
-          icon: 'pi pi-list'
+          icon: 'ai ai-list'
         }
       ]
     },
@@ -35,9 +35,9 @@
       trigger: '@',
       label: 'Resources',
       options: [
-        { value: 'app-1', label: 'checkout-web', description: 'Application', icon: 'pi pi-box' },
-        { value: 'fn-7', label: 'image-resize', description: 'Function', icon: 'pi pi-code' },
-        { value: 'fw-2', label: 'login-protection', description: 'Firewall', icon: 'pi pi-shield' }
+        { value: 'app-1', label: 'checkout-web', description: 'Application', icon: 'ai ai-box' },
+        { value: 'fn-7', label: 'image-resize', description: 'Function', icon: 'ai ai-code' },
+        { value: 'fw-2', label: 'login-protection', description: 'Firewall', icon: 'ai ai-shield' }
       ]
     }
   ]

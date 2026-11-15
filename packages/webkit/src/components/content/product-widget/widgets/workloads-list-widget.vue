@@ -145,7 +145,7 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>
@@ -155,7 +155,7 @@
               label="Create Workload"
               kind="outlined"
               size="medium"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
             />
           </span>
         </div>

@@ -7,7 +7,7 @@
         key: 'user',
         kind: 'pill',
         title: 'User',
-        icon: 'pi pi-user',
+        icon: 'ai ai-user',
         active: true
       },
       {
@@ -40,7 +40,7 @@
         kind: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
-        icon: 'pi pi-database'
+        icon: 'ai ai-database'
       }
     ],
     layout: {

@@ -130,7 +130,7 @@
                 label="Run Query"
                 kind="primary"
                 size="medium"
-                icon="pi pi-play"
+                icon="ai ai-play"
                 :loading="running"
               />
             </span>
@@ -139,14 +139,14 @@
                 label="Prettify"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-align-left"
+                icon="ai ai-align-left"
                 :disabled="running"
               />
               <Button
                 label="Templates"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-bolt"
+                icon="ai ai-bolt"
                 :disabled="running"
               />
             </span>
@@ -180,7 +180,7 @@
                 >
                   <template #prefix>
                     <i
-                      class="pi pi-search"
+                      class="ai ai-search"
                       aria-hidden="true"
                     />
                   </template>
@@ -193,7 +193,7 @@
                   aria-label="Result view"
                 />
                 <IconButton
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   kind="outlined"
                   size="medium"
                   ariaLabel="Refresh results"

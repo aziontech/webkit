@@ -319,13 +319,13 @@ describe('MediaSplitBand', () => {
   it('lets an action kind win over the drawn kind and draws its leading icon', () => {
     const { getByRole } = band({
       primaryAction: { ...primaryAction, kind: 'transparent' },
-      secondaryAction: { ...secondaryAction, icon: 'pi pi-github', trailing: false }
+      secondaryAction: { ...secondaryAction, icon: 'ai ai-github', trailing: false }
     })
 
     expect(getByRole('link', { name: 'Join us' })).toHaveAttribute('data-kind', 'transparent')
     const second = getByRole('link', { name: secondaryAction.label })
     expect(second).toHaveAttribute('data-kind', 'outlined')
-    expect(second.querySelector('.pi-github')).not.toBeNull()
+    expect(second.querySelector('.ai-github')).not.toBeNull()
   })
 
   it('has no a11y violations with a code sample', async () => {

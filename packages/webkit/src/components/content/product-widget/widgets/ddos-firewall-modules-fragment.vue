@@ -192,7 +192,7 @@
               >
                 <Tag
                   label="Automatically enabled in all accounts"
-                  icon="pi pi-lock"
+                  icon="ai ai-lock"
                   severity="neutral"
                   size="small"
                 />

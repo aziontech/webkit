@@ -9,7 +9,7 @@
     <template #empty>
       <EmptyState
         size="small"
-        icon="pi pi-th-large"
+        icon="ai ai-th-large"
         title="No applications yet"
         description="Create an application to serve your site from the edge."
       >
@@ -17,7 +17,7 @@
           <Button
             label="Create application"
             size="small"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
           />
         </template>
       </EmptyState>

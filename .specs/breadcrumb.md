@@ -3,11 +3,11 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: f83c017bb81e81181caa5bb1a41af54220cf5f9dc610c4c9dba884c602ee61d3
+checksum: df4765b32c05c03110671dfa9aca1529aea24b830e18e1bafbb1bc357bb95eac
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -60,7 +60,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
           label="Home"
           href="/"
           show-icon
-          icon="pi pi-home"
+          icon="ai ai-home"
         />
       </li>
       <Breadcrumb.Separator />

@@ -58,7 +58,7 @@ export default {
       ? figma.code`
   <Select.Trigger>
     <template #prefix>
-      <i class="pi pi-globe" />
+      <i class="ai ai-globe" />
     </template>
   </Select.Trigger>`
       : figma.code`

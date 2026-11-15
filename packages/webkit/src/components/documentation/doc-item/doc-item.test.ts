@@ -37,12 +37,12 @@ describe('DocItem', () => {
     })
 
     it('renders the leading glyph only when icon is set', () => {
-      const { container } = render(DocItem, { props: { title: 'T', icon: 'pi pi-code' } })
-      const glyph = container.querySelector('.pi-code')
+      const { container } = render(DocItem, { props: { title: 'T', icon: 'ai ai-code' } })
+      const glyph = container.querySelector('.ai-code')
       expect(glyph).not.toBeNull()
       expect(glyph?.getAttribute('aria-hidden')).toBe('true')
       const without = render(DocItem, { props: { title: 'T' } })
-      expect(without.container.querySelector('.pi-code')).toBeNull()
+      expect(without.container.querySelector('.ai-code')).toBeNull()
     })
   })
 
@@ -76,26 +76,26 @@ describe('DocItem', () => {
       const { container, getByText } = render(DocItem, { props: { title: 'Rule' } })
       expect(getByText('Rule')).toBeInTheDocument()
       expect(container.querySelector('a')).toBeNull()
-      expect(container.querySelector('.pi-chevron-right')).toBeNull()
-      expect(container.querySelector('.pi-arrow-up-right')).toBeNull()
+      expect(container.querySelector('.ai-chevron-right')).toBeNull()
+      expect(container.querySelector('.ai-arrow-up-right')).toBeNull()
     })
   })
 
   describe('leaving the documentation', () => {
     it('draws the chevron for an in-documentation destination', () => {
       const { container } = render(DocItem, { props: { title: 'T', href: '/docs/x' } })
-      const glyph = container.querySelector('.pi-chevron-right')
+      const glyph = container.querySelector('.ai-chevron-right')
       expect(glyph).not.toBeNull()
       expect(glyph?.getAttribute('aria-hidden')).toBe('true')
-      expect(container.querySelector('.pi-arrow-up-right')).toBeNull()
+      expect(container.querySelector('.ai-arrow-up-right')).toBeNull()
     })
 
     it('swaps to the diagonal arrow and adds rel=noreferrer for an explicit new tab', () => {
       const { container } = render(DocItem, {
         props: { title: 'T', href: 'https://github.com/aziontech', target: '_blank' }
       })
-      expect(container.querySelector('.pi-arrow-up-right')).not.toBeNull()
-      expect(container.querySelector('.pi-chevron-right')).toBeNull()
+      expect(container.querySelector('.ai-arrow-up-right')).not.toBeNull()
+      expect(container.querySelector('.ai-chevron-right')).toBeNull()
       const anchor = container.querySelector('a')
       expect(anchor?.getAttribute('target')).toBe('_blank')
       expect(anchor?.getAttribute('rel')).toBe('noreferrer')
@@ -105,7 +105,7 @@ describe('DocItem', () => {
       const { container } = render(DocItem, {
         props: { title: 'T', href: 'https://azion.com/docs' }
       })
-      expect(container.querySelector('.pi-arrow-up-right')).not.toBeNull()
+      expect(container.querySelector('.ai-arrow-up-right')).not.toBeNull()
       const anchor = container.querySelector('a')
       expect(anchor?.hasAttribute('rel')).toBe(false)
     })

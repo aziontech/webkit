@@ -1,12 +1,12 @@
 const LANGUAGE_ICON: Record<string, string> = {
-  javascript: 'pi pi-code',
-  js: 'pi pi-code',
-  typescript: 'pi pi-code',
-  ts: 'pi pi-code',
-  python: 'pi pi-code',
-  json: 'pi pi-file',
-  shell: 'pi pi-code',
-  bash: 'pi pi-code'
+  javascript: 'ai ai-code',
+  js: 'ai ai-code',
+  typescript: 'ai ai-code',
+  ts: 'ai ai-code',
+  python: 'ai ai-code',
+  json: 'ai ai-file',
+  shell: 'ai ai-code',
+  bash: 'ai ai-code'
 }
 
 export const resolveFileIcon = (language?: string, fileIcon?: string): string => {
@@ -20,5 +20,5 @@ export const resolveFileIcon = (language?: string, fileIcon?: string): string =>
     return LANGUAGE_ICON[normalized]
   }
 
-  return 'pi pi-file'
+  return 'ai ai-file'
 }

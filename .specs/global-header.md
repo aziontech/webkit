@@ -3,11 +3,11 @@ name: global-header
 category: layout
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4310-19617
   node_id: 4310:19617
-checksum: c856b9946cb878c99cddbe2b120921084e26666bdc8bfa0533131975f3f7c05c
+checksum: d4c7852067d5b3204aae5412d5f8635cec172e2d79d96e5654edd11c8fd086c4
 created: 2026-05-23
 last_updated: 2026-11-15
 ---
@@ -70,7 +70,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
     <GlobalHeader.Container>
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-bars"
+          icon="ai ai-bars"
           aria-label="Open navigation"
           kind="transparent"
         />
@@ -93,7 +93,7 @@ The cap is the bar's OWN measure — `--layout-measure-site-header` (1620px), on
         label="Create"
         kind="secondary"
         size="medium"
-        icon="pi pi-plus-circle"
+        icon="ai ai-plus-circle"
       />
     </GlobalHeader.End>
   </GlobalHeader>

@@ -156,15 +156,15 @@
             >
               <i
                 v-if="step.status === 'done'"
-                class="pi pi-check-circle text-(--success-contrast)"
+                class="ai ai-check-circle text-(--success-contrast)"
               />
               <i
                 v-else-if="step.status === 'failed'"
-                class="pi pi-times-circle text-(--danger-contrast)"
+                class="ai ai-times-circle text-(--danger-contrast)"
               />
               <i
                 v-else-if="step.status === 'skipped'"
-                class="pi pi-minus-circle text-(--text-muted)"
+                class="ai ai-circle-minus text-(--text-muted)"
               />
               <Spinner v-else-if="step.status === 'running'" />
               <span

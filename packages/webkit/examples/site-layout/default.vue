@@ -71,7 +71,7 @@
       }
     ],
     socials: [
-      { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
+      { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' }
     ],
     statusLabel: 'All Systems Operational',
     languages: ['EN', 'PT-BR', 'ES']

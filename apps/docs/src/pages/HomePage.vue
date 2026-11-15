@@ -23,22 +23,22 @@
     {
       to: '/foundations',
       label: t.value.foundations,
-      icon: 'pi pi-palette',
+      icon: 'ai ai-palette',
       text: t.value.exploreFoundations
     },
     {
       to: '/components',
       label: t.value.components,
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       text: t.value.exploreComponents
     },
     {
       to: '/blocks',
       label: t.value.blocks,
-      icon: 'pi pi-window-maximize',
+      icon: 'ai ai-window-maximize',
       text: t.value.exploreBlocks
     },
-    { to: '/assets', label: t.value.assets, icon: 'pi pi-images', text: t.value.exploreAssets }
+    { to: '/assets', label: t.value.assets, icon: 'ai ai-images', text: t.value.exploreAssets }
   ])
 
   const features = computed(() => [
@@ -129,7 +129,7 @@
             class="flex flex-col gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
           >
             <i
-              class="pi pi-asterisk text-heading-sm text-(--primary)"
+              class="ai ai-asterisk text-heading-sm text-(--primary)"
               aria-hidden="true"
             />
             <h3 class="max-w-[20ch] text-balance text-heading-xs text-(--text-default)">

@@ -3,12 +3,12 @@ name: button-highlight
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: deef77f24efe08a6e4cb064d1152703fb6580d77ee97aec173809d0917f7ebb4
+checksum: 1e76629e23091d5721433d12525e32a833a85d7441823fa5881e12c48e1faf63
 created: 2026-06-01
 last_updated: 2026-11-15
 ---
@@ -39,7 +39,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 ## Best practices
 
 - Use at most one per view; the glow loses its meaning when it repeats.
-- Keep the label short and verb-led, and pair it with a leading `icon` (for example `pi pi-sparkles`).
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - `disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
 - The glow stops under reduced motion, so never use it to convey state.
@@ -54,7 +54,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 <template>
   <ButtonHighlight
     label="Ask Azion"
-    icon="pi pi-sparkles"
+    icon="ai ai-sparkles"
   />
 </template>
 ```
@@ -67,7 +67,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 | `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height, padding, and typography.                    |
 | `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                       |
 | `loading`  | `boolean`                        | `false`   | false    | Shows loading state and disables activation.                            |
-| `icon`     | `string`                         | `''`      | false    | PrimeIcons class for the leading icon.                                  |
+| `icon`     | `string`                         | `''`      | false    | Azion icon class for the leading icon.                                  |
 | `href`     | `string`                         | `''`      | false    | When set, renders as an anchor link.                                    |
 | `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when `href` is set.                                         |
 

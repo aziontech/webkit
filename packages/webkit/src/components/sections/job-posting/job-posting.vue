@@ -372,7 +372,7 @@
                   kind="secondary"
                   size="large"
                   :href="`#${applyId}`"
-                  icon="pi pi-chevron-right"
+                  icon="ai ai-chevron-right"
                   icon-position="trailing"
                   animated
                   class="w-full"

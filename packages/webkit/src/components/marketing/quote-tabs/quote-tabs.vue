@@ -263,7 +263,7 @@
   >
     <IconButton
       v-if="autoplayEnabled"
-      :icon="paused ? 'pi pi-play' : 'pi pi-pause'"
+      :icon="paused ? 'ai ai-play' : 'ai ai-pause'"
       :aria-label="pauseLabel"
       kind="outlined"
       size="small"

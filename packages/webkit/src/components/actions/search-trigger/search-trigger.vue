@@ -103,7 +103,7 @@
         aria-hidden="true"
         :data-testid="`${testId}__icon`"
       >
-        <i class="pi pi-search" />
+        <i class="ai ai-search" />
       </span>
       <span
         class="sr-only"

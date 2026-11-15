@@ -3,9 +3,9 @@ name: card-carousel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: b726c6def6ad453e69175bece5ecbb062ae3dc778d0caaa5fb785872e2655621
+checksum: 068feb8ec4d706a78a7de280bbd79a6cab409b4c22ae26bb2da33933e916ab01
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -153,7 +153,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 ## Right-to-left
 
 - Layout: logical utilities only; the title row keeps the title at the start edge and the controls at the end edge.
-- Icons: the link arrow (`pi pi-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
+- Icons: the link arrow (`ai ai-arrow-right`) mirrors under `rtl:-scale-x-100` and its hover nudge runs toward the end edge (`rtl:group-hover/card:-translate-x-0.5`); the carousel's chevrons mirror in `carousel`.
 - Keyboard: the next control steps toward the end edge in both directions (`carousel`).
 - User data: none.
 

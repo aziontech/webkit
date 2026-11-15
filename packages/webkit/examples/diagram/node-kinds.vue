@@ -12,7 +12,7 @@
         key: 'user',
         kind: 'pill',
         title: 'User',
-        icon: 'pi pi-user',
+        icon: 'ai ai-user',
         active: true
       },
       {
@@ -33,7 +33,7 @@
         kind: 'item',
         eyebrow: 'provider · general',
         title: 'General model',
-        icon: 'pi pi-sparkles',
+        icon: 'ai ai-sparkles',
         status: {
           label: 'Primary',
           severity: 'info'

@@ -144,7 +144,7 @@
               label="Filter"
               kind="outlined"
               size="medium"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
             />
             <span class="pointer-events-none absolute -top-2 -end-2 flex">
               <Badge
@@ -169,7 +169,7 @@
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
               >
                 <IconButton
-                  icon="pi pi-angle-left"
+                  icon="ai ai-angle-left"
                   kind="outlined"
                   size="small"
                   ariaLabel="Back to all filters"
@@ -186,7 +186,7 @@
                 >
                   <template #prefix>
                     <i
-                      class="pi pi-search"
+                      class="ai ai-search"
                       aria-hidden="true"
                     />
                   </template>
@@ -204,7 +204,7 @@
                   <span class="grow truncate">{{ period }}</span>
                   <i
                     :data-picked="frame.period === period || null"
-                    class="pi pi-check invisible shrink-0 text-(--text-default) data-picked:visible"
+                    class="ai ai-check invisible shrink-0 text-(--text-default) data-picked:visible"
                     aria-hidden="true"
                   />
                 </span>
@@ -215,7 +215,7 @@
                   class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
                 >
                   <i
-                    class="pi pi-filter-slash text-(--text-muted)"
+                    class="ai ai-filter-slash text-(--text-muted)"
                     aria-hidden="true"
                   />
                   Clear Period

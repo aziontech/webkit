@@ -4,10 +4,10 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 1a62b75902ee1e35763a947dfdcdf205aa3ef4f6a7b5e0885653b46c83890bbf
+checksum: 94f6ed5ba6b92e98f7c6d4a8f390cdff67c07db59b101fd97e2f4dfa247ce4a0
 ---
 
 # UseCases — Component Spec
@@ -55,12 +55,12 @@ The "what teams use it for" band of a product page: a three-column frame whose f
     :primary-action="{ label: 'Docs', href: '/docs', trailing: true }"
     :items="[
       {
-        icon: 'pi pi-comments',
+        icon: 'ai ai-comments',
         title: 'RAG Applications',
         description: 'Build topic-specific chatbots with the data stored in SQL Database.'
       },
       {
-        icon: 'pi pi-search',
+        icon: 'ai ai-search',
         title: 'Search Applications',
         description: 'Power search with vector similarity queries on stored embeddings.'
       }

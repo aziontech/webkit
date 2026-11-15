@@ -131,25 +131,25 @@ describe('DocPrompt', () => {
         props: { title: 'AI Assistant' },
         slots: { default: PROMPT }
       })
-      expect(getByTestId('documentation-doc-prompt').querySelector('i.pi-sparkles')).toBeTruthy()
+      expect(getByTestId('documentation-doc-prompt').querySelector('i.ai-sparkles')).toBeTruthy()
     })
 
     it('renders the icon glyph only alongside a title, and hides it from AT', () => {
       const withTitle = render(DocPrompt, {
-        props: { title: 'AI Assistant', icon: 'pi pi-bolt' },
+        props: { title: 'AI Assistant', icon: 'ai ai-bolt' },
         slots: { default: PROMPT }
       })
-      const glyph = withTitle.getByTestId('documentation-doc-prompt').querySelector('i.pi-bolt')
+      const glyph = withTitle.getByTestId('documentation-doc-prompt').querySelector('i.ai-bolt')
       expect(glyph).toBeTruthy()
       expect(glyph?.getAttribute('aria-hidden')).toBe('true')
       withTitle.unmount()
 
       const withoutTitle = render(DocPrompt, {
-        props: { icon: 'pi pi-bolt' },
+        props: { icon: 'ai ai-bolt' },
         slots: { default: PROMPT }
       })
       expect(
-        withoutTitle.getByTestId('documentation-doc-prompt').querySelector('i.pi-bolt')
+        withoutTitle.getByTestId('documentation-doc-prompt').querySelector('i.ai-bolt')
       ).toBeNull()
     })
   })

@@ -3,11 +3,11 @@ name: prompt-input
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 94beacfad100e371a9fc03c5650b1de552187e00a16cd38c15678f4db3f8d613
+checksum: 3dfcfc2444a1b3d2db689cad4a345db17c335759889c9d69eecb90a7429bf81a
 created: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # PromptInput — Component Spec
@@ -124,8 +124,8 @@ Types: `PromptInputMenu = { trigger: string; label: string; options: PromptInput
 ## States
 
 - `data-status` mirrors `state`; `data-disabled`; `data-invalid` while over `maxLength`.
-- `ready`: Submit (primary `IconButton`, `pi pi-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
-- `submitted` / `streaming`: Stop (secondary `IconButton`, `pi pi-stop`) replaces Submit; Enter does nothing.
+- `ready`: Submit (primary `IconButton`, `ai ai-arrow-up`), disabled while the prompt is empty, over the limit or `disabled`.
+- `submitted` / `streaming`: Stop (secondary `IconButton`, `ai ai-stop`) replaces Submit; Enter does nothing.
 - Over the limit: border turns `--danger-border`, the counter turns danger, `aria-invalid="true"`, and a polite live region says how many characters are over.
 
 ## Motion & Animations

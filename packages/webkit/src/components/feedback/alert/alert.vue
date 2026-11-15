@@ -24,7 +24,7 @@
     label?: string
     /** Bold heading above the message copy; hidden when empty. */
     title?: string
-    /** PrimeIcons class override for the leading icon. */
+    /** Azion icon class override for the leading icon. */
     icon?: string
     /** Label for the built-in secondary action button; hidden when empty. */
     actionLabel?: string
@@ -59,10 +59,10 @@
   }>()
 
   const defaultIcons = {
-    info: 'pi pi-info-circle',
-    success: 'pi pi-check',
-    warning: 'pi pi-exclamation-triangle',
-    danger: 'pi pi-exclamation-circle'
+    info: 'ai ai-info-circle',
+    success: 'ai ai-check',
+    warning: 'ai ai-exclamation-triangle',
+    danger: 'ai ai-exclamation-circle'
   } as const
 
   const attrs = useAttrs()
@@ -219,7 +219,7 @@
       </div>
       <IconButton
         v-if="closable"
-        icon="pi pi-times"
+        icon="ai ai-times"
         kind="transparent"
         :size="size"
         :ariaLabel="t('alert.close')"

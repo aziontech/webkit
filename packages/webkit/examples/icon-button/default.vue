@@ -6,7 +6,7 @@
   <IconButton
     kind="primary"
     size="large"
-    icon="pi pi-plus"
+    icon="ai ai-plus"
     aria-label="Add"
   />
 </template>

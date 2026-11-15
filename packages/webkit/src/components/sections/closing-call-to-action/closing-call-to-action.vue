@@ -202,7 +202,7 @@
                 :href="primaryAction.href"
                 kind="secondary"
                 size="large"
-                :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(primaryAction.trailing)"
               />
@@ -213,7 +213,7 @@
                 :href="secondaryAction.href"
                 kind="outlined"
                 size="large"
-                :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(secondaryAction.trailing)"
               />
@@ -228,7 +228,7 @@
               :href="secondaryAction.href"
               kind="outlined"
               size="large"
-              :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(secondaryAction.trailing)"
             />

@@ -627,7 +627,7 @@
                 }}</span>
                 <IconButton
                   v-if="scope.removable"
-                  icon="pi pi-trash"
+                  icon="ai ai-trash"
                   kind="outlined"
                   size="small"
                   :aria-label="scope.removeLabel"

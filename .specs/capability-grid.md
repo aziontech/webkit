@@ -3,9 +3,9 @@ name: capability-grid
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 47ca7d5d3a267e1d55f766517032837718c4812a9f2e20e470f42282010948dd
+checksum: 6594b54ccd793adfa4c92c7f235029c68ff985547635e5b3a684f95010209261
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -53,14 +53,14 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
   <CapabilityGrid
     title="Everything an application needs"
     :items="[
-      { icon: 'pi pi-bolt', title: 'Functions', description: 'Run code close to users.' },
+      { icon: 'ai ai-bolt', title: 'Functions', description: 'Run code close to users.' },
       {
-        icon: 'pi pi-database',
+        icon: 'ai ai-database',
         title: 'Storage',
         description: 'Keep objects where they are read.'
       },
       {
-        icon: 'pi pi-shield',
+        icon: 'ai ai-shield',
         title: 'Firewall',
         description: 'Stop attacks before they reach you.'
       }

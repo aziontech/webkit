@@ -43,7 +43,7 @@
         <Tag
           label="Sum"
           severity="neutral"
-          icon="pi pi-calculator"
+          icon="ai ai-calculator"
         />
         <Tag
           label="+12.40%"
@@ -54,7 +54,7 @@
             <IconButton
               kind="transparent"
               size="small"
-              icon="pi pi-ellipsis-h"
+              icon="ai ai-ellipsis-h"
               aria-label="More options"
             />
           </DropdownMenuTrigger>

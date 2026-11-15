@@ -139,7 +139,7 @@
               :href="primaryAction.href"
               :target="primaryAction.target"
               kind="secondary"
-              :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"
             />
@@ -203,7 +203,7 @@
             :label="primaryAction.label"
             :href="primaryAction.href"
             :target="primaryAction.target"
-            :icon="primaryAction.trailing ? 'pi pi-angle-right' : ''"
+            :icon="primaryAction.trailing ? 'ai ai-angle-right' : ''"
           />
         </div>
       </FrameBox>

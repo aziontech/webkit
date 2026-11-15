@@ -188,7 +188,7 @@
                 kind="secondary"
                 size="large"
                 :target="primaryAction.target"
-                :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(primaryAction.trailing)"
               />
@@ -200,7 +200,7 @@
                 kind="outlined"
                 size="large"
                 :target="secondaryAction.target"
-                :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                 icon-position="trailing"
                 :animated="Boolean(secondaryAction.trailing)"
               />
@@ -278,7 +278,7 @@
                   kind="secondary"
                   size="large"
                   :target="primaryAction.target"
-                  :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(primaryAction.trailing)"
                 />
@@ -290,7 +290,7 @@
                   kind="outlined"
                   size="large"
                   :target="secondaryAction.target"
-                  :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(secondaryAction.trailing)"
                 />

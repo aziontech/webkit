@@ -32,7 +32,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Amazon Bedrock',
       title: 'Claude Haiku 5.5',
-      icon: 'pi pi-amazon',
+      icon: 'ai ai-cloud',
       active: true,
       lit: true
     }

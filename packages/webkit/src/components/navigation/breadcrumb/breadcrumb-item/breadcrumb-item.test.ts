@@ -47,14 +47,14 @@ describe('BreadcrumbItem', () => {
 
     it('renders the leading icon when showIcon is true', () => {
       const { getByTestId } = render(BreadcrumbItem, {
-        props: { label: 'Home', showIcon: true, icon: 'pi pi-cog' }
+        props: { label: 'Home', showIcon: true, icon: 'ai ai-cog' }
       })
 
       const icon = getByTestId(`${TESTID}__icon`)
 
       expect(icon).toBeTruthy()
       expect(icon.getAttribute('aria-hidden')).toBe('true')
-      expect(icon.className).toContain('pi pi-cog')
+      expect(icon.className).toContain('ai ai-cog')
     })
 
     it('honours a consumer-provided data-testid', () => {
@@ -207,7 +207,7 @@ describe('BreadcrumbItem', () => {
 
     it('has no a11y violations with a leading icon', async () => {
       const { container } = render(BreadcrumbItem, {
-        props: { label: 'Home', showIcon: true, icon: 'pi pi-box' }
+        props: { label: 'Home', showIcon: true, icon: 'ai ai-box' }
       })
 
       await expectNoA11yViolations(container)
@@ -255,6 +255,6 @@ describe('BreadcrumbItem defaults', () => {
 
   it('keeps the box glyph for show-icon without an icon', () => {
     const { getByTestId } = render(BreadcrumbItem, { props: { label: 'Home', showIcon: true } })
-    expect(getByTestId(`${TESTID}__icon`).classList.contains('pi-box')).toBe(true)
+    expect(getByTestId(`${TESTID}__icon`).classList.contains('ai-box')).toBe(true)
   })
 })

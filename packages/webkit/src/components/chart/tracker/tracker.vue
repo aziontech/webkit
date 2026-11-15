@@ -171,7 +171,7 @@
       class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-contrast) forced-color-adjust-none"
     >
       <i
-        class="pi pi-exclamation-triangle shrink-0"
+        class="ai ai-exclamation-triangle shrink-0"
         aria-hidden="true"
       />
       <span class="min-w-0 truncate">{{ error }}</span>

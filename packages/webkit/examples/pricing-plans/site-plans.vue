@@ -27,7 +27,7 @@
       featuresTitle: 'All features included.',
       features: [
         {
-          icon: 'pi pi-globe',
+          icon: 'ai ai-globe',
           label: 'Global infrastructure'
         },
         {
@@ -39,7 +39,7 @@
           label: 'Storage and database'
         },
         {
-          icon: 'pi pi-image',
+          icon: 'ai ai-image',
           label: 'Image Processor'
         },
         {
@@ -92,7 +92,7 @@
           label: 'Broader security coverage'
         },
         {
-          icon: 'pi pi-wallet',
+          icon: 'ai ai-wallet',
           label: 'Configurable spend limit'
         }
       ],
@@ -113,11 +113,11 @@
       featuresTitle: 'All Pro features, plus:',
       features: [
         {
-          icon: 'pi pi-chart-line',
+          icon: 'ai ai-chart-line',
           label: 'On-demand pricing'
         },
         {
-          icon: 'pi pi-arrow-down',
+          icon: 'ai ai-arrow-down',
           label: 'Cut costs with commitments'
         },
         {
@@ -125,7 +125,7 @@
           label: 'Capacity Reservation available'
         },
         {
-          icon: 'pi pi-calendar',
+          icon: 'ai ai-calendar',
           label: 'Savings Plan available'
         },
         {

@@ -45,7 +45,7 @@
       >
         <template #prefix>
           <i
-            class="pi pi-filter text-(--text-muted)"
+            class="ai ai-filter text-(--text-muted)"
             aria-hidden="true"
           />
         </template>

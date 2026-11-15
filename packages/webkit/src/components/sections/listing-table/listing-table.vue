@@ -178,7 +178,7 @@
               :href="primaryAction.href"
               kind="outlined"
               size="large"
-              :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"
               class="w-full"
@@ -250,7 +250,7 @@
                   :href="primaryAction.href"
                   kind="outlined"
                   size="large"
-                  :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(primaryAction.trailing)"
                 />

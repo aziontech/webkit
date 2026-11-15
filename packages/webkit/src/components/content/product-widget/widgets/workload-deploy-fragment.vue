@@ -19,14 +19,14 @@
   const canHover = useMediaQuery('(hover: hover)', true)
 
   const EVENTS = [
-    { icon: 'pi pi-cog', label: 'Build started', note: 'vue preset' },
-    { icon: 'pi pi-box', label: 'Bundle produced', note: '1.4 MB' },
-    { icon: 'pi pi-cloud-upload', label: 'Assets uploaded', note: '214 objects' },
+    { icon: 'ai ai-cog', label: 'Build started', note: 'vue preset' },
+    { icon: 'ai ai-box', label: 'Bundle produced', note: '1.4 MB' },
+    { icon: 'ai ai-cloud-upload', label: 'Assets uploaded', note: '214 objects' },
     { icon: 'ai ai-edge-functions', label: 'Functions bundled', note: '2 functions' },
-    { icon: 'pi pi-globe', label: 'Propagating', note: '100+ locations' },
-    { icon: 'pi pi-lock', label: 'Certificates verified', note: 'TLS 1.3' },
-    { icon: 'pi pi-bolt', label: 'Cache warmed', note: 'storefront-prod' },
-    { icon: 'pi pi-check-circle', label: 'Live everywhere', note: '18s total' }
+    { icon: 'ai ai-globe', label: 'Propagating', note: '100+ locations' },
+    { icon: 'ai ai-lock', label: 'Certificates verified', note: 'TLS 1.3' },
+    { icon: 'ai ai-bolt', label: 'Cache warmed', note: 'storefront-prod' },
+    { icon: 'ai ai-check-circle', label: 'Live everywhere', note: '18s total' }
   ]
 </script>
 
@@ -44,7 +44,7 @@
           class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm)"
         >
           <i
-            class="pi pi-cloud-upload shrink-0 text-body-md leading-none text-(--text-muted)"
+            class="ai ai-cloud-upload shrink-0 text-body-md leading-none text-(--text-muted)"
             aria-hidden="true"
           />
           <span class="flex min-w-0 flex-col">

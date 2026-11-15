@@ -12,7 +12,7 @@
       kind="integration"
       title="Request Signer"
       vendor="Acme Inc."
-      logo="pi pi-key"
+      logo="ai ai-key"
       description="Sign every request at the edge with a rotating key, so the origin only answers traffic that passed through."
       :badges="[{ label: 'Firewall' }]"
       @select="opened = 'Request Signer'"

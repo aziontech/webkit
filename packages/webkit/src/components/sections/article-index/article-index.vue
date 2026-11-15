@@ -331,7 +331,7 @@
               :aria-label="search.label"
             >
               <template #prefix>
-                <i class="pi pi-search text-(--text-muted)" />
+                <i class="ai ai-search text-(--text-muted)" />
               </template>
             </Input>
           </div>
@@ -366,7 +366,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -494,7 +494,7 @@
                     class="flex shrink-0 translate-y-1 items-center self-center gap-(--spacing-xxs) whitespace-nowrap text-overline-md text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/row:translate-y-0 group-hover/row:opacity-100 group-has-[a:focus-visible]/row:translate-y-0 group-has-[a:focus-visible]/row:opacity-100 motion-reduce:transition-none max-lg:hidden"
                   >
                     {{ rowLabel }}
-                    <i class="pi pi-arrow-up-right leading-none" />
+                    <i class="ai ai-arrow-up-right leading-none" />
                   </span>
                 </div>
               </article>
@@ -529,7 +529,7 @@
         <EmptyState
           :title="empty.title"
           :description="empty.description"
-          icon="pi pi-search"
+          icon="ai ai-search"
           class="p-(--spacing-xxl)"
         >
           <template

@@ -3,12 +3,12 @@ name: split-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 3f971af87d3f0a21067401fa210bef6e17b432483a03411b64c57c84a0cd3262
+checksum: 2e71fb4cde6996dea7d62f5e4a2006b8d6ec8e23aeafdb9fae1de2da94f27b6e
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -52,15 +52,15 @@ A primary command button visually joined to a chevron toggle that opens an overl
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },
-    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
+    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
   ]
 </script>
 
 <template>
   <SplitButton
     label="Save"
-    icon="pi pi-check"
+    icon="ai ai-check"
     :items="items"
     @click="onSave"
     @item-click="onAction"
@@ -73,7 +73,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 | Prop                  | Type                                     | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
 | --------------------- | ---------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `label`               | `string`                                 | `''`        | false    | Visible label text on the primary command button.                                                                                                                                                                                                                                 |
-| `icon`                | `string`                                 | `''`        | false    | PrimeIcons class for the primary button's leading icon.                                                                                                                                                                                                                           |
+| `icon`                | `string`                                 | `''`        | false    | Azion icon class for the primary button's leading icon.                                                                                                                                                                                                                           |
 | `items`               | `SplitButtonItem[]`                      | `[]`        | false    | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions.                                                                                                                                                                                        |
 | `kind`                | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false    | Visual variant applied to both joined segments.                                                                                                                                                                                                                                   |
 | `size`                | `'small' \| 'medium' \| 'large'`         | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                                                                                                                              |

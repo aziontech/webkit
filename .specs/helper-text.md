@@ -3,11 +3,11 @@ name: helper-text
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: 23cb00cd01fd5174b71ac29958f339576e4cb128d17130ab5427cfe36d90acfc
+checksum: ebfcc166e6b3ed95dbf168a35151c536f0ef5ce8c58e6ad294b5085a0d5b70cf
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -64,7 +64,7 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 | Prop    | Type                                                | Default    | Required | JSDoc                                                         |
 | ------- | --------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------- |
 | `label` | `string`                                            | `''`       | false    | Fallback text when the default slot is empty.                 |
-| `kind`  | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false    | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
+| `kind`  | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false    | Visual variant; `disabled` also prepends a `ai ai-lock` icon. |
 
 ## Events
 

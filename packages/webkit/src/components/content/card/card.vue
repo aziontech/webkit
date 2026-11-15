@@ -181,7 +181,7 @@
           >
             <slot name="logo">
               <i
-                :class="logo || 'pi pi-box'"
+                :class="logo || 'ai ai-box'"
                 class="text-body-lg leading-none text-(--text-default)"
                 aria-hidden="true"
               />
@@ -241,7 +241,7 @@
             :label="t('card.installed')"
             severity="success"
             size="small"
-            icon="pi pi-check"
+            icon="ai ai-check"
             :data-testid="`${testId}__installed`"
           />
           <template v-if="!isFeatured">

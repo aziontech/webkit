@@ -59,7 +59,7 @@
         size="small"
       />
       <IconButton
-        icon="pi pi-external-link"
+        icon="ai ai-external-link"
         kind="outlined"
         size="small"
         :aria-label="t.openInNewTab"

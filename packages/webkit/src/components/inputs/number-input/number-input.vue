@@ -205,7 +205,7 @@
       class="relative z-(--z-input-field) flex items-center pe-(--spacing-md) text-(--text-disabled)"
       aria-hidden="true"
     >
-      <i class="pi pi-lock text-label-sm leading-none" />
+      <i class="ai ai-lock text-label-sm leading-none" />
     </span>
 
     <span
@@ -221,7 +221,7 @@
         @click="handleIncrement"
       >
         <i
-          class="pi pi-chevron-up text-[0.625rem] leading-none"
+          class="ai ai-chevron-up text-[0.625rem] leading-none"
           aria-hidden="true"
         />
       </button>
@@ -234,7 +234,7 @@
         @click="handleDecrement"
       >
         <i
-          class="pi pi-chevron-down text-[0.625rem] leading-none"
+          class="ai ai-chevron-down text-[0.625rem] leading-none"
           aria-hidden="true"
         />
       </button>

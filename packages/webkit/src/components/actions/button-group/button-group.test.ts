@@ -8,14 +8,14 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import ButtonGroup, { type ButtonGroupItem } from './button-group.vue'
 
 const items: ButtonGroupItem[] = [
-  { id: 'copy', label: 'Copy', icon: 'pi pi-copy' },
-  { id: 'off', label: 'Disabled', icon: 'pi pi-ban', disabled: true },
-  { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'pi pi-arrows-h', pressed: true },
+  { id: 'copy', label: 'Copy', icon: 'ai ai-copy' },
+  { id: 'off', label: 'Disabled', icon: 'ai ai-ban', disabled: true },
+  { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-arrows-h', pressed: true },
   {
     id: 'download',
     type: 'menu',
     label: 'Download',
-    icon: 'pi pi-download',
+    icon: 'ai ai-download',
     options: [
       { id: 'js', label: 'As .js' },
       { id: 'zip', label: 'As .zip' }

@@ -48,7 +48,7 @@
       label="Replay"
       kind="outlined"
       size="small"
-      icon="pi pi-refresh"
+      icon="ai ai-refresh"
       :disabled="streaming"
       @click="play"
     />

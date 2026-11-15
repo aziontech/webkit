@@ -15,7 +15,7 @@
       label?: string
       /** Semantic colour of the status; keep it from one shared helper per status set. */
       severity?: TagSeverity
-      /** PrimeIcons class for a leading glyph. */
+      /** Azion icon class for a leading glyph. */
       icon?: string
     }>(),
     {

@@ -193,7 +193,7 @@
               >
                 <Tag
                   label="Automatically enabled in all accounts."
-                  icon="pi pi-lock"
+                  icon="ai ai-lock"
                   severity="neutral"
                   size="small"
                 />
@@ -209,7 +209,7 @@
               label="Contact sales"
               kind="outlined"
               size="medium"
-              icon="pi pi-shopping-cart"
+              icon="ai ai-shopping-cart"
             />
           </span>
         </div>

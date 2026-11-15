@@ -3,8 +3,8 @@ name: diagram
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 7909aa19ae00a8538a01393f215beaa41129806693c279da14173a22c8752969
+spec_version: 4
+checksum: d4e90a904466284b1e8becd4a3cc3a308a98d25ec06def0016d9f7a00c7cfd49
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -55,13 +55,13 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
   const spec = {
     nodes: [
-      { key: 'client', kind: 'pill', title: 'Client', icon: 'pi pi-user', active: true },
+      { key: 'client', kind: 'pill', title: 'Client', icon: 'ai ai-user', active: true },
       {
         key: 'app',
         kind: 'card',
         title: 'Application',
         eyebrow: 'Workload',
-        icon: 'pi pi-globe',
+        icon: 'ai ai-globe',
         active: true
       },
       {
@@ -69,11 +69,11 @@ A node-and-connector diagram for marketing pages: the request path of an archite
         kind: 'card',
         title: 'Firewall',
         eyebrow: 'Product',
-        icon: 'pi pi-shield',
+        icon: 'ai ai-shield',
         lit: true,
         active: true
       },
-      { key: 'origin', kind: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'pi pi-server' }
+      { key: 'origin', kind: 'card', title: 'Origin', eyebrow: 'Backend', icon: 'ai ai-server' }
     ],
     layout: {
       row: [{ node: 'client' }, { node: 'app' }, { node: 'firewall' }, { node: 'origin' }],

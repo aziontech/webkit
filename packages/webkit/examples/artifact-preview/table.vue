@@ -14,7 +14,7 @@
       title="cache-hits-by-country.csv"
       description="Last 7 days"
       meta="48 KB · 212 rows"
-      icon="pi pi-table"
+      icon="ai ai-table"
       download-href="data:text/csv;charset=utf-8,country,requests,hit"
     >
       <table class="w-full border-collapse text-body-sm">

@@ -21,7 +21,7 @@
     disabled?: boolean
     /** Shows loading state and disables activation. */
     loading?: boolean
-    /** PrimeIcons class for the leading icon. */
+    /** Azion icon class for the leading icon. */
     icon?: string
     /** When set, renders as an anchor link. */
     href?: string

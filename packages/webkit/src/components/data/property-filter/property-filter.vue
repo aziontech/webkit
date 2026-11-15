@@ -737,7 +737,7 @@
       >
         <template #prefix>
           <i
-            class="pi pi-filter text-(--text-muted)"
+            class="ai ai-filter text-(--text-muted)"
             aria-hidden="true"
           />
         </template>
@@ -831,7 +831,7 @@
             class="flex min-h-8 items-center gap-(--spacing-sm) px-(--spacing-sm) text-body-sm text-(--text-default)"
           >
             <i
-              class="pi pi-exclamation-circle shrink-0 text-(--danger)"
+              class="ai ai-exclamation-circle shrink-0 text-(--danger)"
               aria-hidden="true"
             />
             {{ t('propertyFilter.valuesError') }}
@@ -971,7 +971,7 @@
         :label="t('propertyFilter.addGroup')"
         :disabled="disabled"
         :data-testid="`${testId}__add-group`"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         kind="transparent"
         size="small"
         @click="startGroup"

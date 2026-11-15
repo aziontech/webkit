@@ -135,7 +135,7 @@
               label="Deploy"
               kind="outlined"
               size="medium"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
             />
           </span>
         </div>

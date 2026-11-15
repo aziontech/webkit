@@ -5,7 +5,7 @@
 <template>
   <Link
     label="Learn more"
-    icon="pi pi-external-link"
+    icon="ai ai-external-link"
     disabled
   />
 </template>

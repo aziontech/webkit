@@ -634,7 +634,7 @@ test('header-search-trigger', () => {
         code: '<template><SearchTrigger aria-keyshortcuts="Meta+K Control+K" /></template>',
         filename: 'b.vue'
       },
-      { code: '<template><IconButton icon="pi pi-search" /></template>', filename: 'toolbar.vue' },
+      { code: '<template><IconButton icon="ai ai-search" /></template>', filename: 'toolbar.vue' },
       { code: '<template><Kbd meta>K</Kbd></template>', filename: 'kbd.vue' }
     ],
     invalid: [
@@ -656,6 +656,11 @@ test('header-search-trigger', () => {
       },
       {
         code: header('<SearchTrigger /><IconButton icon="pi pi-search" aria-label="Search" />'),
+        filename: 'g-legacy.vue',
+        errors: [{ messageId: 'bareIcon' }]
+      },
+      {
+        code: header('<SearchTrigger /><IconButton icon="ai ai-search" aria-label="Search" />'),
         filename: 'g.vue',
         errors: [{ messageId: 'bareIcon' }]
       }
@@ -747,12 +752,12 @@ test('no-dropped-children', () => {
       },
       // a named slot the spec lists, as a template child
       {
-        code: `${imp('Button', 'button')}<template><Button label="Deploy"><template #prefix><i class="pi pi-bolt" /></template></Button></template>`,
+        code: `${imp('Button', 'button')}<template><Button label="Deploy"><template #prefix><i class="ai ai-bolt" /></template></Button></template>`,
         filename: 'b.vue'
       },
       // a named slot on the component tag itself
       {
-        code: `${imp('Button', 'button')}<template><Button label="Deploy" #prefix><i class="pi pi-bolt" /></Button></template>`,
+        code: `${imp('Button', 'button')}<template><Button label="Deploy" #prefix><i class="ai ai-bolt" /></Button></template>`,
         filename: 'c.vue'
       },
       // whitespace between the tags renders nothing either way
@@ -1460,7 +1465,7 @@ test('menu-node-href', () => {
     ],
     invalid: [
       {
-        code: "const nav = [{ id: 'home', label: 'Home', icon: 'pi pi-home', path: '/home' }]",
+        code: "const nav = [{ id: 'home', label: 'Home', icon: 'ai ai-home', path: '/home' }]",
         errors: [{ messageId: 'alias', data: { key: 'path' } }]
       },
       {

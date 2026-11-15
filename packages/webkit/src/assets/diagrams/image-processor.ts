@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Browser',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Origin',
       title: 'One source image',
-      icon: 'pi pi-image'
+      icon: 'ai ai-image'
     }
   ],
   layout: {

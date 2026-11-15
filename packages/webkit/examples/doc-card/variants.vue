@@ -6,7 +6,7 @@
   <div class="grid gap-(--spacing-md) sm:grid-cols-2">
     <DocCard
       title="Edge Application"
-      icon="pi pi-server"
+      icon="ai ai-server"
       href="/docs/edge-application"
       link-label="Read the guide"
     >
@@ -15,7 +15,7 @@
     <DocCard
       eyebrow="Azion CLI"
       title="Deploy from your terminal"
-      icon="pi pi-desktop"
+      icon="ai ai-desktop"
       href="/docs/cli"
     >
       An overline says who or when, for a title that does not carry it.

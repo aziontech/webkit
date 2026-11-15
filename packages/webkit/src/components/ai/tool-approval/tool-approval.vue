@@ -124,7 +124,7 @@
     <div class="flex items-start gap-(--spacing-sm)">
       <i
         :data-kind="kind"
-        class="pi pi-shield mt-0.5 shrink-0 text-(--text-muted) data-[kind=danger]:text-(--danger-contrast)"
+        class="ai ai-shield mt-0.5 shrink-0 text-(--text-muted) data-[kind=danger]:text-(--danger-contrast)"
         aria-hidden="true"
       />
       <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">

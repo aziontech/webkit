@@ -13,7 +13,7 @@
     <DropdownMenuTrigger>
       <IconButton
         kind="outlined"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>

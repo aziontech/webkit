@@ -3,9 +3,9 @@ name: button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 498e50f7744ce0047ee47c44f5acc15974ce6dc6e6b013c7ff23b403edaaaaee
+checksum: 383fa64882b879d53b08e4df6cfea3548c2d6480325c430c825b31fe76ec3ee9
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ The labelled control that triggers an action. `kind` ranks the action in its vie
 - `kind="link"` has no box: no height, padding or surface, `text-body-sm` in the link colour, underlined on hover. `size` does not apply to it; place it where body text sits (a cell, a summary line, under a section).
 - Set `loading` while the action resolves: it swaps the icon for a spinner, sets `aria-busy` and suppresses `click`, so the handler needs no extra guard.
 - Use `iconPosition="leading"` for a glyph that names the action and `"trailing"` for one that points where it goes; add `animated` only on marketing CTAs with a trailing icon.
-- Put brand or product marks in the `prefix` slot; `icon` takes a PrimeIcons class.
+- Put brand or product marks in the `prefix` slot; `icon` takes an Azion icon class.
 - `label` is required and is the accessible name; never pass an empty string to get an icon-only control.
 
 ## Usage
@@ -64,13 +64,13 @@ The labelled control that triggers an action. `kind` ranks the action in its vie
   <Button
     label="Deploy"
     kind="secondary"
-    icon="pi pi-upload"
+    icon="ai ai-upload"
   />
   <Button
     label="Read the docs"
     kind="outlined"
     href="https://www.azion.com/en/documentation/"
-    icon="pi pi-chevron-right"
+    icon="ai ai-chevron-right"
     icon-position="trailing"
     animated
   />
@@ -86,7 +86,7 @@ The labelled control that triggers an action. `kind` ranks the action in its vie
 | `size`         | `'small' \| 'medium' \| 'large'`                                                | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                      |
 | `disabled`     | `boolean`                                                                       | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                         |
 | `loading`      | `boolean`                                                                       | `false`     | false    | Shows loading state and disables activation.                                                                                              |
-| `icon`         | `string`                                                                        | `''`        | false    | PrimeIcons class for the icon drawn beside the label.                                                                                     |
+| `icon`         | `string`                                                                        | `''`        | false    | Azion icon class for the icon drawn beside the label.                                                                                     |
 | `iconPosition` | `'leading' \| 'trailing'`                                                       | `'leading'` | false    | Which side of the label the icon sits on. `leading` is a glyph that names the action; `trailing` is a glyph that points at where it goes. |
 | `animated`     | `boolean`                                                                       | `false`     | false    | Nudges a trailing icon along its axis on hover. Off by default; marketing CTAs opt in.                                                    |
 | `href`         | `string`                                                                        | `''`        | false    | When set, renders as a link (`<a>`).                                                                                                      |

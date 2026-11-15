@@ -20,13 +20,13 @@
         'Apps send OpenAI-format requests with a model alias. Change the model behind an alias once, and every app follows.'
     },
     {
-      icon: 'pi pi-replay',
+      icon: 'ai ai-replay',
       title: 'Fallback when a provider fails',
       description:
         'Each alias lists its models in order. When a call errors or times out, the gateway moves to the next one.'
     },
     {
-      icon: 'pi pi-key',
+      icon: 'ai ai-key',
       title: 'Provider keys stay server-side',
       description:
         'Provider keys live in secret environment variables. Each team gets its own gateway key, stored only as a SHA-256 hash.'
@@ -44,7 +44,7 @@
         'Callers opt in per request. A matching prompt gets a stored response, with no model call and no tokens spent.'
     },
     {
-      icon: 'pi pi-list',
+      icon: 'ai ai-list',
       title: 'Every call on the record',
       description:
         'Each call logs the team, model, fallback, cache result, and tokens used. Stream the logs to your SIEM or data warehouse.'

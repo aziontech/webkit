@@ -97,7 +97,7 @@ describe('Avatar', () => {
 
     const icon = getByTestId('content-avatar__icon')
     expect(icon).toBeInTheDocument()
-    expect(icon).toHaveClass('pi', 'pi-user')
+    expect(icon).toHaveClass('ai', 'ai-user')
     expect(icon).toHaveAttribute('aria-hidden', 'true')
 
     expect(queryByTestId('content-avatar__image')).toBeNull()
@@ -105,9 +105,9 @@ describe('Avatar', () => {
   })
 
   it('applies a custom icon class on the icon fallback element', () => {
-    const { getByTestId } = render(Avatar, { props: { icon: 'pi pi-star' } })
+    const { getByTestId } = render(Avatar, { props: { icon: 'ai ai-star' } })
 
-    expect(getByTestId('content-avatar__icon')).toHaveClass('pi', 'pi-star')
+    expect(getByTestId('content-avatar__icon')).toHaveClass('ai', 'ai-star')
   })
 
   it('labels the icon-only root as "User avatar" via role="img" + aria-label', () => {

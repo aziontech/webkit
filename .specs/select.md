@@ -3,11 +3,11 @@ name: select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 057f252ab09609b4bc287472cf3fc13a1d4cfdcc8f4afca535d80e0c938feed6
+checksum: 537ab260fc228ef2d705da4580ab69e1a73f3c91101be42c5b79881ecba08bed
 created: 2026-06-15
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Select control for choosing exactly one option from a list; several values are `multi-select`. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. A selected option shows a trailing check (`pi pi-check`) (the shadcn pattern), optionally a leading slot/icon and a trailing tag. The trigger shows the selected option's label (each option records its text, as Radix `SelectValue` does), not its raw value. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
+Select control for choosing exactly one option from a list; several values are `multi-select`. The trigger field mirrors `Input`'s visual API (size, hover/focus/filled/disabled/invalid/required states) so a Select sits next to a TextInput without visual drift. The dropdown panel is teleported to `body` and anchored to the trigger by the shared `usePlacement` composable — no `@floating-ui` runtime. A selected option shows a trailing check (`ai ai-check`) (the shadcn pattern), optionally a leading slot/icon and a trailing tag. The trigger shows the selected option's label (each option records its text, as Radix `SelectValue` does), not its raw value. Search and "Create new" footer are exposed as slots on `<SelectContent>`.
 
 Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (options panel).
 
@@ -74,7 +74,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
       <Select.Group label="Group B">
         <Select.Option
           value="opt-3"
-          icon="pi pi-heart"
+          icon="ai ai-heart"
           >Option 3</Select.Option
         >
       </Select.Group>
@@ -88,7 +88,7 @@ Aligned with Figma frames `3714:10801` (trigger states) and `3899:29361` (option
 - `select-trigger/select-trigger.vue` — Bordered trigger field with an optional `#prefix` slot (typed with `defineSlots`), selected-value label, and chevron-down. Mirrors `Input` size/state visuals. The selected value renders inside a `<bdi>`, so its own direction is isolated from the trigger's: an English value on a right-to-left page, or an Arabic value on a left-to-right one, keeps its character order while the label still aligns to the inline start. Prop `valueDir?: 'ltr' | 'rtl' | 'auto'` (default `undefined`, i.e. the `<bdi>` follows the value's first strong character) sets the `<bdi>`'s `dir`; pass `ltr` for values with no strong character whose order matters, such as dial codes (`PhoneInput` passes it, so `+1` never reads `1+`).
 - `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`.
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
-- `select-option/select-option.vue` — Selectable option row with a trailing check when selected, an optional `icon` (PrimeIcons, default `''`), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders only the selected options (and any group without a `value`) once in a `hidden` container (`<testId>__labels`) to collect them; a 1,000-option list with a preselection mounts within the `select-1k-preselected` budget.
+- `select-option/select-option.vue` — Selectable option row with a trailing check when selected, an optional `icon` (an Azion icon class, default `''`), an optional leading `#left` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#left` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders only the selected options (and any group without a `value`) once in a `hidden` container (`<testId>__labels`) to collect them; a 1,000-option list with a preselection mounts within the `select-1k-preselected` budget.
 - `select-group/select-group.vue` `label` defaults to `''` (no heading, no `aria-label`).
 
 ## Props
@@ -194,7 +194,7 @@ _none_
 - Keyboard map (trigger): `Tab` focuses; `Space`/`Enter`/`ArrowDown` opens the panel; `Escape` closes it.
 - Keyboard map (closed trigger): `Enter`, `Space`, `ArrowDown` and `ArrowUp` open the list (focus lands as described below); `Home` opens it on the first enabled option and `End` on the last; typing a printable character opens it on the first enabled option whose label starts with that character (with a search field, focus goes to the search field instead). Clicking the trigger while the list is open closes it. Tests: `select.test.ts` › Select keyboard and naming (APG select-only combobox).
 - Keyboard map (open panel): opening focuses the search field when there is one, else the selected option, else the first enabled option; `ArrowDown`/`ArrowUp` move the active option and wrap; `Home`/`End` jump to first/last; `Enter`/`Space` select, close and return focus to the trigger; typing a printable character moves focus to the next enabled option whose label starts with the typed text (characters typed within 500 ms add up; ignored while the search field has focus); `Escape` closes and returns focus to the trigger; `Tab` closes and moves focus to the control after the trigger; `Shift+Tab` closes and returns focus to the trigger. Tests: `select.test.ts` › keyboard map (spec).
-- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` (single-select, no `aria-multiselectable`). Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`pi pi-chevron-down`, `pi-heart`, etc.) are `aria-hidden="true"`.
+- ARIA: trigger uses `role="combobox"` with `aria-haspopup="listbox"`, `aria-expanded` bound to open state, `aria-controls` pointing to the list. The teleported content is a plain panel holding the optional search field, the list and the optional footer; the list (not the panel) carries `role="listbox"`, so the search field sits outside it, and is named by the root's `aria-label`, else by the root's `aria-labelledby`, else by the enclosing `Field` label, else by the trigger (which always has an `id`). The list uses `role="listbox"` (single-select, no `aria-multiselectable`). Each option uses `role="option"` with `aria-selected` mirroring its selection. Decorative icons (`ai ai-chevron-down`, `ai-heart`, etc.) are `aria-hidden="true"`.
 - Nested overlays: the open list joins the shared overlay layer stack (`useOverlayLayer`), so inside a `Popover`, `Dialog` or `Drawer` an option click or `Escape` in the list closes only the list; the host overlay stays open.
 - `aria-invalid` and `aria-required` on the trigger mirror the matching props.
 - Contrast ≥4.5:1 (text) / ≥3:1 (icons + borders), including disabled state.

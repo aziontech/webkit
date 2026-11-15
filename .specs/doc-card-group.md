@@ -3,8 +3,8 @@ name: doc-card-group
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 1c4ff8702ffe2ed6caadbc88b7e775027b4675a3a9b6b5c758e49d13add2c913
+spec_version: 4
+checksum: 35037a83aaa27b1307ad34381f35ec440357a54d8cb640e6e379f101858f9d42
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -49,14 +49,14 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
   <DocCardGroup :columns="2">
     <DocCard
       title="Edge Application"
-      icon="pi pi-server"
+      icon="ai ai-server"
       href="/docs/edge-application"
     >
       Serve and cache your application at the edge, close to the people using it.
     </DocCard>
     <DocCard
       title="Edge Firewall"
-      icon="pi pi-shield"
+      icon="ai ai-shield"
       href="/docs/edge-firewall"
     >
       Filter and secure traffic before it reaches your origin.
