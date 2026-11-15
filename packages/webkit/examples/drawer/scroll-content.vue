@@ -21,7 +21,7 @@
   <Drawer
     v-model:open="open"
     dismissible
-    side="right"
+    side="end"
     size="large"
   >
     <DrawerTrigger>

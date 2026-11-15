@@ -87,9 +87,9 @@ describe('Resizable', () => {
   })
 
   it('renders a collapsed pane at zero length without unmounting its content', () => {
-    const { getAllByTestId, getByText } = render(group({ expanded: false, collapsible: true }))
+    const { getAllByTestId, getByText } = render(group({ open: false, collapsible: true }))
     const sized = getAllByTestId('layout-resizable__pane')[1]
-    expect(sized.dataset.collapsed).toBe('true')
+    expect(sized.dataset.state).toBe('closed')
     expect(sized.style.width).toBe('0px')
     // Still in the DOM — the whole point of collapsing rather than v-if.
     expect(getByText('preview')).toBeTruthy()
@@ -108,7 +108,7 @@ describe('Resizable', () => {
   describe('keyboard and models', () => {
     const setup = async (paneProps: Record<string, unknown> = {}, dir = 'ltr') => {
       const basis: number[] = []
-      const expanded: boolean[] = []
+      const opens: boolean[] = []
       const size = ref(300)
       const view = render({
         render: () =>
@@ -119,13 +119,13 @@ describe('Resizable', () => {
                 size.value = value
                 basis.push(value)
               },
-              'onUpdate:expanded': (value: boolean) => expanded.push(value),
+              'onUpdate:open': (value: boolean) => opens.push(value),
               ...paneProps
             })
           ])
       })
       await nextTick()
-      return { ...view, handle: view.getByRole('separator'), basis, expanded }
+      return { ...view, handle: view.getByRole('separator'), basis, opens }
     }
 
     it('ArrowLeft grows the pane after the handle and ArrowRight shrinks it (ltr)', async () => {
@@ -158,43 +158,43 @@ describe('Resizable', () => {
       expect(handle.getAttribute('aria-valuenow')).toBe('600')
     })
 
-    it('Enter collapses a collapsible pane and restores it, emitting expanded', async () => {
-      const { handle, expanded, getAllByTestId } = await setup({ collapsible: true })
+    it('Enter collapses a collapsible pane and restores it, emitting update:open', async () => {
+      const { handle, opens, getAllByTestId } = await setup({ collapsible: true })
       const pane = getAllByTestId('layout-resizable__pane')[1]
       await fireEvent.keyDown(handle, { key: 'Enter' })
-      expect(expanded.at(-1)).toBe(false)
-      expect(pane.dataset.collapsed).toBe('true')
+      expect(opens.at(-1)).toBe(false)
+      expect(pane.dataset.state).toBe('closed')
       await fireEvent.keyDown(handle, { key: 'Enter' })
-      expect(expanded.at(-1)).toBe(true)
-      expect(pane.dataset.collapsed).toBeUndefined()
+      expect(opens.at(-1)).toBe(true)
+      expect(pane.dataset.state).toBe('open')
     })
 
-    it('has no collapsed model: only expanded drives the pane', async () => {
-      const { getAllByTestId } = await setup({ collapsed: true, collapsible: true })
-      expect(getAllByTestId('layout-resizable__pane')[1].dataset.collapsed).toBeUndefined()
+    it('has no expanded model: only open drives the pane', async () => {
+      const { getAllByTestId } = await setup({ expanded: false, collapsible: true })
+      expect(getAllByTestId('layout-resizable__pane')[1].dataset.state).toBe('open')
     })
 
     it('Enter does nothing on a pane that is not collapsible', async () => {
-      const { handle, expanded } = await setup()
+      const { handle, opens } = await setup()
       await fireEvent.keyDown(handle, { key: 'Enter' })
-      expect(expanded).toEqual([])
+      expect(opens).toEqual([])
     })
 
-    it('expanded false renders the pane collapsed, and a bound parent drives it back', async () => {
-      const expanded = ref(false)
+    it('open false renders the pane collapsed, and a bound parent drives it back', async () => {
+      const open = ref(false)
       const { getAllByTestId } = render({
         setup: () => () =>
           group({
             collapsible: true,
-            expanded: expanded.value,
-            'onUpdate:expanded': (value: boolean) => (expanded.value = value)
+            open: open.value,
+            'onUpdate:open': (value: boolean) => (open.value = value)
           })
       })
       const pane = getAllByTestId('layout-resizable__pane')[1]
-      expect(pane.dataset.collapsed).toBe('true')
-      expanded.value = true
+      expect(pane.dataset.state).toBe('closed')
+      open.value = true
       await nextTick()
-      expect(pane.dataset.collapsed).toBeUndefined()
+      expect(pane.dataset.state).toBe('open')
     })
   })
 

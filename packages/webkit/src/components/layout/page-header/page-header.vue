@@ -32,7 +32,7 @@
     /** The actions the page owns, Documentation first and the create action on the outer edge. */
     actions(): unknown
     /** The trail back to the parent pages, above the title row. */
-    breadcrumb(): unknown
+    breadcrumbs(): unknown
     /** A decorative leading glyph or square avatar before the title. */
     icon(): unknown
     /** Short facts beside the title, such as a status tag. */
@@ -56,11 +56,11 @@
     class="@container/page-header flex flex-wrap items-start justify-between gap-(--spacing-md)"
   >
     <div
-      v-if="$slots['breadcrumb']"
-      :data-testid="`${testId}__breadcrumb`"
+      v-if="$slots['breadcrumbs']"
+      :data-testid="`${testId}__breadcrumbs`"
       class="flex min-w-0 basis-full"
     >
-      <slot name="breadcrumb" />
+      <slot name="breadcrumbs" />
     </div>
     <div class="flex min-w-0 grow flex-col gap-(--spacing-2xs)">
       <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">

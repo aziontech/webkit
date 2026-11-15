@@ -11,7 +11,7 @@
   /** Where the control sits: `field` in a right cell capped at the 3xs container, `compact` hard right at its natural width, `stacked` under the copy at the full measure. */
   export type SettingRowKind = 'field' | 'compact' | 'stacked'
   /** Indent depth of a child setting under the row that enables it. */
-  export type SettingRowLevel = 0 | 1 | 2
+  export type SettingRowDepth = 0 | 1 | 2
 
   defineOptions({
     name: 'SettingRow',
@@ -26,7 +26,7 @@
     /** Where the control sits relative to the copy. */
     kind?: SettingRowKind
     /** Indent depth under a rule, for a setting that only applies when its parent is on. */
-    level?: SettingRowLevel
+    depth?: SettingRowDepth
     /** Below the md container of the row, move a field control under the copy at full width. */
     stackable?: boolean
     /** Extra guidance in a Hint glyph beside the title; empty renders no glyph. */
@@ -36,7 +36,7 @@
   withDefaults(defineProps<Props>(), {
     description: '',
     kind: 'field',
-    level: 0,
+    depth: 0,
     stackable: false,
     hint: ''
   })
@@ -62,7 +62,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-row-kind="kind"
-    :data-level="level"
+    :data-depth="depth"
     :data-stackable="stackable || null"
     role="listitem"
     size="small"
@@ -74,8 +74,8 @@
     >
       <ItemContent>
         <div
-          :data-level="level"
-          class="flex flex-col data-[level=1]:border-s data-[level=2]:border-s data-[level=1]:border-(--border-default) data-[level=2]:border-(--border-default) data-[level=1]:ps-(--spacing-md) data-[level=2]:ps-(--spacing-md) data-[level=2]:ms-(--spacing-md)"
+          :data-depth="depth"
+          class="flex flex-col data-[depth=1]:border-s data-[depth=2]:border-s data-[depth=1]:border-(--border-default) data-[depth=2]:border-(--border-default) data-[depth=1]:ps-(--spacing-md) data-[depth=2]:ps-(--spacing-md) data-[depth=2]:ms-(--spacing-md)"
         >
           <ItemTitle :data-testid="`${testId}__title`">
             <slot name="title">{{ title }}</slot>

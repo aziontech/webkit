@@ -76,10 +76,10 @@ describe('SettingRow', () => {
     }
   )
 
-  it.each([0, 1, 2] as const)('mirrors level=%s onto data-level', (level) => {
-    const { getByTestId } = within(render(inList({ title: 'Name', level })).container)
+  it.each([0, 1, 2] as const)('mirrors depth=%s onto data-depth', (depth) => {
+    const { getByTestId } = within(render(inList({ title: 'Name', depth })).container)
 
-    expect(getByTestId('layout-setting-row').getAttribute('data-level')).toBe(String(level))
+    expect(getByTestId('layout-setting-row').getAttribute('data-depth')).toBe(String(depth))
   })
 
   it('sets data-stackable only when stackable is on', () => {
@@ -131,10 +131,10 @@ describe('SettingRow', () => {
     expect(within(render(Default).container).getAllByTestId('layout-setting-row')).toHaveLength(3)
     expect(within(render(CompactRows).container).getAllByRole('switch')).toHaveLength(2)
     expect(within(render(WithMessage).container).getByText('This field is required.')).toBeTruthy()
-    const levels = within(render(Nested).container)
+    const depths = within(render(Nested).container)
       .getAllByTestId('layout-setting-row')
-      .map((el) => el.dataset['level'])
-    expect(levels).toEqual(['0', '0', '1', '1', '1', '2'])
+      .map((el) => el.dataset['depth'])
+    expect(depths).toEqual(['0', '0', '1', '1', '1', '2'])
     expect(within(render(Stackable).container).getAllByRole('textbox')).toHaveLength(2)
     expect(
       within(render(WithHint).container).getAllByTestId('layout-setting-row__hint__trigger')

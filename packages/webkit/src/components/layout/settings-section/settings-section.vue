@@ -143,19 +143,19 @@
     <div
       :id="regionId"
       :data-testid="`${testId}__body`"
-      :data-open="expanded || null"
+      :data-state="expanded ? 'open' : 'closed'"
       :data-collapsible="collapsible || null"
       :inert="!expanded || undefined"
       :aria-hidden="!expanded || undefined"
-      class="min-w-0 transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-collapsible:grid data-collapsible:grid-rows-[0fr] data-collapsible:data-open:grid-rows-[1fr] motion-reduce:transition-none"
+      class="min-w-0 transition-[grid-template-rows] duration-moderate-02 ease-expressive-entrance data-collapsible:grid data-collapsible:grid-rows-[0fr] data-collapsible:data-[state=open]:grid-rows-[1fr] motion-reduce:transition-none"
     >
       <div
         :data-collapsible="collapsible || null"
         class="min-w-0 data-collapsible:overflow-hidden"
       >
         <div
-          :data-open="expanded || null"
-          class="@container/settings-section flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-open:translate-y-0 data-open:opacity-100 motion-reduce:transition-none"
+          :data-state="expanded ? 'open' : 'closed'"
+          class="@container/settings-section flex min-w-0 -translate-y-1 flex-col gap-(--spacing-lg) opacity-0 transition-[opacity,translate] duration-moderate-02 ease-expressive-entrance data-[state=open]:translate-y-0 data-[state=open]:opacity-100 motion-reduce:transition-none"
         >
           <slot />
         </div>

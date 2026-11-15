@@ -71,7 +71,7 @@ describe('SettingsSection', () => {
     )
 
     expect(queryByTestId('layout-settings-section__trigger')).toBeNull()
-    expect(getByTestId('layout-settings-section__body').hasAttribute('data-open')).toBe(true)
+    expect(getByTestId('layout-settings-section__body').getAttribute('data-state')).toBe('open')
     expect(getByTestId('layout-settings-section__body').hasAttribute('inert')).toBe(false)
     expect(getByTestId('layout-settings-section__body').hasAttribute('data-collapsible')).toBe(
       false

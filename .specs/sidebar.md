@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: dee25e1196f067abc2002a71c7ae7dfe9cf623762536ba0853fbfbbb6b31a2b0
+checksum: b3715203c533c6bdc56ac990438e5cc9cb70038158f5a3f7406b9f61259efa4d
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -403,7 +403,7 @@ The only events are the `update:*` of the models above.
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-collapsed` on the root while the rail is collapsed (out of the layout, or down to the icon rail)
+- `data-state="closed"` on the root while the rail is collapsed (out of the layout, or down to the icon rail), `data-state="open"` otherwise
 - `data-rail` on the root while `collapsible="icon"` and collapsed; the rail stays in the layout at
   `var(--size-14)`, is **not** `inert` or `aria-hidden`, renders no edge affordance, and its footer
   trigger becomes `__expand-button` (`Expand sidebar`). Menu rows inside it carry `data-rail` too:
@@ -411,7 +411,7 @@ The only events are the `update:*` of the models above.
   rows without an icon and inline sub-menus are hidden.
 - `data-resizing` on the root and on the handle while a pointer drag is in flight
 - `data-preview` on the collapsed edge zone while it is showing the rail's preview sliver
-- `data-collapsed` / `data-resizing` / `data-preview` are **reported state, not the motion
+- `data-state` / `data-resizing` / `data-preview` are **reported state, not the motion
   driver**: the collapse/expand animation itself runs off the hidden checkbox's `:checked` (see
   Motion & Animations), so these attributes exist for consumer styling hooks and for tests, not
   because the component's own CSS depends on them for that transition.

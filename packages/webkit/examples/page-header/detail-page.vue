@@ -15,7 +15,7 @@
     title="acme-store"
     description="Storefront for Acme Inc., served from three regions."
   >
-    <template #breadcrumb>
+    <template #breadcrumbs>
       <Breadcrumb :items="trail" />
     </template>
     <template #icon>

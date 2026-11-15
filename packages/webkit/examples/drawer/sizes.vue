@@ -39,7 +39,7 @@
       :size="size"
       v-model:open="openBySize[size]"
       dismissible
-      side="right"
+      side="end"
     >
       <DrawerTrigger>
         <Button

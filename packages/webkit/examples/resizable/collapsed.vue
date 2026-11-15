@@ -2,16 +2,16 @@
   import Resizable from '@aziontech/webkit/resizable'
   import { ref } from 'vue'
 
-  const expanded = ref(false)
+  const open = ref(false)
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-sm)">
     <button
       type="button"
-      @click="expanded = !expanded"
+      @click="open = !open"
     >
-      {{ expanded ? 'Hide' : 'Show' }} the preview
+      {{ open ? 'Hide' : 'Show' }} the preview
     </button>
     <div class="h-64">
       <Resizable
@@ -21,7 +21,7 @@
         <Resizable.Pane aria-label="Editor">Editor</Resizable.Pane>
         <Resizable.Handle aria-label="Resize the preview" />
         <Resizable.Pane
-          v-model:expanded="expanded"
+          v-model:open="open"
           :basis="240"
           :min="160"
           collapsible

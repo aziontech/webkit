@@ -105,7 +105,7 @@
     if (target?.isConnected) target.focus()
   })
 
-  const side = computed(() => (ctx?.side === 'left' ? 'left' : 'right'))
+  const side = computed(() => (ctx?.side === 'start' ? 'start' : 'end'))
   const drawerSize = computed(() => unref(ctx?.size) ?? 'medium')
 
   const onOverlayClick = () => {
@@ -139,7 +139,7 @@
         v-bind="forwardedAttrs"
         :class="
           cn(
-            'pointer-events-none fixed z-1001 flex p-0 transition-[translate] duration-slow-02 ease-expressive-entrance data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit motion-reduce:transition-none max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:justify-center max-md:translate-x-0 max-md:data-[state=closed]:translate-y-full max-md:data-[state=open]:translate-y-0 max-sm:top-0 max-sm:h-dvh max-sm:max-h-dvh md:inset-y-0 md:h-full md:min-h-full md:w-full md:translate-y-0 md:data-[state=open]:translate-x-0 data-[side=left]:md:start-0 data-[side=left]:md:justify-start data-[side=left]:md:data-[state=closed]:-translate-x-full data-[side=left]:rtl:md:data-[state=closed]:translate-x-full data-[side=right]:md:end-0 data-[side=right]:md:justify-end data-[side=right]:md:data-[state=closed]:translate-x-full data-[side=right]:rtl:md:data-[state=closed]:-translate-x-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-4xl)',
+            'pointer-events-none fixed z-1001 flex p-0 transition-[translate] duration-slow-02 ease-expressive-entrance data-[state=closed]:duration-slow-01 data-[state=closed]:ease-expressive-exit motion-reduce:transition-none max-md:inset-x-0 max-md:top-auto max-md:bottom-0 max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:justify-center max-md:translate-x-0 max-md:data-[state=closed]:translate-y-full max-md:data-[state=open]:translate-y-0 max-sm:top-0 max-sm:h-dvh max-sm:max-h-dvh md:inset-y-0 md:h-full md:min-h-full md:w-full md:translate-y-0 md:data-[state=open]:translate-x-0 data-[side=start]:md:start-0 data-[side=start]:md:justify-start data-[side=start]:md:data-[state=closed]:-translate-x-full data-[side=start]:rtl:md:data-[state=closed]:translate-x-full data-[side=end]:md:end-0 data-[side=end]:md:justify-end data-[side=end]:md:data-[state=closed]:translate-x-full data-[side=end]:rtl:md:data-[state=closed]:-translate-x-full data-[size=small]:md:max-w-(--container-sm) data-[size=medium]:md:max-w-(--container-xl) data-[size=large]:md:max-w-(--container-4xl)',
             attrs.class as string | undefined
           )
         "
@@ -155,7 +155,7 @@
         <Panel
           data-fluid
           :data-side="side"
-          class="pointer-events-auto flex h-full min-h-0 flex-col max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:max-w-none max-md:rounded-t-(--shape-card) max-md:rounded-b-(--shape-flat) max-sm:h-dvh max-sm:max-h-dvh max-sm:rounded-none max-sm:border-0 md:h-full md:max-h-full md:min-h-0 data-[side=left]:md:rounded-s-(--shape-flat) data-[side=left]:md:rounded-e-(--shape-card) data-[side=right]:md:rounded-s-(--shape-card) data-[side=right]:md:rounded-e-(--shape-flat)"
+          class="pointer-events-auto flex h-full min-h-0 flex-col max-md:h-fit max-md:max-h-[80dvh] max-md:w-full max-md:max-w-none max-md:rounded-t-(--shape-card) max-md:rounded-b-(--shape-flat) max-sm:h-dvh max-sm:max-h-dvh max-sm:rounded-none max-sm:border-0 md:h-full md:max-h-full md:min-h-0 data-[side=start]:md:rounded-s-(--shape-flat) data-[side=start]:md:rounded-e-(--shape-card) data-[side=end]:md:rounded-s-(--shape-card) data-[side=end]:md:rounded-e-(--shape-flat)"
           :data-testid="`${testId}__panel-shell`"
         >
           <slot />

@@ -82,7 +82,7 @@
     <template #actions="{ compact }">
       <Tooltip
         v-if="compact"
-        text="Create"
+        content="Create"
         placement="bottom"
       >
         <IconButton

@@ -20,7 +20,7 @@
 
   interface Props {
     /** Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`). */
-    navigationLabel?: string
+    navigationAriaLabel?: string
     /** Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`). */
     toolsLabel?: string
     /** Width of the tools region in pixels while not compact. */
@@ -34,7 +34,7 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    navigationLabel: '',
+    navigationAriaLabel: '',
     toolsLabel: '',
     toolsWidth: 320,
     splitPanelTitle: '',
@@ -515,13 +515,13 @@
       v-if="hasNavigation() && compact"
       key="navigation-drawer"
       v-model:open="navDrawerOpen"
-      side="right"
+      side="end"
       size="small"
       :data-testid="`${testId}__navigation-drawer`"
     >
       <DrawerContent>
         <DrawerTitle class="sr-only">
-          {{ navigationLabel || t('appLayout.navigation') }}
+          {{ navigationAriaLabel || t('appLayout.navigation') }}
         </DrawerTitle>
         <slot
           name="navigation"
@@ -535,7 +535,7 @@
       v-if="hasTools() && compact"
       key="tools-drawer"
       v-model:open="toolsDrawerOpen"
-      side="right"
+      side="end"
       size="small"
       :data-testid="`${testId}__tools-drawer`"
     >

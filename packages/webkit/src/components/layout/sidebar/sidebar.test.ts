@@ -19,7 +19,7 @@ describe('Sidebar', () => {
   describe('v-model:open', () => {
     it('open=false renders the rail collapsed', () => {
       const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
-      expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
+      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('closed')
     })
 
     it('the trigger emits update:open false and no update:collapsed', async () => {
@@ -42,7 +42,7 @@ describe('Sidebar', () => {
         props: { collapsible: true },
         attrs: { collapsed: true }
       })
-      expect(getByTestId('layout-sidebar').hasAttribute('data-collapsed')).toBe(false)
+      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('open')
     })
 
     it('a parent that binds open follows it after an internal collapse', async () => {
@@ -56,7 +56,7 @@ describe('Sidebar', () => {
       expect(open.value).toBe(false)
       open.value = true
       await nextTick()
-      expect(getByTestId('layout-sidebar').hasAttribute('data-collapsed')).toBe(false)
+      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('open')
     })
   })
 
@@ -306,7 +306,7 @@ describe('Sidebar', () => {
         expect(root.hasAttribute('data-settled')).toBe(true)
         expect(panel.hasAttribute('data-settled')).toBe(true)
       })
-      expect(root.getAttribute('data-collapsed')).toBe('')
+      expect(root.getAttribute('data-state')).toBe('closed')
     })
 
     it('the trigger collapses the rail and takes it out of the tree and the tab order', async () => {
@@ -322,7 +322,7 @@ describe('Sidebar', () => {
       expect(emitted()['update:open']?.[0]).toEqual([false])
 
       const root = getByTestId('layout-sidebar')
-      expect(root.getAttribute('data-collapsed')).toBe('')
+      expect(root.getAttribute('data-state')).toBe('closed')
       expect(root.getAttribute('aria-hidden')).toBe('true')
       expect(root.hasAttribute('inert')).toBe(true)
       expect((getByTestId('layout-sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
@@ -352,7 +352,7 @@ describe('Sidebar', () => {
 
       expect(input.checked).toBe(true)
       expect(emitted()['update:open']?.at(-1)).toEqual([false])
-      expect(getByTestId('layout-sidebar').getAttribute('data-collapsed')).toBe('')
+      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('closed')
     })
 
     it('the way back is a sibling of the rail, because a collapsed rail would clip it', async () => {
@@ -412,7 +412,7 @@ describe('Sidebar', () => {
       expect(rail.style.width).toBe('40px')
       expect(rail.hasAttribute('inert')).toBe(true)
       expect(rail.getAttribute('aria-hidden')).toBe('true')
-      expect(rail.getAttribute('data-collapsed')).toBe('')
+      expect(rail.getAttribute('data-state')).toBe('closed')
     })
 
     it('previewing: a click on the collapsed splitter brings the rail back', async () => {
