@@ -1,5 +1,5 @@
 <script setup>
-  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
+  import HeroBand from '@aziontech/webkit/hero-band'
 
   const primaryAction = {
     label: 'Start for free',
@@ -53,7 +53,8 @@
 </script>
 
 <template>
-  <HeroWithOpening
+  <HeroBand
+    size="large"
     eyebrow="AI Gateway"
     title="One gateway for all your AI applications"
     description="Route requests to AI Inference and third-party providers, fall back when a model fails, and keep keys, limits, and usage logs in one place, with no proxy servers to run."

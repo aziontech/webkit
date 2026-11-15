@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
+  import type { TagSeverity } from '../../content/tag/tag.vue'
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle, {
     type HeroTitleEyebrowPrefix
@@ -55,6 +56,38 @@
     height: number
   }
 
+  /** One card of the topology drawn under the copy. */
+  export type HeroBandNode = {
+    /** Kind of resource the card stands for, set above its title. */
+    eyebrow: string
+    /** Icon class drawn before the eyebrow. */
+    icon: string
+    /** Name of the resource; a card without it is skipped. */
+    title: string
+    /** Status shown in the card's tag. */
+    label: string
+    /** Severity of the status tag. */
+    severity: TagSeverity
+    /** Marks the card as the focus of the scene. */
+    lit?: boolean
+  }
+
+  /** One column of the topology drawn under the copy. */
+  export type HeroBandLevel = {
+    /** The cards of the column, top to bottom. */
+    nodes: HeroBandNode[]
+  }
+
+  /** One argument of the grid under the band. */
+  export type HeroBandItem = {
+    /** Icon class drawn above the heading. */
+    icon: string
+    /** Short heading of the argument. */
+    title: string
+    /** One sentence supporting the heading. */
+    description: string
+  }
+
   type ArtBounds = {
     canvas: number
     start: number
@@ -103,6 +136,10 @@
     titleLength?: HeroBandTitleLength
     /** Drops the dot texture of the `centered` layout. */
     plain?: boolean
+    /** Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. */
+    levels?: HeroBandLevel[]
+    /** Arguments in a framed grid under the band, three to a row; each is `{ icon, title, description }`. The grid renders only when there are items. */
+    items?: HeroBandItem[]
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -123,7 +160,9 @@
     anchor: '',
     headerOffset: 'var(--layout-header-height)',
     titleLength: 'short',
-    plain: false
+    plain: false,
+    levels: () => [],
+    items: () => []
   })
 
   const slots = defineSlots<{
@@ -134,6 +173,10 @@
   }>()
 
   const attrs = useAttrs()
+
+  const HeroBandTopology = defineAsyncComponent(() => import('./parts/hero-band-topology.vue'))
+
+  const HeroBandArguments = defineAsyncComponent(() => import('./parts/hero-band-arguments.vue'))
   const { t } = useTranslate({ heroBand: en.heroBand })
 
   const COMPARISON: ArtBounds = {
@@ -282,6 +325,15 @@
   const secondary = computed(() =>
     props.secondaryAction?.label && props.secondaryAction.href ? props.secondaryAction : null
   )
+
+  const levelColumns = computed(() =>
+    props.levels
+      .map((level) => level.nodes.filter((node) => node.title))
+      .filter((nodes) => nodes.length > 0)
+  )
+
+  const scene = () =>
+    props.kind === 'copy-on-top-art' && !slots.top && !slots.bottom ? levelColumns.value : []
 </script>
 
 <template>
@@ -360,14 +412,16 @@
       </template>
 
       <template
-        v-if="slots.bottom"
+        v-if="slots.bottom || scene().length > 0"
         #bottom
       >
         <div class="@container">
           <div
             class="flex animate-content-enter justify-center pb-(--spacing-xxl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
           >
-            <slot name="bottom" />
+            <slot name="bottom">
+              <HeroBandTopology :columns="scene()" />
+            </slot>
           </div>
         </div>
       </template>
@@ -398,5 +452,10 @@
         </div>
       </template>
     </Hero>
+
+    <HeroBandArguments
+      v-if="title && items.length > 0"
+      :items="items"
+    />
   </div>
 </template>

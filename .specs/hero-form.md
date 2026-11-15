@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c0e4d2f96f5513d7ab5149452868bfd2fccfea6b4300dbb6b21d02038b7e2d7b
+checksum: 3c8aefb4dcdb20a44c0ae500a95d0c6a11155ce84e032981e69cd68fffc7ea02
 template: 2
 ---
 
@@ -18,12 +18,13 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 
 ## When to use
 
+- Use HeroForm when the page exists to capture a lead and the form sits above the fold.
 - To open a page whose purpose is a lead form, such as Contact sales or Under attack.
 
 ## When NOT to use
 
 - For a newsletter sign-up with one email field → use `closing-call-to-action-newsletter`.
-- For an opening band with calls to action and no form → use `hero-band` or `hero-with-opening`.
+- For an opening band with calls to action and no form → use `hero-band`, which takes every other marketing page opening.
 
 ## Related
 

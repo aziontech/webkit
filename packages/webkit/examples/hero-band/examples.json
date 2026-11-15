@@ -21,6 +21,16 @@
       "name": "Image",
       "summary": "`copy-beside-art` with an `image` instead of an illustration: the photograph fills the media column, and a portrait one is drawn at half width, centered, on narrow screens. The eyebrow takes the `</>` prefix.",
       "file": "image.vue"
+    },
+    {
+      "name": "Topology",
+      "summary": "`copy-on-top-art` with no scene slot: `levels` draws the Workloads topology under the centered copy — two domains feed the lit workload, which binds an application and a firewall. A card with no title is skipped, and a band with no levels drops the scene.",
+      "file": "topology.vue"
+    },
+    {
+      "name": "Arguments",
+      "summary": "The Firewall opening: the large title band with a long headline (`title-length=\"long\"`), both actions, and one row of three arguments (`items`) framed under the hero floor. A band with no items drops the grid.",
+      "file": "arguments.vue"
     }
   ],
   "site": [
@@ -65,6 +75,18 @@
       "summary": "Copy on one side and a wide illustration on the other, with the client strip on the floor; the illustration bleeds past the column edge from medium widths up.",
       "file": "site-copy-beside-art.vue",
       "json": "site-copy-beside-art.json"
+    },
+    {
+      "name": "Topology",
+      "summary": "The Workloads hero: the copy centered over a topology drawn from `levels`, so the page JSON carries the scene as data.",
+      "file": "site-topology.vue",
+      "json": "site-topology.json"
+    },
+    {
+      "name": "Arguments",
+      "summary": "The AI Gateway opening: the large title band with six arguments in two rows of three under it, for a page that argues on breadth.",
+      "file": "site-arguments.vue",
+      "json": "site-arguments.json"
     }
   ],
   "siteTitle": "Templates/Marketing/Hero Band/HeroBand",
@@ -86,6 +108,10 @@
     "PixelFloor",
     "PixelFloorJson",
     "CopyBesideArt",
-    "CopyBesideArtJson"
+    "CopyBesideArtJson",
+    "Topology",
+    "TopologyJson",
+    "Arguments",
+    "ArgumentsJson"
   ]
 }

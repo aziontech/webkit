@@ -2,7 +2,7 @@
 
 The opening band of a page: an eyebrow, the page headline, a lead and up to two calls to action, laid out by `kind`, with an optional scene above or under the copy.
 
-The band is the `HeroBand` component from `@aziontech/webkit/hero-band`; it composes `Hero`, `SectionModule`, `FrameBox` and `Button`.
+The band is the `HeroBand` component from `@aziontech/webkit/hero-band`; it composes `Hero`, `Button`, the `Flow` nodes for a topology, and `SectionContainer`, `SectionModule`, `FrameBox`, `CardGrid` and `Topic` for the argument grid.
 
 ## Examples
 
@@ -140,3 +140,39 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-copy-beside-art.json`](./site-copy-beside-art.json)
+
+### Topology
+
+Copy centered over a flow of resource nodes, level by level, the lit node marking the product the page is about: two domains routing to one workload, which serves an application and a firewall.
+
+Example: [`site-topology.vue`](./site-topology.vue)
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` are bound straight onto the component:
+
+- `_id` is `hero-band` and `kind` is `copy-on-top-art`.
+- `eyebrow`, `title`, `description` and the two actions work as in the title band.
+- `levels[]` are the columns of the flow, left to right, each `nodes[]` of `{ eyebrow, icon, title, label, severity, lit? }`. A node with no title is skipped. The flow is drawn only when the entry has no `scenes`.
+
+Example:
+
+Site JSON: [`site-topology.json`](./site-topology.json)
+
+### Arguments
+
+The large title band with the sales arguments that open the page right under it. Each argument is an icon, a title and one sentence on a thin frame grid, three to a row. The grid starts at the hero floor with no hatched gap between them, so the arguments read as the second half of the hero; the hatched gap comes after the grid.
+
+Example: [`site-arguments.vue`](./site-arguments.vue)
+
+##### Use it on the site
+
+Add this entry to the `hero` array of the page JSON. `_id` picks the block and `props` fill it:
+
+- `_id` is `hero-band`, `size` is `large`, and `kind` stays the default `title-band`.
+- `eyebrow`, `title`, `description` and the two actions work as in the title band. Set `titleLength` to `long` for a headline that would run to three lines.
+- `items` are the arguments in reading order. Three fill a row, so use three or six. Each takes an `icon` class, a short `title` and a one-sentence `description`.
+
+Example:
+
+Site JSON: [`site-arguments.json`](./site-arguments.json)

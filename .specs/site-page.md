@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 8175b0a818a594cbba79cedd1c36f9799be9d3ad37b7f858f0b72a0ad10ec959
+checksum: c1cde3e922c5f5308e2ed82e67a52dbede4bacb4a99f081e7392a3bcd649a630
 created: 2026-11-12
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SitePage — Component Spec
@@ -45,7 +45,7 @@ It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships n
 ## Best practices
 
 - Write `_id` as the section's public subpath (`use-cases` for `@aziontech/webkit/use-cases`); the `props` object is exactly what the section's own `site-*.json` example carries.
-- Put openings (`hero-band`, `hero-form`, `hero-with-opening`, `hero-copy-on-top-art`, `article-body`, `pricing-plans`) in `hero` and every band after them in `sections`.
+- Put openings (`hero-band`, `hero-form`, `article-body`, `pricing-plans`) in `hero` and every band after them in `sections`.
 - Keep scenes as names (`{ component: 'BrandGlobeScene' }`), never as code, so the page stays plain JSON.
 - Use `gap` only to change the default break: `none` for a band that follows its neighbour with no break, `small` for two bands that belong together.
 - End a page on a closing band, or on `{ _id: 'closing-call-to-action', props: { kind: 'frame' } }` when its last band already carries its actions; never set `hatch` yourself on stacked closings, the renderer does.

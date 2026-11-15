@@ -1,5 +1,5 @@
 <script setup>
-  import HeroCopyOnTopArt from '@aziontech/webkit/hero-copy-on-top-art'
+  import HeroBand from '@aziontech/webkit/hero-band'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
 
@@ -70,7 +70,8 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <HeroCopyOnTopArt
+    <HeroBand
+      kind="copy-on-top-art"
       eyebrow="Workloads"
       title="Put your application close to users in seconds"
       description="A workload is the hostname, the certificate and the routing that make an application reachable. Create one and it is live in every Azion data center, with no servers to size and no regions to pick."

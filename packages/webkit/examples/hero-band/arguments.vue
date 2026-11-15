@@ -1,9 +1,11 @@
 <script setup>
-  import HeroWithOpening from '@aziontech/webkit/hero-with-opening'
+  import HeroBand from '@aziontech/webkit/hero-band'
 </script>
 
 <template>
-  <HeroWithOpening
+  <HeroBand
+    size="large"
+    title-length="long"
     eyebrow="Firewall"
     title="Programmable firewall for distributed applications"
     description="Protect users, applications, and networks with rules you program, from layer 3 to layer 7."

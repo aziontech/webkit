@@ -12,6 +12,71 @@ const EYEBROW = 'Cache'
 const DESCRIPTION = 'Serve cached content close to users.'
 const MARKS = ['global-fashion-group', 'herospark', 'itau']
 
+const NODE_TESTID = 'data-flow__node'
+const CELL_TESTID = 'marketing-card-grid-cell'
+
+const levels = [
+  {
+    nodes: [
+      {
+        eyebrow: 'Domain',
+        icon: 'ai ai-domains',
+        title: 'shop.example.com',
+        label: 'Public',
+        severity: 'info'
+      },
+      {
+        eyebrow: 'Domain',
+        icon: 'ai ai-domains',
+        title: 'api.example.com',
+        label: 'Public',
+        severity: 'info'
+      }
+    ]
+  },
+  {
+    nodes: [
+      {
+        eyebrow: 'Workload',
+        icon: 'ai ai-workloads',
+        title: 'shop-prod',
+        label: 'Live',
+        severity: 'success',
+        lit: true
+      }
+    ]
+  },
+  {
+    nodes: [
+      {
+        eyebrow: 'Application',
+        icon: 'ai ai-edge-application',
+        title: 'storefront',
+        label: 'Active',
+        severity: 'success'
+      }
+    ]
+  }
+]
+
+const items = [
+  {
+    icon: 'pi pi-shield',
+    title: 'Programmable rule engine',
+    description: 'Define custom rules across OSI layers L3-L7.'
+  },
+  {
+    icon: 'pi pi-code',
+    title: 'Extensible with Functions',
+    description: 'Run custom JavaScript security code.'
+  },
+  {
+    icon: 'pi pi-sync',
+    title: 'Real-time synchronization',
+    description: 'Rules sync automatically across every data center.'
+  }
+]
+
 const primaryAction = { label: 'Start for free', href: '/signup' }
 const secondaryAction = { label: 'Docs', href: '/docs', trailing: true }
 
@@ -319,5 +384,104 @@ describe('HeroBand — sample opening bands', () => {
     const { default: Bands } = await import('../../../../examples/hero-band/bands.vue')
     const { container } = render(Bands)
     await expectNoA11yViolations(container)
+  })
+
+  describe('levels topology', () => {
+    const topology = (props: Record<string, unknown> = {}) =>
+      band({ kind: 'copy-on-top-art', levels, ...props })
+
+    it('draws one column per level and one card per node, in order', async () => {
+      const { container, findAllByTestId } = topology()
+      const nodes = await findAllByTestId(NODE_TESTID)
+
+      expect(
+        container.querySelectorAll('[role="listitem"][data-flow-kind="parallel"]')
+      ).toHaveLength(levels.length)
+      expect(nodes.map((node) => node.textContent?.includes('shop-prod'))).toEqual([
+        false,
+        false,
+        true,
+        false
+      ])
+    })
+
+    it('renders each card with its eyebrow, title and status, and marks only the lit card', async () => {
+      const { findAllByTestId, container } = topology()
+
+      const first = (await findAllByTestId(NODE_TESTID))[0]
+      expect(first?.textContent).toContain('Domain')
+      expect(first?.textContent).toContain('shop.example.com')
+      expect(first?.textContent).toContain('Public')
+      const lit = container.querySelectorAll('[data-lit]')
+      expect(lit).toHaveLength(1)
+      expect(lit[0]?.textContent?.trim()).toBe('shop-prod')
+    })
+
+    it('skips a card without a title and a level left empty', async () => {
+      const { container, findAllByTestId } = topology({
+        levels: [
+          ...levels,
+          { nodes: [{ eyebrow: 'Firewall', icon: '', title: '', label: '', severity: 'success' }] }
+        ]
+      })
+
+      expect(await findAllByTestId(NODE_TESTID)).toHaveLength(4)
+      expect(container.querySelectorAll('[data-flow-kind="parallel"]')).toHaveLength(levels.length)
+    })
+
+    it('draws nothing in other layouts or when a scene slot is given', () => {
+      const other = band({ kind: 'centered', levels })
+      expect(other.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
+      other.unmount()
+
+      const slotted = render(HeroBand, {
+        props: { kind: 'copy-on-top-art', title: TITLE, levels },
+        slots: { bottom: '<div>scene</div>' }
+      })
+      expect(slotted.getByText('scene')).toBeInTheDocument()
+      expect(slotted.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
+      slotted.unmount()
+
+      const top = render(HeroBand, {
+        props: { kind: 'copy-on-top-art', title: TITLE, levels },
+        slots: { top: '<div>top scene</div>' }
+      })
+      expect(top.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
+    })
+
+    it('has no a11y violations with the topology', async () => {
+      const { container, findAllByTestId } = topology()
+      await findAllByTestId(NODE_TESTID)
+
+      await expectNoA11yViolations(container)
+    })
+  })
+
+  describe('items grid', () => {
+    it('renders one cell per item, in order, each with an h2', async () => {
+      const { findAllByTestId, getAllByRole } = band({ items })
+
+      expect(await findAllByTestId(CELL_TESTID)).toHaveLength(items.length)
+      expect(
+        getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())
+      ).toEqual(items.map((item) => item.title))
+    })
+
+    it('omits the grid and its gap when items is empty, and everything without a title', () => {
+      const empty = band()
+      expect(empty.queryAllByTestId(CELL_TESTID)).toHaveLength(0)
+      expect(empty.queryByTestId('marketing-section-gap')).toBeNull()
+      empty.unmount()
+
+      const untitled = band({ items, title: '' })
+      expect(untitled.getByTestId(TESTID).children).toHaveLength(0)
+    })
+
+    it('has no a11y violations with the grid', async () => {
+      const { container, findAllByTestId } = band({ items })
+      await findAllByTestId(CELL_TESTID)
+
+      await expectNoA11yViolations(container)
+    })
   })
 })
