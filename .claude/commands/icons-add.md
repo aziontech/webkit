@@ -37,15 +37,9 @@ Detect colored automatically: the SVG has `<linearGradient>`/`<radialGradient>`,
 6. **Build:** `cd packages/icons && npm run build`. This regenerates the font, `catalog.json`, `color-catalog.json`, and `azionicons-color.css`. (`dist/` is gitignored — it is a build artifact; never edit it by hand.)
 7. **Verify** (state results plainly — counts, not vibes):
    - **Monochrome:** the name is in `dist/catalog.json` as `{ icon: "ai ai-<name>", … }`; it is **not** in `color-catalog.json`.
-<<<<<<< HEAD:.claude/commands/include-icons.md
    - **Colored:** the name is in `dist/color-catalog.json` (well-formed `<svg>`; `currentColor` only for ink parts, which the build emits per theme) **and** has a `.ai-color.ai-<name>` rule in `dist/azionicons-color.css` whose data-URI decodes to the colored SVG; it is **not** in `catalog.json` and **not** in the woff2 font.
-   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and confirm the icon appears in the grid; run `pnpm docs:dev` to see it in an example if one uses it. For colored, confirm `<i class="ai-color ai-<name>">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
+   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and confirm the icon appears in the grid; run `pnpm dev:docs` to see it in an example if one uses it. For colored, confirm `<i class="ai-color ai-<name>">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
 8. **Report** what you added (names, kind), how to use each (`<i class="ai ai-<name>">` or `<i class="ai-color ai-<name>">`), and the verification outcome.
-=======
-   - **Colored:** the name is in `dist/color-catalog.json` (well-formed `<svg>`; `currentColor` only for ink parts, which the build emits per theme) **and** has a `.ai-cor.ai-<name>` rule in `dist/azionicons-color.css` whose data-URI decodes to the colored SVG; it is **not** in `catalog.json` and **not** in the woff2 font.
-   - **Apps:** rebuild the gallery (`apps/icons-gallery`) and confirm the icon appears in the grid; run `pnpm dev:docs` to see it in an example if one uses it. For colored, confirm `<i class="ai-cor ai-<name>">` paints the logo (the `azionicons-color.css` class is bundled via the `index.css` barrel).
-8. **Report** what you added (names, kind), how to use each (`<i class="ai ai-<name>">` or `<i class="ai-cor ai-<name>">`), and the verification outcome.
->>>>>>> naming/tooling:.claude/commands/icons-add.md
 
 ## Rules (hard)
 
