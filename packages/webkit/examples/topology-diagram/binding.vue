@@ -22,7 +22,7 @@
 
   const deployed = { policy: 'edge-guard', 'error-page': '' }
   const staged = reactive({})
-  const expanded = ref(['policy'])
+  const openKeys = ref(['policy'])
   const note = ref('')
 
   const slot = (key) => {
@@ -110,7 +110,7 @@
   <div class="flex flex-col gap-(--spacing-sm)">
     <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
       <TopologyDiagram
-        v-model:expanded="expanded"
+        v-model:open-keys="openKeys"
         :levels="levels"
         @bind="bind"
         @remove="remove"

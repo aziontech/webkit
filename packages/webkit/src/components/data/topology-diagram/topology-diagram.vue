@@ -38,7 +38,7 @@
     ariaLabel: ''
   })
 
-  const expanded = defineModel<string[]>('expanded', { default: () => [] })
+  const openKeys = defineModel<string[]>('openKeys', { default: () => [] })
 
   const emit = defineEmits<{
     /** An existing option was picked in a node's bind control. */
@@ -96,11 +96,11 @@
     }
   )
 
-  const isOpen = (key: string): boolean => expanded.value.includes(key)
+  const isOpen = (key: string): boolean => openKeys.value.includes(key)
   const toggle = (key: string): void => {
-    expanded.value = isOpen(key)
-      ? expanded.value.filter((entry) => entry !== key)
-      : [...expanded.value, key]
+    openKeys.value = isOpen(key)
+      ? openKeys.value.filter((entry) => entry !== key)
+      : [...openKeys.value, key]
   }
 </script>
 

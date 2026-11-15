@@ -21,7 +21,7 @@ export interface TopologyBindOption {
 
 /** One resource in the topology. A node without `name` is an unbound slot. */
 export interface TopologyNode {
-  /** Stable identity, used by `expanded` and the bind events. */
+  /** Stable identity, used by `openKeys` and the bind events. */
   id: string
   /** Resource type shown in the header, e.g. `Policy`. */
   type?: string

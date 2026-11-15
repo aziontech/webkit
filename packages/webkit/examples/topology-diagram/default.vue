@@ -162,7 +162,7 @@
     }
   ]
 
-  const expanded = ref(['project'])
+  const openKeys = ref(['project'])
   const note = ref('')
 </script>
 
@@ -170,7 +170,7 @@
   <div class="flex flex-col gap-(--spacing-sm)">
     <div class="rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)">
       <TopologyDiagram
-        v-model:expanded="expanded"
+        v-model:open-keys="openKeys"
         :levels="levels"
         @bind="(event, { id, value }) => (note = `Bind ${value} to ${id}.`)"
         @remove="(event, id) => (note = `Remove ${id}.`)"

@@ -3,9 +3,9 @@ name: topology-diagram
 category: data
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 633d454174dda7bd88d759f258596853e9298d30c575a38d7b7a94e56eeb4da6
+checksum: 1fd548399cc0191ed7d08c3bc9ba6daa4a46eb08e6f9e26efbfa37c285ef2197
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -91,12 +91,12 @@ The deployment topology of a resource as a left-to-right diagram: each column is
       ]
     }
   ]
-  const expanded = ref([])
+  const openKeys = ref([])
 </script>
 
 <template>
   <TopologyDiagram
-    v-model:expanded="expanded"
+    v-model:open-keys="openKeys"
     :levels="levels"
     @bind="(event, { id, value }) => {}"
   >
@@ -129,7 +129,7 @@ Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; 
 
 ## v-model
 
-- **`v-model:expanded`** — `string[]`, default `[]`. Ids of the open node cards; a header click toggles its id.
+- **`v-model:openKeys`** — `string[]`, default `[]`. Ids of the open node cards; a header click toggles its id.
 
 ## Events
 

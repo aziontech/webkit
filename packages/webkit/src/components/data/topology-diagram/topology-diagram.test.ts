@@ -69,8 +69,8 @@ describe('TopologyDiagram', () => {
     await waitFor(() => expect(root.querySelectorAll('svg path').length).toBe(9))
   })
 
-  it('toggles a card with Enter and updates expanded', async () => {
-    const view = render(TopologyDiagram, { props: { levels, expanded: [] } })
+  it('toggles a card with Enter and updates openKeys', async () => {
+    const view = render(TopologyDiagram, { props: { levels, openKeys: [] } })
     const header = view.getByRole('button', { name: /Project/ })
     expect(header.getAttribute('aria-expanded')).toBe('false')
     const body = document.getElementById(header.getAttribute('aria-controls') as string)
@@ -78,7 +78,7 @@ describe('TopologyDiagram', () => {
     header.focus()
     await fireEvent.keyDown(header, { key: 'Enter' })
     await fireEvent.click(header)
-    expect(view.emitted()['update:expanded']?.at(-1)).toEqual([['project']])
+    expect(view.emitted()['update:openKeys']?.at(-1)).toEqual([['project']])
   })
 
   it('shows an unbound slot as Not bound with a bind control', () => {
