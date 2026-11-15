@@ -3,18 +3,20 @@ name: chip
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: 1010f43a9fcbfa24bbd94e2f9494b5751632dd4c15c99479183b722f36fe7776
+checksum: e689181e94f54d9d2b51710b564989b4e0988ac157cce9b1647c15b7941ef9f6
 created: 2026-06-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Chip — Component Spec
 
 ## Purpose
+
+Use Chip when the person can remove or select the token (applied filters, picked values); a read-only word is a Tag, and a number is a Badge.
 
 A Chip is a compact, pill-shaped token that labels a discrete value the user has applied — most often a filter on a data view. Unlike `tag` (a read-only status/category badge with severity color coding), a Chip carries no severity and exposes an optional trailing remove control: when `removable` is set, it renders a real `<button>` that emits `remove`, so the consumer can drop the value from a collection. This is the token consumed by the data table's `#filters` slot (`<Chip :label="f.label" removable @remove="dropFilter(f)" />`): each active filter becomes one removable Chip, and dismissing it removes that filter. Reach for a Chip when a value is user-applied and dismissible; reach for `tag` when it is a static status or category indicator.
 

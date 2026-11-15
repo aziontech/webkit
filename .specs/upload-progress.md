@@ -3,16 +3,18 @@ name: upload-progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 8aa07331a622bd9e62b067a80527e0b1a2f15f459bf33be4701cfa0538677fad
+checksum: a524f4c1c90256a4ffdc22b2d0463ff260e98205eb06161dbcf0b84fa4aad843
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # UploadProgress — Component Spec
 
 ## Purpose
+
+Use UploadProgress for a floating card that tracks a background transfer while the person keeps working; the files picked in a form field are a FileTokenGroup, and one measurable task in place is a Progress.
 
 A card that follows a file transfer to its end while the person keeps working: uploading files into a bucket, moving objects between folders or deleting them. Its header says what is happening and how far it got (`Uploading 2 of 5 files`) over one overall bar; below it each file has its own bar, its state and a Cancel or Retry button. When every file has finished the header turns into the outcome (`5 files uploaded`, or `4 files uploaded, 1 failed` with Retry failed) and the card can be closed. It floats at the inline-end bottom corner by default, so it survives route changes in the console shell. Taken from the Console Kit's object storage progress card, extended with the per-file list the design sample's bucket browser needs.
 

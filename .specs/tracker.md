@@ -3,15 +3,17 @@ name: tracker
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-10
-last_updated: 2026-11-14
-checksum: 6fcfdcb9fc03904d0dd6c7aa0746a578b5a632e64daa8227b858a34c360cecaa
+last_updated: 2026-11-15
+checksum: dbaa92a1fa5fd9cc483f2e4facab6a067314c58a09d939d965fefa942c590979
 ---
 
 # Tracker — Component Spec
 
 ## Purpose
+
+Use Tracker for the history of a state across periods (an uptime strip); the current state of one resource is a StatusIndicator.
 
 A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.
 

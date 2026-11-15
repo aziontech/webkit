@@ -3,8 +3,8 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 856de3fd1780ec631ea90fba072383e46f89171d62d0b45274c643deef6ef9bc
-spec_version: 2
+checksum: e4916b9f6f3e954273a6a26b7e6bbeec9a5dd2926e09cc6cbcaa254c89b58283
+spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -12,6 +12,8 @@ last_updated: 2026-11-15
 # KeyValuePairs — Component Spec
 
 ## Purpose
+
+Use KeyValuePairs to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
 
 A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.
 

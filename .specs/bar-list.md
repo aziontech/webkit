@@ -3,15 +3,17 @@ name: bar-list
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-10
-last_updated: 2026-11-14
-checksum: 9fea8662c7104c217eccda9fdf79f1ab1e357867e19df47004480368c358bffa
+last_updated: 2026-11-15
+checksum: 2b6d7b1dc5fc4d82c4bb0da5ae56965ac80cba5ee3824d0eb49bc5280b121c32
 ---
 
 # BarList — Component Spec
 
 ## Purpose
+
+Use BarList for a ranked top-N breakdown inside a chart card; a list of mixed rows with actions is Item rows.
 
 A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column. It reads as a list, not a chart — no axes, no grid — so it suits top-N breakdowns inside a card, where a horizontal `chart` would spend its width on an axis gutter.
 

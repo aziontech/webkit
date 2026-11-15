@@ -3,8 +3,8 @@ name: status-indicator
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 973af310f9f80c971a0e899eb92f858d3087631ee03ac4e357354479144db551
+spec_version: 6
+checksum: 736fe694b89e42437412eec067954431415f54de63505354f53631b83791593a
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -12,6 +12,8 @@ last_updated: 2026-11-15
 # Status Indicator — Component Spec
 
 ## Purpose
+
+Use StatusIndicator for the current state of one resource (Active, Failed, Deploying) in a table column or detail header — the default answer for 'status'. A category or outcome word is a Tag, a number is a Badge, a level on the critical → info scale is a SeverityTag, and an HTTP code is a StatusCode.
 
 Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.
 

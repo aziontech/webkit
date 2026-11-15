@@ -3,16 +3,18 @@ name: file-token-group
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: f7751f9a10baf535a72946c9f57eb00f2fb732c6a3fbbf22f7eaf9e930a7ce60
+checksum: 5e34aca1c2cf9d68feabdeaf0c9d1775e9ce0aa01a49a9ed9233d81a1b242703
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # FileTokenGroup — Component Spec
 
 ## Purpose
+
+Use FileTokenGroup for the files picked in a form field, before and during upload; a transfer that runs in the background while the person keeps working is an UploadProgress.
 
 The files a person picked for upload, shown as removable tokens before or while they upload: each token names the file with a glyph for its type, its size and, when asked, its last-modified date, carries a progress bar while it uploads and its own error or warning line when it cannot be sent. It pairs with `file-dropzone` (which receives the files) and with a Browse files button: the product keeps the list, the group renders it and reports which token was removed. Taken from Cloudscape's file token group; the Console Kit and the design sample list files by hand.
 

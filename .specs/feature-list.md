@@ -3,16 +3,18 @@ name: feature-list
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 5d3a3b3d167eb09e935586efafff8f2dbeb2dced11782b5ceeb2e631eb1072ec
+checksum: bb3dca0b59fbe700024e701e49fa40e0a630a06d933b612b77658d691cf0b942
 created: 2026-11-12
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # FeatureList — Component Spec
 
 ## Purpose
+
+Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs.
 
 The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `pi pi-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 

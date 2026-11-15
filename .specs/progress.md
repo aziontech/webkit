@@ -3,8 +3,8 @@ name: progress
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: feebb6724dfe30a558c274d2c39ea18ed8169ec66c8e47d2112014cc55201665
+spec_version: 5
+checksum: 58e51a7173c1252f9acaf8ceb888f287503cd958f5a53acd328fdb5b034aff26
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-870
   node_id: 479:870
@@ -15,6 +15,8 @@ last_updated: 2026-11-15
 # Progress Bar — Component Spec
 
 ## Purpose
+
+Use Progress when the work has a measurable amount (value/max), or for a long task with no layout to reserve (indeterminate). A region with a known shape loads with Skeleton, an inline busy mark is a Spinner, and a background file transfer is an UploadProgress.
 
 Communicates the progress of an ongoing task as a horizontal bar. Use it for a
 determinate value within a range (`value` / `max`) or, when progress can't be

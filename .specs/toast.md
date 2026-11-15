@@ -3,13 +3,13 @@ name: toast
 category: feedback
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 setup: "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region."
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 0447ac8b47a4ef5eafa11acebaee31b7e0f1f646f810767da0c7d80366e4e7f7
+checksum: 94d44a7a6410b7d827fcefa4358cfbbbe8e5e9ac29f83ae5eee8455599dd29cb
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -17,6 +17,8 @@ last_updated: 2026-11-15
 # Toast — Component Spec
 
 ## Purpose
+
+Use Toast for a short confirmation after an action that disappears on its own; a persistent message on a page or section (a banner, a notice) is an Alert.
 
 A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.progress`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own.
 

@@ -3,15 +3,17 @@ name: severity-tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 008e66b3b44cae2eaa5d4c1a19f9457abe9b02e8d08653d672c93a76a8e6ac6b
+spec_version: 2
+checksum: be6cdc50abd412a60476b679f9f58f5bd70e224911f0641e52ae090e736cf4bb
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # SeverityTag — Component Spec
 
 ## Purpose
+
+Use SeverityTag only for a level on the critical → info scale of findings and alerts; the state of a resource is a StatusIndicator, and any other category word is a Tag.
 
 SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info. The level reads from a four-bar glyph, where the filled bars count the level, and from the label, so two levels never depend on colour alone to differ. It differs from `tag`, whose `severity` prop is a colour tone (success, warning, danger) with no order between values.
 

@@ -3,8 +3,8 @@ name: currency
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 1e2ce9c3a9dc64f3c884bda72d6e23a023d1adad9062bf395bd249883628be42
+spec_version: 3
+checksum: 249dbd4e22726b61395a6b8e90edea1ecc2504efebe658c785ddfcea212b3359
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -12,6 +12,8 @@ last_updated: 2026-11-15
 # Currency — Component Spec
 
 ## Purpose
+
+Use Currency to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
 
 Typesets one monetary amount as three separately-styled parts — the currency symbol, the figure, and a trailing period or unit — so money reads the same everywhere in the product instead of being a formatted string each screen spells its own way. The suffix carries the code typeface (`text-label-code-*`), which keeps the unit visually subordinate to the figure and aligns the whole set with the way the system typesets metered values.
 
