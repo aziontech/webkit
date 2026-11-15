@@ -45,7 +45,7 @@
     :columns="columns"
     :get-sub-rows="(row) => row.children"
     row-key="id"
-    enable-row-selection
+    selectable
     aria-label="Accounts"
   />
 </template>

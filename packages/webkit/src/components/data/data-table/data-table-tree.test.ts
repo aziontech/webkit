@@ -42,7 +42,7 @@ const mountTree = (extra: Record<string, unknown> = {}, dir?: 'rtl') => {
         DataTable,
         {
           data: seed(),
-          columns: [{ accessorKey: 'name', header: 'Name', enableSorting: true }],
+          columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
           rowKey: 'id',
           getSubRows: (row: Record<string, unknown>) => row['children'] as Node[] | undefined,
           expanded: expanded.value,
@@ -107,8 +107,12 @@ describe('DataTable', () => {
       const { view, expanded } = mountTree()
       const toggles = view.getAllByTestId('data-data-table__expand-toggle')
       expect(toggles).toHaveLength(1)
-      expect(toggles[0].closest('[data-tree-gutter]')?.getAttribute('aria-hidden')).toBe('true')
-      const gutters = Array.from(document.querySelectorAll<HTMLElement>('[data-tree-gutter]'))
+      expect(toggles[0].closest('[data-slot="tree-gutter"]')?.getAttribute('aria-hidden')).toBe(
+        'true'
+      )
+      const gutters = Array.from(
+        document.querySelectorAll<HTMLElement>('[data-slot="tree-gutter"]')
+      )
       expect(gutters).toHaveLength(2)
       expect(gutters[1].children).toHaveLength(0)
       await fireEvent.click(toggles[0])
@@ -125,7 +129,7 @@ describe('DataTable', () => {
     })
 
     it('follows the treegrid keyboard map', async () => {
-      const { selection } = mountTree({ enableRowSelection: true })
+      const { selection } = mountTree({ selectable: true })
       rowOf('a').focus()
       await press('ArrowRight')
       await waitFor(() => expect(ids()).toEqual(['a', 'a1', 'a2', 'b']))
@@ -165,7 +169,7 @@ describe('DataTable', () => {
 
     it('selects one row at a time and reports every selected row, nested ones included', async () => {
       const { view, selection, selectedCounts } = mountTree({
-        enableRowSelection: true,
+        selectable: true,
         expanded: { a: true }
       })
       await waitFor(() => expect(ids()).toEqual(['a', 'a1', 'a2', 'b']))
@@ -194,7 +198,7 @@ describe('DataTable', () => {
     })
 
     it('leaves keys typed inside a cell control alone', async () => {
-      const { view } = mountTree({ enableRowSelection: true })
+      const { view } = mountTree({ selectable: true })
       const box = view.getAllByRole('checkbox', { name: 'Select row' })[0]
       box.focus()
       await fireEvent.keyDown(box, { key: 'ArrowRight' })

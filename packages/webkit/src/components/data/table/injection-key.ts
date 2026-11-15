@@ -156,8 +156,8 @@ export interface TableColumn {
   accessorKey?: string
   /** Header label (overridden by a `header-<id>` slot). */
   header?: string
-  /** Allow sorting on this column. */
-  enableSorting?: boolean
+  /** Allow sorting on this column; overrides the table-wide `sortable`. */
+  sortable?: boolean
   /** Flex weight; the principal column uses 2 (see `principal`). */
   grow?: 1 | 2 | 3
   /** Mark this as the principal column — it defaults to `grow: 2`. When no column sets it, the first non-checkbox column is principal. */

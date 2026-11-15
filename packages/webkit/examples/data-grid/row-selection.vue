@@ -20,7 +20,7 @@
   const addRow = () => {
     rows.value = [...rows.value, { id: `r${next++}`, host: '', ttl: 3600, proxied: false }]
   }
-  const deleteRows = (event, removed) => {
+  const removeRows = (event, removed) => {
     const ids = new Set(removed.map((row) => row.id))
     rows.value = rows.value.filter((row) => !ids.has(row.id))
     selection.value = {}
@@ -33,9 +33,9 @@
     v-model:row-selection="selection"
     :columns="columns"
     aria-label="DNS records"
-    enable-row-selection
+    selectable
     @row-add="addRow"
-    @row-delete="deleteRows"
+    @row-remove="removeRows"
   >
     <template #toolbar="{ add, remove, selectedCount }">
       <Button

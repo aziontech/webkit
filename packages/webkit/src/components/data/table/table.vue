@@ -124,11 +124,11 @@
   <div
     v-bind="splitAttrs[0]"
     :data-testid="testId"
-    :data-border="bordered || null"
+    :data-bordered="bordered || null"
     :data-density="density"
     :data-wrap="wrapLines || null"
     :style="viewportHeightVar"
-    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[border]:border-(length:--border-width-default) data-[border]:border-solid data-[border]:border-(--border-default)"
+    class="@container/table data-[density=compact]:[&_[role=cell]]:min-h-9 data-[density=compact]:[&_[role=cell]]:py-(--spacing-2xs) data-[wrap]:[&_[role=cell]]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:whitespace-normal data-[wrap]:[&_[role=cell]_.truncate]:break-words flex w-full flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) text-(--text-default) text-body-sm data-[bordered]:border-(length:--border-width-default) data-[bordered]:border-solid data-[bordered]:border-(--border-default)"
   >
     <div
       v-if="$slots['title'] || $slots['toolbar']"

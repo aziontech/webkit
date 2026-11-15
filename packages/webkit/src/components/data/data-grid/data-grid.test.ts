@@ -57,7 +57,7 @@ const mount = (extra: Record<string, unknown> = {}, dir = 'ltr') => {
               ariaLabel: 'Customers',
               onChange: record('change'),
               onRowAdd: record('row-add'),
-              onRowDelete: record('row-delete'),
+              onRowRemove: record('row-remove'),
               onCopy: record('copy'),
               ...extra
             },
@@ -297,7 +297,7 @@ describe('DataGrid', () => {
   })
 
   it('selects rows with the checkbox column, Space and Select all', async () => {
-    const { view, selection } = mount({ enableRowSelection: true })
+    const { view, selection } = mount({ selectable: true })
     expect(
       within(view.getByTestId('data-data-grid__select-1')).getByRole('checkbox')
     ).toHaveAccessibleName('Select row Jane Doe')
@@ -312,16 +312,16 @@ describe('DataGrid', () => {
     await expectNoA11yViolations(view.container)
   })
 
-  it('emits row-add and row-delete with the selected rows from the toolbar', async () => {
-    const { view, events } = mount({ enableRowSelection: true })
+  it('emits row-add and row-remove with the selected rows from the toolbar', async () => {
+    const { view, events } = mount({ selectable: true })
     await userEvent.click(view.getByRole('button', { name: 'Delete rows' }))
-    expect(events['row-delete']).toBeUndefined()
+    expect(events['row-remove']).toBeUndefined()
     await userEvent.click(view.getByRole('button', { name: 'Add row' }))
     expect(events['row-add']?.[0]?.[0]).toBeInstanceOf(Event)
     view.getByTestId('data-data-grid__select-1').focus()
     await userEvent.keyboard(' ')
     await userEvent.click(view.getByRole('button', { name: 'Delete rows' }))
-    const [event, removed] = events['row-delete']?.[0] ?? []
+    const [event, removed] = events['row-remove']?.[0] ?? []
     expect(event).toBeInstanceOf(Event)
     expect(removed).toEqual([seed()[1]])
   })

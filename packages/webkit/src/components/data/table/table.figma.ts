@@ -41,7 +41,7 @@ const columns = instance
         true: true
       })
       return figma.code`${acc}
-    { accessorKey: '${toKey(content.textContent)}', header: '${content.textContent}'${sortable ? figma.code`, enableSorting: true` : ''} },`
+    { accessorKey: '${toKey(content.textContent)}', header: '${content.textContent}'${sortable ? figma.code`, sortable: true` : ''} },`
     },
     figma.code``
   )

@@ -46,15 +46,15 @@
 
   const columns = [
     { accessorKey: 'name', header: 'Name', frozen: 'start', width: 260 },
-    { accessorKey: 'id', header: 'ID', enableSorting: false, width: 170 },
+    { accessorKey: 'id', header: 'ID', sortable: false, width: 170 },
     { accessorKey: 'status', header: 'Status', width: 140 },
-    { accessorKey: 'protocol', header: 'Protocol', enableSorting: false, width: 170 },
+    { accessorKey: 'protocol', header: 'Protocol', sortable: false, width: 170 },
     { accessorKey: 'domains', header: 'Domains', align: 'end', width: 130 },
     { accessorKey: 'origins', header: 'Origins', align: 'end', width: 130 },
-    { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, width: 280 },
+    { accessorKey: 'editor', header: 'Last Editor', sortable: false, width: 280 },
     { accessorKey: 'created', header: 'Created', width: 220 },
     { accessorKey: 'modified', header: 'Last Modified', width: 220 },
-    { id: 'actions', header: '', kind: 'action', frozen: 'end', enableSorting: false }
+    { id: 'actions', header: '', kind: 'action', frozen: 'end', sortable: false }
   ]
 
   const sorting = ref([])
@@ -80,7 +80,7 @@
     :data="rows"
     :columns="columns"
     row-key="id"
-    enable-sorting
+    sortable
     density="compact"
     v-model:sorting="sorting"
     @row-click="onRowClick"

@@ -135,9 +135,9 @@
         @keydown.stop
       >
         <TableSortButton
-          :direction="sortDirection"
+          :sort-direction="sortDirection"
           :aria-labelledby="`${sortById} ${labelId}`"
-          @toggle="handleSort"
+          @sort="handleSort"
         />
       </span>
     </template>
