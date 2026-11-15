@@ -3,9 +3,9 @@ name: hover-card
 category: overlay
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: bbf664510e82aff53d3f093ac695fc0ee3e0e5c90096b7eca600f4fc0d813963
+checksum: 678a7f5250f086efbae55017e3a9255f8141cc50cd1c47da64680337a1718cb1
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -74,11 +74,11 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Sub-components
 
-- `hover-card-trigger/hover-card-trigger.vue` — wraps the previewed element in an `inline-flex` span that carries `data-testid` (`overlay-hover-card__trigger`) and `data-state`, and is the positioning anchor. It has no role and no tab stop of its own. It schedules the open on `pointerenter` (mouse and pen only; a touch tap follows the link) and on `focusin`, and the close on `pointerleave` and `focusout`. While the card is open, the first focusable element in the slot gets `aria-describedby` pointing at the card, so screen readers read the card text after the link's name.
+- `hover-card-trigger/hover-card-trigger.vue` — wraps the previewed element in an `inline-flex` span that carries `data-testid` (`overlay-hover-card__trigger`) and `data-state`, and is the positioning anchor. It has no role and no tab stop of its own. It schedules the open on `pointerenter` (mouse and pen only; a touch tap follows the link) and on `focusin`, and the close on `pointerleave` and `focusout` (unless focus moves into the card). While the card is open and holds a focusable element, `Tab` on the trigger moves focus to the first one instead of leaving. While the card is open, the first focusable element in the slot gets `aria-describedby` pointing at the card, so screen readers read the card text after the link's name.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` with scope `{ isOpen: boolean }` — the previewed element.
-- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `overlay-hover-card__content`, `data-state`, `data-placement`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card. It has no role: it is description text for the trigger, not a dialog, and it takes no focus.
+- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `overlay-hover-card__content`, `data-state`, `data-placement`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the card content.
@@ -144,8 +144,8 @@ _none_ — the card uses the same surface tokens as `popover`.
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Content on hover or focus (WCAG 1.4.13): dismissible (`Esc` closes it without moving focus), hoverable (the pointer can move onto the card; `closeDelay` and the card's own pointer handlers keep it open), persistent (it stays until pointer and focus leave or `Esc`).
-- Keyboard map: `Tab` onto the trigger's link opens the card after `openDelay`; `Tab` away closes it after `closeDelay`; `Esc` closes it. The card takes no focus. Tests: `hover-card.test.ts` › keyboard.
+- Content on hover or focus (WCAG 1.4.13): dismissible (`Esc` closes it without moving focus from the trigger, and returns focus to the trigger from inside the card), hoverable (the pointer can move onto the card; `closeDelay` and the card's own pointer handlers keep it open), persistent (it stays until pointer and focus leave or `Esc`).
+- Keyboard map: `Tab` onto the trigger's link opens the card after `openDelay`; while it is open, `Tab` moves into the card when the card holds a link (or any focusable element), walks its links, and the `Tab` after the last one continues to the element after the trigger; `Shift+Tab` from the first returns to the trigger. A card with nothing focusable is skipped and `Tab` away closes it after `closeDelay`. `Esc` closes it; from inside the card focus returns to the trigger. Tests: `hover-card.test.ts` › keyboard.
 - ARIA: while open, the trigger's focusable element carries `aria-describedby` pointing at the card; the card has no role and no `aria-modal`. The trigger wrapper adds no role or tab stop.
 - Visible focus: the focus ring belongs to the consumer's link or button.
 - Contrast ≥4.5:1 for card text on `--bg-surface-raised`.

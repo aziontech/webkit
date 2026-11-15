@@ -28,9 +28,16 @@ export interface HoverCardContext {
   scheduleOpen: () => void
   /** Closes after the close delay, cancelling a pending open. */
   scheduleClose: () => void
-  /** Cancels a pending close (the pointer reached the card). */
+  /** Cancels a pending close (the pointer or focus reached the card). */
   cancelClose: () => void
+  /** Moves focus to the first focusable element in the open card; false when it has none. */
+  focusContent: () => boolean
+  /** Moves focus back to the trigger's focusable element. */
+  focusTrigger: () => void
 }
+
+export const HOVER_CARD_FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export const HoverCardInjectionKey: InjectionKey<HoverCardContext> = Symbol('HoverCard')
 

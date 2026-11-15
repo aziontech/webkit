@@ -38,8 +38,13 @@
 
   function onFocusout(event: globalThis.FocusEvent) {
     const next = event.relatedTarget as globalThis.Node | null
-    if (next && ctx.triggerRef.value?.contains(next)) return
+    if (next && (ctx.triggerRef.value?.contains(next) || ctx.panelRef.value?.contains(next))) return
     ctx.scheduleClose()
+  }
+
+  function onKeydown(event: globalThis.KeyboardEvent) {
+    if (event.key !== 'Tab' || event.shiftKey || !isOpen.value) return
+    if (ctx.focusContent()) event.preventDefault()
   }
 
   watch(
@@ -74,6 +79,7 @@
     @pointerleave="onPointerleave"
     @focusin="ctx.scheduleOpen()"
     @focusout="onFocusout"
+    @keydown="onKeydown"
   >
     <slot :is-open="isOpen" />
   </span>

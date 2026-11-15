@@ -3,8 +3,9 @@
 
   import { useControllable } from '../../../composables/use-controllable'
   import { usePlacement } from '../../../composables/use-placement'
+  import { triggerControl } from '../../../utils/trigger-control'
   import type { HoverCardPlacement, HoverCardPlacementInput } from './injection-key'
-  import { HoverCardInjectionKey } from './injection-key'
+  import { HOVER_CARD_FOCUSABLE, HoverCardInjectionKey } from './injection-key'
 
   export type { HoverCardPlacement, HoverCardPlacementInput } from './injection-key'
 
@@ -51,6 +52,7 @@
   const panelRef = ref<globalThis.HTMLElement | null>(null)
   let openTimer: ReturnType<typeof setTimeout> | undefined
   let closeTimer: ReturnType<typeof setTimeout> | undefined
+  let returningFocus = false
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'overlay-hover-card'
@@ -93,7 +95,7 @@
   }
 
   function scheduleOpen() {
-    if (props.disabled) return
+    if (props.disabled || returningFocus) return
     if (closeTimer !== undefined) clearTimeout(closeTimer)
     closeTimer = undefined
     if (isOpenState.value || openTimer !== undefined) return
@@ -112,9 +114,25 @@
     closeTimer = undefined
   }
 
+  function focusTrigger() {
+    const host = triggerRef.value
+    if (host) triggerControl(host).focus()
+  }
+
+  function focusContent(): boolean {
+    const first = panelRef.value?.querySelector<globalThis.HTMLElement>(HOVER_CARD_FOCUSABLE)
+    first?.focus()
+    return Boolean(first)
+  }
+
   function onDocumentKeydown(event: globalThis.KeyboardEvent) {
     if (event.key !== 'Escape' || !isOpenState.value) return
+    const inside = Boolean(panelRef.value?.contains(globalThis.document.activeElement))
     setOpen(false)
+    if (!inside) return
+    returningFocus = true
+    focusTrigger()
+    returningFocus = false
   }
 
   onMounted(() => {
@@ -136,7 +154,9 @@
     panelRef,
     scheduleOpen,
     scheduleClose,
-    cancelClose
+    cancelClose,
+    focusContent,
+    focusTrigger
   })
 </script>
 

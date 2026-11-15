@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import { usePortalLocale } from '../../../../composables/use-locale/use-translate'
-  import { useHoverCardContext } from '../injection-key'
+  import { HOVER_CARD_FOCUSABLE, useHoverCardContext } from '../injection-key'
 
   defineOptions({
     name: 'HoverCardContent',
@@ -29,6 +29,20 @@
     ctx.scheduleClose()
   }
 
+  function onFocusout(event: globalThis.FocusEvent) {
+    const next = event.relatedTarget as globalThis.Node | null
+    if (next && (ctx.panelRef.value?.contains(next) || ctx.triggerRef.value?.contains(next))) return
+    ctx.scheduleClose()
+  }
+
+  function onKeydown(event: globalThis.KeyboardEvent) {
+    if (event.key !== 'Tab') return
+    const items = ctx.panelRef.value?.querySelectorAll(HOVER_CARD_FOCUSABLE) ?? []
+    if (event.target !== items[event.shiftKey ? 0 : items.length - 1]) return
+    if (event.shiftKey) event.preventDefault()
+    ctx.focusTrigger()
+  }
+
   const portalLocale = usePortalLocale()
 </script>
 
@@ -52,6 +66,9 @@
         class="flex w-max min-w-(--container-3xs) max-w-(--container-xs) flex-col gap-(--spacing-sm) overflow-y-auto rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-md) text-body-sm text-(--text-default) shadow-(--shadow-sm) [transform-origin:var(--popup-origin,top_left)]"
         @pointerenter="ctx.cancelClose()"
         @pointerleave="onPointerleave"
+        @focusin="ctx.cancelClose()"
+        @focusout="onFocusout"
+        @keydown="onKeydown"
       >
         <slot />
       </div>
