@@ -643,8 +643,12 @@ export function checkTestid(rel, text) {
 const DOM_EVENT_CAMEL =
   /^on\w*?(Key(?:Down|Up|Press)|Pointer(?:Down|Up|Move|Enter|Leave|Cancel|Over|Out)|Mouse(?:Down|Up|Move|Enter|Leave|Over|Out)|Focus(?:In|Out)|DblClick|ContextMenu|Touch(?:Start|End|Move|Cancel)|Drag(?:Start|End|Over|Enter|Leave)|Animation(?:End|Start)|Transition(?:End|Start)|BeforeInput)(?=[A-Z]|$)/
 
-export function checkHandlers(rel, text) {
+const blankTemplateLiterals = (text) =>
+  text.replace(/`(?:\\[\s\S]|\$\{[^}]*\}|[^`\\])*`/g, (lit) => lit.replace(/[^\n]/g, ' '))
+
+export function checkHandlers(rel, source) {
   const out = []
+  const text = blankTemplateLiterals(source)
   for (const m of text.matchAll(
     /(?:^|[\s;{(])(?:async\s+)?(?:function\s+|(?:const|let)\s+)(handle[A-Z]\w*)\s*(?:=\s*(?:async\s*)?(?:\(|[a-zA-Z_$][\w$]*\s*=>)|\()/g
   )) {

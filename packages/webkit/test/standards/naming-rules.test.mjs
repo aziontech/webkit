@@ -359,6 +359,13 @@ test('false positives the checker skips: test artifacts, element ids, kept token
   assert.ok(hits('packages/webkit/src/cli/add.js', legacy, 'icon-name').length > 0)
 })
 
+test('handler-name: sample code inside a template literal is not a handler', () => {
+  const rel = `${C}/content/code-panel/code-panel.vue`
+  const text = sfc('const CODE = `async function handleRequest(request) {\n  return request\n}`')
+  assert.deepEqual(hits(rel, text, 'handler-name'), [])
+  assert.equal(hits(rel, sfc('async function handleRequest() {}'), 'handler-name').length, 1)
+})
+
 test('css-variable: a component may set a variable another component or the theme owns', () => {
   const owned = {
     ...ctx,
