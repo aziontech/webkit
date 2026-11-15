@@ -52,14 +52,14 @@
       "file": "variants/error.vue"
     },
     {
-      "name": "CompleteView",
+      "name": "ContinuousLog",
       "summary": "The Complete view of a finished run: every line the pipeline printed as one continuous LogViewer with its copy button.",
-      "file": "variants/complete-view.vue"
+      "file": "variants/continuous-log.vue"
     },
     {
-      "name": "CompleteViewError",
+      "name": "ContinuousLogError",
       "summary": "The Complete view of the failed run: the lines up to the error, as one LogViewer, nothing from the steps that never ran.",
-      "file": "variants/complete-view-error.vue"
+      "file": "variants/continuous-log-error.vue"
     },
     {
       "name": "InCreateFlow",
