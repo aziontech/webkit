@@ -17,6 +17,28 @@ export interface LogViewLine {
   level?: LogViewLineLevel
 }
 
+/** How one step of a run ended, or where it stands. */
+export type LogViewStepStatus = 'done' | 'running' | 'failed' | 'skipped' | 'pending'
+
+/** Which view LogView.Steps shows: one collapsible log per step, or every line in one log. */
+export type LogViewStepsView = 'phased' | 'complete'
+
+/** One step of a run shown by LogView.Steps. */
+export interface LogViewStep {
+  /** Stable step key; v-model:open-step holds it. */
+  key: string
+  /** Step name. */
+  title: string
+  /** One-line summary, or the reason a failed step stopped. */
+  description?: string
+  /** How the step ended, or where it stands. */
+  status: LogViewStepStatus
+  /** Time label, such as 4s. */
+  duration?: string
+  /** The step's own log lines. */
+  lines: LogViewLine[]
+}
+
 export interface LogViewContext {
   testId: ComputedRef<string>
   lines: ComputedRef<LogViewLine[]>

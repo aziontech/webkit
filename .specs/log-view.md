@@ -3,12 +3,12 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 6cd33387755fcd0fdf18424116bfe4247f3cfb28517f71d02af28263f3dd3472
+checksum: b9c05a803221bb4f17466e628615f316f3b89e7969d0518cc8c385d4dc192200
 created: 2026-05-26
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,9 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **`LogView.Header`**, **`LogView.Content`**, and **`LogView.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer.
+Composition-based terminal log viewer for CI/deploy output. **LogView** is the root shell and context provider; **`LogView.Header`**, **`LogView.Content`**, and **`LogView.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer. **`LogView.Steps`** shows a run with known steps (build, deploy, provisioning) as a pipeline: one collapsible step per phase, each with its own log, a Phased or Complete switch and an optional flush progress bar.
+
+Use LogView for build, deploy or runtime log lines, and LogView.Steps when the run has named steps; for code the person reads or copies use CodeBlock, and for code the person edits use CodeEditor.
 
 ## When to use
 
@@ -25,6 +27,7 @@ Composition-based terminal log viewer for CI/deploy output. **LogView** is the r
 - A log shell whose toolbar and footer vary by screen — compose `LogViewHeader`, `LogViewContent` and `LogViewFooter` in the order you need, or drop the ones you don't.
 - A run log with levels (`debug`, `info`, `warn`, `error`), such as what a function printed during a test run: set `level` on each line and `levels` on the root, and the header filters by level with a count per level.
 - A log that is still loading from the server — set `loading` to show a spinner and `loading-label` in place of the body.
+- A build or deploy run with known steps → `LogView.Steps` with one entry per step; every deploy-log block composes it instead of rebuilding the pipeline.
 
 ## When NOT to use
 
@@ -88,15 +91,36 @@ Composition-based terminal log viewer for CI/deploy output. **LogView** is the r
 </template>
 ```
 
-`@aziontech/webkit/log-view` is the compound (the root with `Header`, `Content` and `Footer` attached). For tree-shaking, import the root alone from `@aziontech/webkit/log-view-root` and each part from `@aziontech/webkit/log-view-header`, `log-view-content` and `log-view-footer`.
+`@aziontech/webkit/log-view` is the compound (the root with `Header`, `Content`, `Footer` and `Steps` attached). For tree-shaking, import the root alone from `@aziontech/webkit/log-view-root` and each part from `@aziontech/webkit/log-view-header`, `log-view-content`, `log-view-footer` and `log-view-steps`.
+
+```vue
+<script setup>
+  import LogView from '@aziontech/webkit/log-view'
+
+  const steps = [
+    { key: 'build', title: 'Build', status: 'done', duration: '9s', lines: buildLines },
+    { key: 'publish', title: 'Publish', status: 'running', lines: publishLines }
+  ]
+</script>
+
+<template>
+  <LogView.Steps
+    :steps="steps"
+    progress
+  >
+    <template #header>Deployment logs</template>
+  </LogView.Steps>
+</template>
+```
 
 ## Sub-components
 
-LogView ships its sub-components attached to the root (`LogView.Header`, `LogView.Content`, `LogView.Footer`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
+LogView ships its sub-components attached to the root (`LogView.Header`, `LogView.Content`, `LogView.Footer`, `LogView.Steps`, via `index.ts`) and individually importable (each from its own `@aziontech/webkit/log-view-*` entry); every sub-component reads the root's shared state through the injected context, so the consumer wires nothing.
 
 - `log-view-header.vue` (`LogView.Header`) — Default 48px toolbar: line count, warning filter (a native button that toggles `level` between `warn` and every level, 32 px, 44 px on coarse pointers), the level filter (one toggle per entry of `levels`, with its line count) and a search field. Slots: `left`, `right`, `search`.
 - `log-view-content.vue` (`LogView.Content`) — Scrollable log body with per-`type` line rendering, search highlighting, `ScrollArea`'s `fade` on the log body (the edges that still have lines beyond them fade out), and the copy-to-clipboard control (a `CopyButton` pinned top-right over the log content, shown when `copyable` is set). When `loading` is set, it replaces the log body with a centered `Spinner` (`@aziontech/webkit/spinner`) and the `loadingLabel` text (`role="status"`). When `error` is set, it replaces the body with a danger `Alert` holding the message. With no line to show, it renders the package `EmptyState` (small): "No log lines yet." for an empty log, "No line matches “query”" with a Clear search action for a search with no result, and "No log lines match the current filters." for a level or warnings filter with no result. Slot: `empty` (replaces the EmptyState).
 - `log-view-footer.vue` (`LogView.Footer`) — Optional footer region for actions (download, follow live, pagination). Slot: `default`.
+- `log-view-steps.vue` (`LogView.Steps`) — A run with known steps, standalone (it renders its own `LogView` per step and needs no parent `LogView`). An optional toolbar row (`__toolbar`, shown when the `header` slot is filled or `viewSwitch` is on) holds the `header` slot at the start and, with `viewSwitch`, a `ToggleGroup` (`__view-switch`, named `Log view`) switching **Phased** and **Complete** at the end. Phased renders an `Accordion` (`type="single"`, collapsible) with one item per step (`__step`, `data-status`): the trigger shows the status glyph (done: a success check; failed: a danger cross; skipped: a muted minus; running: a `Spinner`; pending: a dashed circle), the status in words for assistive technology (`sr-only`), the title, the `step-meta` slot, the description (danger text when failed, a shimmer while running) and the duration; the panel holds a borderless `LogView` + `LogView.Content` over the step's lines, loading with `Waiting to start…` while the step is pending, and the `step-empty` slot in place of the empty state (a skipped step defaults to `Never ran.`). Complete renders every step's lines as one borderless `LogView` (`__complete`; line ids are prefixed with the step key). With `progress`, a flush, small, flat `Progress` (`__progress`, named `Run progress`) sits on the bottom edge; its value is the share of steps done. Props: `steps?: LogViewStep[]` (default `[]`), `copyable?: boolean` (default `true`, forwarded to each log), `viewSwitch?: boolean` (default `true`), `progress?: boolean` (default `false`). Models: `v-model:view` (`LogViewStepsView` = `'phased' | 'complete'`, default `'phased'`), `v-model:open-step` (`string`, the key of the open step; unbound, the running step opens, else the failed one, else none). Slots: `header`, `step-meta({ step })`, `step-empty({ step })`. Test ids: `code-log-view__steps` (a consumer `data-testid` wins) and `__toolbar`, `__view-switch`, `__step`, `__complete`, `__progress` under it.
 
 ## Props
 
@@ -149,6 +173,17 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 
 `time` is a label, so it holds a clock time (`13:47:33`) or a run offset (`120 ms`); an empty `time` drops the time column for that line.
 
+`LogViewStep` (exported from `injection-key.ts`, read by `LogView.Steps`):
+
+| Field         | Type                                                          | Notes                                          |
+| ------------- | ------------------------------------------------------------- | ---------------------------------------------- |
+| `key`         | `string`                                                      | Stable step key; `v-model:open-step` holds it. |
+| `title`       | `string`                                                      | Step name.                                     |
+| `description` | `string`                                                      | Optional one-line summary or failure reason.   |
+| `status`      | `'done' \| 'running' \| 'failed' \| 'skipped' \| 'pending'` | `LogViewStepStatus`; drives the glyph.         |
+| `duration`    | `string`                                                      | Optional time label (`4s`).                    |
+| `lines`       | `LogViewLine[]`                                               | The step's own log lines.                      |
+
 ## States
 
 - Visual states: `default`, `hover` (per log line), `focus-visible`, `disabled`, `loading`, `error`, `empty`
@@ -166,6 +201,7 @@ LogView ships its sub-components attached to the root (`LogView.Header`, `LogVie
 | Trigger                         | Animation / Transition                    | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------- | ------------------------------- |
 | log line hover (LogViewContent) | `transition-colors duration-150 ease-out` | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| running step description (LogView.Steps) | `animate-(--animate-shimmer)` | `--animate-shimmer`                          | `motion-reduce:animate-none` (and `motion-safe:` on the shimmer) |
 
 ## Tokens
 
@@ -214,6 +250,7 @@ the height of a single row the moment the root stopped stretching.
 - The warning filter exposes `aria-pressed`; the copy control (a CopyButton in LogViewContent) uses `aria-label="Copy logs"` at rest, switching to `"Copied logs"` after a successful copy.
 - The loading state uses `role="status"` with `aria-live="polite"`; the spinner is `aria-hidden` (from the Spinner component) and the `loadingLabel` text conveys status.
 - `motion-reduce:transition-none` on every motion-bearing class.
+- LogView.Steps: each step is an `Accordion` item (a button with `aria-expanded`); the status glyph is `aria-hidden` and the status is in the trigger's text (`sr-only`), so it is never colour or shape only; the view switch is a named `ToggleGroup`; the progress bar is a `progressbar` named `Run progress`.
 - Touch target: level toggles are 32 px high (44 px on `pointer: coarse`); the warning control is ≥40×40 px; the copy control uses CopyButton `size="small"` (28×28 px) to match CodeBlock — a justified deviation for the compact overlay.
 
 ## Internationalization
@@ -235,6 +272,17 @@ the height of a single row the moment the root stopped stretching.
 | `logView.copied`            | Copied logs                                             | —                   |
 | `logView.levels`            | Log levels                                              | —                   |
 | `logView.levelCount`        | {level}, {count} line / {level}, {count} lines (plural) | —                   |
+| `logView.stepsView`         | Log view                                                | —                   |
+| `logView.stepsPhased`       | Phased                                                  | —                   |
+| `logView.stepsComplete`     | Complete                                                | —                   |
+| `logView.stepsProgress`     | Run progress                                            | —                   |
+| `logView.stepsWaiting`      | Waiting to start…                                       | —                   |
+| `logView.stepsNeverRan`     | Never ran.                                              | `step-empty` slot   |
+| `logView.stepDone`          | Done                                                    | —                   |
+| `logView.stepFailed`        | Failed                                                  | —                   |
+| `logView.stepSkipped`       | Skipped                                                 | —                   |
+| `logView.stepRunning`       | Running                                                 | —                   |
+| `logView.stepPending`       | Not started                                             | —                   |
 
 - Formatting: counts go through the plural rules of the active locale. Level names (`debug`, `info`, `warn`, `error`) are log tokens and stay untranslated, as they appear in the log itself.
 
@@ -254,7 +302,7 @@ the height of a single row the moment the root stopped stretching.
 
 ## Performance
 
-- Bundle budget: `log-view` (the compound `index.ts`, every part attached) 34.35 KB, `log-view-root` 12.75 KB, `log-view-header` 4.8 KB, `log-view-content` 23.25 KB (initial chunk, with `EmptyState` and `Alert`), `log-view-footer` 0.65 KB gzip in `.size-limit.json`.
+- Bundle budget: `log-view` (the compound `index.ts`, every part attached, including `LogView.Steps` with `Accordion`, `ToggleGroup` and `Progress`) in `.size-limit.json`, `log-view-steps` on its own, `log-view-root` 12.75 KB, `log-view-header` 4.8 KB, `log-view-content` 23.25 KB (initial chunk, with `EmptyState` and `Alert`), `log-view-footer` 0.65 KB gzip in `.size-limit.json`.
 - Runtime budget: a 10,000-line log mounts within budget through chunked mounting (above 300 visible lines, chunks of 100); a chunk that scrolls far out of view is unmounted again and keeps its measured height, so scrolling through a long log never keeps every line mounted. The level counts and filters are one pass over `lines`; each line's lowercased search text and its copy text are built once and reused until its `message` changes, so a live tail costs one new line, not the whole log. The `LogView with 10k lines and a search: tail 20 appended lines` scenario holds the tail to its budget in `perf-budgets.json`.
 - Heavy parts: none lazy-loaded; off-screen chunks stay unmounted.
 
@@ -267,6 +315,9 @@ the height of a single row the moment the root stopped stretching.
 - Empty — no lines: the package empty state; justified because `empty` is a state the component owns.
 - Disabled — `disabled` locks the search, level toggles and copy.
 - WithFooter — `LogView.Footer` with a summary and an action; justified because the footer is public anatomy no other example shows.
+- Steps — `LogView.Steps` over a finished deploy: each step's log in Phased, every line in Complete; justified because the steps part is public anatomy.
+- StepsRunning — `LogView.Steps` mid-run: done steps, a running step with its spinner, pending steps waiting, and the flush progress bar.
+- StepsFailed — `LogView.Steps` after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
 
 ## Constraints — DO NOT
 

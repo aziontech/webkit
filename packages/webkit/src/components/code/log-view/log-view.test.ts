@@ -6,13 +6,17 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Borderless from '../../../../examples/log-view/borderless.vue'
 import Default from '../../../../examples/log-view/default.vue'
 import Levels from '../../../../examples/log-view/levels.vue'
+import StepsExample from '../../../../examples/log-view/steps.vue'
+import StepsFailed from '../../../../examples/log-view/steps-failed.vue'
+import StepsRunning from '../../../../examples/log-view/steps-running.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import LogViewCompound from './index'
-import type { LogViewLine, LogViewLineLevel } from './injection-key'
+import type { LogViewLine, LogViewLineLevel, LogViewStep } from './injection-key'
 import LogView from './log-view.vue'
 import LogViewContent from './log-view-content.vue'
 import LogViewFooter from './log-view-footer.vue'
 import LogViewHeader from './log-view-header.vue'
+import LogViewSteps from './log-view-steps.vue'
 
 // The real Clipboard API rejects in headless Chromium; stub writeText to resolve
 // so CopyButton's own logic (await write -> emit 'copy') runs. Not a layout mock.
@@ -557,6 +561,7 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
       expect(LogViewCompound.Header).toBe(LogViewHeader)
       expect(LogViewCompound.Content).toBe(LogViewContent)
       expect(LogViewCompound.Footer).toBe(LogViewFooter)
+      expect(LogViewCompound.Steps).toBe(LogViewSteps)
     })
   })
 
@@ -649,6 +654,164 @@ describe('LogView (composition: provide/inject over Header/Content/Footer)', () 
 
       expect(getByTestId('code-log-view').hasAttribute('data-border')).toBe(false)
       expect(getByTestId('code-log-view__content')).toBeTruthy()
+    })
+  })
+
+  describe('LogView.Steps: a run with known steps', () => {
+    const STEPS: LogViewStep[] = [
+      {
+        key: 'build',
+        title: 'Build',
+        description: 'Assets bundled',
+        status: 'done',
+        duration: '9s',
+        lines: [
+          { id: '1', time: '13:47:41', type: 'text', message: 'Running build' },
+          { id: '2', time: '13:47:50', type: 'success', message: 'Build finished' }
+        ]
+      },
+      {
+        key: 'rules',
+        title: 'Routing Rules',
+        description: 'Applying rules',
+        status: 'running',
+        lines: [{ id: '1', time: '13:48:08', type: 'text', message: 'Configuring rules' }]
+      },
+      { key: 'publish', title: 'Publish', status: 'pending', lines: [] }
+    ]
+
+    const stepsHost = (props: Record<string, unknown> = {}, slots = {}) => {
+      const view = ref<'phased' | 'complete'>('phased')
+      const open = ref<string | undefined>(undefined)
+      const Host = defineComponent({
+        setup: () => () =>
+          h(
+            LogViewSteps,
+            {
+              steps: STEPS,
+              view: view.value,
+              'onUpdate:view': (v: 'phased' | 'complete') => (view.value = v),
+              openStep: open.value,
+              'onUpdate:openStep': (v: string | undefined) => (open.value = v),
+              ...props
+            },
+            slots
+          )
+      })
+      return { Host, view, open }
+    }
+
+    it('renders one step per entry, with its status in words, and opens the running step', () => {
+      const { Host } = stepsHost()
+      const { getAllByTestId, getByTestId, getByText } = render(Host)
+      const items = getAllByTestId('code-log-view__steps__step')
+      expect(items.map((item) => item.getAttribute('data-status'))).toEqual([
+        'done',
+        'running',
+        'pending'
+      ])
+      expect(within(items[0]!).getByText('Done')).toBeTruthy()
+      expect(within(items[1]!).getByText('Running')).toBeTruthy()
+      expect(within(items[2]!).getByText('Not started')).toBeTruthy()
+      expect(getByText('Configuring rules')).toBeTruthy()
+      expect(getByTestId('code-log-view__steps').getAttribute('data-view')).toBe('phased')
+    })
+
+    it('opens the failed step when no step runs', () => {
+      const failed: LogViewStep[] = [
+        { ...STEPS[0]!, status: 'done' },
+        { ...STEPS[1]!, status: 'failed', description: 'Origin not found' },
+        { key: 'publish', title: 'Publish', status: 'skipped', lines: [] }
+      ]
+      const { getByText, queryByText } = render(LogViewSteps, { props: { steps: failed } })
+      expect(getByText('Configuring rules')).toBeTruthy()
+      expect(queryByText('Running build')).toBeNull()
+    })
+
+    it('round-trips v-model:open-step when a step trigger is pressed', async () => {
+      const { Host, open } = stepsHost()
+      const { getByRole, findByText } = render(Host)
+      await fireEvent.click(getByRole('button', { name: /Build/ }))
+      expect(open.value).toBe('build')
+      expect(await findByText('Running build')).toBeTruthy()
+    })
+
+    it('switches to the complete view, one log with every line', async () => {
+      const { Host, view } = stepsHost()
+      const { getByRole, getByTestId, getAllByTestId } = render(Host)
+      const group = getByTestId('code-log-view__steps__view-switch')
+      expect(group).toBeTruthy()
+      await fireEvent.click(getByRole('radio', { name: 'Complete' }))
+      expect(view.value).toBe('complete')
+      expect(getByTestId('code-log-view__steps__complete')).toBeTruthy()
+      expect(getAllByTestId('code-log-view__steps__complete__line')).toHaveLength(3)
+    })
+
+    it('hides the view switch with view-switch false and has no toolbar without a header', () => {
+      const { queryByTestId } = render(LogViewSteps, {
+        props: { steps: STEPS, viewSwitch: false }
+      })
+      expect(queryByTestId('code-log-view__steps__view-switch')).toBeNull()
+      expect(queryByTestId('code-log-view__steps__toolbar')).toBeNull()
+    })
+
+    it('draws the flush progress bar valued by the share of steps done', () => {
+      const { getByRole } = render(LogViewSteps, { props: { steps: STEPS, progress: true } })
+      const bar = getByRole('progressbar', { name: 'Run progress' })
+      expect(bar.getAttribute('aria-valuenow')).toBe('33')
+    })
+
+    it('shows no progress bar by default', () => {
+      const { queryByTestId } = render(LogViewSteps, { props: { steps: STEPS } })
+      expect(queryByTestId('code-log-view__steps__progress')).toBeNull()
+    })
+
+    it('waits on a pending step and says a skipped step never ran', async () => {
+      const steps: LogViewStep[] = [
+        { key: 'a', title: 'Pending step', status: 'pending', lines: [] },
+        { key: 'b', title: 'Skipped step', status: 'skipped', lines: [] }
+      ]
+      const pending = render(LogViewSteps, { props: { steps, openStep: 'a' } })
+      expect(pending.getByText('Waiting to start…')).toBeTruthy()
+      pending.unmount()
+      const skipped = render(LogViewSteps, { props: { steps, openStep: 'b' } })
+      expect(skipped.getByText('Never ran.')).toBeTruthy()
+    })
+
+    it('fills the header, step-meta and step-empty slots', () => {
+      const steps: LogViewStep[] = [{ key: 'a', title: 'Publish', status: 'skipped', lines: [] }]
+      const { getByTestId, getByText } = render(LogViewSteps, {
+        props: { steps, openStep: 'a' },
+        slots: {
+          header: '<h2>Deployment logs</h2>',
+          'step-meta': '<span>meta-tag</span>',
+          'step-empty': '<span>Stopped earlier</span>'
+        }
+      })
+      expect(
+        within(getByTestId('code-log-view__steps__toolbar')).getByText('Deployment logs')
+      ).toBeTruthy()
+      expect(getByText('meta-tag')).toBeTruthy()
+      expect(getByText('Stopped earlier')).toBeTruthy()
+    })
+
+    it('lets a consumer data-testid win and derives the parts from it', () => {
+      const { getByTestId, queryByTestId } = render(LogViewSteps, {
+        props: { steps: STEPS },
+        attrs: { 'data-testid': 'deploy-run' }
+      })
+      expect(getByTestId('deploy-run')).toBeTruthy()
+      expect(getByTestId('deploy-run__view-switch')).toBeTruthy()
+      expect(queryByTestId('code-log-view__steps')).toBeNull()
+    })
+
+    it('renders the Steps, StepsRunning and StepsFailed examples without violations', async () => {
+      for (const Example of [StepsExample, StepsRunning, StepsFailed]) {
+        const view = render(Example)
+        expect(view.getAllByTestId('code-log-view__steps__step').length).toBeGreaterThan(0)
+        await expectNoA11yViolations(view.container)
+        view.unmount()
+      }
     })
   })
 })

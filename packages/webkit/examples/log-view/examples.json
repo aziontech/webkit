@@ -36,6 +36,21 @@
       "name": "WithFooter",
       "summary": "`LogView.Footer` closes the shell with a summary line and an action, below the scrolling body.",
       "file": "with-footer.vue"
+    },
+    {
+      "name": "Steps",
+      "summary": "`LogView.Steps` over a finished deploy: each step's own log in the Phased view, every line in one log in Complete. The `header` slot holds the title, the outcome and the time; `open-step` opens Build.",
+      "file": "steps.vue"
+    },
+    {
+      "name": "StepsRunning",
+      "summary": "`LogView.Steps` mid-run: done steps, the running step with its spinner and shimmering description, pending steps waiting to start, and `progress` drawing the flush bar valued by the share of steps done. `:view-switch=\"false\"` keeps the switch out until the run settles.",
+      "file": "steps-running.vue"
+    },
+    {
+      "name": "StepsFailed",
+      "summary": "`LogView.Steps` after a failure: the failed step opens on its own with the reason in danger text, the step after it is skipped, `#step-meta` adds a Skipped `Tag` and `#step-empty` says why it never ran.",
+      "file": "steps-failed.vue"
     }
   ]
 }

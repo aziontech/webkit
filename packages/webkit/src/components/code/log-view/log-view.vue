@@ -8,7 +8,14 @@
   import type { LogViewLine, LogViewLineLevel } from './injection-key'
   import { lineLevel, LogViewInjectionKey } from './injection-key'
 
-  export type { LogViewLine, LogViewLineLevel, LogViewLineType } from './injection-key'
+  export type {
+    LogViewLine,
+    LogViewLineLevel,
+    LogViewLineType,
+    LogViewStep,
+    LogViewStepStatus,
+    LogViewStepsView
+  } from './injection-key'
 
   defineOptions({
     name: 'LogView',
