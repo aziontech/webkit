@@ -15,6 +15,7 @@ import {
   intlLocale,
   type LocaleContext,
   LocaleInjectionKey,
+  useDeviceLocale,
   useLocaleContext
 } from './use-translate'
 
@@ -25,7 +26,7 @@ export type DirectionSetting = Direction | 'auto'
 
 /** Options accepted by `provideLocale`. */
 export interface ProvideLocaleOptions {
-  /** BCP 47 locale tag. */
+  /** BCP 47 locale tag; empty follows the device locale (`en-US` until mount). */
   locale: MaybeRefOrGetter<string>
   /** Partial catalog deep-merged over the built-in one. */
   messages?: MaybeRefOrGetter<PartialMessages | undefined>
@@ -45,7 +46,7 @@ export type FileSizeUnit = 'byte' | 'kilobyte' | 'megabyte' | 'gigabyte' | 'tera
 
 /** What `useLocale()` returns. */
 export interface UseLocaleReturn {
-  /** Active BCP 47 locale tag (`en` with no provider). */
+  /** Active BCP 47 locale tag (the device locale with no provider, `en-US` until mount). */
   locale: ComputedRef<string>
   /** Active text direction (`ltr` with no provider). */
   dir: ComputedRef<Direction>
@@ -197,15 +198,19 @@ function epochOf(value: string | number | Date | undefined | null): number | und
 }
 
 export function provideLocale(options: ProvideLocaleOptions): LocaleContext {
-  const locale = computed(() => toValue(options.locale) || DEFAULT_LOCALE)
+  const device = useDeviceLocale()
+  const explicit = computed(() => toValue(options.locale) || '')
+  const locale = computed(() => explicit.value || device.value)
   const dir = computed<Direction>(() => {
     const requested = toValue(options.dir) ?? 'auto'
-    return requested === 'auto' ? directionOf(locale.value) : requested
+    if (requested !== 'auto') return requested
+    if (explicit.value) return directionOf(explicit.value)
+    return findCatalog(locale.value, toValue(options.catalogs)) ? directionOf(locale.value) : 'ltr'
   })
   const messages = computed(() => {
     const catalogs = toValue(options.catalogs)
     const found = findCatalog(locale.value, catalogs)
-    if (!found) warnMissingCatalog(locale.value)
+    if (!found && explicit.value) warnMissingCatalog(locale.value)
     return mergeMessages(found ?? (catalogs[DEFAULT_LOCALE] as Messages), toValue(options.messages))
   })
   const now = computed<number | undefined>(() => epochOf(toValue(options.now)))

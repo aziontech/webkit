@@ -1,6 +1,6 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it, vi } from 'vitest'
-import { defineComponent, h } from 'vue'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { defineComponent, h, nextTick } from 'vue'
 
 import { es } from '../../locales/es'
 import { ptBR } from '../../locales/pt-BR'
@@ -36,11 +36,86 @@ function probe(setupParent?: () => void) {
   return helpers as unknown as ReturnType<typeof useLocale>
 }
 
+const useDevice = (languages: string[]) => {
+  vi.spyOn(navigator, 'languages', 'get').mockReturnValue(languages)
+  vi.spyOn(navigator, 'language', 'get').mockReturnValue(languages[0] ?? '')
+  window.dispatchEvent(new Event('languagechange'))
+}
+
+afterEach(() => {
+  vi.restoreAllMocks()
+  window.dispatchEvent(new Event('languagechange'))
+})
+
 describe('useLocale', () => {
-  describe('without a provider', () => {
-    it('falls back to English, left to right', () => {
+  describe('device locale', () => {
+    it('renders en-US until mount, then formats for the device', async () => {
+      useDevice(['pt-BR'])
+      const seen: string[] = []
+      let helpers: ReturnType<typeof useLocale> | null = null
+      const view = render(
+        defineComponent({
+          setup() {
+            helpers = useLocale(en)
+            seen.push(helpers.locale.value)
+            return () => h('p', helpers!.formatNumber(1200))
+          }
+        })
+      )
+      await nextTick()
+      const l = helpers as unknown as ReturnType<typeof useLocale>
+      expect(seen).toEqual(['en-US'])
+      expect(l.locale.value).toBe('pt-BR')
+      expect(view.container.textContent).toBe('1.200')
+      expect(l.formatDate(new Date(2026, 10, 15), { dateStyle: 'short' })).toBe('15/11/2026')
+      expect(l.t('pagination.next')).toBe('Next page')
+      expect(l.dir.value).toBe('ltr')
+    })
+
+    it('follows a device language change', async () => {
+      useDevice(['en-US'])
       const l = probe()
-      expect(l.locale.value).toBe('en')
+      expect(l.formatNumber(1200.5)).toBe('1,200.5')
+      useDevice(['de-DE'])
+      await nextTick()
+      expect(l.locale.value).toBe('de-DE')
+      expect(l.formatNumber(1200.5)).toBe('1.200,5')
+    })
+
+    it('falls back to en-US for a missing or invalid device tag', () => {
+      useDevice(['not a tag'])
+      expect(probe().locale.value).toBe('en-US')
+      useDevice([])
+      expect(probe().locale.value).toBe('en-US')
+    })
+
+    it('an explicit provider locale wins over the device', () => {
+      useDevice(['pt-BR'])
+      const l = probe(() => provideLocale({ locale: 'es', catalogs: ALL }))
+      expect(l.locale.value).toBe('es')
+    })
+
+    it('a provider with no locale follows the device and picks its registered catalog', async () => {
+      useDevice(['pt-BR'])
+      const l = probe(() => provideLocale({ locale: '', catalogs: ALL }))
+      await nextTick()
+      expect(l.locale.value).toBe('pt-BR')
+      expect(l.t('pagination.next')).toBe('Próxima página')
+    })
+
+    it('keeps English text left to right on a right-to-left device with no catalog for it', async () => {
+      useDevice(['ar-EG'])
+      const l = probe(() => provideLocale({ locale: '', catalogs: ALL }))
+      await nextTick()
+      expect(l.locale.value).toBe('ar-EG')
+      expect(l.dir.value).toBe('ltr')
+    })
+  })
+
+  describe('without a provider', () => {
+    it('follows the device locale (pinned to en-US in this suite) with English text, left to right', () => {
+      const l = probe()
+      expect(l.locale.value).toBe('en-US')
       expect(l.dir.value).toBe('ltr')
       expect(l.t('pagination.next')).toBe('Next page')
       expect(l.t('dialog.close')).toBe('Close')
@@ -200,7 +275,7 @@ describe('useLocale', () => {
 
     it('reads, fills, formats and pluralizes like useLocale', () => {
       const { l, full } = lean()
-      expect(l.locale.value).toBe('en')
+      expect(l.locale.value).toBe('en-US')
       expect(l.dir.value).toBe('ltr')
       const cases: [MessageKey, Record<string, string | number>?][] = [
         ['pagination.next'],

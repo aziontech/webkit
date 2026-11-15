@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -20,6 +21,7 @@
 
   const canHover = useMediaQuery('(hover: hover)', true)
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const { formatNumber } = useLocale()
 
   const LEVEL_ORDER = ['Error', 'Warning', 'Info', 'Debug'] as const
   const STACK_ORDER = [...LEVEL_ORDER].reverse()
@@ -157,13 +159,13 @@
           <div class="flex flex-col">
             <dt class="text-label-sm text-(--text-muted)">Events</dt>
             <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-              {{ TOTAL.toLocaleString('en-US') }}
+              {{ formatNumber(TOTAL) }}
             </dd>
           </div>
           <div class="flex flex-col">
             <dt class="text-label-sm text-(--text-muted)">Errors</dt>
             <dd class="m-0 text-heading-xs tabular-nums text-(--danger-contrast)">
-              {{ ERRORS.toLocaleString('en-US') }}
+              {{ formatNumber(ERRORS) }}
             </dd>
           </div>
           <div class="flex flex-col">

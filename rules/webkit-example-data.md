@@ -18,7 +18,7 @@ Seed data, placeholders, mocks, fixtures and screenshots are **sample data**. Wr
 - Do not invent a domain or a brand (`edgeflow.com`, `company.com`, `mydomain.com`, `example.app`, `Contoso`).
 - Do not use one country's identity formats in sample data: no CPF, CNPJ, CEP or SSN values, labels or masks (`00.000.000/0001-00`, `00000-000`), no `+55` phones, no `R$` amounts.
 - Do not preselect a country, state or city in a blank form. Keep every country in the list, in alphabetical order.
-- Do not default a component's country, currency, zone or locale to one market; let the app pass it.
+- Do not default a component's country, currency, zone or locale to one market; let the app pass it. A component's default locale is the device locale, falling back to `en-US` (on the server and until mount), and the value it hands back through `v-model` stays unambiguous (ISO 8601).
 - Do not hot-link avatars or photos from another site; use local assets or initials.
 
 A link to a real resource stays real: your product's own domains, documentation, GitHub or a social platform are links, not sample data.

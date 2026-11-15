@@ -4,7 +4,7 @@ category: utils
 structure: monolithic
 status: implemented
 checksum: cc5cbe170edc1fb843c26d380ab0a07bad5a5fe584778db66472a1ceaad9cc4c
-spec_version: 1
+spec_version: 2
 created: 2026-11-11
 last_updated: 2026-11-12
 ---
@@ -13,11 +13,11 @@ last_updated: 2026-11-12
 
 ## Purpose
 
-Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/webkit/locales/pt-BR`) and Spanish (`@aziontech/webkit/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. With no provider mounted every component falls back to English. It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
+Sets the language and text direction of every WebKit component below it. It wraps the app once, at the root, with the user's BCP 47 locale: components then read their built-in strings (close buttons, pagination, empty states, assistive labels) from the locale catalog and format dates, numbers, file sizes, relative times and plurals with `Intl` for that locale. English is built in; Portuguese (`@aziontech/webkit/locales/pt-BR`) and Spanish (`@aziontech/webkit/locales/es`) are separate entries the app imports and passes through `catalogs`, so an English-only app does not ship them. The catalogs are static imports, so the server and the client render the same strings and hydration never flips after the first render. Digits are Latin unless the tag picks a numbering system (`ar-u-nu-arab`): engines ship different CLDR defaults (Node and Chromium format `ar` with Latin digits, Safari with Arabic-Indic ones), so every `Intl` formatter receives the tag through `intlLocale`, and server and client render the same text. By default everything follows the person's device: an unset `locale` (and every component with no provider mounted) uses the device locale (`navigator.language`) for the `Intl` formats and picks its catalog when one is registered, falling back to English text. The server cannot know the device, so the server render and the hydrating client render `en-US`, and the device locale applies right after mount; an explicit `locale` (the user's saved choice) renders the same on both from the start. Only what people read follows the device: values that components hand back through `v-model` stay unambiguous (Calendar a `Date`, DateRangePicker ISO 8601 instants, TagEditor `key`/`value` pairs). It also carries the reference time of relative times (`now`), so a page that must render the same text on the server and the client, or an example, fixes it once instead of on every cell. The element it renders carries `lang` and `dir`.
 
 ## When to use
 
-- Once at the root of every app, with the locale the user chose (`pt-BR`, `en`, `es`) and the catalogs of the languages the app offers.
+- Once at the root of every app, with the catalogs of the languages the app offers; pass `locale` when the user chose one (`pt-BR`, `en`, `es`), leave it unset to follow the device.
 - Around one region that must read in another language than the rest of the page (a preview of an email in the customer's language).
 - To rename a built-in string for the whole app (`messages`), instead of passing the same label prop to every instance.
 
@@ -35,11 +35,11 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 ## Best practices
 
-- Mount one `WebkitProvider` at the app root and pass the locale the user chose; do not nest one per page.
+- Mount one `WebkitProvider` at the app root and pass the locale the user chose, or leave it unset to follow the device; do not nest one per page.
 - Register every language the app offers in `catalogs` (`{ 'pt-BR': ptBR, es }`), imported from `@aziontech/webkit/locales/<tag>`; a `pt-BR` or `es` locale with no registered catalog falls back to English and warns once in development.
 - Use a full BCP 47 tag (`pt-BR`, not `pt`); a tag with no registered catalog falls back to the same language, then to English.
 - Override built-in strings through `messages` (partial, deep-merged), not by forking components.
-- Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left.
+- Leave `dir` on `auto`: Arabic, Hebrew, Persian and Urdu locales turn the subtree right-to-left (a device locale does so only when its catalog is registered, so English text never reads right-to-left).
 - Leave `now` unset in an app: relative times then read the real clock and `Table.CellTime` re-renders every minute. Set it to a fixed moment where the text must not depend on when it renders: an example or a test (`const NOW = Date.UTC(2026, 10, 10, 12)`, sample dates counted back from it), or a server render whose markup the browser hydrates. Never compute that moment from `Date.now()` / `new Date()` in setup: the server and the browser read different clocks.
 
 ## Usage
@@ -65,7 +65,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 | Prop       | Type                       | Default     | Required | JSDoc                                                                                                                                                                                                                                                                             |
 | ---------- | -------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `locale`   | `string`                   | `'en'`      | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats.                                                                                                                                                   |
+| `locale`   | `string`                   | `''`        | false    | BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount.                                                                           |
 | `catalogs` | `Record<string, Messages>` | `undefined` | false    | Extra catalogs keyed by locale tag, imported from `@aziontech/webkit/locales/<tag>` (`{ 'pt-BR': ptBR, es }`); a locale with no catalog falls back to English.                                                                                                                    |
 | `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                                                                                                                                             |
 | `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                                                                                                                                      |
@@ -84,6 +84,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 ## States
 
 - No visual states; the root carries `lang` (the locale) and `dir` (`ltr` | `rtl`).
+- `locale` unset: `lang` and the formats are `en-US` in the server render and during hydration, then the device locale after mount.
 - `now` set: every relative time below reads it instead of the real clock; changing it re-renders them. An empty or unparseable value reads the real clock.
 
 ## Motion & Animations
@@ -113,6 +114,7 @@ _none_
 - Default — Pagination and a ConfirmDialog in Portuguese, with the pt-BR catalog registered.
 - CustomMessages — `messages` overrides one built-in string; justified because the override is the provider's second job.
 - RightToLeft — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
+- DeviceLocale — no `locale`: a DateRangePicker prints dates in the device's language and format while its `v-model` keeps ISO 8601 instants; justified because following the device is the provider's default.
 - `now` is shown by `table/cell-presets` (a fixed reference around a table whose `Table.CellTime` cells count back from it), not by a provider example of its own.
 
 ## Constraints — DO NOT

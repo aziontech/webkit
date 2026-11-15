@@ -3,7 +3,7 @@ name: calendar
 category: inputs
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
@@ -250,6 +250,8 @@ The period list and the presets menu take `min-w-(--container-3xs)` (256px), the
 ## Internationalization
 
 - Every built-in string comes from the `calendar` group of the locale catalog (`useLocale`): trigger placeholder, Period / Select period, Start / End / Date / Time labels, Apply, preset labels, hint headings, timezone label, and the words that separate a typed range (`calendar.rangeSeparators`: `to|through`, `a|até`, `a|hasta`).
+- The active locale is the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
+- What the person sends stays unambiguous: `v-model` is a `Date` (or a `{ start, end }` range of `Date`s) whatever the display format, so an app sends `toISOString()` (or the ISO date `2026-11-15`) to its server, never the printed label.
 - Printed text uses `Intl` in the active locale: the trigger label, the field values and their placeholders (`Jun 1, 2026` in `en`, `1 de jun. de 2026` in `pt-BR`), the time fields, weekday and month names.
 - Period hint chips are printed by `Intl` (`Intl.NumberFormat` units and `Intl.RelativeTimeFormat`): `12 hours` / `12 horas`, `yesterday` / `ontem`, `last month` / `mês passado`, and the fixed hints (`Jan 1` / `1 de jan.`, `1/1 - 1/2` / `01/01 - 02/01`). A chip applies exactly the text it shows.
 - Typing is parsed in the active locale with English always accepted as well: unit words and their abbreviations, `today`/`yesterday`/`last week`/`last month`/`last year`/`this month` and their translations, month names (long and short, accents optional), numeric dates in the locale's day/month order (`1/2/2026` is 2 January in `en`, 1 February in `pt-BR`), ISO `2026-01-05`, and ranges split by `-`, `–` or a separator word. Times accept `14:30`, `14h30` and `2:30 pm`.
