@@ -365,8 +365,8 @@ test('checkToastRegion flags a page body that renders a Toaster and allows an ap
     /^blocks\/platform\/view\/x \(Saved\): renders a `Toaster` in a page body/
   )
   assert.match(errors[0], /ToastPlugin/)
-  assert.deepEqual(checkToastRegion('shell/console', pattern), [])
-  assert.deepEqual(checkToastRegion('platform/view/x', { ...pattern, variants: [] }), [])
+  assert.deepEqual(checkToastRegion('shell/console', toastBlock), [])
+  assert.deepEqual(checkToastRegion('platform/view/x', { ...toastBlock, variants: [] }), [])
 })
 
 test('no block outside shell/ renders a Toaster', () => {

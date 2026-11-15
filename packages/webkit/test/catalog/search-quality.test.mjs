@@ -101,7 +101,7 @@ test('the surface filter keeps only blocks and components of that surface', () =
   assert.ok(marketing.matches.length > 0)
   assert.ok(marketing.matches.every((m) => m.surface === 'site'))
   const product = suggestComponent(catalog, 'login page', { surface: 'app' })
-  assert.equal(product.pattern.id, 'auth/sign-in')
+  assert.equal(product.block.id, 'auth/sign-in')
 })
 
 test('a translated component name answers with the component, not a block', () => {

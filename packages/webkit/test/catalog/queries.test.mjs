@@ -416,8 +416,8 @@ test('searchBlocks lands each task on its v6 category block', () => {
 
 test('suggestComponent returns the block first for a screen and the section for a marketing band', () => {
   const screen = suggestComponent(catalog, 'login page')
-  assert.equal(screen.recommendation, 'pattern')
-  assert.equal(screen.pattern.id, 'auth/sign-in')
+  assert.equal(screen.recommendation, 'block')
+  assert.equal(screen.block.id, 'auth/sign-in')
   const band = suggestComponent(catalog, 'pricing page')
   assert.equal(band.recommendation, 'section')
   assert.equal(band.best.name, 'pricing-plans')
