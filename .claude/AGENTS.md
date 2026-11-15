@@ -145,7 +145,7 @@ read the issue → research benchmarks and reuse → `spec-create` (draft, `temp
 `spec-reviewer` (second agent, fixed checklist) → `spec-validate` (approved + checksum) →
 `/component-create` (component, test, examples) → machine gates
 (`pnpm --filter @aziontech/webkit run gates`, the same commands as the `toolkit` CI job) →
-`ui-craft` review → usage check (`packages/webkit/scripts/usage-check.mjs`) → PR from
+`ui-craft` review → usage check (`packages/webkit/scripts/check-usage.mjs`) → PR from
 `.github/pull_request_template.md`. Any failure stops the run. The two commands below are the
 building blocks it calls.
 

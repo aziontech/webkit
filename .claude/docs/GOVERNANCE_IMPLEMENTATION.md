@@ -276,7 +276,7 @@ Comprehensive CI/CD pipeline with path-filtered gating, parallel execution, and 
 | **types**         | `vue-tsc --noEmit` + type coverage ≥ 95%                                                             | `webkit` changes, parallel            |
 | **build**         | Publish-safety (`check:pack`) + bundle budget (`check:size`)                                         | after lint + types                    |
 | **site**          | Docs site + demos build, uploaded for the visual shards                                              | after lint + types                    |
-| **toolkit**       | Catalog drift, toolkit unit tests, authoring **ratchet**, test-existence gate, doc-standards ratchet | `toolkit` changes, parallel           |
+| **toolkit**       | Catalog drift, toolkit unit tests, authoring **ratchet**, test-existence gate, authoring-docs ratchet | `toolkit` changes, parallel           |
 | **smoke**         | Consumer smoke test — `init` + build a bare consumer app                                             | `visual`-scope changes                |
 | **tests**         | **Vitest browser mode** (Playwright Chromium), 4 shards                                              | after lint + types                    |
 | **visual**        | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure   | after all build/test jobs             |

@@ -36,7 +36,7 @@ fails the build when the two mix.
    6. machine gates (`pnpm --filter @aziontech/webkit run gates`, lint, types, size, Vitest);
    7. `ui-craft` review ([`.claude/skills/ui-craft/SKILL.md`](./.claude/skills/ui-craft/SKILL.md)),
       findings fixed or listed;
-   8. usage check (`packages/webkit/scripts/usage-check.mjs`): a fresh agent must pick the new
+   8. usage check (`packages/webkit/scripts/check-usage.mjs`): a fresh agent must pick the new
       piece through the MCP and pass `webkit doctor`;
    9. PR from [`.github/pull_request_template.md`](./.github/pull_request_template.md).
 

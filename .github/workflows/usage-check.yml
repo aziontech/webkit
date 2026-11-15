@@ -60,7 +60,7 @@ jobs:
           MAX_TURNS: ${{ inputs.max_turns }}
         run: |
           test -n "$ANTHROPIC_API_KEY" || { echo "::error::ANTHROPIC_API_KEY secret is not set"; exit 1; }
-          node scripts/usage-check.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
+          node scripts/check-usage.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
 
       - name: Publish the report
         if: always()

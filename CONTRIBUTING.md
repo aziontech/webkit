@@ -172,7 +172,7 @@ design opens the request and approves the merge, and nobody edits the code by ha
    | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                            | `/component-create` sub-agents    |
    | 6    | Machine gates (below)                                                                                                                     | orchestrator                      |
    | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                             | orchestrator                      |
-   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `usage-check.mjs`                 |
+   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `check-usage.mjs`                 |
    | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                      | `/pr-open`                        |
 
 3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
@@ -185,11 +185,11 @@ pnpm --filter @aziontech/webkit run gates            # all fast gates, in order,
 pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
 ```
 
-It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blocks`, `cited-names`,
-`spec-status` (no draft spec), `check:spec-template` (template-2 sections), `authoring`,
-`doc-standards`, `check:tests`, `size` (the bundle budget, about 15 s), the hook tests and
+It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blocks`, `check:cited-names`,
+`check:spec-status` (no draft spec), `check:spec-template` (template-2 sections), `check:authoring`,
+`check:authoring-docs`, `check:tests`, `check:size` (the bundle budget, about 15 s), the hook tests and
 `test:toolkit`. The `toolkit` job of `.github/workflows/governance.yml` runs the same commands on
-**every** PR, except `size`, which runs in the `build` job; the lint, type, size, Vitest browser
+**every** PR, except `check:size`, which runs in the `build` job; the lint, type, size, Vitest browser
 (including `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run
 when `packages/webkit` changes; the docs/demos build and the styled visual job run when
 `packages/` or `apps/docs`, `apps/demos`, `apps/visual` change.

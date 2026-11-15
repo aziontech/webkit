@@ -64,7 +64,7 @@
 
 ## Usage check
 
-<!-- Paste usage-report.md (scripts/usage-check.mjs or the usage-check.yml run): prompt, checks, turns and cost. -->
+<!-- Paste usage-report.md (scripts/check-usage.mjs or the usage-check.yml run): prompt, checks, turns and cost. -->
 
 ## Screenshots
 
