@@ -3,10 +3,10 @@ name: field
 category: inputs
 structure: composition
 status: implemented
-spec_version: 3
-checksum: 5e8f8f683363925de9b4fa89ee824917a1bb081ed65eabc04aeaa360a657b9fb
+spec_version: 4
+checksum: 6040ce853a2cb0b361cfb9820c841ec3ba8acefb1c77b6456e34e7204a39d926
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Field — Component Spec
@@ -17,6 +17,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 
 ## When to use
 
+- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.
 - Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
 - A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
 - A selectable choice card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants).
@@ -25,12 +26,11 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 ## When NOT to use
 
 - A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.
-- A group of mutually exclusive cards with icons → use `radio-cards`.
+- A group of mutually exclusive cards with icons → use `radio-group` with `kind="card"`.
 - A static key/value read-out → use `key-value-pairs`.
 
 ## Related
 
-- `label` — the standalone label; `Field.Label` adds the `for` wiring and the Required marker from the Field.
 - `helper-text` — the tone-aware helper line that `Field.Description` and `Field.Error` render.
 - `input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.
 - `phone-input`, `password-requirements` — the controls that replaced `field-phone-number` and the requirements row of `field-password`.
@@ -109,7 +109,7 @@ Tree-shaking alternative — the standalone root + each part from its own entry 
 
 The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
 
-- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (`*` + "(Required)") when the Field is `required`, and a `Hint` glyph when `hint` is set. When it wraps a `Field` it becomes a selectable card (border, padding, hover, focus ring, selected tokens when the control inside is `data-checked`).
+- `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (`*` + "(Required)") when the Field is `required` or its own `required` prop is set (for a label set apart from its control, outside any Field), and a `Hint` glyph when `hint` is set. When it wraps a `Field` it becomes a selectable card (border, padding, hover, focus ring, selected tokens when the control inside is `data-checked`).
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.

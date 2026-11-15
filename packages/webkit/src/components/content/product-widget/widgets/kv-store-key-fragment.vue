@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -109,11 +109,11 @@
       <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
         <ShellMockupPart :order="0">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
+            <FieldLabel
               for="kv-key"
-              label="Key"
               required
-            />
+              >Key</FieldLabel
+            >
             <Input
               id="kv-key"
               model-value="session:user-123"
@@ -151,10 +151,7 @@
               >
                 <div class="grid grid-cols-2 gap-(--spacing-sm) pt-(--spacing-md)">
                   <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                    <Label
-                      for="kv-expiration-type"
-                      label="Type"
-                    />
+                    <FieldLabel for="kv-expiration-type">Type</FieldLabel>
                     <MockupSelect
                       value="EX"
                       control-id="kv-expiration-type"
@@ -162,10 +159,7 @@
                     />
                   </div>
                   <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                    <Label
-                      for="kv-expiration-value"
-                      label="Seconds"
-                    />
+                    <FieldLabel for="kv-expiration-value">Seconds</FieldLabel>
                     <NumberInput
                       id="kv-expiration-value"
                       :model-value="3600"
@@ -181,11 +175,11 @@
 
         <ShellMockupPart :order="2">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
+            <FieldLabel
               for="kv-value"
-              label="Value"
               required
-            />
+              >Value</FieldLabel
+            >
             <Textarea
               id="kv-value"
               :model-value="VALUE"
@@ -198,10 +192,7 @@
         </ShellMockupPart>
 
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
-            for="kv-metadata"
-            label="Metadata"
-          />
+          <FieldLabel for="kv-metadata">Metadata</FieldLabel>
           <Textarea
             id="kv-metadata"
             model-value='{ "source": "login" }'

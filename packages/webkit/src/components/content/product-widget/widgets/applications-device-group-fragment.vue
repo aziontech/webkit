@@ -2,10 +2,10 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Hint from '../../../inputs/hint/hint.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -105,10 +105,7 @@
             />
           </div>
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="device-group-name"
-              label="Name"
-            />
+            <FieldLabel for="device-group-name">Name</FieldLabel>
             <Input
               id="device-group-name"
               model-value="mobiledevices"
@@ -133,10 +130,7 @@
             />
           </div>
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="device-group-expression"
-              label="Regular expression"
-            />
+            <FieldLabel for="device-group-expression">Regular expression</FieldLabel>
             <span
               :data-focused="frame.focused || null"
               class="flex rounded-(--shape-elements) ring-offset-2 ring-offset-(--bg-surface) data-focused:ring-2 data-focused:ring-(--ring-color)"

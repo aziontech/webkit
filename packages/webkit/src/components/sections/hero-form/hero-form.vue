@@ -5,8 +5,8 @@
   import Alert from '../../feedback/alert/alert.vue'
   import Field from '../../inputs/field/field.vue'
   import FieldDescription from '../../inputs/field/field-description/field-description.vue'
+  import FieldLabel from '../../inputs/field/field-label/field-label.vue'
   import Input from '../../inputs/input/input.vue'
-  import Label from '../../inputs/label/label.vue'
   import { defaultCountries } from '../../inputs/phone-input/countries'
   import PhoneInput from '../../inputs/phone-input/phone-input.vue'
   import Textarea from '../../inputs/textarea/textarea.vue'
@@ -368,13 +368,13 @@
                 :data-half="field.half || null"
                 class="min-w-0 sm:col-span-2 sm:data-[half]:col-span-1"
               >
-                <Label
+                <FieldLabel
                   :for="fieldId(field)"
-                  :label="field.label"
                   :required="field.required"
                   :data-visually-hidden="field.visuallyHiddenLabel || null"
                   class="data-[visually-hidden]:sr-only"
-                />
+                  >{{ field.label }}</FieldLabel
+                >
                 <HeroFormSelect
                   v-if="field.kind === 'select'"
                   :model-value="values[field.name] ?? ''"

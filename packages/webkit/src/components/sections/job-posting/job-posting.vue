@@ -6,11 +6,11 @@
   import Alert from '../../feedback/alert/alert.vue'
   import Field from '../../inputs/field/field.vue'
   import FieldDescription from '../../inputs/field/field-description/field-description.vue'
+  import FieldLabel from '../../inputs/field/field-label/field-label.vue'
   import FileDropzone from '../../inputs/file-dropzone/file-dropzone.vue'
   import type { FileTokenGroupItem } from '../../inputs/file-token-group/file-token-group.vue'
   import FileTokenGroup from '../../inputs/file-token-group/file-token-group.vue'
   import Input from '../../inputs/input/input.vue'
-  import Label from '../../inputs/label/label.vue'
   import { defaultCountries } from '../../inputs/phone-input/countries'
   import PhoneInput from '../../inputs/phone-input/phone-input.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
@@ -484,11 +484,11 @@
                   :data-wide="field.kind === 'file' || null"
                   class="min-w-0 sm:data-[wide]:col-span-2"
                 >
-                  <Label
+                  <FieldLabel
                     :for="focusTarget(field)"
-                    :label="field.label"
                     :required="field.required"
-                  />
+                    >{{ field.label }}</FieldLabel
+                  >
                   <template v-if="field.kind === 'file'">
                     <FileDropzone
                       v-if="!files[field.name]"

@@ -4,8 +4,8 @@
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import Select from '../../../inputs/select/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -179,11 +179,11 @@
       >
         <ShellMockupPart :order="0">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
+            <FieldLabel
               for="waf-allowed-rule-id"
-              label="Rule ID"
               required
-            />
+              >Rule ID</FieldLabel
+            >
             <Select
               :model-value="RULE"
               size="medium"
@@ -199,10 +199,7 @@
 
         <ShellMockupPart :order="1">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="waf-allowed-path"
-              label="Path"
-            />
+            <FieldLabel for="waf-allowed-path">Path</FieldLabel>
             <Input
               id="waf-allowed-path"
               model-value="/search"
@@ -273,11 +270,11 @@
                       />
                     </span>
                     <span class="flex flex-col gap-(--spacing-xs) p-(--spacing-md)">
-                      <Label
+                      <FieldLabel
                         for="waf-allowed-condition"
-                        label="Condition"
                         required
-                      />
+                        >Condition</FieldLabel
+                      >
                       <MockupSelect
                         :value="frame.condition"
                         :options="CONDITIONS"

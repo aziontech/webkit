@@ -14,11 +14,14 @@
   export interface Props {
     /** Short explanation appended as a Hint glyph that reveals it on hover or focus. Empty renders no glyph. */
     hint?: string
+    /** Shows the Required marker without an enclosing Field, for a label set apart from its control. An enclosing Field's required sets it too. */
+    required?: boolean
   }
   export type FieldLabelProps = Props
 
-  withDefaults(defineProps<Props>(), {
-    hint: ''
+  const props = withDefaults(defineProps<Props>(), {
+    hint: '',
+    required: false
   })
 
   defineSlots<{
@@ -31,7 +34,7 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'input-field-label')
   const htmlFor = computed(() => (attrs['for'] as string | undefined) ?? field?.controlId)
-  const required = computed(() => field?.required.value ?? false)
+  const required = computed(() => props.required || (field?.required.value ?? false))
 </script>
 
 <template>

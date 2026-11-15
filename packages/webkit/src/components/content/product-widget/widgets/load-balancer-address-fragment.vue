@@ -3,8 +3,8 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Select from '../../../inputs/select/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -175,10 +175,7 @@
         data-anchor
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
-            for="address-server-role"
-            label="Server Role"
-          />
+          <FieldLabel for="address-server-role">Server Role</FieldLabel>
           <Select
             model-value="Primary"
             size="medium"
@@ -195,10 +192,7 @@
 
       <ShellMockupPart :order="3">
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
-            for="address-weight"
-            label="Weight"
-          />
+          <FieldLabel for="address-weight">Weight</FieldLabel>
           <span
             :data-focused="frame.focused || null"
             class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"

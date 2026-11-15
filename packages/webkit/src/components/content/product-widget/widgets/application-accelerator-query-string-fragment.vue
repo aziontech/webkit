@@ -2,8 +2,8 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -175,10 +175,7 @@
                 class="relative data-open:z-1"
               >
                 <div class="flex flex-col gap-(--spacing-xs)">
-                  <Label
-                    for="accelerator-query-string-behavior"
-                    label="Behavior"
-                  />
+                  <FieldLabel for="accelerator-query-string-behavior">Behavior</FieldLabel>
                   <MockupSelect
                     :value="frame.behavior"
                     :options="BEHAVIORS"
@@ -206,11 +203,11 @@
                   class="overflow-hidden [interpolate-size:allow-keywords]"
                 >
                   <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-lg)">
-                    <Label
+                    <FieldLabel
                       for="accelerator-query-string-fields"
-                      label="Fields"
                       required
-                    />
+                      >Fields</FieldLabel
+                    >
                     <span
                       :data-focused="frame.typing || null"
                       class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"

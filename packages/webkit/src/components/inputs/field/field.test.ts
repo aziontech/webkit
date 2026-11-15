@@ -96,6 +96,21 @@ describe('Field', () => {
     expect(getByTestId('input-field-label').getAttribute('for')).toBe(input.id)
   })
 
+  it('shows the Required marker from its own required prop outside a Field', () => {
+    const { getByTestId, getByLabelText } = mount(
+      '<FieldLabel for="key" required>Key</FieldLabel><Input id="key" />'
+    )
+    expect(getByTestId('input-field-label').hasAttribute('data-required')).toBe(true)
+    expect(getByTestId('input-field-label__required')).toBeTruthy()
+    expect(getByLabelText(/Key/).id).toBe('key')
+  })
+
+  it('keeps the Required marker when its own required is set and the Field is not required', () => {
+    const { getByTestId } = mount('<Field><FieldLabel required>Key</FieldLabel><Input /></Field>')
+    expect(getByTestId('input-field-label__required')).toBeTruthy()
+    expect(getByTestId('input').hasAttribute('required')).toBe(false)
+  })
+
   it('keeps an explicit id on the control and for on the label', () => {
     const { getByLabelText } = mount(
       '<Field><FieldLabel for="mail">Email</FieldLabel><Input id="mail" /></Field>'

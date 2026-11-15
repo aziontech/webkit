@@ -3,13 +3,13 @@ name: helper-text
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=600-5603
   node_id: 600:5603
-checksum: 4ba97c1b9da4c889e0077ef2bd341cfe3853e86e9e6f213bd241992c91435910
+checksum: 88834ab50bfb166bd61a1333a753d0d543e87e928f555ef3368ba4f0d9ed3c1e
 created: 2026-06-15
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # HelperText — Component Spec
@@ -20,18 +20,19 @@ Auxiliary text rendered below a form input to communicate guidance (`helper`), v
 
 ## When to use
 
+- Use HelperText only under a control that is not inside Field; inside Field use Field.Description or Field.Error. For a one-sentence note beside a label use Hint.
 - Guidance under a bare input you compose yourself (format hints, limits).
 - A validation error (`kind="invalid"`), a required reminder (`kind="required"`), or a locked-field notice (`kind="disabled"`) under a field.
 
 ## When NOT to use
 
 - A standard form field → use `field`, whose `Field.Description` / `Field.Error` render this helper and wire it to the control.
-- The field name or required marker above the input → use `label`.
+- The field name or required marker above the input → use `Field.Label`.
 - Feedback about a whole form or page rather than one field → use `alert`.
 
 ## Related
 
-- `label` — sits above the input; HelperText sits below it.
+- `Field.Label` — sits above the input; HelperText sits below it.
 - `field` — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
 - `message` — banner-level feedback with severity and an optional action.
 

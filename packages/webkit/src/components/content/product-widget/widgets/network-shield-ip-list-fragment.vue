@@ -9,7 +9,6 @@
   import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -161,11 +160,11 @@
         data-anchor
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="network-list-name"
-            label="Name"
             required
-          />
+            >Name</FieldLabel
+          >
           <Input
             id="network-list-name"
             model-value="qa-p-nl-ip"
@@ -206,11 +205,11 @@
         data-anchor
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="network-list-items"
-            label="List"
             required
-          />
+            >List</FieldLabel
+          >
           <span
             :data-focused="typing || null"
             class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"

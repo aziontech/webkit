@@ -2,8 +2,8 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -134,11 +134,11 @@
         class="relative data-open:z-1"
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="data-stream-source"
-            label="Data Source"
             required
-          />
+            >Data Source</FieldLabel
+          >
           <MockupSelect
             control-id="data-stream-source"
             :value="frame.source"
@@ -155,10 +155,7 @@
 
       <ShellMockupPart :order="1">
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
-            for="data-stream-template"
-            label="Template"
-          />
+          <FieldLabel for="data-stream-template">Template</FieldLabel>
           <MockupSelect
             control-id="data-stream-template"
             value="siem-security-fields"

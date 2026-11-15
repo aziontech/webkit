@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
-  import Label from '../../../inputs/label/label.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
   import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -266,10 +266,7 @@
                   </div>
                 </div>
                 <div class="flex w-full max-w-lg flex-col gap-(--spacing-xs)">
-                  <Label
-                    label="Name"
-                    required
-                  />
+                  <FieldLabel required>Name</FieldLabel>
                   <Input
                     model-value="qa-p-app"
                     size="medium"

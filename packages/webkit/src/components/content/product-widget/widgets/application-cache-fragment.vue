@@ -7,7 +7,6 @@
   import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -139,11 +138,11 @@
       class="relative flex flex-col gap-(--spacing-lg) py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
     >
       <div class="flex flex-col gap-(--spacing-xs)">
-        <Label
+        <FieldLabel
           for="browser-max-age"
-          label="Max Age"
           required
-        />
+          >Max Age</FieldLabel
+        >
         <NumberInput
           id="browser-max-age"
           :model-value="600"
@@ -187,11 +186,11 @@
         data-anchor
       >
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
+          <FieldLabel
             for="cache-max-age"
-            label="Max Age"
             required
-          />
+            >Max Age</FieldLabel
+          >
           <NumberInput
             id="cache-max-age"
             :model-value="3600"
@@ -236,10 +235,7 @@
           </span>
         </span>
         <div class="flex flex-col gap-(--spacing-xs)">
-          <Label
-            for="cache-offset"
-            label="Offset (KB)"
-          />
+          <FieldLabel for="cache-offset">Offset (KB)</FieldLabel>
           <NumberInput
             id="cache-offset"
             :model-value="1024"

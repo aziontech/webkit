@@ -2,11 +2,11 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
   import InputGroupAddon from '../../../inputs/input-group/input-group-addon/input-group-addon.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
   import Link from '../../../navigation/link/link.vue'
@@ -160,10 +160,7 @@
       <div class="flex flex-col gap-(--spacing-lg) py-(--spacing-xs)">
         <ShellMockupPart :order="0">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="edge-dns-record-name"
-              label="Name"
-            />
+            <FieldLabel for="edge-dns-record-name">Name</FieldLabel>
             <InputGroupRoot>
               <Input
                 id="edge-dns-record-name"
@@ -185,10 +182,7 @@
           class="relative data-open:z-1"
         >
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="edge-dns-record-type"
-              label="Record type"
-            />
+            <FieldLabel for="edge-dns-record-type">Record type</FieldLabel>
             <MockupSelect
               :value="selected.label"
               :options="TYPE_LABELS"
@@ -214,10 +208,7 @@
 
         <ShellMockupPart :order="2">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="edge-dns-record-ttl"
-              label="TTL (seconds)"
-            />
+            <FieldLabel for="edge-dns-record-ttl">TTL (seconds)</FieldLabel>
             <NumberInput
               id="edge-dns-record-ttl"
               :model-value="3600"
@@ -230,10 +221,7 @@
 
         <ShellMockupPart :order="3">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              for="edge-dns-record-value"
-              label="Value"
-            />
+            <FieldLabel for="edge-dns-record-value">Value</FieldLabel>
             <Textarea
               id="edge-dns-record-value"
               class="w-full"

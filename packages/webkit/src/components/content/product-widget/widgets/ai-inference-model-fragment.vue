@@ -3,11 +3,11 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../actions/button/button.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Input from '../../../inputs/input/input.vue'
   import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
   import InputGroupAddon from '../../../inputs/input-group/input-group-addon/input-group-addon.vue'
-  import Label from '../../../inputs/label/label.vue'
   import Select from '../../../inputs/select/index'
   import Switch from '../../../inputs/switch/switch.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -122,11 +122,11 @@
         <ShellMockupPart :order="0">
           <div class="grid grid-cols-2 items-start gap-(--spacing-lg)">
             <div class="flex flex-col gap-(--spacing-xs)">
-              <Label
-                label="Scope"
+              <FieldLabel
                 required
                 for="ai-inference-scope"
-              />
+                >Scope</FieldLabel
+              >
               <Select
                 model-value="gab-az"
                 size="large"
@@ -138,11 +138,11 @@
             </div>
 
             <div class="flex flex-col gap-(--spacing-xs)">
-              <Label
-                label="Public Repository Name"
+              <FieldLabel
                 required
                 for="ai-inference-repo"
-              />
+                >Public Repository Name</FieldLabel
+              >
               <InputGroupRoot size="large">
                 <Input
                   id="ai-inference-repo"
@@ -169,11 +169,11 @@
 
         <ShellMockupPart :order="2">
           <div class="flex flex-col gap-(--spacing-xs)">
-            <Label
-              label="Model"
+            <FieldLabel
               required
               for="ai-inference-model"
-            />
+              >Model</FieldLabel
+            >
             <span
               :data-focused="frame.focused || null"
               data-cursor="model"

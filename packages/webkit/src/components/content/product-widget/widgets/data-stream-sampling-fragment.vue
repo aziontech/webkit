@@ -8,7 +8,6 @@
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -195,10 +194,7 @@
               class="overflow-hidden [interpolate-size:allow-keywords]"
             >
               <div class="flex flex-col gap-(--spacing-xs) pt-(--spacing-lg)">
-                <Label
-                  for="data-stream-sampling-rate"
-                  label="Sampling Rate (%)"
-                />
+                <FieldLabel for="data-stream-sampling-rate">Sampling Rate (%)</FieldLabel>
                 <NumberInput
                   id="data-stream-sampling-rate"
                   :model-value="frame.rate"

@@ -8,7 +8,6 @@
   import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
   import FieldTitle from '../../../inputs/field/field-title/field-title.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
-  import Label from '../../../inputs/label/label.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -126,7 +125,7 @@
       <div class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)">
         <ShellMockupPart :order="0">
           <div class="flex flex-col gap-(--spacing-xxs)">
-            <Label label="Workloads access" />
+            <FieldLabel>Workloads access</FieldLabel>
             <HelperText label="The access level workloads have to the objects in this bucket." />
           </div>
         </ShellMockupPart>
