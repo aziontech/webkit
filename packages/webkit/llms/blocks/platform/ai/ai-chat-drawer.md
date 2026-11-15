@@ -10,12 +10,13 @@
 
 ## Asked as
 
-ai assistant drawer; ask ai about this page; contextual ai help; copilot panel; ai side panel; chat drawer; assistant over console page; ai help drawer; assistente de ia na gaveta; perguntar à ia; painel lateral de ia; asistente de ia en panel lateral
+ai assistant drawer; ask ai about this page; contextual ai help; copilot panel; ai side panel; chat drawer; assistant over console page; ai help drawer; assistente de ia na gaveta; perguntar à ia; painel lateral de ia; asistente de ia en panel lateral; ask about this page; assistant side panel
 
 The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
+- Use ai-chat-drawer when the questions are about the page the user is on and they should keep it in view.
 - A resource or list page where questions are about what is on screen: why a metric moved, what a setting does, how to fix a status.
 - A global Agent entry point in the console header, when the reader should keep their place.
 - A short exchange that ends back on the page (the reader acts on the answer there).
@@ -183,10 +184,10 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
-      icon: 'pi pi-exclamation-triangle'
+      icon: 'ai ai-exclamation-triangle'
     },
-    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'pi pi-bolt' },
-    { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'pi pi-globe' }
+    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
+    { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'ai ai-globe' }
   ]
 
   const turns = ref<Turn[]>([])
@@ -421,7 +422,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
             </div>
             <div class="flex items-center gap-(--spacing-xxs)">
               <IconButton
-                icon="pi pi-plus"
+                icon="ai ai-plus"
                 aria-label="New chat"
                 kind="transparent"
                 size="small"
@@ -497,7 +498,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
                       :value="turn.content"
                     />
                     <IconButton
-                      icon="pi pi-refresh"
+                      icon="ai ai-refresh"
                       aria-label="Regenerate response"
                       kind="transparent"
                       size="small"

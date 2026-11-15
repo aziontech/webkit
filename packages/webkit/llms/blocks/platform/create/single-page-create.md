@@ -1,32 +1,33 @@
 # SinglePageCreate (`platform/create/single-page-create`)
 
-> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`kind="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`. ImportFromGit is the same job as a page body for ConsoleLayout, with standalone `Field` stacks under plain headings instead of `Item` rows: the Git scope and repository side by side, Template settings, Deployment, Build and Runtime, Notifications and Alerts and Delivery features, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer; ImportFromGitSubmitted is that form after Deploy on the untouched fields.
+> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`kind="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/single-page-create/single-page-create.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/single-page-create")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [InputGroup](../../../components/input-group.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [PasswordInput](../../../components/password-input.md), [PhoneInput](../../../components/phone-input.md), [RadioGroup](../../../components/radio-group.md), [RadioGroup](../../../components/radio-group.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [MultiSelect](../../../components/multi-select.md), [NumberInput](../../../components/number-input.md), [PageHeader](../../../components/page-header.md), [RadioGroup](../../../components/radio-group.md), [RadioGroup](../../../components/radio-group.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
 
-create page; create resource page; create zone; full page create form; top-level create page; new resource form; creation page; página de criação; criar recurso; formulário de criação; single page create; create purge; create service page; criação em uma página; sectioned form; single column form; import from git form; form with sections; deploy form; acknowledgement checkbox; formulário em seções; formulário de uma coluna; importar do git; import zone file; create dns zone; importar arquivo de zona; create organization; new organization form; organization mark; criar organização
+create page; create resource page; create zone; full page create form; top-level create page; new resource form; creation page; página de criação; criar recurso; formulário de criação; single page create; create purge; create service page; criação em uma página; sectioned form; single column form; form with sections; formulário em seções; formulário de uma coluna; import zone file; create dns zone; importar arquivo de zona; create organization; new organization form; organization mark; criar organização; one page create; create form page
 
 The page a first-level resource is created on when everything it needs fits on one screen. The user arrives from the module's `Create <Object>` button, answers the required fields at the top, leaves the defaulted ones folded under Advanced, and commits from a bar that never scrolls away. The page has its own URL, its own creation header and no sidebar, so it survives a reload and the back button, and leaving it returns to the list.
 
 ## When to use
 
+- Use single-page-create only to create a first-level resource on one page; its settings page is edit-resource (`platform/edit/edit-resource`).
 - The resource is one the sidebar routes to (a domain, a service, a purge) and the user came only to create it (`skills/webkit-create-surface`).
 - Its fields fit in a few sections without depending on each other's answers step by step.
 - An action that takes a form and runs once, whose submit names what it does (Save, Purge, Deploy).
-- The settings page of the same resource: it reuses these sections in the same order.
 
 ## When not to use
 
 - The fields split into steps that unlock in order, or one answer adds a step: use `platform/create/multipage-create`.
-- The resource binds another one and then deploys: use `platform/create/provision-wizard` or `platform/create/source-wizard`.
+- The resource binds another one and then deploys: use `platform/create/multipage-create` (CreateAndDeploy).
+- Deploying a repository, a template or an uploaded folder: start at `platform/create/create-hub` and deploy with `platform/create/deploy-template` (ImportFromGit covers a Git import).
 - The thing is created inside another resource (a record in a zone, a rule in an application): use `platform/create/create-in-drawer`.
-- Editing an existing resource where the commit bar should mount only after a change: use `platform/settings/settings-form`.
+- The settings page of an existing resource, with the save bar that mounts only after a change: use `platform/edit/edit-resource`.
 - Never put a create form in a dialog.
 
 ## Building blocks
@@ -41,7 +42,7 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ### C. Sections — `SettingsSection`, `Card`, `Item` (required)
 
-Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="pi pi-cog"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
+Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="ai ai-cog"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
 
 ### D. Field rows — `SettingRow`, `Input`, `HelperText` (required)
 
@@ -53,7 +54,7 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
-`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar; the Import from Git form instead ends with one Deploy `Button` at the end of the column.
+`SaveBar kind="centered"`, a raised card centred at the bottom of the form that stays on screen while the form scrolls under it, at every width. It is the last child of the scrolling region, so the last field always scrolls clear of it. Its `#leading` slot holds what sits at the start, when there is something: an outlined Import `Button` and one muted line on the domain form, nothing on the others. Its `#actions` slot holds outlined Cancel and the primary submit, both medium `Button`s. The submit is the form's only `type="submit"`. A long create uses the same bar.
 
 ## Do
 
@@ -102,8 +103,6 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - CreatePurge: a Target band of radio choice cards for Layer and Purge type, an Arguments textarea that follows the type, a warning alert and a bar with Cancel and Purge.
 - CreateService: a long create with a small `PageHeader` (Create Service, breadcrumb Services / Create Service) and five groups of rows, each under an `h2`, under the same centred `SaveBar` with Cancel and Save.
 - RequiredFields: Create Service after Save on the empty form; Name and Address show "This field is required." until edited.
-- ImportFromGit: the same job as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`) with standalone field stacks under plain headings, an acknowledgement checkbox and one Deploy button at the end of the column.
-- ImportFromGitSubmitted: Import from Git after Deploy on the untouched form; every required field shows its required state and message.
 
 ## Related
 
@@ -122,8 +121,6 @@ On/off settings use `SettingRow kind="compact"` with a `Switch` hard right at it
 - `CreatePurge` — Create Purge: a Target section of wide rows choosing the Layer and the Purge type with RadioGroup choice cards, an Arguments section whose monospace Textarea follows the chosen type, a warning Alert, and a bar with only Cancel and Purge, which shows its loading state and confirms in a toast (or an error toast with Retry). Choosing Tiered Cache leaves Cache Key as the only allowed type.
 - `CreateService` — A long create, Create Service, under a small PageHeader, in five groups of Item rows (General, Delivery settings, Origins, Cache expiration policies and Debug rules, each under an h2) under the centred commit card with Cancel and Save: Name and Address empty, HTTP port 80 preselected, HTTPS ports disabled until a protocol with HTTPS is chosen, and the host header prefilled with ${host}.
 - `RequiredFields` — Create Service after Save on the empty form: Name and Address carry the required state with This field is required. under them, and typing into either clears its own error.
-- `ImportFromGit` — Standalone field stacks in one column, as a page body for ConsoleLayout: a page heading, then the Git scope and repository side by side and sections of field stacks under plain headings, ending with an acknowledgement checkbox and a single Deploy button at the end of the column, with no sticky footer. Import from Git is the example: Template settings, Deployment, Build and Runtime, Notifications and Alerts, Delivery features. Every required field flags only after Deploy is pressed, through the field’s own required state and helper text. Built from `PageHeader`, `Select`, `Field` (with its `FieldLabel`, `FieldDescription`, `FieldContent`, `FieldTitle` and `FieldLegend` parts and choice cards), `Input`, `InputGroup`, `RadioGroup`, `MultiSelect`, `PasswordInput`, `Textarea`, `PhoneInput`, `Switch`, `Checkbox`, `HelperText` and `Button`.
-- `ImportFromGitSubmitted` — After Deploy on the untouched form: the access token, deployment type, build command, deploy key, on-call number and the acknowledgement each show their required state and message.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/single-page-create", { variant })`, or the file under `blocks/platform/create/single-page-create/variants/`.
 
@@ -234,7 +231,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Domains"
           kind="outlined"
           size="small"
@@ -356,7 +353,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               <SettingsSection
                 title="Advanced"
                 v-model:open="advancedOpen"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 collapsible
               >
                 <Card :padded="false">

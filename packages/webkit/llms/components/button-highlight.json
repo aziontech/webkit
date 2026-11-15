@@ -26,7 +26,7 @@
  ],
  "bestPractices": [
   "Use at most one per view; the glow loses its meaning when it repeats.",
-  "Keep the label short and verb-led, and pair it with a leading `icon` (for example `pi pi-sparkles`).",
+  "Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).",
   "It always renders `type=\"button\"`; use `button` with `type=\"submit\"` to submit a form.",
   "disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.",
   "The glow stops under reduced motion, so never use it to convey state."
@@ -65,7 +65,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "PrimeIcons class for the leading icon."
+   "doc": "Azion icon class for the leading icon."
   },
   {
    "name": "href",
@@ -100,15 +100,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <ButtonHighlight\n    size=\"large\"\n    label=\"Ask Azion\"\n    icon=\"pi pi-sparkles\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <ButtonHighlight\n    size=\"large\"\n    label=\"Ask Azion\"\n    icon=\"ai ai-sparkles\"\n  />\n</template>"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <ButtonHighlight\n      size=\"small\"\n      label=\"Ask Azion\"\n      icon=\"pi pi-sparkles\"\n    />\n    <ButtonHighlight\n      size=\"medium\"\n      label=\"Ask Azion\"\n      icon=\"pi pi-sparkles\"\n    />\n    <ButtonHighlight\n      size=\"large\"\n      label=\"Ask Azion\"\n      icon=\"pi pi-sparkles\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <ButtonHighlight\n      size=\"small\"\n      label=\"Ask Azion\"\n      icon=\"ai ai-sparkles\"\n    />\n    <ButtonHighlight\n      size=\"medium\"\n      label=\"Ask Azion\"\n      icon=\"ai ai-sparkles\"\n    />\n    <ButtonHighlight\n      size=\"large\"\n      label=\"Ask Azion\"\n      icon=\"ai ai-sparkles\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <ButtonHighlight\n    label=\"Ask Azion\"\n    icon=\"pi pi-sparkles\"\n    loading\n  />\n</template>"
+   "sfc": "<script setup>\n  import ButtonHighlight from '@aziontech/webkit/button-highlight'\n</script>\n\n<template>\n  <ButtonHighlight\n    label=\"Ask Azion\"\n    icon=\"ai ai-sparkles\"\n    loading\n  />\n</template>"
   }
  ],
  "docs": "components/button-highlight.md"

@@ -20,7 +20,7 @@
  ],
  "bestPractices": [
   "Put a `SidebarMenu` with `role=\"presentation\"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.",
-  "Use `SidebarMenu.Group` for new navigation — `SidebarGroup` still works but is superseded.",
+  "Group the rows with `SidebarMenu.Group`; the sidebar has no group part of its own.",
   "Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.",
   "When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.",
   "Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.",

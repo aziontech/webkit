@@ -108,7 +108,7 @@
         label="Add payment method"
         kind="outlined"
         size="medium"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
       />
     </template>
   </SectionHeader>

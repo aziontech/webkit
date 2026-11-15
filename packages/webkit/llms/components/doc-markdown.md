@@ -137,8 +137,8 @@
     '## Next steps',
     '',
     '<CardGroup cols={2}>',
-    '  <Card title="Domains" icon="pi pi-globe" href="/docs/domains">Point your own domain at the deploy.</Card>',
-    '  <Card title="Cache" icon="pi pi-bolt" href="/docs/cache">Cache static assets at the edge.</Card>',
+    '  <Card title="Domains" icon="ai ai-globe" href="/docs/domains">Point your own domain at the deploy.</Card>',
+    '  <Card title="Cache" icon="ai ai-bolt" href="/docs/cache">Cache static assets at the edge.</Card>',
     '</CardGroup>'
   ].join('\n')
 </script>

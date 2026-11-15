@@ -16,6 +16,7 @@ The Payment method card of the Upgrade to Pro drawer. The user needs to confirm 
 
 ## When to use
 
+- Use payment-method-card inside a checkout or billing drawer to replace the card on file; it is a card, not a page.
 - Inside a checkout or upgrade drawer where a card on file may need replacing.
 - Wherever a card on file is replaced in place. On Billing, Add payment method in the Payment methods tab leads to this form (the Editing state).
 

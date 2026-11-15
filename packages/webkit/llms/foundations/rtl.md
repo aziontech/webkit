@@ -17,7 +17,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
   same in both directions.
 - Mirror what points along the reading direction: arrows, chevrons, carets, "back"/"next", sign-in /
   sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
-  and `@aziontech/webkit/styles` for any `pi pi-chevron-right`-style glyph); on your own glyph add
+  and `@aziontech/webkit/styles` for any `ai ai-chevron-right`-style glyph); on your own glyph add
   `rtl:-scale-x-100`.
 - Mirror horizontal motion with the `rtl:` variant: a panel that slides in with
   `-translate-x-full` also gets `rtl:translate-x-full`.
@@ -36,8 +36,8 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
 - `ml-*`, `mr-*`, `pl-*`, `pr-*`, `left-*`, `right-*`, `text-left`, `text-right`, `border-l`,
   `border-r`, `rounded-l`, `rounded-tr`… in a class string. They stay put under `dir="rtl"` and the
   layout breaks: an icon gap on the wrong side, a drawer that opens from the wrong edge.
-- Mirroring what does not point along the text: external-link arrows (`pi-arrow-up-right`,
-  `pi-external-link`), play/pause and other media controls, logos, clocks, checkmarks, charts'
+- Mirroring what does not point along the text: external-link arrows (`ai-arrow-up-right`,
+  `ai-external-link`), play/pause and other media controls, logos, clocks, checkmarks, charts'
   value axes, code.
 - Comparing `event.key === 'ArrowRight'` to mean "next" without the direction.
 - Reading `scrollLeft` as a distance from the start: it is `0` or negative under `rtl`; use
@@ -66,7 +66,7 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
       >{{ domain }}</span
     >
     <i
-      class="pi pi-chevron-right rtl:-scale-x-100"
+      class="ai ai-chevron-right rtl:-scale-x-100"
       aria-hidden="true"
     />
   </div>

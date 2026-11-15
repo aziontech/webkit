@@ -99,7 +99,7 @@
         key: 'user',
         kind: 'pill',
         title: 'User',
-        icon: 'pi pi-user',
+        icon: 'ai ai-user',
         active: true
       },
       {
@@ -107,7 +107,7 @@
         kind: 'card',
         eyebrow: 'Routing',
         title: 'Nearest data center',
-        icon: 'pi pi-directions',
+        icon: 'ai ai-directions',
         active: true
       },
       {
@@ -136,7 +136,7 @@
         kind: 'item',
         eyebrow: 'Origin',
         title: 'origin.example.com',
-        icon: 'pi pi-database'
+        icon: 'ai ai-database'
       }
     ],
     layout: {
@@ -214,7 +214,7 @@
         key: 'user',
         kind: 'pill',
         title: 'User',
-        icon: 'pi pi-user',
+        icon: 'ai ai-user',
         active: true
       },
       {
@@ -235,7 +235,7 @@
         kind: 'item',
         eyebrow: 'provider · general',
         title: 'General model',
-        icon: 'pi pi-sparkles',
+        icon: 'ai ai-sparkles',
         status: {
           label: 'Primary',
           severity: 'info'

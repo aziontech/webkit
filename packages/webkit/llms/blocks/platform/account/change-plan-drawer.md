@@ -10,12 +10,13 @@
 
 ## Asked as
 
-change plan; plan selection; pricing plans drawer; choose plan; switch plan; monthly or yearly plans; compare plans; mudar plano; trocar plano; escolher plano; upgrade to pro; upgrade plan; plan upgrade; checkout; checkout drawer; upgrade drawer; purchase plan; fazer upgrade; assinar plano; finalizar compra; upgrade checkout; accept terms; checkout de upgrade
+change plan; plan selection; pricing plans drawer; choose plan; switch plan; monthly or yearly plans; compare plans; mudar plano; trocar plano; escolher plano; upgrade to pro; upgrade plan; plan upgrade; checkout; checkout drawer; upgrade drawer; purchase plan; fazer upgrade; assinar plano; finalizar compra; upgrade checkout; accept terms; checkout de upgrade; change my plan; upgrade plan drawer
 
 The drawer the Billing page opens from its Subscription Plan card. The user wants to compare tiers and move the account to one without leaving Billing: a Monthly or Yearly switch over the Free, Pro and Enterprise pricing cards, each with its features and one action. Continue with Pro stacks the Upgrade to Pro drawer on top (what is included, the charge, the payment method and the billing address, then Upgrade); Contact sales closes the drawer.
 
 ## When to use
 
+- Use change-plan-drawer to change a signed-in account's plan.
 - Changing the subscription plan from Billing or from an upgrade prompt anywhere in the console.
 
 ## When not to use
@@ -149,7 +150,7 @@ A failure no section owns (the payment service did not answer) is `toast.error` 
 
 - `platform/account/payment-method-card` — the Payment method card on its own, with its editing state.
 - `platform/account/onboarding-form` — the plan choice during sign-up opens the same upgrade drawer.
-- `platform/account/profile` — the account settings layout Billing shares.
+- `platform/settings/settings-form` (Profile) — the account settings layout Billing shares.
 
 ## Variants
 

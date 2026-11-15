@@ -211,7 +211,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
       state: 'draft',
-      tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
+      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
       comment: 'Cache static assets for 30 days',
       author: 'John Smith',
       createdAgo: '14 hours ago'
@@ -275,7 +275,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     id: 'ADA8FMMR',
     name: 'ADA8FMMR',
     state: 'draft',
-    tag: { label: 'Draft', severity: 'warning', icon: 'pi pi-file-edit' },
+    tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
     comment: 'Cache static assets for 30 days',
     author: 'John Smith',
     createdAgo: '14 hours ago'
@@ -445,7 +445,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -481,7 +481,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-plus-circle"
+                  class="ai ai-plus-circle"
                   aria-hidden="true"
                 />
                 Add Version
@@ -497,7 +497,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     >
       <Tooltip text="Back to web-app versions">
         <IconButton
-          icon="pi pi-arrow-left"
+          icon="ai ai-arrow-left"
           kind="transparent"
           size="medium"
           href="/resources/1784552864?tab=versions"
@@ -529,7 +529,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
               >
                 <template #prefix>
                   <i
-                    class="pi pi-search"
+                    class="ai ai-search"
                     aria-hidden="true"
                   />
                 </template>
@@ -565,7 +565,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="pi pi-plus-circle"
+                    class="ai ai-plus-circle"
                     aria-hidden="true"
                   />
                   Add Version
@@ -594,7 +594,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 <Tag
                   label="Draft"
                   severity="warning"
-                  icon="pi pi-file-edit"
+                  icon="ai ai-file-edit"
                   size="medium"
                 />
                 <DropdownMenu
@@ -603,7 +603,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="transparent"
                       size="small"
                       aria-label="Version actions"
@@ -616,7 +616,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     >
                       <template #leading>
                         <i
-                          class="pi pi-pencil"
+                          class="ai ai-pencil"
                           aria-hidden="true"
                         />
                       </template>
@@ -627,7 +627,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     >
                       <template #leading>
                         <i
-                          class="pi pi-history"
+                          class="ai ai-history"
                           aria-hidden="true"
                         />
                       </template>
@@ -750,7 +750,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                                       >
                                         Contact sales
                                         <i
-                                          class="pi pi-external-link shrink-0 text-body-sm leading-none"
+                                          class="ai ai-external-link shrink-0 text-body-sm leading-none"
                                           aria-hidden="true"
                                         />
                                       </a>
@@ -782,7 +782,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 <div class="layout-section-start">
                   <EmptyState
                     size="medium"
-                    icon="pi pi-external-link"
+                    icon="ai ai-external-link"
                     :title="tabLabel"
                     :description="`${tabLabel} opens on its own page.`"
                   >
@@ -815,7 +815,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
                     aria-hidden="true"
                   >
-                    <i class="pi pi-file-edit text-body-sm text-(--text-default)" />
+                    <i class="ai ai-file-edit text-body-sm text-(--text-default)" />
                   </span>
                   <div
                     class="flex min-w-0 flex-1 flex-col"
@@ -842,7 +842,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   <div class="flex shrink-0 items-center gap-(--spacing-xs)">
                     <SplitButton
                       :label="saveOptions.find((option) => option.value === saveAction)?.label"
-                      :icon="saveAction === 'deploy' ? 'pi pi-cloud-upload' : ''"
+                      :icon="saveAction === 'deploy' ? 'ai ai-cloud-upload' : ''"
                       kind="primary"
                       size="medium"
                       :items="saveOptions"
@@ -883,7 +883,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 Version history
               </h2>
               <IconButton
-                icon="pi pi-times"
+                icon="ai ai-times"
                 kind="transparent"
                 size="small"
                 aria-label="Close version history"
@@ -901,7 +901,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-contrast)"
                     aria-hidden="true"
                   >
-                    <i class="pi pi-file-edit text-body-xs" />
+                    <i class="ai ai-file-edit text-body-xs" />
                   </span>
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -920,7 +920,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         class="ms-auto shrink-0"
                       >
                         <IconButton
-                          icon="pi pi-pencil"
+                          icon="ai ai-pencil"
                           kind="transparent"
                           size="small"
                           aria-label="Edit version info"
@@ -1033,7 +1033,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                       class="relative flex size-7 shrink-0 items-center justify-center rounded-full border border-(--border-default) bg-(--bg-surface) text-(--text-default)"
                       aria-hidden="true"
                     >
-                      <i class="pi pi-code text-body-xs" />
+                      <i class="ai ai-code text-body-xs" />
                     </span>
                     <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">

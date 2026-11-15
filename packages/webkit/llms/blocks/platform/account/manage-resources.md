@@ -182,9 +182,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   }
 
   const types: Record<ResourceType, ResourceTypeMeta> = {
-    organization: { label: 'Organization', icon: 'pi pi-building', severity: 'accent' },
-    group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'neutral' }
+    organization: { label: 'Organization', icon: 'ai ai-building', severity: 'accent' },
+    group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
+    workspace: { label: 'Workspace', icon: 'ai ai-th-large', severity: 'neutral' }
   }
 
   const seedResources: Resource[] = [
@@ -508,7 +508,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         <template #actions>
           <Button
             label="Create Workspace"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
             href="/account/resources/new"
@@ -523,7 +523,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       >
         <Button
           label="Create Group"
-          icon="pi pi-folder"
+          icon="ai ai-folder"
           kind="outlined"
           size="medium"
           href="/account/resources/new-group"
@@ -534,7 +534,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         />
         <Button
           label="Move"
-          icon="pi pi-arrow-right-arrow-left"
+          icon="ai ai-arrow-right-arrow-left"
           kind="outlined"
           size="medium"
           :disabled="!selectedCount"
@@ -542,7 +542,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         />
         <Button
           label="Labels"
-          icon="pi pi-tag"
+          icon="ai ai-tag"
           kind="outlined"
           size="medium"
           :disabled="!selectedCount"
@@ -550,7 +550,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         />
         <Button
           label="Delete"
-          icon="pi pi-trash"
+          icon="ai ai-trash"
           kind="outlined"
           size="medium"
           :disabled="!selectedCount"
@@ -559,7 +559,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         <div class="ms-auto flex items-center gap-(--spacing-xs)">
           <Tooltip text="Refresh">
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               :loading="refreshing"
@@ -569,7 +569,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           </Tooltip>
           <Button
             :label="detailsOpen ? 'Hide details' : 'Show details'"
-            :icon="detailsOpen ? 'pi pi-eye-slash' : 'pi pi-eye'"
+            :icon="detailsOpen ? 'ai ai-eye-slash' : 'ai ai-eye'"
             kind="transparent"
             size="medium"
             :aria-expanded="detailsOpen"
@@ -623,14 +623,14 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             <template #content>
               <EmptyState
                 size="medium"
-                icon="pi pi-sitemap"
+                icon="ai ai-sitemap"
                 title="No resources yet"
                 description="Create a workspace, then group workspaces under organizations and groups to share role bindings."
               >
                 <template #actions>
                   <Button
                     label="Create Workspace"
-                    icon="pi pi-plus"
+                    icon="ai ai-plus"
                     kind="secondary"
                     size="small"
                     href="/account/resources/new"
@@ -649,7 +649,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -663,7 +663,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               <template #content>
                 <EmptyState
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching resources"
                   :description="`No resource matches “${query.trim()}”.`"
                 >
@@ -721,7 +721,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         text="Current workspace"
                       >
                         <i
-                          class="pi pi-check shrink-0 text-body-xs text-(--text-muted)"
+                          class="ai ai-check shrink-0 text-body-xs text-(--text-muted)"
                           aria-label="Current workspace"
                           role="img"
                         />
@@ -769,7 +769,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                       Charges
                       <Tooltip text="Estimated month-to-date charges.">
                         <i
-                          class="pi pi-question-circle text-body-xs text-(--text-muted)"
+                          class="ai ai-question-circle text-body-xs text-(--text-muted)"
                           role="img"
                           aria-label="About charges"
                           tabindex="0"
@@ -780,7 +780,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                   <template #cell-labels="{ value }">
                     <Table.CellTags
                       :items="value ?? []"
-                      icon="pi pi-tag"
+                      icon="ai ai-tag"
                       :noun="{ one: 'label', other: 'labels' }"
                     />
                   </template>
@@ -861,7 +861,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         <EmptyState
                           v-if="!focused"
                           size="small"
-                          icon="pi pi-sitemap"
+                          icon="ai ai-sitemap"
                           :title="
                             selectedCount ? 'Several resources selected' : 'Select a resource'
                           "
@@ -905,7 +905,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         <EmptyState
                           v-if="!focused"
                           size="small"
-                          icon="pi pi-tag"
+                          icon="ai ai-tag"
                           :title="
                             selectedCount ? 'Several resources selected' : 'Select a resource'
                           "
@@ -938,13 +938,13 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           <EmptyState
                             v-else
                             size="small"
-                            icon="pi pi-tag"
+                            icon="ai ai-tag"
                             title="No labels"
                             description="This resource has no labels."
                           />
                           <Button
                             label="Edit labels"
-                            icon="pi pi-tag"
+                            icon="ai ai-tag"
                             kind="outlined"
                             size="small"
                             class="self-start"

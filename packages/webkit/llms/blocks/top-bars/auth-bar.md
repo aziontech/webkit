@@ -1,28 +1,29 @@
-# AuthHeader (`headers/auth-header`)
+# AuthBar (`top-bars/auth-bar`)
 
 > The console bar for the signed-out and onboarding screens: sign in, sign up, password recovery and the first-run steps. A `GlobalHeader` in its default `content` placement with the brand at the start and one outlined Documentation button at the end. There is no navigation, no search and no account control, because there is no session to act on yet. Built from `GlobalHeader`, `Button` and `Brand`.
 
 - Surface: product
-- Source: `blocks/headers/auth-header/auth-header.vue` in `@aziontech/webkit`
-- MCP: `get_pattern("headers/auth-header")`
+- Source: `blocks/top-bars/auth-bar/auth-bar.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("top-bars/auth-bar")`
 - Components: [Brand](../../components/brand.md), [Button](../../components/button.md), [GlobalHeader](../../components/global-header.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-auth header; signed-out header; login page header; onboarding header; public console header; header without navigation; logged-out top bar; cabeçalho de login; cabeçalho deslogado; barra do topo sem navegação
+auth header; signed-out header; login page header; onboarding header; public console header; header without navigation; logged-out top bar; cabeçalho de login; cabeçalho deslogado; barra do topo sem navegação; top bar; auth bar; signed-out top bar; barra de autenticação
 
 The top bar of every signed-out and first-run screen: sign in, sign up, password recovery and the onboarding steps. The user has no session yet, so the bar has one job: say where they are (Azion) and offer the one way out that needs no account, the documentation. Everything a signed-in bar carries (navigation, search, Create, the account avatar) is left out because there is nothing to act on.
 
 ## When to use
 
+- Use auth-bar on signed-out and onboarding screens (brand + Documentation, no navigation).
 - Above the auth card on sign in, sign up, reset password and MFA screens (`platform/auth`).
 - Above the onboarding steps that run before the organization exists (`platform/account/onboarding-form`).
 
 ## When not to use
 
-- Any page with a session: use `headers/resource-header` inside the console shell (`shells/console`), or `headers/creation-header` for a create, edit or deploy flow.
-- Documentation pages: use `headers/docs-header`. Marketing pages: use `headers/site-header`.
+- Any page with a session: `ConsoleLayout` already renders the console bar (`shells/console`); a create, edit or deploy flow uses `top-bars/creation-bar`.
+- Documentation pages: `DocLayout` renders their bar (`shells/documentation`). Marketing pages: `SiteLayout` and `SiteNav` render theirs (`shells/website`).
 
 ## Building blocks
 
@@ -67,13 +68,14 @@ One outlined, medium button with the book icon and an `href` to the docs. It is 
 
 - `platform/auth` — the sign-in and sign-up card this bar sits above.
 - `platform/account/onboarding-form` — the first-run steps render the same bar.
-- `headers/resource-header` — the bar once the user is signed in.
+- `shells/console` — the bar once the user is signed in, rendered by `ConsoleLayout`.
+- `top-bars/creation-bar` — the bar of a signed-in focused flow.
 
 ## Variants
 
 - `Default` — primary (the code below)
 
-Each variant is the same screen in another state: `get_pattern("headers/auth-header", { variant })`, or the file under `blocks/headers/auth-header/variants/`.
+Each variant is the same screen in another state: `get_pattern("top-bars/auth-bar", { variant })`, or the file under `blocks/top-bars/auth-bar/variants/`.
 
 ## Code (`Default`)
 
@@ -108,7 +110,7 @@ Each variant is the same screen in another state: `get_pattern("headers/auth-hea
           label="Documentation"
           kind="outlined"
           size="medium"
-          icon="pi pi-book"
+          icon="ai ai-book"
           href="/docs"
         />
       </GlobalHeader.End>

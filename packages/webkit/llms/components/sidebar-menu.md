@@ -53,7 +53,6 @@
 
 - [sidebar](sidebar.md) — the most common host. It supplies the landmark, the scroll region, and the header/footer; this menu is placed in its default slot. The two are independent — neither imports the other.
 - sidebar-menu-item` — **is** `SidebarMenu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
-- sidebar-group` — functionally **superseded by `SidebarMenu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.
 - [navigation-menu](navigation-menu.md) — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
 - [accordion](accordion.md) — a **reference only**, for content disclosure rather than navigation. `SidebarMenu` borrows the _shape_ of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `SidebarMenu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the token rules § Forbidden in animations).
 - [tag](tag.md) — renders the optional trailing badge on a row via `sidebar-menu-item`'s `tagValue`.
@@ -108,7 +107,7 @@ element instead of three.
   - **Two changes made to it**, both fixing drift against the rows around it:
     1. The leading icon box renders **only when `icon` is set**. An empty `size-8` box reserved a column the row did not use, pushing an icon-less row's label off the column its siblings hold and leaving the rail anchored to blank space.
     2. Its **two branches now share one label class**. The anchor branch was `.text-label-sm` (12 px) and the button branch `.text-body-sm` (14 px), so the same menu rendered two sizes depending on whether a row happened to carry an `href` — children came out _smaller than their parents_. Both are now `.text-label-md`.
-  - Props: `label?: string` (default `''` — visible text of the row), `selected?: boolean` (default `false` — applies the selected surface), `disabled?: boolean` (default `false` — blocks interaction), `icon?: string` (default `''` — PrimeIcons class for the leading glyph; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: SidebarMenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | neutral | success | info | warning | danger | accent`).
+  - Props: `label?: string` (default `''` — visible text of the row), `selected?: boolean` (default `false` — applies the selected surface), `disabled?: boolean` (default `false` — blocks interaction), `icon?: string` (default `''` — Azion icon class for the leading glyph; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: SidebarMenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | neutral | success | info | warning | danger | accent`).
   - Events: `click` — `(event: MouseEvent, item: { label: string; href: string })`. `item` carries the row's `label` and `href`, identifying which row was activated (event-first per `event-payloads.md`).
   - Slots: `default` — replaces the label text; `tag` — replaces the trailing `Tag` (its presence alone renders the tag region, with or without `tagValue`).
   - **This spec is menu-item's only spec.** It previously carried its own `.specs/menu-item.md`, which is removed with this change: a sub-component of a compound is documented in the compound's spec, the way `sidebar-menu-sub` and `sidebar-menu-group` already are. The `./menu-item` export path stays public, so its API lives here (that is what `build-catalog.mjs` reads to give the path an entry in `catalog.json`).
@@ -131,7 +130,7 @@ element instead of three.
     - **Without one** the label is a `<button>` that **reveals the children too**, so the whole row does. There is no destination to protect, and leaving the arrow as the only live target is a 28 px box — **7 % of the row's area**, with the other 93 % doing nothing — which on a phone reads as a broken menu. This is the shape most containers have (a console module's settings drill, every one of the 28 container rows in the sample's docs tree), so it is the one that must be right by default.
     - `href` is the signal rather than a boolean because it is the same data every other row in this menu uses to say where it goes, and because it makes the behaviour fall out of the tree in data-driven mode: `SidebarMenuNode.href` already exists. It also follows [`root-element.md`](https://github.com/aziontech/webkit/blob/main/.claude/rules/root-element.md) — the root switches element on a **data** prop, never an `as`/`is` string.
     - The **link** is an `<a href>` carrying `sub.triggerId`, the icon column and the row's typography (`min-w-0 flex-1`, so it fills what the arrow leaves). A real anchor, so middle-click and open-in-new-tab work; the consumer intercepts a plain left click for SPA routing. It announces its activation through `click` and does **nothing else** — it neither expands nor pushes. **A disabled row drops its `href` outright** (an anchor with no destination is not a link) and takes `tabindex="-1"` + `aria-disabled`.
-    - The **arrow** is an `IconButton kind="transparent" size="small"` (28 px box, 12 px glyph), on every row. With `kind="inline"` it is a rotating `pi pi-chevron-down` that toggles the sub; with `kind="drill"` a static `pi pi-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
+    - The **arrow** is an `IconButton kind="transparent" size="small"` (28 px box, 12 px glyph), on every row. With `kind="inline"` it is a rotating `ai ai-chevron-down` that toggles the sub; with `kind="drill"` a static `ai ai-chevron-right` that pushes the sub onto the root's stack and carries **no** `aria-expanded` — nothing expands, so the attribute would be a lie. Its accessible name is derived, since the glyph alone says nothing: `Expand <label>` / `Collapse <label>` for an inline arrow (it names the state it moves to, which `aria-expanded` then confirms) and `Open <label> menu` for a drill one. It overrides `IconButton`'s ring offset with the menu's own (`ring-offset-1` against `--menu-ring-offset`) — both with `!`, because they conflict with utilities `IconButton` puts in the same class list, where stylesheet order rather than source order would otherwise decide. Its glyph colour goes through `iconClass` (onto the `i`) for the same reason, and a **disabled** arrow paints no fill (`bg-transparent!`) with `--text-disabled` ink, because `IconButton`'s filled disabled box made the arrow the brightest thing on a row whose label had dimmed away.
     - **`aria-expanded` / `aria-controls` sit on whichever control expands the children, and on exactly one of them.** With a link that is the arrow. Without one the **label** already reveals, so it carries them and the arrow becomes a **redundant pointer affordance** for the same action: `tabindex="-1"` + `aria-hidden="true"`, so it leaves the tab order and the accessibility tree rather than announcing a second control for one thing. One tab stop per row either way.
     - **The arrow keys work from the row's own control**: `ArrowRight` expands / pushes and `ArrowLeft` collapses, so a keyboard reader reaches the children without first tabbing to an arrow.
     - Focus returns, on pop, to **whichever control pushed the level** — the arrow when the label is a link, the label otherwise.
@@ -276,7 +275,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
       <SidebarMenuGroup label="User agents">
         <SidebarMenuItem
           label="End User"
-          icon="pi pi-user"
+          icon="ai ai-user"
           href="/end-user"
           selected
         />
@@ -287,25 +286,25 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
         />
         <SidebarMenuItem
           label="Device Groups"
-          icon="pi pi-mobile"
+          icon="ai ai-mobile"
           href="/device-groups"
         />
       </SidebarMenuGroup>
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="pi pi-th-large"
+          icon="ai ai-th-large"
           href="/applications"
         />
         <SidebarMenuItem
           label="Edge Firewall"
-          icon="pi pi-shield"
+          icon="ai ai-shield"
           href="/edge-firewall"
           tag-value="Beta"
         />
         <SidebarMenuItem
           label="Real-Time Metrics"
-          icon="pi pi-chart-bar"
+          icon="ai ai-chart-bar"
           href="/metrics"
         />
       </SidebarMenuGroup>
@@ -361,7 +360,7 @@ folder only). 6.0 renamed every key from `./menu*` to `./sidebar-menu*`, with no
             <SidebarMenuSubTrigger
               label="Settings"
               kind="drill"
-              icon="pi pi-cog"
+              icon="ai ai-cog"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem

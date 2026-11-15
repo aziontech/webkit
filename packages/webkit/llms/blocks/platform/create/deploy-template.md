@@ -1,37 +1,38 @@
 # DeployTemplate (`platform/create/deploy-template`)
 
-> The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the DeploymentFlow template) and then to the success screen (the DeploySuccess template). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. Built from `GlobalHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton` and `Button`.
+> The deploy template page, a focused flow outside the console shell: the creation header with Back to Creation Center and the Start from a template crumb, the template preview card naming the repository it clones from, then the step the flow is on with Browse templates under it. Without a Git provider the step is the Connect a Git provider bordered EmptyState; once one is connected it is the Deploy your project form, with the scope and the repository name with its privacy switch side by side over the template settings and two collapsible groups, Build and output settings and Environment variables (a locked key, a value with a show control and a locked Secret checkbox), and a Deploy that checks the form and shows each missing value under its field. While the settings load they are Skeleton bands. Deploying hands the same column to the build logs (the InCreateFlow state of the DeploymentLogs template) and then to the success screen (the DeploySuccess template). Import from Git reaches the same page with the form trimmed to the repository and its build settings, and Upload a Project with the project name, a build preset and the uploaded files with a Root (/) pick for a static project without an index. WhereItRuns opens the flow on the service the project deploys to: a search over the services, six at a time, an inline Create Service row and a way to continue without one, before the Git step. InstallIntegration is the same page for an integration template (Origin Proxy): no Git and no build, its settings with the required origin, What gets added previewing the origin record, the request-phase rule and its behaviors on the service, and Add to the service. Built from `GlobalHeader`, `Breadcrumb`, `Card`, `EmptyState`, `Field`, `Select`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Switch`, `Input`, `Accordion`, `Checkbox`, `Tooltip`, `Skeleton`, `Item`, `Tag` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/deploy-template/deploy-template.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-template")`
-- Components: [Accordion](../../../components/accordion.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Link](../../../components/link.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tooltip](../../../components/tooltip.md), `use-locale`
+- Components: [Accordion](../../../components/accordion.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [Item](../../../components/item.md), [Link](../../../components/link.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-locale`
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
-deploy template; clone template; template deploy page; connect git provider; deploy from template; one click deploy; start from a template; implantar template; clonar template; conectar git; deploy uploaded project; deploy imported repository; implantar projeto enviado
+deploy template; clone template; template deploy page; connect git provider; deploy from template; one click deploy; start from a template; implantar template; clonar template; conectar git; deploy uploaded project; deploy imported repository; implantar projeto enviado; import from git form; import from git; importar do git; where it runs; select a service; choose service to deploy to; install integration template; integration template; add integration to service; origin proxy template; instalar integração
 
 A focused page, outside the console shell, where the user turns a template into a running project. They chose a template in the Creation Center and now need to see what it clones, connect a Git provider if they have none, name the repository it creates, fill the settings the template requires and deploy. The same column then shows the build and the outcome, so the user never leaves the page.
 
 ## When to use
 
+- Use deploy-template for the configure-and-deploy step once the source (repository, template or uploaded folder) is chosen.
 - The user picked a template, a Git import or an upload from `platform/create/create-hub`, and the next step is to deploy it.
 - The flow creates a repository from a source in the user's Git account and deploys from it on every push.
 - The template needs a few settings (tokens, a domain) before its first build can run.
+- The project must first say which service it runs on (WhereItRuns), or the template is an integration that adds records and a rule to a service instead of cloning code (InstallIntegration).
 
 ## When not to use
 
 - Choosing what to start from: use `platform/create/create-hub`.
 - A first-level resource created from a form with no source code: use `platform/create/single-page-create`.
-- A source that needs several steps (where it runs, how it builds): use `platform/create/source-wizard`.
-- Provisioning a resource and binding it to another: use `platform/create/provision-wizard`.
+- Provisioning a resource and binding it to another: use `platform/create/multipage-create` (CreateAndDeploy).
 
 ## Building blocks
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The creation header from `headers/creation-header`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
+The creation header from `top-bars/creation-bar`: a small outlined back `IconButton` to the Creation Center, the `Brand` linking home, a `Breadcrumb` whose last crumb is the template and is current, and the account `Avatar` alone on the right. No sidebar, no search.
 
 ### B. Template and Git step — `Card`, `EmptyState`, `Button`, `Link` (required)
 
@@ -40,6 +41,10 @@ Above the step, a preview `Card` names the template, its one-sentence descriptio
 **Advanced settings (when the source builds).** Under the template settings, two collapsible groups, each a large single `Accordion` with the chevron on the start side inside a bordered frame. **Build and output settings** holds the build fields filled with their defaults (root directory, install command), led by a Build preset `Select` when the framework was detected or must be picked. **Environment variables** holds one row pair per variable: a disabled Key row with the variable name, then a Value row with a show or hide `IconButton` for a secret and a locked Secret `Checkbox` whose `Tooltip` says whether the template keeps it secret. A group opens on its own when it holds a required value. Deploy checks the form: each missing required value shows its `Field.Error` and the group that holds it opens.
 
 **Uploaded project (Upload only).** Reached from a dropped folder there is no Git: the form asks for the project name and a Build preset, then a Project files card shows the folder summary (name, file count and total size, formatted with `Intl.NumberFormat` from the files themselves) and a scrollable list with each file's glyph, monospace path and size. The list shows the first 100 files and an "and N more" line counts the rest; its scroll region is focusable so a keyboard can scroll it. A static project with no `index.html` adds a required Root (/) `Select` of the top-level files, and Deploy waits for it.
+
+**Where it runs (WhereItRuns).** When the project must be bound to a service, the flow opens on a `Card` headed Where it runs: a large search `Input` over the services, up to six small `clickable` `Item` rows (native `button`s with `aria-pressed`, a check on the chosen one), an "N more. Type to narrow the list." line or a no-match line, and a Create Service row that opens an inline New service `Field` with focus in it (Enter on a search with no match opens it prefilled). Continue without a service sits under the card as a transparent small `Button`. Picking a row answers the step; the Git step that follows names the service it deploys to.
+
+**Integration template (InstallIntegration).** An integration template clones nothing and builds nothing: the preview card says which service it adds to, a Configure `Card` lists the template's settings as `Field`s (the required ones flagged only after the action is pressed), and a flush What gets added `Card` previews the origin record, the rule (an `Item` with a Request phase `Tag`) and its behaviors as `Tag`s, updating as the user types. The footer action names the service, e.g. Add to service-01.
 
 ### C. Browse templates — `Button` (optional)
 
@@ -52,7 +57,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 - Let Deploy check the form: show each missing required value under its field and open the collapsed group that holds it. Disable Deploy only while the settings load, or on an upload until a Root (/) is picked.
 - Keep build and variable settings in their collapsible groups, prefilled with defaults, so a template that needs nothing more deploys in one press.
 - Mark a secret variable with the locked Secret checkbox and mask its value, with a show control beside it.
-- Hand the same column to `platform/create/deployment-flow` on Deploy, then to `platform/create/deploy-success`.
+- Hand the same column to the create-flow card of `platform/detail/deployment-logs` (InCreateFlow) on Deploy, then to `platform/create/deploy-success`.
 - Trim the form to the repository fields for Import from Git, and to the uploaded files for Upload a Project.
 
 ## Don't
@@ -96,28 +101,33 @@ An outlined medium `Button` under the step that returns to the template list. It
 - LoadingSettings: the template settings loading as Skeleton bands, Deploy disabled.
 - ImportFromGit: a repository imported from GitHub; scope and repository name over one collapsed Build and output settings group.
 - Upload: a dropped folder; project name and build preset, the Project files card and a required Root (/) for a static project with no index.
+- WhereItRuns: the service chooser before the Git step, with search, Create Service and Continue without a service.
+- InstallIntegration: the Origin Proxy integration on service-01; its settings, What gets added and Add to service-01, which shows the required origin message.
 
 ## Related
 
 - `platform/create/create-hub` — where the user picks the template.
-- `platform/create/deployment-flow` — the build card the column shows after Deploy.
+- `platform/detail/deployment-logs` — the build card (InCreateFlow) the column shows after Deploy.
 - `platform/create/deploy-success` — the outcome the column ends on.
-- `headers/creation-header` — the header this page uses.
+- `top-bars/creation-bar` — the header this page uses.
 - `platform/states/project-intake` — the upload path that reaches this page with files instead of a template.
 
 ## Steps
 
+- where-it-runs
 - connect-git
 - form
 
 ## Variants
 
 - `ConnectGit` — primary (the code below)
+- `WhereItRuns` — The first step, before Git: Where it runs, a search over the services with six rows at a time and an 'N more' line, an inline Create Service row that opens a New service name field with focus in it (Enter on a search with no match opens it prefilled), and Continue without a service. Picking one answers the step and shows the Connect a Git provider step naming the service it deploys to.
 - `Form` — GitHub connected: the jane-doe scope and the nuxt-ecommerce repository name, public by default, over the store domain setting, then two collapsible groups in bordered frames: Build and output settings (root directory and install command, filled with their defaults) and Environment variables, open because the access token is required, each variable a locked Key row over a Value row with a show or hide control and a locked Secret checkbox. Deploy checks the form and shows each missing required value under its field, opening the group that holds it.
 - `BuildSettings` — Deploy was pressed with the access token empty: both groups open, Build and output settings led by a Build preset `Select` on the detected Nuxt preset with its helper, and the required NUXT_STORE_ACCESS_TOKEN value showing its error.
 - `LoadingSettings` — The template settings are still loading: scope and repository name are ready, three `Skeleton` field bands stand in for the settings in an `aria-busy` region with a status line, and Deploy is disabled.
 - `ImportFromGit` — Reached from Import from Git: the crumb and preview card name the acme-web repository it imports from GitHub, the form keeps the scope and repository name and trims the settings to one collapsed Build and output settings group with the detected Vite preset; no template settings, no variables.
 - `Upload` — Reached from a dropped folder: no Git and no repository, the project name and an empty Build preset `Select` side by side, then Project files, a card with the folder summary (file count and total size, formatted from the files) and a scrollable, keyboard-focusable list of up to 100 files with their glyph, monospace path and size (an 'and N more' line counts the rest), and, because the static project has no index.html, a required Root (/) `Select` of the top-level files; Deploy waits for it.
+- `InstallIntegration` — An integration template (Origin Proxy) on service-01: the preview card says what it adds to, Configure Origin Proxy asks for the required Origin address and the optional Host header, What gets added previews the origin record, the Proxy every path rule tagged Request phase and the behaviors, and Add to service-01 checks the form and shows the required message under the empty origin.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/deploy-template", { variant })`, or the file under `blocks/platform/create/deploy-template/variants/`.
 
@@ -146,7 +156,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Creation Center"
           kind="outlined"
           size="small"
@@ -229,7 +239,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
                     >
                       <i
-                        class="pi pi-folder text-[length:inherit] leading-none"
+                        class="ai ai-folder text-[length:inherit] leading-none"
                         aria-hidden="true"
                       />
                       templates/nuxt-ecommerce

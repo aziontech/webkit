@@ -101,7 +101,6 @@ A row of headline figures inside a `FrameBox`.
 
 - `shells/console` — the signed-in counterpart, on `ConsoleLayout`.
 - `shells/documentation` — the docs counterpart, shares the footer anatomy in its `content` placement.
-- `headers/site-header` — the bar on its own.
 
 ## Variants
 
@@ -528,25 +527,25 @@ Each variant is the same screen in another state: `get_pattern("shells/website",
       }
     ],
     socials: [
-      { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+      { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
       {
-        icon: 'pi pi-linkedin',
+        icon: 'ai ai-linkedin',
         label: 'Azion on LinkedIn',
         href: 'https://www.linkedin.com/company/aziontech'
       },
       {
-        icon: 'pi pi-youtube',
+        icon: 'ai ai-youtube',
         label: 'Azion on YouTube',
         href: 'https://www.youtube.com/aziontech'
       },
       { icon: 'ai ai-x', label: 'Azion on X', href: 'https://x.com/aziontech' },
       {
-        icon: 'pi pi-instagram',
+        icon: 'ai ai-instagram',
         label: 'Azion on Instagram',
         href: 'https://www.instagram.com/aziontech'
       },
-      { icon: 'pi pi-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
-      { icon: 'pi pi-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
+      { icon: 'ai ai-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
+      { icon: 'ai ai-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
     ],
     statusLabel: 'All systems operational',
     languages: ['EN', 'PT-BR', 'ES'],

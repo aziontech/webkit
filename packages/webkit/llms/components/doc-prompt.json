@@ -51,9 +51,9 @@
   {
    "name": "icon",
    "type": "string",
-   "default": "'pi pi-sparkles'",
+   "default": "'ai ai-sparkles'",
    "required": "false",
-   "doc": "PrimeIcons class for the glyph beside the title."
+   "doc": "Azion icon class for the glyph beside the title."
   },
   {
    "name": "label",

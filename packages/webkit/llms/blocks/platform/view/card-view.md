@@ -315,7 +315,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/applications"
@@ -323,7 +323,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
           />
           <Button
             label="Create Application"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
           />
@@ -348,7 +348,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
                 <template #trigger>
                   <Button
                     :label="selectedCount ? `Delete (${selectedCount})` : 'Delete'"
-                    icon="pi pi-trash"
+                    icon="ai ai-trash"
                     kind="outlined"
                     size="medium"
                     :disabled="!selectedCount"
@@ -411,14 +411,14 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
             <template #content>
               <EmptyState
                 size="medium"
-                icon="pi pi-th-large"
+                icon="ai ai-th-large"
                 title="No applications yet"
                 description="Create an application to start serving traffic."
               >
                 <template #actions>
                   <Button
                     label="Create Application"
-                    icon="pi pi-plus"
+                    icon="ai ai-plus"
                     kind="secondary"
                     size="small"
                   />
@@ -476,7 +476,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
               <template #empty>
                 <EmptyState
                   size="medium"
-                  icon="pi pi-filter-slash"
+                  icon="ai ai-filter-slash"
                   title="No matching applications"
                   description="No application matches these filters."
                 >

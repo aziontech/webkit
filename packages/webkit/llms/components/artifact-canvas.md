@@ -183,7 +183,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
           <ArtifactPreview
             title="top-orders.sql"
             meta="SQL"
-            icon="pi pi-code"
+            icon="ai ai-code"
             openable
             @open="show"
           />
@@ -306,7 +306,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
       label="Regenerate"
       kind="outlined"
       size="small"
-      icon="pi pi-refresh"
+      icon="ai ai-refresh"
       :loading="streaming"
       @click="regenerate"
     />

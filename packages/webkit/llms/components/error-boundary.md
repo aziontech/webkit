@@ -23,7 +23,7 @@
 
 ## Don’t
 
-- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-error` and `skills/webkit-ui-states` describe.
+- A request that failed (a fetch, a mutation): that is data state, not a render error. Show it in the region with an `alert` and a Retry, as `platform/states/form-validation` (SectionRejected) and `skills/webkit-ui-states` describe.
 - A whole page that cannot be shown (missing route, no access, server failure) → use the `platform/states/not-found` block.
 - A field that failed validation → use `field` with its error message.
 - Errors thrown in click or submit handlers you can catch yourself: catch them where you call the action and show the outcome with `toast` or `alert`.
@@ -219,7 +219,7 @@
             <EmptyState
               title="This chart failed to load"
               description="The rest of the dashboard still works."
-              icon="pi pi-exclamation-triangle"
+              icon="ai ai-exclamation-triangle"
               size="small"
             >
               <template #actions>
@@ -227,7 +227,7 @@
                   label="Try again"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   @click="retry"
                 />
               </template>

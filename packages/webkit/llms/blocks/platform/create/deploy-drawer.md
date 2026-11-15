@@ -25,7 +25,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 - A release of several resources reviewed together: use `platform/create/release-impact`. This drawer is the canonical surface for deploying one service or one project.
 
 - Creating or editing an item inside a resource: use `platform/create/create-in-drawer`.
-- The first deploy at the end of a create flow: use `platform/create/deploy-template` or `platform/create/provision-wizard`, which stream `platform/create/deployment-flow` in the page.
+- The first deploy at the end of a create flow: use `platform/create/deploy-template` or `platform/create/multipage-create` (CreateAndDeploy), which stream the create-flow card of `platform/detail/deployment-logs` in the page.
 - Reading what a past deploy did: use `platform/detail/deployment-logs` or `platform/detail/version-detail`.
 - Binding one resource to another without deploying: use `platform/create/resource-picker`.
 
@@ -137,7 +137,7 @@ Every project the chosen environment's shared Deployment Settings deploy to, gro
 ## Related
 
 - `platform/create/create-in-drawer` — the drawer that creates items rather than deploying.
-- `platform/create/deployment-flow` — the run a deploy streams once it starts.
+- `platform/detail/deployment-logs` — the run a deploy streams once it starts.
 - `platform/states/async-submit` — the toast and outcome rule every deploy started here follows.
 - `platform/detail/deployment-logs` — the logs of a deploy after it ran.
 - `platform/detail/version-detail` — what a version contains before it is deployed.
@@ -236,7 +236,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       key: 'service',
       label: 'Service',
       name: 'web-app',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       note: '',
       total: 6,
       versions: [
@@ -273,7 +273,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           key: 'service@AG1VVDJP:module-auth-gateway',
           label: 'Module',
           name: 'auth-gateway',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           note: '',
           total: 8,
           versions: [
@@ -313,7 +313,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           key: 'service@AG1VVDJP:module-geo-redirect',
           label: 'Module',
           name: 'geo-redirect',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           note: '',
           total: 11,
           versions: [
@@ -353,7 +353,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           key: 'service@AG1VVDJP:integration-payments-api',
           label: 'Integration',
           name: 'payments-api',
-          icon: 'pi pi-link',
+          icon: 'ai ai-link',
           note: '',
           total: 11,
           versions: [
@@ -714,7 +714,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </DrawerTrigger>
 
@@ -790,7 +790,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               :aria-label="`Change version of ${row.name}`"
                               kind="outlined"
                               size="small"
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               icon-position="trailing"
                               :disabled="!row.versions.length"
                             />
@@ -810,7 +810,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               >
                                 <template #prefix>
                                   <i
-                                    class="pi pi-search"
+                                    class="ai ai-search"
                                     aria-hidden="true"
                                   />
                                 </template>
@@ -938,7 +938,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                           :aria-label="`Change version of ${dependency.name}`"
                                           kind="outlined"
                                           size="small"
-                                          icon="pi pi-chevron-down"
+                                          icon="ai ai-chevron-down"
                                           icon-position="trailing"
                                           :disabled="!dependency.versions.length"
                                         />
@@ -958,7 +958,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                           >
                                             <template #prefix>
                                               <i
-                                                class="pi pi-search"
+                                                class="ai ai-search"
                                                 aria-hidden="true"
                                               />
                                             </template>
@@ -1060,7 +1060,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
-                            class="pi pi-box text-body-xs text-(--text-default)"
+                            class="ai ai-box text-body-xs text-(--text-default)"
                             aria-hidden="true"
                           />
                         </span>
@@ -1138,7 +1138,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                   >
                                     <template #prefix>
                                       <i
-                                        class="pi pi-search"
+                                        class="ai ai-search"
                                         aria-hidden="true"
                                       />
                                     </template>
@@ -1195,7 +1195,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               label="Change"
                               kind="outlined"
                               size="small"
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               icon-position="trailing"
                             />
                           </DropdownMenu.Trigger>
@@ -1285,7 +1285,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                           >
                             <i
-                              class="pi pi-box text-body-xs text-(--text-default)"
+                              class="ai ai-box text-body-xs text-(--text-default)"
                               aria-hidden="true"
                             />
                           </span>
@@ -1357,7 +1357,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                     >
                                       <template #prefix>
                                         <i
-                                          class="pi pi-search"
+                                          class="ai ai-search"
                                           aria-hidden="true"
                                         />
                                       </template>
@@ -1425,7 +1425,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               class="flex min-w-0 items-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
             >
               <i
-                class="pi pi-info-circle shrink-0"
+                class="ai ai-info-circle shrink-0"
                 aria-hidden="true"
               />
               <span class="truncate">{{ changeSummary }}</span>

@@ -10,12 +10,13 @@
 
 ## Asked as
 
-ai action approval; approve ai action; user authorized action; agent asks permission; human in the loop; tool call approval; confirm agent command; allow tool; aprovar ação da ia; autorizar ação do agente; confirmar comando; aprobar acción de la ia
+ai action approval; approve ai action; user authorized action; agent asks permission; human in the loop; tool call approval; confirm agent command; allow tool; aprovar ação da ia; autorizar ação do agente; confirmar comando; aprobar acción de la ia; approve an agent action; tool approval in chat
 
 The moment an assistant needs permission. The reader asked for something that changes their account — a deployment, a purge, a deletion — and the assistant stops before doing it: it says what it found, shows exactly what will run, and waits for Approve or Deny. The decision stays in the thread as text, and the assistant reports what happened next, so the conversation is also the record of what ran and who allowed it. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
+- Use ai-action-approval when an AI assistant proposes an action with side effects inside a conversation (ToolApproval).
 - The assistant is about to call a tool or run a command with side effects: deploy, purge, change a rule, delete.
 - A one-time decision about a consequential action, made inside the conversation.
 - An irreversible action: add a typed confirmation to the card.
@@ -239,7 +240,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
               label="Retry"
               kind="outlined"
               size="small"
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               @click="approve"
             />
           </ChatMessage.Actions>

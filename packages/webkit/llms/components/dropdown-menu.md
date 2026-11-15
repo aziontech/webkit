@@ -89,7 +89,7 @@
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
     - `command: string` default `''` — keyboard-shortcut hint rendered on the trailing side (e.g. `'⌘P'`, `'⇧⌘P'`, `'Ctrl+,'`). A module-level registry holds one `window` `keydown` listener for every menu on the page (attached while at least one shortcut is registered); it matches the shortcut against the registered options of enabled menus and emits `select` for one match only (preventing the browser default): an option of the open menu wins, then an option of the menu whose trigger holds focus, then the first registered, so a row menu repeated on every table row fires for the row the person is on. Mutually exclusive with the `trailing` slot.
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
-    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `pi pi-check`.
+    - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `ai ai-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
     - `kind: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuOptionKind`.
   - Events: _none_ (root emits `select`).
@@ -98,7 +98,7 @@
   - Props: `defaultOpen: boolean` default `false` — opens the sub-menu when the parent panel opens (for documentation and screenshots); the user can still close it.
   - Events: _none_ (activation inside bubbles to the root `select`).
   - Slots: `default` — one `<DropdownMenu.SubTrigger>` followed by one `<DropdownMenu.SubContent>`.
-- `dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue` — the row that opens the sub-menu. Same 32 px row as an option, with a trailing chevron (`pi pi-chevron-right`, mirrored under rtl). `role="menuitem"`, `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` pointing at the sub-panel; keeps the hover background while its sub-menu is open (`data-state="open"`). Opens on pointer enter, click, `Enter`, `Space` and `ArrowRight` (`ArrowLeft` under rtl); the keyboard paths move focus to the first sub-menu item.
+- `dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue` — the row that opens the sub-menu. Same 32 px row as an option, with a trailing chevron (`ai ai-chevron-right`, mirrored under rtl). `role="menuitem"`, `aria-haspopup="menu"`, `aria-expanded`, `aria-controls` pointing at the sub-panel; keeps the hover background while its sub-menu is open (`data-state="open"`). Opens on pointer enter, click, `Enter`, `Space` and `ArrowRight` (`ArrowLeft` under rtl); the keyboard paths move focus to the first sub-menu item.
   - Props: `label: string` default `''` — plain-text label; falls back to the default slot. `disabled: boolean` default `false` — the row cannot open its sub-menu and applies disabled tokens.
   - Events: _none_.
   - Slots: `default` (rich label), `leading` (icon before the label).
@@ -178,7 +178,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
     <DropdownMenuTrigger>
       <IconButton
         kind="outlined"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>
@@ -228,7 +228,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
     <DropdownMenuTrigger>
       <IconButton
         kind="outlined"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>
@@ -274,7 +274,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
     <DropdownMenuTrigger>
       <IconButton
         kind="outlined"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         aria-label="Open menu"
       />
     </DropdownMenuTrigger>

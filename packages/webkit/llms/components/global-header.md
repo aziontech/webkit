@@ -131,7 +131,7 @@ right-to-left: the start region is on the right there. 6.0 removed the physical 
           label="Create"
           kind="secondary"
           size="medium"
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
         />
       </GlobalHeader.End>
     </GlobalHeader>

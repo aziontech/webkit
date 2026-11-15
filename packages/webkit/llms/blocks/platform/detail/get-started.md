@@ -16,6 +16,7 @@ The first thing a user reads about a resource they created from the CLI and have
 
 ## When to use
 
+- Use get-started inside a resource's Overview tab or a deploy success screen to list the next commands; it is a card, not a page.
 - Under the summary card on the Overview tab of a resource made from the CLI that has no deployment yet.
 - At the end of a create wizard, on the deploy success screen, when the next move happens in a terminal.
 - Any onboarding that comes down to three ordered steps with commands per step.

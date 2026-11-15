@@ -22,7 +22,7 @@ The screen a create flow ends on. The user has just watched a deploy finish and 
 
 ## When not to use
 
-- The run is still going or has failed: keep `platform/create/deployment-flow` on screen.
+- The run is still going or has failed: keep the create-flow card of `platform/detail/deployment-logs` (InCreateFlow) on screen.
 - A resource created from a form that does not deploy: end on the resource's page with a success toast that names it, as `skills/webkit-create-surface` describes; there is no outcome screen.
 - An item added inside a resource from a drawer: use `platform/create/create-in-drawer` and close it on save.
 - The onboarding steps for a CLI resource on its Overview tab: use `platform/detail/get-started`.
@@ -91,10 +91,9 @@ One full-width secondary large `Button`, "Manage service", at the end of the col
 
 ## Related
 
-- `platform/create/deployment-flow` — the run this screen follows.
+- `platform/detail/deployment-logs` — the run this screen follows (InCreateFlow).
 - `platform/create/deploy-template` — a flow that ends here.
-- `platform/create/source-wizard` — a wizard that ends here.
-- `platform/create/provision-wizard` — a wizard that ends here with its own title.
+- `platform/create/multipage-create` — its CreateAndDeploy variant ends here with its own title.
 - `platform/detail/get-started` — the source of the CLI and GitHub Actions steps the CliCreated state embeds; CliCreated copies its section verbatim, so change the command copy there first and copy it here.
 - `platform/detail/details-page` — where Manage leads.
 
@@ -131,14 +130,14 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     {
       key: 'service',
       kind: 'Service',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       name: 'web-app',
       reference: '1482736015'
     },
     {
       key: 'resource',
       kind: 'Resource',
-      icon: 'pi pi-box',
+      icon: 'ai ai-box',
       name: 'web-app',
       state: 'created',
       reference: '1739204418'
@@ -146,14 +145,14 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     {
       key: 'integration',
       kind: 'Integration',
-      icon: 'pi pi-link',
+      icon: 'ai ai-link',
       name: 'web-app-storage',
       reference: '1215583907'
     },
     {
       key: 'storage',
       kind: 'Storage',
-      icon: 'pi pi-inbox',
+      icon: 'ai ai-inbox',
       name: 'web-app-assets',
       reference: '24 files · 1.2 MB'
     }
@@ -161,21 +160,21 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 
   const nextSteps: NextStep[] = [
     {
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Customize domain',
       description:
         'Associate a custom domain and subdomains with this service to handle user access.',
       href: 'https://example.com/docs'
     },
     {
-      icon: 'pi pi-sitemap',
+      icon: 'ai ai-sitemap',
       title: 'Point traffic',
       description:
         'Redirect the traffic of a domain to the platform and take advantage of the distributed network.',
       href: 'https://example.com/docs'
     },
     {
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       title: 'View analytics',
       description: 'Gain powerful insights into your performance, availability, and security.',
       href: 'https://example.com/docs'
@@ -220,7 +219,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
                     >
                       <i
-                        class="pi pi-globe text-body-md leading-none text-(--text-default)"
+                        class="ai ai-globe text-body-md leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </span>
@@ -246,7 +245,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                         label="Visit site"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-external-link"
+                        icon="ai ai-external-link"
                         icon-position="trailing"
                         href="https://web-app-k3x9q2.example.com"
                         target="_blank"
@@ -257,7 +256,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
                         <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                           <i
-                            class="pi pi-globe shrink-0 text-(--text-muted)"
+                            class="ai ai-globe shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                           <div class="min-w-0">
@@ -278,7 +277,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           label="Add custom domain"
                           kind="link"
                           size="small"
-                          icon="pi pi-plus-circle"
+                          icon="ai ai-plus-circle"
                           href="/services/1482736015?name=web-app&tab=settings"
                         />
                       </li>

@@ -10,7 +10,7 @@
 
 ## Asked as
 
-empty state; empty list; first use; no resources yet; create first resource; product empty state; zero state; estado vazio; lista vazia; primeiro uso
+empty state; empty list; first use; no resources yet; create first resource; product empty state; zero state; estado vazio; lista vazia; primeiro uso; first resource empty state
 
 What a first-level list shows before the account owns any resource of that kind. The user's job is to create the first one, so the block replaces the empty table with a short explanation and every way to get started on the same screen: the methods to create one (import, CLI, from scratch), then the promotions that shortcut it (a Catalog template, a coding agent). Every list that is still empty renders this block with its own nouns, methods and promos.
 
@@ -18,6 +18,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use first-use on a list page before the account owns any resource of that kind.
 - The first visit to a list page (Resources, Services, Domains…) when the account has none of that resource.
 - When there is more than one way to create the first item and each deserves its own action.
 
@@ -157,7 +158,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
     >
       <template #content>
         <EmptyState
-          icon="pi pi-box"
+          icon="ai ai-box"
           title="Create your first resource"
           description="Start from scratch, from a template or by importing your code."
         >
@@ -196,7 +197,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
             <Item>
               <Item.Media kind="icon">
                 <i
-                  class="pi pi-code text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-code text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -235,7 +236,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
             <Item>
               <Item.Media kind="icon">
                 <i
-                  class="pi pi-globe text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-globe text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </Item.Media>
@@ -316,7 +317,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
             </span>
 
             <i
-              class="pi pi-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
+              class="ai ai-external-link absolute end-(--spacing-md) top-(--spacing-md) text-body-sm leading-none text-(--text-muted) transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none group-hover:text-(--text-default)"
               aria-hidden="true"
             />
             <span class="sr-only">(opens in a new tab)</span>

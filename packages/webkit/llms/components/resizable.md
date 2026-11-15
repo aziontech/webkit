@@ -67,7 +67,6 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 - `min` — `number`, default `96`. Smallest length in pixels a drag may set.
 - `max` — `number`, default `720`. Largest length in pixels a drag may set.
 - `expanded` — `boolean`, default `true`. Whether the pane is shown at its length; `false` renders it at zero length. Two-way through `v-model:expanded`. The pane stays mounted, so its content keeps its state.
-- `collapsed` — `boolean`, default unset. **@deprecated since 6.0 — use `v-model:expanded` (inverted). Removed in 7.0.** The inverse of `expanded`; a host that binds only `collapsed` still drives the pane.
 - `collapsible` — `boolean`, default `false`. Whether dragging past the minimum collapses the pane instead of stopping at it.
 - `ariaLabel` — `string`, default `''`. Accessible name for the region.
 
@@ -78,8 +77,7 @@ Neither part is an overlay, so neither is named `Trigger` or `Content` and neith
 
 `resizable-pane` events: `update:basis` (`number`) on every step of a drag and on a
 keyboard nudge, and `update:expanded` (`boolean`) when a drag past the minimum or `Enter` on the
-handle collapses the pane, or a drag back out restores it; the deprecated `update:collapsed` is
-emitted with the inverse value on the same change. Each is the `v-model` half of the props above.
+handle collapses the pane, or a drag back out restores it. Each is the `v-model` half of the props above.
 
 `resizable-handle` emits nothing: it drives the pane beside it through the group's
 context, so a consumer never wires one part to the other.

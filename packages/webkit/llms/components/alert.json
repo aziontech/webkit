@@ -69,7 +69,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "PrimeIcons class override for the leading icon."
+   "doc": "Azion icon class override for the leading icon."
   },
   {
    "name": "actionLabel",

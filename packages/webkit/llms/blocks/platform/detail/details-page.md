@@ -1,22 +1,23 @@
 # DetailsPage (`platform/detail/details-page`)
 
-> The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. The deployment page has no tabs: a status banner, the Deployment details card with its Deployment Settings band, and the Deployment logs card whose header carries the duration or the status and the Phased or Complete switch over the DeploymentLogs steps. The FirstDeploy variant draws the summary cards before and during the first deploy, Invocation the summary card of one function invocation, DeploymentQueued a deployment that has not started, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `LogView`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.
+> The Overview tab of a resource detail page: the full-bleed tab bar, sticky while the layout scrolls, then the column that opens on the resource summary card. The resource overview follows it with Get started for a resource made from the CLI, and the same page plots its Versions tab (the versions table) and its Build tab (repository, build configuration and token bands); the service overview follows the summary with the production checklist and the deployment topology. The summary card on its own, in its resource, service and policy shapes, is the Resource, Service and Policy variants: a subject band with the primary link and the actions, a band of labelled facts, and a state band on the canvas fill. A deployment's own page (success, failure, queued) is the DeploymentLogs template and one function run is the Invocations template. The FirstDeploy variant draws the summary cards before and during the first deploy, ResourceBuildConnected the Build tab with a connected repository, and ApplicationBuild the application page with a Build tab and the project drop target. The Application variant is a whole application page with Overview, Versions, Deployments and a Topology tab built on `TopologyDiagram`, whose staged binds deploy through a `Drawer` and the Edit and Redeploy toast. The version page of a resource is the VersionDetail template and the deploy drawers opened from these pages are the DeployDrawer template (Templates/Platform/Create/DeployDrawer). The Deployments tab of a resource and of a service is the TableView controls row over a deployments table, scoped to the resource (the resource tab adds a small Deployments heading with Documentation and an outlined Deploy action); the service Settings tab is a variant of Templates/Platform/Edit/EditResource. Built from `PageHeader`, `PageTabs`, `SectionHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `Tabs`, `DataTable`, `EmptyState`, `InputGroupRoot`, `Card`, `DropdownMenu`, `Popover`, `Accordion`, `TopologyDiagram`, `Item`, `Drawer`, `Alert`, `CodeBlock` and `ToggleGroup`; the summary card variants add `Button`, `IconButton`, `Tag`, `StatusIndicator`, `Avatar`, `CopyButton` and `Tooltip`. A page body for ConsoleLayout: the layout owns the rail, the header with the breadcrumb (a service's environment crumb is its `breadcrumbs` slot) and the main.
 
 - Surface: product
 - Source: `blocks/platform/detail/details-page/details-page.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/details-page")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [ConfirmDialog](../../../components/confirm-dialog.md), [ConsoleLayout](../../../components/console-layout.md), [CopyButton](../../../components/copy-button.md), [DataTable](../../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Link](../../../components/link.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md), `use-unsaved-changes`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [ConfirmDialog](../../../components/confirm-dialog.md), [ConsoleLayout](../../../components/console-layout.md), [CopyButton](../../../components/copy-button.md), [DataTable](../../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [TopologyDiagram](../../../components/topology-diagram.md), `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
 
-overview page; resource overview; detail page; summary page; deployment detail; application overview; deployment failed; página de visão geral; detalhe do recurso; página de resumo; details page with tabs; versions tab; build tab; detalhe com abas; resource summary; summary card; overview card; resource facts; status card; resumo do recurso; cartão de resumo; visão geral; details page; resource details; página de detalhes; application detail; application tabs; topology tab; deployment topology; detalhe da aplicação; topologia; first deploy; not deployed; deployment queued; function invocation; invocation summary; connected repository; primeiro deploy; implantação na fila; invocação de função
+overview page; resource overview; detail page; summary page; application overview; página de visão geral; detalhe do recurso; página de resumo; details page with tabs; versions tab; build tab; detalhe com abas; resource summary; summary card; overview card; resource facts; status card; resumo do recurso; cartão de resumo; visão geral; details page; resource details; página de detalhes; application detail; application tabs; topology tab; deployment topology; detalhe da aplicação; topologia; first deploy; not deployed; connected repository; primeiro deploy; resource overview tabs; service details; policy details
 
 The second-level page of one resource. The user arrives from a list row or a deploy flow to answer three questions about it: where it lives and whether it is serving, what it is made of, and what to do next. The page names the resource in the breadcrumb, splits its concerns into tabs, and opens the Overview tab on one summary card of facts, followed by whatever the resource needs next: Get started for a resource made from the CLI, the production checklist and topology for a service. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the breadcrumb, the ⌘K palette and the `main`.
 
 ## When to use
 
-- A user opens one resource, service, policy or deployment from its list or from a deploy flow.
+- Use details-page for the tabbed overview of one resource, service, policy or application.
+- A user opens one resource, service, policy or application from its list or from a deploy flow.
 - The resource has more than one concern (overview, versions, build, deployments) that each deserve a tab.
 - The user needs the live address, the status and the latest deployment of a resource at a glance, with Visit and the resource actions one click away.
 
@@ -25,14 +26,15 @@ The second-level page of one resource. The user arrives from a list row or a dep
 - Many resources of one type to compare and filter: use `platform/view/table-view`.
 - Editing one version's settings, source or rules: use `platform/detail/version-detail`.
 - Changing a resource's settings in a form: use `platform/edit/edit-resource` or `platform/settings/settings-form`.
-- Following a deployment as it streams inside a create flow: use `platform/create/deployment-flow` with `platform/detail/deployment-logs`.
+- One deployment, as it streams in a create flow or on its own page (live, failed, queued): use `platform/detail/deployment-logs`.
+- One function run end to end (summary, trace, logs): use `platform/detail/invocations`.
 - A key and value list that belongs to the resource: use `platform/detail/record-table`.
 
 ## Building blocks
 
 ### A. Tab bar — `PageTabs`, `Tabs`, `EmptyState` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. A deployment page has no tabs. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
+A full-bleed `PageTabs` with one `Tabs.Item` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
 ### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
 
@@ -62,7 +64,7 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
-- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`pi pi-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
+- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
 
 ## Do
 
@@ -71,7 +73,6 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - Name the resource in the breadcrumb, not in a `PageHeader` title above the card.
 - Put the one primary page action (Deploy) on the tab row, medium and outlined; keep Visit in the summary.
 - Give Versions and Deployments the same table shape as `platform/view/table-view`, scoped to this resource, with a small section heading, pages of 10 and an `EmptyState` for none yet.
-- On a deployment page, lead with a status banner (success, or danger with Redeploy) and disable Visit until the deployment is live.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
@@ -105,20 +106,29 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 
 ## States
 
+Grouped by the resource type the page shows. A deployment's own page is `platform/detail/deployment-logs` (DeploymentDetail, DeploymentFailed, DeploymentQueued) and one function invocation is `platform/detail/invocations`.
+
+### Resource
+
 - ResourceOverview: the Overview tab of a resource made from the CLI, the summary card followed by Get started.
 - Resource: the summary card alone, in its resource shape.
-- Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
-- Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
+- FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.
 - ResourceBuild: the Build tab, the Git repository, Build configuration and Deployment bands, with a save bar once a command changes.
-- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumbs`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
-- DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
-- DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
-- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
-- FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
-- Invocation: the summary card of one function invocation, with the function link, the copyable invocation ID and its status, Replay, the Recent switcher, the Invocation actions menu, the Started, Completed, Duration and Location facts, and the triggering request with its outcome.
-- DeploymentQueued: a deployment waiting for a runner, the info banner, Visit disabled, Queued in the details and the logs header, and a not-started `EmptyState` in the logs card with no Phased or Complete switch.
 - ResourceBuildConnected: the Build tab of a resource with a connected repository, its link and a danger Disconnect, the Production branch and Preview branch rows, the Build configuration and Deployment bands, and the save bar once a value changes.
+
+### Service
+
+- Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumbs`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+
+### Policy
+
+- Policy: the policy summary with the resource it protects, a Rules shortcut, its status, environment, rule count and modules.
+
+### Application
+
+- Application: a whole application page body, with working tabs. Overview is the summary card; Versions and Deployments are a small `SectionHeader` over a flush `DataTable`; Topology draws the request path with `TopologyDiagram` (domain, workload, firewall, application, function instance). Binding or removing the firewall or the function only stages the change: the node turns dashed with a Staged status, a polite status line names it, and the tab row shows the count as a warning `Tag` beside Deploy. Deploy opens a `Drawer` that lists each staged change as from and to, then runs on its own: a loading toast, then the async-submit toast with **Edit** (back to the Topology tab) and **Redeploy**, never View deployments.
 - ApplicationBuild: an application page body with Overview, Versions, Build and Deployments. Dragging files over the page raises the dashed drop target of `platform/states/project-intake`; dropping them or Deploy opens a deploy `Drawer` naming the source, and the run reports through the async-submit toast with Edit and Redeploy. Leaving the Build tab with unsaved changes asks first in a `ConfirmDialog`.
 
 ## Related
@@ -126,11 +136,11 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `platform/view/table-view` — the list a row of which leads here.
 - `platform/detail/get-started` — the section that follows the summary for a resource made from the CLI.
 - `platform/detail/production-checklist` — the card on a service overview.
-- `platform/detail/deployment-logs` — the steps inside the Deployment logs card.
+- `platform/detail/deployment-logs` — a deployment's own page, and the steps a create flow streams.
 - `platform/detail/version-detail` — where a row of the Versions tab leads.
 - `platform/create/deploy-drawer` — the drawer the Deploy action opens.
 - `platform/states/project-intake` — the drop target an application page raises while files hover over it.
-- `platform/detail/invocations` — the page an invocation summary opens, with its request path, trace and logs; it owns the invocation summary card, so take the card from there.
+- `platform/detail/invocations` — the page an invocation summary opens, with its request path, trace and logs; it owns the invocation summary card.
 - `platform/edit/edit-resource` — the service Settings tab.
 - `shells/console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-navigation` and `skills/webkit-layout`.
 
@@ -143,12 +153,8 @@ For a resource made from the CLI, the `platform/detail/get-started` section foll
 - `ResourceVersions` — The Versions tab of the same resource: the small Versions heading with Add Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions.
 - `ResourceBuild` — The Build tab of a resource made from the CLI: the small Build heading with an outlined Deploy, the Git repository band holding the Connect Git repository card, the Build configuration band with the read-only framework preset and the build and deploy commands, and the Deployment band with the API token. Editing a command raises the save bar.
 - `ServiceOverview` — A service (its environment crumb is a transparent small select the page sets with `ConsoleLayout.Breadcrumbs`): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.
-- `DeploymentDetail` — A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the phased steps.
-- `DeploymentFailed` — A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.
 - `Application` — An application page body with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `DataTable` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy.
 - `FirstDeploy` — The summary cards before and during the first deploy: a resource never deployed (Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status, Not yet as its creation, Connect Git repository and Project upload under Source, and the state band naming the three ways to deploy), then two service cards whose Status reads Deploying · Build with a loading `StatusIndicator`, and Inactive.
-- `Invocation` — The summary card of one function invocation: the function link, the invocation ID with a `CopyButton` and its status, Replay, the Recent switcher whose `DropdownMenu` lists the recent invocations with their status and start, the Invocation actions menu (Open in Real-Time Events, Function settings), a facts band with Started, Completed, Duration and Location, and a state band with the request that triggered it, copyable, and its outcome, in danger color when it failed.
-- `DeploymentQueued` — A deployment waiting for a runner: the info banner, Visit disabled until the deployment is live, the Deployment details card with Queued as its status and Not started as its duration, and the Deployment logs card with a Queued `StatusIndicator` in its header and a not-started `EmptyState` in place of the steps, with no Phased or Complete switch.
 - `ResourceBuildConnected` — The Build tab of a resource with a connected repository: the Git repository band holds the repository link with a danger Disconnect and the Production branch and Preview branch rows, then the Build configuration and Deployment bands. Editing a branch or a command raises the save bar.
 - `ApplicationBuild` — An application page body with the Overview, Versions, Build and Deployments tabs and no topology: the Overview summary says every push to the production branch deploys and that a project can be dropped on the page; dragging files over the page raises the dashed project-intake drop target, and dropping them (or Deploy on the tab row) opens a deploy `Drawer` that names the source and runs through the async-submit toast with Edit and Redeploy. The Build tab edits the connected repository branches and the build commands behind a save bar, and leaving it with unsaved changes asks first in a `ConfirmDialog` (`useUnsavedChanges`).
 
@@ -332,7 +338,7 @@ jobs:
                       class="flex min-w-0 flex-1 basis-(--container-2xs) items-center gap-(--spacing-xs)"
                     >
                       <i
-                        class="pi pi-globe shrink-0 text-body-lg text-(--text-muted)"
+                        class="ai ai-globe shrink-0 text-body-lg text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <div class="flex min-w-0">
@@ -352,7 +358,7 @@ jobs:
                             >
                             <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                             <i
-                              class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </a>
@@ -367,14 +373,14 @@ jobs:
                         target="_blank"
                         kind="secondary"
                         size="medium"
-                        icon="pi pi-external-link"
+                        icon="ai ai-external-link"
                       />
 
                       <DropdownMenu placement="bottom-end">
                         <DropdownMenu.Trigger>
                           <Tooltip text="Resource actions">
                             <IconButton
-                              icon="pi pi-ellipsis-h"
+                              icon="ai ai-ellipsis-h"
                               kind="outlined"
                               size="medium"
                               aria-label="Resource actions"
@@ -389,7 +395,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="pi pi-copy"
+                                class="ai ai-copy"
                                 aria-hidden="true"
                               />
                             </template>
@@ -403,7 +409,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="pi pi-cog"
+                                class="ai ai-cog"
                                 aria-hidden="true"
                               />
                             </template>
@@ -460,7 +466,7 @@ jobs:
                               >
                               <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                               <i
-                                class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                                class="ai ai-external-link shrink-0 text-body-xs leading-none"
                                 aria-hidden="true"
                               />
                             </a>
@@ -538,7 +544,7 @@ jobs:
                         label="Documentation"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-book"
+                        icon="ai ai-book"
                         href="https://example.com/docs/cli"
                         target="_blank"
                       />
@@ -629,7 +635,7 @@ jobs:
         <div class="layout-section-start">
           <EmptyState
             size="medium"
-            icon="pi pi-external-link"
+            icon="ai ai-external-link"
             :title="tabLabel"
             :description="`${tabLabel} opens on its own page.`"
           >

@@ -37,7 +37,7 @@
 | `title` | `string` | `—` | true | File name or title of what was generated (`cache-rules.json`). |
 | `description` | `string` | `''` | false | One line on what it is or does. |
 | `meta` | `string` | `''` | false | Facts that help recognize it: size, rows, language (`2.4 KB · JSON`). |
-| `icon` | `string` | `'pi pi-file'` | false | Icon class for the file type. |
+| `icon` | `string` | `'ai ai-file'` | false | Icon class for the file type. |
 | `copyValue` | `string` | `''` | false | Text the Copy control puts on the clipboard. Empty hides Copy. |
 | `downloadHref` | `string` | `''` | false | URL of the file for the Download control. Empty hides Download. |
 | `openable` | `boolean` | `false` | false | Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). |
@@ -129,7 +129,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
       title="cache-rules.json"
       description="Cache settings for storefront"
       meta="1 KB · JSON"
-      icon="pi pi-code"
+      icon="ai ai-code"
       :copy-value="rules"
       openable
       @open="opened = true"
@@ -170,7 +170,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
       title="cache-hits-by-country.csv"
       description="Last 7 days"
       meta="48 KB · 212 rows"
-      icon="pi pi-table"
+      icon="ai ai-table"
       download-href="data:text/csv;charset=utf-8,country,requests,hit"
     >
       <table class="w-full border-collapse text-body-sm">

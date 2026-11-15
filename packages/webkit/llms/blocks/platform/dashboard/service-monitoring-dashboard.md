@@ -10,7 +10,7 @@
 
 ## Asked as
 
-service monitoring; monitoring dashboard; latency p95; error rate; uptime; service health; observability; monitoramento; painel de monitoramento; latência
+service monitoring; monitoring dashboard; latency p95; error rate; uptime; service health; observability; monitoramento; painel de monitoramento; latência; latency percentiles; error rate per service
 
 The page an on-call engineer keeps open: is every service up, how fast is it answering, how many
 requests fail, and which alerts are open right now. One tile per service states its p95 latency and
@@ -22,6 +22,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use service-monitoring-dashboard for latency percentiles, error rates and live state per service.
 - The reader watches a known set of services for state changes and threshold breaches.
 - Latency percentiles and error rates matter more than volume.
 - Open alerts need to stay visible next to the evidence.
@@ -773,7 +774,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         <EmptyState
           v-else
           size="small"
-          icon="pi pi-check-circle"
+          icon="ai ai-check-circle"
           title="No open alerts"
           description="Alerts appear here when a service crosses a threshold."
         />

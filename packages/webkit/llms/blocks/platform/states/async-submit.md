@@ -1,16 +1,16 @@
 # AsyncSubmit (`platform/states/async-submit`)
 
-> The async counterpart of the server rejection in the FormError template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card from Templates/Platform/Create/DeploymentFlow (`Card`, `StatusIndicator`, `Accordion`, `LogView`, `Spinner`, `Progress`, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of Templates/Platform/Detail/DeploymentLogs (`Card`, `StatusIndicator`, `LogView` with its `LogView.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/states/async-submit/async-submit.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/states/async-submit")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [EmptyState](../../../components/empty-state.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [EmptyState](../../../components/empty-state.md), [LogView](../../../components/log-view.md), [PageHeader](../../../components/page-header.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
 
 ## Asked as
 
-async submit; long running action; background job status; deploy in progress; async deploy result; operation status; envio assíncrono; ação demorada; status da operação
+async submit; long running action; background job status; deploy in progress; async deploy result; operation status; envio assíncrono; ação demorada; status da operação; result reaches me later
 
 The async-action pattern, and the standard for every build and deploy screen. A long-running action the user is free to walk away from: a deploy that runs for about half a minute and asks nothing while it does. The user's job is to start it, go on working anywhere in the console, and learn how it ended without coming back to check. The page that started the run shows its status in the heading, the logs while it runs and an inline outcome when it ends; in a full app the run lives outside the page, so its progress and its outcome also travel with the user as a toast, on success and on failure.
 
@@ -22,6 +22,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ## When to use
 
+- Use async-submit when the action runs long enough that the user leaves (build, deploy, import) and the result must reach them later.
 - Any action that takes long enough to leave: build, deploy, redeploy, import, provision, a bulk change.
 - When the outcome must reach the user on whatever page they are on when it lands.
 - As the reference for the idle, running, failed and succeeded states of a run started from a page.
@@ -29,7 +30,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 ## When not to use
 
 - A save that answers in about a second: use `platform/states/form-validation`.
-- The full deployment flow with its own steps and logs page: use `platform/create/deployment-flow` and `platform/detail/deployment-logs`.
+- A run the user watches to the end inside a create flow, or a deployment's own page: use `platform/detail/deployment-logs` (InCreateFlow, DeploymentDetail).
 - Confirming a finished deploy with next steps: use `platform/create/deploy-success`.
 - A deploy configured in a side panel: use `platform/create/deploy-drawer`.
 
@@ -101,8 +102,7 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 ## Related
 
 - `platform/states/form-validation` — the synchronous counterpart: field, section and toast placement for a save that answers right away.
-- `platform/create/deployment-flow` — the deployment logs card the Running and Failed states reuse.
-- `platform/detail/deployment-logs` — the full logs of a run, the page Edit or a failure leads into.
+- `platform/detail/deployment-logs` — the deployment logs card (`LogView.Steps`) the Running and Failed states reuse, and the full logs of a run the page Edit or a failure leads into.
 - `platform/create/deploy-success` — the confirmation page after a deploy completes.
 - `shells/console` — the layout this body renders in, which the user moves through while the run reports back.
 
@@ -190,7 +190,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
       <div class="layout-section-start">
         <EmptyState
           bordered
-          icon="pi pi-cloud-upload"
+          icon="ai ai-cloud-upload"
           title="No deployment running"
           description="Deploy web-app to build it and publish it to production. It takes about 25 seconds, and you can leave this page while it runs."
         >
@@ -199,7 +199,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
               label="Deploy"
               kind="primary"
               size="medium"
-              icon="pi pi-play"
+              icon="ai ai-play"
               :loading="running"
               @click="deploy"
             />

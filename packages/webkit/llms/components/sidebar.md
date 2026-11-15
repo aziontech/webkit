@@ -18,7 +18,7 @@
 ## Do
 
 - Put a `SidebarMenu` with `role="presentation"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.
-- Use `SidebarMenu.Group` for new navigation — `SidebarGroup` still works but is superseded.
+- Group the rows with `SidebarMenu.Group`; the sidebar has no group part of its own.
 - Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.
 - When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.
 - Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.
@@ -65,24 +65,17 @@
 
 ## Sub-component imports
 
-- `@aziontech/webkit/sidebar-group`
 - `@aziontech/webkit/sidebar-header`
 - `@aziontech/webkit/sidebar-footer`
 
 ## Sub-components
 
 The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
-`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
 standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
 working.
 
 - `sidebar-footer.vue` — Public sub-component `sidebar-footer`.
-- `sidebar-group.vue` — Public sub-component `sidebar-group`. One flat block of rows under an
-  optional title, **superseded by `SidebarMenu.Group`**: the docs, the stories and every example here
-  compose `SidebarMenu`, which does everything this does and also nests, collapses and drills. It keeps
-  working untouched for existing consumers and is **not** deprecated (no `@deprecated` tag, because
-  `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's
-  lint green→red on a minor). Reach for `SidebarMenu` in anything new.
 - `sidebar-header.vue` — Public sub-component `sidebar-header`.
 
 `Sidebar` does not import `SidebarMenu` and `SidebarMenu` does not import `Sidebar`. Two things pass between
@@ -185,7 +178,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   it under `dir="rtl"`.
 - The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
   right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
-- The collapse / expand glyphs (`pi-angle-double-left` / `-right`) keep their meaning through the
+- The collapse / expand glyphs (`ai-angle-double-left` / `-right`) keep their meaning through the
   direction-aware placement of the trigger.
 
 ## Internationalization
@@ -278,7 +271,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 <CommandItem value="cmd:settings">
                   <template #prefix
                     ><i
-                      class="pi pi-cog"
+                      class="ai ai-cog"
                       aria-hidden="true"
                   /></template>
                   Account Settings
@@ -351,7 +344,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           <SidebarMenuSub>
             <SidebarMenuSubTrigger
               label="Settings"
-              icon="pi pi-cog"
+              icon="ai ai-cog"
               kind="drill"
             />
             <SidebarMenuSubContent>
@@ -391,7 +384,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             >
               <DropdownMenuTrigger>
                 <IconButton
-                  icon="pi pi-ellipsis-v"
+                  icon="ai ai-ellipsis-v"
                   aria-label="Account menu"
                   kind="outlined"
                   size="small"
@@ -422,7 +415,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                 >
                   <template #trailing
                     ><i
-                      class="pi pi-sign-out"
+                      class="ai ai-sign-out"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuOption>
@@ -509,7 +502,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
             <SidebarMenuSub>
               <SidebarMenuSubTrigger
                 label="Settings"
-                icon="pi pi-cog"
+                icon="ai ai-cog"
                 kind="drill"
               />
               <SidebarMenuSubContent>

@@ -1,6 +1,6 @@
 # ResourcePicker (`platform/create/resource-picker`)
 
-> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. ProvisionWizard binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on; the firewall binding of SourceWizard's last step uses it. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
+> The card a create flow uses to bind one resource to another: a lead, a ToggleGroup choosing between an existing resource and a new one, then either a hint over a searchable list of the existing resources with a selected mark, paged five at a time with skeleton rows while the next page loads and a polite status line for screen readers, or a Name `Field` around an `Input` whose helper text carries the allowed characters and turns into the required message once Next is pressed empty. The ToggleGroup disappears and the card opens on New when nothing exists to bind. The CreateAndDeploy variant of MultipageCreate binds its project with it on the first step, and its second step reuses the same paged list to pick an existing deployment. The OptionalBinding variant wraps the picker in an opt-in band: a compact `SettingRow` with a `Switch` that unfolds the Existing / New choice in place, where New shows a Name field over module switches with one locked on, its row description saying it is always on. Built from `Card`, `ToggleGroup`, `Field`, `Input`, `HelperText`, `Item`, `Skeleton` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/resource-picker/resource-picker.vue` in `@aziontech/webkit`
@@ -16,6 +16,7 @@ The band a create flow uses when the resource being created needs another resour
 
 ## When to use
 
+- Use resource-picker inside a create flow to bind one resource the user may reuse or create; it is a card, not a page.
 - A create flow binds a whole resource that the user may reuse or create: the project a service serves, the deployment a release is cut against, the firewall that protects a workload.
 - The candidates can run past seven, so the list needs search, paging and a no-match line.
 - Creating the bound resource takes one or a few fields that fit in the same card.
@@ -23,8 +24,8 @@ The band a create flow uses when the resource being created needs another resour
 
 ## When not to use
 
-- A single field that references an existing resource (a certificate, an environment, a function): use a select row inside the form, as `platform/create/provision-wizard` does for Environment.
-- Choosing where a resource runs as a step of its own, with module tags and an inline create row: use the chooser in `platform/create/multipage-create` or `platform/create/source-wizard`.
+- A single field that references an existing resource (a certificate, an environment, a function): use a select row inside the form, as `platform/create/multipage-create` (CreateAndDeploy) does for Environment.
+- Choosing where a resource runs as a step of its own, with module tags and an inline create row: use the chooser in `platform/create/multipage-create` or `platform/create/deploy-template` (WhereItRuns).
 - Browsing or managing the resources themselves: use `platform/view/table-view`.
 - Creating the bound resource needs its own full form: link to its create page (`platform/create/single-page-create`) instead of nesting it here.
 
@@ -109,8 +110,7 @@ A transparent small full-width `Button` under the list while more matches remain
 
 ## Related
 
-- `platform/create/source-wizard` — its last step binds an optional firewall with the OptionalBinding band.
-- `platform/create/provision-wizard` — binds its project with this band on the first step and reuses the list for the deployment.
+- `platform/create/multipage-create` — its CreateAndDeploy variant binds its project with this band on the first step and reuses the list for the deployment.
 - `platform/create/multipage-create` — the step wizard whose Where it runs chooser follows the same list rules.
 - `platform/states/form-validation` — how required and invalid messages appear on submit.
 - `Item` — the selectable row the list is built from; see `skills/webkit-form`.
@@ -347,7 +347,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -375,7 +375,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                     class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
-                      class="pi pi-box text-body-md leading-none text-(--text-default)"
+                      class="ai ai-box text-body-md leading-none text-(--text-default)"
                       aria-hidden="true"
                     />
                   </span>
@@ -387,7 +387,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 <Item.Actions>
                   <i
                     v-if="option.value === projectPicker.chosen"
-                    class="pi pi-check shrink-0 text-(--text-default)"
+                    class="ai ai-check shrink-0 text-(--text-default)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

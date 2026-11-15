@@ -2,9 +2,9 @@
 
 > Every icon class of `@aziontech/icons` with search keywords.
 
-A monochrome icon is `ai ai-<name>` (Azion) or `pi pi-<name>` (PrimeIcons), coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
+A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.
 
-495 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
+471 names. These are the only values the components accept. An unknown class renders nothing. The MCP tool `list_assets({ kind: "icons" })` returns the same list (with a `query` to filter), and `catalog.json#assets.icons` points at it as data.
 
 Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifact-preview.md), [Avatar](../components/avatar.md), [Button](../components/button.md), [ButtonHighlight](../components/button-highlight.md), [DocCard](../components/doc-card.md), [DocItem](../components/doc-item.md), [DocPrompt](../components/doc-prompt.md), [EmptyState](../components/empty-state.md), [FileDropzone](../components/file-dropzone.md), [IconButton](../components/icon-button.md), [Link](../components/link.md), [SettingsSection](../components/settings-section.md), [SplitButton](../components/split-button.md), [Tag](../components/tag.md), [Topic](../components/topic.md).
 
@@ -18,9 +18,9 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 
 <template>
   <i class="ai ai-edge-firewall" aria-hidden="true"></i>
-  <i class="pi pi-trash" aria-hidden="true"></i>
+  <i class="ai ai-trash" aria-hidden="true"></i>
   <i class="ai-cor ai-react" aria-hidden="true"></i>
-  <Button icon="pi pi-plus">Create</Button>
+  <Button icon="ai ai-plus">Create</Button>
 </template>
 ```
 
@@ -30,39 +30,141 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 | --- | --- | --- |
 | `ai ai-abuse-prevention` | azionicons | abuse, prevention, fraud, security |
 | `ai ai-adaptive-security` | azionicons | adaptive, security, protection, shield |
+| `ai ai-address-book` | azionicons | address, book, contacts, people, docs, documentation, read |
 | `ai ai-ai-gateway` | azionicons | gateway, artificial intelligence, llm, model, proxy, api, routing |
 | `ai ai-ai-pillar` | azionicons | pillar, artificial intelligence, llm, model, product family |
+| `ai ai-align-center` | azionicons | align, center, text, alignment, format |
+| `ai ai-align-justify` | azionicons | align, justify, text, alignment, format |
+| `ai ai-align-left` | azionicons | align, left, text, alignment, format |
+| `ai ai-align-right` | azionicons | align, right, text, alignment, format |
+| `ai ai-angle-double-down` | azionicons | angle, double, down, chevron, arrow, direction |
+| `ai ai-angle-double-left` | azionicons | angle, double, left, chevron, arrow, direction |
+| `ai ai-angle-double-right` | azionicons | angle, double, right, chevron, arrow, direction |
+| `ai ai-angle-double-up` | azionicons | angle, double, chevron, arrow, direction |
+| `ai ai-angle-down` | azionicons | angle, down, chevron, arrow, direction |
+| `ai ai-angle-left` | azionicons | angle, left, chevron, arrow, direction |
+| `ai ai-angle-right` | azionicons | angle, right, chevron, arrow, direction |
+| `ai ai-angle-up` | azionicons | angle, chevron, arrow, direction |
 | `ai ai-angular` | azionicons | brand, logo |
 | `ai ai-app-accelerator` | azionicons | app, accelerator, performance, speed, product |
+| `ai ai-arrow-circle-down` | azionicons | arrow, circle, down, direction, navigate, move, status, shape |
+| `ai ai-arrow-circle-left` | azionicons | arrow, circle, left, direction, navigate, move, status, shape |
+| `ai ai-arrow-circle-right` | azionicons | arrow, circle, right, direction, navigate, move, status, shape |
+| `ai ai-arrow-circle-up` | azionicons | arrow, circle, direction, navigate, move, status, shape |
+| `ai ai-arrow-down-left-and-arrow-up-right-to-center` | azionicons | arrow, down, left, and, right, center, direction, navigate, move |
+| `ai ai-arrow-down-left` | azionicons | arrow, down, left, direction, navigate, move |
+| `ai ai-arrow-down-right` | azionicons | arrow, down, right, direction, navigate, move |
+| `ai ai-arrow-down` | azionicons | arrow, down, direction, navigate, move |
+| `ai ai-arrow-left` | azionicons | arrow, left, direction, navigate, move |
+| `ai ai-arrow-right-arrow-left` | azionicons | arrow, right, left, direction, navigate, move |
+| `ai ai-arrow-right` | azionicons | arrow, right, direction, navigate, move |
+| `ai ai-arrow-up-left` | azionicons | arrow, left, direction, navigate, move |
+| `ai ai-arrow-up-right-and-arrow-down-left-from-center` | azionicons | arrow, right, and, down, left, from, center, direction, navigate, move |
+| `ai ai-arrow-up-right` | azionicons | arrow, right, direction, navigate, move |
+| `ai ai-arrow-up` | azionicons | arrow, direction, navigate, move |
+| `ai ai-arrows-alt` | azionicons | arrows, alt, move, resize, direction |
+| `ai ai-arrows-h` | azionicons | arrows, move, resize, direction |
+| `ai ai-arrows-v` | azionicons | arrows, move, resize, direction |
 | `ai ai-ask-azion` | azionicons | ask, azion, question, assistant, chat, brand, logo, company |
+| `ai ai-asterisk` | azionicons | required, star |
 | `ai ai-astro` | azionicons | brand, logo |
+| `ai ai-at` | azionicons | email, mention |
 | `ai ai-attack` | azionicons | threat, security, ddos |
 | `ai ai-azion-api` | azionicons | azion, api, brand, logo, company, endpoint, integration, developer |
 | `ai ai-azion-cli` | azionicons | azion, cli, brand, logo, company, terminal, command line, console |
 | `ai ai-azion` | azionicons | brand, logo, company |
+| `ai ai-backward` | azionicons | previous, rewind |
+| `ai ai-ban` | azionicons | block, forbidden, deny |
+| `ai ai-barcode` | azionicons | scan, product code |
+| `ai ai-bars` | azionicons | menu, hamburger, navigation |
+| `ai ai-bell-slash` | azionicons | bell, slash, notification, alert |
+| `ai ai-bell` | azionicons | notification, alert |
+| `ai ai-bolt` | azionicons | fast, lightning, power |
+| `ai ai-book` | azionicons | docs, documentation, read |
+| `ai ai-bookmark-fill` | azionicons | bookmark, fill, save, favorite |
+| `ai ai-bookmark` | azionicons | save, favorite |
 | `ai ai-bot-manager` | azionicons | bot, manager, robot, automation, security |
+| `ai ai-box` | azionicons | package, product |
 | `ai ai-branch` | azionicons | git, version |
+| `ai ai-briefcase` | azionicons | work, business |
 | `ai ai-build-pillar` | azionicons | build, pillar, product family |
+| `ai ai-building-columns` | azionicons | building, columns, company, organization, office |
+| `ai ai-building` | azionicons | company, organization, office |
+| `ai ai-bullseye` | azionicons | target, goal |
 | `ai ai-business-support` | azionicons | business, support, help, service |
+| `ai ai-calculator` | azionicons | math, pricing |
+| `ai ai-calendar-clock` | azionicons | calendar, clock, date, schedule, time, history |
+| `ai ai-calendar-minus` | azionicons | calendar, minus, date, schedule, time, remove, subtract, collapse |
+| `ai ai-calendar-plus` | azionicons | calendar, plus, date, schedule, time, add, create, new |
+| `ai ai-calendar-times` | azionicons | calendar, times, date, schedule, time, close, cancel, dismiss, x |
+| `ai ai-calendar` | azionicons | date, schedule, time |
+| `ai ai-camera` | azionicons | photo, picture |
+| `ai ai-car` | azionicons | vehicle, automotive |
+| `ai ai-caret-down` | azionicons | caret, down, arrow, dropdown, triangle |
+| `ai ai-caret-left` | azionicons | caret, left, arrow, dropdown, triangle |
+| `ai ai-caret-right` | azionicons | caret, right, arrow, dropdown, triangle |
+| `ai ai-caret-up` | azionicons | caret, arrow, dropdown, triangle |
+| `ai ai-cart-arrow-down` | azionicons | cart, arrow, down, shopping, commerce, buy, direction, navigate, move |
+| `ai ai-cart-minus` | azionicons | cart, minus, shopping, commerce, buy, remove, subtract, collapse |
+| `ai ai-cart-plus` | azionicons | cart, plus, shopping, commerce, buy, add, create, new |
 | `ai ai-certificate-manager` | azionicons | certificate, manager, tls, ssl, security, https |
+| `ai ai-chart-bar` | azionicons | chart, bar, graph, analytics, metrics |
+| `ai ai-chart-line` | azionicons | chart, line, graph, analytics, metrics |
+| `ai ai-chart-pie` | azionicons | chart, pie, graph, analytics, metrics |
+| `ai ai-chart-scatter` | azionicons | chart, scatter, graph, analytics, metrics |
+| `ai ai-check-circle` | azionicons | check, circle, done, success, confirm, ok, status, shape |
+| `ai ai-check-square` | azionicons | check, square, done, success, confirm, ok |
+| `ai ai-check` | azionicons | done, success, confirm, ok |
+| `ai ai-chevron-circle-down` | azionicons | chevron, circle, down, arrow, expand, collapse, direction, status, shape |
+| `ai ai-chevron-circle-left` | azionicons | chevron, circle, left, arrow, expand, collapse, direction, status, shape |
+| `ai ai-chevron-circle-right` | azionicons | chevron, circle, right, arrow, expand, collapse, direction, status, shape |
+| `ai ai-chevron-circle-up` | azionicons | chevron, circle, arrow, expand, collapse, direction, status, shape |
+| `ai ai-chevron-down` | azionicons | chevron, down, arrow, expand, collapse, direction |
+| `ai ai-chevron-left` | azionicons | chevron, left, arrow, expand, collapse, direction |
+| `ai ai-chevron-right` | azionicons | chevron, right, arrow, expand, collapse, direction |
+| `ai ai-chevron-up` | azionicons | chevron, arrow, expand, collapse, direction |
+| `ai ai-circle-fill` | azionicons | circle, fill, status, shape |
 | `ai ai-circle-half` | azionicons | circle, half, status, shape |
 | `ai ai-circle-minus` | azionicons | circle, minus, status, shape, remove, subtract, collapse |
+| `ai ai-circle-off` | azionicons | circle, off, status, shape |
+| `ai ai-circle-on` | azionicons | circle, status, shape |
+| `ai ai-circle` | azionicons | status, shape |
 | `ai ai-claude` | azionicons | brand, logo |
+| `ai ai-clipboard` | azionicons | copy, paste |
+| `ai ai-clock` | azionicons | time, schedule, history |
+| `ai ai-clone` | azionicons | copy, duplicate |
+| `ai ai-cloud-download` | azionicons | cloud, download, hosting, storage, save, export |
+| `ai ai-cloud-upload` | azionicons | cloud, upload, hosting, storage, import, send |
+| `ai ai-cloud` | azionicons | hosting, storage |
+| `ai ai-code` | azionicons | developer, source, snippet |
+| `ai ai-cog` | azionicons | settings, gear, preferences, configuration |
 | `ai ai-column` | azionicons | layout, grid |
+| `ai ai-comment` | azionicons | chat, message, feedback |
+| `ai ai-comments` | azionicons | chat, messages, discussion |
+| `ai ai-compass` | azionicons | explore, navigation |
 | `ai ai-configuration-service` | azionicons | configuration, service, settings, preferences |
 | `ai ai-content-delivery` | azionicons | content, delivery |
+| `ai ai-copy` | azionicons | duplicate, clipboard |
+| `ai ai-credit-card` | azionicons | credit, card, payment, billing |
+| `ai ai-crown` | azionicons | premium, plan, pro |
 | `ai ai-cursor` | azionicons | brand, logo |
 | `ai ai-custom-pages` | azionicons | custom, pages |
 | `ai ai-data-stream` | azionicons | data, stream, logs, events |
 | `ai ai-database` | azionicons | data, storage, sql |
 | `ai ai-datasheet` | azionicons | document, specification |
 | `ai ai-deepseek` | azionicons | brand, logo |
+| `ai ai-delete-left` | azionicons | delete, left, remove, erase |
 | `ai ai-deploy-pillar` | azionicons | deploy, pillar, release, publish, ship, product family |
+| `ai ai-desktop` | azionicons | computer, screen, device |
 | `ai ai-digital-certificates` | azionicons | digital, certificates, certificate, security, tls, ssl, https |
+| `ai ai-directions-alt` | azionicons | directions, alt, route, navigation, map |
+| `ai ai-directions` | azionicons | route, navigation, map |
 | `ai ai-disabled` | azionicons | off, inactive, status |
 | `ai ai-discord` | azionicons | brand, logo |
 | `ai ai-docusaurus` | azionicons | brand, logo |
+| `ai ai-dollar` | azionicons | money, price, billing, currency |
 | `ai ai-domains` | azionicons | dns, url, workload |
+| `ai ai-download` | azionicons | save, export |
 | `ai ai-durable-objects` | azionicons | durable, objects |
 | `ai ai-edge-ai` | azionicons | edge, network, distributed, artificial intelligence, llm, model |
 | `ai ai-edge-application` | azionicons | edge, application, network, distributed |
@@ -78,12 +180,51 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 | `ai ai-edge-services` | azionicons | edge, services, network, distributed |
 | `ai ai-edge-sql` | azionicons | edge, sql, network, distributed, database, query |
 | `ai ai-edge-storage` | azionicons | edge, storage, network, distributed, bucket, files, object storage |
+| `ai ai-eject` | azionicons | remove, unmount |
 | `ai ai-eleventy` | azionicons | brand, logo |
+| `ai ai-ellipsis-h` | azionicons | ellipsis, more, menu, actions, overflow |
+| `ai ai-ellipsis-v` | azionicons | ellipsis, more, menu, actions, overflow |
 | `ai ai-enabled` | azionicons | on, active, status |
+| `ai ai-envelope` | azionicons | email, mail, message |
+| `ai ai-equals` | azionicons | equal, math |
+| `ai ai-eraser` | azionicons | clear, erase |
+| `ai ai-euro` | azionicons | money, currency |
+| `ai ai-exclamation-circle` | azionicons | exclamation, circle, warning, error, alert, status, shape |
+| `ai ai-exclamation-triangle` | azionicons | exclamation, triangle, warning, error, alert |
+| `ai ai-expand` | azionicons | fullscreen, maximize |
+| `ai ai-external-link` | azionicons | external, link, open, new tab, link out, url, chain, hyperlink |
+| `ai ai-eye-slash` | azionicons | eye, slash, hide, hidden, invisible, view, show, visible, preview |
+| `ai ai-eye` | azionicons | view, show, visible, preview |
+| `ai ai-face-smile` | azionicons | face, smile |
+| `ai ai-facebook` | azionicons | brand, logo |
+| `ai ai-fast-backward` | azionicons | fast, backward, previous, rewind |
+| `ai ai-fast-forward` | azionicons | fast, forward, next, skip |
+| `ai ai-file-arrow-up` | azionicons | file, arrow, document, page, direction, navigate, move |
+| `ai ai-file-check` | azionicons | file, check, document, page, done, success, confirm, ok |
+| `ai ai-file-edit` | azionicons | file, edit, document, page |
+| `ai ai-file-excel` | azionicons | file, excel, document, page |
+| `ai ai-file-export` | azionicons | file, export, document, page |
+| `ai ai-file-import` | azionicons | file, import, document, page |
+| `ai ai-file-o` | azionicons | file, document, page |
+| `ai ai-file-pdf` | azionicons | file, pdf, document, page |
+| `ai ai-file-plus` | azionicons | file, plus, document, page, add, create, new |
+| `ai ai-file-word` | azionicons | file, word, document, page |
+| `ai ai-file` | azionicons | document, page |
 | `ai ai-filter-alt` | azionicons | filter, alt, funnel, refine, narrow |
+| `ai ai-filter-fill` | azionicons | filter, fill, funnel, refine, narrow |
+| `ai ai-filter-slash` | azionicons | filter, slash, funnel, refine, narrow |
+| `ai ai-filter` | azionicons | funnel, refine, narrow |
+| `ai ai-flag-fill` | azionicons | flag, fill, report, mark |
+| `ai ai-flag` | azionicons | report, mark |
+| `ai ai-folder-open` | azionicons | folder, open, directory, files, openai, brand, logo |
+| `ai ai-folder-plus` | azionicons | folder, plus, directory, files, add, create, new |
+| `ai ai-folder` | azionicons | directory, files |
+| `ai ai-forward` | azionicons | next, skip |
 | `ai ai-gateway` | azionicons | proxy, api, routing |
 | `ai ai-gatsby` | azionicons | brand, logo |
+| `ai ai-gauge` | azionicons | performance, speed, meter |
 | `ai ai-gemini` | azionicons | brand, logo |
+| `ai ai-gift` | azionicons | present, reward |
 | `ai ai-git-branch-delete` | azionicons | git, branch, delete, version control, source, repository, version, remove, erase |
 | `ai ai-git-branch-plus` | azionicons | git, branch, plus, version control, source, repository, version, add, create, new |
 | `ai ai-git-branch` | azionicons | git, branch, version control, source, repository, version |
@@ -100,394 +241,229 @@ Used by: [Alert](../components/alert.md), [ArtifactPreview](../components/artifa
 | `ai ai-git-pull-request` | azionicons | git, pull, request, version control, source, repository |
 | `ai ai-git-repository` | azionicons | git, repository, version control, source, code |
 | `ai ai-github` | azionicons | brand, logo |
+| `ai ai-globe` | azionicons | world, global, language, web |
+| `ai ai-google` | azionicons | brand, logo |
+| `ai ai-graduation-cap` | azionicons | graduation, cap, learn, education, course |
 | `ai ai-graphql` | azionicons | brand, logo |
 | `ai ai-grok` | azionicons | brand, logo |
+| `ai ai-hammer` | azionicons | build, tools |
+| `ai ai-hashtag` | azionicons | tag, number, channel |
+| `ai ai-headphones` | azionicons | support, audio |
+| `ai ai-heart-fill` | azionicons | heart, fill, like, favorite, love |
+| `ai ai-heart` | azionicons | like, favorite, love |
 | `ai ai-hexo` | azionicons | brand, logo |
+| `ai ai-history` | azionicons | recent, activity, audit, log |
 | `ai ai-home` | azionicons | house, start, dashboard |
 | `ai ai-hono` | azionicons | brand, logo |
+| `ai ai-hourglass` | azionicons | wait, pending, time |
 | `ai ai-html` | azionicons | markup, web, brand |
 | `ai ai-hugo` | azionicons | brand, logo |
+| `ai ai-id-card` | azionicons | card, identity, profile, account |
 | `ai ai-image-processor` | azionicons | image, processor, picture, photo, media |
+| `ai ai-image` | azionicons | picture, photo, media |
+| `ai ai-images` | azionicons | pictures, photos, gallery, media |
+| `ai ai-inbox` | azionicons | messages, mail, empty |
+| `ai ai-indian-rupee` | azionicons | indian, rupee |
+| `ai ai-info-circle` | azionicons | info, circle, information, help, about, status, shape |
+| `ai ai-info` | azionicons | information, help, about |
+| `ai ai-instagram` | azionicons | brand, logo |
 | `ai ai-instructor` | azionicons | teacher, training, course |
 | `ai ai-integration-services` | azionicons | integration, services |
 | `ai ai-jekyll` | azionicons | brand, logo |
 | `ai ai-json-text` | azionicons | json, text, data, format, code |
 | `ai ai-json` | azionicons | data, format, code |
+| `ai ai-key` | azionicons | password, token, secret, credential |
+| `ai ai-language` | azionicons | translate, locale, i18n |
 | `ai ai-layers` | azionicons | stack, levels |
+| `ai ai-lightbulb` | azionicons | idea, tip, hint |
+| `ai ai-link` | azionicons | url, chain, hyperlink |
+| `ai ai-linkedin` | azionicons | brand, logo |
+| `ai ai-list-check` | azionicons | list, check, tasks, todo, checklist, items, bullets, done, success, confirm, ok |
+| `ai ai-list` | azionicons | items, bullets |
 | `ai ai-live-ingest` | azionicons | live, ingest |
 | `ai ai-load-balancer` | azionicons | load, balancer, traffic, distribution, origin |
+| `ai ai-lock-open` | azionicons | lock, open, unlock, public, unlocked, secure, private, password, locked, openai, brand, logo |
+| `ai ai-lock` | azionicons | secure, private, password, locked |
 | `ai ai-lora` | azionicons | fine-tuning, ai, model |
+| `ai ai-map-marker` | azionicons | map, marker, location, pin, place, geo |
+| `ai ai-map` | azionicons | location, geo |
 | `ai ai-marketplace` | azionicons | templates, store, integrations |
+| `ai ai-mars` | azionicons | male, gender |
 | `ai ai-mcp-logo` | azionicons | mcp, logo, brand |
 | `ai ai-medium` | azionicons | brand, logo |
+| `ai ai-megaphone` | azionicons | announcement, marketing, news |
 | `ai ai-meta` | azionicons | brand, logo |
+| `ai ai-microchip-ai` | azionicons | microchip, hardware, processor, compute, artificial intelligence, llm, model |
+| `ai ai-microchip` | azionicons | hardware, processor, compute |
+| `ai ai-microphone` | azionicons | audio, voice, record |
 | `ai ai-microsoft-copilot` | azionicons | microsoft, copilot, brand, logo |
+| `ai ai-minus` | azionicons | remove, subtract, collapse |
 | `ai ai-mistral` | azionicons | brand, logo |
+| `ai ai-mobile` | azionicons | phone, device, smartphone |
+| `ai ai-money-bill` | azionicons | money, bill, payment, billing, cash |
+| `ai ai-moon` | azionicons | dark mode, night, theme |
 | `ai ai-network-lists` | azionicons | network, lists, connectivity |
 | `ai ai-next` | azionicons | brand, logo |
 | `ai ai-nitro` | azionicons | server, framework, unjs, brand, logo |
 | `ai ai-nuxt` | azionicons | brand, logo |
+| `ai ai-objects-column` | azionicons | objects, column, layout, grid |
 | `ai ai-observe-pillar` | azionicons | observe, pillar, observability, monitoring, product family |
 | `ai ai-open` | azionicons | openai, brand, logo |
 | `ai ai-origin-accelerator` | azionicons | origin, accelerator, backend, server, performance, speed, product |
 | `ai ai-origin-shield` | azionicons | origin, shield, backend, server, security, protection, safe |
+| `ai ai-palette` | azionicons | color, theme, design |
+| `ai ai-paperclip` | azionicons | attachment, attach |
+| `ai ai-pause-circle` | azionicons | pause, circle, stop, hold, status, shape |
+| `ai ai-pause` | azionicons | stop, hold |
+| `ai ai-pen-to-square` | azionicons | pen, square, edit, write |
+| `ai ai-pencil` | azionicons | edit, write, rename |
+| `ai ai-percentage` | azionicons | percent, discount, rate |
 | `ai ai-perplexity` | azionicons | brand, logo |
+| `ai ai-phone` | azionicons | call, contact |
+| `ai ai-play-circle` | azionicons | play, circle, start, run, video, status, shape |
+| `ai ai-play` | azionicons | start, run, video |
+| `ai ai-plus-circle` | azionicons | plus, circle, add, create, new, status, shape |
+| `ai ai-plus` | azionicons | add, create, new |
+| `ai ai-pound` | azionicons | currency, money, gbp |
+| `ai ai-power-off` | azionicons | power, off, shut down, logout |
 | `ai ai-pratices-review` | azionicons | pratices, review |
 | `ai ai-preact` | azionicons | brand, logo |
+| `ai ai-print` | azionicons | printer |
 | `ai ai-professional-services` | azionicons | professional, services |
+| `ai ai-qrcode` | azionicons | qr code, scan |
+| `ai ai-question-circle` | azionicons | question, circle, help, faq, support, status, shape |
+| `ai ai-question` | azionicons | help, faq, support |
 | `ai ai-qwen` | azionicons | brand, logo |
 | `ai ai-qwik` | azionicons | brand, logo |
 | `ai ai-react` | azionicons | brand, logo |
 | `ai ai-real-time-events` | azionicons | real, time, events |
 | `ai ai-real-time-metrics` | azionicons | real, time, metrics, analytics, observability, charts |
 | `ai ai-real-time-purge` | azionicons | real, time, purge, cache, clear, invalidate |
+| `ai ai-receipt` | azionicons | invoice, billing, payment |
+| `ai ai-reddit` | azionicons | brand, logo |
 | `ai ai-redis` | azionicons | brand, logo |
+| `ai ai-refresh` | azionicons | reload, sync, update |
 | `ai ai-remix` | azionicons | brand, logo |
+| `ai ai-replay` | azionicons | repeat, retry |
+| `ai ai-reply` | azionicons | answer, respond |
 | `ai ai-rss` | azionicons | feed, subscribe, news |
 | `ai ai-rules-engine` | azionicons | rules, engine, logic, conditions, behavior |
 | `ai ai-sase` | azionicons | secure access, network security, zero trust |
+| `ai ai-save` | azionicons | disk, store |
 | `ai ai-scizors` | azionicons | scissors, cut |
+| `ai ai-search-minus` | azionicons | search, minus, zoom out, find, magnifier, lookup, remove, subtract, collapse |
+| `ai ai-search-plus` | azionicons | search, plus, zoom in, find, magnifier, lookup, add, create, new |
+| `ai ai-search` | azionicons | find, magnifier, lookup |
 | `ai ai-secure-pillar` | azionicons | secure, pillar, security, protection, product family |
 | `ai ai-security-team` | azionicons | security, team, protection, shield |
+| `ai ai-send` | azionicons | submit, paper plane, message |
+| `ai ai-server` | azionicons | host, infrastructure, compute |
+| `ai ai-share-alt` | azionicons | share, alt, send, social |
+| `ai ai-shield` | azionicons | security, protection, safe |
+| `ai ai-shop` | azionicons | store, commerce |
+| `ai ai-shopping-bag` | azionicons | shopping, bag, commerce, buy |
+| `ai ai-shopping-cart` | azionicons | shopping, cart, commerce, buy |
+| `ai ai-sign-in` | azionicons | sign, login, log in, enter |
+| `ai ai-sign-out` | azionicons | sign, out, logout, log out, exit |
+| `ai ai-sitemap` | azionicons | hierarchy, tree, structure |
+| `ai ai-slack` | azionicons | brand, logo |
+| `ai ai-sliders-h` | azionicons | sliders, settings, controls, adjust, filters |
+| `ai ai-sliders-v` | azionicons | sliders, settings, controls, adjust, filters |
+| `ai ai-sort-alpha-down-alt` | azionicons | sort, alpha, down, alt, order, arrange |
+| `ai ai-sort-alpha-down` | azionicons | sort, alpha, down, order, arrange |
+| `ai ai-sort-alpha-up-alt` | azionicons | sort, alpha, alt, order, arrange |
+| `ai ai-sort-alpha-up` | azionicons | sort, alpha, order, arrange |
+| `ai ai-sort-alt-slash` | azionicons | sort, alt, slash, order, arrange |
+| `ai ai-sort-alt` | azionicons | sort, alt, order, arrange |
+| `ai ai-sort-amount-down-alt` | azionicons | sort, amount, down, alt, order, arrange |
+| `ai ai-sort-amount-down` | azionicons | sort, amount, down, order, arrange |
+| `ai ai-sort-amount-up-alt` | azionicons | sort, amount, alt, order, arrange |
+| `ai ai-sort-amount-up` | azionicons | sort, amount, order, arrange |
+| `ai ai-sort-down-fill` | azionicons | sort, down, fill, order, arrange |
+| `ai ai-sort-down` | azionicons | sort, down, order, arrange |
+| `ai ai-sort-numeric-down-alt` | azionicons | sort, numeric, down, alt, order, arrange |
+| `ai ai-sort-numeric-down` | azionicons | sort, numeric, down, order, arrange |
+| `ai ai-sort-numeric-up-alt` | azionicons | sort, numeric, alt, order, arrange |
+| `ai ai-sort-numeric-up` | azionicons | sort, numeric, order, arrange |
+| `ai ai-sort-up-fill` | azionicons | sort, fill, order, arrange |
+| `ai ai-sort-up` | azionicons | sort, order, arrange |
+| `ai ai-sort` | azionicons | order, arrange |
 | `ai ai-sparkles` | azionicons | ai, magic, new, generate |
+| `ai ai-spinner-dotted` | azionicons | spinner, dotted, loading, progress, busy |
+| `ai ai-spinner` | azionicons | loading, progress, busy |
 | `ai ai-sql` | azionicons | database, query |
+| `ai ai-star-fill` | azionicons | star, fill, favorite, rating |
+| `ai ai-star-half-fill` | azionicons | star, half, fill, favorite, rating |
+| `ai ai-star-half` | azionicons | star, half, favorite, rating |
+| `ai ai-star` | azionicons | favorite, rating |
 | `ai ai-stencil` | azionicons | web components, compiler, framework, brand, logo |
+| `ai ai-step-backward-alt` | azionicons | step, backward, alt, previous, rewind |
+| `ai ai-step-backward` | azionicons | step, backward, previous, rewind |
+| `ai ai-step-forward-alt` | azionicons | step, forward, alt, next, skip |
+| `ai ai-step-forward` | azionicons | step, forward, next, skip |
+| `ai ai-stop-circle` | azionicons | stop, circle, halt, end, status, shape |
+| `ai ai-stop` | azionicons | halt, end |
+| `ai ai-stopwatch` | azionicons | timer, time, duration |
 | `ai ai-store` | azionicons | shop, marketplace |
+| `ai ai-sun` | azionicons | light mode, day, theme |
 | `ai ai-svelte` | azionicons | brand, logo |
+| `ai ai-sync` | azionicons | refresh, synchronize |
+| `ai ai-table` | azionicons | grid, data, rows |
+| `ai ai-tablet` | azionicons | device, ipad |
+| `ai ai-tag` | azionicons | label, category |
+| `ai ai-tags` | azionicons | labels, categories |
 | `ai ai-technical-account` | azionicons | technical, account |
 | `ai ai-technical-support` | azionicons | technical, support, help, service |
 | `ai ai-terraform` | azionicons | infrastructure as code, iac, brand, logo |
+| `ai ai-th-large` | azionicons | large, grid, tiles, layout |
+| `ai ai-thumbs-down-fill` | azionicons | thumbs, down, fill, dislike, bad, feedback |
+| `ai ai-thumbs-down` | azionicons | thumbs, down, dislike, bad, feedback |
+| `ai ai-thumbs-up-fill` | azionicons | thumbs, fill, like, good, feedback |
+| `ai ai-thumbs-up` | azionicons | thumbs, like, good, feedback |
+| `ai ai-thumbtack` | azionicons | pin |
+| `ai ai-ticket` | azionicons | support, issue |
 | `ai ai-tiered-cache` | azionicons | tiered, cache |
+| `ai ai-times-circle` | azionicons | times, circle, close, error, clear, cancel, dismiss, x, status, shape |
+| `ai ai-times` | azionicons | close, cancel, dismiss, x |
+| `ai ai-trash` | azionicons | delete, remove, bin |
+| `ai ai-trophy` | azionicons | award, winner |
+| `ai ai-truck` | azionicons | delivery, shipping |
+| `ai ai-turkish-lira` | azionicons | turkish, lira |
 | `ai ai-turso` | azionicons | brand, logo |
 | `ai ai-twitch` | azionicons | brand, logo |
+| `ai ai-undo` | azionicons | revert, back |
+| `ai ai-unlock` | azionicons | open, unlocked |
+| `ai ai-upload` | azionicons | import, send |
+| `ai ai-user-edit` | azionicons | user, edit, person, account, profile |
+| `ai ai-user-minus` | azionicons | user, minus, person, account, profile, remove, subtract, collapse |
+| `ai ai-user-plus` | azionicons | user, plus, person, account, profile, add, create, new |
+| `ai ai-user` | azionicons | person, account, profile |
+| `ai ai-users` | azionicons | people, team, members |
 | `ai ai-variables` | azionicons | environment, env, config |
+| `ai ai-venus` | azionicons | female, gender |
+| `ai ai-verified` | azionicons | check, approved, badge |
+| `ai ai-video` | azionicons | movie, media |
 | `ai ai-vite` | azionicons | brand, logo |
 | `ai ai-vitepress` | azionicons | brand, logo |
+| `ai ai-volume-down` | azionicons | volume, down, sound, audio |
+| `ai ai-volume-off` | azionicons | volume, off, sound, audio |
+| `ai ai-volume-up` | azionicons | volume, sound, audio |
 | `ai ai-vue` | azionicons | brand, logo |
 | `ai ai-vuepress` | azionicons | brand, logo |
 | `ai ai-waf-rules` | azionicons | waf, rules, web application firewall, security, logic, conditions, behavior |
+| `ai ai-wallet` | azionicons | payment, money |
+| `ai ai-warehouse` | azionicons | storage, inventory |
+| `ai ai-wave-pulse` | azionicons | wave, pulse, activity, health, monitoring |
 | `ai ai-webhook` | azionicons | integration, callback, events |
+| `ai ai-whatsapp` | azionicons | brand, logo |
+| `ai ai-wifi` | azionicons | network, wireless, connection |
+| `ai ai-window-maximize` | azionicons | window, maximize, browser, app |
+| `ai ai-window-minimize` | azionicons | window, minimize, browser, app |
 | `ai ai-windsurf` | azionicons | brand, logo |
 | `ai ai-workloads` | azionicons | domains, deploy, traffic |
+| `ai ai-wrench` | azionicons | settings, tools, fix, maintenance |
 | `ai ai-x` | azionicons | brand, logo |
 | `ai ai-youtube` | azionicons | brand, logo |
-| `ai ai-sparkles` | primeicons | ai, magic, new, generate |
-| `pi pi-address-book` | primeicons | address, book, contacts, people, docs, documentation, read |
-| `pi pi-align-center` | primeicons | align, center, text, alignment, format |
-| `pi pi-align-justify` | primeicons | align, justify, text, alignment, format |
-| `pi pi-align-left` | primeicons | align, left, text, alignment, format |
-| `pi pi-align-right` | primeicons | align, right, text, alignment, format |
-| `pi pi-amazon` | primeicons | aws, brand, logo |
-| `pi pi-android` | primeicons | brand, logo |
-| `pi pi-angle-double-down` | primeicons | angle, double, down, chevron, arrow, direction |
-| `pi pi-angle-double-left` | primeicons | angle, double, left, chevron, arrow, direction |
-| `pi pi-angle-double-right` | primeicons | angle, double, right, chevron, arrow, direction |
-| `pi pi-angle-double-up` | primeicons | angle, double, chevron, arrow, direction |
-| `pi pi-angle-down` | primeicons | angle, down, chevron, arrow, direction |
-| `pi pi-angle-left` | primeicons | angle, left, chevron, arrow, direction |
-| `pi pi-angle-right` | primeicons | angle, right, chevron, arrow, direction |
-| `pi pi-angle-up` | primeicons | angle, chevron, arrow, direction |
-| `pi pi-apple` | primeicons | brand, logo |
-| `pi pi-arrow-circle-down` | primeicons | arrow, circle, down, direction, navigate, move, status, shape |
-| `pi pi-arrow-circle-left` | primeicons | arrow, circle, left, direction, navigate, move, status, shape |
-| `pi pi-arrow-circle-right` | primeicons | arrow, circle, right, direction, navigate, move, status, shape |
-| `pi pi-arrow-circle-up` | primeicons | arrow, circle, direction, navigate, move, status, shape |
-| `pi pi-arrow-down-left-and-arrow-up-right-to-center` | primeicons | arrow, down, left, and, right, center, direction, navigate, move |
-| `pi pi-arrow-down-left` | primeicons | arrow, down, left, direction, navigate, move |
-| `pi pi-arrow-down-right` | primeicons | arrow, down, right, direction, navigate, move |
-| `pi pi-arrow-down` | primeicons | arrow, down, direction, navigate, move |
-| `pi pi-arrow-left` | primeicons | arrow, left, direction, navigate, move |
-| `pi pi-arrow-right-arrow-left` | primeicons | arrow, right, left, direction, navigate, move |
-| `pi pi-arrow-right` | primeicons | arrow, right, direction, navigate, move |
-| `pi pi-arrow-up-left` | primeicons | arrow, left, direction, navigate, move |
-| `pi pi-arrow-up-right-and-arrow-down-left-from-center` | primeicons | arrow, right, and, down, left, from, center, direction, navigate, move |
-| `pi pi-arrow-up-right` | primeicons | arrow, right, direction, navigate, move |
-| `pi pi-arrow-up` | primeicons | arrow, direction, navigate, move |
-| `pi pi-arrows-alt` | primeicons | arrows, alt, move, resize, direction |
-| `pi pi-arrows-h` | primeicons | arrows, move, resize, direction |
-| `pi pi-arrows-v` | primeicons | arrows, move, resize, direction |
-| `pi pi-asterisk` | primeicons | required, star |
-| `pi pi-at` | primeicons | email, mention |
-| `pi pi-backward` | primeicons | previous, rewind |
-| `pi pi-ban` | primeicons | block, forbidden, deny |
-| `pi pi-barcode` | primeicons | scan, product code |
-| `pi pi-bars` | primeicons | menu, hamburger, navigation |
-| `pi pi-bell-slash` | primeicons | bell, slash, notification, alert |
-| `pi pi-bell` | primeicons | notification, alert |
-| `pi pi-bitcoin` | primeicons | brand, logo |
-| `pi pi-bolt` | primeicons | fast, lightning, power |
-| `pi pi-book` | primeicons | docs, documentation, read |
-| `pi pi-bookmark-fill` | primeicons | bookmark, fill, save, favorite |
-| `pi pi-bookmark` | primeicons | save, favorite |
-| `pi pi-box` | primeicons | package, product |
-| `pi pi-briefcase` | primeicons | work, business |
-| `pi pi-building-columns` | primeicons | building, columns, company, organization, office |
-| `pi pi-building` | primeicons | company, organization, office |
-| `pi pi-bullseye` | primeicons | target, goal |
-| `pi pi-calculator` | primeicons | math, pricing |
-| `pi pi-calendar-clock` | primeicons | calendar, clock, date, schedule, time, history |
-| `pi pi-calendar-minus` | primeicons | calendar, minus, date, schedule, time, remove, subtract, collapse |
-| `pi pi-calendar-plus` | primeicons | calendar, plus, date, schedule, time, add, create, new |
-| `pi pi-calendar-times` | primeicons | calendar, times, date, schedule, time, close, cancel, dismiss, x |
-| `pi pi-calendar` | primeicons | date, schedule, time |
-| `pi pi-camera` | primeicons | photo, picture |
-| `pi pi-car` | primeicons | vehicle, automotive |
-| `pi pi-caret-down` | primeicons | caret, down, arrow, dropdown, triangle |
-| `pi pi-caret-left` | primeicons | caret, left, arrow, dropdown, triangle |
-| `pi pi-caret-right` | primeicons | caret, right, arrow, dropdown, triangle |
-| `pi pi-caret-up` | primeicons | caret, arrow, dropdown, triangle |
-| `pi pi-cart-arrow-down` | primeicons | cart, arrow, down, shopping, commerce, buy, direction, navigate, move |
-| `pi pi-cart-minus` | primeicons | cart, minus, shopping, commerce, buy, remove, subtract, collapse |
-| `pi pi-cart-plus` | primeicons | cart, plus, shopping, commerce, buy, add, create, new |
-| `pi pi-chart-bar` | primeicons | chart, bar, graph, analytics, metrics |
-| `pi pi-chart-line` | primeicons | chart, line, graph, analytics, metrics |
-| `pi pi-chart-pie` | primeicons | chart, pie, graph, analytics, metrics |
-| `pi pi-chart-scatter` | primeicons | chart, scatter, graph, analytics, metrics |
-| `pi pi-check-circle` | primeicons | check, circle, done, success, confirm, ok, status, shape |
-| `pi pi-check-square` | primeicons | check, square, done, success, confirm, ok |
-| `pi pi-check` | primeicons | done, success, confirm, ok |
-| `pi pi-chevron-circle-down` | primeicons | chevron, circle, down, arrow, expand, collapse, direction, status, shape |
-| `pi pi-chevron-circle-left` | primeicons | chevron, circle, left, arrow, expand, collapse, direction, status, shape |
-| `pi pi-chevron-circle-right` | primeicons | chevron, circle, right, arrow, expand, collapse, direction, status, shape |
-| `pi pi-chevron-circle-up` | primeicons | chevron, circle, arrow, expand, collapse, direction, status, shape |
-| `pi pi-chevron-down` | primeicons | chevron, down, arrow, expand, collapse, direction |
-| `pi pi-chevron-left` | primeicons | chevron, left, arrow, expand, collapse, direction |
-| `pi pi-chevron-right` | primeicons | chevron, right, arrow, expand, collapse, direction |
-| `pi pi-chevron-up` | primeicons | chevron, arrow, expand, collapse, direction |
-| `pi pi-circle-fill` | primeicons | circle, fill, status, shape |
-| `pi pi-circle-off` | primeicons | circle, off, status, shape |
-| `pi pi-circle-on` | primeicons | circle, status, shape |
-| `pi pi-circle` | primeicons | status, shape |
-| `pi pi-claude` | primeicons | brand, logo |
-| `pi pi-clipboard` | primeicons | copy, paste |
-| `pi pi-clock` | primeicons | time, schedule, history |
-| `pi pi-clone` | primeicons | copy, duplicate |
-| `pi pi-cloud-download` | primeicons | cloud, download, hosting, storage, save, export |
-| `pi pi-cloud-upload` | primeicons | cloud, upload, hosting, storage, import, send |
-| `pi pi-cloud` | primeicons | hosting, storage |
-| `pi pi-code` | primeicons | developer, source, snippet |
-| `pi pi-cog` | primeicons | settings, gear, preferences, configuration |
-| `pi pi-comment` | primeicons | chat, message, feedback |
-| `pi pi-comments` | primeicons | chat, messages, discussion |
-| `pi pi-compass` | primeicons | explore, navigation |
-| `pi pi-copy` | primeicons | duplicate, clipboard |
-| `pi pi-credit-card` | primeicons | credit, card, payment, billing |
-| `pi pi-crown` | primeicons | premium, plan, pro |
-| `pi pi-database` | primeicons | data, storage, sql |
-| `pi pi-delete-left` | primeicons | delete, left, remove, erase |
-| `pi pi-desktop` | primeicons | computer, screen, device |
-| `pi pi-directions-alt` | primeicons | directions, alt, route, navigation, map |
-| `pi pi-directions` | primeicons | route, navigation, map |
-| `pi pi-discord` | primeicons | brand, logo |
-| `pi pi-dollar` | primeicons | money, price, billing, currency |
-| `pi pi-download` | primeicons | save, export |
-| `pi pi-eject` | primeicons | remove, unmount |
-| `pi pi-ellipsis-h` | primeicons | ellipsis, more, menu, actions, overflow |
-| `pi pi-ellipsis-v` | primeicons | ellipsis, more, menu, actions, overflow |
-| `pi pi-envelope` | primeicons | email, mail, message |
-| `pi pi-equals` | primeicons | equal, math |
-| `pi pi-eraser` | primeicons | clear, erase |
-| `pi pi-ethereum` | primeicons | brand, logo |
-| `pi pi-euro` | primeicons | money, currency |
-| `pi pi-exclamation-circle` | primeicons | exclamation, circle, warning, error, alert, status, shape |
-| `pi pi-exclamation-triangle` | primeicons | exclamation, triangle, warning, error, alert |
-| `pi pi-expand` | primeicons | fullscreen, maximize |
-| `pi pi-external-link` | primeicons | external, link, open, new tab, link out, url, chain, hyperlink |
-| `pi pi-eye-slash` | primeicons | eye, slash, hide, hidden, invisible, view, show, visible, preview |
-| `pi pi-eye` | primeicons | view, show, visible, preview |
-| `pi pi-face-smile` | primeicons | face, smile |
-| `pi pi-facebook` | primeicons | brand, logo |
-| `pi pi-fast-backward` | primeicons | fast, backward, previous, rewind |
-| `pi pi-fast-forward` | primeicons | fast, forward, next, skip |
-| `pi pi-file-arrow-up` | primeicons | file, arrow, document, page, direction, navigate, move |
-| `pi pi-file-check` | primeicons | file, check, document, page, done, success, confirm, ok |
-| `pi pi-file-edit` | primeicons | file, edit, document, page |
-| `pi pi-file-excel` | primeicons | file, excel, document, page |
-| `pi pi-file-export` | primeicons | file, export, document, page |
-| `pi pi-file-import` | primeicons | file, import, document, page |
-| `pi pi-file-o` | primeicons | file, document, page |
-| `pi pi-file-pdf` | primeicons | file, pdf, document, page |
-| `pi pi-file-plus` | primeicons | file, plus, document, page, add, create, new |
-| `pi pi-file-word` | primeicons | file, word, document, page |
-| `pi pi-file` | primeicons | document, page |
-| `pi pi-filter-fill` | primeicons | filter, fill, funnel, refine, narrow |
-| `pi pi-filter-slash` | primeicons | filter, slash, funnel, refine, narrow |
-| `pi pi-filter` | primeicons | funnel, refine, narrow |
-| `pi pi-flag-fill` | primeicons | flag, fill, report, mark |
-| `pi pi-flag` | primeicons | report, mark |
-| `pi pi-folder-open` | primeicons | folder, open, directory, files, openai, brand, logo |
-| `pi pi-folder-plus` | primeicons | folder, plus, directory, files, add, create, new |
-| `pi pi-folder` | primeicons | directory, files |
-| `pi pi-forward` | primeicons | next, skip |
-| `pi pi-gauge` | primeicons | performance, speed, meter |
-| `pi pi-gemini` | primeicons | brand, logo |
-| `pi pi-gift` | primeicons | present, reward |
-| `pi pi-github` | primeicons | brand, logo |
-| `pi pi-globe` | primeicons | world, global, language, web |
-| `pi pi-google` | primeicons | brand, logo |
-| `pi pi-graduation-cap` | primeicons | graduation, cap, learn, education, course |
-| `pi pi-hammer` | primeicons | build, tools |
-| `pi pi-hashtag` | primeicons | tag, number, channel |
-| `pi pi-headphones` | primeicons | support, audio |
-| `pi pi-heart-fill` | primeicons | heart, fill, like, favorite, love |
-| `pi pi-heart` | primeicons | like, favorite, love |
-| `pi pi-history` | primeicons | recent, activity, audit, log |
-| `pi pi-home` | primeicons | house, start, dashboard |
-| `pi pi-hourglass` | primeicons | wait, pending, time |
-| `pi pi-id-card` | primeicons | card, identity, profile, account |
-| `pi pi-image` | primeicons | picture, photo, media |
-| `pi pi-images` | primeicons | pictures, photos, gallery, media |
-| `pi pi-inbox` | primeicons | messages, mail, empty |
-| `pi pi-indian-rupee` | primeicons | indian, rupee |
-| `pi pi-info-circle` | primeicons | info, circle, information, help, about, status, shape |
-| `pi pi-info` | primeicons | information, help, about |
-| `pi pi-instagram` | primeicons | brand, logo |
-| `pi pi-key` | primeicons | password, token, secret, credential |
-| `pi pi-language` | primeicons | translate, locale, i18n |
-| `pi pi-lightbulb` | primeicons | idea, tip, hint |
-| `pi pi-link` | primeicons | url, chain, hyperlink |
-| `pi pi-linkedin` | primeicons | brand, logo |
-| `pi pi-list-check` | primeicons | list, check, tasks, todo, checklist, items, bullets, done, success, confirm, ok |
-| `pi pi-list` | primeicons | items, bullets |
-| `pi pi-lock-open` | primeicons | lock, open, unlock, public, unlocked, secure, private, password, locked, openai, brand, logo |
-| `pi pi-lock` | primeicons | secure, private, password, locked |
-| `pi pi-map-marker` | primeicons | map, marker, location, pin, place, geo |
-| `pi pi-map` | primeicons | location, geo |
-| `pi pi-mars` | primeicons | male, gender |
-| `pi pi-megaphone` | primeicons | announcement, marketing, news |
-| `pi pi-microchip-ai` | primeicons | microchip, hardware, processor, compute, artificial intelligence, llm, model |
-| `pi pi-microchip` | primeicons | hardware, processor, compute |
-| `pi pi-microphone` | primeicons | audio, voice, record |
-| `pi pi-microsoft` | primeicons | brand, logo |
-| `pi pi-minus-circle` | primeicons | minus, circle, remove, subtract, collapse, status, shape |
-| `pi pi-minus` | primeicons | remove, subtract, collapse |
-| `pi pi-mobile` | primeicons | phone, device, smartphone |
-| `pi pi-money-bill` | primeicons | money, bill, payment, billing, cash |
-| `pi pi-moon` | primeicons | dark mode, night, theme |
-| `pi pi-objects-column` | primeicons | objects, column, layout, grid |
-| `pi pi-palette` | primeicons | color, theme, design |
-| `pi pi-paperclip` | primeicons | attachment, attach |
-| `pi pi-pause-circle` | primeicons | pause, circle, stop, hold, status, shape |
-| `pi pi-pause` | primeicons | stop, hold |
-| `pi pi-paypal` | primeicons | brand, logo |
-| `pi pi-pen-to-square` | primeicons | pen, square, edit, write |
-| `pi pi-pencil` | primeicons | edit, write, rename |
-| `pi pi-percentage` | primeicons | percent, discount, rate |
-| `pi pi-phone` | primeicons | call, contact |
-| `pi pi-pinterest` | primeicons | brand, logo |
-| `pi pi-play-circle` | primeicons | play, circle, start, run, video, status, shape |
-| `pi pi-play` | primeicons | start, run, video |
-| `pi pi-plus-circle` | primeicons | plus, circle, add, create, new, status, shape |
-| `pi pi-plus` | primeicons | add, create, new |
-| `pi pi-pound` | primeicons | currency, money, gbp |
-| `pi pi-power-off` | primeicons | power, off, shut down, logout |
-| `pi pi-prime` | primeicons | primevue, primefaces, brand |
-| `pi pi-print` | primeicons | printer |
-| `pi pi-qrcode` | primeicons | qr code, scan |
-| `pi pi-question-circle` | primeicons | question, circle, help, faq, support, status, shape |
-| `pi pi-question` | primeicons | help, faq, support |
-| `pi pi-receipt` | primeicons | invoice, billing, payment |
-| `pi pi-reddit` | primeicons | brand, logo |
-| `pi pi-refresh` | primeicons | reload, sync, update |
-| `pi pi-replay` | primeicons | repeat, retry |
-| `pi pi-reply` | primeicons | answer, respond |
-| `pi pi-save` | primeicons | disk, store |
-| `pi pi-search-minus` | primeicons | search, minus, zoom out, find, magnifier, lookup, remove, subtract, collapse |
-| `pi pi-search-plus` | primeicons | search, plus, zoom in, find, magnifier, lookup, add, create, new |
-| `pi pi-search` | primeicons | find, magnifier, lookup |
-| `pi pi-send` | primeicons | submit, paper plane, message |
-| `pi pi-server` | primeicons | host, infrastructure, compute |
-| `pi pi-share-alt` | primeicons | share, alt, send, social |
-| `pi pi-shield` | primeicons | security, protection, safe |
-| `pi pi-shop` | primeicons | store, commerce |
-| `pi pi-shopping-bag` | primeicons | shopping, bag, commerce, buy |
-| `pi pi-shopping-cart` | primeicons | shopping, cart, commerce, buy |
-| `pi pi-sign-in` | primeicons | sign, login, log in, enter |
-| `pi pi-sign-out` | primeicons | sign, out, logout, log out, exit |
-| `pi pi-sitemap` | primeicons | hierarchy, tree, structure |
-| `pi pi-slack` | primeicons | brand, logo |
-| `pi pi-sliders-h` | primeicons | sliders, settings, controls, adjust, filters |
-| `pi pi-sliders-v` | primeicons | sliders, settings, controls, adjust, filters |
-| `pi pi-sort-alpha-down-alt` | primeicons | sort, alpha, down, alt, order, arrange |
-| `pi pi-sort-alpha-down` | primeicons | sort, alpha, down, order, arrange |
-| `pi pi-sort-alpha-up-alt` | primeicons | sort, alpha, alt, order, arrange |
-| `pi pi-sort-alpha-up` | primeicons | sort, alpha, order, arrange |
-| `pi pi-sort-alt-slash` | primeicons | sort, alt, slash, order, arrange |
-| `pi pi-sort-alt` | primeicons | sort, alt, order, arrange |
-| `pi pi-sort-amount-down-alt` | primeicons | sort, amount, down, alt, order, arrange |
-| `pi pi-sort-amount-down` | primeicons | sort, amount, down, order, arrange |
-| `pi pi-sort-amount-up-alt` | primeicons | sort, amount, alt, order, arrange |
-| `pi pi-sort-amount-up` | primeicons | sort, amount, order, arrange |
-| `pi pi-sort-down-fill` | primeicons | sort, down, fill, order, arrange |
-| `pi pi-sort-down` | primeicons | sort, down, order, arrange |
-| `pi pi-sort-numeric-down-alt` | primeicons | sort, numeric, down, alt, order, arrange |
-| `pi pi-sort-numeric-down` | primeicons | sort, numeric, down, order, arrange |
-| `pi pi-sort-numeric-up-alt` | primeicons | sort, numeric, alt, order, arrange |
-| `pi pi-sort-numeric-up` | primeicons | sort, numeric, order, arrange |
-| `pi pi-sort-up-fill` | primeicons | sort, fill, order, arrange |
-| `pi pi-sort-up` | primeicons | sort, order, arrange |
-| `pi pi-sort` | primeicons | order, arrange |
-| `pi pi-sparkles` | primeicons | ai, magic, new, generate |
-| `pi pi-spinner-dotted` | primeicons | spinner, dotted, loading, progress, busy |
-| `pi pi-spinner` | primeicons | loading, progress, busy |
-| `pi pi-star-fill` | primeicons | star, fill, favorite, rating |
-| `pi pi-star-half-fill` | primeicons | star, half, fill, favorite, rating |
-| `pi pi-star-half` | primeicons | star, half, favorite, rating |
-| `pi pi-star` | primeicons | favorite, rating |
-| `pi pi-step-backward-alt` | primeicons | step, backward, alt, previous, rewind |
-| `pi pi-step-backward` | primeicons | step, backward, previous, rewind |
-| `pi pi-step-forward-alt` | primeicons | step, forward, alt, next, skip |
-| `pi pi-step-forward` | primeicons | step, forward, next, skip |
-| `pi pi-stop-circle` | primeicons | stop, circle, halt, end, status, shape |
-| `pi pi-stop` | primeicons | halt, end |
-| `pi pi-stopwatch` | primeicons | timer, time, duration |
-| `pi pi-sun` | primeicons | light mode, day, theme |
-| `pi pi-sync` | primeicons | refresh, synchronize |
-| `pi pi-table` | primeicons | grid, data, rows |
-| `pi pi-tablet` | primeicons | device, ipad |
-| `pi pi-tag` | primeicons | label, category |
-| `pi pi-tags` | primeicons | labels, categories |
-| `pi pi-telegram` | primeicons | brand, logo |
-| `pi pi-th-large` | primeicons | large, grid, tiles, layout |
-| `pi pi-thumbs-down-fill` | primeicons | thumbs, down, fill, dislike, bad, feedback |
-| `pi pi-thumbs-down` | primeicons | thumbs, down, dislike, bad, feedback |
-| `pi pi-thumbs-up-fill` | primeicons | thumbs, fill, like, good, feedback |
-| `pi pi-thumbs-up` | primeicons | thumbs, like, good, feedback |
-| `pi pi-thumbtack` | primeicons | pin |
-| `pi pi-ticket` | primeicons | support, issue |
-| `pi pi-tiktok` | primeicons | brand, logo |
-| `pi pi-times-circle` | primeicons | times, circle, close, error, clear, cancel, dismiss, x, status, shape |
-| `pi pi-times` | primeicons | close, cancel, dismiss, x |
-| `pi pi-trash` | primeicons | delete, remove, bin |
-| `pi pi-trophy` | primeicons | award, winner |
-| `pi pi-truck` | primeicons | delivery, shipping |
-| `pi pi-turkish-lira` | primeicons | turkish, lira |
-| `pi pi-twitch` | primeicons | brand, logo |
-| `pi pi-twitter` | primeicons | brand, logo |
-| `pi pi-undo` | primeicons | revert, back |
-| `pi pi-unlock` | primeicons | open, unlocked |
-| `pi pi-upload` | primeicons | import, send |
-| `pi pi-user-edit` | primeicons | user, edit, person, account, profile |
-| `pi pi-user-minus` | primeicons | user, minus, person, account, profile, remove, subtract, collapse |
-| `pi pi-user-plus` | primeicons | user, plus, person, account, profile, add, create, new |
-| `pi pi-user` | primeicons | person, account, profile |
-| `pi pi-users` | primeicons | people, team, members |
-| `pi pi-venus` | primeicons | female, gender |
-| `pi pi-verified` | primeicons | check, approved, badge |
-| `pi pi-video` | primeicons | movie, media |
-| `pi pi-vimeo` | primeicons | brand, logo |
-| `pi pi-volume-down` | primeicons | volume, down, sound, audio |
-| `pi pi-volume-off` | primeicons | volume, off, sound, audio |
-| `pi pi-volume-up` | primeicons | volume, sound, audio |
-| `pi pi-wallet` | primeicons | payment, money |
-| `pi pi-warehouse` | primeicons | storage, inventory |
-| `pi pi-wave-pulse` | primeicons | wave, pulse, activity, health, monitoring |
-| `pi pi-whatsapp` | primeicons | brand, logo |
-| `pi pi-wifi` | primeicons | network, wireless, connection |
-| `pi pi-window-maximize` | primeicons | window, maximize, browser, app |
-| `pi pi-window-minimize` | primeicons | window, minimize, browser, app |
-| `pi pi-wrench` | primeicons | settings, tools, fix, maintenance |
-| `pi pi-youtube` | primeicons | brand, logo |
 | `ai-cor ai-angular` | color | brand, logo |
 | `ai-cor ai-astro` | color | brand, logo |
 | `ai-cor ai-azuredevops` | color | brand, logo |

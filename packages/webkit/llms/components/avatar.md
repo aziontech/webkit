@@ -16,7 +16,7 @@
 
 - Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
-- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `pi pi-user`).
+- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `ai ai-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
 - size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
 
@@ -40,7 +40,7 @@
 | `src` | `string` | `''` | false | Image URL. When set, renders a photo and takes precedence over label and icon. |
 | `alt` | `string` | `''` | false | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it. |
 | `label` | `string` | `''` | false | Initials shown when no image (normalized to two uppercase characters). |
-| `icon` | `string` | `'pi pi-user'` | false | Icon class for the fallback when no image or label (PrimeIcons class). |
+| `icon` | `string` | `'ai ai-user'` | false | Icon class for the fallback when no image or label (Azion icon class). |
 | `kind` | `AvatarKind` | `'circle'` | false | Visual shape of the avatar container. |
 | `size` | `AvatarSize` | `'medium'` | false | Size preset matching Figma sm / md / lg (24 / 32 / 48 px). |
 | `pattern` | `AvatarPattern` | `undefined` | false | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |

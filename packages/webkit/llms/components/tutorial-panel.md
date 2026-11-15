@@ -125,7 +125,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
 ## Right-to-left
 
 - Layout: logical utilities only; every row is a flex row that follows `dir`.
-- Icons: `pi pi-check-circle` (not mirrored), `pi pi-sign-out` on Exit (not mirrored; it names the action, not a direction).
+- Icons: `ai ai-check-circle` (not mirrored), `ai ai-sign-out` on Exit (not mirrored; it names the action, not a direction).
 - Keyboard: no arrow keys.
 - User data: none.
 
@@ -256,7 +256,7 @@ Composed DS components (relative imports): `help-panel` (root, `Header`), `butto
           <Hotspot hotspot-id="new-service">
             <Button
               label="New service"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
               size="medium"
             />
           </Hotspot>

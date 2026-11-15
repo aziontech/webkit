@@ -16,13 +16,14 @@ A service that is live on its generated hostname is not yet ready for real traff
 
 ## When to use
 
+- Use production-checklist inside a resource's Overview tab for the few setup gates left before production traffic; it is a card, not a page.
 - On the Overview tab of a service or resource that is deployed but still has setup gates before it should take production traffic.
 - When the gates are few (three to five), independent and each completed by one action elsewhere in the console.
 
 ## When not to use
 
 - Commands to build and deploy a resource for the first time: use `platform/detail/get-started`.
-- Ordered steps the user must complete before the resource exists: use `platform/create/provision-wizard` or `platform/create/multipage-create`.
+- Ordered steps the user must complete before the resource exists: use `platform/create/multipage-create`.
 - A list of resources already bound to this one: use `platform/detail/attached-resources`.
 - A module the account has never used: use `platform/states/first-use`.
 
@@ -125,7 +126,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   const steps = [
     {
       id: 'domain',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Add a custom domain',
       description:
         'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
@@ -135,7 +136,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     },
     {
       id: 'policy',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       title: 'Enable a security policy',
       description:
         'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
@@ -145,7 +146,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     },
     {
       id: 'customPage',
-      icon: 'pi pi-file',
+      icon: 'ai ai-file',
       title: 'Set custom error pages',
       description: 'Answer 4xx and 5xx with your own page instead of the default response.',
       actionLabel: 'Add Error Page',
@@ -180,7 +181,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
         class="shrink-0"
       >
         <IconButton
-          icon="pi pi-window-maximize"
+          icon="ai ai-window-maximize"
           aria-label="Expand the production checklist"
           kind="outlined"
           size="small"
@@ -222,7 +223,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             <Item.Actions>
               <i
                 v-if="step.done"
-                class="pi pi-check text-body-sm leading-none text-(--primary)"
+                class="ai ai-check text-body-sm leading-none text-(--primary)"
                 aria-hidden="true"
               />
               <span class="sr-only">{{ step.done ? 'Done' : 'Not started' }}</span>
@@ -270,7 +271,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 aria-hidden="true"
               >
                 <i
-                  :class="step.done ? 'pi pi-check' : step.icon"
+                  :class="step.done ? 'ai ai-check' : step.icon"
                   class="text-body-sm leading-none"
                 />
               </span>
@@ -291,7 +292,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
               >
                 <Tag
-                  icon="pi pi-check"
+                  icon="ai ai-check"
                   label="Done"
                   severity="neutral"
                   size="medium"

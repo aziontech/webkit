@@ -26,7 +26,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A first-level list of resources the user creates and manages: use `platform/view/table-view`.
 - The log of one deployment or build run: use `platform/detail/deployment-logs`.
-- Metrics and charts without a row-level log: use `platform/dashboard/data-dashboard`.
+- Metrics and charts without a row-level log: use `platform/dashboard/analytics-dashboard`.
 - Files and folders of a storage resource: use `platform/view/file-browser`.
 - Querying a database with SQL: use `platform/view/query-editor`.
 
@@ -151,7 +151,7 @@ The document lists every field of the event. Search in this event narrows the li
 
 - `platform/view/table-view` — the same controls row over a resource list.
 - `platform/detail/deployment-logs` — logs of one deployment run.
-- `platform/dashboard/data-dashboard` — the metrics view for the same traffic.
+- `platform/dashboard/analytics-dashboard` — the metrics view for the same traffic.
 - `shells/console` — the layout this explorer renders in.
 - `DataTable` — the log table; see `skills/webkit-tables`, `skills/webkit-data-viz` and `skills/webkit-ui-states`.
 
@@ -1155,7 +1155,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -1168,7 +1168,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               :loading="loading"
@@ -1182,7 +1182,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
             class="shrink-0"
           >
             <IconButton
-              icon="pi pi-download"
+              icon="ai ai-download"
               kind="outlined"
               size="medium"
               :disabled="!tableRef"
@@ -1238,7 +1238,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                     >
                       <template #prefix>
                         <i
-                          class="pi pi-search"
+                          class="ai ai-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -1320,7 +1320,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                               </span>
                               <i
                                 v-if="isValueApplied(field.id, entry.value)"
-                                class="pi pi-check shrink-0 text-(--primary)"
+                                class="ai ai-check shrink-0 text-(--primary)"
                                 aria-hidden="true"
                               />
                             </span>
@@ -1441,7 +1441,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                                       </span>
                                       <i
                                         v-if="isValueApplied(field.id, entry.value)"
-                                        class="pi pi-check shrink-0 text-(--primary)"
+                                        class="ai ai-check shrink-0 text-(--primary)"
                                         aria-hidden="true"
                                       />
                                     </span>
@@ -1585,7 +1585,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 
                     <template #cell-detail="{ row }">
                       <IconButton
-                        :icon="row.id === selectedId ? 'pi pi-angle-down' : 'pi pi-angle-right'"
+                        :icon="row.id === selectedId ? 'ai ai-angle-down' : 'ai ai-angle-right'"
                         kind="transparent"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
@@ -1642,7 +1642,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                         v-if="!events.length"
                         key="no-traffic"
                         size="small"
-                        icon="pi pi-inbox"
+                        icon="ai ai-inbox"
                         title="No events yet"
                         description="Events appear here as soon as traffic reaches this workspace's resources."
                       />
@@ -1650,7 +1650,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                         v-else-if="search.trim()"
                         key="no-match"
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No events match this search"
                         description="Clear the search, or widen the period to cover more of the log."
                       />
@@ -1658,7 +1658,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                         v-else
                         key="no-events"
                         size="small"
-                        icon="pi pi-filter-slash"
+                        icon="ai ai-filter-slash"
                         title="No events in this window"
                         description="Widen the period or clear a filter to see more of the log."
                       />
@@ -1697,7 +1697,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
               </h2>
               <Tooltip text="Close">
                 <IconButton
-                  icon="pi pi-times"
+                  icon="ai ai-times"
                   kind="transparent"
                   size="small"
                   aria-label="Close the event document"

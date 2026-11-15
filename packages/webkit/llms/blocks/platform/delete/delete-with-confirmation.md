@@ -10,12 +10,13 @@
 
 ## Asked as
 
-delete; delete dialog; delete confirmation; delete resource; type to confirm; destructive confirmation; remove resource; excluir; confirmar exclusão; excluir recurso; apagar; delete with confirmation; excluir com confirmação; form in modal; dialog form; modal form; blocking decision; type name to delete; confirm in dialog; formulário em modal; formulário no diálogo; modal com formulário
+delete; delete dialog; delete confirmation; delete resource; type to confirm; destructive confirmation; remove resource; excluir; confirmar exclusão; excluir recurso; apagar; delete with confirmation; excluir com confirmação; form in modal; dialog form; modal form; blocking decision; type name to delete; confirm in dialog; formulário em modal; formulário no diálogo; modal com formulário; type the name to delete; confirm deletion by name
 
 The last stop before a resource is gone for good. The user chose Delete from a row menu or a settings page and now has to see what goes with the resource, take one deliberate step to prove they mean this one, and either confirm or back out. The dialog makes the irreversible action slow on purpose: Delete stays disabled until the typed name matches. LabelledField draws the page it is opened from as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).
 
 ## When to use
 
+- Use delete-with-confirmation when the user deletes a resource from the UI and must type its name.
 - Any permanent delete of a resource, a folder of files or a record, opened from the row Delete action of `platform/view/table-view`, `platform/view/file-browser` or `platform/detail/record-table`.
 - The resource takes other things with it (settings, instances, files) and the user must read that before confirming.
 - A delete that lives in a settings page as its own row (the danger zone): use the LabelledField variant, a labelled field inside the same medium `ConfirmDialog` opened from an outlined `Item`.

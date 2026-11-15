@@ -1,6 +1,6 @@
 # AnalyticsDashboard (`platform/dashboard/analytics-dashboard`)
 
-> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The analytics dashboard pattern: KPI tiles, charts and a table that all read the same period, so one change of range moves every region together: the Period Select in the PageHeader actions sets the comparison of every delta and the period in each exported CSV name. A row of four StatTiles (requests, data transferred, success rate and status 5xx, each with a sparkline and its change against the previous period) sits over a 12-column grid of ChartCards. Requests over time spans the grid as an area Chart, status codes as a multi-series line and requests by country as labeled horizontal bars share a row, and a searchable, paginated DataTable of top hosts closes it. Every card carries the same header: title with a Hint, the aggregation and variation Tags, a Line or Bar ToggleGroup for time series, an Expand IconButton that opens the card in a large Dialog, and a DropdownMenu whose Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Tag`, `Hint`, `ToggleGroup`, `IconButton`, `Tooltip`, `DropdownMenu`, `Dialog`, `toast`, `Input` and `EmptyState`. The Usage variant applies the same grammar to consumption: six usage tiles, this period against the previous one, a ranking of projects and a table of usage per project. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
@@ -10,7 +10,7 @@
 
 ## Asked as
 
-metrics; metric panel; kpi tiles; sparkline; real-time metrics; analytics dashboard; painel de métricas; indicadores; analytics; traffic analytics; requests over time; period comparison; painel analítico; análise de tráfego; real-time metrics per product; product metrics; metrics by product; period filter; métricas por produto; métricas en tiempo real; expand chart; chart dialog; export csv; copy query; metrics overview; metrics landing; sub-dashboards; status class filter; visão geral de métricas
+metrics; metric panel; kpi tiles; sparkline; real-time metrics; analytics dashboard; painel de métricas; indicadores; analytics; traffic analytics; requests over time; period comparison; painel analítico; análise de tráfego; real-time metrics per product; product metrics; metrics by product; period filter; métricas por produto; métricas en tiempo real; expand chart; chart dialog; export csv; copy query; metrics overview; metrics landing; sub-dashboards; status class filter; visão geral de métricas; data dashboard; metrics dashboard; kpi dashboard; stat tiles; data transferred; usage dashboard; usage per project; consumption; breakdown charts; métricas; painel de dados; painel de uso; traffic and usage dashboard
 
 The page a developer or operator opens to see how much traffic their services handled and how well
 they handled it: requests, data transferred, success rate and server errors for the period, then the
@@ -22,18 +22,19 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use analytics-dashboard for KPI tiles, charts and a table over one shared period: Traffic (requests, status codes) by default, Usage for consumption per product or project.
 - The reader monitors volume and quality of traffic (requests, bytes, status codes) over a period.
 - Several metrics share one time window and one set of dimensions (host, country, status code).
 - The reader needs to move from a total to the breakdown and then to the rows behind it.
 
 ## When not to use
 
-- Usage per project or product, with the previous period overlaid: use
-  `platform/dashboard/data-dashboard`.
 - Latency percentiles and live service health with an alert rail: use
   `platform/dashboard/service-monitoring-dashboard`.
 - Blocked and allowed requests and the rules behind them: use `platform/dashboard/security-dashboard`.
 - The reader arranges the cards themselves: use `platform/dashboard/configurable-dashboard`.
+- Money split by category over time: use `platform/dashboard/composition-dashboard`.
+- Real-user web vitals or one banded score: use `platform/dashboard/health-score-dashboard`.
 
 ## Building blocks
 
@@ -141,6 +142,20 @@ without icon, `Open <Product> dashboard`, to the product dashboard and view the 
 The header actions hold the `Period` `Select` and an outlined Refresh `IconButton` in a `Tooltip`;
 Refresh holds the charts at reduced opacity (`refetching`) while the data reloads.
 
+### Q. Usage — `StatTile`, `ChartCard`, `Chart`, `DataTable`, `Hint`, `Input`, `EmptyState` (optional)
+
+Variant Usage only: what the account's projects consumed in the period, against the previous period.
+Title `Data usage`. Six tiles: `Requests`, `Data transferred`, `Jobs run`, `Images processed`,
+`Requests inspected`, `Logs exported`, each with its period total, a sparkline and the change
+`vs previous 24 hours`. Consumption is neither good nor bad by itself, so these tiles do not pass
+`inverse`; pass it only on a metric where a rise is bad. Three cards follow:
+`Data transferred, this period vs previous` draws `This period` and `Previous period` as two series of
+the same metric (the current period declared first, so it takes the first series color), with the Line
+or Bar `ToggleGroup`; `Data transferred by project` is a labeled horizontal bar chart, largest first;
+`Usage by project` is a searchable (`Search projects`), paginated `DataTable` of requests and data
+transferred per project. The empty copy is `No usage yet` /
+`Usage appears here once a project serves requests.`
+
 ## Do
 
 - Keep the KPI row to the four numbers the reader checks first; put the rest in cards.
@@ -170,6 +185,7 @@ Refresh holds the charts at reduced opacity (`refetching`) while the data reload
 - **Overview:** footer links read `Open <Product> dashboard`; breakdown searches name what they match (`Search addresses, networks or countries`).
 - **Toasts:** `Query copied.` / `Paste it into any GraphQL client that sends your token.`; `The query could not be copied.`; `CSV exported.` with the file name.
 - **Metrics:** title `Real-time metrics`; tab labels are product names; aggregation tags name the math (`Sum`, `Median`, `Percentile`).
+- **Usage:** title `Data usage`, description `What your projects consumed in the period, against the previous period.`; card titles say what is compared (`Data transferred, this period vs previous`); series `This period`, `Previous period`.
 - **Empty state:** `No traffic yet` / `Metrics appear here once a service serves requests.`
 - **No-match state:** `No matching rows` / `Change the search.`
 
@@ -191,11 +207,14 @@ Refresh holds the charts at reduced opacity (`refetching`) while the data reload
 - Metrics: real-time metrics per product, a `PageTabs` strip of products and a `Period` `Select` in the header; each product shows four tiles and four area, line or stacked bar cards, and products with sub-dashboards switch them with a `ToggleGroup`, adding breakdown table cards.
 - Expanded: the Requests over time card open in the large `Dialog`, with the Line or Bar choice and a 420px plot.
 - MetricsOverview: six cross-product tiles and six highlight cards, each with a footer link to its product dashboard.
+- Usage: the Data usage page, consumption per meter and per project against the previous period.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
-- `platform/dashboard/data-dashboard` — the same grammar for usage per project, with the previous period overlaid.
+- `platform/dashboard/composition-dashboard` — when the total is money split by category.
+- `platform/dashboard/health-score-dashboard` — real-user web vitals and banded scores.
+- `platform/account/change-plan-drawer` — where usage limits are changed.
 - `platform/dashboard/configurable-dashboard` — when the reader arranges the cards.
 - `platform/dashboard/service-monitoring-dashboard` — latency percentiles and an alert rail.
 - `ChartCard` / `StatTile` — the card and tile every dashboard shares.
@@ -211,6 +230,7 @@ Refresh holds the charts at reduced opacity (`refetching`) while the data reload
 - `Metrics` — Real-time metrics per product: a PageTabs strip switches between Applications, Functions, Firewall, DNS and Data stream, and a Period Select in the page header (Last hour, Last 24 hours, Last 7 days, Last 30 days) drives every region. Each product shows its own four StatTiles with sparkline and change against the previous period, over four ChartCards of area, line or stacked bar Charts that share one crosshair. Products with more than one dashboard add a ToggleGroup under the tabs: Applications switches between Overview, Status codes (the status card over a status and upstream status table with search and an All, 2xx, 3xx, 4xx, 5xx status-class filter) and Request breakdown (an IP address table with search); Firewall adds Denied sources. Every card menu copies its GraphQL query and exports its rows as CSV.
 - `Expanded` — The Requests over time card opened from its Expand button: a large Dialog with the card title and its description, the Line or Bar ToggleGroup shared with the card, and the chart at a 420px plot (the table card opens with ten rows per page). Closing it returns focus to Expand. Every card's menu works: Copy query copies the card's GraphQL query and Export CSV downloads its rows, each confirmed by a toast.
 - `MetricsOverview` — The real-time metrics landing page across products: a Period Select and a Refresh button in the page header, six StatTiles (requests, data transferred, cache offload, status 5xx, requests denied, function invocations) with sparkline and change, and six highlight ChartCards from Applications, Firewall and Functions. Each card keeps the full header (Sum Tag, Line or Bar ToggleGroup, Expand into a large Dialog, Copy query and Export CSV) and ends in a footer Link to its product dashboard (Open Applications dashboard).
+- `Usage` — Consumption instead of traffic quality: the Data usage page, whose Period Select drives six StatTiles (requests, data transferred, jobs run, images processed, requests inspected, logs exported) with a sparkline and the change against the previous period, then data transferred this period over the previous one as two series, a labeled horizontal bar Chart ranking projects by data transferred, and a searchable, paginated DataTable of requests and data transferred per project.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/analytics-dashboard", { variant })`, or the file under `blocks/platform/dashboard/analytics-dashboard/variants/`.
 
@@ -483,12 +503,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     requests: {
       label: '+10.03%',
       severity: 'success',
-      icon: 'pi pi-arrow-up-right'
+      icon: 'ai ai-arrow-up-right'
     },
     statusCodes: {
       label: '+14.66%',
       severity: 'success',
-      icon: 'pi pi-arrow-up-right'
+      icon: 'ai ai-arrow-up-right'
     }
   }
 
@@ -743,7 +763,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="variations.requests"
@@ -761,7 +781,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests over time"
@@ -775,7 +795,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests over time"
@@ -831,7 +851,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   v-if="variations.statusCodes"
@@ -849,7 +869,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Status codes"
@@ -863,7 +883,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Status codes"
@@ -922,12 +942,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Requests by country"
@@ -941,7 +961,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests by country"
@@ -996,12 +1016,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top hosts"
@@ -1015,7 +1035,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top hosts"
@@ -1047,7 +1067,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -1073,7 +1093,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     key="empty-state-1"
                     v-if="!hosts.length"
                     size="small"
-                    icon="pi pi-chart-line"
+                    icon="ai ai-chart-line"
                     title="No traffic yet"
                     description="Metrics appear here once a service serves requests."
                   />
@@ -1081,7 +1101,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                     key="empty-state-2"
                     v-else
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -1192,7 +1212,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-chart-line"
+                  icon="ai ai-chart-line"
                   title="No traffic yet"
                   description="Metrics appear here once a service serves requests."
                 />

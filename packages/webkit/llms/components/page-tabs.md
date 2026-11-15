@@ -153,7 +153,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </template>
   </PageTabs>

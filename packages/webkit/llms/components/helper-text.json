@@ -43,7 +43,7 @@
    "type": "'helper' | 'invalid' | 'required' | 'disabled'",
    "default": "'helper'",
    "required": "false",
-   "doc": "Visual variant; `disabled` also prepends a `pi pi-lock` icon."
+   "doc": "Visual variant; `disabled` also prepends a `ai ai-lock` icon."
   }
  ],
  "events": [],

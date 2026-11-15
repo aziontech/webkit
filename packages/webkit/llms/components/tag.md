@@ -38,7 +38,7 @@
 | `severity` | `Severity \| 'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false | Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `medium` is 24px tall, `small` is 20px. |
 | `rounded` | `boolean` | `false` | false | Pill shape when true. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading icon. |
+| `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
 
 ## Slots
 
@@ -162,13 +162,13 @@
         label="Label"
         severity="primary"
         size="medium"
-        icon="pi pi-box"
+        icon="ai ai-box"
       />
       <Tag
         label="Label"
         severity="primary"
         size="medium"
-        icon="pi pi-box"
+        icon="ai ai-box"
         rounded
       />
     </div>
@@ -188,13 +188,13 @@
         label="Label"
         severity="primary"
         size="small"
-        icon="pi pi-box"
+        icon="ai ai-box"
       />
       <Tag
         label="Label"
         severity="primary"
         size="small"
-        icon="pi pi-box"
+        icon="ai ai-box"
         rounded
       />
     </div>

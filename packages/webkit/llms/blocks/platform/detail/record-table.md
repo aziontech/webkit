@@ -585,7 +585,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           <template #actions>
             <Button
               label="Documentation"
-              icon="pi pi-book"
+              icon="ai ai-book"
               kind="outlined"
               size="medium"
               href="https://example.com/docs/records"
@@ -593,7 +593,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             />
             <Button
               label="Add Record"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
               kind="outlined"
               size="medium"
             />
@@ -615,7 +615,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="pi pi-refresh"
+                    icon="ai ai-refresh"
                     kind="outlined"
                     size="medium"
                     :loading="loading"
@@ -628,7 +628,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   class="shrink-0"
                 >
                   <IconButton
-                    icon="pi pi-download"
+                    icon="ai ai-download"
                     kind="outlined"
                     size="medium"
                     :disabled="!matchingItems.length"
@@ -692,7 +692,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         >
                           <template #leading
                             ><i
-                              class="pi pi-pencil"
+                              class="ai ai-pencil"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -704,7 +704,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         >
                           <template #leading
                             ><i
-                              class="pi pi-trash"
+                              class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -716,7 +716,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                       key="empty-state-1"
                       v-if="status === 'no-match'"
                       size="medium"
-                      icon="pi pi-filter-slash"
+                      icon="ai ai-filter-slash"
                       title="No matching records"
                       description="No record matches these filters."
                     >
@@ -733,7 +733,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                       key="empty-state-2"
                       v-else
                       size="medium"
-                      icon="pi pi-list"
+                      icon="ai ai-list"
                       title="No records yet"
                       description="Add a record, or import a zone file, so this zone starts answering for example.com."
                     >
@@ -741,13 +741,13 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                           <Button
                             label="Add Record"
-                            icon="pi pi-plus"
+                            icon="ai ai-plus"
                             kind="secondary"
                             size="small"
                           />
                           <Button
                             label="Import zone file"
-                            icon="pi pi-upload"
+                            icon="ai ai-upload"
                             kind="outlined"
                             size="small"
                           />

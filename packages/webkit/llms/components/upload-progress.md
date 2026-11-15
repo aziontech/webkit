@@ -180,7 +180,7 @@
       label="Start upload"
       kind="secondary"
       size="medium"
-      icon="pi pi-upload"
+      icon="ai ai-upload"
       @click="start"
     />
     <UploadProgress

@@ -51,7 +51,7 @@
 | `directories` | `boolean` | `false` | false | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk. |
 | `disabled` | `boolean` | `false` | false | Ignores drags and drops: no active state, no events. |
 | `invalid` | `boolean` | `false` | false | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the glyph above the title. Empty draws the cloud-upload glyph (`pi pi-cloud-upload`). |
+| `icon` | `string` | `''` | false | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`ai ai-cloud-upload`). |
 
 ## Events
 
@@ -178,7 +178,7 @@
           label="Browse folder"
           kind="secondary"
           size="medium"
-          icon="pi pi-folder-open"
+          icon="ai ai-folder-open"
           @click="folderInput?.click()"
         />
       </div>

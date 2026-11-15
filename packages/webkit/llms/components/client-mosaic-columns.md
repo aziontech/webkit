@@ -53,7 +53,7 @@
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the link line ink follows `brand.ink`; the story text is `var(--text-default)` on `var(--bg-canvas)`.
 - `motion-reduce:before:transition-none` on the hover fill.
 - Touch target ≥40×40 px — each mark face spans its column.
-- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `pi-arrow-up-right` mirrors under right-to-left.
+- `reveal="hover"`: the list carries the one accessible name (`ariaLabel`, else the built-in "Customer stories"); each card is one link named "<link label>, <client>: <story>", so its logo is decorative (`alt=""`); focus opens the card the same way hover does and the ring is drawn inside the card; `ai-arrow-up-right` mirrors under right-to-left.
 
 ## Internationalization
 

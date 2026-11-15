@@ -10,19 +10,20 @@
 
 ## Asked as
 
-function invocations; invocation detail; function run; request path; trace waterfall; function logs; replay invocation; invocações da função; detalhe da invocação; execução da função; caminho da requisição; rastreamento
+function invocations; invocation detail; function run; request path; trace waterfall; function logs; replay invocation; invocações da função; detalhe da invocação; execução da função; caminho da requisição; rastreamento; one invocation; invocation summary; function invocation; invocação de função
 
 The page a user opens to understand one run of a function: did it work, how long did it take, where did the time go, and what did the code print. It reads top to bottom from the answer to the evidence: the invocation summary, the path the request travelled, the trace that measured each step, and the logs on the same clock. It is a page body for `ConsoleLayout`: the layout owns the rail, the header with the breadcrumb (Functions › the function › Invocations) and the `main`.
 
 ## When to use
 
+- Use invocations for one function run end to end (summary, trace, logs).
 - A function has run and the user needs one invocation end to end: its status, duration, request and outcome.
 - The user arrives from a function's list of runs, from an alert, or from a failed request in an event log.
 - Several services touch the request and the user must see which hop spent the time or failed.
 
 ## When not to use
 
-- Testing code you are still editing: use the TestRun variant of `platform/edit/code-editor`.
+- Testing code you are still editing: use the TestRun variant of `platform/edit/function-editor`.
 - Searching many requests or events across products: use an event log table, e.g. `platform/view/table-view`.
 - The overview of the function itself, its versions or deployments: use `platform/detail/details-page`.
 - Following a deployment as it builds: use `platform/detail/deployment-logs`.
@@ -90,8 +91,8 @@ A small `SectionHeader` over a copyable `LogView` whose lines are timed from the
 
 ## Related
 
-- `platform/edit/code-editor` — its TestRun variant runs the function before it ships, with the same trace and logs.
-- `platform/detail/details-page` — its Invocation variant is the summary card on its own.
+- `platform/edit/function-editor` — its TestRun variant runs the function before it ships, with the same trace and logs.
+- `platform/detail/details-page` — the overview of the function; this page owns the invocation summary card.
 - `platform/detail/deployment-logs` — the step logs of a deployment.
 - `shells/console` — the `ConsoleLayout` this page body renders in; see `skills/webkit-layout`.
 
@@ -187,7 +188,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'parse-request',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 4,
           duration: 12
         },
@@ -196,7 +197,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'fetch-origin',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 16,
           duration: 186
         },
@@ -205,7 +206,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'origin',
           name: 'dns-lookup',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 16,
           duration: 14
         },
@@ -214,7 +215,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'origin',
           name: 'tls-handshake',
           service: 'Security',
-          icon: 'pi pi-lock',
+          icon: 'ai ai-lock',
           start: 30,
           duration: 31
         },
@@ -223,7 +224,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'origin',
           name: 'origin-response',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 61,
           duration: 141
         },
@@ -232,7 +233,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'decode',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 202,
           duration: 54
         },
@@ -241,7 +242,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'transform',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 256,
           duration: 92
         },
@@ -289,7 +290,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'parse-request',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 4,
           duration: 11
         },
@@ -298,7 +299,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'fetch-origin',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 15,
           duration: 1201,
           status: 'error'
@@ -308,7 +309,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'origin',
           name: 'dns-lookup',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 15,
           duration: 12
         },
@@ -317,7 +318,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'origin',
           name: 'tls-handshake',
           service: 'Security',
-          icon: 'pi pi-lock',
+          icon: 'ai ai-lock',
           start: 27,
           duration: 34
         },
@@ -326,7 +327,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'origin',
           name: 'origin-response',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 61,
           duration: 1155,
           status: 'error',
@@ -363,7 +364,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'parse-request',
           service: 'Compute',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           start: 3,
           duration: 10
         },
@@ -372,7 +373,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           parentId: 'root',
           name: 'fetch-origin',
           service: 'Network',
-          icon: 'pi pi-send',
+          icon: 'ai ai-send',
           start: 13,
           duration: 155,
           status: 'running'
@@ -411,7 +412,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       {
         key: 'service',
         eyebrow: 'Service',
-        icon: 'pi pi-globe',
+        icon: 'ai ai-globe',
         title: 'storefront-prod',
         label: 'Live',
         severity: 'success',
@@ -424,7 +425,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       {
         key: 'resource',
         eyebrow: 'Resource',
-        icon: 'pi pi-box',
+        icon: 'ai ai-box',
         title: 'storefront',
         label: 'Active',
         severity: 'success',
@@ -450,7 +451,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       {
         key: 'origin',
         eyebrow: 'Origin',
-        icon: 'pi pi-server',
+        icon: 'ai ai-server',
         title: 'origin-assets',
         label: failed ? 'Timed out' : running.value ? 'Waiting' : 'Answered',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
@@ -556,7 +557,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   label="Replay"
                   kind="secondary"
                   size="medium"
-                  icon="pi pi-replay"
+                  icon="ai ai-replay"
                   :disabled="running"
                   @click="replay"
                 />
@@ -571,7 +572,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                         label="Recent"
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-history"
+                        icon="ai ai-history"
                       />
                     </Tooltip>
                   </DropdownMenu.Trigger>
@@ -597,7 +598,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   <DropdownMenu.Trigger>
                     <Tooltip text="Invocation actions">
                       <IconButton
-                        icon="pi pi-ellipsis-h"
+                        icon="ai ai-ellipsis-h"
                         kind="outlined"
                         size="medium"
                         aria-label="Invocation actions"
@@ -623,7 +624,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     >
                       <template #leading>
                         <i
-                          class="pi pi-cog"
+                          class="ai ai-cog"
                           aria-hidden="true"
                         />
                       </template>
@@ -658,7 +659,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
               >
                 <i
                   :data-severity="severity"
-                  class="pi pi-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-contrast)"
+                  class="ai ai-arrow-right shrink-0 text-(--text-muted) data-[severity=danger]:text-(--danger-contrast)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-label-code-sm text-(--text-muted)">{{
@@ -741,7 +742,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                     >
                       <Tooltip :text="`Show ${node.title} in the trace`">
                         <IconButton
-                          icon="pi pi-align-left"
+                          icon="ai ai-align-left"
                           kind="outlined"
                           size="small"
                           :aria-label="`Show ${node.title} in the trace`"

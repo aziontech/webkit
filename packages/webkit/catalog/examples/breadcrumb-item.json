@@ -12,8 +12,8 @@
   },
   {
    "name": "WithIcon",
-   "summary": "Segment with a leading PrimeIcons icon before the label.",
-   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n    show-icon\n    icon=\"pi pi-box\"\n  />\n</template>"
+   "summary": "Segment with a leading icon before the label.",
+   "sfc": "<script setup>\n  import BreadcrumbItem from '@aziontech/webkit/breadcrumb-item'\n</script>\n\n<template>\n  <BreadcrumbItem\n    label=\"Page Name\"\n    href=\"#\"\n    show-icon\n    icon=\"ai ai-box\"\n  />\n</template>"
   }
  ]
 }

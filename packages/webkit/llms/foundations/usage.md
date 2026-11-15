@@ -48,7 +48,7 @@ The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) ar
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
-create flow (`platform/create/*`, headed by the `headers/creation-header` bar) or a
+create flow (`platform/create/*`, headed by the `top-bars/creation-bar` bar) or a
 signed-out screen (`platform/auth`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`).
 
@@ -150,7 +150,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
-- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, `pi pi-<name>`, and `ai-cor ai-<name>` for a colour brand icon.
+- ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, and `ai-cor ai-<name>` for a colour brand icon. WebKit 6 uses only the Azion set: write `ai ai-check`, never the PrimeIcons `pi pi-check` (the default `@aziontech/icons` entry no longer loads it; `webkit migrate v6` rewrites old classes).
 - ✅ A webkit component reused instead of a hand-rolled or third-party equivalent.
 
 ## Must Not Have

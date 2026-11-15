@@ -104,7 +104,7 @@ Unbound, each one keeps its own local state.
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s`, `border-e`, `ms-auto`); the navigation sits at the inline start and the tools and side split panel at the inline end.
-- Icons: the position toggle icons (`pi pi-window-maximize` family) are not mirrored; close is not mirrored.
+- Icons: the position toggle icons (`ai ai-window-maximize` family) are not mirrored; close is not mirrored.
 - Keyboard: on a side split panel, the arrow that points away from the panel grows it — `ArrowLeft` in LTR, `ArrowRight` in RTL.
 - User data: none.
 
@@ -208,7 +208,7 @@ Unbound, each one keeps its own local state.
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
-                  icon="pi pi-bars"
+                  icon="ai ai-bars"
                   aria-label="Open navigation"
                   kind="outlined"
                   size="medium"
@@ -223,7 +223,7 @@ Unbound, each one keeps its own local state.
                 @open="searchOpen = true"
               />
               <IconButton
-                icon="pi pi-question-circle"
+                icon="ai ai-question-circle"
                 aria-label="Help"
                 kind="outlined"
                 size="medium"
@@ -353,7 +353,7 @@ Unbound, each one keeps its own local state.
           <EmptyState
             title="No domain yet"
             description="Add a domain to route its traffic to this workload."
-            icon="pi pi-globe"
+            icon="ai ai-globe"
           >
             <template #actions>
               <Button

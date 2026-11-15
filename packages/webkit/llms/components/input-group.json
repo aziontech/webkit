@@ -68,7 +68,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), a PrimeIcons `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
+   "notes": "On the **root**: the full row of children in visual order — any mix of `<InputGroup.Addon>`, `<Button>`, `<Select>`, `<Input>`, raw `<input>`. Order in the template is the order rendered left-to-right. On **`<InputGroup.Addon>`**: the addon content — text (`https://`, `.com`, `$`), an Azion icon `<i>`, or any small inline node; kept short by convention (long content breaks the fixed row height)."
   }
  ],
  "styleSeam": false,

@@ -19,7 +19,7 @@
 - Put limits in the schema (`minimum`, `maxLength`, `pattern`, `enum`) so the form checks them; say the rule in the `description` when it is a `pattern`, since the built-in message cannot name it.
 - Keep the default `validate-on="blur"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
-- Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
+- Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-validation rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
 - Use a `field:<path>` slot for a control the schema cannot express (`RadioGroup` cards, a resource picker); the slot keeps the label, description and messages.
 - Do not rely on unsupported keywords (`$ref`, `anyOf`, `allOf`, `if`/`then`/`else`, `uniqueItems`, `multipleOf`, `patternProperties`, a `oneOf` without a `discriminator`): they are ignored, so validate them on the server. Express an `if`/`then` as `ui[path].when`.
 - Define `ui` once in the script, not inline in the template: a new `ui` object rebuilds the fields and seeds defaults again.

@@ -22,7 +22,7 @@ The Personal tokens page of the account settings. A person creates a token for a
 ## When not to use
 
 - Team or service credentials with roles and scopes managed by an admin: start from `platform/account/team-permissions` and add a scope field to the create drawer.
-- Secrets the product stores and shows again (environment variables): use `platform/edit/attribute-editor` with masked values.
+- Secrets the product stores and shows again (environment variables): use `platform/edit/variables` with masked values.
 - A single key shown on a resource's details page: use `CopyButton` beside the value in `platform/detail/details-page`.
 
 ## Building blocks
@@ -429,7 +429,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/personal-tokens"
@@ -437,7 +437,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           />
           <Button
             label="Create Personal Token"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
             @click="openCreate"
@@ -463,7 +463,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="refreshing"
@@ -476,7 +476,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -514,14 +514,14 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           <template #content>
             <EmptyState
               size="medium"
-              icon="pi pi-key"
+              icon="ai ai-key"
               title="No personal tokens yet"
               description="Create a token to call the API from a script, a CI job or the CLI."
             >
               <template #actions>
                 <Button
                   label="Create Personal Token"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="secondary"
                   size="small"
                   @click="openCreate"
@@ -614,7 +614,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching tokens"
                   description="No token matches these filters."
                 >

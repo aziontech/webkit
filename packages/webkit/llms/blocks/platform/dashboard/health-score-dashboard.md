@@ -1,16 +1,16 @@
 # HealthScoreDashboard (`platform/dashboard/health-score-dashboard`)
 
-> A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `Item`, `PageHeader`, `Select`, `Skeleton`, `StatTile`, `Tag`, `Tracker` and `Alert`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A health score dashboard: how well something performs for the people who use it, read as one score out of 100 and its bands. A page heading with the period Select sits over the overall score, a ChartCard with the figure, its band Tag (Good at 80 or more, Fair from 50 to 79, Poor under 50), the top cause of poor samples and a Line Chart of the score per hour. Two ChartCards rank the score per application and per location in a BarList, lowest first, each row naming its top cause. An hourly score card gives every application a Tracker strip, one block per hour colored by band, with its current band Tag at the end of the row. Under the grid, a Card lists the open incidents as Item rows: what is affected, the cause, how many devices and what share of samples, when it opened, and its band. Built from `BarList`, `Card`, `Chart`, `ChartCard`, `EmptyState`, `Hint`, `Item`, `PageHeader`, `Select`, `Skeleton`, `StatTile`, `Tag`, `Tracker` and `Alert`. The RealUser variant shows the real-user web vitals behind such a score: median page load time, largest contentful paint, first input delay and sessions, with a trend tile per vital. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/health-score-dashboard/health-score-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/health-score-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Tracker](../../../components/tracker.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-ui-states`
 
 ## Asked as
 
-health score; health dashboard; performance score; web vitals; score bands; quality score; pontuação de saúde; painel de saúde; nota de desempenho
+health score; health dashboard; performance score; web vitals; score bands; quality score; pontuação de saúde; painel de saúde; nota de desempenho; real user monitoring; rum; core web vitals; page load time; monitoramento de usuário real; banded score
 
 The page that answers "how well does this work for the people who use it, and where is it worst?".
 Experience is reduced to one score out of 100 with three bands (Good at 80 or more, Fair from 50 to 79,
@@ -22,6 +22,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use health-score-dashboard when many signals roll up into one banded score (including real-user web vitals).
 - Many raw signals (latency, packet loss, DNS time, Wi-Fi signal) are combined into one score the
   reader can act on.
 - The score has fixed bands that mean the same thing everywhere on the page.
@@ -99,6 +100,18 @@ One `Item` per incident, with `href` to the incident's page (`/incidents/inciden
 is a link: what is affected, the cause, how many devices and what share of samples, when it opened,
 and its band.
 
+### N. Real-user monitoring — `PageHeader`, `Select`, `StatTile`, `Hint` (optional)
+
+Variant RealUser only: the timings measured in the reader's browsers that such a score is built
+from. Title `Real-user monitoring`, and a medium Period `Select` (`Last hour`, `Last 24 hours`,
+`Last 7 days`, `Last 30 days`) in the `PageHeader` actions drives every figure. Four vitals
+`StatTile`s (`kind="sans"`) lead: `Page load time`, `Largest contentful paint`, `First input delay`,
+`Sessions`, each a median value beside its unit (`s`, `ms`, `K`) with no delta, and a `Hint` in the
+aside that defines the timing. Under them, a two-column grid of trend `StatTile`s, one per vital,
+each with the latest value, its unit, a sparkline of the period and the period name in the aside.
+A timing has no "previous period" the reader acts on here, so these tiles carry no delta and no
+`inverse`.
+
 ## Do
 
 - Use the same three bands, with the same thresholds and words, in every region.
@@ -118,6 +131,7 @@ and its band.
 - **Title:** `Experience score`.
 - **Band words:** one word each. `Good`, `Fair`, `Poor`.
 - **Cause:** subject, a middle dot, the cause in lowercase. `CRM · slow DNS lookups`.
+- **RealUser:** title `Real-user monitoring`, description `Real-user timings collected in the browser, for the selected period.`; tile labels are the timing in sentence case (`First input delay`); the aside of a trend tile is the period name (`Last 24 hours`).
 - **Empty state:** name the period. `No open incidents in the last 24 hours` / `An incident opens when an application or a location stays poor for several samples in a row.`
 
 ## Accessibility
@@ -133,6 +147,7 @@ and its band.
 - Default: the scored period.
 - Loading: the chart, rankings and trackers render their own `Skeleton`; incidents hold Skeleton rows.
 - Empty: a period with no samples; the score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
+- RealUser: the real-user monitoring page; the vitals and the trend tiles follow the Period select.
 - Failed: the request failed; the score shows a dash, and every region keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
@@ -147,6 +162,7 @@ and its band.
 - `Loading` — While the period loads, the chart, the rankings and the trackers render their own Skeleton and the incidents hold Skeleton rows, so the page does not reflow when data arrives.
 - `Empty` — A period with no samples. The score shows a dash with no band, and every region keeps its box with an empty state that names the period and says what fills it.
 - `Failed` — The request for the period failed: the score shows a dash, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `RealUser` — Real-user monitoring: a Period Select in the header drives four vitals StatTiles (page load time, largest contentful paint, first input delay, sessions) that read a median value beside its unit with no delta and a Hint on the label, over a two-column grid of trend StatTiles with the latest value, a sparkline of the period and the period name in the aside.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/health-score-dashboard", { variant })`, or the file under `blocks/platform/dashboard/health-score-dashboard/variants/`.
 
@@ -1119,7 +1135,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'incident-03',
       name: 'Video calls',
       scope: 'Application',
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       devices: 34,
       share: 12,
       cause: 'Packet loss',
@@ -1134,7 +1150,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'incident-02',
       name: 'Travel',
       scope: 'Location',
-      icon: 'pi pi-map-marker',
+      icon: 'ai ai-map-marker',
       devices: 9,
       share: 31,
       cause: 'High latency',
@@ -1149,7 +1165,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'incident-01',
       name: 'File storage',
       scope: 'Application',
-      icon: 'pi pi-th-large',
+      icon: 'ai ai-th-large',
       devices: 18,
       share: 7,
       cause: 'Slow server response',
@@ -1358,7 +1374,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-chart-bar"
+              icon="ai ai-chart-bar"
               :title="'No samples in ' + phrase"
               description="Each application gets a row once its first sample arrives. Select a longer period."
             />
@@ -1442,7 +1458,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           >
             <EmptyState
               size="small"
-              icon="pi pi-check-circle"
+              icon="ai ai-check-circle"
               :title="'No open incidents in ' + phrase"
               description="An incident opens when an application or a location stays poor for several samples in a row."
             />

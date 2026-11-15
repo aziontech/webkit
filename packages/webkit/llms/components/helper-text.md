@@ -36,7 +36,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Fallback text when the default slot is empty. |
-| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false | Visual variant; `disabled` also prepends a `pi pi-lock` icon. |
+| `kind` | `'helper' \| 'invalid' \| 'required' \| 'disabled'` | `'helper'` | false | Visual variant; `disabled` also prepends a `ai ai-lock` icon. |
 
 ## Slots
 

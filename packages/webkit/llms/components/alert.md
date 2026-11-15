@@ -44,7 +44,7 @@
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
 | `label` | `string` | `''` | false | Fallback message copy when the default slot is empty. |
 | `title` | `string` | `''` | false | Bold heading above the message copy; hidden when empty. |
-| `icon` | `string` | `''` | false | PrimeIcons class override for the leading icon. |
+| `icon` | `string` | `''` | false | Azion icon class override for the leading icon. |
 | `actionLabel` | `string` | `''` | false | Label for the built-in secondary action button; hidden when empty. |
 | `closable` | `boolean` | `false` | false | When true, shows a close control that dismisses the message. |
 | `life` | `number` | `0` | false | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |

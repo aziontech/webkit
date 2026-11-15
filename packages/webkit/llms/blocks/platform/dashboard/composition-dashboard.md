@@ -10,7 +10,7 @@
 
 ## Asked as
 
-composition dashboard; spend breakdown; cost by category; donut chart dashboard; stacked area chart; top contributors; mix over time; painel de composição; gastos por categoria; custos por categoria
+composition dashboard; spend breakdown; cost by category; donut chart dashboard; stacked area chart; top contributors; mix over time; painel de composição; gastos por categoria; custos por categoria; total by category over time; spend by category
 
 The page that answers "what is this total made of, and how did the mix move?". The block's example is
 the organization's monthly spend: the total and its three largest categories first, then the mix over
@@ -21,6 +21,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use composition-dashboard when a total breaks into categories over time.
 - One total splits into a small number of exclusive categories (up to six, plus Other).
 - The reader needs both the current split and how it changed over time.
 - The reader has to find the individual items that drive the largest share.
@@ -30,7 +31,6 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - The parts are not exclusive or do not sum to the total: use a multi-series line in
   `platform/dashboard/analytics-dashboard` instead of a stack or a donut.
 - The reader tracks progress against targets: use `platform/dashboard/executive-summary-dashboard`.
-- Steps that people drop out of: use `platform/dashboard/funnel-cohort-dashboard`.
 - Changing the plan that drives the spend: use `platform/account/change-plan-drawer`.
 
 ## Building blocks
@@ -306,7 +306,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'web-app',
       rank: 1,
       name: 'web-app',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       category: 'Compute',
       amount: 6200,
       share: 16.1,
@@ -316,7 +316,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'worker-pool',
       rank: 2,
       name: 'worker-pool',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       category: 'Compute',
       amount: 5900,
       share: 15.3,
@@ -326,7 +326,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'orders-db',
       rank: 3,
       name: 'orders-db',
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       category: 'Database',
       amount: 5400,
       share: 14,
@@ -336,7 +336,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'api-service',
       rank: 4,
       name: 'api-service',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       category: 'Compute',
       amount: 4800,
       share: 12.5,
@@ -346,7 +346,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'analytics-warehouse',
       rank: 5,
       name: 'analytics-warehouse',
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       category: 'Database',
       amount: 4000,
       share: 10.4,
@@ -356,7 +356,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'media-files',
       rank: 6,
       name: 'media-files',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       category: 'Storage',
       amount: 3700,
       share: 9.6,
@@ -366,7 +366,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'public-egress',
       rank: 7,
       name: 'public-egress',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       category: 'Networking',
       amount: 2600,
       share: 6.8,
@@ -376,7 +376,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'backups',
       rank: 8,
       name: 'backups',
-      icon: 'pi pi-folder',
+      icon: 'ai ai-folder',
       category: 'Storage',
       amount: 2300,
       share: 6,
@@ -386,7 +386,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'logs-pipeline',
       rank: 9,
       name: 'logs-pipeline',
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       category: 'Monitoring',
       amount: 2100,
       share: 5.5,
@@ -396,7 +396,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       id: 'load-balancer',
       rank: 10,
       name: 'load-balancer',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       category: 'Networking',
       amount: 1500,
       share: 3.9,
@@ -600,7 +600,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
           </div>
           <Button
             label="Export CSV"
-            icon="pi pi-download"
+            icon="ai ai-download"
             kind="outlined"
             size="medium"
             :disabled="loading"
@@ -656,7 +656,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -712,7 +712,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Current split"
@@ -756,7 +756,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top contributors"
@@ -785,7 +785,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-chart-bar"
+                  icon="ai ai-chart-bar"
                   title="No spend in this range"
                   description="Nothing was billed to the organization in the selected period."
                 />
@@ -837,10 +837,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
-                      ? 'pi pi-arrow-up-right'
+                      ? 'ai ai-arrow-up-right'
                       : row.change < 0
-                        ? 'pi pi-arrow-down-right'
-                        : 'pi pi-minus'
+                        ? 'ai ai-arrow-down-right'
+                        : 'ai ai-minus'
                   "
                   size="small"
                 />

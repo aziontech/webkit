@@ -20,8 +20,8 @@ The application shell every signed-in page renders inside. The user browses and 
 
 ## When not to use
 
-- Create, edit and deploy flows: use the focused shell headed by `headers/creation-header`, with no rail.
-- Signed-out screens: `platform/auth` with `headers/auth-header`.
+- Create, edit and deploy flows: use the focused shell headed by `top-bars/creation-bar`, with no rail.
+- Signed-out screens: `platform/auth` with `top-bars/auth-bar`.
 - Documentation and marketing: `shells/documentation`, `shells/website`.
 - A page needing the resizable split panel: compose `AppLayout` directly for that page.
 
@@ -117,8 +117,7 @@ Flush (`:padded="false"`), standing in for the page body; the list page's contro
 
 ## Related
 
-- `headers/resource-header` — this shell's header on its own.
-- `headers/creation-header` — the focused shell for create, edit and deploy.
+- `top-bars/creation-bar` — the focused shell for create, edit and deploy.
 - `platform/view/table-view`, `platform/detail/details-page`, `platform/dashboard/home-dashboard` — the page bodies rendered in the slot.
 
 ## Variants
@@ -266,7 +265,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'pi pi-cog',
+          icon: 'ai ai-cog',
           kind: 'drill',
           groups: [
             {
@@ -339,7 +338,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
           placement="bottom"
         >
           <IconButton
-            icon="pi pi-plus-circle"
+            icon="ai ai-plus-circle"
             kind="primary"
             size="medium"
             aria-label="Create"
@@ -362,7 +361,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
           label="Create"
           kind="primary"
           size="medium"
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
         />
         <ButtonHighlight
           label="Agent"
@@ -398,7 +397,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         <Command.Item value="action:create">
           <template #prefix>
             <i
-              class="pi pi-plus-circle"
+              class="ai ai-plus-circle"
               aria-hidden="true"
             />
           </template>
@@ -407,7 +406,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         <Command.Item value="action:theme">
           <template #prefix>
             <i
-              class="pi pi-moon"
+              class="ai ai-moon"
               aria-hidden="true"
             />
           </template>
@@ -430,7 +429,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         >
           <template #trailing>
             <i
-              class="pi pi-cog"
+              class="ai ai-cog"
               aria-hidden="true"
             />
           </template>
@@ -441,7 +440,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         >
           <template #trailing>
             <i
-              class="pi pi-key"
+              class="ai ai-key"
               aria-hidden="true"
             />
           </template>
@@ -465,7 +464,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         >
           <template #trailing>
             <i
-              class="pi pi-book"
+              class="ai ai-book"
               aria-hidden="true"
             />
           </template>
@@ -476,7 +475,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
         >
           <template #trailing>
             <i
-              class="pi pi-sign-out"
+              class="ai ai-sign-out"
               aria-hidden="true"
             />
           </template>
@@ -509,7 +508,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
           <template #actions>
             <Button
               label="Documentation"
-              icon="pi pi-book"
+              icon="ai ai-book"
               kind="outlined"
               size="medium"
               href="https://www.azion.com/en/documentation/"
@@ -517,7 +516,7 @@ Each variant is the same screen in another state: `get_pattern("shells/console",
             />
             <Button
               label="Create Application"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
               kind="outlined"
               size="medium"
             />

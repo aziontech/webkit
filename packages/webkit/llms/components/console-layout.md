@@ -221,7 +221,7 @@ packages/webkit/src/components/layout/console-layout/
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'pi pi-cog',
+          icon: 'ai ai-cog',
           kind: 'drill',
           groups: [
             {
@@ -260,7 +260,7 @@ packages/webkit/src/components/layout/console-layout/
         placement="bottom"
       >
         <IconButton
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
           kind="primary"
           size="medium"
           aria-label="Create"
@@ -271,7 +271,7 @@ packages/webkit/src/components/layout/console-layout/
           label="Create"
           kind="primary"
           size="medium"
-          icon="pi pi-plus-circle"
+          icon="ai ai-plus-circle"
         />
         <ButtonHighlight
           label="Agent"
@@ -354,7 +354,7 @@ packages/webkit/src/components/layout/console-layout/
       return () =>
         h(Button, {
           label: 'Find a workload',
-          icon: 'pi pi-search',
+          icon: 'ai ai-search',
           kind: 'outlined',
           size: 'medium',
           onClick: openSearch
@@ -422,7 +422,7 @@ packages/webkit/src/components/layout/console-layout/
         <Command.Item value="action:sidebar">
           <template #prefix>
             <i
-              :class="navigationOpen ? 'pi pi-angle-double-left' : 'pi pi-angle-double-right'"
+              :class="navigationOpen ? 'ai ai-angle-double-left' : 'ai ai-angle-double-right'"
               aria-hidden="true"
             />
           </template>

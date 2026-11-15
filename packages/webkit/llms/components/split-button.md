@@ -38,7 +38,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `label` | `string` | `''` | false | Visible label text on the primary command button. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the primary button's leading icon. |
+| `icon` | `string` | `''` | false | Azion icon class for the primary button's leading icon. |
 | `items` | `SplitButtonItem[]` | `[]` | false | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false | Visual variant applied to both joined segments. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
@@ -113,9 +113,9 @@
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },
-    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
+    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
   ]
 </script>
 
@@ -124,7 +124,7 @@
     kind="primary"
     size="large"
     label="Save"
-    icon="pi pi-check"
+    icon="ai ai-check"
     :items="items"
   />
 </template>
@@ -137,9 +137,9 @@
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },
-    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
+    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
   ]
 </script>
 
@@ -171,9 +171,9 @@
   import SplitButton from '@aziontech/webkit/split-button'
 
   const items = [
-    { label: 'Update', value: 'update', icon: 'pi pi-refresh' },
-    { label: 'Duplicate', value: 'duplicate', icon: 'pi pi-copy' },
-    { label: 'Delete', value: 'delete', icon: 'pi pi-trash', disabled: true }
+    { label: 'Update', value: 'update', icon: 'ai ai-refresh' },
+    { label: 'Duplicate', value: 'duplicate', icon: 'ai ai-copy' },
+    { label: 'Delete', value: 'delete', icon: 'ai ai-trash', disabled: true }
   ]
 </script>
 

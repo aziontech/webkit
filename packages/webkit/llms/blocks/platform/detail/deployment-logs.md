@@ -1,102 +1,110 @@
 # DeploymentLogs (`platform/detail/deployment-logs`)
 
-> The deploy logs block on its own: a Logs row that reports the step count and the step in flight while the run goes, or the outcome Tag, the time and the Phased or Complete switch once it has settled; then the pipeline as an Accordion of steps, each with its status glyph, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view; and a flush Progress on the bottom edge while it runs. Inside a deploy flow card it moves its controls up to the card header; on a deployment detail page it sits inside a Deployment logs card without its Logs row and progress bar. Built from Accordion, LogView, Spinner, Tag, ToggleGroup and Progress.
+> The deploy logs of a build or deploy run with known steps, wherever it is shown: `LogView.Steps` lists the pipeline as an Accordion of steps, each with its status glyph and the status in words for assistive technology, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view, with a flush Progress on the bottom edge while it runs. On its own its toolbar row reports the step count and the step in flight, or the outcome Tag, the time and the Phased or Complete switch once it has settled. In a create flow (InCreateFlow) it sits in a Card titled Deployment that opens on a cloning splash (a source tile, a marching dashed connector and a large destination tile) with a Cloning StatusIndicator, and once a run fails the card header carries the view switch and its footer Edit and Redeploy. On a deployment page (DeploymentDetail, DeploymentFailed, DeploymentQueued) it is the Deployment logs card under a status banner and the Deployment details card. Built from `LogView` (`LogView.Steps`), `Tag`, `Card`, `StatusIndicator`, `ToggleGroup` and `Button`; the deployment pages add `Alert`, `Accordion`, `Avatar`, `CopyButton`, `DropdownMenu`, `IconButton`, `EmptyState` and `Tooltip`. The deployment pages are page bodies for ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/detail/deployment-logs/deployment-logs.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/deployment-logs")`
-- Components: [Accordion](../../../components/accordion.md), `LogViewContent`, [LogView](../../../components/log-view.md), [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md)
-- Skills: `webkit-ui-states`, `webkit-errors`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CopyButton](../../../components/copy-button.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [LogView](../../../components/log-view.md), [StatusIndicator](../../../components/status-indicator.md), [Tag](../../../components/tag.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Skills: `webkit-ui-states`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
 
-deployment logs; deploy logs; build logs; pipeline steps; log viewer; phased logs; logs do deploy; logs de build; etapas do pipeline
+deployment logs; deploy logs; build logs; pipeline steps; log viewer; phased logs; logs do deploy; logs de build; etapas do pipeline; deployment progress; creation progress; deployment status; build pipeline; deploy failed; status da implantação; deploy flow; fluxo de deploy; first deploy; primeiro deploy; deployment detail; deployment failed; deployment queued; deployment page; página da implantação; implantação na fila
 
-The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why. This block shows the pipeline as ordered steps, each with its status, its one-line outcome, its time and its own log output, so the user can follow the run as it streams, then read the full output once it settles.
+The user started a deployment and wants to know where it is, whether it went live and, when it did not, exactly which step failed and why. This block shows the pipeline as ordered steps, each with its status, its one-line outcome, its time and its own log output, so the user can follow the run as it streams, then read the full output once it settles. It is the one deploy-log block: the same steps sit in the deploy card of a create flow and on a deployment's own page.
 
 ## When to use
 
-- Inside the deploy flow card of a create flow, while the deployment runs and once it finishes.
-- In the Deployment logs card of a deployment detail page, for a run that has already settled.
+- Use deployment-logs wherever a build or deploy run with known steps is shown, in a create flow (InCreateFlow) or on a deployment page.
+- Inside the deploy card of a create flow (a template deploy, an import from Git, a provisioning run), from the moment Deploy is pressed until the run finishes or fails.
+- On a deployment's own page, under its status banner and Deployment details card (DeploymentDetail, DeploymentFailed, DeploymentQueued).
 - Any build or deploy pipeline with a fixed, known list of steps whose output the user needs to read.
 
 ## When not to use
 
-- The whole deploy screen of a create flow, with its card, header and next steps: use `platform/create/deployment-flow`.
-- The deployment page itself, with its status banner and facts: use the DeploymentDetail state of `platform/detail/details-page`.
+- A run of half a minute or more the user is expected to leave and come back to: use `platform/states/async-submit`, which reports the outcome where the user returns (its logs card composes the same `LogView.Steps`).
+- The outcome once a create flow's run has finished: hand the column to `platform/create/deploy-success`; do not keep the finished card as the last screen.
+- A dropped folder being uploaded before anything is built: use the Initializing overlay in `platform/states/project-intake`.
+- The overview of the resource the deployment belongs to: use `platform/detail/details-page`.
+- One function run with its request path and trace: use `platform/detail/invocations`.
 - Events or logs explored over time with filters and a chart: use `platform/view/split-view`.
-- A short async action that finishes in seconds: use the button's loading state from `platform/states/async-submit`.
 
 ## Building blocks
 
-### A. Step list — `Accordion` (required)
+### A. Steps — `LogView.Steps` (required)
 
-A single, collapsible `Accordion` with one item per pipeline step, in run order. Each trigger holds a status glyph, the step title, one sentence of outcome and the step time. Only one step is open at a time: the running step while the run goes, the failed step after a failure, the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted.
+`LogView.Steps` (`@aziontech/webkit/log-view`, or `@aziontech/webkit/log-view-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogView` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogView`.
 
-### B. Running indicator — `Spinner` (required)
+### B. Toolbar row — `LogView.Steps` header slot (required)
 
-The glyph of the step in flight. Done steps show a success check, a failed step a danger cross, skipped steps a muted minus and pending steps a dashed ring. The running step's sentence also shimmers, only when motion is allowed.
+The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome Tag and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogView`, nothing from steps that never ran.
 
-### C. Step output — `LogView`, `LogViewContent` (required)
+## Create-flow card (InCreateFlow, InCreateFlowFailed)
 
-Each open step shows its own borderless `LogView` with its lines, typed `text`, `success` or `warning`. A pending step shows the loading label "Waiting to start…" and `LogViewContent` gives an empty slot, "No log lines yet.". While the run goes, `:copyable="false"`; once it settles, every step log and the Complete view get a copy button. The Complete view replaces the accordion with one continuous `LogView` of every line printed, nothing from steps that never ran.
+`Card :padded="false"` at the full width of the flow's column, titled Deployment (Provisioning when the flow provisions rather than deploys). Its header carries the run status opposite the title: a loading `StatusIndicator` with `severity="info"`, Cloning during the splash, then Building (or Creating). The content opens on the cloning splash, which fades in: a small source tile (the Git provider glyph), a dashed connector whose dashes march toward the destination (`animate-flow-dash`, still under `motion-reduce`) and a large destination tile, with one polite live line naming the repository and the scope. Once the first step starts, the content becomes the steps with their controls moved up to the card header: after a failure the header swaps the indicator for the Phased or Complete `ToggleGroup` bound to `v-model:view` (`:view-switch="false"` on the steps) and the footer holds Edit (outlined, back to the form with the values kept) and Redeploy (primary, with its loading state and a Redeploying indicator). Every deploy surface ends a failure with the same two actions (`platform/create/deploy-drawer`, `platform/create/deploy-progress-dialog`, `platform/states/async-submit`, `platform/create/release-impact`).
 
-### D. Run progress — `Progress` (optional)
+## Deployment page (DeploymentDetail, DeploymentFailed, DeploymentQueued)
 
-A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment progress"`, only while the run goes. Its value is the share of steps done (3 of 8 is 38), computed from the steps, never typed in. It is dropped on a deployment detail page and once the run settles.
+A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger with Redeploy; info while queued), the Deployment details card with every fact and its Deployment Settings band, then the Deployment logs card. The logs card header carries the duration or the status and the Phased or Complete switch; the steps drop their own toolbar row and progress. Visit stays disabled until the deployment is live. A queued run shows a not-started `EmptyState` in place of the steps, with no switch.
 
 ## Do
 
 - Show a step's time only once it has run (done, running, failed); a pending or skipped step shows none.
-- Show the Logs row, titled by a level-2 "Deployment logs" heading, with the step count and the step in flight, both computed from the steps, e.g. "3/8 steps" and "Build", while the run goes.
-- Once settled, replace the count with the outcome `Tag`, the total time, and a medium `ToggleGroup` between Phased and Complete labelled "Log view".
 - Open the failed step automatically and mark every step after it Skipped.
-- Inside a deploy flow card, move the Logs row controls up to the card header; on a deployment page, drop the Logs row and progress and put the controls in the Deployment logs card header.
-- Keep step times in a code label at the end of each trigger.
+- Show copy buttons only once the run has settled.
+- In a create flow, open on the cloning splash the moment Deploy is pressed, so the column never goes blank between the form and the first log line, and hand over to `platform/create/deploy-success` a beat after the last line prints.
+- Inside a card, move the toolbar controls up to the card header.
 
 ## Don't
 
+- Don't hand-build the step list from `Accordion`, `LogView` and status glyphs; compose `LogView.Steps`.
 - Don't open several steps at once or auto-expand every step after a success.
-- Don't show copy buttons while lines still stream.
 - Don't print lines for steps that never ran in the Complete view.
 - Don't summarize the error in a vague sentence; the failed step shows the reason in full.
-- Don't animate the shimmer or the spinner when the user prefers reduced motion.
+- Don't put the run status in a toast while the user watches it; it belongs in the toolbar row or the card header.
+- Don't auto-advance to the success screen after a failure, or add a Cancel to the card while the run goes.
 
 ## Copy
 
-- **Header:** "Deployment logs".
-- **Running status:** count and step, e.g. "3/8 steps", "Build".
+- **Header:** "Deployment logs"; inside a card, "Logs" under a card titled "Deployment" or "Provisioning".
+- **Running status:** count and step, e.g. "3/8 steps", "Build"; the card indicator a progressive word, e.g. "Cloning", "Building".
 - **Outcome tags:** a past-tense word, or the failure and its step, e.g. "Completed", "Failed on Routing Rules".
 - **Run time:** past tense with the duration, e.g. "Deployed in 42s", "Failed after 42s".
 - **Step titles:** a short noun phrase in sentence case, keeping a product name as written, e.g. "Access token", "Install dependencies", "Routing Rules"; descriptions state the outcome without a period, e.g. "478 packages installed".
-- **Waiting:** "Waiting to start…", the only place an ellipsis appears, because the step is in progress.
 - **Skipped step:** two sentences, never a dash, e.g. "Never ran. The deployment stopped at Routing Rules."
-- **View switch:** "Phased" and "Complete".
+- **Splash line:** names source and destination in fragments, e.g. "Cloning acme/web-app to acme".
 - Follow `skills/webkit-microcopy` and `skills/webkit-errors`: say what failed and why, no "please", no exclamation in console copy.
 
 ## Accessibility
 
-- Each step is an accordion trigger, a button that announces expanded or collapsed and is reachable by keyboard in run order.
-- Status glyphs are `aria-hidden`; each step trigger carries its status as screen-reader text (Done, Running, Failed, Skipped, Not started) before its title, and the outcome tag carries the run's, so it never depends on color.
-- While the run goes, the Logs row's step count and step in flight sit in a `role="status"` region, so a screen reader hears each step as it starts.
-- The progress bar has `aria-label="Deployment progress"`; the view switch has `aria-label="Log view"`.
-- Copy buttons on the logs announce what they copy.
-- Shimmer and spinner animations stop under `prefers-reduced-motion`.
+- Each step is an accordion trigger, a button that announces expanded or collapsed and is reachable by keyboard in run order; opening a step does not move focus.
+- Status glyphs are `aria-hidden`; `LogView.Steps` gives each step trigger its status as screen-reader text, and the outcome tag carries the run's, so it never depends on color.
+- While the run goes, the step count and step in flight sit in one `role="status"` region, so a screen reader hears each step as it starts; new log lines do not announce one by one.
+- The progress bar and the view switch carry the accessible names `LogView.Steps` gives them; copy buttons announce what they copy.
+- The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line.
+- Shimmer, spinner and connector animations stop under `prefers-reduced-motion`.
 
 ## States
 
-- Running: the run is in flight; the Logs row shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
+- Running: the run is in flight; the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Succeeded: every step checked, the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
-- Failed: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the Logs row names the failed step.
+- Failed: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
 - CompleteView: a finished run in the Complete view, every line as one `LogView` with its copy button.
 - FailedCompleteView: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
+- InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
+- InCreateFlowFailed: the create-flow card after a failure, the switch in the header, the failed step open and Edit and Redeploy in the footer.
+- DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.
+- DeploymentFailed: a deployment the rules rejected, the danger banner with Redeploy, Visit disabled and the logs open on the failed step.
+- DeploymentQueued: a deployment waiting for a runner, the info banner, Visit disabled, Queued in the details and the logs header, and a not-started `EmptyState` in the logs card.
 
 ## Related
 
-- `platform/create/deployment-flow` — the deploy flow card that hosts this block in a create flow.
-- `platform/detail/details-page` — the deployment page whose Deployment logs card hosts it.
+- `platform/create/deploy-template` — the template flow that streams the create-flow card after Deploy.
 - `platform/create/deploy-success` — where a create flow lands once the run goes live.
-- `LogView` — the log reader each step and the Complete view use; see `skills/webkit-ui-states` for the running and failed states.
+- `platform/states/async-submit` — a long run the user leaves and comes back to, with the same steps in its logs card.
+- `platform/detail/details-page` — the overview of the resource a deployment belongs to; its Deployments tab links here.
+- `LogView` — `LogView.Steps` draws the steps; see `skills/webkit-ui-states` for the running and failed states.
 
 ## Variants
 
@@ -105,6 +113,11 @@ A small, flat `Progress` flush on the bottom edge with `aria-label="Deployment p
 - `Failed` — A run whose routing rules were rejected: that step is open on its error output with a Failed Tag and the reason in full, the steps behind it read Skipped, and the Logs row names the failed step beside the view switch.
 - `CompleteView` — The Complete view of a finished run: every line the pipeline printed as one continuous LogView with its copy button.
 - `FailedCompleteView` — The Complete view of the failed run: the lines up to the error, as one LogView, nothing from the steps that never ran.
+- `InCreateFlow` — Deploy was just pressed in a create flow: the Deployment Card with a Cloning StatusIndicator in its header, opening on the cloning splash (the Git provider tile, a dashed connector marching toward a large destination tile, still under reduced motion) with one polite screen-reader line naming the repository and the scope; the steps replace the splash as the first one starts.
+- `InCreateFlowFailed` — The create-flow card after the routing rules were rejected: the Deployment header swaps the status for the Phased or Complete switch, the Logs row names the failed step, that step is open on its error output with a Failed Tag, the steps behind it read Skipped, and the card footer offers Edit (back to the form, values kept) and Redeploy.
+- `DeploymentDetail` — A deployment that went live: the success banner, the Deployment details card with every fact and its Deployment Settings band for Default, and the Deployment logs card with the run duration and the Phased or Complete switch over the steps.
+- `DeploymentFailed` — A deployment the rules rejected: the danger banner with Redeploy, Visit disabled until the deployment is live, and the Deployment logs card with the Error status, open on the failed step with the rest skipped.
+- `DeploymentQueued` — A deployment waiting for a runner: the info banner, Visit disabled until the deployment is live, the Deployment details card with Queued as its status and Not started as its duration, and the Deployment logs card with a Queued `StatusIndicator` in its header and a not-started `EmptyState` in place of the steps, with no Phased or Complete switch.
 
 Each variant is the same screen in another state: `get_pattern("platform/detail/deployment-logs", { variant })`, or the file under `blocks/platform/detail/deployment-logs/variants/`.
 
@@ -112,24 +125,10 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 
 ```vue
 <script setup lang="ts">
-  import Accordion from '@aziontech/webkit/accordion'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
-  import Progress from '@aziontech/webkit/progress'
-  import Spinner from '@aziontech/webkit/spinner'
+  import LogView, { type LogViewStep } from '@aziontech/webkit/log-view'
   import { computed, ref } from 'vue'
 
-  type StepStatus = 'done' | 'failed' | 'skipped' | 'running' | 'pending'
-  type DeployStep = {
-    key: string
-    title: string
-    description: string
-    status: StepStatus
-    duration: string
-    lines: LogViewLine[]
-  }
-
-  const steps: DeployStep[] = [
+  const steps: LogViewStep[] = [
     {
       key: 'token',
       title: 'Access token',
@@ -291,25 +290,20 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   const openStep = ref('build')
 
   const doneCount = computed(() => steps.filter((step) => step.status === 'done').length)
-  const progress = computed(() => Math.round((doneCount.value / steps.length) * 100))
   const currentStep = computed(
     () => steps.find((step) => step.status === 'running' || step.status === 'failed')?.title ?? ''
   )
-
-  const stepStatusLabels: Record<StepStatus, string> = {
-    done: 'Done',
-    failed: 'Failed',
-    skipped: 'Skipped',
-    running: 'Running',
-    pending: 'Not started'
-  }
 </script>
 
 <template>
-  <div class="flex w-full flex-col">
-    <div
-      class="flex min-h-12 items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
-    >
+  <LogView.Steps
+    :steps="steps"
+    v-model:open-step="openStep"
+    :copyable="false"
+    :view-switch="false"
+    progress
+  >
+    <template #header>
       <h2 class="m-0 shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
       <div
         role="status"
@@ -320,97 +314,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
         >
         <span class="truncate text-label-sm text-(--text-muted)">{{ currentStep }}</span>
       </div>
-    </div>
-    <Accordion
-      v-model="openStep"
-      type="single"
-      collapsible
-    >
-      <Accordion.Item
-        v-for="step in steps"
-        :key="step.key"
-        :value="step.key"
-      >
-        <Accordion.Trigger>
-          <span class="flex min-h-10 flex-1 items-center gap-(--spacing-sm)">
-            <span class="flex size-5 shrink-0 items-center justify-center">
-              <i
-                v-if="step.status === 'done'"
-                class="pi pi-check-circle text-(--success-contrast)"
-                aria-hidden="true"
-              />
-              <i
-                v-else-if="step.status === 'failed'"
-                class="pi pi-times-circle text-(--danger-contrast)"
-                aria-hidden="true"
-              />
-              <i
-                v-else-if="step.status === 'skipped'"
-                class="pi pi-minus-circle text-(--text-muted) opacity-60"
-                aria-hidden="true"
-              />
-              <div
-                v-else-if="step.status === 'running'"
-                class="contents text-(--text-default)"
-              >
-                <Spinner />
-              </div>
-              <span
-                v-else
-                class="size-3.5 rounded-full border border-dashed border-(--border-default)"
-              />
-            </span>
-            <span class="sr-only">{{ stepStatusLabels[step.status] }}</span>
-            <span
-              :data-state="step.status"
-              class="flex min-w-0 flex-1 items-baseline gap-(--spacing-xs) text-start data-[state=failed]:flex-wrap"
-            >
-              <span
-                :data-state="step.status"
-                class="shrink-0 text-label-md text-(--text-default) data-[state=pending]:text-(--text-muted) data-[state=skipped]:text-(--text-muted)"
-              >
-                {{ step.title }}
-              </span>
-              <span
-                :data-state="step.status"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[state=running]:motion-safe:bg-[length:200%_100%] data-[state=running]:motion-safe:bg-clip-text data-[state=running]:motion-safe:text-transparent data-[state=running]:motion-safe:animate-(--animate-shimmer) motion-reduce:animate-none"
-              >
-                {{ step.description }}
-              </span>
-            </span>
-            <span class="ms-auto flex shrink-0 items-center">
-              <span
-                v-if="step.duration"
-                class="text-label-code-md text-(--text-muted)"
-              >
-                {{ step.duration }}
-              </span>
-            </span>
-          </span>
-        </Accordion.Trigger>
-        <Accordion.Content>
-          <LogView
-            :lines="step.lines"
-            :bordered="false"
-            :copyable="false"
-            :loading="step.status === 'pending'"
-            loading-label="Waiting to start…"
-          >
-            <LogViewContent>
-              <template #empty>No log lines yet.</template>
-            </LogViewContent>
-          </LogView>
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion>
-    <Progress
-      :value="progress"
-      :max="100"
-      size="small"
-      kind="flat"
-      class="w-full"
-      aria-label="Deployment progress"
-    />
-  </div>
+    </template>
+  </LogView.Steps>
 </template>
 ```

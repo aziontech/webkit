@@ -16,7 +16,7 @@
 
 - Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
 - Pass the label as the default slot or the `label` prop; the slot wins when both are set.
-- target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `pi pi-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
+- target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `ai ai-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
 - An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
@@ -40,7 +40,7 @@
 | `label` | `string` | `''` | false | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`). |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the trailing icon; set shows it. Empty shows `pi pi-external-link` only when `target` is `_blank`. |
+| `icon` | `string` | `''` | false | Azion icon class for the trailing icon; set shows it. Empty shows `ai ai-external-link` only when `target` is `_blank`. |
 | `href` | `string` | `''` | false | Destination URL for the anchor. Empty renders `#`. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when navigating. |
 
@@ -114,17 +114,17 @@
     <Link
       size="large"
       label="Learn more"
-      icon="pi pi-external-link"
+      icon="ai ai-external-link"
     />
     <Link
       size="medium"
       label="Learn more"
-      icon="pi pi-external-link"
+      icon="ai ai-external-link"
     />
     <Link
       size="small"
       label="Learn more"
-      icon="pi pi-external-link"
+      icon="ai ai-external-link"
     />
   </div>
 </template>
@@ -140,7 +140,7 @@
 <template>
   <Link
     label="Learn more"
-    icon="pi pi-external-link"
+    icon="ai ai-external-link"
     disabled
   />
 </template>

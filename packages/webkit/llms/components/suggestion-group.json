@@ -78,7 +78,7 @@
   },
   {
    "name": "SupportPrompts",
-   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const items = [\n    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'pi pi-github' },\n    { id: 'waf', label: 'Protect my site with a WAF', icon: 'pi pi-shield' },\n    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'pi pi-chart-line' },\n    { id: 'domain', label: 'Point my domain to a workload', icon: 'pi pi-globe' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      orientation=\"vertical\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import SuggestionGroup from '@aziontech/webkit/suggestion-group'\n\n  const items = [\n    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },\n    { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' },\n    { id: 'cache', label: 'Explain why my cache hit ratio dropped', icon: 'ai ai-chart-line' },\n    { id: 'domain', label: 'Point my domain to a workload', icon: 'ai ai-globe' }\n  ]\n</script>\n\n<template>\n  <div class=\"w-full max-w-(--container-sm)\">\n    <SuggestionGroup\n      :items=\"items\"\n      orientation=\"vertical\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/suggestion-group.md"

@@ -10,7 +10,7 @@
 
 ## Asked as
 
-home; home page; home dashboard; console home; usage overview; página inicial; início do console; first access; home empty state; new account home; welcome screen; first run; brand-new account; getting started home; primeiro acesso; tela de boas-vindas; home vazia; classic overview; overview dashboard; account summary; recent activity; monthly usage; visão geral
+home; home page; home dashboard; console home; usage overview; página inicial; início do console; first access; home empty state; new account home; welcome screen; first run; brand-new account; getting started home; primeiro acesso; tela de boas-vindas; home vazia; classic overview; overview dashboard; account summary; recent activity; monthly usage; visão geral; account landing overview
 
 The Console's Home page: the first screen a signed-in user lands on. Its job
 is to get them back to work fast. For an account that owns resources it shows a short usage band and
@@ -23,14 +23,15 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use home-dashboard for the account's landing overview.
 - The landing page after sign-in in the Console.
 - The reader needs to resume work (open a recent resource) more than to analyse data.
 - The same page must serve both a populated and a brand-new account.
 
 ## When not to use
 
-- Analysing traffic or usage: use `platform/dashboard/analytics-dashboard` or
-  `platform/dashboard/data-dashboard`.
+- Analysing traffic or usage: use `platform/dashboard/analytics-dashboard`
+  (Traffic by default, Usage for consumption).
 - The empty first page of one resource list: use `platform/states/first-use`.
 - Only the shell, with another page inside: use `shells/console`.
 - A placeholder while Home loads: use the Overview and Onboarding wires of `platform/states/page-wires`.
@@ -438,7 +439,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 placement="top"
               >
                 <IconButton
-                  icon="pi pi-times"
+                  icon="ai ai-times"
                   kind="transparent"
                   size="small"
                   aria-label="Dismiss agent setup"
@@ -473,7 +474,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               :href="panel.path"
               :label="panel.label"
               size="small"
-              icon="pi pi-chevron-right"
+              icon="ai ai-chevron-right"
             />
             <span v-else>{{ panel.label }}</span>
           </h2>
@@ -503,7 +504,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                         class="flex shrink-0 items-center justify-center"
                         aria-hidden="true"
                       >
-                        <i class="pi pi-history text-body-xs leading-none text-(--text-muted)" />
+                        <i class="ai ai-history text-body-xs leading-none text-(--text-muted)" />
                       </span>
                       <span class="min-w-(--size-24) shrink-0 text-body-sm text-(--text-muted)"
                         >{{ resource.typeLabel }} /</span
@@ -530,7 +531,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
                 <Item.Actions>
                   <i
-                    class="pi pi-chevron-right shrink-0 text-body-xs text-(--text-muted)"
+                    class="ai ai-chevron-right shrink-0 text-body-xs text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Actions>

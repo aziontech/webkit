@@ -24,6 +24,7 @@
   "Keep step state in the consumer (refs or a form store). Only the active step renders its content, so a",
   "Validate in the `next` handler and call `event.preventDefault()` synchronously to block the move. For",
   "Show why Next was blocked inside the step (an inline `alert` or the field's `invalid` +",
+  "The rail reaches every step the reader has already reached, forward too. A forward jump does not",
   "Give every step a title that names the decision (`Settings`, `Review`) and keep it short. The same",
   "Make the last step a review of the answers when the resource is costly to change after creation, and",
   "Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no",

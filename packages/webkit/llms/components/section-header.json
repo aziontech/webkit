@@ -82,7 +82,7 @@
   },
   {
    "name": "WithActions",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <SectionHeader\n    title=\"Payment methods\"\n    description=\"Every card on the account. Invoices are charged to the default one.\"\n    anchor=\"payment-methods\"\n  >\n    <template #actions>\n      <Button\n        label=\"Add payment method\"\n        kind=\"outlined\"\n        size=\"medium\"\n        icon=\"pi pi-plus\"\n      />\n    </template>\n  </SectionHeader>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import SectionHeader from '@aziontech/webkit/section-header'\n</script>\n\n<template>\n  <SectionHeader\n    title=\"Payment methods\"\n    description=\"Every card on the account. Invoices are charged to the default one.\"\n    anchor=\"payment-methods\"\n  >\n    <template #actions>\n      <Button\n        label=\"Add payment method\"\n        kind=\"outlined\"\n        size=\"medium\"\n        icon=\"ai ai-plus\"\n      />\n    </template>\n  </SectionHeader>\n</template>"
   },
   {
    "name": "Sizes",

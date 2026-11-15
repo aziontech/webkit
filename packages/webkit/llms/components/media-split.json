@@ -203,7 +203,7 @@
   {
    "name": "actions",
    "scope": "—",
-   "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind=\"secondary\"` for the action, `kind=\"outlined\"` for a second beside it, `icon=\"pi pi-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
+   "notes": "Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind=\"secondary\"` for the action, `kind=\"outlined\"` for a second beside it, `icon=\"ai ai-chevron-right\"` + `icon-position=\"trailing\"` when it leaves the page."
   }
  ],
  "styleSeam": false,

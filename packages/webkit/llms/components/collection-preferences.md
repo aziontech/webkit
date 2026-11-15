@@ -174,7 +174,7 @@
     <template #trigger="{ open }">
       <Button
         label="Table settings"
-        icon="pi pi-cog"
+        icon="ai ai-cog"
         kind="outlined"
         size="medium"
         @click="open"

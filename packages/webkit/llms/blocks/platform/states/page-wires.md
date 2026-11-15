@@ -10,7 +10,7 @@
 
 ## Asked as
 
-page skeleton; loading skeleton; skeleton screen; page loading state; wireframe loading; carregando; esqueleto de carregamento; tela de carregamento
+page skeleton; loading skeleton; skeleton screen; page loading state; wireframe loading; carregando; esqueleto de carregamento; tela de carregamento; whole page loading; shell skeleton
 
 The skeleton wires an app paints while a page is still arriving. The user's job does not change while they wait: they need to see the shape of the page they asked for, so the wire draws the real page's grid with `Skeleton` bands inside the same `Card` frames, and nothing shifts when the content lands. The set covers the Home overview, the first-access Home, and the whole shell while an expired session signs out, drawn over the family of page it covers (list, detail, create form or Home).
 
@@ -18,6 +18,7 @@ Overview and Onboarding are page bodies for the default slot of `ConsoleLayout` 
 
 ## When to use
 
+- Use page-wires for the first paint of a whole page or shell; inside a block use that block's Loading variant.
 - The first paint of a page whose data is still loading, when the layout is known.
 - Home, before its metrics and recent activity arrive (Overview), or before the first project (Onboarding).
 - Over the whole app while an expired session signs out (the Session wires), so the user sees the page dissolve into its frame instead of a blank screen.

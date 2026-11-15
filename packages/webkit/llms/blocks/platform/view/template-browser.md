@@ -10,14 +10,15 @@
 
 ## Asked as
 
-template browser; template gallery; template catalog; start from a template; browse templates; templates by framework; template preview; template readme; deploy a template; starter templates; galeria de templates; catálogo de templates; navegar templates; começar a partir de um template; pré-visualizar template
+template browser; template gallery; template catalog; start from a template; browse templates; templates by framework; template preview; template readme; deploy a template; starter templates; galeria de templates; catálogo de templates; navegar templates; começar a partir de um template; pré-visualizar template; template marketplace; search templates; templates catalog; project templates; pick a template
 
-The catalog of templates a person starts a project from. They arrive from the creation hub, the marketplace or a "Start from a template" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.
+The catalog of templates a person starts a project from. They arrive from the creation hub or a "Start from a template" link, already knowing roughly what they want (a framework, a kind of site, a small function) and needing to find it, check what it contains and start the deploy. The page is one heading over one band: a single search and filter control, then the templates grouped by category. A tile opens a preview drawer with the facts and the README, and the drawer's Deploy hands off to the deploy template flow, which owns the run and its outcome.
 
 This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.
 
 ## When to use
 
+- Use template-browser for the catalog of templates a project starts from; it is the one product template catalog.
 - A gallery of starting points (framework starters, sample sites, small functions) people pick one of and deploy.
 - People choose by recognising a framework mark and a name, then confirm by reading what the template contains.
 - The catalog is tens of items, small enough to show every match grouped by category without paging.
@@ -113,7 +114,7 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 
 - `platform/create/deploy-template` — where Deploy leads; it owns the form, the run and the async-submit toast.
 - `platform/states/async-submit` — the toast and inline outcome every deploy follows.
-- `platform/view/marketplace` — the marketplace page, whose first tab is a flat searchable grid of the same template tiles, and its integrations.
+- `platform/view/marketplace` — installable integrations into an existing resource; it lists no templates.
 - `platform/create/create-hub` — the creation hub that links here for "Start from a template".
 - `Card` and `useCollection` — see `skills/webkit-lists`.
 
@@ -350,7 +351,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/templates"
@@ -371,7 +372,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
         <EmptyState
           v-if="status === 'no-match'"
           size="medium"
-          icon="pi pi-filter-slash"
+          icon="ai ai-filter-slash"
           title="No matching templates"
           description="No template matches this search. Remove a filter to widen the results."
         >
@@ -501,7 +502,7 @@ npm run dev</code></pre>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
             <Button
               label="View repository"
-              icon="pi pi-external-link"
+              icon="ai ai-external-link"
               icon-position="trailing"
               kind="outlined"
               size="medium"
@@ -510,7 +511,7 @@ npm run dev</code></pre>
             />
             <Button
               label="Deploy"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
               kind="primary"
               size="medium"
               :href="`/create/deploy?template=${selected.id}`"

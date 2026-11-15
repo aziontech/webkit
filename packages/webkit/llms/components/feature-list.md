@@ -1,6 +1,6 @@
 # Feature List
 
-> Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs. The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `pi pi-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
+> Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs. The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 
 - Import: `import FeatureList from '@aziontech/webkit/feature-list'`
 - Category: content · Surface: product · Structure: monolithic

@@ -1,6 +1,6 @@
 # Switch
 
-> Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `pi-lock` / `pi-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
+> Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plain handle) and `privacy` (handle carries a `ai-lock` / `ai-lock-open` icon mirroring the toggled state; both glyphs render and `group-data-[checked]:` shows the right one, so no class is chosen in script). No label or description — wrap it in a horizontal `Field` or a `Field.Label` choice card for labeled layouts, or place it bare where the label already exists outside the control (an ItemGroup row names the field with `Item.Title`). Because the bare form has no wrapper to defer to, the control owns its own `disabled` state.
 
 - Import: `import Switch from '@aziontech/webkit/switch'`
 - Category: inputs · Surface: product · Structure: monolithic

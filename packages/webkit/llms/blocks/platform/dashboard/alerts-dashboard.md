@@ -10,7 +10,7 @@
 
 ## Asked as
 
-alerts dashboard; open alerts; alerts by severity; incident dashboard; false positive rate; alert triage; painel de alertas; alertas abertos; alertas por severidade
+alerts dashboard; open alerts; alerts by severity; incident dashboard; false positive rate; alert triage; painel de alertas; alertas abertos; alertas por severidade; triage open alerts
 
 The page a security or operations lead opens to triage: what is open, how severe it is, what kind of
 alert it is and which entities are involved. It leads with the open counts, shows how many alerts were
@@ -22,6 +22,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use alerts-dashboard to triage open alerts by severity.
 - Alerts carry a severity level and the reader has to decide which to handle first.
 - The reader needs both the trend (are we raising more?) and the queue (what is open now?) on one page.
 - Alerts name entities (hosts, users, accounts) whose accumulated risk is worth ranking.
@@ -29,7 +30,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 ## When not to use
 
 - Every request and the rule that decided it, not only alerts: use
-  `platform/dashboard/activity-outcomes-dashboard`.
+  `platform/dashboard/security-dashboard` (ByActor).
 - Service health with latency and error thresholds and a short alert rail: use
   `platform/dashboard/service-monitoring-dashboard`.
 - Items waiting for a verdict from an analysis engine: use `platform/dashboard/scan-results-dashboard`.
@@ -142,7 +143,7 @@ so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The 
 
 ## Related
 
-- `platform/dashboard/activity-outcomes-dashboard` — every request and its outcome, not only alerts.
+- `platform/dashboard/security-dashboard` (ByActor) — every request and its outcome, not only alerts.
 - `platform/dashboard/security-dashboard` — blocked traffic and the rules that block it.
 - `platform/dashboard/service-monitoring-dashboard` — threshold alerts beside service health.
 - `SeverityTag` — the one severity scale the page shares.
@@ -810,7 +811,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-check-circle"
+                icon="ai ai-check-circle"
                 title="No open alerts"
                 description="Every alert raised in the period has been closed."
               />
@@ -879,7 +880,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-users"
+              icon="ai ai-users"
               title="No entities at risk yet"
               description="Entities appear here once an alert names them."
             />
@@ -923,7 +924,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-bell"
+              icon="ai ai-bell"
               title="No open alerts"
               description="Alerts appear here when a detection rule matches. Select a longer period to see closed ones."
             />

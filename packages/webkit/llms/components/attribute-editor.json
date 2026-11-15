@@ -34,7 +34,7 @@
  ],
  "bestPractices": [
   "Keep two to four columns; more columns belong in a drawer per row.",
-  "Pass `errors` only after the first Save (rule of the form-error block), then keep them live while the user fixes the rows.",
+  "Pass `errors` only after the first Save (rule of the form-validation block), then keep them live while the user fixes the rows.",
   "Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.",
   "Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.",
   "Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.",
@@ -79,7 +79,7 @@
    "doc": "Label of the Add group button in grouped mode. Empty uses the locale catalog."
   },
   {
-   "name": "empty",
+   "name": "emptyTitle",
    "type": "string",
    "default": "''",
    "required": "false",

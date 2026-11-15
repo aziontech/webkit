@@ -282,14 +282,14 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
         label="Reset layout"
         kind="transparent"
         size="medium"
-        icon="pi pi-replay"
+        icon="ai ai-replay"
         @click="reset"
       />
       <Button
         :label="editing ? 'Done' : 'Edit layout'"
         :kind="editing ? 'primary' : 'outlined'"
         size="medium"
-        :icon="editing ? 'pi pi-check' : 'pi pi-th-large'"
+        :icon="editing ? 'ai ai-check' : 'ai ai-th-large'"
         :aria-pressed="editing"
         @click="editing = !editing"
       />
@@ -316,7 +316,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
                 :label="item.span + '/12'"
                 severity="neutral"
                 size="small"
-                icon="pi pi-arrows-h"
+                icon="ai ai-arrows-h"
               />
             </ChartCard.Action>
           </ChartCard.Header>

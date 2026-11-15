@@ -165,7 +165,7 @@
       placeholder="Leading icon"
     >
       <template #prefix>
-        <i class="pi pi-globe" />
+        <i class="ai ai-globe" />
       </template>
     </Input>
     <Input
@@ -173,7 +173,7 @@
       placeholder="Trailing icon"
     >
       <template #suffix>
-        <i class="pi pi-search" />
+        <i class="ai ai-search" />
       </template>
     </Input>
     <Input
@@ -181,10 +181,10 @@
       placeholder="Both icons"
     >
       <template #prefix>
-        <i class="pi pi-globe" />
+        <i class="ai ai-globe" />
       </template>
       <template #suffix>
-        <i class="pi pi-search" />
+        <i class="ai ai-search" />
       </template>
     </Input>
   </div>

@@ -36,7 +36,7 @@
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | Card heading. |
 | `eyebrow` | `string` | `''` | false | Small muted line above the title — who makes the thing, when the title does not say. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled. |
+| `icon` | `string` | `''` | false | Azion icon class for the leading glyph. Ignored when the `icon` slot is filled. |
 | `href` | `string` | `''` | false | Destination; when set the whole card becomes the link. |
 | `target` | `'_self' \| '_blank'` | `'_self'` | false | Where the link opens. |
 | `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
@@ -87,7 +87,7 @@
 <template>
   <DocCard
     title="Edge Application"
-    icon="pi pi-server"
+    icon="ai ai-server"
     href="/docs/edge-application"
     link-label="Read the guide"
   >
@@ -107,7 +107,7 @@
   <div class="grid gap-(--spacing-md) sm:grid-cols-2">
     <DocCard
       title="Edge Application"
-      icon="pi pi-server"
+      icon="ai ai-server"
       href="/docs/edge-application"
       link-label="Read the guide"
     >
@@ -116,7 +116,7 @@
     <DocCard
       eyebrow="Azion CLI"
       title="Deploy from your terminal"
-      icon="pi pi-desktop"
+      icon="ai ai-desktop"
       href="/docs/cli"
     >
       An overline says who or when, for a title that does not carry it.

@@ -61,7 +61,7 @@
 - The status indicator sits in the footer's `status` slot and the language select in its `language` slot; below `md` they share the bottom bar at its two ends, from `md` they sit side by side at its end
 - The social buttons are small icon buttons
 - The status indicator, the language select and the Azion mark each render only when their prop is set
-- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `pi pi-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
+- An `external` link sets `target="_blank"` and `rel="noopener noreferrer"`, draws the `ai ai-external-link` glyph after its label in the label's own colour (hidden from assistive tech) and appends the catalog's “(opens in a new tab)” as screen-reader text
 - Server render and hydration: both marks are always in the DOM and CSS shows one per width (the social-row mark from `lg`, the signature mark below it), so the server HTML, the first client render and every later render are the same tree — nothing moves on mount.
 
 ## Accessibility
@@ -232,17 +232,17 @@
 
   const socials = [
     {
-      icon: 'pi pi-github',
+      icon: 'ai ai-github',
       label: 'Azion on GitHub',
       href: 'https://github.com/aziontech'
     },
     {
-      icon: 'pi pi-linkedin',
+      icon: 'ai ai-linkedin',
       label: 'Azion on LinkedIn',
       href: 'https://www.linkedin.com/company/aziontech'
     },
     {
-      icon: 'pi pi-youtube',
+      icon: 'ai ai-youtube',
       label: 'Azion on YouTube',
       href: 'https://www.youtube.com/aziontech'
     },
@@ -252,17 +252,17 @@
       href: 'https://x.com/aziontech'
     },
     {
-      icon: 'pi pi-instagram',
+      icon: 'ai ai-instagram',
       label: 'Azion on Instagram',
       href: 'https://www.instagram.com/aziontech'
     },
     {
-      icon: 'pi pi-discord',
+      icon: 'ai ai-discord',
       label: 'Azion on Discord',
       href: 'https://discord.gg/azion'
     },
     {
-      icon: 'pi pi-reddit',
+      icon: 'ai ai-reddit',
       label: 'Azion on Reddit',
       href: 'https://www.reddit.com/r/aziontech'
     }

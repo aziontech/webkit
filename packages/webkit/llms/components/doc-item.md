@@ -35,7 +35,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `title` | `string` | `''` | false | The row's name — what the reader is choosing. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading glyph. |
+| `icon` | `string` | `''` | false | Azion icon class for the leading glyph. |
 | `href` | `string` | `''` | false | Destination; when set the whole row becomes the link. |
 | `target` | `'_self' \| '_blank'` | `'_self'` | false | Where the link opens. |
 | `label` | `string` | `''` | false | Fallback copy when the default slot is empty. |
@@ -89,7 +89,7 @@
     <ItemList>
       <DocItem
         title="Edge Functions"
-        icon="pi pi-code"
+        icon="ai ai-code"
         href="#edge-functions"
       >
         Build serverless applications on Azion's global network. Workloads integrate with functions
@@ -97,7 +97,7 @@
       </DocItem>
       <DocItem
         title="Edge SQL"
-        icon="pi pi-database"
+        icon="ai ai-database"
         href="#edge-sql"
       >
         Store relational data across the network. A workload reads it from the location that served
@@ -105,7 +105,7 @@
       </DocItem>
       <DocItem
         title="Edge Cache"
-        icon="pi pi-bolt"
+        icon="ai ai-bolt"
         href="#edge-cache"
       >
         Decide what is cached, for how long, and by which key.
@@ -129,7 +129,7 @@
     <ItemList>
       <DocItem
         title="Community templates"
-        icon="pi pi-github"
+        icon="ai ai-github"
         href="https://github.com/aziontech"
         target="_blank"
       >
@@ -137,7 +137,7 @@
       </DocItem>
       <DocItem
         title="Rule"
-        icon="pi pi-filter"
+        icon="ai ai-filter"
       >
         With no href the row is inert — no hover, no anchor, no trailing arrow.
       </DocItem>

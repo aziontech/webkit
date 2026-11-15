@@ -10,12 +10,13 @@
 
 ## Asked as
 
-create hub; creation center; new project; start a project; import from github; import repository; start from template; template gallery; create from git; central de criação; novo projeto; importar repositório; começar de um template
+create hub; creation center; new project; start a project; import from github; import repository; start from template; template gallery; create from git; central de criação; novo projeto; importar repositório; começar de um template; create project; where to start; começar um projeto
 
 The Creation Center, where a new project starts. The user arrives from Home or a Create action with something to deploy and needs to pick its source in one look: a repository from their Git account, a template, or a file or folder from their machine. The page puts the two main sources side by side, Import from GitHub and Start from template, under one heading, and offers file and folder upload in the heading.
 
 ## When to use
 
+- Use create-hub as the first screen of every new project, where the user picks Git, a template or an upload.
 - The entry point of every new project, before the user has decided where the code comes from.
 - The user may import an existing repository, start from a framework or starter template, or upload local files.
 - The choice leads to a focused flow outside the console shell, such as `platform/create/deploy-template`.
@@ -23,7 +24,8 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 ## When not to use
 
 - Creating a first-level resource that has no source code: use `platform/create/single-page-create`.
-- A guided multi-step creation once the source is known: use `platform/create/source-wizard`.
+- Configuring and deploying once the source is known: use `platform/create/deploy-template`.
+- A first-level resource created in ordered steps: use `platform/create/multipage-create`.
 - Adding something inside an existing resource: use `platform/create/create-in-drawer`.
 - The drop target and upload progress after a folder is dropped: those are `platform/states/project-intake`.
 - Teaching a module to a new account: use `platform/states/first-use`.
@@ -32,7 +34,7 @@ The Creation Center, where a new project starts. The user arrives from Home or a
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-The creation header from `headers/creation-header`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
+The creation header from `top-bars/creation-bar`: a small outlined back `IconButton` to Home, the `Brand` linking home, a `Breadcrumb` with Creation Center as the single current crumb, and the account `Avatar` alone on the right. No sidebar.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -103,8 +105,7 @@ Beside the Start from template heading, a medium search `Input` that filters the
 
 - `platform/create/deploy-template` — where a template card or Import leads.
 - `platform/states/project-intake` — the drop target and upload overlay for a dropped folder.
-- `platform/create/source-wizard` — the guided flow once a source is chosen.
-- `headers/creation-header` — the header this page uses.
+- `top-bars/creation-bar` — the header this page uses.
 - `platform/dashboard/home-dashboard` — Home, where the back control returns.
 
 ## Variants
@@ -173,11 +174,11 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-cor ai-svelte' },
     { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-cor ai-nuxt' },
     { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' },
-    { name: 'image-resizer', age: 'last month', icon: 'pi pi-image' },
+    { name: 'image-resizer', age: 'last month', icon: 'ai ai-image' },
     { name: 'status-page', age: '2 months ago', icon: 'ai-cor ai-astro' },
-    { name: 'auth-gateway', age: '2 months ago', icon: 'pi pi-lock' },
+    { name: 'auth-gateway', age: '2 months ago', icon: 'ai ai-lock' },
     { name: 'blog', age: '3 months ago', icon: 'ai-cor ai-nuxt' },
-    { name: 'design-tokens', age: '5 months ago', icon: 'pi pi-palette' }
+    { name: 'design-tokens', age: '5 months ago', icon: 'ai ai-palette' }
   ]
   const REPO_PAGE = 10
   const sections: HubSection[] = [
@@ -261,7 +262,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Static Site',
           description: 'Publish a folder of built files and serve it as-is.',
           vendor: 'Acme',
-          icon: 'pi pi-file',
+          icon: 'ai ai-file',
           markClass: ''
         },
         {
@@ -269,7 +270,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Reverse Proxy',
           description: 'Front an origin you already run and pass its traffic on.',
           vendor: 'Acme',
-          icon: 'pi pi-server',
+          icon: 'ai ai-server',
           markClass: ''
         },
         {
@@ -277,7 +278,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'API Service',
           description: 'Run a small HTTP API with routing and JSON responses.',
           vendor: 'Acme',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           markClass: ''
         },
         {
@@ -285,7 +286,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Scheduled Job',
           description: 'Run a task on a schedule, with its runs and logs kept.',
           vendor: 'Acme',
-          icon: 'pi pi-clock',
+          icon: 'ai ai-clock',
           markClass: ''
         },
         {
@@ -293,7 +294,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'AI Inference',
           description: 'Serve a model behind an endpoint that streams its answers.',
           vendor: 'Acme',
-          icon: 'pi pi-bolt',
+          icon: 'ai ai-bolt',
           markClass: ''
         },
         {
@@ -301,7 +302,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Image Optimization',
           description: 'Resize and compress images on request, cached after the first.',
           vendor: 'Acme',
-          icon: 'pi pi-image',
+          icon: 'ai ai-image',
           markClass: ''
         },
         {
@@ -309,7 +310,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Storefront',
           description: 'A server-rendered commerce storefront with cart and checkout.',
           vendor: 'Acme',
-          icon: 'pi pi-shopping-cart',
+          icon: 'ai ai-shopping-cart',
           markClass: ''
         },
         {
@@ -317,7 +318,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Multi-tenant App',
           description: 'One codebase that serves each tenant on its own domain.',
           vendor: 'Acme',
-          icon: 'pi pi-users',
+          icon: 'ai ai-users',
           markClass: ''
         },
         {
@@ -325,7 +326,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Auth Gateway',
           description: 'Check a token before a request reaches the service behind it.',
           vendor: 'Acme',
-          icon: 'pi pi-lock',
+          icon: 'ai ai-lock',
           markClass: ''
         },
         {
@@ -333,7 +334,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Database App',
           description: 'A starter wired to a database, with a table and its queries.',
           vendor: 'Acme',
-          icon: 'pi pi-database',
+          icon: 'ai ai-database',
           markClass: ''
         },
         {
@@ -341,7 +342,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Blog',
           description: 'A content site with posts, tags and a feed.',
           vendor: 'Community',
-          icon: 'pi pi-pencil',
+          icon: 'ai ai-pencil',
           markClass: ''
         },
         {
@@ -349,7 +350,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Landing Page',
           description: 'A single page with a hero, features and a sign-up form.',
           vendor: 'Community',
-          icon: 'pi pi-desktop',
+          icon: 'ai ai-desktop',
           markClass: ''
         },
         {
@@ -357,7 +358,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Documentation Site',
           description: 'Searchable docs with versioned sections.',
           vendor: 'Community',
-          icon: 'pi pi-book',
+          icon: 'ai ai-book',
           markClass: ''
         },
         {
@@ -365,7 +366,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Status Page',
           description: 'Publish uptime and incidents for the services you run.',
           vendor: 'Community',
-          icon: 'pi pi-chart-line',
+          icon: 'ai ai-chart-line',
           markClass: ''
         }
       ]
@@ -388,7 +389,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Nitro Starter',
           description: 'Deploy a Nitro server build, the engine behind Nuxt, on its own.',
           vendor: '',
-          icon: 'pi pi-server',
+          icon: 'ai ai-server',
           markClass: ''
         },
         {
@@ -460,7 +461,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Stencil Starter',
           description: 'Build framework-agnostic web components with Stencil.',
           vendor: '',
-          icon: 'pi pi-code',
+          icon: 'ai ai-code',
           markClass: ''
         },
         {
@@ -492,7 +493,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Rust WASM Starter',
           description: 'Compile Rust to WebAssembly and run it.',
           vendor: '',
-          icon: 'pi pi-microchip',
+          icon: 'ai ai-microchip',
           markClass: ''
         },
         {
@@ -500,7 +501,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
           title: 'Emscripten Starter',
           description: 'Bring C or C++, compiled to WebAssembly with Emscripten.',
           vendor: '',
-          icon: 'pi pi-microchip',
+          icon: 'ai ai-microchip',
           markClass: ''
         }
       ]
@@ -616,7 +617,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Home"
           kind="outlined"
           size="small"
@@ -800,7 +801,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           </Select.Option>
                           <Select.Option
                             value="__add-account__"
-                            icon="pi pi-plus-circle"
+                            icon="ai ai-plus-circle"
                           >
                             Add GitHub account
                           </Select.Option>
@@ -817,7 +818,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                         class="w-full"
                       >
                         <template #prefix>
-                          <i class="pi pi-search" />
+                          <i class="ai ai-search" />
                         </template>
                       </Input>
                     </div>
@@ -915,7 +916,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                       class="flex items-center gap-(--spacing-xxs) text-body-xs"
                                     >
                                       <i
-                                        class="pi pi-history"
+                                        class="ai ai-history"
                                         aria-hidden="true"
                                       />
                                       {{ repo.age }}
@@ -947,7 +948,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                           <EmptyState
                             v-else
                             size="small"
-                            icon="pi pi-search"
+                            icon="ai ai-search"
                             title="No repositories match"
                             :description="`Nothing in ${scope} is named like “${search}”.`"
                           >
@@ -988,7 +989,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       class="w-full"
                     >
                       <template #prefix>
-                        <i class="pi pi-search" />
+                        <i class="ai ai-search" />
                       </template>
                     </Input>
                   </div>
@@ -1006,7 +1007,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                       <EmptyState
                         v-if="!filteredSections.length"
                         size="small"
-                        icon="pi pi-search"
+                        icon="ai ai-search"
                         title="No templates match"
                         :description="`Nothing is named like “${templateSearch}”.`"
                       >

@@ -10,12 +10,13 @@
 
 ## Asked as
 
-ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado
+ai chat; ai assistant; chatbot; copilot; chat with ai; generative ai chat; assistant page; ask ai; llm chat; conversational ui; prompt and response; streaming response; chat de ia; assistente de ia; assistente virtual; conversa com ia; chat con ia; asistente de ia; artifact; artifact canvas; generated file; code canvas; canvas de artefato; artefato gerado; full page chat
 
 A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.
 
 ## When to use
 
+- Use ai-chat when the conversation is the page (an assistant page).
 - A dedicated assistant page (Console → AI assistant) where the conversation is the main task.
 - Open-ended questions across the whole account: how-to, troubleshooting, explaining settings or metrics.
 - A conversation the reader expects to scroll back through and continue.
@@ -191,14 +192,14 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
   type Turn = UserTurn | AssistantTurn
 
   const supportPrompts: SuggestionItem[] = [
-    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'pi pi-bolt' },
+    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
-      icon: 'pi pi-exclamation-triangle'
+      icon: 'ai ai-exclamation-triangle'
     },
-    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'pi pi-github' },
-    { id: 'waf', label: 'Protect my site with a WAF', icon: 'pi pi-shield' }
+    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
+    { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }
   ]
 
   const turns = ref<Turn[]>([])
@@ -392,7 +393,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
         label="New chat"
         kind="transparent"
         size="small"
-        icon="pi pi-plus"
+        icon="ai ai-plus"
         :disabled="!turns.length"
         @click="newChat"
       />
@@ -462,7 +463,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
                 :value="turn.content"
               />
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 aria-label="Regenerate response"
                 kind="transparent"
                 size="small"

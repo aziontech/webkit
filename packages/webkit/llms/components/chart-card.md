@@ -353,7 +353,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
         <Tag
           label="Sum"
           severity="neutral"
-          icon="pi pi-calculator"
+          icon="ai ai-calculator"
         />
         <Tag
           label="+12.40%"
@@ -364,7 +364,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
             <IconButton
               kind="transparent"
               size="small"
-              icon="pi pi-ellipsis-h"
+              icon="ai ai-ellipsis-h"
               aria-label="More options"
             />
           </DropdownMenuTrigger>

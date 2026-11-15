@@ -15,7 +15,7 @@
 ## Do
 
 - Use at most one per view; the glow loses its meaning when it repeats.
-- Keep the label short and verb-led, and pair it with a leading `icon` (for example `pi pi-sparkles`).
+- Keep the label short and verb-led, and pair it with a leading `icon` (for example `ai ai-sparkles`).
 - It always renders `type="button"`; use `button` with `type="submit"` to submit a form.
 - disabled` and `loading` both hide the glow, apply the disabled surface and suppress `click`.
 - The glow stops under reduced motion, so never use it to convey state.
@@ -40,7 +40,7 @@
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 | `loading` | `boolean` | `false` | false | Shows loading state and disables activation. |
-| `icon` | `string` | `''` | false | PrimeIcons class for the leading icon. |
+| `icon` | `string` | `''` | false | Azion icon class for the leading icon. |
 | `href` | `string` | `''` | false | When set, renders as an anchor link. |
 | `target` | `'_blank' \| '_self'` | `'_self'` | false | Link target when `href` is set. |
 
@@ -99,7 +99,7 @@
   <ButtonHighlight
     size="large"
     label="Ask Azion"
-    icon="pi pi-sparkles"
+    icon="ai ai-sparkles"
   />
 </template>
 ```
@@ -116,17 +116,17 @@
     <ButtonHighlight
       size="small"
       label="Ask Azion"
-      icon="pi pi-sparkles"
+      icon="ai ai-sparkles"
     />
     <ButtonHighlight
       size="medium"
       label="Ask Azion"
-      icon="pi pi-sparkles"
+      icon="ai ai-sparkles"
     />
     <ButtonHighlight
       size="large"
       label="Ask Azion"
-      icon="pi pi-sparkles"
+      icon="ai ai-sparkles"
     />
   </div>
 </template>
@@ -142,7 +142,7 @@
 <template>
   <ButtonHighlight
     label="Ask Azion"
-    icon="pi pi-sparkles"
+    icon="ai ai-sparkles"
     loading
   />
 </template>

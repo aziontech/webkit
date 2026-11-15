@@ -1,21 +1,22 @@
-# AttributeEditor (`platform/edit/attribute-editor`)
+# Variables (`platform/edit/variables`)
 
 > A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-with-confirmation. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
 
 - Surface: product
-- Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
-- MCP: `get_pattern("platform/edit/attribute-editor")`
+- Source: `blocks/platform/edit/variables/variables.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/edit/variables")`
 - Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [DataTable](../../../components/data-table.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
 
-variables; environment variables; env vars; secrets; create variable; edit variable; variables list; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red
+variables; environment variables; env vars; secrets; create variable; edit variable; variables list; variáveis; variáveis de ambiente; segredos; criar variável; key value editor; attribute editor; .env upload; editor de chave e valor; delete variable; clone variable; paste .env; paste env file; import .env; colar .env; importar variáveis; dotenv; network list; ip list; asn list; country list; bulk paste; lista de rede; lista de ips; lista de red; variables page; variables block; environment variables page; list of variables; página de variáveis
 
 A list of key and value pairs and the drawer that edits them, here environment variables. The user scans the variables already defined, then opens Create Variable to type or paste several pairs at once, mark the sensitive ones as secret, and select where they apply (the whole account, or specific environments, projects, services or policies) before saving them in one step. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header, the ⌘K palette and the `main`.
 
 ## When to use
 
+- Use the variables block for a list of key/value variables with a create/edit drawer; the key/value field itself is the AttributeEditor component.
 - Users define many free-form pairs of a name and a value (environment variables, headers, metadata, tags) and often bring them from a file.
 - Some values are sensitive and must be masked and write-only once saved.
 - Each pair applies to a scope the user picks from existing resources.
@@ -25,7 +26,7 @@ A list of key and value pairs and the drawer that edits them, here environment v
 - Conditions and actions evaluated in order: use `platform/edit/rule-builder`.
 - A fixed set of named settings on one resource: use `platform/edit/edit-resource` or `platform/settings/settings-form`.
 - A short read-only list of related records inside a settings tab: use `platform/detail/attached-resources`.
-- A long document or code the user edits as text: use `platform/edit/code-editor`.
+- A long document or code the user edits as text: use `platform/edit/function-editor`.
 
 ## Building blocks
 
@@ -160,7 +161,7 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 - `PasteEnv` — Create Variable opens the drawer with the Paste .env panel open on a pasted file: the report counts the pairs found, names the line that will be skipped, the key repeated in the text and the key already in the list whose value will be replaced, and Add 3 variables merges them into the rows, announces the count and returns focus to Paste .env.
 - `NetworkList` — Create Network List opens a drawer with a Name, a type `ToggleGroup` (IP/CIDR, ASN, Countries) and the entries as an `AttributeEditor` of address and comment rows; Paste list holds a pasted list of nine lines whose report counts 7 entries, names the 2 lines that are not valid addresses and the line already in the list, and Add 7 entries appends them as rows where each invalid line shows its own error. Countries is a `MultiSelect`; Save checks every row and raises a success toast.
 
-Each variant is the same screen in another state: `get_pattern("platform/edit/attribute-editor", { variant })`, or the file under `blocks/platform/edit/attribute-editor/variants/`.
+Each variant is the same screen in another state: `get_pattern("platform/edit/variables", { variant })`, or the file under `blocks/platform/edit/variables/variants/`.
 
 ## Code (`List`)
 
@@ -804,7 +805,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
       <template #actions>
         <Button
           label="Documentation"
-          icon="pi pi-book"
+          icon="ai ai-book"
           kind="outlined"
           href="https://example.com/docs/variables"
           target="_blank"
@@ -812,7 +813,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
         />
         <Button
           label="Create Variable"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="primary"
           size="large"
           @click="openCreate"
@@ -836,7 +837,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="loading"
@@ -849,7 +850,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -873,7 +874,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
             <template #content>
               <EmptyState
                 size="medium"
-                icon="pi pi-key"
+                icon="ai ai-key"
                 title="No variables yet"
                 description="Create a variable to store a value your services read at runtime."
               >
@@ -881,14 +882,14 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                   <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                     <Button
                       label="Create Variable"
-                      icon="pi pi-plus"
+                      icon="ai ai-plus"
                       kind="secondary"
                       size="small"
                       @click="openCreate"
                     />
                     <Button
                       label="Documentation"
-                      icon="pi pi-book"
+                      icon="ai ai-book"
                       kind="outlined"
                       size="small"
                       href="https://example.com/docs/variables"
@@ -915,7 +916,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                 <template #cell-key="{ value }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-key shrink-0 text-body-lg text-(--text-muted)"
+                      class="ai ai-key shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 truncate">{{ value }}</span>
@@ -987,7 +988,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                       >
                         <template #leading>
                           <i
-                            class="pi pi-pencil"
+                            class="ai ai-pencil"
                             aria-hidden="true"
                           />
                         </template>
@@ -998,7 +999,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                       >
                         <template #leading>
                           <i
-                            class="pi pi-clone"
+                            class="ai ai-clone"
                             aria-hidden="true"
                           />
                         </template>
@@ -1012,7 +1013,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                       >
                         <template #leading>
                           <i
-                            class="pi pi-trash"
+                            class="ai ai-trash"
                             aria-hidden="true"
                           />
                         </template>
@@ -1024,7 +1025,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="pi pi-filter-slash"
+                    icon="ai ai-filter-slash"
                     title="No matching variables"
                     description="No variable matches these filters."
                   >
@@ -1094,7 +1095,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                   >
                     <Button
                       label="Upload"
-                      icon="pi pi-upload"
+                      icon="ai ai-upload"
                       kind="outlined"
                       size="medium"
                       @click="fileInput?.click()"
@@ -1162,7 +1163,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                                 text="Remove variable"
                               >
                                 <IconButton
-                                  icon="pi pi-trash"
+                                  icon="ai ai-trash"
                                   kind="outlined"
                                   size="large"
                                   :aria-label="removeLabel"
@@ -1209,7 +1210,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                                 :text="entries[index].visible ? 'Hide value' : 'Show value'"
                               >
                                 <IconButton
-                                  :icon="entries[index].visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                  :icon="entries[index].visible ? 'ai ai-eye-slash' : 'ai ai-eye'"
                                   kind="outlined"
                                   size="large"
                                   :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
@@ -1343,7 +1344,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
                               >
                                 <template #prefix>
                                   <i
-                                    class="pi pi-search"
+                                    class="ai ai-search"
                                     aria-hidden="true"
                                   />
                                 </template>

@@ -19,6 +19,7 @@
 - Keep step state in the consumer (refs or a form store). Only the active step renders its content, so a
 - Validate in the `next` handler and call `event.preventDefault()` synchronously to block the move. For
 - Show why Next was blocked inside the step (an inline `alert` or the field's `invalid` +
+- The rail reaches every step the reader has already reached, forward too. A forward jump does not
 - Give every step a title that names the decision (`Settings`, `Review`) and keep it short. The same
 - Make the last step a review of the answers when the resource is costly to change after creation, and
 - Bind `loading` to the submit request. It disables Cancel, Previous and the rail, so the handler needs no
@@ -56,7 +57,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `next` | `(event: MouseEvent, step: number)` | Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to the `v-model` index. Not fired by Previous or by rail jumps, which only go back. |
+| `next` | `(event: MouseEvent, step: number)` | Fired when Next is activated on any step but the last, **before** the wizard advances. `step` is the zero-based index of the step being left, which is the one to validate. Cancelable: if a handler calls `event.preventDefault()` synchronously, the wizard stays on `step`. Otherwise it writes `step + 1` to the `v-model` index. Not fired by Previous or by rail jumps, which only reach steps the reader has already reached. |
 | `submit` | `(event: MouseEvent)` | Fired when the primary action is activated on the last step. The wizard changes no state. The consumer starts the request and binds `loading`. Not fired while `loading`. |
 | `cancel` | `(event: MouseEvent)` | Fired when Cancel is activated. The wizard changes no state, and the consumer decides where to go. Not fired while `loading`. |
 
@@ -90,9 +91,14 @@ The root composes, and does not re-implement:
   `Stepper.Step` per registered `Wizard.Step` and passes:
   - `value` = `String(index)`.
   - `title` = the step's `title`.
-  - `state` = `'complete'` for every step before the active one, otherwise `'upcoming'`. The rail
-    derives `current` itself.
-  - `disabled` = `true` for every step after the active one, and for every step while `loading`.
+  - `state` = `'error'` for a step marked `invalid`; otherwise `'complete'` for every step before the
+    furthest step reached, except the active one, and `'upcoming'` for the rest. The rail derives
+    `current` itself.
+  - `disabled` = `true` for every step after the furthest step reached, and for every step while
+    `loading`. The furthest step reached is the highest index the `v-model` has held since mount.
+  - `data-invalid` on the `Stepper.Step` root when the step is `invalid`. `Stepper.Step` draws the
+    `error` state with the danger tokens and reads its error word (`stepper.error`, `Needs attention`)
+    to screen readers.
 
   An `optional` step shows the word `Optional` in the `Stepper.Step` default slot. The rail's `v-model`
   is the active index as a string, and a rail activation writes `Number(value)` back to the `v-model` index.
@@ -118,7 +124,9 @@ The root composes, and does not re-implement:
   - Props: `title?: string` (default `''` — what this step decides, in the reader's words; shown in the
     rail and as the step heading), `description?: string` (default `''` — one line under the heading
     saying what the step is for; omitted when empty), `optional?: boolean` (default `false` — marks the
-    step as skippable: shows `Optional` beside the title in the rail and in the header).
+    step as skippable: shows `Optional` beside the title in the rail and in the header),
+    `invalid?: boolean` (default `false` — the step holds an error: the rail shows it in the error
+    state and the step root carries `data-invalid`).
   - Slot: `default` — the step's content (fields, review summary).
   - `data-testid` fallback: `navigation-wizard-step` (consumer `data-testid` wins).
 
@@ -150,7 +158,7 @@ folder only):
 
 | Model     | Type                  | Default     | Emits               | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | --------- | --------------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model` | `number \| undefined` | `undefined` | `update:modelValue` | Zero-based index of the step on screen, through `defineModel<number \| undefined>()`, the primary value as on `Stepper` and every sibling. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to an earlier step. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. The rail `Stepper` identifies steps by string `value`; the wizard by numeric index, because its steps are positional. |
+| `v-model` | `number \| undefined` | `undefined` | `update:modelValue` | Zero-based index of the step on screen, through `defineModel<number \| undefined>()`, the primary value as on `Stepper` and every sibling. Written by Next (after an un-prevented `next`), by Previous (index − 1) and by a rail jump to any step already reached. Rendering clamps an out-of-range value to `0 … N − 1` without emitting. The rail `Stepper` identifies steps by string `value`; the wizard by numeric index, because its steps are positional. |
 
 ## States
 
@@ -160,8 +168,11 @@ folder only):
 - `data-active-step` on the root mirrors the clamped `v-model` index.
 - `data-active` on `Wizard.Step` is present only on the step on screen.
 - `data-optional` on `Wizard.Step` mirrors `optional`.
-- Rail step statuses come from `Stepper.Step`. Every step before the active one is `complete`, the
-  active one is `current` (derived by the rail), and every step after it is `upcoming` + `disabled`.
+- `data-invalid` on `Wizard.Step` and on its rail step mirrors `invalid`.
+- Rail step statuses come from `Stepper.Step`. A step marked `invalid` is `error`. Otherwise every step
+  before the furthest step reached is `complete`, the active one is `current` (derived by the rail),
+  the furthest step reached is `upcoming` and enabled, and every step after it is `upcoming` +
+  `disabled`.
 - No `data-state`: the wizard has no open/closed state.
 
 State matrix:
@@ -174,6 +185,8 @@ State matrix:
 | single step  | `N === 1`                             | Previous is not rendered, and the primary action is the submit action from the start.                                                                                                                                                                                                                                                          |
 | loading      | `loading`                             | The primary `Button` gets `loading` (spinner + `aria-busy`, click suppressed). Cancel and Previous are `disabled`, and every `Stepper.Step` is `disabled`.                                                                                                                                                                                     |
 | next blocked | `next` handler calls `preventDefault` | The wizard stays on the step. The consumer renders the reason inside the step's slot.                                                                                                                                                                                                                                                          |
+| invalid step | `Wizard.Step` `invalid`               | The step root carries `data-invalid`. Its rail step carries `data-invalid` and renders the `Stepper.Step` `error` state: the danger dot with the warning glyph and the screen-reader word `Needs attention`.                                                                                                                                            |
+| step reached | the `v-model` index once held a step  | That step and every step before it stay reachable from the rail after the reader goes back.                                                                                                                                                                                                                                                    |
 | narrow box   | wizard box under `@2xl`               | The rail is not displayed (`@max-2xl/wizard:hidden`). The root shows its own `Step n of N` progress line (`wizard.stepOf`, `aria-live="polite"`, `data-testid="<testid>__progress"`) at the top of the content column in place of the step header's overline, which hides at that width; the step title follows it and the footer stays below. |
 
 Layout from `@2xl` of the wizard's own box (`@container/wizard`, so a wizard in a drawer or split view follows that box): a row with the rail column (`@2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0`) on the start
@@ -190,9 +203,9 @@ separated from the content by a top border.
 focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic focus target
   (`tabindex="-1"`), not a control, so it is out of the Tab order and draws no ring.
 - Keyboard map:
-  - `Tab` order: the enabled rail steps (those before the active one), then the step content, then the
-    footer (Cancel, Previous, Next/submit).
-  - `Enter` / `Space` on an earlier rail step jumps back to it.
+  - `Tab` order: the enabled rail steps (every step up to the furthest one reached), then the step
+    content, then the footer (Cancel, Previous, Next/submit).
+  - `Enter` / `Space` on an enabled rail step jumps to it, back or forward.
   - `Enter` / `Space` on a footer button activates it.
   - Disabled rail steps and actions are skipped by `Tab`.
   - On every step change after the initial render, focus moves to the new step's heading, so the screen

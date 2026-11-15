@@ -106,8 +106,8 @@ The five dot states, and what each one renders:
 | ------------ | ----------------------------------- | ----------------------------------------------------------- | -------------------- |
 | `upcoming`   | not reached, nothing known          | outlined, muted, shows its number                           | muted track          |
 | `current`    | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc          | muted track          |
-| `complete`   | the owner set `state="complete"`    | filled `--secondary`, `pi pi-check` glyph                   | filled `--secondary` |
-| `error`      | the owner set `state="error"`       | filled `--danger`, `pi pi-exclamation-triangle` glyph       | muted track          |
+| `complete`   | the owner set `state="complete"`    | filled `--secondary`, `ai ai-check` glyph                   | filled `--secondary` |
+| `error`      | the owner set `state="error"`       | filled `--danger`, `ai ai-exclamation-triangle` glyph       | muted track          |
 | `loading`    | the owner set `state="loading"`     | outlined in `--secondary`, `Spinner` in place of the number | muted track          |
 
 `error` and `loading` outrank `current`: a step that is both on screen and wrong must say it is wrong.

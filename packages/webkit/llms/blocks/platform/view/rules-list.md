@@ -117,7 +117,7 @@ Each phase renders every rule, unpaged: paging an ordered list would hide the ne
 
 - `platform/edit/rule-builder` — the drawer that adds or edits one rule.
 - `platform/view/table-view` — lists whose order does not matter.
-- `platform/states/form-error` — the failed-save `Alert` pattern the review dialog follows.
+- `platform/states/form-validation` (SectionRejected) — the failed-save `Alert` pattern the review dialog follows.
 - `platform/view/waf-tuning` — the WAF tuning list a firewall's WAF rule links to.
 
 ## Variants
@@ -533,7 +533,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/rules"
@@ -541,7 +541,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
           />
           <Button
             label="Add Rule"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="outlined"
             size="medium"
             :disabled="loading"
@@ -567,7 +567,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -662,7 +662,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                           </Tooltip>
                           <Tooltip :text="lockReason(group.value, row) || 'Move up'">
                             <IconButton
-                              icon="pi pi-chevron-up"
+                              icon="ai ai-chevron-up"
                               kind="outlined"
                               size="small"
                               data-control="up"
@@ -677,7 +677,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                           </Tooltip>
                           <Tooltip :text="lockReason(group.value, row) || 'Move down'">
                             <IconButton
-                              icon="pi pi-chevron-down"
+                              icon="ai ai-chevron-down"
                               kind="outlined"
                               size="small"
                               data-control="down"
@@ -742,7 +742,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                       <template #empty>
                         <EmptyState
                           size="small"
-                          icon="pi pi-search"
+                          icon="ai ai-search"
                           :title="`No ${group.label.toLowerCase()} rule matches “${search.trim()}”`"
                         >
                           <template #actions>
@@ -765,7 +765,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                       <template #actions>
                         <Button
                           label="Add Rule"
-                          icon="pi pi-plus"
+                          icon="ai ai-plus"
                           kind="outlined"
                           size="medium"
                         />

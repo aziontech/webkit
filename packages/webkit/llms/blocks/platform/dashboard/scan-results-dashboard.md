@@ -10,7 +10,7 @@
 
 ## Asked as
 
-scan results; scan dashboard; analysis verdicts; malware scan; flagged items; submissions in analysis; resultados da análise; painel de varredura; itens sinalizados
+scan results; scan dashboard; analysis verdicts; malware scan; flagged items; submissions in analysis; resultados da análise; painel de varredura; itens sinalizados; waiting for a verdict; asynchronous analysis results
 
 The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a
 verdict. The reader checks what was submitted, what is still waiting, what was flagged, and above all
@@ -21,6 +21,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use scan-results-dashboard when items wait for a verdict from an asynchronous analysis.
 - Items get a verdict from an asynchronous analysis (Clean, Suspicious, Flagged, Pending).
 - Some items are held or released depending on that verdict, and the exceptions need follow-up.
 - The reader needs to look up a specific item by name or submitter.
@@ -29,7 +30,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 - A continuous score rather than a verdict per item: use `platform/dashboard/health-score-dashboard`.
 - Alerts triaged by severity: use `platform/dashboard/alerts-dashboard`.
-- Requests decided by rules in real time: use `platform/dashboard/activity-outcomes-dashboard`.
+- Requests decided by rules in real time: use `platform/dashboard/security-dashboard`.
 
 ## Building blocks
 
@@ -142,7 +143,7 @@ The verdict of each row, in the same hue as its donut slice.
 ## Related
 
 - `platform/dashboard/alerts-dashboard` — the early delivery alerts as a triage queue.
-- `platform/dashboard/activity-outcomes-dashboard` — decisions made in real time.
+- `platform/dashboard/security-dashboard` — decisions made in real time.
 - `platform/view/table-view` — the submissions table on its own page.
 
 ## Variants
@@ -650,7 +651,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       >
         <template #actions>
           <IconButton
-            icon="pi pi-refresh"
+            icon="ai ai-refresh"
             kind="outlined"
             size="medium"
             aria-label="Refresh"
@@ -806,7 +807,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -895,7 +896,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching items"
                     description="Change the search or the filters."
                   />
@@ -903,7 +904,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <template #cell-name="{ row }">
                   <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="pi pi-file shrink-0 text-body-lg text-(--text-muted)"
+                      class="ai ai-file shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="truncate">{{ row.name }}</span>
@@ -936,7 +937,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-file"
+              icon="ai ai-file"
               title="No items yet"
               description="Items sent for analysis inline or through the API appear here."
             />

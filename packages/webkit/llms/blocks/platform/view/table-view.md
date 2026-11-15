@@ -327,7 +327,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/resources"
@@ -335,7 +335,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
           />
           <Button
             label="Create Resource"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
           />
@@ -357,7 +357,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-refresh"
+                  icon="ai ai-refresh"
                   kind="outlined"
                   size="medium"
                   :loading="loading"
@@ -370,7 +370,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                 class="shrink-0"
               >
                 <IconButton
-                  icon="pi pi-download"
+                  icon="ai ai-download"
                   kind="outlined"
                   size="medium"
                   :disabled="!matchingItems.length"
@@ -393,7 +393,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
               <template #content>
                 <EmptyState
                   size="medium"
-                  icon="pi pi-box"
+                  icon="ai ai-box"
                   title="No resources yet"
                   description="Create a resource to start serving traffic on your domains."
                 >
@@ -401,13 +401,13 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                     <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">
                       <Button
                         label="Create Resource"
-                        icon="pi pi-plus"
+                        icon="ai ai-plus"
                         kind="secondary"
                         size="small"
                       />
                       <Button
                         label="Documentation"
-                        icon="pi pi-book"
+                        icon="ai ai-book"
                         kind="outlined"
                         size="small"
                         href="https://example.com/docs/resources"
@@ -486,7 +486,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                         >
                           <template #leading
                             ><i
-                              class="pi pi-cloud-upload"
+                              class="ai ai-cloud-upload"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -496,7 +496,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                         >
                           <template #leading
                             ><i
-                              class="pi pi-eye"
+                              class="ai ai-eye"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -506,7 +506,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                         >
                           <template #leading
                             ><i
-                              class="pi pi-clone"
+                              class="ai ai-clone"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -518,7 +518,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                         >
                           <template #leading
                             ><i
-                              class="pi pi-trash"
+                              class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -528,7 +528,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="pi pi-filter-slash"
+                      icon="ai ai-filter-slash"
                       title="No matching resources"
                       description="No resource matches these filters."
                     >

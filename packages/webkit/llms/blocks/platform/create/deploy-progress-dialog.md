@@ -24,7 +24,7 @@ The modal progress of one deploy that sends several Deployment Settings live, ea
 ## When not to use
 
 - A deploy of one service or project: use `platform/create/deploy-drawer`, which closes and reports through the toast.
-- A deploy with build steps and logs: use `platform/create/deployment-flow` and `platform/detail/deployment-logs`.
+- A deploy with build steps and logs: use `platform/detail/deployment-logs`.
 - Reviewing what a multi-resource release reaches before it runs: use `platform/create/release-impact`.
 
 ## Building blocks
@@ -367,7 +367,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
         label="Show progress"
         kind="outlined"
         size="medium"
-        icon="pi pi-list"
+        icon="ai ai-list"
         @click="open = true"
       />
     </div>
@@ -440,7 +440,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                   />
                   <i
                     v-else
-                    class="pi pi-sliders-h text-(--text-muted)"
+                    class="ai ai-sliders-h text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Media>
@@ -472,7 +472,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
             <EmptyState
               v-else
               size="small"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
               :title="emptyLabel"
             />
             <span
@@ -495,7 +495,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                 label="Retry failed"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 @click="retryFailed"
               />
             </div>

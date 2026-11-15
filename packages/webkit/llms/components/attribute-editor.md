@@ -17,7 +17,7 @@
 ## Do
 
 - Keep two to four columns; more columns belong in a drawer per row.
-- Pass `errors` only after the first Save (rule of the form-error block), then keep them live while the user fixes the rows.
+- Pass `errors` only after the first Save (rule of the form-validation block), then keep them live while the user fixes the rows.
 - Use `minItems: 1` when the form needs at least one row, so the last row keeps its fields and loses its Remove.
 - Set `limit` when the backend has one; the component says how many rows are left and disables Add at the limit.
 - Replace a cell's control through `cell-<key>` (a `Select` for an operator, a `Switch` for secret) instead of drawing rows by hand; use `row` only when the row needs a layout of its own.
@@ -52,7 +52,7 @@
 | `addButtonLabel` | `string` | `''` | false | Label of the Add button. Empty uses the locale catalog. |
 | `removeButtonLabel` | `string` | `''` | false | Accessible name of the Remove button, followed by the row number. Empty uses the locale catalog. |
 | `addGroupLabel` | `string` | `''` | false | Label of the Add group button in grouped mode. Empty uses the locale catalog. |
-| `empty` | `string` | `''` | false | Text shown when there are no rows. Empty uses the locale catalog. |
+| `emptyTitle` | `string` | `''` | false | Text shown when there are no rows. Empty uses the locale catalog. |
 | `limit` | `number` | `undefined` | false | Most rows allowed (per group in grouped mode); Add is disabled at the limit and the rows left are announced. |
 | `groupLimit` | `number` | `undefined` | false | Most groups allowed in grouped mode. |
 | `minItems` | `number` | `0` | false | Fewest rows kept; rows at the minimum lose their Remove button. |
@@ -121,7 +121,7 @@
 | `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`         | No items yet.                                  | `empty`             |
+| `attributeEditor.empty`         | No items yet.                                  | `emptyTitle`        |
 | `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
 | `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |

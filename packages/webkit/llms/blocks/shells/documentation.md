@@ -123,7 +123,6 @@ In the footer's language slot, trigger labelled `Language`.
 ## Related
 
 - `DocLayout` — the component this block shows.
-- `headers/docs-header` — the header on its own.
 - `shells/console` (`ConsoleLayout`) and `shells/website` (`SiteLayout`) — the console and marketing counterparts.
 
 ## Variants
@@ -208,18 +207,18 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
     {
       label: 'GitHub',
       links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'pi pi-github' },
+        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
         {
           label: 'Contribute to this page',
           href: 'https://github.com/aziontech/azion',
-          icon: 'pi pi-pencil'
+          icon: 'ai ai-pencil'
         }
       ]
     },
     {
       label: 'Community',
       links: [
-        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'pi pi-discord' },
+        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
         { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
       ]
     }
@@ -259,25 +258,25 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
   ]
 
   const socials = [
-    { icon: 'pi pi-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
+    { icon: 'ai ai-github', label: 'Azion on GitHub', href: 'https://github.com/aziontech' },
     {
-      icon: 'pi pi-linkedin',
+      icon: 'ai ai-linkedin',
       label: 'Azion on LinkedIn',
       href: 'https://www.linkedin.com/company/aziontech'
     },
     {
-      icon: 'pi pi-youtube',
+      icon: 'ai ai-youtube',
       label: 'Azion on YouTube',
       href: 'https://www.youtube.com/aziontech'
     },
     { icon: 'ai ai-x', label: 'Azion on X', href: 'https://x.com/aziontech' },
     {
-      icon: 'pi pi-instagram',
+      icon: 'ai ai-instagram',
       label: 'Azion on Instagram',
       href: 'https://www.instagram.com/aziontech'
     },
-    { icon: 'pi pi-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
-    { icon: 'pi pi-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
+    { icon: 'ai ai-discord', label: 'Azion on Discord', href: 'https://discord.gg/azion' },
+    { icon: 'ai ai-reddit', label: 'Azion on Reddit', href: 'https://www.reddit.com/r/aziontech' }
   ]
 
   const languages = ['EN', 'PT-BR', 'ES']
@@ -343,7 +342,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
 
     <template #actions>
       <IconButton
-        icon="pi pi-github"
+        icon="ai ai-github"
         kind="outlined"
         size="medium"
         aria-label="Azion on GitHub"
@@ -433,7 +432,7 @@ Each variant is the same screen in another state: `get_pattern("shells/documenta
                 <Select.Trigger aria-label="Language">
                   <template #prefix>
                     <i
-                      class="pi pi-globe text-(--text-muted)"
+                      class="ai ai-globe text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </template>

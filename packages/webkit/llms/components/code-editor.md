@@ -337,7 +337,7 @@ addEventListener('fetch', (event) => {
         label="Run"
         kind="secondary"
         size="small"
-        icon="pi pi-play"
+        icon="ai ai-play"
       />
     </template>
   </CodeEditor>

@@ -48,7 +48,7 @@ A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says 
 
 ### E. Outcome — `Alert` (required)
 
-Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-error`). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
+Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `platform/states/form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
 ## Do
 
@@ -97,7 +97,7 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 
 - `platform/view/rules-list` — the firewall's rules, where a WAF rule set is applied.
 - `platform/view/table-view` — the list recipe this table follows.
-- `platform/states/form-error` — the failure pattern in the dialog.
+- `platform/states/form-validation` (SectionRejected) — the failure pattern in the dialog.
 - `platform/dashboard/security-dashboard` — attack volume over time.
 
 ## Variants
@@ -320,7 +320,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
         <template #actions>
           <Button
             label="Export to CSV"
-            icon="pi pi-download"
+            icon="ai ai-download"
             kind="outlined"
             size="medium"
             :disabled="!rows.length || loading || loadFailed"
@@ -328,7 +328,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
           />
           <Button
             :label="selected.length ? `Allow ${selected.length} selected` : 'Allow selected'"
-            icon="pi pi-check"
+            icon="ai ai-check"
             kind="outlined"
             size="medium"
             :disabled="!selected.length || loading"
@@ -393,7 +393,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -401,7 +401,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
           </div>
           <Tooltip text="Refresh">
             <IconButton
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="medium"
               aria-label="Refresh matched requests"
@@ -425,7 +425,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
           <template #content>
             <EmptyState
               v-if="!INITIAL_ROWS.length"
-              icon="pi pi-shield"
+              icon="ai ai-shield"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
             />
@@ -473,7 +473,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
                   key="empty-state-1"
                   v-if="search.trim()"
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching rules"
                   :description="`No rule, IP address, country or path matches “${search.trim()}”.`"
                 >

@@ -40,7 +40,7 @@
    "type": "string",
    "default": "—",
    "required": "true",
-   "doc": "PrimeIcons class for the leading/trailing icon."
+   "doc": "Azion icon class for the leading/trailing icon."
   },
   {
    "name": "ariaLabel",
@@ -131,15 +131,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <IconButton\n    kind=\"primary\"\n    size=\"large\"\n    icon=\"pi pi-plus\"\n    aria-label=\"Add\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <IconButton\n    kind=\"primary\"\n    size=\"large\"\n    icon=\"ai ai-plus\"\n    aria-label=\"Add\"\n  />\n</template>"
   },
   {
    "name": "Types",
-   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      kind=\"primary\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"secondary\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"outlined\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"transparent\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"danger\"\n      icon=\"pi pi-trash\"\n      aria-label=\"Delete\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      kind=\"primary\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"secondary\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"outlined\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"transparent\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      kind=\"danger\"\n      icon=\"ai ai-trash\"\n      aria-label=\"Delete\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Sizes",
-   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      size=\"small\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"medium\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"large\"\n      icon=\"pi pi-plus\"\n      aria-label=\"Add\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import IconButton from '@aziontech/webkit/icon-button'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-4\">\n    <IconButton\n      size=\"small\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"medium\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n    <IconButton\n      size=\"large\"\n      icon=\"ai ai-plus\"\n      aria-label=\"Add\"\n    />\n  </div>\n</template>"
   }
  ],
  "docs": "components/icon-button.md"

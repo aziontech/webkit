@@ -32,7 +32,7 @@
 - [attribute-editor](attribute-editor.md) — the rows, Add, Remove, limit text, focus and announcements underneath.
 - [input](input.md) — key and value controls; suggestions come from a native `datalist`.
 - [tag](tag.md) — how the saved tags read outside the editor.
-- platform/states/form-error` — the rule for server errors passed through `errors`.
+- platform/states/form-validation` (SectionRejected) — the rule for server errors passed through `errors`.
 
 ## Props
 

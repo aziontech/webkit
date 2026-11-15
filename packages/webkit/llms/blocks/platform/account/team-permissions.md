@@ -356,7 +356,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         <template #actions>
           <Button
             label="Documentation"
-            icon="pi pi-book"
+            icon="ai ai-book"
             kind="outlined"
             size="medium"
             href="https://example.com/docs/teams"
@@ -364,7 +364,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           />
           <Button
             label="Create Team"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             kind="primary"
             size="large"
             href="/account/teams/new"
@@ -390,7 +390,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="outlined"
                 size="medium"
                 :loading="refreshing"
@@ -403,7 +403,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               class="shrink-0"
             >
               <IconButton
-                icon="pi pi-download"
+                icon="ai ai-download"
                 kind="outlined"
                 size="medium"
                 :disabled="!matchingItems.length"
@@ -441,14 +441,14 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           <template #content>
             <EmptyState
               size="medium"
-              icon="pi pi-users"
+              icon="ai ai-users"
               title="No teams yet"
               description="Create a team for each role in your organisation, then add people to it."
             >
               <template #actions>
                 <Button
                   label="Create Team"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   kind="secondary"
                   size="small"
                   href="/account/teams/new"
@@ -540,7 +540,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-search"
+                  icon="ai ai-search"
                   title="No matching teams"
                   description="No team matches these filters."
                 >

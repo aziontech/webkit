@@ -1,21 +1,22 @@
-# CodeEditor (`platform/edit/code-editor`)
+# FunctionEditor (`platform/edit/function-editor`)
 
 > The code editor page, a page body for ConsoleLayout (the layout's breadcrumb names the service): the Code and Settings tabs, an editor toolbar whose ToggleGroup switches between the Code document and the Arguments document, and under it either one editor filling the pane or the Arguments split, a Resizable with the collapsible schema editor on the left and the form fields on the right. Both editors are a `CodeEditor` filling its pane with zero-padded line numbers and the Monaco loader from the code-editor spec. On Settings the tab holds the General, Runtime, Execution environment and Status sections, with the unsaved-changes bar: Save shows its loading state while Discard and the fields wait, a saved change raises a success toast, and a failed save keeps the bar with a danger `Alert`. Fields reorder with Move up and Move down buttons. Its page-level parts are `PageTabs`, `SettingsSection`, `SettingRow` and `SaveBar`.
 
 - Surface: product
-- Source: `blocks/platform/edit/code-editor/code-editor.vue` in `@aziontech/webkit`
-- MCP: `get_pattern("platform/edit/code-editor")`
+- Source: `blocks/platform/edit/function-editor/function-editor.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("platform/edit/function-editor")`
 - Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeEditor](../../../components/code-editor.md), [CopyButton](../../../components/copy-button.md), [EmptyState](../../../components/empty-state.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), `LogViewContent`, [LogView](../../../components/log-view.md), [PageTabs](../../../components/page-tabs.md), [RadioGroup](../../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [StatusIndicator](../../../components/status-indicator.md), [Switch](../../../components/switch.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), [Trace](../../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
 
-code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução
+code editor; code editor page; function code editor; editor page; code and arguments editor; split editor; monaco editor; editor de código; página do editor; editar código; function editor; edge function; function detail; function arguments; json schema arguments; function settings; editor de função; argumentos da função; detalhe da função; test run; function test; run trace; span waterfall; invocation trace; testar função; execução de teste; rastreamento da execução; function code page; edit function code; function arguments page
 
 The editing page of a service whose behavior lives in source code. The user writes and saves the code, defines the argument form each instance of the service asks for (its fields, types and defaults), and adjusts the service's settings. The editor fills the page so the code has room, and one save bar commits code, arguments and settings together. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header with the Services breadcrumb, the ⌘K palette and the `main`. The editor pins its own panes, so its root carries `data-layout-fill`: the layout's `main` stops scrolling and the root fills it (`h-dvh` only sizes a standalone preview).
 
 ## When to use
 
+- Use the function-editor block for the code and arguments page of a function; the editor itself is the CodeEditor component.
 - A resource is mainly a document the user edits as text: function code, a schema, a configuration file.
 - The document comes with a structured companion (an argument form) that is easier to edit as fields than as JSON, and the user wants both views side by side.
 - The same resource also has a few settings, shown on a second tab of the same page.
@@ -25,7 +26,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 
 - A resource made only of settings: use `platform/edit/edit-resource`.
 - Ordered conditions and actions the user composes without code: use `platform/edit/rule-builder`.
-- Free key and value pairs such as environment variables: use `platform/edit/attribute-editor`.
+- Free key and value pairs such as environment variables: use `platform/edit/variables`.
 - Running queries and reading results: use `platform/view/query-editor`.
 
 ## Building blocks
@@ -151,7 +152,7 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 - `TestRun` — The Code document after a test run of image-optimizer: Run test in the editor toolbar, and under the editor a resizable Test run pane with the run status and ID, the request and its outcome, the run details, the `Trace` waterfall with the origin fetch selected, and the run logs in a `LogView`. Run test again shows the running state until the run finishes.
 - `Saving` — The Code document of image-optimizer while a change is being saved: the save bar stays up, Save shows its loading state, Discard and the fields are disabled and the editors are read-only until the request ends.
 
-Each variant is the same screen in another state: `get_pattern("platform/edit/code-editor", { variant })`, or the file under `blocks/platform/edit/code-editor/variants/`.
+Each variant is the same screen in another state: `get_pattern("platform/edit/function-editor", { variant })`, or the file under `blocks/platform/edit/function-editor/variants/`.
 
 ## Code (`Code`)
 
@@ -582,7 +583,7 @@ export async function handleRequest(request, args = {}) {
                           label="Add field"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-plus"
+                          icon="ai ai-plus"
                           :disabled="saving"
                           @click="addField"
                         />
@@ -590,7 +591,7 @@ export async function handleRequest(request, args = {}) {
                           label="Remove form"
                           kind="outlined"
                           size="medium"
-                          icon="pi pi-times"
+                          icon="ai ai-times"
                           :disabled="saving"
                           @click="removeForm"
                         />
@@ -635,7 +636,7 @@ export async function handleRequest(request, args = {}) {
                             <div class="flex min-h-0 flex-1">
                               <EmptyState
                                 bordered
-                                icon="pi pi-plus-circle"
+                                icon="ai ai-plus-circle"
                                 title="This form has no fields"
                                 description="Add the first argument the service reads."
                                 class="w-full"
@@ -645,7 +646,7 @@ export async function handleRequest(request, args = {}) {
                                     label="Add field"
                                     kind="secondary"
                                     size="medium"
-                                    icon="pi pi-plus"
+                                    icon="ai ai-plus"
                                     @click="addField"
                                   />
                                   <Link
@@ -688,7 +689,7 @@ export async function handleRequest(request, args = {}) {
                                             >
                                               <IconButton
                                                 :id="`${formId}-up-${field.id}`"
-                                                icon="pi pi-arrow-up"
+                                                icon="ai ai-arrow-up"
                                                 kind="transparent"
                                                 size="small"
                                                 :disabled="index === 0"
@@ -697,7 +698,7 @@ export async function handleRequest(request, args = {}) {
                                               />
                                               <IconButton
                                                 :id="`${formId}-down-${field.id}`"
-                                                icon="pi pi-arrow-down"
+                                                icon="ai ai-arrow-down"
                                                 kind="transparent"
                                                 size="small"
                                                 :disabled="index === fields.length - 1"
@@ -739,7 +740,7 @@ export async function handleRequest(request, args = {}) {
                                               />
                                               <Tooltip text="Duplicate this field">
                                                 <IconButton
-                                                  icon="pi pi-clone"
+                                                  icon="ai ai-clone"
                                                   kind="outlined"
                                                   size="small"
                                                   :aria-label="
@@ -750,7 +751,7 @@ export async function handleRequest(request, args = {}) {
                                               </Tooltip>
                                               <Tooltip text="Remove this field">
                                                 <IconButton
-                                                  icon="pi pi-trash"
+                                                  icon="ai ai-trash"
                                                   kind="outlined"
                                                   size="small"
                                                   :aria-label="
@@ -762,8 +763,8 @@ export async function handleRequest(request, args = {}) {
                                               <IconButton
                                                 :icon="
                                                   isExpanded(field.id)
-                                                    ? 'pi pi-chevron-up'
-                                                    : 'pi pi-chevron-down'
+                                                    ? 'ai ai-chevron-up'
+                                                    : 'ai ai-chevron-down'
                                                 "
                                                 kind="outlined"
                                                 size="small"
@@ -1179,7 +1180,7 @@ export async function handleRequest(request, args = {}) {
                         >
                           <template #suffix>
                             <i
-                              class="pi pi-lock"
+                              class="ai ai-lock"
                               aria-hidden="true"
                             />
                           </template>

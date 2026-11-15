@@ -1,50 +1,52 @@
 # MultipageCreate (`platform/create/multipage-create`)
 
-> The page a first-level resource is created on one step at a time: the creation header, a Stepper rail on the left that unlocks each step once it is reached and shows the description of the current one, a form column that opens with the step heading, and a footer bar with Cancel on the left and Back plus Next on the right, Next turning into the create action on the last step, a Review step that shows its loading state and confirms the create in a toast. Every create asks first where the resource runs: a centred chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings, and a code resource can make one step the editor plotted in CodeWorkspace. Built from `PageHeader`, `SettingRow`, `GlobalHeader`, `Stepper`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind="card"`), `Item`, `Textarea`, `HelperText` and `Button`.
+> The page a first-level resource is created on one step at a time, built on the `Wizard` component: the creation header, a page heading, then the Wizard with its step rail on the start side (completed steps reachable, later ones locked), the current step's heading and fields, and its footer with Cancel, Previous and Next, Next turning into the create action on the last step. Next validates the step it leaves and stays put with the message under the field when it fails; a Review step shows the create's loading state and confirms it in a toast. Every create asks first where the resource runs: a chooser lists the hosts it can bind to, six at a time with a search, and tags the ones missing a module the resource needs; choosing one with that module off inserts a step that offers to turn it on. Each resource brings its own field steps, plus an Advanced step when the endpoint has optional settings. CreateAndDeploy is the same frame for a resource that is bound to another and deployed in one act (a service that serves a project on a domain): Project, then Domain and deployment, ending on Create and deploy. Built from `Wizard`, `PageHeader`, `SettingRow`, `GlobalHeader`, `Input`, `Tag`, `Card`, `Alert`, `Field` with `Switch`, `RadioGroup` (`kind="card"`), `Item`, `Textarea`, `HelperText` and `Button`.
 
 - Surface: product
 - Source: `blocks/platform/create/multipage-create/multipage-create.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/multipage-create")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioGroup](../../../components/radio-group.md), [SaveBar](../../../components/save-bar.md), [SectionHeader](../../../components/section-header.md), [SettingRow](../../../components/setting-row.md), [Stepper](../../../components/stepper.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Field](../../../components/field.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [RadioGroup](../../../components/radio-group.md), [RadioGroup](../../../components/radio-group.md), [SectionHeader](../../../components/section-header.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Wizard](../../../components/wizard.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
-multipage create; multi-step create page; stepper create; create wizard; step by step form; criação em etapas; formulário em etapas; review step; review and create; confirm before create; wizard review; summary before submit; revisar; etapa de revisão; revisão antes de criar; review before create; summary step; revisar antes de criar
+multipage create; multi-step create page; stepper create; create wizard; step by step form; criação em etapas; formulário em etapas; review step; review and create; confirm before create; wizard review; summary before submit; revisar; etapa de revisão; revisão antes de criar; review before create; summary step; revisar antes de criar; provision wizard; create service wizard; two-step wizard; create and deploy; bind domain and deployment; create resource in steps; assistente de criação; criar serviço
 
-The page a first-level resource is created on one step at a time. The user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. A rail on the left shows how far they are and lets them return to any step already reached; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read.
+The page a first-level resource is created on one step at a time. It is the `Wizard` component in a creation page: the user first says where the resource runs, then answers each step's fields in order, and only reaches the create action on the last step. The Wizard's rail shows how far they are and lets them return to any step already passed; if the host they chose lacks a module the resource needs, a step is inserted that offers to turn it on, so nothing is created that would silently never be read. The same frame creates a resource that must be bound and deployed in one act (CreateAndDeploy).
 
 ## When to use
 
+- Use multipage-create when a first-level resource is created in ordered steps (a later answer changes what is asked); it is the Wizard component in a creation page.
 - A first-level resource whose fields fall into groups that make sense one at a time (general, then type, then entries) and where a later group depends on an earlier answer.
 - The resource must first bind to a host (a policy, an application) and that choice can change what is asked next.
+- A resource that is useless until it is bound to another and deployed, such as a service that serves a project on a domain: use the CreateAndDeploy variant, whose last action creates and deploys.
 - A code resource whose editor needs a whole step to itself.
 
 ## When not to use
 
 - Everything fits on one screen without order: use `platform/create/single-page-create`.
 - The resource is created inside another one: use `platform/create/create-in-drawer`.
-- The flow provisions a service, binds a project and deploys: use `platform/create/provision-wizard`.
-- The flow starts from a code source (Git, CLI, template): use `platform/create/source-wizard`.
+- A new project from a code source (Git, a template, an upload): start at `platform/create/create-hub` and deploy with `platform/create/deploy-template`.
 - Binding an existing or new resource inside a form step: use `platform/create/resource-picker`.
+- Deploying an existing package from inside a resource: use `platform/create/deploy-drawer`.
 
 ## Building blocks
 
 ### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-`GlobalHeader` with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
+The `top-bars/creation-bar` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
 
-### B. Step rail — `Stepper` (required)
+### B. Page heading — `PageHeader` (required)
 
-A `Stepper` in an aside on the left, `v-model` bound to the current step and labelled with the create label. Each `Stepper.Step` has a title, a `state` (`complete`, `upcoming` or `error`) and is `disabled` until it has been reached. Only the current step shows its description. A step whose fields failed validation turns to `error` so the rail points at it. On a phone the rail gives way to a "Step 2 of 4" line over the heading.
+`PageHeader size="small"` over the wizard, on the create measure (`layout-form-create`): the create label as the page's `h1` and one or two sentences on what the resource is and what the last step does. It stays the same on every step.
 
-### C. Step heading — `PageHeader` (required)
+### C. Wizard — `Wizard`, `Wizard.Step` (required)
 
-`PageHeader size="small"` titled with the step's name and described with the step's sentence. The Where it runs step has no `PageHeader`; it carries its own centred heading instead.
+One `Wizard` labelled with the create label, `v-model` bound to the step index, `submit-label` set to the create label and `loading` bound to the create request. Each step is a `Wizard.Step` with a short noun title and a one-sentence description; the Wizard draws the rail (completed steps reachable, later ones locked), the step heading (`h2`), the "Step 2 of 4" line on a narrow box, and the footer: Cancel on the start side, Previous and Next on the end side, Next becoming the create action on the last step. A conditional step is a `Wizard.Step` with `v-if`; the Wizard numbers steps in the order they render. Validation runs in the `next` handler, which calls `preventDefault()` to keep the user on a failed step.
 
-### D. Where it runs — `Input`, `Item`, `Tag`, `Button` (required)
+### D. Where it runs — `Input`, `Item`, `Tag`, `HelperText`, `Button` (required)
 
-A centred chooser: an icon, the create label as the page's `h1`, one line of instruction, a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. A chosen host past the first six is kept visible. Picking a row advances to the next step, so this step has no Next. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one.
+The first step: a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first six is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `HelperText` asking for one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
@@ -66,45 +68,49 @@ A stacked row with a five-row `Textarea` whose label, placeholder and guidance f
 
 The last step, read-only: three bands under small `SectionHeader`s (Where it runs, What gets created, What can reference it), each with Edit back to its step; see Review step below.
 
-### J. Footer — `SaveBar` (required)
+### J. Create and deploy — `Card`, `Field`, `Input`, `Item`, `RadioGroup` (CreateAndDeploy)
 
-`SaveBar kind="fade"` fixed under the form (the footer every create wizard shares: `platform/create/source-wizard` and `platform/create/provision-wizard` use the same Cancel on the left and Back plus the primary on the right), on the create measure (a wrapper sets `--layout-measure-form` to `--layout-measure-form-create`, since the bar takes no classes of its own): transparent Cancel in its `#leading` slot, on the left; outlined Back (hidden on the first step) and the primary submit in `#actions`, on the right, all medium `Button`s. The submit reads Next and becomes the create label on the last step. It is the form's only `type="submit"`, so Enter advances. On the last step (Review) it shows its loading state while the request runs and the result arrives as a toast; every state of the flow reaches that path.
+Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
+
+- **Project.** The `platform/create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup kind="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup kind="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
+- **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `platform/detail/deployment-logs` (InCreateFlow) and ends on `platform/create/deploy-success`.
 
 ## Do
 
 - Ask where the resource runs first, and insert the module step only when the chosen host needs it.
-- Validate one step at a time on Next, and mark a failed step `error` on the rail.
-- Unlock a step on the rail only once it has been reached, and let the user jump back to any unlocked step.
-- Keep Cancel apart from Back and Next, on the opposite side.
+- Validate one step at a time in the `next` handler, and show the message under the field that failed.
+- Keep Cancel apart from Previous and Next, on the opposite side; the Wizard footer does this.
 - Keep the create action on the last step only; every step before it says Next.
 - Keep the chosen host visible in the chooser even when it falls outside the first six.
+- Label the final action with every act it performs: "Create and deploy" when it also deploys.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
 
-- Don't let the rail skip ahead to steps not reached yet.
-- Don't put a Next button on a step answered by a click; picking the host is the answer.
+- Don't build the rail, the step heading or the footer by hand; the `Wizard` owns them.
+- Don't let the user skip ahead to steps not reached yet.
 - Don't block the create when a module is off; warn, offer the switch and let the user go on.
 - Don't repeat the step title as a second heading inside the card.
 - Don't validate fields of later steps, or judge a field while it is being typed.
-- Don't use more than one step for fields that only make sense together.
+- Don't put a required field inside Advanced, or show both the existing list and the new fields at once.
 
 ## Copy
 
-- **Title, breadcrumb and last submit:** the create label with the entity's capitalization, e.g. "Create Access List".
-- **Step titles:** short nouns, e.g. "Where it runs", "General", "List settings".
+- **Title, breadcrumb and last submit:** the create label with the entity's capitalization, e.g. "Create Access List"; "Create and deploy" when the last step also deploys.
+- **Step titles:** short nouns, e.g. "Where it runs", "General", "List settings", "Project", "Domain and deployment".
 - **Step descriptions:** one sentence with a period, e.g. "Select the policy whose rules match it. It needs IP filtering on."
-- **Chooser:** instruction with "Select", e.g. "Select a policy to continue"; the search placeholder and `aria-label` name what is searched, e.g. "Search policies".
+- **Chooser:** the search placeholder and `aria-label` name what is searched, e.g. "Search policies"; Next with no answer says "Select a policy, or continue without one."
 - **Module tag:** the missing module and its state, e.g. "IP filtering off".
 - **Module alert:** the consequence in one sentence, e.g. "acme-staging has IP filtering off, so no rule reads this list until the module is on."
 - **Escape routes:** verb first, e.g. "Create a policy", "Continue without a policy".
-- **Required message:** "This field is required."
+- **Required message:** "This field is required.", or what to do, e.g. "Select the project this service serves, or create a new one."
 - Follow `skills/webkit-microcopy`: "Select", never "Choose"; no em dash; no "simply".
 
 ## Accessibility
 
-- The `Stepper` has an `aria-label` naming the flow; disabled steps cannot be focused or activated.
-- The `form` takes the current step's title as its `aria-label`; a `fieldset` with a visually hidden `legend` repeats it.
+- The `Wizard` takes an `aria-label` naming the flow; locked rail steps cannot be focused or activated, and focus moves to the new step's heading on every step change.
+- The page has one `h1` (the `PageHeader`); each step heading is an `h2` drawn by the Wizard.
 - Host rows are native `button`s with `aria-pressed`; the chooser's search has an `aria-label` and Enter selects the first match.
 - Choice cards are a `RadioGroup` named with `aria-label`; each `RadioGroup.Item` is labelled by its card.
 - Required messages are tied to their control with `aria-describedby`; focus stays on the step after a failed Next.
@@ -112,10 +118,11 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 ## States
 
-- WhereItRuns: the first step; the centred chooser of policies with search, module tags and the two escape routes.
+- WhereItRuns: the first step; the chooser of policies with search, module tags and the two escape routes.
 - ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Back and Next (Review follows). An empty list marks the step red on the rail.
+- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
 - Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
+- CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state.
 
 ## Review step
 
@@ -126,12 +133,14 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 ## Related
 
+- `Wizard` — the component this block is built on; see `skills/webkit-form`.
 - `platform/create/single-page-create` — the same job when the fields fit one screen.
-- `platform/create/source-wizard` — a step wizard that starts from a code source and deploys.
-- `platform/create/provision-wizard` — a two-step wizard that binds a project and deploys.
-- `platform/edit/code-editor` — the editor a code resource can use as one step.
+- `platform/create/create-hub` and `platform/create/deploy-template` — a new project from Git, a template or an upload.
+- `platform/create/resource-picker` — the Existing or New band CreateAndDeploy binds its project with.
+- `platform/detail/deployment-logs` — the build log Create and deploy hands the column to (InCreateFlow).
+- `platform/create/deploy-success` — the screen a create-and-deploy ends on.
+- `platform/edit/function-editor` — the editor a code resource can use as one step.
 - `platform/states/form-validation` — required and invalid states on Next.
-- `Stepper` — the step rail; see `skills/webkit-form`.
 
 ## Steps
 
@@ -145,8 +154,9 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 - `WhereItRuns` — primary (the code below)
 - `ModuleOff` — acme-staging was chosen with IP filtering off, so an IP filtering step follows Where it runs: a warning Alert, the Switch choice card that turns the module on with the list, and a note on what leaving it off means.
-- `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Back and Next in the footer. Leaving the list empty flags it and marks the step red on the rail.
-- `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step, marked red on the rail.
+- `ListSettings` — The settings step of a list bound to acme-production, before Review: the Type as wide RadioGroup choice cards and the List Textarea whose label, placeholder and guidance follow the type, with Previous and Next in the Wizard footer. Next with the list empty stays on the step and shows the required message under it.
+- `Review` — The Review step that closes the create, after List settings: three bands under small `SectionHeader`s. Where it runs is one `Alert` (success when the policy is ready, warning when it is unbound or its module stays off) with Edit back to the chooser; What gets created lists each value beside the property it is sent as (Name with its own Edit back to General), the entries as `Tag`s with a count and and N more, with Edit back to List settings; What can reference it lists the consumers and the field that carries the reference. Create Access List shows its loading state and the result arrives as a toast; a value that fails on create sends the user back to its step with the message under the field.
+- `CreateAndDeploy` — A resource that is useless until it is bound and deployed (Create Service): step one binds the project it serves, an existing one from the paged list or a new one configured in place (cache settings, origin); step two reads the project back with Change, then asks for the domain (a free platform-domain prefix or your own hostname, previewed as the address traffic arrives on), environment and certificate, the deployment the first release is cut against and a collapsed Advanced section. Next is gated on the project; the last action reads Create and deploy and shows its loading state, then the build logs (`platform/detail/deployment-logs#InCreateFlow`) and `platform/create/deploy-success` follow.
 
 Each variant is the same screen in another state: `get_pattern("platform/create/multipage-create", { variant })`, or the file under `blocks/platform/create/multipage-create/variants/`.
 
@@ -168,19 +178,17 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
-  import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import SettingRow from '@aziontech/webkit/setting-row'
-  import Stepper, { type StepperStepState } from '@aziontech/webkit/stepper'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
+  import Wizard from '@aziontech/webkit/wizard'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   type ListType = 'asn' | 'ip_cidr' | 'countries'
   type FieldName = 'name' | 'type' | 'items'
-  type Direction = 'forward' | 'back'
 
   interface PolicyOption {
     value: string
@@ -204,16 +212,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     value: string
     title: string
     description: string
-    heading?: boolean
     fields: FieldName[]
-  }
-
-  interface StepItem {
-    value: string
-    title: string
-    description: string
-    state: StepperStepState
-    disabled: boolean
   }
 
   const breadcrumb = [
@@ -302,7 +301,6 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const VISIBLE = 6
 
   const current = ref('where-it-runs')
-  const direction = ref<Direction | null>(null)
   const choice = ref('')
   const enableModule = ref(false)
   const query = ref('')
@@ -312,7 +310,8 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     items: ''
   })
   const errors = reactive<Partial<Record<FieldName, FieldError>>>({})
-  const unlocked = ref(['where-it-runs'])
+  const answered = ref(choice.value !== '')
+  const whereMissing = ref(false)
 
   const moduleMissing = computed(
     () => !!choice.value && !policies.find((option) => option.value === choice.value)?.ready
@@ -323,7 +322,6 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       value: 'where-it-runs',
       title: 'Where it runs',
       description: 'Select the policy whose rules match it. It needs IP filtering on.',
-      heading: false,
       fields: []
     },
     ...(moduleMissing.value
@@ -364,23 +362,16 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       definitions.value.findIndex((entry) => entry.value === current.value)
     )
   )
-  const step = computed(() => definitions.value[index.value])
-  const isFirst = computed(() => index.value === 0)
-  const isLast = computed(() => index.value === definitions.value.length - 1)
+  const stepIndex = computed({
+    get: () => index.value,
+    set: (position: number) => {
+      const next = definitions.value[position]
+      if (next) current.value = next.value
+    }
+  })
 
-  const steps = computed(() =>
-    definitions.value.map((entry, position): StepItem => ({
-      value: entry.value,
-      title: entry.title,
-      description: entry.description,
-      state: entry.fields.some((field) => errors[field])
-        ? 'error'
-        : position < index.value
-          ? 'complete'
-          : 'upcoming',
-      disabled: !unlocked.value.includes(entry.value)
-    }))
-  )
+  const byValue = (value: string) =>
+    definitions.value.find((entry) => entry.value === value) ?? definitions.value[0]
 
   const listField = computed(() => listFields[form.type])
 
@@ -410,33 +401,17 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     return fields.every((field) => !errors[field])
   }
 
-  const goNext = () => {
-    if (!validate(step.value.fields)) return
-    const next = definitions.value[index.value + 1]
-    if (!next) return
-    if (!unlocked.value.includes(next.value)) unlocked.value.push(next.value)
-    direction.value = 'forward'
-    current.value = next.value
-  }
-
-  const goBack = () => {
-    const previous = definitions.value[index.value - 1]
-    if (!previous) return
-    direction.value = 'back'
-    current.value = previous.value
-  }
-
-  const choose = (option: PolicyOption) => {
-    choice.value = option.value
+  const answer = (value: string) => {
+    choice.value = value
+    answered.value = true
     enableModule.value = false
-    goNext()
+    whereMissing.value = false
+    stepIndex.value = 1
   }
 
-  const skip = () => {
-    choice.value = ''
-    enableModule.value = false
-    goNext()
-  }
+  const choose = (option: PolicyOption) => answer(option.value)
+
+  const skip = () => answer('')
 
   const onSearchEnter = () => {
     if (matches.value.length) choose(matches.value[0])
@@ -468,18 +443,24 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   ]
 
   const editStep = (value: string) => {
-    direction.value = 'back'
     current.value = value
+  }
+
+  const onNext = (event: MouseEvent, position: number) => {
+    const entry = definitions.value[position]
+    if (entry?.value === 'where-it-runs' && !answered.value) {
+      whereMissing.value = true
+      event.preventDefault()
+      return
+    }
+    if (entry && !validate(entry.fields)) event.preventDefault()
   }
 
   const creating = ref(false)
   let timer: ReturnType<typeof setTimeout> | undefined
 
   const commit = () => {
-    if (!isLast.value) {
-      goNext()
-      return
-    }
+    if (creating.value) return
     if (!validate(['name', 'type', 'items'])) {
       const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
       if (failed) editStep(failed.value)
@@ -505,7 +486,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
     <GlobalHeader aria-label="Console">
       <GlobalHeader.Start>
         <IconButton
-          icon="pi pi-chevron-left"
+          icon="ai ai-chevron-left"
           aria-label="Back to Access Lists"
           kind="outlined"
           size="small"
@@ -540,492 +521,418 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       </GlobalHeader.End>
     </GlobalHeader>
 
-    <div class="flex min-h-0 flex-1">
-      <aside
-        class="hidden h-full w-64 shrink-0 overflow-auto border-e border-(--border-default) px-(--spacing-md) py-(--layout-section-gap) md:block"
+    <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
+      <div
+        class="layout-form-create layout-boundary-inline flex flex-col gap-(--layout-section-gap) py-(--layout-section-gap)"
       >
-        <div class="flex h-full">
-          <Stepper
-            v-model="current"
-            aria-label="Create Access List"
-            class="w-full"
-          >
-            <Stepper.Step
-              v-for="entry in steps"
-              :key="entry.value"
-              :value="entry.value"
-              :title="entry.title"
-              :description="entry.value === current ? entry.description : ''"
-              :state="entry.state"
-              :disabled="entry.disabled"
-            />
-          </Stepper>
-        </div>
-      </aside>
+        <PageHeader
+          title="Create Access List"
+          description="An access list groups IP addresses, countries or ASNs that policy rules match on. Answer each step, review, then create it."
+          size="small"
+        />
 
-      <form
-        class="flex min-w-0 flex-1 flex-col"
-        :aria-label="step.title"
-        novalidate
-        @submit.prevent="commit"
-      >
-        <main
-          :data-direction="direction"
-          class="group/main data-[direction=forward]:[--page-enter-distance:calc(var(--layout-boundary-inline)*-1)] animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto"
+        <Wizard
+          v-model="stepIndex"
+          aria-label="Create Access List"
+          submit-label="Create Access List"
+          :loading="creating"
+          @next="onNext"
+          @submit="commit"
         >
-          <div class="flex min-h-full flex-col">
-            <div
-              class="layout-form-create layout-boundary-inline flex flex-1 flex-col pt-(--layout-section-gap) pb-(--layout-section-gap)"
-            >
-              <p class="pb-(--spacing-sm) text-label-sm text-(--text-muted) md:hidden">
-                Step {{ index + 1 }} of {{ steps.length }}
-              </p>
+          <Wizard.Step
+            title="Where it runs"
+            :description="byValue('where-it-runs').description"
+          >
+            <section class="mx-auto flex w-full max-w-(--container-md) flex-col gap-(--spacing-lg)">
+              <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
+                <Input
+                  v-model="query"
+                  size="large"
+                  class="w-full"
+                  placeholder="Search policies"
+                  aria-label="Search policies"
+                  autocomplete="off"
+                  @keydown.enter.prevent="onSearchEnter"
+                />
 
-              <PageHeader
-                v-if="step.heading !== false"
-                :title="step.title"
-                :description="step.description"
-                size="small"
-              />
-
-              <fieldset
-                class="mx-0 flex min-w-0 flex-1 flex-col border-0 p-0 data-headed:mt-(--layout-section-gap)"
-                :data-headed="step.heading !== false || null"
-              >
-                <legend class="sr-only">{{ step.title }}</legend>
-                <section
-                  v-if="current === 'where-it-runs'"
-                  class="mx-auto flex w-full max-w-(--container-md) flex-col items-center gap-(--spacing-lg)"
-                  aria-labelledby="create-access-list-host-title"
-                >
-                  <header class="flex flex-col items-center gap-(--spacing-xs) text-center">
-                    <span
-                      class="flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                    >
+                <div class="flex flex-col">
+                  <Item
+                    v-for="option in visible"
+                    :key="option.value"
+                    size="small"
+                    clickable
+                    :aria-pressed="choice === option.value"
+                    @click="choose(option)"
+                  >
+                    <Item.Media>
                       <i
-                        class="pi pi-list text-body-lg leading-none text-(--text-default)"
+                        class="ai ai-shield text-body-md leading-none text-(--text-muted)"
                         aria-hidden="true"
                       />
-                    </span>
-                    <h1
-                      id="create-access-list-host-title"
-                      class="text-heading-xs text-(--text-default)"
-                    >
-                      Create Access List
-                    </h1>
-                    <p class="text-body-sm text-(--text-muted)">Select a policy to continue</p>
-                  </header>
-
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-xs)">
-                    <Input
-                      v-model="query"
-                      size="large"
-                      class="w-full"
-                      placeholder="Search policies"
-                      aria-label="Search policies"
-                      autocomplete="off"
-                      @keydown.enter.prevent="onSearchEnter"
-                    />
-
-                    <div class="flex flex-col">
-                      <Item
-                        v-for="option in visible"
-                        :key="option.value"
+                    </Item.Media>
+                    <Item.Content>
+                      <Item.Title>{{ option.label }}</Item.Title>
+                    </Item.Content>
+                    <Item.Actions>
+                      <Tag
+                        v-if="!option.ready"
+                        label="IP filtering off"
+                        severity="warning"
                         size="small"
-                        clickable
-                        :aria-pressed="choice === option.value"
-                        @click="choose(option)"
+                      />
+                      <i
+                        v-if="choice === option.value"
+                        class="ai ai-check text-body-sm leading-none text-(--text-default)"
+                        aria-hidden="true"
+                      />
+                    </Item.Actions>
+                  </Item>
+
+                  <p
+                    v-if="hidden"
+                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                  >
+                    {{ hidden }} more. Type to narrow the list.
+                  </p>
+                  <p
+                    v-else-if="!matches.length"
+                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                  >
+                    No policy matches “{{ query.trim() }}”.
+                  </p>
+                </div>
+                <HelperText
+                  v-if="whereMissing"
+                  kind="required"
+                  label="Select a policy, or continue without one."
+                />
+              </div>
+
+              <div class="flex flex-col items-center gap-(--spacing-xxs)">
+                <Button
+                  type="button"
+                  label="Create a policy"
+                  kind="transparent"
+                  size="small"
+                />
+                <Button
+                  type="button"
+                  label="Continue without a policy"
+                  kind="transparent"
+                  size="small"
+                  @click="skip"
+                />
+              </div>
+            </section>
+          </Wizard.Step>
+          <Wizard.Step
+            v-if="moduleMissing"
+            title="IP filtering"
+            :description="'Off on ' + choice + '.'"
+          >
+            <Card :padded="false">
+              <template #content>
+                <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+                  <Alert
+                    severity="warning"
+                    size="small"
+                    :label="
+                      'An access list is only read by policy rules, and ' +
+                      choice +
+                      ' has IP filtering off, so nothing reads this one until the module is on.'
+                    "
+                  />
+
+                  <Field.Label>
+                    <Field orientation="horizontal">
+                      <Switch v-model="enableModule" />
+                      <Field.Content>
+                        <Field.Title> Turn on IP filtering </Field.Title>
+                        <Field.Description>
+                          {{
+                            'Sets modules.ip_filtering on the policy ' +
+                            choice +
+                            ' when this access list is created.'
+                          }}
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
+
+                  <p class="text-body-sm text-(--text-muted)">
+                    Leaving it off still creates the access list. It is not read until someone turns
+                    IP filtering on.
+                  </p>
+                </div>
+              </template>
+            </Card>
+          </Wizard.Step>
+          <Wizard.Step
+            title="General"
+            :description="byValue('general').description"
+          >
+            <section
+              class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Name"
+                        description="Give a unique and descriptive name to identify the access list."
                       >
-                        <Item.Media>
-                          <i
-                            class="pi pi-shield text-body-md leading-none text-(--text-muted)"
-                            aria-hidden="true"
-                          />
-                        </Item.Media>
+                        <Input
+                          v-model="form.name"
+                          size="large"
+                          class="w-full"
+                          aria-label="Name"
+                          placeholder="office-ranges"
+                          autocomplete="off"
+                          :required="errors.name?.kind === 'required'"
+                          :aria-describedby="
+                            errors.name ? 'create-access-list-name-message' : undefined
+                          "
+                          @update:model-value="delete errors.name"
+                        />
+                        <HelperText
+                          v-if="errors.name"
+                          id="create-access-list-name-message"
+                          :kind="errors.name.kind"
+                          :label="errors.name.message"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </div>
+            </section>
+          </Wizard.Step>
+          <Wizard.Step
+            title="List settings"
+            :description="byValue('settings').description"
+          >
+            <section
+              class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Type"
+                        kind="stacked"
+                      >
+                        <RadioGroup
+                          v-model="form.type"
+                          kind="card"
+                          class="w-full"
+                          name="access-lists-type"
+                          aria-label="Type"
+                        >
+                          <RadioGroup.Item
+                            v-for="option in types"
+                            :key="option.value"
+                            :value="option.value"
+                            :description="option.description"
+                            >{{ option.label }}</RadioGroup.Item
+                          >
+                        </RadioGroup>
+                      </SettingRow>
+                      <SettingRow
+                        :title="listField.label"
+                        :description="listField.helper"
+                        kind="stacked"
+                      >
+                        <Textarea
+                          v-model="form.items"
+                          class="w-full"
+                          :rows="5"
+                          :aria-label="listField.label"
+                          :placeholder="listField.placeholder"
+                          :required="errors.items?.kind === 'required'"
+                          :aria-describedby="
+                            errors.items ? 'create-access-list-items-message' : undefined
+                          "
+                          @update:model-value="delete errors.items"
+                        />
+                        <HelperText
+                          v-if="errors.items"
+                          id="create-access-list-items-message"
+                          :kind="errors.items.kind"
+                          :label="errors.items.message"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </div>
+            </section>
+          </Wizard.Step>
+          <Wizard.Step
+            title="Review"
+            :description="byValue('review').description"
+          >
+            <section class="flex min-w-0 flex-col gap-(--layout-section-gap)">
+              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <SectionHeader
+                  title="Where it runs"
+                  size="small"
+                >
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Edit"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Edit where it runs"
+                      @click="editStep('where-it-runs')"
+                    />
+                  </template>
+                </SectionHeader>
+                <Alert
+                  key="alert-1"
+                  v-if="!choice"
+                  severity="warning"
+                >
+                  Bound to no policy. The list is created, but no rule can match on it until a
+                  policy uses it.
+                </Alert>
+                <Alert
+                  key="alert-2"
+                  v-else-if="moduleMissing && !enableModule"
+                  severity="warning"
+                >
+                  IP filtering is off on {{ choice }}, so no rule reads this list until it is on.
+                </Alert>
+                <Alert
+                  key="alert-3"
+                  severity="success"
+                >
+                  Runs on {{ choice }}.
+                </Alert>
+              </section>
+
+              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <SectionHeader
+                  title="What gets created"
+                  description="Each value is sent as the property named under it."
+                  size="small"
+                >
+                  <template #actions>
+                    <Button
+                      type="button"
+                      label="Edit"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Edit list settings"
+                      @click="editStep('settings')"
+                    />
+                  </template>
+                </SectionHeader>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <Item>
                         <Item.Content>
-                          <Item.Title>{{ option.label }}</Item.Title>
+                          <Item.Title>Name</Item.Title>
+                          <Item.Description>name</Item.Description>
                         </Item.Content>
                         <Item.Actions>
-                          <Tag
-                            v-if="!option.ready"
-                            label="IP filtering off"
-                            severity="warning"
+                          <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
+                            form.name
+                          }}</span>
+                          <Button
+                            type="button"
+                            label="Edit"
+                            kind="transparent"
                             size="small"
-                          />
-                          <i
-                            v-if="choice === option.value"
-                            class="pi pi-check text-body-sm leading-none text-(--text-default)"
-                            aria-hidden="true"
+                            aria-label="Edit name"
+                            @click="editStep('general')"
                           />
                         </Item.Actions>
                       </Item>
-
-                      <p
-                        v-if="hidden"
-                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                      >
-                        {{ hidden }} more. Type to narrow the list.
-                      </p>
-                      <p
-                        v-else-if="!matches.length"
-                        class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                      >
-                        No policy matches “{{ query.trim() }}”.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="flex flex-col items-center gap-(--spacing-xxs)">
-                    <Button
-                      type="button"
-                      label="Create a policy"
-                      kind="transparent"
-                      size="small"
-                    />
-                    <Button
-                      type="button"
-                      label="Continue without a policy"
-                      kind="transparent"
-                      size="small"
-                      @click="skip"
-                    />
-                  </div>
-                </section>
-
-                <Card
-                  v-else-if="current === 'module'"
-                  :padded="false"
-                >
-                  <template #content>
-                    <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                      <Alert
-                        severity="warning"
-                        size="small"
-                        :label="
-                          'An access list is only read by policy rules, and ' +
-                          choice +
-                          ' has IP filtering off, so nothing reads this one until the module is on.'
-                        "
-                      />
-
-                      <Field.Label>
-                        <Field orientation="horizontal">
-                          <Switch v-model="enableModule" />
-                          <Field.Content>
-                            <Field.Title> Turn on IP filtering </Field.Title>
-                            <Field.Description>
-                              {{
-                                'Sets modules.ip_filtering on the policy ' +
-                                choice +
-                                ' when this access list is created.'
-                              }}
-                            </Field.Description>
-                          </Field.Content>
-                        </Field>
-                      </Field.Label>
-
-                      <p class="text-body-sm text-(--text-muted)">
-                        Leaving it off still creates the access list. It is not read until someone
-                        turns IP filtering on.
-                      </p>
-                    </div>
-                  </template>
-                </Card>
-
-                <section
-                  v-else-if="current === 'general'"
-                  class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <SettingRow
-                            title="Name"
-                            description="Give a unique and descriptive name to identify the access list."
+                      <Item>
+                        <Item.Content>
+                          <Item.Title>Type</Item.Title>
+                          <Item.Description>type</Item.Description>
+                        </Item.Content>
+                        <Item.Actions>
+                          <span class="text-label-sm text-(--text-default)">{{ typeLabel }}</span>
+                        </Item.Actions>
+                      </Item>
+                      <Item>
+                        <Item.Content>
+                          <Item.Title>{{ listField.label }}</Item.Title>
+                          <Item.Description>items</Item.Description>
+                          <ul
+                            class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
+                            :aria-label="`${entries.length} entries`"
                           >
-                            <Input
-                              v-model="form.name"
-                              size="large"
-                              class="w-full"
-                              aria-label="Name"
-                              placeholder="office-ranges"
-                              autocomplete="off"
-                              :required="errors.name?.kind === 'required'"
-                              :aria-describedby="
-                                errors.name ? 'create-access-list-name-message' : undefined
-                              "
-                              @update:model-value="delete errors.name"
-                            />
-                            <HelperText
-                              v-if="errors.name"
-                              id="create-access-list-name-message"
-                              :kind="errors.name.kind"
-                              :label="errors.name.message"
-                            />
-                          </SettingRow>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </div>
-                </section>
-
-                <section
-                  v-else-if="current === 'settings'"
-                  class="grid grid-cols-1 gap-y-(--spacing-md) [&:not(:first-of-type)]:mt-(--layout-section-gap)"
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <SettingRow
-                            title="Type"
-                            kind="stacked"
-                          >
-                            <RadioGroup
-                              v-model="form.type"
-                              kind="card"
-                              class="w-full"
-                              name="access-lists-type"
-                              aria-label="Type"
+                            <li
+                              v-for="entry in entries.slice(0, PREVIEW)"
+                              :key="entry"
                             >
-                              <RadioGroup.Item
-                                v-for="option in types"
-                                :key="option.value"
-                                :value="option.value"
-                                :description="option.description"
-                                >{{ option.label }}</RadioGroup.Item
-                              >
-                            </RadioGroup>
-                          </SettingRow>
-                          <SettingRow
-                            :title="listField.label"
-                            :description="listField.helper"
-                            kind="stacked"
-                          >
-                            <Textarea
-                              v-model="form.items"
-                              class="w-full"
-                              :rows="5"
-                              :aria-label="listField.label"
-                              :placeholder="listField.placeholder"
-                              :required="errors.items?.kind === 'required'"
-                              :aria-describedby="
-                                errors.items ? 'create-access-list-items-message' : undefined
-                              "
-                              @update:model-value="delete errors.items"
-                            />
-                            <HelperText
-                              v-if="errors.items"
-                              id="create-access-list-items-message"
-                              :kind="errors.items.kind"
-                              :label="errors.items.message"
-                            />
-                          </SettingRow>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </div>
-                </section>
-                <section
-                  v-else
-                  class="flex min-w-0 flex-col gap-(--layout-section-gap)"
-                >
-                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <SectionHeader
-                      title="Where it runs"
-                      size="small"
-                    >
-                      <template #actions>
-                        <Button
-                          type="button"
-                          label="Edit"
-                          kind="outlined"
-                          size="small"
-                          aria-label="Edit where it runs"
-                          @click="editStep('where-it-runs')"
-                        />
-                      </template>
-                    </SectionHeader>
-                    <Alert
-                      key="alert-1"
-                      v-if="!choice"
-                      severity="warning"
-                    >
-                      Bound to no policy. The list is created, but no rule can match on it until a
-                      policy uses it.
-                    </Alert>
-                    <Alert
-                      key="alert-2"
-                      v-else-if="moduleMissing && !enableModule"
-                      severity="warning"
-                    >
-                      IP filtering is off on {{ choice }}, so no rule reads this list until it is
-                      on.
-                    </Alert>
-                    <Alert
-                      key="alert-3"
-                      v-else
-                      severity="success"
-                    >
-                      Runs on {{ choice }}.
-                    </Alert>
-                  </section>
-
-                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <SectionHeader
-                      title="What gets created"
-                      description="Each value is sent as the property named under it."
-                      size="small"
-                    >
-                      <template #actions>
-                        <Button
-                          type="button"
-                          label="Edit"
-                          kind="outlined"
-                          size="small"
-                          aria-label="Edit list settings"
-                          @click="editStep('settings')"
-                        />
-                      </template>
-                    </SectionHeader>
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <Item>
-                            <Item.Content>
-                              <Item.Title>Name</Item.Title>
-                              <Item.Description>name</Item.Description>
-                            </Item.Content>
-                            <Item.Actions>
-                              <span class="max-w-80 truncate text-label-sm text-(--text-default)">{{
-                                form.name
-                              }}</span>
-                              <Button
-                                type="button"
-                                label="Edit"
-                                kind="transparent"
-                                size="small"
-                                aria-label="Edit name"
-                                @click="editStep('general')"
-                              />
-                            </Item.Actions>
-                          </Item>
-                          <Item>
-                            <Item.Content>
-                              <Item.Title>Type</Item.Title>
-                              <Item.Description>type</Item.Description>
-                            </Item.Content>
-                            <Item.Actions>
-                              <span class="text-label-sm text-(--text-default)">{{
-                                typeLabel
-                              }}</span>
-                            </Item.Actions>
-                          </Item>
-                          <Item>
-                            <Item.Content>
-                              <Item.Title>{{ listField.label }}</Item.Title>
-                              <Item.Description>items</Item.Description>
-                              <ul
-                                class="m-0 mt-(--spacing-xs) flex list-none flex-wrap gap-(--spacing-xxs) p-0"
-                                :aria-label="`${entries.length} entries`"
-                              >
-                                <li
-                                  v-for="entry in entries.slice(0, PREVIEW)"
-                                  :key="entry"
-                                >
-                                  <Tag
-                                    :label="entry"
-                                    severity="neutral"
-                                    size="small"
-                                  />
-                                </li>
-                                <li
-                                  v-if="entries.length > PREVIEW"
-                                  class="text-label-sm text-(--text-muted)"
-                                >
-                                  and {{ entries.length - PREVIEW }} more
-                                </li>
-                              </ul>
-                            </Item.Content>
-                            <Item.Actions>
-                              <span class="text-label-sm text-(--text-default)"
-                                >{{ entries.length }}
-                                {{ entries.length === 1 ? 'entry' : 'entries' }}</span
-                              >
-                            </Item.Actions>
-                          </Item>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </section>
-
-                  <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <SectionHeader
-                      title="What can reference it"
-                      description="Everything that can point at this list once it exists, and the field that carries the reference."
-                      size="small"
-                    />
-                    <Card :padded="false">
-                      <template #content>
-                        <Item.List>
-                          <Item
-                            v-for="row in consumers"
-                            :key="row.by"
-                          >
-                            <Item.Content>
-                              <Item.Title>{{ row.by }}</Item.Title>
-                              <Item.Description>{{ row.path }}</Item.Description>
-                            </Item.Content>
-                            <Item.Actions>
                               <Tag
-                                :label="row.as"
+                                :label="entry"
                                 severity="neutral"
                                 size="small"
                               />
-                            </Item.Actions>
-                          </Item>
-                        </Item.List>
-                      </template>
-                    </Card>
-                  </section>
-                </section>
-              </fieldset>
-            </div>
-          </div>
-        </main>
+                            </li>
+                            <li
+                              v-if="entries.length > PREVIEW"
+                              class="text-label-sm text-(--text-muted)"
+                            >
+                              and {{ entries.length - PREVIEW }} more
+                            </li>
+                          </ul>
+                        </Item.Content>
+                        <Item.Actions>
+                          <span class="text-label-sm text-(--text-default)"
+                            >{{ entries.length }}
+                            {{ entries.length === 1 ? 'entry' : 'entries' }}</span
+                          >
+                        </Item.Actions>
+                      </Item>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
 
-        <div class="shrink-0 [--layout-measure-form:var(--layout-measure-form-create)]">
-          <SaveBar kind="fade">
-            <template #leading>
-              <Button
-                type="button"
-                label="Cancel"
-                kind="transparent"
-                size="medium"
-              />
-            </template>
-            <template #actions>
-              <Button
-                v-if="!isFirst"
-                type="button"
-                label="Back"
-                kind="outlined"
-                size="medium"
-                @click="goBack"
-              />
-              <Button
-                :label="isLast ? 'Create Access List' : 'Next'"
-                kind="primary"
-                size="medium"
-                type="submit"
-                :loading="creating"
-              />
-            </template>
-          </SaveBar>
-        </div>
-      </form>
-    </div>
+              <section class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <SectionHeader
+                  title="What can reference it"
+                  description="Everything that can point at this list once it exists, and the field that carries the reference."
+                  size="small"
+                />
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <Item
+                        v-for="row in consumers"
+                        :key="row.by"
+                      >
+                        <Item.Content>
+                          <Item.Title>{{ row.by }}</Item.Title>
+                          <Item.Description>{{ row.path }}</Item.Description>
+                        </Item.Content>
+                        <Item.Actions>
+                          <Tag
+                            :label="row.as"
+                            severity="neutral"
+                            size="small"
+                          />
+                        </Item.Actions>
+                      </Item>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
+            </section>
+          </Wizard.Step>
+        </Wizard>
+      </div>
+    </main>
   </div>
 </template>
 ```

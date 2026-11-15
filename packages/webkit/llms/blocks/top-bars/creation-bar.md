@@ -1,29 +1,30 @@
-# CreationHeader (`headers/creation-header`)
+# CreationBar (`top-bars/creation-bar`)
 
-> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate), the creation wizards (SourceWizard, ProvisionWizard), the deploy flows and the CreateHub render it. The back button returns to the list the flow started from; the wizards drop it and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
+> The console bar for the focused creation shell: create, edit and deploy flows that run without the navigation rail. A `GlobalHeader` in its default `content` placement, spanning the whole window. Start: a small back link with a `Tooltip`, the brand and the breadcrumb of where the flow lives. End: the account avatar alone, opening the account `DropdownMenu`, so the signed-in user stays visible. The bar carries no search, Create or Agent: the flow is the one thing on screen. Every one-screen create page (SinglePageCreate), every stepped one (MultipageCreate, with its CreateAndDeploy wizard), the deploy flows (DeployTemplate) and the CreateHub render it. The back button returns to the list the flow started from; a wizard drops it and the crumb once they reach the provisioning and success screens. Built from `GlobalHeader`, `Breadcrumb`, `IconButton`, `Tooltip`, `Avatar`, `DropdownMenu` and `Brand`.
 
 - Surface: product
-- Source: `blocks/headers/creation-header/creation-header.vue` in `@aziontech/webkit`
-- MCP: `get_pattern("headers/creation-header")`
+- Source: `blocks/top-bars/creation-bar/creation-bar.vue` in `@aziontech/webkit`
+- MCP: `get_pattern("top-bars/creation-bar")`
 - Components: [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [DropdownMenu](../../components/dropdown-menu.md), [GlobalHeader](../../components/global-header.md), [IconButton](../../components/icon-button.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-navigation`, `webkit-layout`
 
 ## Asked as
 
-creation header; focused shell header; create flow header; flow header with back button; header without sidebar; edit flow header; deploy flow header; cabeçalho de criação; cabeçalho de fluxo; barra com botão voltar; create page header; create zone header; wizard header; header with back and breadcrumb; creation flow top bar; focused page header; cabeçalho da página de criação; cabeçalho do assistente
+creation header; focused shell header; create flow header; flow header with back button; header without sidebar; edit flow header; deploy flow header; cabeçalho de criação; cabeçalho de fluxo; barra com botão voltar; create page header; create zone header; wizard header; header with back and breadcrumb; creation flow top bar; focused page header; cabeçalho da página de criação; cabeçalho do assistente; top bar; creation bar; top navigation without rail; focused top bar; barra de criação
 
 The top bar of the focused creation shell: create, edit and deploy flows that run without the navigation rail. The user is doing one task with a start and an end, so the bar gives them a linear way out (the back button and the breadcrumb to the list the flow started from) and keeps their identity visible (the avatar), and nothing else. No search, no Create, no Agent: the flow is the only thing on screen.
 
 ## When to use
 
-- Every one-screen create page (`platform/create/single-page-create`) and stepped one (`platform/create/multipage-create`).
-- The creation wizards (`platform/create/source-wizard`, `platform/create/provision-wizard`), the deploy flows and the Creation Center (`platform/create/create-hub`).
+- Use creation-bar on focused create, edit and deploy pages that run without the navigation rail.
+- Every one-screen create page (`platform/create/single-page-create`) and stepped one (`platform/create/multipage-create`, including its CreateAndDeploy wizard).
+- The deploy flows (`platform/create/deploy-template`) and the Creation Center (`platform/create/create-hub`).
 
 ## When not to use
 
-- Browse pages (lists, dashboards, details, settings): use `headers/resource-header` inside `shells/console`.
+- Browse pages (lists, dashboards, details, settings): `ConsoleLayout` renders their bar (`shells/console`).
 - A create form that should keep the list visible behind it: use `platform/create/create-in-drawer` and keep the console header.
-- Signed-out screens: use `headers/auth-header`.
+- Signed-out screens: use `top-bars/auth-bar`.
 
 ## Building blocks
 
@@ -84,8 +85,8 @@ Names the icon-only back link with the same text as its `aria-label` (`Back to R
 ## Related
 
 - `shells/console` — the persistent shell the flow returns to.
-- `headers/resource-header` — the bar on browse pages.
-- `platform/create/create-hub`, `platform/create/provision-wizard` — render the CreateHub and Terminal states.
+- `top-bars/auth-bar` — the bar of signed-out screens.
+- `platform/create/create-hub`, `platform/create/multipage-create` — render the CreateHub and Terminal states.
 
 ## Variants
 
@@ -93,7 +94,7 @@ Names the icon-only back link with the same text as its `aria-label` (`Back to R
 - `CreateHub` — The Creation Center header: the back control returns Home and the crumb is the single current page.
 - `Terminal` — A creation wizard once the last step is submitted: the provisioning and success screens keep only the brand and the avatar, with no back control and no crumb.
 
-Each variant is the same screen in another state: `get_pattern("headers/creation-header", { variant })`, or the file under `blocks/headers/creation-header/variants/`.
+Each variant is the same screen in another state: `get_pattern("top-bars/creation-bar", { variant })`, or the file under `blocks/top-bars/creation-bar/variants/`.
 
 ## Code (`Default`)
 
@@ -121,7 +122,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
           placement="bottom"
         >
           <IconButton
-            icon="pi pi-chevron-left"
+            icon="ai ai-chevron-left"
             aria-label="Back to Resources"
             kind="outlined"
             size="small"
@@ -171,7 +172,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
             >
               <template #trailing>
                 <i
-                  class="pi pi-cog"
+                  class="ai ai-cog"
                   aria-hidden="true"
                 />
               </template>
@@ -184,7 +185,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
             >
               <template #trailing>
                 <i
-                  class="pi pi-book"
+                  class="ai ai-book"
                   aria-hidden="true"
                 />
               </template>
@@ -195,7 +196,7 @@ Each variant is the same screen in another state: `get_pattern("headers/creation
             >
               <template #trailing>
                 <i
-                  class="pi pi-sign-out"
+                  class="ai ai-sign-out"
                   aria-hidden="true"
                 />
               </template>

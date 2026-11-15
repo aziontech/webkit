@@ -126,22 +126,22 @@
         primaryAction: { label: 'Docs', href: '/docs', trailing: true },
         items: [
           {
-            icon: 'pi pi-comments',
+            icon: 'ai ai-comments',
             title: 'RAG applications',
             description: 'Build topic-specific chatbots on data stored in SQL Database.'
           },
           {
-            icon: 'pi pi-search',
+            icon: 'ai ai-search',
             title: 'Search applications',
             description: 'Power search with vector similarity queries on stored embeddings.'
           },
           {
-            icon: 'pi pi-sync',
+            icon: 'ai ai-sync',
             title: 'AI context injection',
             description: 'Give AI applications relevant context from vector embeddings.'
           },
           {
-            icon: 'pi pi-globe',
+            icon: 'ai ai-globe',
             title: 'AI workflows',
             description: 'Pair stored embeddings with AI Inference to run RAG on Azion.'
           }

@@ -134,17 +134,17 @@
         {
           label: 'Join us on Discord',
           href: 'https://discord.com/invite/Yp9N7RMVZy',
-          icon: 'pi pi-discord'
+          icon: 'ai ai-discord'
         },
-        { label: 'Read our blog posts', href: '/blog', icon: 'pi pi-comment' },
+        { label: 'Read our blog posts', href: '/blog', icon: 'ai ai-comment' },
         { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x' }
       ]
     }"
     :copy-page="{
       label: 'Copy page',
       menu: [
-        { value: 'link', label: 'Get page link', icon: 'pi pi-link' },
-        { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-eye' }
+        { value: 'link', label: 'Get page link', icon: 'ai ai-link' },
+        { value: 'markdown', label: 'View page as markdown', icon: 'ai ai-eye' }
       ]
     }"
   />

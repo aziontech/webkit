@@ -38,7 +38,7 @@ Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../comp
 | `azion-to-vercel` | 592x300 |  |
 | `branches` | 170x128 |  |
 | `build-applications` | 592x300 |  |
-| `build-databases-from-code` | 592x300 | Deprecated: use `sql-sdk-code-cards`. Removed in 7.0. |
+| `build-databases-from-code` | 592x300 | Old name, kept so existing page data renders: use `sql-sdk-code-cards`. |
 | `chat-and-headset-tiles` | 230x154 |  |
 | `combine-data-and-vector-search` | 592x300 |  |
 | `content-and-media-delivery` | 583x296 |  |
@@ -51,9 +51,9 @@ Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../comp
 | `detect-and-classify` | 592x300 |  |
 | `distributed-apis` | 592x300 |  |
 | `distributed-apis-tile` | 414x148 |  |
-| `distributed-sql-for-resilient-global-reads` | 592x300 | Deprecated: use `globe-with-sql-nodes`. Removed in 7.0. |
+| `distributed-sql-for-resilient-global-reads` | 592x300 | Old name, kept so existing page data renders: use `globe-with-sql-nodes`. |
 | `dns-protection` | 592x300 |  |
-| `enable-owasp-protection-with-customizable-rules` | 592x300 | Deprecated: use `waf-threat-families-panel`. Removed in 7.0. |
+| `enable-owasp-protection-with-customizable-rules` | 592x300 | Old name, kept so existing page data renders: use `waf-threat-families-panel`. |
 | `fastest-path-to-live-website` | 592x300 |  |
 | `global-network` | 592x300 |  |
 | `globe-with-sql-nodes` | 592x300 |  |
@@ -78,17 +78,17 @@ Used by: [FeatureScroll](../components/feature-scroll.md), [FeatureTabs](../comp
 | `real-time-metrics-error-rate` | 366x193 |  |
 | `real-time-metrics-status-codes` | 366x250 |  |
 | `replicated-reads` | 592x300 |  |
-| `reputation-intelligence-for-enhanced-protection` | 592x300 | Deprecated: use `reputation-rings-hub`. Removed in 7.0. |
+| `reputation-intelligence-for-enhanced-protection` | 592x300 | Old name, kept so existing page data renders: use `reputation-rings-hub`. |
 | `reputation-rings-hub` | 592x300 |  |
 | `request-inspection` | 754x382 |  |
 | `retail-application-modernization` | 592x300 |  |
 | `runtime` | 592x300 |  |
-| `saas-platforms` | 592x300 | Deprecated: use `azion-to-commerce-tiles`. Removed in 7.0. |
+| `saas-platforms` | 592x300 | Old name, kept so existing page data renders: use `azion-to-commerce-tiles`. |
 | `sql-sdk-code-cards` | 592x300 |  |
-| `stay-in-control` | 230x154 | Deprecated: use `traffic-and-cost-bar-chart`. Removed in 7.0. |
-| `stream-security-events-for-investigation-and-response` | 592x300 | Deprecated: use `data-stream-destinations-map`. Removed in 7.0. |
+| `stay-in-control` | 230x154 | Old name, kept so existing page data renders: use `traffic-and-cost-bar-chart`. |
+| `stream-security-events-for-investigation-and-response` | 592x300 | Old name, kept so existing page data renders: use `data-stream-destinations-map`. |
 | `traffic-and-cost-bar-chart` | 230x154 |  |
 | `url-based-transformations-without-api-complexity` | 592x300 |  |
 | `usage-chart` | 170x128 |  |
 | `waf-threat-families-panel` | 592x300 |  |
-| `white-gloves-when-it-matters` | 230x154 | Deprecated: use `chat-and-headset-tiles`. Removed in 7.0. |
+| `white-gloves-when-it-matters` | 230x154 | Old name, kept so existing page data renders: use `chat-and-headset-tiles`. |

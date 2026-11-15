@@ -84,17 +84,17 @@
 
   const items = [
     {
-      icon: 'pi pi-bolt',
+      icon: 'ai ai-bolt',
       title: 'Functions',
       description: 'Run JavaScript and WebAssembly close to every user.'
     },
     {
-      icon: 'pi pi-database',
+      icon: 'ai ai-database',
       title: 'Object Storage',
       description: 'Keep files where they are read, with no egress to plan for.'
     },
     {
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       title: 'Firewall',
       description: 'Stop bots and attacks before they reach your origin.'
     }
@@ -120,25 +120,25 @@
 
   const items = [
     {
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       title: 'Global network',
       description: 'Traffic lands on the nearest location.',
       points: ['Anycast routing', 'Automatic failover']
     },
     {
-      icon: 'pi pi-lock',
+      icon: 'ai ai-lock',
       title: 'Certificates',
       description: 'TLS for every domain, renewed for you.',
       points: ['Managed certificates', 'Bring your own']
     },
     {
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       title: 'Observability',
       description: 'Metrics and logs in seconds.',
       points: ['Real-time metrics', 'Log streaming']
     },
     {
-      icon: 'pi pi-sitemap',
+      icon: 'ai ai-sitemap',
       title: 'Load balancing',
       description: 'Spread requests across origins.',
       points: ['Health checks', 'Weighted pools']
@@ -163,17 +163,17 @@
 
   const items = [
     {
-      icon: 'pi pi-check',
+      icon: 'ai ai-check',
       title: 'Grow with Azion',
       description: 'Offer a platform your customers already trust, with pricing built for resale.'
     },
     {
-      icon: 'pi pi-check',
+      icon: 'ai ai-check',
       title: 'Get certified',
       description: 'Train your team on the platform and earn the certifications your projects need.'
     },
     {
-      icon: 'pi pi-check',
+      icon: 'ai ai-check',
       title: 'Sell together',
       description:
         'Work joint accounts with our sales engineers, from the first call to production.'

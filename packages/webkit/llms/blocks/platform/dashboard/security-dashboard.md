@@ -1,16 +1,16 @@
 # SecurityDashboard (`platform/dashboard/security-dashboard`)
 
-> The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated DataTable. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `DataTable`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The security dashboard pattern: blocked and allowed requests over time, breakdowns by attack category and origin, the top sources and an attention list, under a PageHeader whose Period Select sets the comparison of every delta and the period in each exported CSV name. A row of three StatTiles (Requests blocked, Requests inspected, Block rate, each with its delta against the previous period and a sparkline) sits over a 12-column grid of ChartCards. Matched requests over time plots blocked and logged requests; Needs attention lists the settings and traffic that ask for a decision, each with a severity Tag and one action Link; attack categories and countries read as ranked BarLists, and the top source IPs as a searchable, paginated DataTable. With no rule set in place the tiles stay as dashes and one setup EmptyState that offers Add rule set replaces the grid. Built from `PageHeader`, `StatTile`, `ChartCard`, `Chart`, `BarList`, `Item`, `Tag`, `Link`, `DataTable`, `Hint`, `ToggleGroup`, `DropdownMenu`, `Skeleton`, `EmptyState` and `Button`. The ByActor variant pivots the same blocked and allowed data per actor: a FilterMenu of actor, outcome and category with a destination Input, seven outcome StatTiles, outcomes over time as stacked bars in status colors, breakdowns by actor, category and destination, and a request log DataTable naming the rule that decided each request. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/security-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DataTable](../../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [SeverityTag](../../../components/severity-tag.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
 
-security dashboard; waf dashboard; blocked requests; attack categories; threat origins; top attackers; painel de segurança; requisições bloqueadas; ataques
+security dashboard; waf dashboard; blocked requests; attack categories; threat origins; top attackers; painel de segurança; requisições bloqueadas; ataques; activity outcomes; requests and decisions; allowed vs blocked; policy decisions dashboard; request log dashboard; outcomes by actor; rule that decided each request; painel de atividades; decisões das regras; permitidos e bloqueados; waf traffic; firewall traffic
 
 The page a reader opens to see what their security rules are doing: how many requests were blocked
 and inspected, how blocking moved over time, which attack categories and countries it came from, which
@@ -21,16 +21,16 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use security-dashboard for WAF/firewall traffic: blocked vs allowed over time, attack categories, source IPs; ByActor lists each request of known actors with the rule that decided it.
 - Security rules (firewall, WAF, bot rules) inspect and block requests, and the reader owns those rules.
 - The reader needs the trend and the breakdown, plus a short list of things to fix.
 - Source addresses or networks are worth searching individually.
 
 ## When not to use
 
-- Every request with the rule that decided it, for a set of actors: use
-  `platform/dashboard/activity-outcomes-dashboard`.
 - Alerts with severity and an open queue: use `platform/dashboard/alerts-dashboard`.
 - Plain traffic volume and status codes: use `platform/dashboard/analytics-dashboard`.
+- Items waiting for a verdict from an asynchronous analysis: use `platform/dashboard/scan-results-dashboard`.
 
 ## Building blocks
 
@@ -117,6 +117,25 @@ Each chart keeps its box (`No matched requests in this period` / `Nothing was re
 says `No matching rows` / `Change the search.` When no rule set exists at all, the Empty variant
 replaces the whole grid with one bordered `EmptyState` and its `Add rule set` button.
 
+### Q. Request activity by actor — `PageHeader`, `Select`, `IconButton`, `Input`, `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `DataTable`, `Tag`, `EmptyState` (optional)
+
+Variant ByActor only; it adds `FilterMenu`, `Button`, `Table` and `SeverityTag` to the page: the same blocked and allowed data, pivoted per known actor, with the rule that
+decided each request. Title `Request activity`. The heading's actions hold the time range `Select`
+(named `Time range`) and a Refresh `IconButton` (`aria-label="Refresh"`, the block emits `refresh`).
+Under it, one `FilterMenu` with three multi-choice fields (Actor, Outcome, Category) in a container
+labelled `Filters`, its `FilterMenu.Chips` on the row below, and a destination `Input` named
+`Destination host`. The filters are global: every tile, chart, breakdown and the log read them; when
+they match nothing, the chart and the log show `No requests match these filters` with an outlined
+`Clear filters` `Button`, and the tiles show a dash.
+
+Seven outcome `StatTile`s in a grid labelled `Outcomes` (requests, allowed, blocked, held, approved,
+denied, over budget), each with its delta and a `Hint`; pass `inverse` on every outcome where a rise
+is bad. Outcomes over time are stacked bars, one series per exclusive outcome in its status color
+(allowed success, blocked danger, held warning) — here the color means a state. Three `BarList`s rank
+by actor, by category and by destination, largest first. The request log `DataTable` lists time,
+actor, outcome (a `Table.CellStatus` in the same hue as its series), category, a `SeverityTag`,
+destination, method and the rule that decided it; outcome and severity are two different facts.
+
 ## Do
 
 - End every Needs attention entry with exactly one action.
@@ -137,6 +156,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 - **Attention description:** one sentence of evidence with a figure. `SQL injection against the API rose 64% in the last hour.`
 - **Attention action:** verb first. `Review rules`, `Attach a rule set`.
 - **Kind tag:** two words at most. `Log only`, `Spike`, `No rules`.
+- **ByActor:** title `Request activity`, description `What each actor requested through the rules and what the rules decided.`; outcome tags are one past participle (`Allowed`, `Blocked`, `Held`); no match `No requests match these filters` / `Clear the filters or pick other values.`
 - **Setup empty state:** `No security rules protect your services` / `Security metrics and the Needs attention list appear once a rule set protects a service.`, action `Add rule set`.
 
 ## Accessibility
@@ -152,12 +172,14 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 - Default: rules in place, populated tiles, charts, attention list and table.
 - Loading: every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
 - Empty: no rule set yet; tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
+- ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
 - Failed: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 
 - `platform/dashboard/alerts-dashboard` — the alert queue raised by these rules.
-- `platform/dashboard/activity-outcomes-dashboard` — the rule that decided each request.
+- `platform/dashboard/scan-results-dashboard` — verdicts from an asynchronous analysis.
+- `platform/view/table-view` — the request log on its own, as a filterable list page.
 - `platform/edit/rule-builder` — where a rule set is edited.
 
 ## Variants
@@ -166,6 +188,7 @@ replaces the whole grid with one bordered `EmptyState` and its `Add rule set` bu
 - `Loading` — The first load: every tile, chart and the table hold a Skeleton, and Needs attention shows three placeholder rows.
 - `Empty` — No security rules set up yet: the tiles read as dashes, and one bordered EmptyState names the reason and offers Add rule set instead of a grid of empty charts.
 - `Failed` — The request for the period failed: the tiles read as dashes, and every card keeps its header with a danger Alert that names what did not load and offers Retry.
+- `ByActor` — Request activity per actor: a Time range Select and a Refresh IconButton in the header over a FilterMenu (actor, outcome, category) with its chips and a destination Input; seven outcome StatTiles (requests, allowed, blocked, held, approved, denied, over budget), outcomes over time as stacked bars in status colors, three BarList breakdowns (actor, category, destination) and a request log DataTable with an outcome Tag, a SeverityTag and the rule that decided each request. A filter that matches nothing shows Clear filters.
 
 Each variant is the same screen in another state: `get_pattern("platform/dashboard/security-dashboard", { variant })`, or the file under `blocks/platform/dashboard/security-dashboard/variants/`.
 
@@ -405,7 +428,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   const attention: AttentionEntry[] = [
     {
       id: 'log-only',
-      icon: 'pi pi-eye',
+      icon: 'ai ai-eye',
       title: 'A rule set logs requests it does not block',
       description: 'The shop service runs its rule set in log-only mode: 1.2K requests passed.',
       severity: 'warning',
@@ -414,7 +437,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     },
     {
       id: 'spike',
-      icon: 'pi pi-chart-line',
+      icon: 'ai ai-chart-line',
       title: 'Attack spike on api.example.com',
       description: 'SQL injection against the API rose 64% in the last hour.',
       severity: 'danger',
@@ -423,7 +446,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     },
     {
       id: 'no-rules',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       title: 'Service without a rule set',
       description: 'The docs service has no security rule set attached.',
       severity: 'warning',
@@ -671,12 +694,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="+19.01%"
                   severity="danger"
-                  icon="pi pi-arrow-up-right"
+                  icon="ai ai-arrow-up-right"
                   size="small"
                 />
                 <ToggleGroup
@@ -688,7 +711,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Matched requests over time"
@@ -701,7 +724,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Matched requests over time"
@@ -809,18 +832,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="-0.03%"
                   severity="success"
-                  icon="pi pi-arrow-down-left"
+                  icon="ai ai-arrow-down-left"
                   size="small"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
@@ -833,7 +856,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
@@ -875,18 +898,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="+9.33%"
                   severity="danger"
-                  icon="pi pi-arrow-up-right"
+                  icon="ai ai-arrow-up-right"
                   size="small"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Blocked requests by country"
@@ -899,7 +922,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Blocked requests by country"
@@ -942,18 +965,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   label="Sum"
                   severity="neutral"
                   size="small"
-                  icon="pi pi-calculator"
+                  icon="ai ai-calculator"
                 />
                 <Tag
                   label="-6.79%"
                   severity="success"
-                  icon="pi pi-arrow-down-left"
+                  icon="ai ai-arrow-down-left"
                   size="small"
                 />
               </span>
               <Tooltip text="Expand">
                 <IconButton
-                  icon="pi pi-window-maximize"
+                  icon="ai ai-window-maximize"
                   kind="transparent"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
@@ -966,7 +989,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="pi pi-ellipsis-h"
+                    icon="ai ai-ellipsis-h"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
@@ -997,7 +1020,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -1019,7 +1042,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
                 <template #empty>
                   <EmptyState
                     size="small"
-                    icon="pi pi-search"
+                    icon="ai ai-search"
                     title="No matching rows"
                     description="Change the search."
                   />
@@ -1098,7 +1121,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #empty>
                 <EmptyState
                   size="small"
-                  icon="pi pi-shield"
+                  icon="ai ai-shield"
                   title="No blocked requests in this period"
                   description="Nothing was recorded in this period."
                 />

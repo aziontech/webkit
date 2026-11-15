@@ -39,7 +39,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `icon` | `string` | `—` | true | PrimeIcons class for the leading/trailing icon. |
+| `icon` | `string` | `—` | true | Azion icon class for the leading/trailing icon. |
 | `ariaLabel` | `string` | `''` | false | Accessible name for the icon-only control, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the button; then no `aria-label` renders. |
 | `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'primary'` | false | Visual variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token; affects height, padding, and typography. |
@@ -108,7 +108,7 @@
   <IconButton
     kind="primary"
     size="large"
-    icon="pi pi-plus"
+    icon="ai ai-plus"
     aria-label="Add"
   />
 </template>
@@ -125,27 +125,27 @@
   <div class="flex flex-wrap items-center gap-4">
     <IconButton
       kind="primary"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       kind="secondary"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       kind="outlined"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       kind="transparent"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       kind="danger"
-      icon="pi pi-trash"
+      icon="ai ai-trash"
       aria-label="Delete"
     />
   </div>
@@ -163,17 +163,17 @@
   <div class="flex flex-wrap items-center gap-4">
     <IconButton
       size="small"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       size="medium"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
     <IconButton
       size="large"
-      icon="pi pi-plus"
+      icon="ai ai-plus"
       aria-label="Add"
     />
   </div>

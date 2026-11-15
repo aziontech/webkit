@@ -10,7 +10,7 @@
 
 ## Asked as
 
-executive summary; executive dashboard; scorecard; quarterly report; business kpis; leadership dashboard; resumo executivo; painel executivo; indicadores do trimestre
+executive summary; executive dashboard; scorecard; quarterly report; business kpis; leadership dashboard; resumo executivo; painel executivo; indicadores do trimestre; business kpi roll-up; leadership summary
 
 The one page a lead reads to see how the quarter went: the headline results against last quarter, the
 twelve-month trend behind each one, progress on the quarter's goals and the notes the leads wrote when
@@ -21,15 +21,15 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## When to use
 
+- Use executive-summary-dashboard for a one-page roll-up of business KPIs for leadership.
 - A recurring review (quarterly, monthly) where readers need results, trends, goals and context together.
 - The audience reads the page, they do not investigate on it.
 - There are a handful of headline metrics (about six) with targets.
 
 ## When not to use
 
-- Investigating a metric by dimension: use `platform/dashboard/analytics-dashboard` or
-  `platform/dashboard/data-dashboard`.
-- Tracking one project's tasks and sprint: use `platform/dashboard/project-status-dashboard`.
+- Investigating a metric by dimension: use `platform/dashboard/analytics-dashboard`
+  (Usage for consumption).
 - A total broken into categories: use `platform/dashboard/composition-dashboard`.
 
 ## Building blocks
@@ -137,7 +137,6 @@ The author's initials beside each note.
 
 ## Related
 
-- `platform/dashboard/project-status-dashboard` — one project against its plan.
 - `platform/dashboard/composition-dashboard` — where a cost metric breaks down.
 - `platform/dashboard/analytics-dashboard` — the detail behind a traffic metric.
 
@@ -372,7 +371,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       change: {
         label: '+25.2%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -395,7 +394,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       change: {
         label: '+30.8%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -418,7 +417,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       change: {
         label: '+5.7%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -438,7 +437,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       change: {
         label: '+23.7%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -458,7 +457,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       change: {
         label: '+0.05%',
         severity: 'success',
-        icon: 'pi pi-arrow-up-right'
+        icon: 'ai ai-arrow-up-right'
       },
       series: [
         {
@@ -480,7 +479,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       change: {
         label: '−25.0%',
         severity: 'success',
-        icon: 'pi pi-arrow-down-right'
+        icon: 'ai ai-arrow-down-right'
       },
       series: [
         {
@@ -628,7 +627,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             label="Export"
             kind="outlined"
             size="medium"
-            icon="pi pi-download"
+            icon="ai ai-download"
             :disabled="loading"
             @click="exportCsv('executive-summary')"
           />
@@ -783,7 +782,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-flag"
+                icon="ai ai-flag"
                 :title="'No goal results for ' + quarter"
                 description="Progress appears once the quarter reports its first month."
               />
@@ -854,7 +853,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <EmptyState
                 v-else
                 size="small"
-                icon="pi pi-comment"
+                icon="ai ai-comment"
                 :title="'No notes for ' + quarter"
                 description="Leads add notes here when they review the quarter."
               />

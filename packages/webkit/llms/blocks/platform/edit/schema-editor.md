@@ -1,6 +1,6 @@
 # SchemaEditor (`platform/edit/schema-editor`)
 
-> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-error rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.
+> The schema editing surface of a SQL database table, taken from the design sample's SQL database pages and the Console Kit's alter column and truncate dialogs: a flush `Card` holding the table's definition as a `DataTable` (column, type `Tag`, constraints, a Change type row menu) under a toolbar with the table name, its row count, Add column, the primary Insert row and a Table actions menu (Create Table, Truncate table). Create Table is a large right `Drawer` with the table Name and an `AttributeEditor` of column rows (reorderable by grip, Move up and down or Alt+Arrow; name, type `Select` with a search field and the type's glyph, default value, Primary `Checkbox`), validated on submit for an empty or malformed name, duplicate column names and no named column; the server's name conflict comes back as a danger `Alert` in the General section and on the field, per the form-validation rule. Add column is a medium drawer with Name, Type, Default value and Primary key and Not null `Switch`es (a primary key forces Not null). Insert row is a medium drawer with one `Field` per column, the auto-generated key disabled and NOT NULL columns required. Change type is a `ConfirmDialog` that warns the table is rebuilt and shows the statements that will run in a read-only `CodeEditor`; Truncate table is a `ConfirmDialog` with the statement and the typed table name. Every change runs async and ends in a toast whose actions fit the table (Insert row, Add column, Change again, Insert another), never a deploy action. The Create Table drawer also imports a CSV (`FileDropzone`, `FileTokenGroup` token, columns from the header with guessed types, a five-row preview) and adds foreign keys in a second `AttributeEditor` (column, referenced table and column, On delete). A page body for ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
@@ -23,7 +23,7 @@ The table schema of a SQL database: the definition of one table and the drawers 
 ## When not to use
 
 - Running SQL or reading query results: use `platform/view/query-editor`.
-- Rows of a resource that is not a database (variables, records): use `platform/edit/attribute-editor` or `platform/detail/record-table`.
+- Rows of a resource that is not a database (variables, records): use `platform/edit/variables` or `platform/detail/record-table`.
 - A form that creates a resource in its own page: use `platform/create/single-page-create`.
 - A generic item created inside a resource: use `platform/create/create-in-drawer`.
 
@@ -35,7 +35,7 @@ One `Card :padded="false"` around a `DataTable :bordered="false"` named `Columns
 
 ### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
 
-A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `platform/states/form-error`.
+A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `platform/states/form-validation` (SectionRejected).
 
 ### C. Column rows — `AttributeEditor`, `Select`, `Checkbox`, `HelperText` (required)
 
@@ -115,7 +115,7 @@ Raised through `toast` with one id, so each change replaces the last toast. Sche
 - `platform/view/query-editor` — the database page whose buttons open these drawers and dialogs.
 - `platform/create/create-in-drawer` — the drawer recipe these drawers follow.
 - `platform/delete/delete-with-confirmation` — the typed confirmation Truncate table follows.
-- `platform/states/form-error` — the rule for the server's name conflict.
+- `platform/states/form-validation` (SectionRejected) — the rule for the server's name conflict.
 - `platform/states/async-submit` — the long-action rule; schema changes use item actions, not Edit and Redeploy.
 - `CodeEditor`, `Select`, `Field` — see `skills/webkit-form` and `skills/webkit-create-surface`.
 
@@ -774,7 +774,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
             <div class="flex w-full flex-wrap items-center gap-(--spacing-xs)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                 <i
-                  class="pi pi-table shrink-0 text-(--text-muted)"
+                  class="ai ai-table shrink-0 text-(--text-muted)"
                   aria-hidden="true"
                 />
                 <span class="truncate text-heading-xxs text-(--text-default)">{{
@@ -791,14 +791,14 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                   label="Add column"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   @click="openColumn"
                 />
                 <Button
                   label="Insert row"
                   kind="primary"
                   size="medium"
-                  icon="pi pi-plus"
+                  icon="ai ai-plus"
                   @click="openRow"
                 />
                 <DropdownMenu
@@ -808,7 +808,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                   <DropdownMenu.Trigger>
                     <Tooltip text="Table actions">
                       <IconButton
-                        icon="pi pi-ellipsis-h"
+                        icon="ai ai-ellipsis-h"
                         kind="outlined"
                         size="medium"
                         aria-label="Table actions"
@@ -822,7 +822,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                     >
                       <template #leading
                         ><i
-                          class="pi pi-plus"
+                          class="ai ai-plus"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -834,7 +834,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                     >
                       <template #leading
                         ><i
-                          class="pi pi-eraser"
+                          class="ai ai-eraser"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenu.Item>
@@ -868,7 +868,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                 >
                   <template #leading
                     ><i
-                      class="pi pi-pencil"
+                      class="ai ai-pencil"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenu.Item>
@@ -997,7 +997,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                       label="About data types"
                       kind="outlined"
                       size="small"
-                      icon="pi pi-external-link"
+                      icon="ai ai-external-link"
                       href="https://www.azion.com/en/documentation/"
                       target="_blank"
                     />
@@ -1101,7 +1101,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/sc
                     size="large"
                     add-button-label="Add foreign key"
                     remove-button-label="Remove foreign key"
-                    empty="No foreign keys."
+                    empty-title="No foreign keys."
                     aria-label="Foreign keys"
                   >
                     <template #cell-column="{ index, invalid }">

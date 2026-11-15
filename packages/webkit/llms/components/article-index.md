@@ -80,7 +80,7 @@
 ## Right-to-left
 
 - Layout: logical utilities only (`border-e`, `ps-`/`pe-`); the cover cell sits at the inline start.
-- Icons: the read cue's `pi-arrow-up-right` and the search glyph do not mirror; client marks never mirror.
+- Icons: the read cue's `ai-arrow-up-right` and the search glyph do not mirror; client marks never mirror.
 - Keyboard: the category picker and the dropdowns own their keyboard maps under `rtl`.
 - User data: none.
 

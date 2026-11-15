@@ -64,7 +64,7 @@
 
 - Visual states per segment: `default`, `focus-visible`, `selected`, `disabled`.
 - Root: `role="radiogroup"`; consumer attributes (`id`, `aria-labelledby`, `aria-describedby`, …) land on it; `data-disabled` when `disabled`; `data-size` mirrors `size` (`small` | `medium` | `large`); `data-fluid` is present only when `fluid` is set.
-- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`pi pi-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
+- Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`ai ai-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
 - Test ids: root `actions-toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.

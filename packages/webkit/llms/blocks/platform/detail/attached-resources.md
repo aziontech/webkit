@@ -16,6 +16,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 ## When to use
 
+- Use attached-resources inside a section of a resource's Settings tab for a short list of the records it owns; it is a section, not a page.
 - A section of a resource's Settings tab lists related records owned by that resource (domains, attached origins, bound certificates) and the list is short enough to read without search or paging.
 - Each related record has two to four attributes worth scanning side by side, and one or two row actions.
 - The user adds a related record from inside the resource, so the action reads `Add <Module>`.
@@ -24,7 +25,7 @@ A short list of the things one resource is attached to, shown in place inside it
 
 - The related records are many and need search, filters or columns: use the list of `platform/view/table-view`, scoped to the resource.
 - A first-level list of one resource type reached from the sidebar: use `platform/view/table-view`.
-- Pairs of keys and values the user types in place: use `platform/edit/attribute-editor`.
+- Pairs of keys and values the user types in place: use `platform/edit/variables`.
 - Choosing one existing resource inside a form: use `platform/create/resource-picker`.
 
 ## Building blocks
@@ -180,7 +181,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           <template #cell-certificate="{ value }">
             <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
               <i
-                class="pi pi-verified shrink-0 text-(--text-muted)"
+                class="ai ai-verified shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="min-w-0 truncate">{{ value }}</span>
@@ -198,7 +199,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 >
                   <template #leading
                     ><i
-                      class="pi pi-pencil"
+                      class="ai ai-pencil"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuOption>
@@ -210,7 +211,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                 >
                   <template #leading
                     ><i
-                      class="pi pi-trash"
+                      class="ai ai-trash"
                       aria-hidden="true"
                   /></template>
                 </DropdownMenuOption>
@@ -228,7 +229,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
             label="Add Domain"
             kind="outlined"
             size="medium"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
           />
         </div>
       </div>
