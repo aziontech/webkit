@@ -9,7 +9,7 @@
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartSeries, formatCompact, formatShare, normalizeSeries } from '../_lib'
+  import { type ChartSeries, formatCompact, formatShare, normalizeSeries } from '../lib'
 
   defineOptions({ name: 'DonutChart', inheritAttrs: false })
 

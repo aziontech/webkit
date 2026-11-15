@@ -8,7 +8,7 @@
     TERMINAL_SCRIPTS,
     type TerminalScriptLine,
     type TerminalScriptName
-  } from '../data/functions-start'
+  } from '../lib/functions-start'
 
   defineOptions({ name: 'CliTerminal' })
 

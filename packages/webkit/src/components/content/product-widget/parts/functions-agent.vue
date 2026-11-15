@@ -17,7 +17,7 @@
     AGENT_CLIENTS,
     AGENT_TRANSCRIPT,
     type AgentTranscriptEntry
-  } from '../data/functions-start'
+  } from '../lib/functions-start'
 
   defineOptions({ name: 'FunctionsAgent' })
 

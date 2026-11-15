@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: ce08db88b34c0593e5a8a488141bc9bffe496d7cc9599f63bc2b562622112dc2
+checksum: 81b175f3e140adc0b3de172a17a05f6b2b3bc591185e5086a3c8bd8e2e31400c
 spec_version: 9
 template: 2
 created: 2026-10-20
@@ -166,7 +166,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 <!-- Resulting layout:
 
   packages/webkit/src/components/chart/
-  ├── _lib/                       (pure TS: scale, ticks, path, stack, format, series, types)
+  ├── lib/                        (pure TS: scale, ticks, path, stack, format, series, types)
   └── chart/
       ├── chart.vue
       ├── index.ts                (Object.assign: Grid, Axis, Line, Area, Bar, Crosshair, Tooltip, Legend)

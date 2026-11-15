@@ -13,7 +13,7 @@
     linePath,
     maxOf,
     minOf
-  } from '../_lib'
+  } from '../lib'
 
   defineOptions({ name: 'SparkChart', inheritAttrs: false })
 

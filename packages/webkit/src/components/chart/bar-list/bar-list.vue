@@ -6,7 +6,7 @@
   import * as en from '../../../i18n/messages/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartColor, colorToken, formatCompact, isFiniteNumber } from '../_lib'
+  import { type ChartColor, colorToken, formatCompact, isFiniteNumber } from '../lib'
 
   defineOptions({ name: 'BarList', inheritAttrs: false })
 

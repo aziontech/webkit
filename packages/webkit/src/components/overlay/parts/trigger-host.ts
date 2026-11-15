@@ -14,7 +14,7 @@ import {
   type VNodeArrayChildren
 } from 'vue'
 
-import { triggerControl } from './trigger-control'
+import { triggerControl } from '../../../utils/trigger-control'
 
 export type TriggerAria = Record<string, string | undefined>
 

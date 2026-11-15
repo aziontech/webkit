@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import type { ChartSeries } from '../_lib'
+import type { ChartSeries } from '../lib'
 import Chart, {
   ChartAxis,
   ChartBar,

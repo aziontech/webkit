@@ -2,7 +2,7 @@
   import { computed, ref, useAttrs, watch } from 'vue'
 
   import CodeBlock, { type CodeBlockKind } from '../../code/code-block/code-block.vue'
-  import { languageName } from '../../code/code-block/utils/language-name'
+  import { languageName } from '../../code/code-block/lib/language-name'
 
   defineOptions({ name: 'DocCodeGroup', inheritAttrs: false })
 

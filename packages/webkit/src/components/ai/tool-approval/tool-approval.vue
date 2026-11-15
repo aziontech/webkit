@@ -5,8 +5,8 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
-  import MarkdownInline from '../_lib/markdown-inline'
-  import { parseInline } from '../_lib/parse-markdown'
+  import MarkdownInline from '../lib/markdown-inline'
+  import { parseInline } from '../lib/parse-markdown'
 
   export type ToolApprovalState = 'pending' | 'approved' | 'denied' | 'expired'
   export type ToolApprovalKind = 'default' | 'danger'

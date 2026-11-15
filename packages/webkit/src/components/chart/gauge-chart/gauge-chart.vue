@@ -8,14 +8,14 @@
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { type ChartThreshold, formatCompact, isFiniteNumber, thresholdToken } from '../_lib'
   import { ChartCardInjectionKey } from '../chart-card/injection-key'
+  import { type ChartThreshold, formatCompact, isFiniteNumber, thresholdToken } from '../lib'
 
   defineOptions({ name: 'GaugeChart', inheritAttrs: false })
 
   export type GaugeChartSize = 'small' | 'medium' | 'large'
 
-  export type { ChartThreshold, ChartThresholdSeverity } from '../_lib'
+  export type { ChartThreshold, ChartThresholdSeverity } from '../lib'
 
   interface Props {
     /** The reading. Null or absent renders the empty state. */

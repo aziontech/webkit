@@ -19,6 +19,22 @@
   import { diffLines, pairDiffLines } from '../../../utils/line-diff'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
+  import { resolveFileIcon } from './lib/file-icon'
+  import {
+    type CodeBlockHighlightToken,
+    formatLineNumber,
+    getHighlightTokenClass,
+    highlightCode,
+    plainLines
+  } from './lib/highlight-code'
+  import { languageName, stripShellPrompts } from './lib/language-name'
+  import {
+    buildLineChangeMap,
+    type CodeBlockLineChange,
+    type CodeBlockLineState,
+    getDiffMarker,
+    resolveLineState
+  } from './lib/line-decorations'
   import {
     codeBlockEnterOffsetClasses,
     codeBlockLineEnterMotion,
@@ -28,22 +44,6 @@
     getCodeBlockLineSwapTransitionStyle,
     getCodeBlockLineTransitionStyle
   } from './presets/transitions'
-  import { resolveFileIcon } from './utils/file-icon'
-  import {
-    type CodeBlockHighlightToken,
-    formatLineNumber,
-    getHighlightTokenClass,
-    highlightCode,
-    plainLines
-  } from './utils/highlight-code'
-  import { languageName, stripShellPrompts } from './utils/language-name'
-  import {
-    buildLineChangeMap,
-    type CodeBlockLineChange,
-    type CodeBlockLineState,
-    getDiffMarker,
-    resolveLineState
-  } from './utils/line-decorations'
 
   export type { CodeBlockLineChange }
 

@@ -2,7 +2,7 @@
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
-  import { FormValue } from '../../../utils/form-value'
+  import { FormValue } from '../parts/form-value'
 
   defineOptions({
     name: 'Switch',

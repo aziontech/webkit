@@ -8,7 +8,7 @@
   import Separator from '../../../layout/separator/separator.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
-  import { DEFAULT_DEPLOYMENT_STEPS } from '../data/deployment-steps'
+  import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
   import DeploymentLogs from '../parts/deployment-logs.vue'
   import ShellMockup, {
     type ShellMockupFade,

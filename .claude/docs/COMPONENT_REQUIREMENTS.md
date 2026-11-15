@@ -698,7 +698,7 @@ This unlocks state-driven styling without computed class strings:
 
 ### 2.7. `cn` helper (tailwind-merge)
 
-> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../../packages/webkit/package.json). The helper lives at [`src/utils/cn.js`](../../packages/webkit/src/utils/cn.js) and is exported as `@aziontech/webkit/utils/cn`.
+> **Status: available today.** `clsx` and `tailwind-merge` are installed in [`packages/webkit/package.json`](../../packages/webkit/package.json). The helper lives at [`src/utils/cn.ts`](../../packages/webkit/src/utils/cn.ts) and is exported as `@aziontech/webkit/utils/cn`.
 
 The naive `[base, attrs.class]` array works for additive cases but fails when consumer classes need to **override** internal ones (e.g. consumer passes `px-6` while the component sets `px-4` — both end up applied; the later one wins by source order, not intent). `cn(...)` (built on `clsx` + `tailwind-merge`) makes consumer classes win predictably.
 

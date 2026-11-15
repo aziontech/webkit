@@ -2,7 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { barPath, isFiniteNumber, keepIds, stackValues } from '../../_lib'
+  import { barPath, isFiniteNumber, keepIds, stackValues } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartBar', inheritAttrs: false })

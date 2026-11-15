@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { isFiniteNumber } from '../../_lib'
+  import { isFiniteNumber } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartTooltip', inheritAttrs: false })

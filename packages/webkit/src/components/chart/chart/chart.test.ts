@@ -3,8 +3,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import type { ChartSeries } from '../_lib'
-import { linearLayout } from '../_lib/scale'
+import type { ChartSeries } from '../lib'
+import { linearLayout } from '../lib/scale'
 import Chart, {
   ChartArea,
   ChartAxis,

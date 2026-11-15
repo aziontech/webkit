@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
-  import { TriggerHost } from '../../../../utils/trigger-host'
+  import { TriggerHost } from '../../parts/trigger-host'
   import { usePopoverContext } from '../injection-key'
 
   defineOptions({

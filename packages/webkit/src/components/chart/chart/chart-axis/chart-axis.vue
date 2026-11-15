@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { maxOf } from '../../_lib'
+  import { maxOf } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
   import type { ChartAxisKind } from '../injection-key'
 

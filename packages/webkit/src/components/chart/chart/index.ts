@@ -64,6 +64,6 @@ export type {
   ChartStatus,
   ChartThreshold,
   ChartThresholdSeverity
-} from '../_lib'
+} from '../lib'
 export type { ChartBarKind } from './chart-bar/chart-bar.vue'
 export type { ChartAxisKind, ChartOrientation } from './injection-key'

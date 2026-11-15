@@ -14,7 +14,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
-  import { FormValue } from '../../../utils/form-value'
+  import { FormValue } from '../../inputs/parts/form-value'
 
   defineOptions({
     name: 'ToggleGroup',

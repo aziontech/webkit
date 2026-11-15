@@ -8,7 +8,7 @@ import type {
   ChartRange,
   LinearScale,
   NormalizedSeries
-} from '../_lib'
+} from '../lib'
 
 export type ChartOrientation = 'vertical' | 'horizontal'
 

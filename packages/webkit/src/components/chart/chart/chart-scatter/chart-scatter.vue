@@ -2,7 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onScopeDispose, useAttrs } from 'vue'
 
-  import { isFiniteNumber, keepIds } from '../../_lib'
+  import { isFiniteNumber, keepIds } from '../../lib'
   import { useChartContext } from '../composables/use-chart-context'
 
   defineOptions({ name: 'ChartScatter', inheritAttrs: false })

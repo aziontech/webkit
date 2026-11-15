@@ -18,6 +18,7 @@
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
+  import { ChartCardInjectionKey } from '../chart-card/injection-key'
   import {
     categoryLayout,
     type ChartLabel,
@@ -37,8 +38,7 @@
     niceTicks,
     normalizeSeries,
     stackedMax
-  } from '../_lib'
-  import { ChartCardInjectionKey } from '../chart-card/injection-key'
+  } from '../lib'
   import {
     type ChartAxisKind,
     ChartInjectionKey,

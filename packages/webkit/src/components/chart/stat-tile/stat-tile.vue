@@ -6,7 +6,7 @@
   import Tag, { type TagSeverity } from '../../content/tag/tag.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Separator from '../../layout/separator/separator.vue'
-  import { formatCompact, formatSignedPercent, isFiniteNumber } from '../_lib'
+  import { formatCompact, formatSignedPercent, isFiniteNumber } from '../lib'
   import SparkChart from '../spark-chart/spark-chart.vue'
   import { StatTileGroupInjectionKey } from '../stat-tile-group/injection-key'
   import { useCountUp } from './composables/use-count-up'

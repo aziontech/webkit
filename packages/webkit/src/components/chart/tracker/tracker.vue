@@ -6,7 +6,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { categoryLayout, type ChartStatus, colorToken } from '../_lib'
+  import { categoryLayout, type ChartStatus, colorToken } from '../lib'
 
   defineOptions({ name: 'Tracker', inheritAttrs: false })
 

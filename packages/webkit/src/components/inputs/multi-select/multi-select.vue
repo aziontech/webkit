@@ -4,8 +4,8 @@
   import { useFieldControl } from '../../../composables/use-field-control'
   import type { ListboxFocusIntent } from '../../../composables/use-listbox-content'
   import { useTranslate } from '../../../composables/use-translate'
-  import { FormValue } from '../../../utils/form-value'
   import { FieldInjectionKey } from '../field/injection-key'
+  import { FormValue } from '../parts/form-value'
   import {
     type MultiSelectCommitEvent,
     MultiSelectInjectionKey,

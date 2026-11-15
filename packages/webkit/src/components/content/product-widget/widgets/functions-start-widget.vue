@@ -2,7 +2,7 @@
   import { ref } from 'vue'
 
   import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
-  import { AGENT_CLIENTS } from '../data/functions-start'
+  import { AGENT_CLIENTS } from '../lib/functions-start'
   import CliTerminal from '../parts/cli-terminal.vue'
   import FunctionsAgent from '../parts/functions-agent.vue'
   import ShellMockup from '../shell-mockup/shell-mockup.vue'

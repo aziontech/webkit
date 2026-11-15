@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
-  import { TriggerHost } from '../../../../utils/trigger-host'
+  import { TriggerHost } from '../../../overlay/parts/trigger-host'
   import { useDropdownContext } from '../injection-key'
 
   defineOptions({

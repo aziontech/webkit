@@ -2,12 +2,12 @@
   import { computed, useAttrs } from 'vue'
 
   import CodeBlock from '../../code/code-block/code-block.vue'
-  import MarkdownInline from '../_lib/markdown-inline'
+  import MarkdownInline from '../lib/markdown-inline'
   import {
     type MarkdownBlock,
     type MarkdownParse,
     parseMarkdownIncremental
-  } from '../_lib/parse-markdown'
+  } from '../lib/parse-markdown'
   import type { AiSource } from '../sources/types'
 
   defineOptions({
