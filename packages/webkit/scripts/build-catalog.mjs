@@ -151,7 +151,6 @@ function kindFromTarget(target) {
   if (target.startsWith('./src/assets/')) return 'asset'
   if (target.startsWith('./src/styles/')) return 'style'
   if (target.startsWith('./src/locales/')) return 'locale'
-  if (target.startsWith('./src/vite/')) return 'other'
   if (/\.vue$/.test(target) || /\/index\.(ts|js)$/.test(target)) return 'component'
   return 'other'
 }
