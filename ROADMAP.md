@@ -680,6 +680,8 @@ before the branch is closed.
 
 **Owner decision (2026-11-11):** the merge into `main` and the release happen only when the owner asks. This item prepared the branch and stops before the merge.
 
+**Keep the branch merged with `main` (owner, 2026-11-15).** Whenever `main` gets a new release, merge `main` into this branch and push. While the PR conflicts with `main`, GitHub runs none of its checks (that happened from 2026-11-12 to 2026-11-15). In a conflict the branch's version wins; from `main` take only a fix the branch does not have yet, rewritten to v6 (no Storybook, examples, spec template 2; regenerate `catalog.json` and `llms/` instead of merging them).
+
 **Ready to merge (2026-11-12).** PR #1170 (`feat/webkit-ai-ready`) is up to date with `main` (merged the 5.11.x/5.12.0 releases, #1172 NetworkSection floor columns and #1174 `ClosingCallToActionTemplates`, adapted to v6: no Storybook, examples in `packages/webkit/examples`, spec template 2, logical utilities, size budget, marketing inventory, catalog and llms) and GitHub reports it `MERGEABLE`. Governance Pipeline green on every job, Vitest and visual shards included: <https://github.com/aziontech/webkit/actions/runs/43142543861> (head `9698c4960`; later commits are tests and this text, see the PR checks).
 
 Rows, re-checked against the code:
